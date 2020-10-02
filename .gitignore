@@ -1,0 +1,15 @@
+/.vscode/
+
+*.lnk
+desktop.ini
+Thumbs.db
+ehthumbs.db
+.DS_Store
+*.log
+/.vs/CPPBase/v16/*
+!/.vs/CPPBase/v16/.suo
+/CPPBase/bin/*
+!/CPPBase/bin/.gitkeep
+/CPPBase/bin_middle/*
+!/CPPBase/bin_middle/.gitkeep
+/CPPBase/doc/doxygen/doc/
