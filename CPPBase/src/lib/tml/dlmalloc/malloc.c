@@ -604,6 +604,11 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 #define USE_SPIN_LOCKS 0
 #endif /* USE_LOCKS */
 
+/* Custom Start */
+#define MSPACES 1
+#define USE_DL_PREFIX
+/* Custom End */
+
 #ifndef ONLY_MSPACES
 #define ONLY_MSPACES 0
 #endif  /* ONLY_MSPACES */

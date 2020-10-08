@@ -5,6 +5,7 @@
 
 
 #include "Main.h"
+#include "lib/tml/dlmalloc/malloc.h"
 
 
 /**
