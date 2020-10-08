@@ -148,11 +148,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\lib\tml\ConstantUtil.cpp" />
+    <ClCompile Include="src\lib\tml\dlmalloc\malloc.c" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\myp\ConstantUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lib\tml\ConstantUtil.h" />
+    <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
     <ClInclude Include="src\Main.h" />
     <ClInclude Include="src\myp\ConstantUtil.h" />
   </ItemGroup>

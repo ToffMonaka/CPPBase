@@ -12,11 +12,11 @@
  *
  * 最初に呼ばれる関数
  *
- * @param instance_handle …インスタンスハンドル
- * @param prev_instance_handle …前のインスタンスハンドル
- * @param cmd_line_str …コマンドライン文字列
- * @param wnd_show_type …ウィンドウ表示タイプ
- * @return exit_code …終了コード
+ * @param instance_handle …
+ * @param prev_instance_handle …
+ * @param cmd_line_str …
+ * @param wnd_show_type …
+ * @return exit_code …
  */
 int APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_instance_handle, _In_ LPWSTR cmd_line_str, _In_ int wnd_show_type)
 {
