@@ -16,7 +16,9 @@ namespace myp {
  */
 class ConstantUtil
 {
-private: ConstantUtil() {return;}; ConstantUtil(const ConstantUtil &) {return;}; ConstantUtil &operator =(const ConstantUtil &) {return ((*this));};
+private: ConstantUtil() {return;};
+private: ConstantUtil(const ConstantUtil &) {return;};
+private: ConstantUtil &operator =(const ConstantUtil &) {return ((*this));};
 
 public:
 };
