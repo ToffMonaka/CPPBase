@@ -23,5 +23,5 @@ INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_in
 {
 	MSG msg = {};
 
-	return ((INT)msg.wParam);
+	return (static_cast<INT>(msg.wParam));
 }

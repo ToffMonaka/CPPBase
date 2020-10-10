@@ -151,6 +151,8 @@
     <ClCompile Include="src\lib\tml\dlmalloc\malloc.c" />
     <ClCompile Include="src\lib\tml\MemoryUtil.cpp" />
     <ClCompile Include="src\lib\tml\MemoryUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\ThreadID.cpp" />
+    <ClCompile Include="src\lib\tml\ThreadLock.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\myp\ConstantUtil.cpp" />
   </ItemGroup>
@@ -159,6 +161,8 @@
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
     <ClInclude Include="src\lib\tml\MemoryUtil.h" />
     <ClInclude Include="src\lib\tml\MemoryUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\ThreadID.h" />
+    <ClInclude Include="src\lib\tml\ThreadLock.h" />
     <ClInclude Include="src\Main.h" />
     <ClInclude Include="src\myp\ConstantUtil.h" />
   </ItemGroup>
