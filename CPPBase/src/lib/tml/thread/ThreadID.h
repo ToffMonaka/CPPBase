@@ -5,7 +5,7 @@
 #pragma once
 
 
-#include "ConstantUtil.h"
+#include "../ConstantUtil.h"
 
 
 namespace tml {
@@ -14,14 +14,14 @@ namespace tml {
  */
 typedef struct THREAD_ID_
 {
-	UINT master_id;
+	UINT id;
 	UDLONG count;
 
 	/**
 	 * @brief コンストラクタ
 	 */
 	THREAD_ID_() :
-		master_id(0U),
+		id(0U),
 		count(0ULL)
 	{
 		return;
@@ -30,11 +30,11 @@ typedef struct THREAD_ID_
 	/**
 	 * @brief コンストラクタ
 	 *
-	 * @param mst_id : 
-	 * @param cnt : 
+	 * @param id : id
+	 * @param cnt : count
 	 */
-	THREAD_ID_(const UINT mst_id, const UDLONG cnt) :
-		master_id(mst_id),
+	THREAD_ID_(const UINT id, const UDLONG cnt) :
+		id(id),
 		count(cnt)
 	{
 		return;

@@ -149,20 +149,26 @@
   <ItemGroup>
     <ClCompile Include="src\lib\tml\ConstantUtil.cpp" />
     <ClCompile Include="src\lib\tml\dlmalloc\malloc.c" />
-    <ClCompile Include="src\lib\tml\MemoryUtil.cpp" />
-    <ClCompile Include="src\lib\tml\MemoryUtilEngine.cpp" />
-    <ClCompile Include="src\lib\tml\ThreadID.cpp" />
-    <ClCompile Include="src\lib\tml\ThreadLock.cpp" />
+    <ClCompile Include="src\lib\tml\memory\MemoryUtil.cpp" />
+    <ClCompile Include="src\lib\tml\memory\MemoryUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\thread\MutexThreadLock.cpp" />
+    <ClCompile Include="src\lib\tml\thread\SpinThreadLock.cpp" />
+    <ClCompile Include="src\lib\tml\thread\ThreadID.cpp" />
+    <ClCompile Include="src\lib\tml\thread\ThreadLock.cpp" />
+    <ClCompile Include="src\lib\tml\thread\ThreadLockBlock.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\myp\ConstantUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lib\tml\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
-    <ClInclude Include="src\lib\tml\MemoryUtil.h" />
-    <ClInclude Include="src\lib\tml\MemoryUtilEngine.h" />
-    <ClInclude Include="src\lib\tml\ThreadID.h" />
-    <ClInclude Include="src\lib\tml\ThreadLock.h" />
+    <ClInclude Include="src\lib\tml\memory\MemoryUtil.h" />
+    <ClInclude Include="src\lib\tml\memory\MemoryUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\thread\MutexThreadLock.h" />
+    <ClInclude Include="src\lib\tml\thread\SpinThreadLock.h" />
+    <ClInclude Include="src\lib\tml\thread\ThreadID.h" />
+    <ClInclude Include="src\lib\tml\thread\ThreadLock.h" />
+    <ClInclude Include="src\lib\tml\thread\ThreadLockBlock.h" />
     <ClInclude Include="src\Main.h" />
     <ClInclude Include="src\myp\ConstantUtil.h" />
   </ItemGroup>

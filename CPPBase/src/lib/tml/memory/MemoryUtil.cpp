@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief MemoryUtilコードファイル
@@ -27,3 +28,4 @@ INT tml::MemoryUtil::Create(void)
 
 	return (0);
 }
+#endif

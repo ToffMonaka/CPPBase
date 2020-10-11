@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief MemoryUtilヘッダーファイル
@@ -57,3 +58,4 @@ inline void tml::MemoryUtil::Release(T **pp)
 	return;
 }
 }
+#endif

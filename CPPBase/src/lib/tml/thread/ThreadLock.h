@@ -5,7 +5,7 @@
 #pragma once
 
 
-#include "ConstantUtil.h"
+#include "../ConstantUtil.h"
 
 
 namespace tml {
@@ -16,8 +16,8 @@ namespace tml {
  */
 class ThreadLock
 {
-private: ThreadLock(const ThreadLock &) {return;};
-private: ThreadLock &operator =(const ThreadLock &) {return ((*this));};
+public: ThreadLock(const ThreadLock &) = delete;
+public: ThreadLock &operator =(const ThreadLock &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:

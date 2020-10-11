@@ -31,9 +31,9 @@ namespace tml {
  */
 class ConstantUtil
 {
-private: ConstantUtil() {return;};
-private: ConstantUtil(const ConstantUtil &) {return;};
-private: ConstantUtil &operator =(const ConstantUtil &) {return ((*this));};
+public: ConstantUtil() = delete;
+public: ConstantUtil(const ConstantUtil &) = delete;
+public: ConstantUtil &operator =(const ConstantUtil &) = delete;
 
 public:
 };
