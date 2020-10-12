@@ -1,4 +1,3 @@
-#if 0
 /**
  * @file
  * @brief MemoryUtilコードファイル
@@ -19,8 +18,8 @@ void tml::MemoryUtil::Init(void)
 
 /**
  * @brief Create関数
- *
- * @return res : 0未満=失敗
+ * @return res (result)<br>
+ * 0未満=失敗
  */
 INT tml::MemoryUtil::Create(void)
 {
@@ -28,4 +27,3 @@ INT tml::MemoryUtil::Create(void)
 
 	return (0);
 }
-#endif

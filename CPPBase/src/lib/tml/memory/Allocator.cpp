@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief MemoryUtilEngineコードファイル
+ * @brief Allocatorコードファイル
  */
 
 
-#include "MemoryUtilEngine.h"
+#include "Allocator.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::MemoryUtilEngine::MemoryUtilEngine()
+tml::Allocator::Allocator()
 {
 	return;
 }
@@ -19,10 +19,8 @@ tml::MemoryUtilEngine::MemoryUtilEngine()
 /**
  * @brief デストラクタ
  */
-tml::MemoryUtilEngine::~MemoryUtilEngine()
+tml::Allocator::~Allocator()
 {
-	this->Init();
-
 	return;
 }
 
@@ -30,7 +28,7 @@ tml::MemoryUtilEngine::~MemoryUtilEngine()
 /**
  * @brief Init関数
  */
-void tml::MemoryUtilEngine::Init(void)
+void tml::Allocator::Init(void)
 {
 	return;
 }
@@ -41,7 +39,7 @@ void tml::MemoryUtilEngine::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::MemoryUtilEngine::Create(void)
+INT tml::Allocator::Create(void)
 {
 	this->Init();
 

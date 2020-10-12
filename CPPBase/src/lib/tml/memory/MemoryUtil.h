@@ -1,4 +1,3 @@
-#if 0
 /**
  * @file
  * @brief MemoryUtilヘッダーファイル
@@ -6,8 +5,7 @@
 #pragma once
 
 
-#include "ConstantUtil.h"
-#include "MemoryUtilEngine.h"
+#include "../ConstantUtil.h"
 
 
 namespace tml {
@@ -19,9 +17,9 @@ namespace tml {
  */
 class MemoryUtil
 {
-private: MemoryUtil() {return;};
-private: MemoryUtil(const MemoryUtil &) {return;};
-private: MemoryUtil &operator =(const MemoryUtil &) {return ((*this));};
+public: MemoryUtil() = delete;
+public: MemoryUtil(const MemoryUtil &) = delete;
+public: MemoryUtil &operator =(const MemoryUtil &) = delete;
 
 public:
 	static void Init(void);
@@ -36,9 +34,9 @@ public:
 
 /**
  * @brief Get関数
- *
- * @param cnt : 
- * @return p : NULLP=失敗
+ * @param cnt (count)
+ * @return p (pointer)<br>
+ * NULLP=失敗
  */
 template <typename T>
 inline T *tml::MemoryUtil::Get(const size_t cnt)
@@ -49,8 +47,7 @@ inline T *tml::MemoryUtil::Get(const size_t cnt)
 
 /**
  * @brief Release関数
- *
- * @param pp : 
+ * @param pp (pointer_pointer)
  */
 template <typename T>
 inline void tml::MemoryUtil::Release(T **pp)
@@ -58,4 +55,3 @@ inline void tml::MemoryUtil::Release(T **pp)
 	return;
 }
 }
-#endif

@@ -1,4 +1,3 @@
-#if 0
 /**
  * @file
  * @brief MemoryUtilEngineヘッダーファイル
@@ -6,8 +5,7 @@
 #pragma once
 
 
-#include "dlmalloc/malloc.h"
-#include "ConstantUtil.h"
+#include "../ConstantUtil.h"
 
 
 namespace tml {
@@ -18,8 +16,8 @@ namespace tml {
  */
 class MemoryUtilEngine
 {
-private: MemoryUtilEngine(const MemoryUtilEngine &) {return;};
-private: MemoryUtilEngine &operator =(const MemoryUtilEngine &) {return ((*this));};
+public: MemoryUtilEngine(const MemoryUtilEngine &) = delete;
+public: MemoryUtilEngine &operator =(const MemoryUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
@@ -38,9 +36,9 @@ public:
 
 /**
  * @brief Get関数
- *
- * @param cnt : 
- * @return p : NULLP=失敗
+ * @param cnt (count)
+ * @return p (pointer)<br>
+ * NULLP=失敗
  */
 template <typename T>
 inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
@@ -51,8 +49,7 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 
 /**
  * @brief Release関数
- *
- * @param pp : 
+ * @param pp (pointer_pointer)
  */
 template <typename T>
 inline void tml::MemoryUtilEngine::Release(T **pp)
@@ -60,4 +57,3 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 	return;
 }
 }
-#endif

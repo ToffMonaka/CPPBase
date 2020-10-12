@@ -25,12 +25,12 @@ private:
 	typedef enum {
 		LOCK = 0,
 		UNLOCK
-	} STATE;
+	} STATE_TYPE;
 
 private:
-	std::atomic<tml::SpinThreadLock::STATE> stat_;
+	std::atomic<tml::SpinThreadLock::STATE_TYPE> stat_;
 	std::thread::id th_id_;
-	ULONG lock_cnt_;
+	UINT lock_cnt_;
 
 public:
 	SpinThreadLock();

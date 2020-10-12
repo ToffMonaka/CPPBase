@@ -27,28 +27,26 @@ public:
 	ThreadLockBlock(tml::ThreadLock *, const TIME_MILLI &);
 	~ThreadLockBlock();
 
-	tml::ThreadLock *thread_lock(void) const;
-	INT lock_result(void) const;
+	tml::ThreadLock *GetThreadLock(void) const;
+	INT GetLockResult(void) const;
 };
 
 
 /**
- * @brief thread_lockŠÖ”
- *
- * @return th_lock : thread_lock
+ * @brief GetThreadLockŠÖ”
+ * @return th_lock (thread_lock)
  */
-inline tml::ThreadLock *tml::ThreadLockBlock::thread_lock(void) const
+inline tml::ThreadLock *tml::ThreadLockBlock::GetThreadLock(void) const
 {
 	return (this->th_lock_);
 }
 
 
 /**
- * @brief lock_resultŠÖ”
- *
- * @return lock_res : lock_result
+ * @brief GetLockResultŠÖ”
+ * @return lock_res (lock_result)
  */
-inline INT tml::ThreadLockBlock::lock_result(void) const
+inline INT tml::ThreadLockBlock::GetLockResult(void) const
 {
 	return (this->lock_res_);
 }

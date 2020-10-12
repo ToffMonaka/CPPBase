@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief ThreadIDヘッダーファイル
+ * @brief ProcessIDヘッダーファイル
  */
 #pragma once
 
@@ -10,9 +10,9 @@
 
 namespace tml {
 /**
- * @brief THREAD_ID構造体
+ * @brief PROCESS_ID構造体
  */
-typedef struct THREAD_ID_
+typedef struct PROCESS_ID_
 {
 	UINT master_id;
 	UDLONG count;
@@ -20,7 +20,7 @@ typedef struct THREAD_ID_
 	/**
 	 * @brief コンストラクタ
 	 */
-	THREAD_ID_() :
+	PROCESS_ID_() :
 		master_id(0U),
 		count(0ULL)
 	{
@@ -32,11 +32,11 @@ typedef struct THREAD_ID_
 	 * @param mst_id (master_id)
 	 * @param cnt (count)
 	 */
-	THREAD_ID_(const UINT mst_id, const UDLONG cnt) :
+	PROCESS_ID_(const UINT mst_id, const UDLONG cnt) :
 		master_id(mst_id),
 		count(cnt)
 	{
 		return;
 	}
-} THREAD_ID;
+} PROCESS_ID;
 }

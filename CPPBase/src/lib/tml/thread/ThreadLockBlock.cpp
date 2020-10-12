@@ -9,8 +9,7 @@
 
 /**
  * @brief コンストラクタ
- *
- * @param th_lock : thread_lock
+ * @param th_lock (thread_lock)
  */
 tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock *th_lock) :
 	th_lock_(th_lock),
@@ -26,9 +25,8 @@ tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock *th_lock) :
 
 /**
  * @brief コンストラクタ
- *
- * @param th_lock : thread_lock
- * @param timeout_time : timeout_time
+ * @param th_lock (thread_lock)
+ * @param timeout_time (timeout_time)
  */
 tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock *th_lock, const TIME_MILLI &timeout_time) :
 	th_lock_(th_lock),

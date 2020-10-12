@@ -5,6 +5,8 @@
 
 
 #include "Main.h"
+#include "lib/tml/memory/MemoryUtil.h"
+#include "lib/tml/memory/DefaultMemoryUtilEngine.h"
 
 
 /**
@@ -12,14 +14,31 @@
  *
  * ç≈èâÇ…åƒÇŒÇÍÇÈä÷êî
  *
- * @param instance_handle : instance_handle
- * @param prev_instance_handle : prev_instance_handle
- * @param cmd_line_str : command_line_string
- * @param wnd_show_type : window_show_type
- * @return exit_code : exit_code<br>0à»äO=é∏îs
+ * @param instance_handle (instance_handle)
+ * @param prev_instance_handle (prev_instance_handle)
+ * @param cmd_line_str (command_line_string)
+ * @param wnd_show_type (window_show_type)
+ * @return exit_code (exit_code)<br>
+ * 0à»äO=é∏îs
  */
 INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_instance_handle, _In_ WCHAR *cmd_line_str, _In_ INT wnd_show_type)
 {
+	{
+		tml::DefaultMemoryUtilEngine engine;
+
+		if (engine.Create() < 0) {
+			int a = 0;
+		}
+
+		if (tml::MemoryUtil::Create() < 0) {
+			int a = 0;
+		}
+
+		tml::MemoryUtil::Init();
+	}
+
+	int a = 0;
+
 	MSG msg = {};
 
 	return (static_cast<INT>(msg.wParam));
