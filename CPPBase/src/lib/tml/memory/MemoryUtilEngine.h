@@ -6,6 +6,9 @@
 
 
 #include "../ConstantUtil.h"
+#include "NewAllocator.h"
+#include "MallocAllocator.h"
+#include "DlmallocAllocator.h"
 
 
 namespace tml {
@@ -20,13 +23,15 @@ public: MemoryUtilEngine(const MemoryUtilEngine &) = delete;
 public: MemoryUtilEngine &operator =(const MemoryUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+protected:
+	void Release(void);
+	INT Create(void);
+
 public:
 	MemoryUtilEngine();
 	virtual ~MemoryUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
-
 	template <typename T>
 	T *Get(const size_t);
 	template <typename T>

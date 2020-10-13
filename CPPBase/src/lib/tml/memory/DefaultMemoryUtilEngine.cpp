@@ -21,8 +21,17 @@ tml::DefaultMemoryUtilEngine::DefaultMemoryUtilEngine()
  */
 tml::DefaultMemoryUtilEngine::~DefaultMemoryUtilEngine()
 {
-	this->Init();
+	this->Release();
 
+	return;
+}
+
+
+/**
+ * @brief ReleaseŠÖ”
+ */
+void tml::DefaultMemoryUtilEngine::Release(void)
+{
 	return;
 }
 
@@ -32,6 +41,8 @@ tml::DefaultMemoryUtilEngine::~DefaultMemoryUtilEngine()
  */
 void tml::DefaultMemoryUtilEngine::Init(void)
 {
+	this->Release();
+
 	tml::MemoryUtilEngine::Init();
 
 	return;
@@ -45,6 +56,8 @@ void tml::DefaultMemoryUtilEngine::Init(void)
  */
 INT tml::DefaultMemoryUtilEngine::Create(void)
 {
+	this->Release();
+
 	if (tml::MemoryUtilEngine::Create() < 0) {
 		return (-1);
 	}

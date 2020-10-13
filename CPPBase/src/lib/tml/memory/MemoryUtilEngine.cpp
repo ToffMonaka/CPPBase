@@ -21,8 +21,15 @@ tml::MemoryUtilEngine::MemoryUtilEngine()
  */
 tml::MemoryUtilEngine::~MemoryUtilEngine()
 {
-	this->Init();
+	return;
+}
 
+
+/**
+ * @brief ReleaseŠÖ”
+ */
+void tml::MemoryUtilEngine::Release(void)
+{
 	return;
 }
 
@@ -43,7 +50,5 @@ void tml::MemoryUtilEngine::Init(void)
  */
 INT tml::MemoryUtilEngine::Create(void)
 {
-	this->Init();
-
 	return (0);
 }

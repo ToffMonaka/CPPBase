@@ -26,6 +26,15 @@ tml::Allocator::~Allocator()
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+void tml::Allocator::Release(void)
+{
+	return;
+}
+
+
+/**
  * @brief Initä÷êî
  */
 void tml::Allocator::Init(void)
@@ -41,7 +50,17 @@ void tml::Allocator::Init(void)
  */
 INT tml::Allocator::Create(void)
 {
-	this->Init();
-
 	return (0);
+}
+
+
+/**
+ * @brief GetInfoä÷êî
+ * @return info (info)
+ */
+tml::Allocator::INFO tml::Allocator::GetInfo(void)
+{
+	tml::Allocator::INFO info;
+
+	return (info);
 }

@@ -7,6 +7,9 @@
 #include "Main.h"
 #include "lib/tml/memory/MemoryUtil.h"
 #include "lib/tml/memory/DefaultMemoryUtilEngine.h"
+#include "lib/tml/memory/NewAllocator.h"
+#include "lib/tml/memory/MallocAllocator.h"
+#include "lib/tml/memory/DlmallocAllocator.h"
 
 
 /**
@@ -24,6 +27,14 @@
 INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_instance_handle, _In_ WCHAR *cmd_line_str, _In_ INT wnd_show_type)
 {
 	{
+		tml::NewAllocator allocator;
+
+		allocator.Create();
+
+		auto p = allocator.Get<tml::Allocator::INFO>(1U);
+
+		allocator.Release<tml::Allocator::INFO>(&p);
+
 		tml::DefaultMemoryUtilEngine engine;
 
 		if (engine.Create() < 0) {
