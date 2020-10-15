@@ -32,7 +32,7 @@ tml::MutexThreadLock::~MutexThreadLock()
  */
 INT tml::MutexThreadLock::Lock(void)
 {
-	this->stat_.lock();
+	this->mtx_.lock();
 
 	return (0);
 }
@@ -48,7 +48,7 @@ INT tml::MutexThreadLock::Lock(const TIME_MILLI &timeout_time)
 {
 	auto timeout_time_point = std::chrono::steady_clock::now() + timeout_time;
 
-	if (!(this->stat_.try_lock_until(timeout_time_point))) {
+	if (!(this->mtx_.try_lock_until(timeout_time_point))) {
 		return (-2);
 	}
 
@@ -63,7 +63,7 @@ INT tml::MutexThreadLock::Lock(const TIME_MILLI &timeout_time)
  */
 void tml::MutexThreadLock::Unlock(void)
 {
-	this->stat_.unlock();
+	this->mtx_.unlock();
 
 	return;
 }

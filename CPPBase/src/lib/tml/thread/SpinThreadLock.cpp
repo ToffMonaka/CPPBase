@@ -11,7 +11,7 @@
  * @brief コンストラクタ
  */
 tml::SpinThreadLock::SpinThreadLock() :
-	stat_(tml::SpinThreadLock::STATE_TYPE::UNLOCK),
+	stat_type_(STATE_TYPE_UNLOCK),
 	lock_cnt_(0U)
 {
 	return;
@@ -36,7 +36,7 @@ INT tml::SpinThreadLock::Lock(void)
 {
 	auto th_id = std::this_thread::get_id();
 
-	while (this->stat_.exchange(tml::SpinThreadLock::STATE_TYPE::LOCK, std::memory_order_acquire) == tml::SpinThreadLock::STATE_TYPE::LOCK) {
+	while (this->stat_type_.exchange(STATE_TYPE_LOCK, std::memory_order_acquire) == STATE_TYPE_LOCK) {
 		if (this->th_id_ == th_id) {
 			++this->lock_cnt_;
 
@@ -63,7 +63,7 @@ INT tml::SpinThreadLock::Lock(const TIME_MILLI &timeout_time)
 	auto th_id = std::this_thread::get_id();
 	auto timeout_time_point = std::chrono::steady_clock::now() + timeout_time;
 
-	while (this->stat_.exchange(tml::SpinThreadLock::STATE_TYPE::LOCK, std::memory_order_acquire) == tml::SpinThreadLock::STATE_TYPE::LOCK) {
+	while (this->stat_type_.exchange(STATE_TYPE_LOCK, std::memory_order_acquire) == STATE_TYPE_LOCK) {
 		if (this->th_id_ == th_id) {
 			++this->lock_cnt_;
 
@@ -96,7 +96,7 @@ void tml::SpinThreadLock::Unlock(void)
 
 	this->th_id_ = std::thread::id();
 
-	this->stat_.store(tml::SpinThreadLock::STATE_TYPE::UNLOCK, std::memory_order_release);
+	this->stat_type_.store(STATE_TYPE_UNLOCK, std::memory_order_release);
 
 	return;
 }

@@ -21,7 +21,7 @@ public: MutexThreadLock &operator =(const MutexThreadLock &) = delete;
 protected: virtual void InterfaceDummy(void) {return;}
 
 private:
-	std::recursive_timed_mutex stat_;
+	std::recursive_timed_mutex mtx_;
 
 public:
 	MutexThreadLock();

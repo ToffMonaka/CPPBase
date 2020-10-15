@@ -23,12 +23,12 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	typedef enum {
-		LOCK = 0,
-		UNLOCK
+		STATE_TYPE_LOCK = 0,
+		STATE_TYPE_UNLOCK
 	} STATE_TYPE;
 
 private:
-	std::atomic<tml::SpinThreadLock::STATE_TYPE> stat_;
+	std::atomic<STATE_TYPE> stat_type_;
 	std::thread::id th_id_;
 	UINT lock_cnt_;
 
