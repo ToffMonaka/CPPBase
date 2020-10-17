@@ -59,7 +59,7 @@ inline T *tml::MallocAllocator::Get(const size_t cnt)
 
 	this->ms_th_lock_.Lock();
 
-	if (this->ms_size_ <= 0) {
+	if (this->ms_size_ <= 0U) {
 		this->ms_th_lock_.Unlock();
 
 		return (NULLP);

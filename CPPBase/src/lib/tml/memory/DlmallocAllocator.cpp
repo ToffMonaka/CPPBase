@@ -5,18 +5,14 @@
 
 
 #include "DlmallocAllocator.h"
-#include <cmath>
 
 
 /**
  * @brief コンストラクタ
  */
 tml::DlmallocAllocator::DlmallocAllocator() :
-	ms(NULLP),
-	alignment(0),
-	cnt_head_size(0),
-	offset_head_size(0),
-	head_size(0)
+	ms_(NULLP),
+	ms_cnt_head_size_(0U)
 {
 	return;
 }
@@ -40,10 +36,10 @@ void tml::DlmallocAllocator::Release(void)
 {
 	this->ms_th_lock_.Lock();
 
-	if (this->ms != NULLP) {
-		destroy_mspace(this->ms);
+	if (this->ms_ != NULLP) {
+		destroy_mspace(this->ms_);
 
-		this->ms = NULLP;
+		this->ms_ = NULLP;
 	}
 
 	tml::Allocator::Release();
@@ -63,10 +59,7 @@ void tml::DlmallocAllocator::Init(void)
 
 	this->Release();
 
-	this->alignment = 0;
-	this->cnt_head_size = 0;
-	this->offset_head_size = 0;
-	this->head_size = 0;
+	this->ms_cnt_head_size_ = 0U;
 
 	tml::Allocator::Init();
 
@@ -86,7 +79,9 @@ INT tml::DlmallocAllocator::Create(const size_t size)
 {
 	this->ms_th_lock_.Lock();
 
-	if (this->ms != NULLP) {
+	if (this->ms_ != NULLP) {
+		this->Init();
+
 		this->ms_th_lock_.Unlock();
 
 		return (-1);
@@ -95,23 +90,24 @@ INT tml::DlmallocAllocator::Create(const size_t size)
 	this->Release();
 
 	if (tml::Allocator::Create() < 0) {
+		this->Init();
+
 		this->ms_th_lock_.Unlock();
 
 		return (-1);
 	}
 
-	this->ms = create_mspace(size, 0);
+	this->ms_ = create_mspace(size, 0);
 
-	if (this->ms == NULLP) {
+	if (this->ms_ == NULLP) {
+		this->Init();
+
 		this->ms_th_lock_.Unlock();
 
 		return (-1);
 	}
 
-	this->alignment = 2 * sizeof(void *);
-	this->cnt_head_size = sizeof(size_t);
-	this->offset_head_size = sizeof(size_t);
-	this->head_size = static_cast<INT>(std::ceil(static_cast<DOUBLE>(this->cnt_head_size + this->offset_head_size) / this->alignment)) * this->alignment;
+	this->ms_cnt_head_size_ = sizeof(size_t);
 
 	this->ms_th_lock_.Unlock();
 
@@ -129,13 +125,13 @@ tml::Allocator::INFO tml::DlmallocAllocator::GetInfo(void)
 
 	auto info = tml::Allocator::GetInfo();
 
-	if (this->ms == NULLP) {
+	if (this->ms_ == NULLP) {
 		this->ms_th_lock_.Unlock();
 
 		return (info);
 	}
 
-	auto ms_info = mspace_mallinfo(this->ms);
+	auto ms_info = mspace_mallinfo(this->ms_);
 
 	info.size = ms_info.arena;
 	info.use_size = ms_info.uordblks;

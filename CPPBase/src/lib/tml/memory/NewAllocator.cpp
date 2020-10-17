@@ -76,6 +76,8 @@ INT tml::NewAllocator::Create(void)
 	this->ms_th_lock_.Lock();
 
 	if (this->ms_size_ > 0U) {
+		this->Init();
+
 		this->ms_th_lock_.Unlock();
 
 		return (-1);
@@ -84,6 +86,8 @@ INT tml::NewAllocator::Create(void)
 	this->Release();
 
 	if (tml::Allocator::Create() < 0) {
+		this->Init();
+
 		this->ms_th_lock_.Unlock();
 
 		return (-1);

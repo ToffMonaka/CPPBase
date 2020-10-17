@@ -22,12 +22,9 @@ public: DlmallocAllocator &operator =(const DlmallocAllocator &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	mspace ms;
+	mspace ms_;
+	size_t ms_cnt_head_size_;
 	tml::SpinThreadLock ms_th_lock_;
-	INT alignment;
-	INT cnt_head_size;
-	INT offset_head_size;
-	INT head_size;
 
 private:
 	void Release(void);
@@ -61,30 +58,31 @@ inline T *tml::DlmallocAllocator::Get(const size_t cnt)
 
 	T *p = NULLP;
 
-	void *ms_p = NULLP;
-
 	this->ms_th_lock_.Lock();
 
-	if (this->ms == NULLP) {
+	if (this->ms_ == NULLP) {
 		this->ms_th_lock_.Unlock();
 
 		return (NULLP);
 	}
 
-	ms_p = mspace_memalign(this->ms, this->alignment, sizeof(T) * cnt + this->cnt_head_size + this->head_size);
+	void *ms_p = mspace_malloc(this->ms_, sizeof(T) * cnt + this->ms_cnt_head_size_);
+
+	if (std::is_class<T>::value) {
+		(*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(ms_p)))) = cnt;
+
+		p = reinterpret_cast<T *>(reinterpret_cast<BYTE *>(ms_p) + this->ms_cnt_head_size_);
+
+		for (size_t p_i = 0U; p_i < cnt; ++p_i) {
+			new(p + p_i) T();
+		}
+	} else {
+		(*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(ms_p)))) = 0U;
+
+		p = reinterpret_cast<T *>(reinterpret_cast<BYTE *>(ms_p) + this->ms_cnt_head_size_);
+	}
 
 	this->ms_th_lock_.Unlock();
-
-	p = new(reinterpret_cast<BYTE *>(ms_p) + this->head_size) T[cnt];
-
-	if (reinterpret_cast<BYTE *>(p) == (reinterpret_cast<BYTE *>(ms_p) + this->head_size)) {
-		(*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(p) - this->cnt_head_size))) = 0U;
-		(*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(p) - this->cnt_head_size - this->offset_head_size))) = 0U;
-	} else if (reinterpret_cast<BYTE *>(p) == (reinterpret_cast<BYTE *>(ms_p) + this->cnt_head_size + this->head_size)) {
-		(*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(p) - this->cnt_head_size - this->offset_head_size))) = this->cnt_head_size;
-	} else {
-		return (NULLP);
-	}
 
 	return (p);
 }
@@ -101,20 +99,19 @@ inline void tml::DlmallocAllocator::Release(T **pp)
 		return;
 	}
 
-	size_t cnt = (*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(*pp) - this->cnt_head_size)));
-	size_t offset = (*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(*pp) - this->cnt_head_size - this->offset_head_size)));
+	this->ms_th_lock_.Lock();
+
+	size_t cnt = (*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(*pp) - this->ms_cnt_head_size_)));
 
 	for (size_t pp_i = 0U; pp_i < cnt; ++pp_i) {
 		(*pp)[pp_i].~T();
 	}
 
-	void *ms_p = reinterpret_cast<BYTE *>(*pp) - offset - this->head_size;
+	void *ms_p = reinterpret_cast<BYTE *>(*pp) - this->ms_cnt_head_size_;
+
+	mspace_free(this->ms_, ms_p);
 
 	(*pp) = NULLP;
-
-	this->ms_th_lock_.Lock();
-
-	mspace_free(this->ms, ms_p);
 
 	this->ms_th_lock_.Unlock();
 

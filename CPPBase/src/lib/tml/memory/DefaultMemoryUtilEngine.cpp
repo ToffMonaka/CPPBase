@@ -59,6 +59,8 @@ INT tml::DefaultMemoryUtilEngine::Create(void)
 	this->Release();
 
 	if (tml::MemoryUtilEngine::Create() < 0) {
+		this->Init();
+
 		return (-1);
 	}
 
