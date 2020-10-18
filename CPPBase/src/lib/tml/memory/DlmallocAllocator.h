@@ -23,6 +23,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	mspace ms_;
+	size_t ms_use_cnt_;
 	size_t ms_cnt_head_size_;
 	tml::SpinThreadLock ms_th_lock_;
 
@@ -82,6 +83,8 @@ inline T *tml::DlmallocAllocator::Get(const size_t cnt)
 		p = reinterpret_cast<T *>(reinterpret_cast<BYTE *>(ms_p) + this->ms_cnt_head_size_);
 	}
 
+	++this->ms_use_cnt_;
+
 	this->ms_th_lock_.Unlock();
 
 	return (p);
@@ -101,17 +104,21 @@ inline void tml::DlmallocAllocator::Release(T **pp)
 
 	this->ms_th_lock_.Lock();
 
-	size_t cnt = (*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(*pp) - this->ms_cnt_head_size_)));
+	void *ms_p = reinterpret_cast<BYTE *>(*pp) - this->ms_cnt_head_size_;
 
-	for (size_t pp_i = 0U; pp_i < cnt; ++pp_i) {
+	size_t cnt = (*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(ms_p))));
+
+	for (size_t pp_i = cnt; pp_i > 0U;) {
+		--pp_i;
+
 		(*pp)[pp_i].~T();
 	}
-
-	void *ms_p = reinterpret_cast<BYTE *>(*pp) - this->ms_cnt_head_size_;
 
 	mspace_free(this->ms_, ms_p);
 
 	(*pp) = NULLP;
+
+	--this->ms_use_cnt_;
 
 	this->ms_th_lock_.Unlock();
 

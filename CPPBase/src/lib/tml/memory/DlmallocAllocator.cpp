@@ -12,6 +12,7 @@
  */
 tml::DlmallocAllocator::DlmallocAllocator() :
 	ms_(NULLP),
+	ms_use_cnt_(0U),
 	ms_cnt_head_size_(0U)
 {
 	return;
@@ -40,6 +41,7 @@ void tml::DlmallocAllocator::Release(void)
 		destroy_mspace(this->ms_);
 
 		this->ms_ = NULLP;
+		this->ms_use_cnt_ = 0U;
 	}
 
 	tml::Allocator::Release();
@@ -98,6 +100,7 @@ INT tml::DlmallocAllocator::Create(const size_t size)
 	}
 
 	this->ms_ = create_mspace(size, 0);
+	this->ms_use_cnt_ = 0U;
 
 	if (this->ms_ == NULLP) {
 		this->Init();
@@ -133,8 +136,9 @@ tml::Allocator::INFO tml::DlmallocAllocator::GetInfo(void)
 
 	auto ms_info = mspace_mallinfo(this->ms_);
 
-	info.size = ms_info.arena;
+	info.size = ms_info.usmblks;
 	info.use_size = ms_info.uordblks;
+	info.use_cnt = this->ms_use_cnt_;
 
 	this->ms_th_lock_.Unlock();
 

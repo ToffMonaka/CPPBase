@@ -5,10 +5,6 @@
 
 
 #include "Main.h"
-#include "lib/tml/memory/DefaultMemoryUtilEngine.h"
-#include "lib/tml/memory/NewAllocator.h"
-#include "lib/tml/memory/MallocAllocator.h"
-#include "lib/tml/memory/DlmallocAllocator.h"
 
 
 /**
@@ -26,20 +22,6 @@
 INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_instance_handle, _In_ WCHAR *cmd_line_str, _In_ INT wnd_show_type)
 {
 	{
-		tml::DlmallocAllocator allocator;
-
-		allocator.Create(1024U);
-
-		auto p = allocator.Get<tml::DefaultMemoryUtilEngine>(5U);
-
-		auto d1 = &p[0];
-		auto d2 = &p[1];
-		auto d3 = &p[2];
-		auto d4 = &p[3];
-		auto d5 = &p[4];
-
-		allocator.Release<tml::DefaultMemoryUtilEngine>(&p);
-
 		int a = 0;
 	}
 

@@ -120,6 +120,7 @@ tml::Allocator::INFO tml::MallocAllocator::GetInfo(void)
 
 	info.size = this->ms_size_;
 	info.use_size = this->ms_use_size_;
+	info.use_cnt = this->ms_use_size_;
 
 	this->ms_th_lock_.Unlock();
 
