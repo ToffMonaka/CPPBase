@@ -15,7 +15,7 @@ namespace tml {
 typedef struct THREAD_ID_
 {
 	UINT master_id;
-	UDLONG count;
+	ULONGLONG count;
 
 	/**
 	 * @brief コンストラクタ
@@ -32,7 +32,7 @@ typedef struct THREAD_ID_
 	 * @param mst_id (master_id)
 	 * @param cnt (count)
 	 */
-	THREAD_ID_(const UINT mst_id, const UDLONG cnt) :
+	THREAD_ID_(const UINT mst_id, const ULONGLONG cnt) :
 		master_id(mst_id),
 		count(cnt)
 	{

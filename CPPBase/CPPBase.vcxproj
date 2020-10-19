@@ -160,7 +160,6 @@
     <ClCompile Include="src\lib\tml\memory\Allocator.cpp" />
     <ClCompile Include="src\lib\tml\memory\DefaultMemoryUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\memory\DlmallocAllocator.cpp" />
-    <ClCompile Include="src\lib\tml\memory\MallocAllocator.cpp" />
     <ClCompile Include="src\lib\tml\memory\MemoryUtil.cpp" />
     <ClCompile Include="src\lib\tml\memory\MemoryUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\memory\NewAllocator.cpp" />
@@ -170,8 +169,8 @@
     <ClCompile Include="src\lib\tml\thread\ThreadID.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLockBlock.cpp" />
-    <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\myp\ConstantUtil.cpp" />
+    <ClCompile Include="src\cpp_base\Main.cpp" />
+    <ClCompile Include="src\cpp_base\ConstantUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lib\tml\ConstantUtil.h" />
@@ -179,7 +178,6 @@
     <ClInclude Include="src\lib\tml\memory\Allocator.h" />
     <ClInclude Include="src\lib\tml\memory\DefaultMemoryUtilEngine.h" />
     <ClInclude Include="src\lib\tml\memory\DlmallocAllocator.h" />
-    <ClInclude Include="src\lib\tml\memory\MallocAllocator.h" />
     <ClInclude Include="src\lib\tml\memory\MemoryUtil.h" />
     <ClInclude Include="src\lib\tml\memory\MemoryUtilEngine.h" />
     <ClInclude Include="src\lib\tml\memory\NewAllocator.h" />
@@ -189,8 +187,8 @@
     <ClInclude Include="src\lib\tml\thread\ThreadID.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLockBlock.h" />
-    <ClInclude Include="src\Main.h" />
-    <ClInclude Include="src\myp\ConstantUtil.h" />
+    <ClInclude Include="src\cpp_base\Main.h" />
+    <ClInclude Include="src\cpp_base\ConstantUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -32,6 +32,8 @@ tml::DefaultMemoryUtilEngine::~DefaultMemoryUtilEngine()
  */
 void tml::DefaultMemoryUtilEngine::Release(void)
 {
+	tml::MemoryUtilEngine::Release();
+
 	return;
 }
 
@@ -51,14 +53,16 @@ void tml::DefaultMemoryUtilEngine::Init(void)
 
 /**
  * @brief Createä÷êî
+ * @param allocator_type (allocator_type)
+ * @param allocator_size (allocator_size)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::DefaultMemoryUtilEngine::Create(void)
+INT tml::DefaultMemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE allocator_type, const size_t allocator_size)
 {
 	this->Release();
 
-	if (tml::MemoryUtilEngine::Create() < 0) {
+	if (tml::MemoryUtilEngine::Create(allocator_type, allocator_size) < 0) {
 		this->Init();
 
 		return (-1);

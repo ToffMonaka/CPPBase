@@ -5,6 +5,7 @@
 
 
 #include "Main.h"
+#include "../lib/tml/memory/DefaultMemoryUtilEngine.h"
 
 
 /**
@@ -22,6 +23,21 @@
 INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_instance_handle, _In_ WCHAR *cmd_line_str, _In_ INT wnd_show_type)
 {
 	{
+		tml::DefaultMemoryUtilEngine engine;
+
+		if (engine.Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, 1024U) < 0) {
+			int a = 0;
+		} else {
+			tml::MemoryUtilEngine *p1 = engine.Get<tml::DefaultMemoryUtilEngine>(5U);
+			tml::MemoryUtilEngine *p2 = engine.Get<tml::DefaultMemoryUtilEngine>(10U);
+
+			auto allocator_type = engine.GetAllocatorType();
+			auto allocator_info = engine.GetAllocatorInfo();
+
+			engine.Release(&p1);
+			engine.Release(&p2);
+		}
+
 		int a = 0;
 	}
 

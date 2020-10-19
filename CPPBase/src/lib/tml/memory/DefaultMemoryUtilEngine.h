@@ -27,6 +27,36 @@ public:
 	virtual ~DefaultMemoryUtilEngine();
 
 	void Init(void);
-	INT Create(void);
+	INT Create(const tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE, const size_t);
+	template <typename T>
+	T *Get(const size_t);
+	template <typename T>
+	void Release(T **);
 };
+
+
+/**
+ * @brief Getä÷êî
+ * @param cnt (count)
+ * @return p (pointer)<br>
+ * NULLP=é∏îs
+ */
+template <typename T>
+inline T *tml::DefaultMemoryUtilEngine::Get(const size_t cnt)
+{
+	return (tml::MemoryUtilEngine::Get<T>(cnt));
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ * @param pp (pointer_pointer)
+ */
+template <typename T>
+inline void tml::DefaultMemoryUtilEngine::Release(T **pp)
+{
+	tml::MemoryUtilEngine::Release(pp);
+
+	return;
+}
 }

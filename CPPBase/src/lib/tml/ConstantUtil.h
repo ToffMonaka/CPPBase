@@ -11,8 +11,6 @@
 #include <chrono>
 
 
-using DLONG = long long;
-using UDLONG = unsigned long long;
 using DOUBLE = double;
 #define NULLP nullptr
 using NULLP_TYPE = std::nullptr_t;
@@ -24,17 +22,6 @@ using TIME_REAL = std::chrono::duration<double>;
 
 
 namespace tml {
-/**
- * @brief ConstantUtilクラス
- *
- * ユーティリティパターン
- */
-class ConstantUtil
-{
-public: ConstantUtil() = delete;
-public: ConstantUtil(const ConstantUtil &) = delete;
-public: ConstantUtil &operator =(const ConstantUtil &) = delete;
-
-public:
-};
+namespace ConstantUtil {
+}
 }
