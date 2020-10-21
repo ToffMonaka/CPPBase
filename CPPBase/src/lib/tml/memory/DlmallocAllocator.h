@@ -6,9 +6,9 @@
 
 
 #include "../dlmalloc/malloc.h"
+
 #include "../ConstantUtil.h"
 #include "Allocator.h"
-#include "../thread/SpinThreadLock.h"
 
 
 namespace tml {
@@ -25,7 +25,6 @@ private:
 	mspace ms_;
 	size_t ms_use_cnt_;
 	size_t ms_cnt_head_size_;
-	tml::SpinThreadLock ms_th_lock_;
 
 private:
 	void Release(void);
@@ -40,7 +39,7 @@ public:
 	T *Get(const size_t);
 	template <typename T>
 	void Release(T **);
-	tml::Allocator::INFO GetInfo(void);
+	virtual tml::Allocator::INFO GetInfo(void);
 };
 
 
@@ -59,11 +58,7 @@ inline T *tml::DlmallocAllocator::Get(const size_t cnt)
 
 	T *p = NULLP;
 
-	this->ms_th_lock_.Lock();
-
 	if (this->ms_ == NULLP) {
-		this->ms_th_lock_.Unlock();
-
 		return (NULLP);
 	}
 
@@ -85,8 +80,6 @@ inline T *tml::DlmallocAllocator::Get(const size_t cnt)
 
 	++this->ms_use_cnt_;
 
-	this->ms_th_lock_.Unlock();
-
 	return (p);
 }
 
@@ -101,8 +94,6 @@ inline void tml::DlmallocAllocator::Release(T **pp)
 	if ((*pp) == NULLP) {
 		return;
 	}
-
-	this->ms_th_lock_.Lock();
 
 	void *ms_p = reinterpret_cast<BYTE *>(*pp) - this->ms_cnt_head_size_;
 
@@ -119,8 +110,6 @@ inline void tml::DlmallocAllocator::Release(T **pp)
 	(*pp) = NULLP;
 
 	--this->ms_use_cnt_;
-
-	this->ms_th_lock_.Unlock();
 
 	return;
 }

@@ -11,13 +11,11 @@
  * @brief コンストラクタ
  * @param th_lock (thread_lock)
  */
-tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock *th_lock) :
+tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock) :
 	th_lock_(th_lock),
-	lock_res_(0)
+	res_(0)
 {
-	if (this->th_lock_ != NULLP) {
-		this->lock_res_ = this->th_lock_->Lock();
-	}
+	this->res_ = this->th_lock_.Lock();
 
 	return;
 }
@@ -28,13 +26,11 @@ tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock *th_lock) :
  * @param th_lock (thread_lock)
  * @param timeout_time (timeout_time)
  */
-tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock *th_lock, const TIME_MILLI &timeout_time) :
+tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock, const TIME_MILLI &timeout_time) :
 	th_lock_(th_lock),
-	lock_res_(0)
+	res_(0)
 {
-	if (this->th_lock_ != NULLP) {
-		this->lock_res_ = this->th_lock_->Lock(timeout_time);
-	}
+	this->res_ = this->th_lock_.Lock(timeout_time);
 
 	return;
 }
@@ -45,14 +41,11 @@ tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock *th_lock, const TIME_MILLI
  */
 tml::ThreadLockBlock::~ThreadLockBlock()
 {
-	if (this->th_lock_ != NULLP) {
-		if (this->lock_res_ >= 0) {
-			this->th_lock_->Unlock();
-		}
-
-		this->th_lock_ = NULLP;
-		this->lock_res_ = 0;
+	if (this->res_ >= 0) {
+		this->th_lock_.Unlock();
 	}
+
+	this->res_ = 0;
 
 	return;
 }

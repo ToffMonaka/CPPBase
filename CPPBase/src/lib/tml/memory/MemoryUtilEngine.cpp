@@ -97,3 +97,35 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 
 	return (0);
 }
+
+
+/**
+ * @brief GetAllocatorInfoŠÖ”
+ * @return allocator_info (allocator_info)
+ */
+tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtilEngine::GetAllocatorInfo(void)
+{
+	tml::MemoryUtilEngine::ALLOCATOR_INFO allocator_info1;
+	tml::Allocator::INFO allocator_info2;
+
+	this->allocator_th_lock_.Lock();
+
+	allocator_info1.type = this->allocator_type_;
+
+	switch (this->allocator_type_) {
+	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
+		allocator_info2 = this->new_allocator_->GetInfo();
+	}
+	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
+		allocator_info2 = this->dlmalloc_allocator_->GetInfo();
+	}
+	}
+
+	this->allocator_th_lock_.Unlock();
+
+	allocator_info1.size = allocator_info2.size;
+	allocator_info1.use_size = allocator_info2.use_size;
+	allocator_info1.use_cnt = allocator_info2.use_cnt;
+
+	return (allocator_info1);
+}

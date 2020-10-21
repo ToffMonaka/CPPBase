@@ -19,35 +19,24 @@ public: ThreadLockBlock(const ThreadLockBlock &) = delete;
 public: ThreadLockBlock &operator =(const ThreadLockBlock &) = delete;
 
 private:
-	tml::ThreadLock *th_lock_;
-	INT lock_res_;
+	tml::ThreadLock &th_lock_;
+	INT res_;
 
 public:
-	ThreadLockBlock(tml::ThreadLock *);
-	ThreadLockBlock(tml::ThreadLock *, const TIME_MILLI &);
-	~ThreadLockBlock();
+	ThreadLockBlock(tml::ThreadLock &);
+	ThreadLockBlock(tml::ThreadLock &, const TIME_MILLI &);
+	virtual ~ThreadLockBlock();
 
-	tml::ThreadLock *GetThreadLock(void) const;
-	INT GetLockResult(void) const;
+	INT GetResult(void) const;
 };
 
 
 /**
- * @brief GetThreadLockŠÖ”
- * @return th_lock (thread_lock)
+ * @brief GetResultŠÖ”
+ * @return res (result)
  */
-inline tml::ThreadLock *tml::ThreadLockBlock::GetThreadLock(void) const
+inline INT tml::ThreadLockBlock::GetResult(void) const
 {
-	return (this->th_lock_);
-}
-
-
-/**
- * @brief GetLockResultŠÖ”
- * @return lock_res (lock_result)
- */
-inline INT tml::ThreadLockBlock::GetLockResult(void) const
-{
-	return (this->lock_res_);
+	return (this->res_);
 }
 }

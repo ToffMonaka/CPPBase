@@ -5,6 +5,7 @@
 
 
 #include "Main.h"
+#include "../lib/tml/memory/MemoryUtil.h"
 #include "../lib/tml/memory/DefaultMemoryUtilEngine.h"
 
 
@@ -28,14 +29,27 @@ INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_in
 		if (engine.Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, 1024U) < 0) {
 			int a = 0;
 		} else {
-			tml::MemoryUtilEngine *p1 = engine.Get<tml::DefaultMemoryUtilEngine>(5U);
-			tml::MemoryUtilEngine *p2 = engine.Get<tml::DefaultMemoryUtilEngine>(10U);
+			if (tml::MemoryUtil::Create(&engine) < 0) {
+				int a = 0;
+			} else {
+				tml::MemoryUtilEngine *p1 = tml::MemoryUtil::Get<tml::DefaultMemoryUtilEngine>(5U);
 
-			auto allocator_type = engine.GetAllocatorType();
-			auto allocator_info = engine.GetAllocatorInfo();
+				auto allocator_info1 = tml::MemoryUtil::GetAllocatorInfo();
 
-			engine.Release(&p1);
-			engine.Release(&p2);
+				tml::MemoryUtilEngine *p2 = tml::MemoryUtil::Get<tml::DefaultMemoryUtilEngine>(10U);
+
+				auto allocator_info2 = tml::MemoryUtil::GetAllocatorInfo();
+
+				tml::MemoryUtil::Release(&p2);
+
+				auto allocator_info3 = tml::MemoryUtil::GetAllocatorInfo();
+
+				tml::MemoryUtil::Release(&p1);
+
+				tml::MemoryUtil::Init();
+			}
+
+			engine.Init();
 		}
 
 		int a = 0;

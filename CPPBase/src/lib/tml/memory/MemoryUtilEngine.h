@@ -8,6 +8,7 @@
 #include "../ConstantUtil.h"
 #include "NewAllocator.h"
 #include "DlmallocAllocator.h"
+#include "../thread/SpinThreadLock.h"
 
 
 namespace tml {
@@ -30,10 +31,37 @@ public: MemoryUtilEngine(const MemoryUtilEngine &) = delete;
 public: MemoryUtilEngine &operator =(const MemoryUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+public:
+	/**
+	 * @brief ALLOCATOR_INFO構造体
+	 */
+	typedef struct ALLOCATOR_INFO_
+	{
+		tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE type;
+		size_t size;
+		size_t use_size;
+		size_t use_cnt;
+
+		/**
+		 * @brief コンストラクタ
+		 */
+		ALLOCATOR_INFO_() :
+			type(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE),
+			size(0U),
+			use_size(0U),
+			use_cnt(0U)
+		{
+			return;
+		}
+	} ALLOCATOR_INFO;
+
 private:
 	tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE allocator_type_;
 	tml::NewAllocator *new_allocator_;
 	tml::DlmallocAllocator *dlmalloc_allocator_;
+
+protected:
+	tml::SpinThreadLock allocator_th_lock_;
 
 protected:
 	void Release(void);
@@ -48,8 +76,13 @@ public:
 	T *Get(const size_t);
 	template <typename T>
 	void Release(T **);
-	tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE GetAllocatorType(void) const;
-	tml::Allocator::INFO GetAllocatorInfo(void);
+	template <typename T>
+	void Clear(T *, const size_t);
+	template <typename T>
+	void Copy(T *, const T *, const size_t);
+	template <typename T>
+	void CopySame(T *, const T *, const size_t);
+	tml::MemoryUtilEngine::ALLOCATOR_INFO GetAllocatorInfo(void);
 };
 
 
@@ -62,16 +95,22 @@ public:
 template <typename T>
 inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 {
+	T *p = NULLP;
+
+	this->allocator_th_lock_.Lock();
+
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-		return (this->new_allocator_->Get<T>(cnt));
+		p = this->new_allocator_->Get<T>(cnt);
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-		return (this->dlmalloc_allocator_->Get<T>(cnt));
+		p = this->dlmalloc_allocator_->Get<T>(cnt);
 	}
 	}
 
-	return (NULLP);
+	this->allocator_th_lock_.Unlock();
+
+	return (p);
 }
 
 
@@ -82,46 +121,77 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 template <typename T>
 inline void tml::MemoryUtilEngine::Release(T **pp)
 {
+	this->allocator_th_lock_.Lock();
+
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-		return (this->new_allocator_->Release(pp));
+		this->new_allocator_->Release(pp);
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-		return (this->dlmalloc_allocator_->Release(pp));
+		this->dlmalloc_allocator_->Release(pp);
 	}
 	}
+
+	this->allocator_th_lock_.Unlock();
 
 	return;
 }
 
 
 /**
- * @brief GetAllocatorType関数
- * @return allocator_type (allocator_type)
+ * @brief Clear関数
+ * @param p (pointer)
+ * @param cnt (count)
  */
-inline tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE tml::MemoryUtilEngine::GetAllocatorType(void) const
+template <typename T>
+inline void tml::MemoryUtilEngine::Clear(T *p, const size_t cnt)
 {
-	return (this->allocator_type_);
+	if (cnt <= 0U) {
+		return;
+	}
+
+	memset(p, 0, sizeof(T) * cnt);
+
+	return;
 }
 
 
 /**
- * @brief GetAllocatorInfo関数
- * @return allocator_info (allocator_info)
+ * @brief Copy関数
+ * @param dst_p (dst_pointer)
+ * @param src_p (src_pointer)
+ * @param cnt (count)
  */
-inline tml::Allocator::INFO tml::MemoryUtilEngine::GetAllocatorInfo(void)
+template <typename T>
+inline void tml::MemoryUtilEngine::Copy(T *dst_p, const T *src_p, const size_t cnt)
 {
-	tml::Allocator::INFO allocator_info;
-
-	switch (this->allocator_type_) {
-	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-		allocator_info = this->new_allocator_->GetInfo();
-	}
-	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-		allocator_info = this->dlmalloc_allocator_->GetInfo();
-	}
+	if ((dst_p == src_p)
+	|| (cnt <= 0U)) {
+		return;
 	}
 
-	return (allocator_info);
+	memcpy(dst_p, src_p, sizeof(T) * cnt);
+
+	return;
+}
+
+
+/**
+ * @brief CopySame関数
+ * @param dst_p (dst_pointer)
+ * @param src_p (src_pointer)
+ * @param cnt (count)
+ */
+template <typename T>
+inline void tml::MemoryUtilEngine::CopySame(T *dst_p, const T *src_p, const size_t cnt)
+{
+	if ((dst_p == src_p)
+	|| (cnt <= 0U)) {
+		return;
+	}
+
+	memmove(dst_p, src_p, sizeof(T) * cnt);
+
+	return;
 }
 }

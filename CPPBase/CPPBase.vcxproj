@@ -166,6 +166,7 @@
     <ClCompile Include="src\lib\tml\process\ProcessID.cpp" />
     <ClCompile Include="src\lib\tml\thread\MutexThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\SpinThreadLock.cpp" />
+    <ClCompile Include="src\lib\tml\thread\ThreadFix.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadID.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLockBlock.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="src\lib\tml\process\ProcessID.h" />
     <ClInclude Include="src\lib\tml\thread\MutexThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\SpinThreadLock.h" />
+    <ClInclude Include="src\lib\tml\thread\ThreadFix.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadID.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLockBlock.h" />

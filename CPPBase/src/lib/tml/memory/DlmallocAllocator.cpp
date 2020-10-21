@@ -35,8 +35,6 @@ tml::DlmallocAllocator::~DlmallocAllocator()
  */
 void tml::DlmallocAllocator::Release(void)
 {
-	this->ms_th_lock_.Lock();
-
 	if (this->ms_ != NULLP) {
 		destroy_mspace(this->ms_);
 
@@ -45,8 +43,6 @@ void tml::DlmallocAllocator::Release(void)
 	}
 
 	tml::Allocator::Release();
-
-	this->ms_th_lock_.Unlock();
 
 	return;
 }
@@ -57,15 +53,11 @@ void tml::DlmallocAllocator::Release(void)
  */
 void tml::DlmallocAllocator::Init(void)
 {
-	this->ms_th_lock_.Lock();
-
 	this->Release();
 
 	this->ms_cnt_head_size_ = 0U;
 
 	tml::Allocator::Init();
-
-	this->ms_th_lock_.Unlock();
 
 	return;
 }
@@ -79,12 +71,8 @@ void tml::DlmallocAllocator::Init(void)
  */
 INT tml::DlmallocAllocator::Create(const size_t size)
 {
-	this->ms_th_lock_.Lock();
-
 	if (this->ms_ != NULLP) {
 		this->Init();
-
-		this->ms_th_lock_.Unlock();
 
 		return (-1);
 	}
@@ -93,8 +81,6 @@ INT tml::DlmallocAllocator::Create(const size_t size)
 
 	if (tml::Allocator::Create() < 0) {
 		this->Init();
-
-		this->ms_th_lock_.Unlock();
 
 		return (-1);
 	}
@@ -105,14 +91,10 @@ INT tml::DlmallocAllocator::Create(const size_t size)
 	if (this->ms_ == NULLP) {
 		this->Init();
 
-		this->ms_th_lock_.Unlock();
-
 		return (-1);
 	}
 
 	this->ms_cnt_head_size_ = sizeof(size_t);
-
-	this->ms_th_lock_.Unlock();
 
 	return (0);
 }
@@ -124,13 +106,9 @@ INT tml::DlmallocAllocator::Create(const size_t size)
  */
 tml::Allocator::INFO tml::DlmallocAllocator::GetInfo(void)
 {
-	this->ms_th_lock_.Lock();
-
 	auto info = tml::Allocator::GetInfo();
 
 	if (this->ms_ == NULLP) {
-		this->ms_th_lock_.Unlock();
-
 		return (info);
 	}
 
@@ -139,8 +117,6 @@ tml::Allocator::INFO tml::DlmallocAllocator::GetInfo(void)
 	info.size = ms_info.usmblks;
 	info.use_size = ms_info.uordblks;
 	info.use_cnt = this->ms_use_cnt_;
-
-	this->ms_th_lock_.Unlock();
 
 	return (info);
 }

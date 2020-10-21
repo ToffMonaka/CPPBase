@@ -48,7 +48,7 @@ INT tml::MutexThreadLock::Lock(const TIME_MILLI &timeout_time)
 {
 	auto timeout_time_point = std::chrono::steady_clock::now() + timeout_time;
 
-	if (!(this->mtx_.try_lock_until(timeout_time_point))) {
+	if (!this->mtx_.try_lock_until(timeout_time_point)) {
 		return (-2);
 	}
 

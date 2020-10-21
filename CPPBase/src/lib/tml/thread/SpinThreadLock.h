@@ -36,8 +36,8 @@ public:
 	SpinThreadLock();
 	virtual ~SpinThreadLock();
 
-	INT Lock(void);
-	INT Lock(const TIME_MILLI &);
-	void Unlock(void);
+	virtual INT Lock(void);
+	virtual INT Lock(const TIME_MILLI &);
+	virtual void Unlock(void);
 };
 }

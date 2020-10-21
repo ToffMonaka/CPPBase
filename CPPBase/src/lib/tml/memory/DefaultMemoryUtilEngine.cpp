@@ -32,7 +32,11 @@ tml::DefaultMemoryUtilEngine::~DefaultMemoryUtilEngine()
  */
 void tml::DefaultMemoryUtilEngine::Release(void)
 {
+	this->allocator_th_lock_.Lock();
+
 	tml::MemoryUtilEngine::Release();
+
+	this->allocator_th_lock_.Unlock();
 
 	return;
 }
@@ -43,9 +47,13 @@ void tml::DefaultMemoryUtilEngine::Release(void)
  */
 void tml::DefaultMemoryUtilEngine::Init(void)
 {
+	this->allocator_th_lock_.Lock();
+
 	this->Release();
 
 	tml::MemoryUtilEngine::Init();
+
+	this->allocator_th_lock_.Unlock();
 
 	return;
 }
@@ -60,13 +68,19 @@ void tml::DefaultMemoryUtilEngine::Init(void)
  */
 INT tml::DefaultMemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE allocator_type, const size_t allocator_size)
 {
+	this->allocator_th_lock_.Lock();
+
 	this->Release();
 
 	if (tml::MemoryUtilEngine::Create(allocator_type, allocator_size) < 0) {
 		this->Init();
 
+		this->allocator_th_lock_.Unlock();
+
 		return (-1);
 	}
+
+	this->allocator_th_lock_.Unlock();
 
 	return (0);
 }
