@@ -6,6 +6,8 @@ Thumbs.db
 ehthumbs.db
 .DS_Store
 *.log
+/.vs/CPPBase/*
+!/.vs/CPPBase/v16/
 /.vs/CPPBase/v16/*
 !/.vs/CPPBase/v16/.suo
 /CPPBase/bin/*
