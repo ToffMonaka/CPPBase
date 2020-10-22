@@ -95,22 +95,34 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 {
 	T *p = NULLP;
 
-	this->allocator_th_lock_.Lock();
-
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-		p = this->new_allocator_->Get<T>(cnt);
+		BYTE *ms_p = NULLP;
+
+		this->allocator_th_lock_.Lock();
+
+		ms_p = this->new_allocator_->GetMemorySpacePart<T>(cnt);
+
+		this->allocator_th_lock_.Unlock();
+
+		p = this->new_allocator_->GetConstructorPart<T>(ms_p, cnt);
 
 		break;
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-		p = this->dlmalloc_allocator_->Get<T>(cnt);
+		BYTE *ms_p = NULLP;
+
+		this->allocator_th_lock_.Lock();
+
+		ms_p = this->dlmalloc_allocator_->GetMemorySpacePart<T>(cnt);
+
+		this->allocator_th_lock_.Unlock();
+
+		p = this->dlmalloc_allocator_->GetConstructorPart<T>(ms_p, cnt);
 
 		break;
 	}
 	}
-
-	this->allocator_th_lock_.Unlock();
 
 	return (p);
 }
@@ -123,22 +135,34 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 template <typename T>
 inline void tml::MemoryUtilEngine::Release(T **pp)
 {
-	this->allocator_th_lock_.Lock();
-
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-		this->new_allocator_->Release(pp);
+		BYTE *ms_p = NULLP;
+
+		ms_p = this->new_allocator_->ReleaseDestructorPart<T>(pp);
+
+		this->allocator_th_lock_.Lock();
+
+		this->new_allocator_->ReleaseMemorySpacePart<T>(ms_p, pp);
+
+		this->allocator_th_lock_.Unlock();
 
 		break;
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-		this->dlmalloc_allocator_->Release(pp);
+		BYTE *ms_p = NULLP;
+
+		ms_p = this->dlmalloc_allocator_->ReleaseDestructorPart<T>(pp);
+
+		this->allocator_th_lock_.Lock();
+
+		this->dlmalloc_allocator_->ReleaseMemorySpacePart<T>(ms_p, pp);
+
+		this->allocator_th_lock_.Unlock();
 
 		break;
 	}
 	}
-
-	this->allocator_th_lock_.Unlock();
 
 	return;
 }

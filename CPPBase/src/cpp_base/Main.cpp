@@ -26,7 +26,7 @@ INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_in
 	{
 		tml::DefaultMemoryUtilEngine engine;
 
-		if (engine.Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW, 1024U) < 0) {
+		if (engine.Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, 1024U) < 0) {
 			int a = 0;
 		} else {
 			if (tml::MemoryUtil::Create(&engine) < 0) {
