@@ -63,13 +63,3 @@ INT tml::MemoryUtil::Create(tml::MemoryUtilEngine *engine)
 
 	return (0);
 }
-
-
-/**
- * @brief GetAllocatorInfoŠÖ”
- * @return allocator_info (allocator_info)
- */
-tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtil::GetAllocatorInfo(void)
-{
-	return (tml::MemoryUtil::engine_->GetAllocatorInfo());
-}

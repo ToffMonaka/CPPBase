@@ -116,4 +116,14 @@ inline void tml::MemoryUtil::CopySame(T *dst_p, const T *src_p, const size_t cnt
 
 	return;
 }
+
+
+/**
+ * @brief GetAllocatorInfoŠÖ”
+ * @return allocator_info (allocator_info)
+ */
+inline tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtil::GetAllocatorInfo(void)
+{
+	return (tml::MemoryUtil::engine_->GetAllocatorInfo());
+}
 }

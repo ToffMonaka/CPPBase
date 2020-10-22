@@ -33,6 +33,10 @@ tml::MemoryUtilEngine::~MemoryUtilEngine()
  */
 void tml::MemoryUtilEngine::Release(void)
 {
+	this->allocator_th_lock_.Lock();
+
+	this->allocator_type_ = tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE;
+
 	if (this->new_allocator_ != NULLP) {
 		delete this->new_allocator_;
 
@@ -45,6 +49,8 @@ void tml::MemoryUtilEngine::Release(void)
 		this->dlmalloc_allocator_ = NULLP;
 	}
 
+	this->allocator_th_lock_.Unlock();
+
 	return;
 }
 
@@ -54,8 +60,6 @@ void tml::MemoryUtilEngine::Release(void)
  */
 void tml::MemoryUtilEngine::Init(void)
 {
-	this->allocator_type_ = tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE;
-
 	return;
 }
 
@@ -69,6 +73,8 @@ void tml::MemoryUtilEngine::Init(void)
  */
 INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE allocator_type, const size_t allocator_size)
 {
+	this->allocator_th_lock_.Lock();
+
 	this->allocator_type_ = allocator_type;
 
 	switch (this->allocator_type_) {
@@ -76,6 +82,8 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 		this->new_allocator_ = new tml::NewAllocator();
 
 		if (this->new_allocator_->Create() < 0) {
+			this->allocator_th_lock_.Unlock();
+
 			return (-1);
 		}
 
@@ -85,15 +93,21 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 		this->dlmalloc_allocator_ = new tml::DlmallocAllocator();
 
 		if (this->dlmalloc_allocator_->Create(allocator_size) < 0) {
+			this->allocator_th_lock_.Unlock();
+
 			return (-1);
 		}
 
 		break;
 	}
 	default: {
+		this->allocator_th_lock_.Unlock();
+
 		return (-1);
 	}
 	}
+
+	this->allocator_th_lock_.Unlock();
 
 	return (0);
 }
@@ -105,27 +119,33 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
  */
 tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtilEngine::GetAllocatorInfo(void)
 {
-	tml::MemoryUtilEngine::ALLOCATOR_INFO allocator_info1;
-	tml::Allocator::INFO allocator_info2;
+	tml::MemoryUtilEngine::ALLOCATOR_INFO allocator_info;
+	tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE tmp_allocator_type = tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE;
+	tml::Allocator::INFO tmp_allocator_info;
 
 	this->allocator_th_lock_.Lock();
 
-	allocator_info1.type = this->allocator_type_;
+	tmp_allocator_type = this->allocator_type_;
 
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-		allocator_info2 = this->new_allocator_->GetInfo();
+		tmp_allocator_info = this->new_allocator_->GetInfo();
+
+		break;
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-		allocator_info2 = this->dlmalloc_allocator_->GetInfo();
+		tmp_allocator_info = this->dlmalloc_allocator_->GetInfo();
+
+		break;
 	}
 	}
 
 	this->allocator_th_lock_.Unlock();
 
-	allocator_info1.size = allocator_info2.size;
-	allocator_info1.use_size = allocator_info2.use_size;
-	allocator_info1.use_cnt = allocator_info2.use_cnt;
+	allocator_info.type = tmp_allocator_type;
+	allocator_info.size = tmp_allocator_info.size;
+	allocator_info.use_size = tmp_allocator_info.use_size;
+	allocator_info.use_cnt = tmp_allocator_info.use_cnt;
 
-	return (allocator_info1);
+	return (allocator_info);
 }

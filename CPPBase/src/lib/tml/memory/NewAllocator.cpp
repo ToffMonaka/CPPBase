@@ -12,7 +12,8 @@
  */
 tml::NewAllocator::NewAllocator() :
 	ms_size_(0U),
-	ms_use_size_(0U)
+	ms_use_size_(0U),
+	ms_cnt_head_size_(0U)
 {
 	return;
 }
@@ -52,6 +53,8 @@ void tml::NewAllocator::Init(void)
 {
 	this->Release();
 
+	this->ms_cnt_head_size_ = 0U;
+
 	tml::Allocator::Init();
 
 	return;
@@ -81,6 +84,14 @@ INT tml::NewAllocator::Create(void)
 
 	this->ms_size_ = UINT_MAX;
 	this->ms_use_size_ = 0U;
+
+	if (this->ms_size_ <= 0U) {
+		this->Init();
+
+		return (-1);
+	}
+
+	this->ms_cnt_head_size_ = sizeof(size_t);
 
 	return (0);
 }

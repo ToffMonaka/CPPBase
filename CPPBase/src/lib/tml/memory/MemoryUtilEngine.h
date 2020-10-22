@@ -59,8 +59,6 @@ private:
 	tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE allocator_type_;
 	tml::NewAllocator *new_allocator_;
 	tml::DlmallocAllocator *dlmalloc_allocator_;
-
-protected:
 	tml::SpinThreadLock allocator_th_lock_;
 
 protected:
@@ -102,9 +100,13 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
 		p = this->new_allocator_->Get<T>(cnt);
+
+		break;
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
 		p = this->dlmalloc_allocator_->Get<T>(cnt);
+
+		break;
 	}
 	}
 
@@ -126,9 +128,13 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
 		this->new_allocator_->Release(pp);
+
+		break;
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
 		this->dlmalloc_allocator_->Release(pp);
+
+		break;
 	}
 	}
 

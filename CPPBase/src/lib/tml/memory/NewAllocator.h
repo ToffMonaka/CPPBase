@@ -22,6 +22,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	size_t ms_size_;
 	size_t ms_use_size_;
+	size_t ms_cnt_head_size_;
 
 private:
 	void Release(void);
@@ -59,10 +60,24 @@ inline T *tml::NewAllocator::Get(const size_t cnt)
 		return (NULLP);
 	}
 
-	p = new T[cnt];
+	BYTE *ms_p = new BYTE[sizeof(T) * cnt + this->ms_cnt_head_size_];
 
-	if (p == NULLP) {
+	if (ms_p == NULLP) {
 		return (NULLP);
+	}
+
+	if (std::is_class<T>::value) {
+		(*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(ms_p)))) = cnt;
+
+		p = reinterpret_cast<T *>(reinterpret_cast<BYTE *>(ms_p) + this->ms_cnt_head_size_);
+
+		for (size_t p_i = 0U; p_i < cnt; ++p_i) {
+			new(p + p_i) T();
+		}
+	} else {
+		(*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(ms_p)))) = 0U;
+
+		p = reinterpret_cast<T *>(reinterpret_cast<BYTE *>(ms_p) + this->ms_cnt_head_size_);
 	}
 
 	++this->ms_use_size_;
@@ -82,7 +97,17 @@ inline void tml::NewAllocator::Release(T **pp)
 		return;
 	}
 
-	delete [] ((*pp));
+	BYTE *ms_p = reinterpret_cast<BYTE *>(*pp) - this->ms_cnt_head_size_;
+
+	size_t cnt = (*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(ms_p))));
+
+	for (size_t pp_i = cnt; pp_i > 0U;) {
+		--pp_i;
+
+		(*pp)[pp_i].~T();
+	}
+
+	delete [] ms_p;
 
 	(*pp) = NULLP;
 

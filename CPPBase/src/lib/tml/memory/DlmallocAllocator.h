@@ -64,6 +64,10 @@ inline T *tml::DlmallocAllocator::Get(const size_t cnt)
 
 	void *ms_p = mspace_malloc(this->ms_, sizeof(T) * cnt + this->ms_cnt_head_size_);
 
+	if (ms_p == NULLP) {
+		return (NULLP);
+	}
+
 	if (std::is_class<T>::value) {
 		(*(reinterpret_cast<size_t *>(reinterpret_cast<BYTE *>(ms_p)))) = cnt;
 

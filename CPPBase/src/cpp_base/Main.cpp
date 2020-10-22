@@ -26,7 +26,7 @@ INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_in
 	{
 		tml::DefaultMemoryUtilEngine engine;
 
-		if (engine.Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, 1024U) < 0) {
+		if (engine.Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW, 1024U) < 0) {
 			int a = 0;
 		} else {
 			if (tml::MemoryUtil::Create(&engine) < 0) {
@@ -45,6 +45,8 @@ INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_in
 				auto allocator_info3 = tml::MemoryUtil::GetAllocatorInfo();
 
 				tml::MemoryUtil::Release(&p1);
+
+				auto allocator_info4 = tml::MemoryUtil::GetAllocatorInfo();
 
 				tml::MemoryUtil::Init();
 			}
