@@ -23,41 +23,57 @@
  */
 INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_instance_handle, _In_ WCHAR *cmd_line_str, _In_ INT wnd_show_type)
 {
-	{
-		tml::DefaultMemoryUtilEngine engine;
+	return (cpp_base::CreateMain(instance_handle, prev_instance_handle, cmd_line_str, wnd_show_type));
+}
 
-		if (engine.Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, 1024U) < 0) {
-			int a = 0;
-		} else {
-			if (tml::MemoryUtil::Create(&engine) < 0) {
-				int a = 0;
-			} else {
-				tml::MemoryUtilEngine *p1 = tml::MemoryUtil::Get<tml::DefaultMemoryUtilEngine>(5U);
 
-				auto allocator_info1 = tml::MemoryUtil::GetAllocatorInfo();
+/**
+ * @brief InitMainä÷êî
+ */
+void cpp_base::InitMain(void)
+{
+	tml::MemoryUtil::Init();
 
-				tml::MemoryUtilEngine *p2 = tml::MemoryUtil::Get<tml::DefaultMemoryUtilEngine>(10U);
+	return;
+}
 
-				auto allocator_info2 = tml::MemoryUtil::GetAllocatorInfo();
 
-				tml::MemoryUtil::Release(&p2);
+/**
+ * @brief CreateMainä÷êî
+ * @param instance_handle (instance_handle)
+ * @param prev_instance_handle (prev_instance_handle)
+ * @param cmd_line_str (command_line_string)
+ * @param wnd_show_type (window_show_type)
+ * @return exit_code (exit_code)<br>
+ * 0à»äO=é∏îs
+ */
+INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_handle, WCHAR *cmd_line_str, INT wnd_show_type)
+{
+	{// MemoryUtil Create
+		std::unique_ptr<tml::MemoryUtilEngine> engine(new tml::DefaultMemoryUtilEngine());
 
-				auto allocator_info3 = tml::MemoryUtil::GetAllocatorInfo();
+		if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, 1048576U) < 0) {
+			cpp_base::InitMain();
 
-				tml::MemoryUtil::Release(&p1);
-
-				auto allocator_info4 = tml::MemoryUtil::GetAllocatorInfo();
-
-				tml::MemoryUtil::Init();
-			}
-
-			engine.Init();
+			return (0);
 		}
+
+		if (tml::MemoryUtil::Create(engine) < 0) {
+			cpp_base::InitMain();
+
+			return (0);
+		}
+	}
+
+	{// Test
+		auto allocator_info = tml::MemoryUtil::GetAllocatorInfo();
 
 		int a = 0;
 	}
 
 	MSG msg = {};
+
+	cpp_base::InitMain();
 
 	return (static_cast<INT>(msg.wParam));
 }

@@ -24,15 +24,15 @@ public: MemoryUtil(const MemoryUtil &) = delete;
 public: MemoryUtil &operator =(const MemoryUtil &) = delete;
 
 private:
-	static tml::ThreadFix th_fix;
-	static tml::MemoryUtilEngine *engine_;
+	static tml::ThreadFix th_fix_;
+	static std::unique_ptr<tml::MemoryUtilEngine> engine_;
 
 private:
 	static void Release(void);
 
 public:
 	static void Init(void);
-	static INT Create(tml::MemoryUtilEngine *);
+	static INT Create(std::unique_ptr<tml::MemoryUtilEngine> &);
 
 	template <typename T>
 	static T *Get(const size_t);
