@@ -7,6 +7,8 @@
 #include "Main.h"
 #include "../lib/tml/memory/MemoryUtil.h"
 #include "../lib/tml/memory/DefaultMemoryUtilEngine.h"
+#include "../lib/tml/random/RandomUtil.h"
+#include "../lib/tml/random/DefaultRandomUtilEngine.h"
 
 
 /**
@@ -32,6 +34,7 @@ INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_in
  */
 void cpp_base::InitMain(void)
 {
+	tml::RandomUtil::Init();
 	tml::MemoryUtil::Init();
 
 	return;
@@ -49,6 +52,8 @@ void cpp_base::InitMain(void)
  */
 INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_handle, WCHAR *cmd_line_str, INT wnd_show_type)
 {
+	cpp_base::InitMain();
+
 	{// MemoryUtil Create
 		std::unique_ptr<tml::MemoryUtilEngine> engine(new tml::DefaultMemoryUtilEngine());
 
@@ -65,15 +70,53 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		}
 	}
 
+	{// RandomUtil Create
+		std::unique_ptr<tml::RandomUtilEngine> engine(new tml::DefaultRandomUtilEngine());
+
+		if (dynamic_cast<tml::DefaultRandomUtilEngine *>(engine.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (0);
+		}
+
+		if (tml::RandomUtil::Create(engine) < 0) {
+			cpp_base::InitMain();
+
+			return (0);
+		}
+	}
+
 	{// Test
-		auto allocator_info = tml::MemoryUtil::GetAllocatorInfo();
+		{// MemoryUtil Test
+			auto p = tml::MemoryUtil::Get<INT>(10U);
+
+			auto allocator_info1 = tml::MemoryUtil::GetAllocatorInfo();
+
+			tml::MemoryUtil::Release<INT>(&p);
+
+			auto allocator_info2 = tml::MemoryUtil::GetAllocatorInfo();
+
+			int a = 0;
+		}
+
+		{// RandomUtil Test
+			auto val1 = tml::RandomUtil::GetINT(0, 100);
+			auto val2 = tml::RandomUtil::GetINT(0, 100);
+			auto val3 = tml::RandomUtil::GetINT(0, 100);
+			auto val4 = tml::RandomUtil::GetINT(0, 100);
+			auto val5 = tml::RandomUtil::GetINT(0, 100);
+
+			int a = 0;
+		}
 
 		int a = 0;
 	}
 
 	MSG msg = {};
 
+	INT exit_code = static_cast<INT>(msg.wParam);
+
 	cpp_base::InitMain();
 
-	return (static_cast<INT>(msg.wParam));
+	return (exit_code);
 }

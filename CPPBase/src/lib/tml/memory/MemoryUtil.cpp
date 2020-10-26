@@ -12,17 +12,6 @@ std::unique_ptr<tml::MemoryUtilEngine> tml::MemoryUtil::engine_;
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::MemoryUtil::Release(void)
-{
-	tml::MemoryUtil::engine_.reset();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::MemoryUtil::Init(void)
@@ -31,7 +20,7 @@ void tml::MemoryUtil::Init(void)
 		return;
 	}
 
-	tml::MemoryUtil::Release();
+	tml::MemoryUtil::engine_.reset();
 
 	return;
 }
@@ -51,7 +40,7 @@ INT tml::MemoryUtil::Create(std::unique_ptr<tml::MemoryUtilEngine> &engine)
 		return (-1);
 	}
 
-	tml::MemoryUtil::Release();
+	tml::MemoryUtil::Init();
 
 	tml::MemoryUtil::engine_ = std::move(engine);
 

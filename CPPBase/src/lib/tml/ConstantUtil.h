@@ -6,8 +6,10 @@
 
 
 #define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include <windows.h>
 #include <stdlib.h>
+#include <array>
 #include <chrono>
 
 

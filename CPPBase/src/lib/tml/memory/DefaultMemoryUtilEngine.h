@@ -28,6 +28,7 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE, const size_t);
+
 	template <typename T>
 	T *Get(const size_t);
 	template <typename T>

@@ -51,6 +51,7 @@ public:
 	virtual ~Allocator();
 
 	virtual void Init(void);
+
 	virtual tml::Allocator::INFO GetInfo(void);
 };
 }

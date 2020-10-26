@@ -33,6 +33,7 @@ public:
 
 	virtual void Init(void);
 	INT Create(void);
+
 	template <typename T>
 	T *Get(const size_t);
 	template <typename T>

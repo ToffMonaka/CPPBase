@@ -70,6 +70,7 @@ public:
 	virtual ~MemoryUtilEngine();
 
 	virtual void Init(void);
+
 	template <typename T>
 	T *Get(const size_t);
 	template <typename T>
