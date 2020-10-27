@@ -100,11 +100,9 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
 		BYTE *ms_p = NULLP;
 
-		this->allocator_th_lock_.Lock();
-
-		ms_p = this->new_allocator_->GetMemorySpacePart<T>(cnt);
-
-		this->allocator_th_lock_.Unlock();
+		{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
+			ms_p = this->new_allocator_->GetMemorySpacePart<T>(cnt);
+		}
 
 		p = this->new_allocator_->GetConstructorPart<T>(ms_p, cnt);
 
@@ -113,11 +111,9 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
 		BYTE *ms_p = NULLP;
 
-		this->allocator_th_lock_.Lock();
-
-		ms_p = this->dlmalloc_allocator_->GetMemorySpacePart<T>(cnt);
-
-		this->allocator_th_lock_.Unlock();
+		{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
+			ms_p = this->dlmalloc_allocator_->GetMemorySpacePart<T>(cnt);
+		}
 
 		p = this->dlmalloc_allocator_->GetConstructorPart<T>(ms_p, cnt);
 
@@ -142,11 +138,9 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 
 		ms_p = this->new_allocator_->ReleaseDestructorPart<T>(pp);
 
-		this->allocator_th_lock_.Lock();
-
-		this->new_allocator_->ReleaseMemorySpacePart<T>(ms_p, pp);
-
-		this->allocator_th_lock_.Unlock();
+		{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
+			this->new_allocator_->ReleaseMemorySpacePart<T>(ms_p, pp);
+		}
 
 		break;
 	}
@@ -155,11 +149,9 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 
 		ms_p = this->dlmalloc_allocator_->ReleaseDestructorPart<T>(pp);
 
-		this->allocator_th_lock_.Lock();
-
-		this->dlmalloc_allocator_->ReleaseMemorySpacePart<T>(ms_p, pp);
-
-		this->allocator_th_lock_.Unlock();
+		{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
+			this->dlmalloc_allocator_->ReleaseMemorySpacePart<T>(ms_p, pp);
+		}
 
 		break;
 	}

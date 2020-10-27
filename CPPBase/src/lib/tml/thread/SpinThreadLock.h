@@ -8,7 +8,7 @@
 #include "../ConstantUtil.h"
 #include <atomic>
 #include <thread>
-#include "ThreadLock.h"
+#include "ThreadLockBlock.h"
 
 
 namespace tml {

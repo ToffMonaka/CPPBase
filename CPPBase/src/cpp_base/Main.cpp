@@ -9,6 +9,10 @@
 #include "../lib/tml/memory/DefaultMemoryUtilEngine.h"
 #include "../lib/tml/random/RandomUtil.h"
 #include "../lib/tml/random/DefaultRandomUtilEngine.h"
+#include "../lib/tml/process/ProcessUtil.h"
+#include "../lib/tml/process/DefaultProcessUtilEngine.h"
+#include "../lib/tml/thread/ThreadUtil.h"
+#include "../lib/tml/thread/DefaultThreadUtilEngine.h"
 
 
 /**
@@ -34,6 +38,8 @@ INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_in
  */
 void cpp_base::InitMain(void)
 {
+	tml::ThreadUtil::Init();
+	tml::ProcessUtil::Init();
 	tml::RandomUtil::Init();
 	tml::MemoryUtil::Init();
 
@@ -86,6 +92,38 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		}
 	}
 
+	{// ProcessUtil Create
+		std::unique_ptr<tml::ProcessUtilEngine> engine(new tml::DefaultProcessUtilEngine());
+
+		if (dynamic_cast<tml::DefaultProcessUtilEngine *>(engine.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (0);
+		}
+
+		if (tml::ProcessUtil::Create(engine) < 0) {
+			cpp_base::InitMain();
+
+			return (0);
+		}
+	}
+
+	{// ThreadUtil Create
+		std::unique_ptr<tml::ThreadUtilEngine> engine(new tml::DefaultThreadUtilEngine());
+
+		if (dynamic_cast<tml::DefaultThreadUtilEngine *>(engine.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (0);
+		}
+
+		if (tml::ThreadUtil::Create(engine) < 0) {
+			cpp_base::InitMain();
+
+			return (0);
+		}
+	}
+
 	{// Test
 		{// MemoryUtil Test
 			auto p = tml::MemoryUtil::Get<INT>(10U);
@@ -100,11 +138,11 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		}
 
 		{// RandomUtil Test
-			auto val1 = tml::RandomUtil::GetINT(0, 100);
-			auto val2 = tml::RandomUtil::GetINT(0, 100);
-			auto val3 = tml::RandomUtil::GetINT(0, 100);
-			auto val4 = tml::RandomUtil::GetINT(0, 100);
-			auto val5 = tml::RandomUtil::GetINT(0, 100);
+			std::array<INT, 100U> val_ary;
+
+			for (auto &val : val_ary) {
+				val = tml::RandomUtil::GetINT(0, 100);
+			}
 
 			int a = 0;
 		}
