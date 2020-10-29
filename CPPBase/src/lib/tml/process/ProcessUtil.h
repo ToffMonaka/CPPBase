@@ -30,5 +30,43 @@ private:
 public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::ProcessUtilEngine> &);
+
+	static INT Start(std::unique_ptr<tml::Process> &);
+	void End(void);
+	static INT GetExitCode(void);
 };
+
+
+/**
+ * @brief Startä÷êî
+ * @param proc (process)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs,-2=ëΩèdãNìÆ
+ */
+inline INT tml::ProcessUtil::Start(std::unique_ptr<tml::Process> &proc)
+{
+	return (tml::ProcessUtil::engine_->Start(proc));
+}
+
+
+/**
+ * @brief Endä÷êî
+ */
+inline void tml::ProcessUtil::End(void)
+{
+	tml::ProcessUtil::engine_->End();
+
+	return;
+}
+
+
+/**
+ * @brief GetExitCodeä÷êî
+ * @return exit_code (exit_code)<br>
+ * 0à»äO=é∏îs
+ */
+inline INT tml::ProcessUtil::GetExitCode(void)
+{
+	return (tml::ProcessUtil::engine_->GetExitCode());
+}
 }

@@ -13,6 +13,8 @@
 #include "../lib/tml/process/DefaultProcessUtilEngine.h"
 #include "../lib/tml/thread/ThreadUtil.h"
 #include "../lib/tml/thread/DefaultThreadUtilEngine.h"
+#include "process/MainProcess.h"
+#include "thread/MainThread.h"
 
 
 /**
@@ -58,6 +60,8 @@ void cpp_base::InitMain(void)
  */
 INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_handle, WCHAR *cmd_line_str, INT wnd_show_type)
 {
+	INT exit_code = 0;
+
 	cpp_base::InitMain();
 
 	{// MemoryUtil Create
@@ -66,13 +70,13 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, 1048576U) < 0) {
 			cpp_base::InitMain();
 
-			return (0);
+			return (exit_code);
 		}
 
 		if (tml::MemoryUtil::Create(engine) < 0) {
 			cpp_base::InitMain();
 
-			return (0);
+			return (exit_code);
 		}
 	}
 
@@ -82,13 +86,13 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		if (dynamic_cast<tml::DefaultRandomUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
 
-			return (0);
+			return (exit_code);
 		}
 
 		if (tml::RandomUtil::Create(engine) < 0) {
 			cpp_base::InitMain();
 
-			return (0);
+			return (exit_code);
 		}
 	}
 
@@ -98,13 +102,13 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		if (dynamic_cast<tml::DefaultProcessUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
 
-			return (0);
+			return (exit_code);
 		}
 
 		if (tml::ProcessUtil::Create(engine) < 0) {
 			cpp_base::InitMain();
 
-			return (0);
+			return (exit_code);
 		}
 	}
 
@@ -114,16 +118,17 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		if (dynamic_cast<tml::DefaultThreadUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
 
-			return (0);
+			return (exit_code);
 		}
 
 		if (tml::ThreadUtil::Create(engine) < 0) {
 			cpp_base::InitMain();
 
-			return (0);
+			return (exit_code);
 		}
 	}
 
+	/*
 	{// Test
 		{// MemoryUtil Test
 			auto p = tml::MemoryUtil::Get<INT>(10U);
@@ -149,10 +154,47 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 
 		int a = 0;
 	}
+	*/
 
-	MSG msg = {};
+	{// MainThread Start
+		std::unique_ptr<tml::Thread> th(new cpp_base::MainThread());
 
-	INT exit_code = static_cast<INT>(msg.wParam);
+		if (dynamic_cast<cpp_base::MainThread *>(th.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+
+		if (tml::ThreadUtil::Start(th) < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+	}
+
+	{// MainProcess Start
+		std::unique_ptr<tml::Process> proc(new cpp_base::MainProcess());
+
+		if (dynamic_cast<cpp_base::MainProcess *>(proc.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+
+		INT start_res = tml::ProcessUtil::Start(proc);
+
+		if (start_res == -2) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		} else if (start_res < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+
+		exit_code = tml::ProcessUtil::GetExitCode();
+	}
 
 	cpp_base::InitMain();
 

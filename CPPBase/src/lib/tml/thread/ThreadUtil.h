@@ -30,5 +30,43 @@ private:
 public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::ThreadUtilEngine> &);
+
+	static INT Start(std::unique_ptr<tml::Thread> &);
+	void End(void);
+	void EndAll(void);
 };
+
+
+/**
+ * @brief Startä÷êî
+ * @param th (thread)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::Thread> &th)
+{
+	return (tml::ThreadUtil::engine_->Start(th));
+}
+
+
+/**
+ * @brief Endä÷êî
+ */
+inline void tml::ThreadUtil::End(void)
+{
+	tml::ThreadUtil::engine_->End();
+
+	return;
+}
+
+
+/**
+ * @brief EndAllä÷êî
+ */
+inline void tml::ThreadUtil::EndAll(void)
+{
+	tml::ThreadUtil::engine_->EndAll();
+
+	return;
+}
 }

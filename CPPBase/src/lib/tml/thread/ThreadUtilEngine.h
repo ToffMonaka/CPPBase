@@ -6,6 +6,7 @@
 
 
 #include "../ConstantUtil.h"
+#include "Thread.h"
 
 
 namespace tml {
@@ -29,5 +30,9 @@ public:
 	virtual ~ThreadUtilEngine();
 
 	virtual void Init(void);
+
+	INT Start(std::unique_ptr<tml::Thread> &);
+	void End(void);
+	void EndAll(void);
 };
 }

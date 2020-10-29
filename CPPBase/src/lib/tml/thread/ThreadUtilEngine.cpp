@@ -52,3 +52,33 @@ INT tml::ThreadUtilEngine::Create(void)
 {
 	return (0);
 }
+
+
+/**
+ * @brief StartŠÖ”
+ * @param th (thread)
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::Thread> &th)
+{
+	return (0);
+}
+
+
+/**
+ * @brief EndŠÖ”
+ */
+void tml::ThreadUtilEngine::End(void)
+{
+	return;
+}
+
+
+/**
+ * @brief EndAllŠÖ”
+ */
+void tml::ThreadUtilEngine::EndAll(void)
+{
+	return;
+}

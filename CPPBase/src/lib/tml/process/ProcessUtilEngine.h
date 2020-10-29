@@ -6,6 +6,7 @@
 
 
 #include "../ConstantUtil.h"
+#include "Process.h"
 
 
 namespace tml {
@@ -29,5 +30,9 @@ public:
 	virtual ~ProcessUtilEngine();
 
 	virtual void Init(void);
+
+	INT Start(std::unique_ptr<tml::Process> &);
+	void End(void);
+	INT GetExitCode(void);
 };
 }

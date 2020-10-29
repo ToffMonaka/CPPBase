@@ -52,3 +52,37 @@ INT tml::ProcessUtilEngine::Create(void)
 {
 	return (0);
 }
+
+
+/**
+ * @brief Startä÷êî
+ * @param proc (process)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs,-2=ëΩèdãNìÆ
+ */
+INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
+{
+	return (0);
+}
+
+
+/**
+ * @brief Endä÷êî
+ */
+void tml::ProcessUtilEngine::End(void)
+{
+	return;
+}
+
+
+/**
+ * @brief GetExitCodeä÷êî
+ * @return exit_code (exit_code)<br>
+ * 0à»äO=é∏îs
+ */
+INT tml::ProcessUtilEngine::GetExitCode(void)
+{
+	MSG msg = {};
+
+	return (static_cast<INT>(msg.wParam));
+}

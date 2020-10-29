@@ -155,6 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\cpp_base\process\MainProcess.cpp" />
+    <ClCompile Include="src\cpp_base\thread\MainThread.cpp" />
     <ClCompile Include="src\lib\tml\ConstantUtil.cpp" />
     <ClCompile Include="src\lib\tml\dlmalloc\malloc.c" />
     <ClCompile Include="src\lib\tml\memory\Allocator.cpp" />
@@ -164,6 +166,7 @@
     <ClCompile Include="src\lib\tml\memory\MemoryUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\memory\NewAllocator.cpp" />
     <ClCompile Include="src\lib\tml\process\DefaultProcessUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\process\Process.cpp" />
     <ClCompile Include="src\lib\tml\process\ProcessID.cpp" />
     <ClCompile Include="src\lib\tml\process\ProcessUtil.cpp" />
     <ClCompile Include="src\lib\tml\process\ProcessUtilEngine.cpp" />
@@ -173,6 +176,7 @@
     <ClCompile Include="src\lib\tml\thread\DefaultThreadUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\thread\MutexThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\SpinThreadLock.cpp" />
+    <ClCompile Include="src\lib\tml\thread\Thread.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadFix.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadID.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLock.cpp" />
@@ -183,6 +187,8 @@
     <ClCompile Include="src\lib\tml\thread\ThreadUtilEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\cpp_base\process\MainProcess.h" />
+    <ClInclude Include="src\cpp_base\thread\MainThread.h" />
     <ClInclude Include="src\lib\tml\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
     <ClInclude Include="src\lib\tml\memory\Allocator.h" />
@@ -192,6 +198,7 @@
     <ClInclude Include="src\lib\tml\memory\MemoryUtilEngine.h" />
     <ClInclude Include="src\lib\tml\memory\NewAllocator.h" />
     <ClInclude Include="src\lib\tml\process\DefaultProcessUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\process\Process.h" />
     <ClInclude Include="src\lib\tml\process\ProcessID.h" />
     <ClInclude Include="src\lib\tml\process\ProcessUtil.h" />
     <ClInclude Include="src\lib\tml\process\ProcessUtilEngine.h" />
@@ -201,6 +208,7 @@
     <ClInclude Include="src\lib\tml\thread\DefaultThreadUtilEngine.h" />
     <ClInclude Include="src\lib\tml\thread\MutexThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\SpinThreadLock.h" />
+    <ClInclude Include="src\lib\tml\thread\Thread.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadFix.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadID.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLock.h" />
