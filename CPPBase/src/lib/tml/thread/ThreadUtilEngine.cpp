@@ -30,6 +30,10 @@ tml::ThreadUtilEngine::~ThreadUtilEngine()
  */
 void tml::ThreadUtilEngine::Release(void)
 {
+	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+		this->stat_ = tml::ThreadUtilEngine::STATE();
+	}
+
 	return;
 }
 
@@ -80,5 +84,9 @@ void tml::ThreadUtilEngine::End(void)
  */
 void tml::ThreadUtilEngine::EndAll(void)
 {
+	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+		this->stat_.end_all_flg = TRUE;
+	}
+
 	return;
 }

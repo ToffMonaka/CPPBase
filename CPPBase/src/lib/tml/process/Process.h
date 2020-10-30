@@ -29,5 +29,9 @@ public:
 	virtual ~Process();
 
 	virtual void Init(void);
+
+	virtual INT Start(void);
+	virtual void End(void);
+	virtual void Update(void);
 };
 }

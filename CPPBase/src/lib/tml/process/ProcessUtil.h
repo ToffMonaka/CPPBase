@@ -31,20 +31,37 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::ProcessUtilEngine> &);
 
+	static tml::Process *Get(void);
 	static INT Start(std::unique_ptr<tml::Process> &);
-	void End(void);
+	static void End(void);
+	static tml::ProcessUtilEngine::STATE GetState(void);
 	static INT GetExitCode(void);
 };
+
+
+/**
+ * @brief GetŠÖ”
+ * @return proc (process)<br>
+ * NULLP=Ž¸”s
+ */
+inline tml::Process *tml::ProcessUtil::Get(void)
+{
+	return (tml::ProcessUtil::engine_->Get());
+}
 
 
 /**
  * @brief StartŠÖ”
  * @param proc (process)
  * @return res (result)<br>
- * 0–¢–ž=Ž¸”s,-2=‘½d‹N“®
+ * 0–¢–ž=Ž¸”s
  */
 inline INT tml::ProcessUtil::Start(std::unique_ptr<tml::Process> &proc)
 {
+	if (!tml::ProcessUtil::th_fix_.Check()) {
+		return (-1);
+	}
+
 	return (tml::ProcessUtil::engine_->Start(proc));
 }
 
@@ -57,6 +74,16 @@ inline void tml::ProcessUtil::End(void)
 	tml::ProcessUtil::engine_->End();
 
 	return;
+}
+
+
+/**
+ * @brief GetStateŠÖ”
+ * @return stat (state)
+ */
+inline tml::ProcessUtilEngine::STATE tml::ProcessUtil::GetState(void)
+{
+	return (tml::ProcessUtil::engine_->GetState());
 }
 
 

@@ -29,5 +29,9 @@ public:
 	virtual ~Thread();
 
 	virtual void Init(void);
+
+	virtual INT Start(void);
+	virtual void End(void);
+	virtual void Update(void);
 };
 }

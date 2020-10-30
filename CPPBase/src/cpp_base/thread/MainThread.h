@@ -28,5 +28,9 @@ public:
 
 	virtual void Init(void);
 	INT Create(void);
+
+	virtual INT Start(void);
+	virtual void End(void);
+	virtual void Update(void);
 };
 }

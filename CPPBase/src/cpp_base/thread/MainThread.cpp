@@ -68,3 +68,32 @@ INT cpp_base::MainThread::Create(void)
 
 	return (0);
 }
+
+
+/**
+ * @brief StartŠÖ”
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT cpp_base::MainThread::Start(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief EndŠÖ”
+ */
+void cpp_base::MainThread::End(void)
+{
+	return;
+}
+
+
+/**
+ * @brief UpdateŠÖ”
+ */
+void cpp_base::MainThread::Update(void)
+{
+	return;
+}

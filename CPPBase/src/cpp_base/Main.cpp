@@ -128,34 +128,6 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		}
 	}
 
-	/*
-	{// Test
-		{// MemoryUtil Test
-			auto p = tml::MemoryUtil::Get<INT>(10U);
-
-			auto allocator_info1 = tml::MemoryUtil::GetAllocatorInfo();
-
-			tml::MemoryUtil::Release<INT>(&p);
-
-			auto allocator_info2 = tml::MemoryUtil::GetAllocatorInfo();
-
-			int a = 0;
-		}
-
-		{// RandomUtil Test
-			std::array<INT, 100U> val_ary;
-
-			for (auto &val : val_ary) {
-				val = tml::RandomUtil::GetINT(0, 100);
-			}
-
-			int a = 0;
-		}
-
-		int a = 0;
-	}
-	*/
-
 	{// MainThread Start
 		std::unique_ptr<tml::Thread> th(new cpp_base::MainThread());
 
@@ -181,13 +153,7 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 			return (exit_code);
 		}
 
-		INT start_res = tml::ProcessUtil::Start(proc);
-
-		if (start_res == -2) {
-			cpp_base::InitMain();
-
-			return (exit_code);
-		} else if (start_res < 0) {
+		if (tml::ProcessUtil::Start(proc) < 0) {
 			cpp_base::InitMain();
 
 			return (exit_code);

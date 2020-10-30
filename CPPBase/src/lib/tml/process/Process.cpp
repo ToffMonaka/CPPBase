@@ -52,3 +52,32 @@ INT tml::Process::Create(void)
 {
 	return (0);
 }
+
+
+/**
+ * @brief Startä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::Process::Start(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief Endä÷êî
+ */
+void tml::Process::End(void)
+{
+	return;
+}
+
+
+/**
+ * @brief Updateä÷êî
+ */
+void tml::Process::Update(void)
+{
+	return;
+}

@@ -5,6 +5,9 @@
 
 
 #include "MainProcess.h"
+#include "../../lib/tml/memory/MemoryUtil.h"
+#include "../../lib/tml/random/RandomUtil.h"
+#include "../../lib/tml/process/ProcessUtil.h"
 
 
 /**
@@ -67,4 +70,63 @@ INT cpp_base::MainProcess::Create(void)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief Startä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::MainProcess::Start(void)
+{
+	{// Test
+		{// MemoryUtil Test
+			auto allocator_info1 = tml::MemoryUtil::GetAllocatorInfo();
+
+			auto p = tml::MemoryUtil::Get<INT>(10U);
+
+			auto allocator_info2 = tml::MemoryUtil::GetAllocatorInfo();
+
+			tml::MemoryUtil::Release<INT>(&p);
+
+			auto allocator_info3 = tml::MemoryUtil::GetAllocatorInfo();
+
+			int a = 0;
+		}
+
+		{// RandomUtil Test
+			std::array<INT, 100U> val_ary;
+
+			for (auto &val : val_ary) {
+				val = tml::RandomUtil::GetINT(0, 100);
+			}
+
+			int a = 0;
+		}
+
+		int a = 0;
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief Endä÷êî
+ */
+void cpp_base::MainProcess::End(void)
+{
+	return;
+}
+
+
+/**
+ * @brief Updateä÷êî
+ */
+void cpp_base::MainProcess::Update(void)
+{
+	tml::ProcessUtil::End();
+
+	return;
 }

@@ -52,3 +52,32 @@ INT tml::Thread::Create(void)
 {
 	return (0);
 }
+
+
+/**
+ * @brief StartŠÖ”
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::Thread::Start(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief EndŠÖ”
+ */
+void tml::Thread::End(void)
+{
+	return;
+}
+
+
+/**
+ * @brief UpdateŠÖ”
+ */
+void tml::Thread::Update(void)
+{
+	return;
+}

@@ -31,10 +31,23 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::ThreadUtilEngine> &);
 
+	static tml::Thread *Get(void);
 	static INT Start(std::unique_ptr<tml::Thread> &);
-	void End(void);
-	void EndAll(void);
+	static void End(void);
+	static void EndAll(void);
+	static tml::ThreadUtilEngine::STATE GetState(void);
 };
+
+
+/**
+ * @brief Getä÷êî
+ * @return th (thread)<br>
+ * NULLP=é∏îs
+ */
+inline tml::Thread *tml::ThreadUtil::Get(void)
+{
+	return (tml::ThreadUtil::engine_->Get());
+}
 
 
 /**
@@ -45,6 +58,10 @@ public:
  */
 inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::Thread> &th)
 {
+	if (!tml::ThreadUtil::th_fix_.Check()) {
+		return (-1);
+	}
+
 	return (tml::ThreadUtil::engine_->Start(th));
 }
 
@@ -68,5 +85,15 @@ inline void tml::ThreadUtil::EndAll(void)
 	tml::ThreadUtil::engine_->EndAll();
 
 	return;
+}
+
+
+/**
+ * @brief GetStateä÷êî
+ * @return stat (state)
+ */
+inline tml::ThreadUtilEngine::STATE tml::ThreadUtil::GetState(void)
+{
+	return (tml::ThreadUtil::engine_->GetState());
 }
 }
