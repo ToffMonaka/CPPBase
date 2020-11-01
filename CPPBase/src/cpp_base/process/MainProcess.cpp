@@ -8,6 +8,8 @@
 #include "../../lib/tml/memory/MemoryUtil.h"
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/process/ProcessUtil.h"
+#include "../../lib/tml/thread/ThreadUtil.h"
+#include "../thread/MainThread.h"
 
 
 /**
@@ -80,6 +82,18 @@ INT cpp_base::MainProcess::Create(void)
  */
 INT cpp_base::MainProcess::Start(void)
 {
+	{// MainThread Start
+		std::unique_ptr<tml::Thread> th(new cpp_base::MainThread());
+
+		if (dynamic_cast<cpp_base::MainThread *>(th.get())->Create() < 0) {
+			return (-1);
+		}
+
+		if (tml::ThreadUtil::Start(th, true) < 0) {
+			return (-1);
+		}
+	}
+
 	{// Test
 		{// MemoryUtil Test
 			auto allocator_info1 = tml::MemoryUtil::GetAllocatorInfo();

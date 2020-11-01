@@ -32,9 +32,10 @@ public:
 	static INT Create(std::unique_ptr<tml::ThreadUtilEngine> &);
 
 	static tml::Thread *Get(void);
-	static INT Start(std::unique_ptr<tml::Thread> &);
-	static void End(void);
-	static void EndAll(void);
+	static INT Start(std::unique_ptr<tml::Thread> &, const bool ready_flg = false);
+	static INT StartAll(void);
+	static void End(const bool finish_flg = false);
+	static void EndAll(const bool delete_flg = false);
 	static tml::ThreadUtilEngine::STATE GetState(void);
 };
 
@@ -53,25 +54,34 @@ inline tml::Thread *tml::ThreadUtil::Get(void)
 /**
  * @brief Startä÷êî
  * @param th (thread)
+ * @param ready_flg (ready_flag)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::Thread> &th)
+inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::Thread> &th, const bool ready_flg)
 {
-	if (!tml::ThreadUtil::th_fix_.Check()) {
-		return (-1);
-	}
+	return (tml::ThreadUtil::engine_->Start(th, ready_flg));
+}
 
-	return (tml::ThreadUtil::engine_->Start(th));
+
+/**
+ * @brief StartAllä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+inline INT tml::ThreadUtil::StartAll(void)
+{
+	return (tml::ThreadUtil::engine_->StartAll());
 }
 
 
 /**
  * @brief Endä÷êî
+ * @param finish_flg (finish_flag)
  */
-inline void tml::ThreadUtil::End(void)
+inline void tml::ThreadUtil::End(const bool finish_flg)
 {
-	tml::ThreadUtil::engine_->End();
+	tml::ThreadUtil::engine_->End(finish_flg);
 
 	return;
 }
@@ -79,10 +89,11 @@ inline void tml::ThreadUtil::End(void)
 
 /**
  * @brief EndAllä÷êî
+ * @param delete_flg (delete_flag)
  */
-inline void tml::ThreadUtil::EndAll(void)
+inline void tml::ThreadUtil::EndAll(const bool delete_flg)
 {
-	tml::ThreadUtil::engine_->EndAll();
+	tml::ThreadUtil::engine_->EndAll(delete_flg);
 
 	return;
 }

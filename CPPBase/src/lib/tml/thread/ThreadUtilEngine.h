@@ -6,6 +6,8 @@
 
 
 #include "../ConstantUtil.h"
+#include <list>
+#include <map>
 #include "Thread.h"
 #include "../thread/SpinThreadLock.h"
 
@@ -28,19 +30,23 @@ public:
 	 */
 	typedef struct STATE_
 	{
-		BOOL end_all_flg;
+		bool end_flg;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		STATE_() :
-			end_all_flg(FALSE)
+			end_flg(false)
 		{
 			return;
 		}
 	} STATE;
 
 private:
+	std::list<std::unique_ptr<tml::Thread> > th_cont_;
+	std::list<tml::Thread *> ready_th_cont_;
+	std::list<tml::Thread *> start_th_cont_;
+	std::map<std::thread::id, tml::Thread *> start_th_cont_with_th_id_;
 	tml::ThreadUtilEngine::STATE stat_;
 	tml::SpinThreadLock stat_th_lock_;
 
@@ -55,9 +61,10 @@ public:
 	virtual void Init(void);
 
 	tml::Thread *Get(void);
-	INT Start(std::unique_ptr<tml::Thread> &);
-	void End(void);
-	void EndAll(void);
+	INT Start(std::unique_ptr<tml::Thread> &, const bool ready_flg = false);
+	INT StartAll(void);
+	void End(const bool finish_flg = false);
+	void EndAll(const bool delete_flg = false);
 	tml::ThreadUtilEngine::STATE GetState(void);
 };
 
@@ -68,8 +75,19 @@ public:
  * NULLP=失敗
  */
 inline tml::Thread *tml::ThreadUtilEngine::Get(void)
-{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-	return (NULLP);
+{
+	tml::Thread *th = NULLP;
+	auto th_id = std::this_thread::get_id();
+
+	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+		auto th_itr = this->start_th_cont_with_th_id_.find(th_id);
+
+		if (th_itr != this->start_th_cont_with_th_id_.end()) {
+			th = th_itr->second;
+		}
+	}
+
+	return (th);
 }
 
 

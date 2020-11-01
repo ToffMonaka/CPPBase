@@ -28,9 +28,9 @@ tml::ThreadFix::~ThreadFix()
 /**
  * @brief CheckŠÖ”
  * @return ”»’è
- * FALSE=¸”s,TRUE=¬Œ÷
+ * false=¸”s,true=¬Œ÷
  */
-BOOL tml::ThreadFix::Check(void)
+bool tml::ThreadFix::Check(void)
 {
 	auto th_id = std::this_thread::get_id();
 
@@ -38,9 +38,9 @@ BOOL tml::ThreadFix::Check(void)
 		if (this->th_id_ == std::thread::id()) {
 			this->th_id_ = th_id;
 		} else if (this->th_id_ != th_id) {
-			return (FALSE);
+			return (false);
 		}
 	}
 
-	return (TRUE);
+	return (true);
 }

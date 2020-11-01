@@ -5,6 +5,7 @@
 
 
 #include "ProcessUtilEngine.h"
+#include "../thread/ThreadUtil.h"
 
 
 /**
@@ -30,10 +31,15 @@ tml::ProcessUtilEngine::~ProcessUtilEngine()
  */
 void tml::ProcessUtilEngine::Release(void)
 {
+	std::unique_ptr<tml::Process> proc;
+
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->proc_.reset();
-		this->stat_ = tml::ProcessUtilEngine::STATE();
+		this->stat_.end_flg = true;
+
+		proc = std::move(this->proc_);
 	}
+
+	proc.reset();
 
 	return;
 }
@@ -44,6 +50,10 @@ void tml::ProcessUtilEngine::Release(void)
  */
 void tml::ProcessUtilEngine::Init(void)
 {
+	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+		this->stat_ = tml::ProcessUtilEngine::STATE();
+	}
+
 	return;
 }
 
@@ -55,6 +65,10 @@ void tml::ProcessUtilEngine::Init(void)
  */
 INT tml::ProcessUtilEngine::Create(void)
 {
+	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+		this->stat_ = tml::ProcessUtilEngine::STATE();
+	}
+
 	return (0);
 }
 
@@ -68,6 +82,10 @@ INT tml::ProcessUtilEngine::Create(void)
 INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 {
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+		if (this->stat_.end_flg) {
+			return (-1);
+		}
+
 		if (this->proc_ != NULLP) {
 			return (-1);
 		}
@@ -79,15 +97,19 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 		return (-1);
 	}
 
-	while (1) {
+	tml::ThreadUtil::StartAll();
+
+	do {
+		this->proc_->Update();
+
 		{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 			if (this->stat_.end_flg) {
 				break;
 			}
 		}
+	} while (1);
 
-		this->proc_->Update();
-	}
+	tml::ThreadUtil::EndAll(true);
 
 	this->proc_->End();
 
@@ -101,7 +123,7 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 void tml::ProcessUtilEngine::End(void)
 {
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_.end_flg = TRUE;
+		this->stat_.end_flg = true;
 	}
 
 	return;

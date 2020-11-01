@@ -58,10 +58,6 @@ inline tml::Process *tml::ProcessUtil::Get(void)
  */
 inline INT tml::ProcessUtil::Start(std::unique_ptr<tml::Process> &proc)
 {
-	if (!tml::ProcessUtil::th_fix_.Check()) {
-		return (-1);
-	}
-
 	return (tml::ProcessUtil::engine_->Start(proc));
 }
 

@@ -28,13 +28,13 @@ public:
 	 */
 	typedef struct STATE_
 	{
-		BOOL end_flg;
+		bool end_flg;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		STATE_() :
-			end_flg(FALSE)
+			end_flg(false)
 		{
 			return;
 		}
@@ -69,8 +69,14 @@ public:
  * NULLP=失敗
  */
 inline tml::Process *tml::ProcessUtilEngine::Get(void)
-{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-	return (this->proc_.get());
+{
+	tml::Process *proc = NULLP;
+
+	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+		proc = this->proc_.get();
+	}
+
+	return (proc);
 }
 
 

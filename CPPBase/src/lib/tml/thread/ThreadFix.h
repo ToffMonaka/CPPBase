@@ -26,6 +26,6 @@ public:
 	ThreadFix();
 	virtual ~ThreadFix();
 
-	BOOL Check(void);
+	bool Check(void);
 };
 }

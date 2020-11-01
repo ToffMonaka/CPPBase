@@ -14,7 +14,6 @@
 #include "../lib/tml/thread/ThreadUtil.h"
 #include "../lib/tml/thread/DefaultThreadUtilEngine.h"
 #include "process/MainProcess.h"
-#include "thread/MainThread.h"
 
 
 /**
@@ -122,22 +121,6 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		}
 
 		if (tml::ThreadUtil::Create(engine) < 0) {
-			cpp_base::InitMain();
-
-			return (exit_code);
-		}
-	}
-
-	{// MainThread Start
-		std::unique_ptr<tml::Thread> th(new cpp_base::MainThread());
-
-		if (dynamic_cast<cpp_base::MainThread *>(th.get())->Create() < 0) {
-			cpp_base::InitMain();
-
-			return (exit_code);
-		}
-
-		if (tml::ThreadUtil::Start(th) < 0) {
 			cpp_base::InitMain();
 
 			return (exit_code);

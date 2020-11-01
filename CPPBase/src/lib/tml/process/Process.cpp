@@ -5,6 +5,7 @@
 
 
 #include "Process.h"
+#include "ProcessUtil.h"
 
 
 /**
@@ -39,6 +40,8 @@ void tml::Process::Release(void)
  */
 void tml::Process::Init(void)
 {
+	this->th_id_ = std::thread::id();
+
 	return;
 }
 
@@ -50,34 +53,7 @@ void tml::Process::Init(void)
  */
 INT tml::Process::Create(void)
 {
+	this->th_id_ = std::this_thread::get_id();
+
 	return (0);
-}
-
-
-/**
- * @brief StartŠÖ”
- * @return res (result)<br>
- * 0–¢–=¸”s
- */
-INT tml::Process::Start(void)
-{
-	return (0);
-}
-
-
-/**
- * @brief EndŠÖ”
- */
-void tml::Process::End(void)
-{
-	return;
-}
-
-
-/**
- * @brief UpdateŠÖ”
- */
-void tml::Process::Update(void)
-{
-	return;
 }
