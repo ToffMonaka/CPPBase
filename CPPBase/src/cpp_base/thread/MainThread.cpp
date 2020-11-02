@@ -5,7 +5,7 @@
 
 
 #include "MainThread.h"
-#include "../../lib/tml/thread/ThreadUtil.h"
+#include "../../lib/tml/math/MathUtil.h"
 
 
 /**
@@ -96,5 +96,7 @@ void cpp_base::MainThread::End(void)
  */
 void cpp_base::MainThread::Update(void)
 {
+	tml::MathUtil::Sleep(TIME_REAL(1.0));
+
 	return;
 }

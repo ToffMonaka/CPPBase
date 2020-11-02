@@ -7,6 +7,8 @@
 #include "Main.h"
 #include "../lib/tml/memory/MemoryUtil.h"
 #include "../lib/tml/memory/DefaultMemoryUtilEngine.h"
+#include "../lib/tml/math/MathUtil.h"
+#include "../lib/tml/math/DefaultMathUtilEngine.h"
 #include "../lib/tml/random/RandomUtil.h"
 #include "../lib/tml/random/DefaultRandomUtilEngine.h"
 #include "../lib/tml/process/ProcessUtil.h"
@@ -42,6 +44,7 @@ void cpp_base::InitMain(void)
 	tml::ThreadUtil::Init();
 	tml::ProcessUtil::Init();
 	tml::RandomUtil::Init();
+	tml::MathUtil::Init();
 	tml::MemoryUtil::Init();
 
 	return;
@@ -73,6 +76,22 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 		}
 
 		if (tml::MemoryUtil::Create(engine) < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+	}
+
+	{// MathUtil Create
+		std::unique_ptr<tml::MathUtilEngine> engine(new tml::DefaultMathUtilEngine());
+
+		if (dynamic_cast<tml::DefaultMathUtilEngine *>(engine.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+
+		if (tml::MathUtil::Create(engine) < 0) {
 			cpp_base::InitMain();
 
 			return (exit_code);

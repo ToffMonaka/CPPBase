@@ -6,6 +6,7 @@
 
 #include "MainProcess.h"
 #include "../../lib/tml/memory/MemoryUtil.h"
+#include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/process/ProcessUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
@@ -140,6 +141,8 @@ void cpp_base::MainProcess::End(void)
  */
 void cpp_base::MainProcess::Update(void)
 {
+	tml::MathUtil::Sleep(TIME_REAL(1.0));
+
 	tml::ProcessUtil::End();
 
 	return;
