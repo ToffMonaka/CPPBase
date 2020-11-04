@@ -6,6 +6,7 @@
 
 #include "Thread.h"
 #include "ThreadUtil.h"
+#include "../memory/MemoryUtil.h"
 
 
 /**

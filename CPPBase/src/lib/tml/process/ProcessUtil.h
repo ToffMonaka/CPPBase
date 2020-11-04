@@ -33,7 +33,7 @@ public:
 
 	static tml::Process *Get(void);
 	static INT Start(std::unique_ptr<tml::Process> &);
-	static void End(void);
+	static void End(const INT exit_code = 0);
 	static tml::ProcessUtilEngine::STATE GetState(void);
 	static INT GetExitCode(void);
 };
@@ -64,10 +64,11 @@ inline INT tml::ProcessUtil::Start(std::unique_ptr<tml::Process> &proc)
 
 /**
  * @brief EndŠÖ”
+ * @param exit_code (exit_code)
  */
-inline void tml::ProcessUtil::End(void)
+inline void tml::ProcessUtil::End(const INT exit_code)
 {
-	tml::ProcessUtil::engine_->End();
+	tml::ProcessUtil::engine_->End(exit_code);
 
 	return;
 }

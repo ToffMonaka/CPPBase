@@ -60,7 +60,7 @@ void cpp_base::InitMain(void)
  * @return exit_code (exit_code)<br>
  * 0ˆÈŠO=Ž¸”s
  */
-INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_handle, WCHAR *cmd_line_str, INT wnd_show_type)
+INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_instance_handle, const WCHAR *cmd_line_str, const INT wnd_show_type)
 {
 	INT exit_code = 0;
 
@@ -149,7 +149,7 @@ INT cpp_base::CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_hand
 	{// MainProcess Start
 		std::unique_ptr<tml::Process> proc(new cpp_base::MainProcess());
 
-		if (dynamic_cast<cpp_base::MainProcess *>(proc.get())->Create() < 0) {
+		if (dynamic_cast<cpp_base::MainProcess *>(proc.get())->Create(instance_handle, cpp_base::ConstantUtil::WINDOW::NAME, wnd_show_type) < 0) {
 			cpp_base::InitMain();
 
 			return (exit_code);

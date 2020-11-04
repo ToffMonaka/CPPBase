@@ -75,12 +75,6 @@ public:
 	T *Get(const size_t);
 	template <typename T>
 	void Release(T **);
-	template <typename T>
-	void Clear(T *, const size_t);
-	template <typename T>
-	void Copy(T *, const T *, const size_t);
-	template <typename T>
-	void CopySame(T *, const T *, const size_t);
 	tml::MemoryUtilEngine::ALLOCATOR_INFO GetAllocatorInfo(void);
 };
 
@@ -156,64 +150,6 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 		break;
 	}
 	}
-
-	return;
-}
-
-
-/**
- * @brief Clearä÷êî
- * @param p (pointer)
- * @param cnt (count)
- */
-template <typename T>
-inline void tml::MemoryUtilEngine::Clear(T *p, const size_t cnt)
-{
-	if (cnt <= 0U) {
-		return;
-	}
-
-	memset(p, 0, sizeof(T) * cnt);
-
-	return;
-}
-
-
-/**
- * @brief Copyä÷êî
- * @param dst_p (dst_pointer)
- * @param src_p (src_pointer)
- * @param cnt (count)
- */
-template <typename T>
-inline void tml::MemoryUtilEngine::Copy(T *dst_p, const T *src_p, const size_t cnt)
-{
-	if ((dst_p == src_p)
-	|| (cnt <= 0U)) {
-		return;
-	}
-
-	memcpy(dst_p, src_p, sizeof(T) * cnt);
-
-	return;
-}
-
-
-/**
- * @brief CopySameä÷êî
- * @param dst_p (dst_pointer)
- * @param src_p (src_pointer)
- * @param cnt (count)
- */
-template <typename T>
-inline void tml::MemoryUtilEngine::CopySame(T *dst_p, const T *src_p, const size_t cnt)
-{
-	if ((dst_p == src_p)
-	|| (cnt <= 0U)) {
-		return;
-	}
-
-	memmove(dst_p, src_p, sizeof(T) * cnt);
 
 	return;
 }

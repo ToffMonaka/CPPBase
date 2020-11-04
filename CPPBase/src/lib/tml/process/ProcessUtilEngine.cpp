@@ -35,6 +35,7 @@ void tml::ProcessUtilEngine::Release(void)
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		this->stat_.end_flg = true;
+		this->stat_.exit_code = 0;
 
 		proc = std::move(this->proc_);
 	}
@@ -99,15 +100,45 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 
 	tml::ThreadUtil::StartAll();
 
-	do {
-		this->proc_->Update();
+	if (this->proc_->GetWindowHandle() != NULLP) {
+		bool loop_flg = true;
+		MSG msg = {};
 
-		{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-			if (this->stat_.end_flg) {
-				break;
+		do {
+			while (PeekMessage(&msg, NULLP, 0U, 0U, PM_REMOVE)) {
+				if (msg.message == WM_QUIT) {
+					this->End(static_cast<INT>(msg.wParam));
+
+					{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+						loop_flg = !this->stat_.end_flg;
+					}
+
+					break;
+				}
+
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
 			}
-		}
-	} while (1);
+
+			if (loop_flg) {
+				this->proc_->Update();
+
+				{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+					loop_flg = !this->stat_.end_flg;
+				}
+			}
+		} while (loop_flg);
+	} else {
+		bool loop_flg = true;
+
+		do {
+			this->proc_->Update();
+
+			{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+				loop_flg = !this->stat_.end_flg;
+			}
+		} while (loop_flg);
+	}
 
 	tml::ThreadUtil::EndAll(true);
 
@@ -119,25 +150,14 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 
 /**
  * @brief Endä÷êî
+ * @param exit_code (exit_code)
  */
-void tml::ProcessUtilEngine::End(void)
+void tml::ProcessUtilEngine::End(const INT exit_code)
 {
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		this->stat_.end_flg = true;
+		this->stat_.exit_code = exit_code;
 	}
 
 	return;
-}
-
-
-/**
- * @brief GetExitCodeä÷êî
- * @return exit_code (exit_code)<br>
- * 0à»äO=é∏îs
- */
-INT tml::ProcessUtilEngine::GetExitCode(void)
-{
-	MSG msg = {};
-
-	return (static_cast<INT>(msg.wParam));
 }

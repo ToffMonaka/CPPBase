@@ -11,6 +11,7 @@
 #include "../../lib/tml/process/ProcessUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
 #include "../thread/MainThread.h"
+#include "../resource/resource.h"
 
 
 /**
@@ -59,14 +60,17 @@ void cpp_base::MainProcess::Init(void)
 
 /**
  * @brief Createä÷êî
+ * @param instance_handle (instance_handle)
+ * @param wnd_name (window_name)
+ * @param wnd_show_type (window_show_type)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::MainProcess::Create(void)
+INT cpp_base::MainProcess::Create(const HINSTANCE instance_handle, const WCHAR *wnd_name, const INT wnd_show_type)
 {
 	this->Release();
 
-	if (tml::Process::Create() < 0) {
+	if (tml::Process::Create(instance_handle, wnd_name, wnd_show_type) < 0) {
 		this->Init();
 
 		return (-1);
@@ -91,6 +95,27 @@ INT cpp_base::MainProcess::Start(void)
 		}
 
 		if (tml::ThreadUtil::Start(th, true) < 0) {
+			return (-1);
+		}
+	}
+
+	{// Window Create
+		WNDCLASSEX wnd_class = {};
+
+		wnd_class.cbSize = sizeof(wnd_class);
+		wnd_class.style = CS_HREDRAW | CS_VREDRAW;
+		wnd_class.lpfnWndProc = cpp_base::MainProcess::WindowProcedure;
+		wnd_class.cbClsExtra = 0;
+		wnd_class.cbWndExtra = 0;
+		wnd_class.hInstance = this->GetInstanceHandle();
+		wnd_class.hIcon = LoadIcon(this->GetInstanceHandle(), MAKEINTRESOURCE(IDI_APPLICATION_ICON1));
+		wnd_class.hCursor = LoadCursor(this->GetInstanceHandle(), IDC_ARROW);
+		wnd_class.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
+		wnd_class.lpszMenuName = NULLP;
+		wnd_class.lpszClassName = cpp_base::ConstantUtil::WINDOW::CLASS_NAME;
+		wnd_class.hIconSm = NULLP;
+
+		if (this->CreateWindow_(wnd_class) < 0) {
 			return (-1);
 		}
 	}
@@ -141,9 +166,30 @@ void cpp_base::MainProcess::End(void)
  */
 void cpp_base::MainProcess::Update(void)
 {
-	tml::MathUtil::Sleep(TIME_REAL(1.0));
-
-	tml::ProcessUtil::End();
+	tml::MathUtil::Sleep(TIME_REAL(0.001));
 
 	return;
+}
+
+
+/**
+ * @brief WindowProcedureä÷êî
+ * @param wnd_handle (window_handle)
+ * @param msg_type (message_type)
+ * @param msg_param1 (message_parameter1)
+ * @param msg_param2 (message_parameter2)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+LRESULT CALLBACK cpp_base::MainProcess::WindowProcedure(HWND wnd_handle, UINT msg_type, WPARAM msg_param1, LPARAM msg_param2)
+{
+	switch (msg_type) {
+	case WM_DESTROY: {
+		PostQuitMessage(0);
+
+		return (0);
+	}
+	}
+
+	return (DefWindowProc(wnd_handle, msg_type, msg_param1, msg_param2));
 }

@@ -20,6 +20,9 @@ public: MainProcess &operator =(const MainProcess &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
+
+private:
 	void Release(void);
 
 public:
@@ -27,7 +30,7 @@ public:
 	virtual ~MainProcess();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const HINSTANCE, const WCHAR *, const INT);
 
 	virtual INT Start(void);
 	virtual void End(void);

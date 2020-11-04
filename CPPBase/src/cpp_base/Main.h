@@ -10,5 +10,5 @@
 
 namespace cpp_base {
 static void InitMain(void);
-static INT CreateMain(HINSTANCE instance_handle, HINSTANCE prev_instance_handle, WCHAR *cmd_line_str, INT);
+static INT CreateMain(const HINSTANCE, const HINSTANCE, const WCHAR *, const INT);
 }

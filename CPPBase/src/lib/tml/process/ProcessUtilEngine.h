@@ -29,12 +29,14 @@ public:
 	typedef struct STATE_
 	{
 		bool end_flg;
+		INT exit_code;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		STATE_() :
-			end_flg(false)
+			end_flg(false),
+			exit_code(0)
 		{
 			return;
 		}
@@ -57,7 +59,7 @@ public:
 
 	tml::Process *Get(void);
 	INT Start(std::unique_ptr<tml::Process> &);
-	void End(void);
+	void End(const INT exit_code = 0);
 	tml::ProcessUtilEngine::STATE GetState(void);
 	INT GetExitCode(void);
 };
@@ -87,5 +89,16 @@ inline tml::Process *tml::ProcessUtilEngine::Get(void)
 inline tml::ProcessUtilEngine::STATE tml::ProcessUtilEngine::GetState(void)
 {tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 	return (this->stat_);
+}
+
+
+/**
+ * @brief GetExitCode関数
+ * @return exit_code (exit_code)<br>
+ * 0以外=失敗
+ */
+inline INT tml::ProcessUtilEngine::GetExitCode(void)
+{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+	return (this->stat_.exit_code);
 }
 }

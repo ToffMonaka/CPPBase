@@ -170,7 +170,6 @@
     <ClCompile Include="src\lib\tml\memory\NewAllocator.cpp" />
     <ClCompile Include="src\lib\tml\process\DefaultProcessUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\process\Process.cpp" />
-    <ClCompile Include="src\lib\tml\process\ProcessID.cpp" />
     <ClCompile Include="src\lib\tml\process\ProcessUtil.cpp" />
     <ClCompile Include="src\lib\tml\process\ProcessUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\random\DefaultRandomUtilEngine.cpp" />
@@ -181,7 +180,6 @@
     <ClCompile Include="src\lib\tml\thread\SpinThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\Thread.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadFix.cpp" />
-    <ClCompile Include="src\lib\tml\thread\ThreadID.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLockBlock.cpp" />
     <ClCompile Include="src\cpp_base\Main.cpp" />
@@ -190,6 +188,7 @@
     <ClCompile Include="src\lib\tml\thread\ThreadUtilEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\cpp_base\resource\resource.h" />
     <ClInclude Include="src\cpp_base\process\MainProcess.h" />
     <ClInclude Include="src\cpp_base\thread\MainThread.h" />
     <ClInclude Include="src\lib\tml\ConstantUtil.h" />
@@ -205,7 +204,6 @@
     <ClInclude Include="src\lib\tml\memory\NewAllocator.h" />
     <ClInclude Include="src\lib\tml\process\DefaultProcessUtilEngine.h" />
     <ClInclude Include="src\lib\tml\process\Process.h" />
-    <ClInclude Include="src\lib\tml\process\ProcessID.h" />
     <ClInclude Include="src\lib\tml\process\ProcessUtil.h" />
     <ClInclude Include="src\lib\tml\process\ProcessUtilEngine.h" />
     <ClInclude Include="src\lib\tml\random\DefaultRandomUtilEngine.h" />
@@ -216,13 +214,18 @@
     <ClInclude Include="src\lib\tml\thread\SpinThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\Thread.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadFix.h" />
-    <ClInclude Include="src\lib\tml\thread\ThreadID.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLockBlock.h" />
     <ClInclude Include="src\cpp_base\Main.h" />
     <ClInclude Include="src\cpp_base\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadUtil.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadUtilEngine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\cpp_base\resource\resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\cpp_base\resource\app_icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

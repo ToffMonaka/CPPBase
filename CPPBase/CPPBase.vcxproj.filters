@@ -21,9 +21,6 @@
     <ClCompile Include="src\lib\tml\dlmalloc\malloc.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\lib\tml\thread\ThreadID.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\lib\tml\thread\ThreadLock.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -52,9 +49,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\lib\tml\memory\DlmallocAllocator.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\process\ProcessID.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\cpp_base\Main.cpp">
@@ -122,9 +116,6 @@
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\lib\tml\thread\ThreadID.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\lib\tml\thread\ThreadLock.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -153,9 +144,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\tml\memory\DlmallocAllocator.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\process\ProcessID.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\cpp_base\Main.h">
@@ -215,5 +203,18 @@
     <ClInclude Include="src\lib\tml\math\MathUtil.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\cpp_base\resource\resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\cpp_base\resource\resource.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\cpp_base\resource\app_icon1.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
   </ItemGroup>
 </Project>

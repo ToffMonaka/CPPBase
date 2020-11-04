@@ -35,13 +35,13 @@ public:
 	static T *Get(const size_t);
 	template <typename T>
 	static void Release(T **);
+	static tml::MemoryUtilEngine::ALLOCATOR_INFO GetAllocatorInfo(void);
 	template <typename T>
 	static void Clear(T *, const size_t);
 	template <typename T>
 	static void Copy(T *, const T *, const size_t);
 	template <typename T>
 	static void CopySame(T *, const T *, const size_t);
-	static tml::MemoryUtilEngine::ALLOCATOR_INFO GetAllocatorInfo(void);
 };
 
 
@@ -72,14 +72,31 @@ inline void tml::MemoryUtil::Release(T **pp)
 
 
 /**
+ * @brief GetAllocatorInfo関数
+ * @return allocator_info (allocator_info)
+ */
+inline tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtil::GetAllocatorInfo(void)
+{
+	return (tml::MemoryUtil::engine_->GetAllocatorInfo());
+}
+
+
+/**
  * @brief Clear関数
+ *
+ * エンジン不要
+ *
  * @param p (pointer)
  * @param cnt (count)
  */
 template <typename T>
 inline void tml::MemoryUtil::Clear(T *p, const size_t cnt)
 {
-	tml::MemoryUtil::engine_->Clear(p, cnt);
+	if (cnt <= 0U) {
+		return;
+	}
+
+	memset(p, 0, sizeof(T) * cnt);
 
 	return;
 }
@@ -87,6 +104,9 @@ inline void tml::MemoryUtil::Clear(T *p, const size_t cnt)
 
 /**
  * @brief Copy関数
+ *
+ * エンジン不要
+ *
  * @param dst_p (dst_pointer)
  * @param src_p (src_pointer)
  * @param cnt (count)
@@ -94,7 +114,12 @@ inline void tml::MemoryUtil::Clear(T *p, const size_t cnt)
 template <typename T>
 inline void tml::MemoryUtil::Copy(T *dst_p, const T *src_p, const size_t cnt)
 {
-	tml::MemoryUtil::engine_->Copy(dst_p, src_p, cnt);
+	if ((dst_p == src_p)
+	|| (cnt <= 0U)) {
+		return;
+	}
+
+	memcpy(dst_p, src_p, sizeof(T) * cnt);
 
 	return;
 }
@@ -102,6 +127,9 @@ inline void tml::MemoryUtil::Copy(T *dst_p, const T *src_p, const size_t cnt)
 
 /**
  * @brief CopySame関数
+ *
+ * エンジン不要
+ *
  * @param dst_p (dst_pointer)
  * @param src_p (src_pointer)
  * @param cnt (count)
@@ -109,18 +137,13 @@ inline void tml::MemoryUtil::Copy(T *dst_p, const T *src_p, const size_t cnt)
 template <typename T>
 inline void tml::MemoryUtil::CopySame(T *dst_p, const T *src_p, const size_t cnt)
 {
-	tml::MemoryUtil::engine_->CopySame(dst_p, src_p, cnt);
+	if ((dst_p == src_p)
+	|| (cnt <= 0U)) {
+		return;
+	}
+
+	memmove(dst_p, src_p, sizeof(T) * cnt);
 
 	return;
-}
-
-
-/**
- * @brief GetAllocatorInfo関数
- * @return allocator_info (allocator_info)
- */
-inline tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtil::GetAllocatorInfo(void)
-{
-	return (tml::MemoryUtil::engine_->GetAllocatorInfo());
 }
 }
