@@ -5,6 +5,7 @@
 
 
 #include "RandomUtilEngine.h"
+#include <array>
 
 
 /**

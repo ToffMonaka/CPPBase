@@ -159,6 +159,9 @@
     <ClCompile Include="src\cpp_base\thread\MainThread.cpp" />
     <ClCompile Include="src\lib\tml\ConstantUtil.cpp" />
     <ClCompile Include="src\lib\tml\dlmalloc\malloc.c" />
+    <ClCompile Include="src\lib\tml\file\DefaultFileUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\file\FileUtil.cpp" />
+    <ClCompile Include="src\lib\tml\file\FileUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\math\DefaultMathUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtil.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtilEngine.cpp" />
@@ -175,6 +178,9 @@
     <ClCompile Include="src\lib\tml\random\DefaultRandomUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtil.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\string\DefaultStringUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\string\StringUtil.cpp" />
+    <ClCompile Include="src\lib\tml\string\StringUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\thread\DefaultThreadUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\thread\MutexThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\SpinThreadLock.cpp" />
@@ -186,6 +192,9 @@
     <ClCompile Include="src\cpp_base\ConstantUtil.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadUtil.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\time\DefaultTimeUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\time\TimeUtil.cpp" />
+    <ClCompile Include="src\lib\tml\time\TimeUtilEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cpp_base\resource\resource.h" />
@@ -193,6 +202,9 @@
     <ClInclude Include="src\cpp_base\thread\MainThread.h" />
     <ClInclude Include="src\lib\tml\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
+    <ClInclude Include="src\lib\tml\file\DefaultFileUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\file\FileUtil.h" />
+    <ClInclude Include="src\lib\tml\file\FileUtilEngine.h" />
     <ClInclude Include="src\lib\tml\math\DefaultMathUtilEngine.h" />
     <ClInclude Include="src\lib\tml\math\MathUtil.h" />
     <ClInclude Include="src\lib\tml\math\MathUtilEngine.h" />
@@ -209,6 +221,9 @@
     <ClInclude Include="src\lib\tml\random\DefaultRandomUtilEngine.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtil.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\string\DefaultStringUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\string\StringUtil.h" />
+    <ClInclude Include="src\lib\tml\string\StringUtilEngine.h" />
     <ClInclude Include="src\lib\tml\thread\DefaultThreadUtilEngine.h" />
     <ClInclude Include="src\lib\tml\thread\MutexThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\SpinThreadLock.h" />
@@ -220,6 +235,9 @@
     <ClInclude Include="src\cpp_base\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadUtil.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\time\DefaultTimeUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\time\TimeUtil.h" />
+    <ClInclude Include="src\lib\tml\time\TimeUtilEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\cpp_base\resource\resource.rc" />

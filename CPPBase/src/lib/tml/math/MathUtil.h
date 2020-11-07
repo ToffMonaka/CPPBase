@@ -45,8 +45,6 @@ public:
 	static T Max(const T &, const T &);
 	template <typename T>
 	static T Clamp(const T &, const T &, const T &);
-	static TIME_REAL Sleep(const TIME_REAL &);
-	static TIME_REAL Wait(const TIME_REAL &);
 };
 
 

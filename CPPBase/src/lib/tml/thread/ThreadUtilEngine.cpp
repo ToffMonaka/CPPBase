@@ -31,7 +31,7 @@ tml::ThreadUtilEngine::~ThreadUtilEngine()
  */
 void tml::ThreadUtilEngine::Release(void)
 {
-	std::list<std::unique_ptr<tml::Thread> > th_cont;
+	std::list<std::unique_ptr<tml::Thread>> th_cont;
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		this->stat_.end_flg = true;
@@ -192,7 +192,7 @@ void tml::ThreadUtilEngine::EndAll(const bool delete_flg)
 		return;
 	}
 
-	std::list<std::unique_ptr<tml::Thread> > th_cont;
+	std::list<std::unique_ptr<tml::Thread>> th_cont;
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		this->stat_.end_flg = true;

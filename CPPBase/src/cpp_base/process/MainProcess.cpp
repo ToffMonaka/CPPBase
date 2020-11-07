@@ -5,9 +5,13 @@
 
 
 #include "MainProcess.h"
+#include <array>
 #include "../../lib/tml/memory/MemoryUtil.h"
+#include "../../lib/tml/string/StringUtil.h"
+#include "../../lib/tml/time/TimeUtil.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/random/RandomUtil.h"
+#include "../../lib/tml/file/FileUtil.h"
 #include "../../lib/tml/process/ProcessUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
 #include "../thread/MainThread.h"
@@ -166,7 +170,7 @@ void cpp_base::MainProcess::End(void)
  */
 void cpp_base::MainProcess::Update(void)
 {
-	tml::MathUtil::Sleep(TIME_REAL(0.001));
+	tml::TimeUtil::Sleep(TIME_REAL(0.001));
 
 	return;
 }

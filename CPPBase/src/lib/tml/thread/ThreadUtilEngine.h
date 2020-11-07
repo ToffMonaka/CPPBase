@@ -43,7 +43,7 @@ public:
 	} STATE;
 
 private:
-	std::list<std::unique_ptr<tml::Thread> > th_cont_;
+	std::list<std::unique_ptr<tml::Thread>> th_cont_;
 	std::list<tml::Thread *> ready_th_cont_;
 	std::list<tml::Thread *> start_th_cont_;
 	std::map<std::thread::id, tml::Thread *> start_th_cont_with_th_id_;

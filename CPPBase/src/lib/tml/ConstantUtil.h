@@ -10,7 +10,6 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <memory>
-#include <array>
 #include <string>
 #include <chrono>
 
@@ -27,5 +26,17 @@ using TIME_REAL = std::chrono::duration<double>;
 
 namespace tml {
 namespace ConstantUtil {
+}
+
+
+/**
+ * @brief TimeCastä÷êî
+ * @param time (time)
+ * @return time (time)
+ */
+template <typename T1, typename T2>
+T1 TimeCast(const T2 &time)
+{
+	return (std::chrono::duration_cast<T1>(time));
 }
 }

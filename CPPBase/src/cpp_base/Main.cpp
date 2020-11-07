@@ -7,10 +7,16 @@
 #include "Main.h"
 #include "../lib/tml/memory/MemoryUtil.h"
 #include "../lib/tml/memory/DefaultMemoryUtilEngine.h"
+#include "../lib/tml/string/StringUtil.h"
+#include "../lib/tml/string/DefaultStringUtilEngine.h"
+#include "../lib/tml/time/TimeUtil.h"
+#include "../lib/tml/time/DefaultTimeUtilEngine.h"
 #include "../lib/tml/math/MathUtil.h"
 #include "../lib/tml/math/DefaultMathUtilEngine.h"
 #include "../lib/tml/random/RandomUtil.h"
 #include "../lib/tml/random/DefaultRandomUtilEngine.h"
+#include "../lib/tml/file/FileUtil.h"
+#include "../lib/tml/file/DefaultFileUtilEngine.h"
 #include "../lib/tml/process/ProcessUtil.h"
 #include "../lib/tml/process/DefaultProcessUtilEngine.h"
 #include "../lib/tml/thread/ThreadUtil.h"
@@ -43,8 +49,11 @@ void cpp_base::InitMain(void)
 {
 	tml::ThreadUtil::Init();
 	tml::ProcessUtil::Init();
+	tml::FileUtil::Init();
 	tml::RandomUtil::Init();
 	tml::MathUtil::Init();
+	tml::TimeUtil::Init();
+	tml::StringUtil::Init();
 	tml::MemoryUtil::Init();
 
 	return;
@@ -82,6 +91,38 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 		}
 	}
 
+	{// StringUtil Create
+		std::unique_ptr<tml::StringUtilEngine> engine(new tml::DefaultStringUtilEngine());
+
+		if (dynamic_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+
+		if (tml::StringUtil::Create(engine) < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+	}
+
+	{// TimeUtil Create
+		std::unique_ptr<tml::TimeUtilEngine> engine(new tml::DefaultTimeUtilEngine());
+
+		if (dynamic_cast<tml::DefaultTimeUtilEngine *>(engine.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+
+		if (tml::TimeUtil::Create(engine) < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+	}
+
 	{// MathUtil Create
 		std::unique_ptr<tml::MathUtilEngine> engine(new tml::DefaultMathUtilEngine());
 
@@ -108,6 +149,22 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 		}
 
 		if (tml::RandomUtil::Create(engine) < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+	}
+
+	{// FileUtil Create
+		std::unique_ptr<tml::FileUtilEngine> engine(new tml::DefaultFileUtilEngine());
+
+		if (dynamic_cast<tml::DefaultFileUtilEngine *>(engine.get())->Create() < 0) {
+			cpp_base::InitMain();
+
+			return (exit_code);
+		}
+
+		if (tml::FileUtil::Create(engine) < 0) {
 			cpp_base::InitMain();
 
 			return (exit_code);
