@@ -46,6 +46,7 @@ public:
 	template <typename T>
 	static T Clamp(const T &, const T &, const T &);
 };
+}
 
 
 /**
@@ -160,5 +161,4 @@ template <typename T>
 inline T tml::MathUtil::Clamp(const T &val, const T &min_val, const T &max_val)
 {
 	return ((val < min_val) ? min_val : (val > max_val) ? max_val : val);
-}
 }

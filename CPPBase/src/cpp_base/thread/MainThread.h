@@ -6,6 +6,7 @@
 
 
 #include "../ConstantUtil.h"
+#include "../../lib/tml/time/FrameRate.h"
 #include "../../lib/tml/thread/Thread.h"
 
 
@@ -18,6 +19,9 @@ class MainThread : public tml::Thread
 public: MainThread(const MainThread &) = delete;
 public: MainThread &operator =(const MainThread &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
+
+private:
+	tml::FrameRate frame_rate_;
 
 private:
 	void Release(void);

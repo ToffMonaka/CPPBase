@@ -50,6 +50,7 @@ public:
 	bool GetLoopFlag(void) const;
 	void SetLoopFlag(const bool);
 };
+}
 
 
 /**
@@ -81,5 +82,4 @@ inline void tml::Thread::SetLoopFlag(const bool loop_flg)
 	this->loop_flg_ = loop_flg;
 
 	return;
-}
 }

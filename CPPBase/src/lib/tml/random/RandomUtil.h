@@ -44,6 +44,7 @@ public:
 	static DOUBLE GetDOUBLE(void);
 	static DOUBLE GetDOUBLE(const DOUBLE, const DOUBLE);
 };
+}
 
 
 /**
@@ -175,5 +176,4 @@ inline DOUBLE tml::RandomUtil::GetDOUBLE(void)
 inline DOUBLE tml::RandomUtil::GetDOUBLE(const DOUBLE min, const DOUBLE max)
 {
 	return (tml::RandomUtil::engine_->GetDOUBLE(min, max));
-}
 }

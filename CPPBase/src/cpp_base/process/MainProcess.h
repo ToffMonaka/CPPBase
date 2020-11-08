@@ -6,6 +6,7 @@
 
 
 #include "../ConstantUtil.h"
+#include "../../lib/tml/time/FrameRate.h"
 #include "../../lib/tml/process/Process.h"
 
 
@@ -18,6 +19,9 @@ class MainProcess : public tml::Process
 public: MainProcess(const MainProcess &) = delete;
 public: MainProcess &operator =(const MainProcess &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
+
+private:
+	tml::FrameRate frame_rate_;
 
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);

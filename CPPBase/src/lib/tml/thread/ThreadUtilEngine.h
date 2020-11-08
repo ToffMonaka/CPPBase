@@ -67,16 +67,17 @@ public:
 	void EndAll(const bool delete_flg = false);
 	tml::ThreadUtilEngine::STATE GetState(void);
 };
+}
 
 
 /**
  * @brief GetŠÖ”
  * @return th (thread)<br>
- * NULLP=¸”s
+ * nullptr=¸”s
  */
 inline tml::Thread *tml::ThreadUtilEngine::Get(void)
 {
-	tml::Thread *th = NULLP;
+	tml::Thread *th = nullptr;
 	auto th_id = std::this_thread::get_id();
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
@@ -98,5 +99,4 @@ inline tml::Thread *tml::ThreadUtilEngine::Get(void)
 inline tml::ThreadUtilEngine::STATE tml::ThreadUtilEngine::GetState(void)
 {tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 	return (this->stat_);
-}
 }

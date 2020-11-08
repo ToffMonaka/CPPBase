@@ -12,8 +12,8 @@
  */
 tml::MemoryUtilEngine::MemoryUtilEngine() :
 	allocator_type_(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE),
-	new_allocator_(NULLP),
-	dlmalloc_allocator_(NULLP)
+	new_allocator_(nullptr),
+	dlmalloc_allocator_(nullptr)
 {
 	return;
 }
@@ -36,16 +36,16 @@ void tml::MemoryUtilEngine::Release(void)
 	{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
 		this->allocator_type_ = tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE;
 
-		if (this->new_allocator_ != NULLP) {
+		if (this->new_allocator_ != nullptr) {
 			delete this->new_allocator_;
 
-			this->new_allocator_ = NULLP;
+			this->new_allocator_ = nullptr;
 		}
 
-		if (this->dlmalloc_allocator_ != NULLP) {
+		if (this->dlmalloc_allocator_ != nullptr) {
 			delete this->dlmalloc_allocator_;
 
-			this->dlmalloc_allocator_ = NULLP;
+			this->dlmalloc_allocator_ = nullptr;
 		}
 	}
 

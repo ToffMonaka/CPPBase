@@ -15,28 +15,30 @@
 
 
 using DOUBLE = double;
-#define NULLP nullptr
-using NULLP_TYPE = std::nullptr_t;
-using TIME_SECOND = std::chrono::seconds;
-using TIME_MILLI = std::chrono::milliseconds;
-using TIME_MICRO = std::chrono::microseconds;
-using TIME_NANO = std::chrono::nanoseconds;
-using TIME_REAL = std::chrono::duration<double>;
 
 
 namespace tml {
 namespace ConstantUtil {
 }
 
+using TIME_SECOND = std::chrono::seconds;
+using TIME_MILLI = std::chrono::milliseconds;
+using TIME_MICRO = std::chrono::microseconds;
+using TIME_NANO = std::chrono::nanoseconds;
+using TIME_REAL = std::chrono::duration<double>;
+
+template <typename T1, typename T2>
+T1 CastTime(const T2 &time);
+}
+
 
 /**
- * @brief TimeCastä÷êî
+ * @brief CastTimeä÷êî
  * @param time (time)
  * @return time (time)
  */
 template <typename T1, typename T2>
-T1 TimeCast(const T2 &time)
+inline T1 tml::CastTime(const T2 &time)
 {
 	return (std::chrono::duration_cast<T1>(time));
-}
 }

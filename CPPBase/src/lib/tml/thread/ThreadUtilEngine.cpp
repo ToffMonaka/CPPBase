@@ -92,7 +92,7 @@ INT tml::ThreadUtilEngine::Create(void)
  */
 INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::Thread> &th, const bool ready_flg)
 {
-	if (tml::ProcessUtil::Get() == NULLP) {
+	if (tml::ProcessUtil::Get() == nullptr) {
 		return (-1);
 	}
 
@@ -126,7 +126,7 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::Thread> &th, const bool re
  */
 INT tml::ThreadUtilEngine::StartAll(void)
 {
-	if (tml::ProcessUtil::Get() == NULLP) {
+	if (tml::ProcessUtil::Get() == nullptr) {
 		return (-1);
 	}
 
@@ -155,7 +155,7 @@ INT tml::ThreadUtilEngine::StartAll(void)
  */
 void tml::ThreadUtilEngine::End(const bool finish_flg)
 {
-	if (tml::ProcessUtil::Get() == NULLP) {
+	if (tml::ProcessUtil::Get() == nullptr) {
 		return;
 	}
 
@@ -188,7 +188,7 @@ void tml::ThreadUtilEngine::End(const bool finish_flg)
  */
 void tml::ThreadUtilEngine::EndAll(const bool delete_flg)
 {
-	if (tml::ProcessUtil::Get() == NULLP) {
+	if (tml::ProcessUtil::Get() == nullptr) {
 		return;
 	}
 

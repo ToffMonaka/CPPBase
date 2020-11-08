@@ -58,7 +58,7 @@ INT tml::SpinThreadLock::Lock(void)
  * @return res (result)<br>
  * 0未満=失敗,-2=タイムアウト
  */
-INT tml::SpinThreadLock::Lock(const TIME_MILLI &timeout_time)
+INT tml::SpinThreadLock::Lock(const tml::TIME_MILLI &timeout_time)
 {
 	auto th_id = std::this_thread::get_id();
 	auto timeout_time_point = std::chrono::steady_clock::now() + timeout_time;

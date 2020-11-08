@@ -24,11 +24,12 @@ private:
 
 public:
 	ThreadLockBlock(tml::ThreadLock &);
-	ThreadLockBlock(tml::ThreadLock &, const TIME_MILLI &);
+	ThreadLockBlock(tml::ThreadLock &, const tml::TIME_MILLI &);
 	virtual ~ThreadLockBlock();
 
 	INT GetResult(void) const;
 };
+}
 
 
 /**
@@ -38,5 +39,4 @@ public:
 inline INT tml::ThreadLockBlock::GetResult(void) const
 {
 	return (this->res_);
-}
 }

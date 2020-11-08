@@ -25,7 +25,7 @@ public:
 	virtual ~ThreadLock();
 
 	virtual INT Lock(void) = 0;
-	virtual INT Lock(const TIME_MILLI &) = 0;
+	virtual INT Lock(const tml::TIME_MILLI &) = 0;
 	virtual void Unlock(void) = 0;
 };
 }

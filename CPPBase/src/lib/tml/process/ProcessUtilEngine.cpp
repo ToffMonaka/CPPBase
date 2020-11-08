@@ -87,7 +87,7 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 			return (-1);
 		}
 
-		if (this->proc_ != NULLP) {
+		if (this->proc_ != nullptr) {
 			return (-1);
 		}
 
@@ -100,12 +100,12 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 
 	tml::ThreadUtil::StartAll();
 
-	if (this->proc_->GetWindowHandle() != NULLP) {
+	if (this->proc_->GetWindowHandle() != nullptr) {
 		bool loop_flg = true;
 		MSG msg = {};
 
 		do {
-			while (PeekMessage(&msg, NULLP, 0U, 0U, PM_REMOVE)) {
+			while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE)) {
 				if (msg.message == WM_QUIT) {
 					this->End(static_cast<INT>(msg.wParam));
 

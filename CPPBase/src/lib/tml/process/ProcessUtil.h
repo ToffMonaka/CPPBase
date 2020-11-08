@@ -37,12 +37,13 @@ public:
 	static tml::ProcessUtilEngine::STATE GetState(void);
 	static INT GetExitCode(void);
 };
+}
 
 
 /**
  * @brief Getä÷êî
  * @return proc (process)<br>
- * NULLP=é∏îs
+ * nullptr=é∏îs
  */
 inline tml::Process *tml::ProcessUtil::Get(void)
 {
@@ -92,5 +93,4 @@ inline tml::ProcessUtilEngine::STATE tml::ProcessUtil::GetState(void)
 inline INT tml::ProcessUtil::GetExitCode(void)
 {
 	return (tml::ProcessUtil::engine_->GetExitCode());
-}
 }

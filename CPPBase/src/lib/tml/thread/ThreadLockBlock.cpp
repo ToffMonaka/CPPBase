@@ -26,7 +26,7 @@ tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock) :
  * @param th_lock (thread_lock)
  * @param timeout_time (timeout_time)
  */
-tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock, const TIME_MILLI &timeout_time) :
+tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock, const tml::TIME_MILLI &timeout_time) :
 	th_lock_(th_lock),
 	res_(0)
 {

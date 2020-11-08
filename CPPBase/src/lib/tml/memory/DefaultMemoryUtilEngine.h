@@ -34,13 +34,14 @@ public:
 	template <typename T>
 	void Release(T **);
 };
+}
 
 
 /**
  * @brief Getä÷êî
  * @param cnt (count)
  * @return p (pointer)<br>
- * NULLP=é∏îs
+ * nullptr=é∏îs
  */
 template <typename T>
 inline T *tml::DefaultMemoryUtilEngine::Get(const size_t cnt)
@@ -59,5 +60,4 @@ inline void tml::DefaultMemoryUtilEngine::Release(T **pp)
 	tml::MemoryUtilEngine::Release(pp);
 
 	return;
-}
 }

@@ -63,16 +63,17 @@ public:
 	tml::ProcessUtilEngine::STATE GetState(void);
 	INT GetExitCode(void);
 };
+}
 
 
 /**
  * @brief Getä÷êî
  * @return proc (process)<br>
- * NULLP=é∏îs
+ * nullptr=é∏îs
  */
 inline tml::Process *tml::ProcessUtilEngine::Get(void)
 {
-	tml::Process *proc = NULLP;
+	tml::Process *proc = nullptr;
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		proc = this->proc_.get();
@@ -100,5 +101,4 @@ inline tml::ProcessUtilEngine::STATE tml::ProcessUtilEngine::GetState(void)
 inline INT tml::ProcessUtilEngine::GetExitCode(void)
 {tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 	return (this->stat_.exit_code);
-}
 }

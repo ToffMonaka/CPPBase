@@ -193,6 +193,7 @@
     <ClCompile Include="src\lib\tml\thread\ThreadUtil.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\time\DefaultTimeUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\time\FrameRate.cpp" />
     <ClCompile Include="src\lib\tml\time\TimeUtil.cpp" />
     <ClCompile Include="src\lib\tml\time\TimeUtilEngine.cpp" />
   </ItemGroup>
@@ -236,6 +237,7 @@
     <ClInclude Include="src\lib\tml\thread\ThreadUtil.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadUtilEngine.h" />
     <ClInclude Include="src\lib\tml\time\DefaultTimeUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\time\FrameRate.h" />
     <ClInclude Include="src\lib\tml\time\TimeUtil.h" />
     <ClInclude Include="src\lib\tml\time\TimeUtilEngine.h" />
   </ItemGroup>

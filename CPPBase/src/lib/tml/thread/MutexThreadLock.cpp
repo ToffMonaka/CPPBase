@@ -44,7 +44,7 @@ INT tml::MutexThreadLock::Lock(void)
  * @return res (result)<br>
  * 0未満=失敗,-2=タイムアウト
  */
-INT tml::MutexThreadLock::Lock(const TIME_MILLI &timeout_time)
+INT tml::MutexThreadLock::Lock(const tml::TIME_MILLI &timeout_time)
 {
 	auto timeout_time_point = std::chrono::steady_clock::now() + timeout_time;
 

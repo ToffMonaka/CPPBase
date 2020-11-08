@@ -77,22 +77,23 @@ public:
 	void Release(T **);
 	tml::MemoryUtilEngine::ALLOCATOR_INFO GetAllocatorInfo(void);
 };
+}
 
 
 /**
  * @brief Getä÷êî
  * @param cnt (count)
  * @return p (pointer)<br>
- * NULLP=é∏îs
+ * nullptr=é∏îs
  */
 template <typename T>
 inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 {
-	T *p = NULLP;
+	T *p = nullptr;
 
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-		BYTE *ms_p = NULLP;
+		BYTE *ms_p = nullptr;
 
 		{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
 			ms_p = this->new_allocator_->GetMemorySpacePart<T>(cnt);
@@ -103,7 +104,7 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 		break;
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-		BYTE *ms_p = NULLP;
+		BYTE *ms_p = nullptr;
 
 		{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
 			ms_p = this->dlmalloc_allocator_->GetMemorySpacePart<T>(cnt);
@@ -128,7 +129,7 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 {
 	switch (this->allocator_type_) {
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-		BYTE *ms_p = NULLP;
+		BYTE *ms_p = nullptr;
 
 		ms_p = this->new_allocator_->ReleaseDestructorPart<T>(pp);
 
@@ -139,7 +140,7 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 		break;
 	}
 	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-		BYTE *ms_p = NULLP;
+		BYTE *ms_p = nullptr;
 
 		ms_p = this->dlmalloc_allocator_->ReleaseDestructorPart<T>(pp);
 
@@ -152,5 +153,4 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 	}
 
 	return;
-}
 }

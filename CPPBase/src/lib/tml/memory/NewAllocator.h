@@ -48,13 +48,14 @@ public:
 	void ReleaseMemorySpacePart(BYTE *, T **);
 	virtual tml::Allocator::INFO GetInfo(void);
 };
+}
 
 
 /**
  * @brief GetŠÖ”
  * @param cnt (count)
  * @return p (pointer)<br>
- * NULLP=Ž¸”s
+ * nullptr=Ž¸”s
  */
 template <typename T>
 inline T *tml::NewAllocator::Get(const size_t cnt)
@@ -67,23 +68,23 @@ inline T *tml::NewAllocator::Get(const size_t cnt)
  * @brief GetMemorySpacePartŠÖ”
  * @param cnt (count)
  * @return ms_p (memory_space_pointer)<br>
- * NULLP=Ž¸”s
+ * nullptr=Ž¸”s
  */
 template <typename T>
 inline BYTE *tml::NewAllocator::GetMemorySpacePart(const size_t cnt)
 {
 	if (cnt <= 0U) {
-		return (NULLP);
+		return (nullptr);
 	}
 
 	if (this->ms_size_ <= 0U) {
-		return (NULLP);
+		return (nullptr);
 	}
 
 	BYTE *ms_p = new BYTE[sizeof(T) * cnt + this->ms_cnt_head_size_];
 
-	if (ms_p == NULLP) {
-		return (NULLP);
+	if (ms_p == nullptr) {
+		return (nullptr);
 	}
 
 	++this->ms_use_size_;
@@ -97,16 +98,16 @@ inline BYTE *tml::NewAllocator::GetMemorySpacePart(const size_t cnt)
  * @param ms_p (memory_space_pointer)
  * @param cnt (count)
  * @return p (pointer)<br>
- * NULLP=Ž¸”s
+ * nullptr=Ž¸”s
  */
 template <typename T>
 inline T *tml::NewAllocator::GetConstructorPart(BYTE *ms_p, const size_t cnt)
 {
-	if (ms_p == NULLP) {
-		return (NULLP);
+	if (ms_p == nullptr) {
+		return (nullptr);
 	}
 
-	T *p = NULLP;
+	T *p = nullptr;
 
 	if (std::is_class<T>::value) {
 		(*(reinterpret_cast<size_t *>(ms_p))) = cnt;
@@ -143,13 +144,13 @@ inline void tml::NewAllocator::Release(T **pp)
  * @brief ReleaseDestructorPartŠÖ”
  * @param pp (pointer_pointer)
  * @return ms_p (memory_space_pointer)<br>
- * NULLP=Ž¸”s
+ * nullptr=Ž¸”s
  */
 template <typename T>
 inline BYTE *tml::NewAllocator::ReleaseDestructorPart(T **pp)
 {
-	if ((*pp) == NULLP) {
-		return (NULLP);
+	if ((*pp) == nullptr) {
+		return (nullptr);
 	}
 
 	BYTE *ms_p = reinterpret_cast<BYTE *>(*pp) - this->ms_cnt_head_size_;
@@ -174,16 +175,15 @@ inline BYTE *tml::NewAllocator::ReleaseDestructorPart(T **pp)
 template <typename T>
 inline void tml::NewAllocator::ReleaseMemorySpacePart(BYTE *ms_p, T **pp)
 {
-	if (ms_p == NULLP) {
+	if (ms_p == nullptr) {
 		return;
 	}
 
 	delete [] ms_p;
 
-	(*pp) = NULLP;
+	(*pp) = nullptr;
 
 	--this->ms_use_size_;
 
 	return;
-}
 }

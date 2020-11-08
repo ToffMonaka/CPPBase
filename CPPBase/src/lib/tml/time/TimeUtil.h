@@ -31,7 +31,7 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::TimeUtilEngine> &);
 
-	static TIME_REAL Sleep(const TIME_REAL &);
-	static TIME_REAL Wait(const TIME_REAL &);
+	static tml::TIME_REAL Sleep(const tml::TIME_REAL &);
+	static tml::TIME_REAL Wait(const tml::TIME_REAL &);
 };
 }

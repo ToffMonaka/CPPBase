@@ -43,13 +43,14 @@ public:
 	template <typename T>
 	static void CopySame(T *, const T *, const size_t);
 };
+}
 
 
 /**
  * @brief Getä÷êî
  * @param cnt (count)
  * @return p (pointer)<br>
- * NULLP=é∏îs
+ * nullptr=é∏îs
  */
 template <typename T>
 inline T *tml::MemoryUtil::Get(const size_t cnt)
@@ -145,5 +146,4 @@ inline void tml::MemoryUtil::CopySame(T *dst_p, const T *src_p, const size_t cnt
 	memmove(dst_p, src_p, sizeof(T) * cnt);
 
 	return;
-}
 }

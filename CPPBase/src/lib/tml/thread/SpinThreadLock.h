@@ -37,7 +37,7 @@ public:
 	virtual ~SpinThreadLock();
 
 	virtual INT Lock(void);
-	virtual INT Lock(const TIME_MILLI &);
+	virtual INT Lock(const tml::TIME_MILLI &);
 	virtual void Unlock(void);
 };
 }

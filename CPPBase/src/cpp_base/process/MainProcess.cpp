@@ -56,6 +56,8 @@ void cpp_base::MainProcess::Init(void)
 {
 	this->Release();
 
+	this->frame_rate_.Init();
+
 	tml::Process::Init();
 
 	return;
@@ -79,6 +81,8 @@ INT cpp_base::MainProcess::Create(const HINSTANCE instance_handle, const WCHAR *
 
 		return (-1);
 	}
+
+	this->frame_rate_.Init();
 
 	return (0);
 }
@@ -115,9 +119,9 @@ INT cpp_base::MainProcess::Start(void)
 		wnd_class.hIcon = LoadIcon(this->GetInstanceHandle(), MAKEINTRESOURCE(IDI_APPLICATION_ICON1));
 		wnd_class.hCursor = LoadCursor(this->GetInstanceHandle(), IDC_ARROW);
 		wnd_class.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
-		wnd_class.lpszMenuName = NULLP;
+		wnd_class.lpszMenuName = nullptr;
 		wnd_class.lpszClassName = cpp_base::ConstantUtil::WINDOW::CLASS_NAME;
-		wnd_class.hIconSm = NULLP;
+		wnd_class.hIconSm = nullptr;
 
 		if (this->CreateWindow_(wnd_class) < 0) {
 			return (-1);
@@ -152,6 +156,8 @@ INT cpp_base::MainProcess::Start(void)
 		int a = 0;
 	}
 
+	this->frame_rate_.Start(60U);
+
 	return (0);
 }
 
@@ -170,7 +176,7 @@ void cpp_base::MainProcess::End(void)
  */
 void cpp_base::MainProcess::Update(void)
 {
-	tml::TimeUtil::Sleep(TIME_REAL(0.001));
+	this->frame_rate_.Update();
 
 	return;
 }

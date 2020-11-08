@@ -13,8 +13,8 @@
  * @brief コンストラクタ
  */
 tml::Process::Process() :
-	instance_handle_(NULLP),
-	wnd_handle_(NULLP),
+	instance_handle_(nullptr),
+	wnd_handle_(nullptr),
 	wnd_show_type_(0)
 {
 	tml::MemoryUtil::Clear(&this->wnd_class_, 1U);
@@ -50,7 +50,7 @@ void tml::Process::Release(void)
 void tml::Process::Init(void)
 {
 	this->th_id_ = std::thread::id();
-	this->instance_handle_ = NULLP;
+	this->instance_handle_ = nullptr;
 	this->wnd_name_.clear();
 	this->wnd_show_type_ = 0;
 
@@ -85,11 +85,11 @@ INT tml::Process::Create(const HINSTANCE instance_handle, const WCHAR *wnd_name,
  */
 INT tml::Process::CreateWindow_(const WNDCLASSEX &wnd_class)
 {
-	if (this->wnd_handle_ != NULLP) {
+	if (this->wnd_handle_ != nullptr) {
 		return (-1);
 	}
 
-	if (FindWindow(wnd_class.lpszClassName, this->wnd_name_.c_str()) != NULLP) {
+	if (FindWindow(wnd_class.lpszClassName, this->wnd_name_.c_str()) != nullptr) {
 		return(-2);
 	}
 
@@ -106,11 +106,11 @@ INT tml::Process::CreateWindow_(const WNDCLASSEX &wnd_class)
 		this->wnd_class_.lpszClassName, this->wnd_name_.c_str(),
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-		NULLP, NULLP, this->instance_handle_,
-		NULLP
+		nullptr, nullptr, this->instance_handle_,
+		nullptr
 	);
 
-	if (this->wnd_handle_ == NULLP) {
+	if (this->wnd_handle_ == nullptr) {
 		this->DeleteWindow_();
 
 		return (-1);
@@ -128,10 +128,10 @@ INT tml::Process::CreateWindow_(const WNDCLASSEX &wnd_class)
  */
 void tml::Process::DeleteWindow_(void)
 {
-	if (this->wnd_handle_ != NULLP) {
+	if (this->wnd_handle_ != nullptr) {
 		DestroyWindow(this->wnd_handle_);
 
-		this->wnd_handle_ = NULLP;
+		this->wnd_handle_ = nullptr;
 	}
 
 	if (this->wnd_class_atom_) {

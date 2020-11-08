@@ -38,12 +38,13 @@ public:
 	static void EndAll(const bool delete_flg = false);
 	static tml::ThreadUtilEngine::STATE GetState(void);
 };
+}
 
 
 /**
  * @brief GetŠÖ”
  * @return th (thread)<br>
- * NULLP=¸”s
+ * nullptr=¸”s
  */
 inline tml::Thread *tml::ThreadUtil::Get(void)
 {
@@ -106,5 +107,4 @@ inline void tml::ThreadUtil::EndAll(const bool delete_flg)
 inline tml::ThreadUtilEngine::STATE tml::ThreadUtil::GetState(void)
 {
 	return (tml::ThreadUtil::engine_->GetState());
-}
 }

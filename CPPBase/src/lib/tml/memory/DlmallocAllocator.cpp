@@ -11,7 +11,7 @@
  * @brief コンストラクタ
  */
 tml::DlmallocAllocator::DlmallocAllocator() :
-	ms_(NULLP),
+	ms_(nullptr),
 	ms_use_cnt_(0U),
 	ms_cnt_head_size_(0U)
 {
@@ -35,10 +35,10 @@ tml::DlmallocAllocator::~DlmallocAllocator()
  */
 void tml::DlmallocAllocator::Release(void)
 {
-	if (this->ms_ != NULLP) {
+	if (this->ms_ != nullptr) {
 		destroy_mspace(this->ms_);
 
-		this->ms_ = NULLP;
+		this->ms_ = nullptr;
 		this->ms_use_cnt_ = 0U;
 	}
 
@@ -71,7 +71,7 @@ void tml::DlmallocAllocator::Init(void)
  */
 INT tml::DlmallocAllocator::Create(const size_t size)
 {
-	if (this->ms_ != NULLP) {
+	if (this->ms_ != nullptr) {
 		this->Init();
 
 		return (-1);
@@ -88,7 +88,7 @@ INT tml::DlmallocAllocator::Create(const size_t size)
 	this->ms_ = create_mspace(size, 0);
 	this->ms_use_cnt_ = 0U;
 
-	if (this->ms_ == NULLP) {
+	if (this->ms_ == nullptr) {
 		this->Init();
 
 		return (-1);
@@ -108,7 +108,7 @@ tml::Allocator::INFO tml::DlmallocAllocator::GetInfo(void)
 {
 	auto info = tml::Allocator::GetInfo();
 
-	if (this->ms_ == NULLP) {
+	if (this->ms_ == nullptr) {
 		return (info);
 	}
 

@@ -52,6 +52,7 @@ public:
 	const std::wstring &GetWindowName(void) const;
 	INT GetWindowShowType(void) const;
 };
+}
 
 
 /**
@@ -101,5 +102,4 @@ inline const std::wstring &tml::Process::GetWindowName(void) const
 inline INT tml::Process::GetWindowShowType(void) const
 {
 	return (this->wnd_show_type_);
-}
 }
