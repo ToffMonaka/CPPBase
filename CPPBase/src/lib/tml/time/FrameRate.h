@@ -21,18 +21,17 @@ private:
 	UINT limit_;
 	UINT cnt_;
 	DOUBLE fps_;
+	std::chrono::steady_clock::time_point one_start_time_;
+	tml::TIME_REAL one_elapsed_time_;
+	std::chrono::steady_clock::time_point work_one_start_time_;
+	tml::TIME_REAL work_one_elapsed_time_;
+	tml::TIME_REAL total_elapsed_time_;
+	tml::TIME_REAL one_time_;
 	tml::TIME_REAL sleep_time_;
+	tml::TIME_REAL average_sleep_time_;
 	tml::TIME_REAL wait_time_;
-	tml::TIME_REAL total_time_;
 	tml::TIME_REAL over_time_;
-	bool start_flg_;
-
-	/*
-	tm_l::time::Timer work_one_frame_timer;
-	tm_l::time::Timer one_frame_timer;
-	tm_l::time::TimerStorage work_one_frame_timer_storage;
-	tm_l::time::LimitTimerStorage one_frame_timer_storage;
-	*/
+	bool started_flg_;
 
 public:
 	FrameRate();

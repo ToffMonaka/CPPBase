@@ -30,13 +30,13 @@ public:
 	 */
 	typedef struct STATE_
 	{
-		bool end_flg;
+		bool ended_flg;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		STATE_() :
-			end_flg(false)
+			ended_flg(false)
 		{
 			return;
 		}

@@ -34,7 +34,7 @@ void tml::ProcessUtilEngine::Release(void)
 	std::unique_ptr<tml::Process> proc;
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_.end_flg = true;
+		this->stat_.ended_flg = true;
 		this->stat_.exit_code = 0;
 
 		proc = std::move(this->proc_);
@@ -83,7 +83,7 @@ INT tml::ProcessUtilEngine::Create(void)
 INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 {
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		if (this->stat_.end_flg) {
+		if (this->stat_.ended_flg) {
 			return (-1);
 		}
 
@@ -110,7 +110,7 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 					this->End(static_cast<INT>(msg.wParam));
 
 					{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-						loop_flg = !this->stat_.end_flg;
+						loop_flg = !this->stat_.ended_flg;
 					}
 
 					break;
@@ -124,7 +124,7 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 				this->proc_->Update();
 
 				{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-					loop_flg = !this->stat_.end_flg;
+					loop_flg = !this->stat_.ended_flg;
 				}
 			}
 		} while (loop_flg);
@@ -135,7 +135,7 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 			this->proc_->Update();
 
 			{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-				loop_flg = !this->stat_.end_flg;
+				loop_flg = !this->stat_.ended_flg;
 			}
 		} while (loop_flg);
 	}
@@ -155,7 +155,7 @@ INT tml::ProcessUtilEngine::Start(std::unique_ptr<tml::Process> &proc)
 void tml::ProcessUtilEngine::End(const INT exit_code)
 {
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_.end_flg = true;
+		this->stat_.ended_flg = true;
 		this->stat_.exit_code = exit_code;
 	}
 

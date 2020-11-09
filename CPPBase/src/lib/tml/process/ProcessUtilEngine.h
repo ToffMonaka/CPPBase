@@ -28,14 +28,14 @@ public:
 	 */
 	typedef struct STATE_
 	{
-		bool end_flg;
+		bool ended_flg;
 		INT exit_code;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		STATE_() :
-			end_flg(false),
+			ended_flg(false),
 			exit_code(0)
 		{
 			return;

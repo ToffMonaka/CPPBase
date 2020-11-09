@@ -26,7 +26,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	std::thread::id th_id_;
 	std::thread core_;
-	std::atomic<bool> core_flg_;
+	std::atomic<bool> core_created_flg_;
 	tml::MutexThreadLock core_th_lock_;
 	std::atomic<bool> loop_flg_;
 

@@ -13,7 +13,7 @@
  * @brief コンストラクタ
  */
 tml::Thread::Thread() :
-	core_flg_(false),
+	core_created_flg_(false),
 	loop_flg_(true)
 {
 	return;
@@ -71,7 +71,7 @@ INT tml::Thread::Create(void)
  */
 INT tml::Thread::CreateCore(void)
 {tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
-	if (this->core_flg_) {
+	if (this->core_created_flg_) {
 		return (0);
 	}
 
@@ -79,7 +79,7 @@ INT tml::Thread::CreateCore(void)
 
 	this->th_id_ = this->core_.get_id();
 
-	this->core_flg_ = true;
+	this->core_created_flg_ = true;
 
 	return (0);
 }
@@ -90,7 +90,7 @@ INT tml::Thread::CreateCore(void)
  */
 void tml::Thread::DeleteCore(void)
 {tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
-	if (!this->core_flg_) {
+	if (!this->core_created_flg_) {
 		return;
 	}
 
@@ -100,7 +100,7 @@ void tml::Thread::DeleteCore(void)
 
 	this->th_id_ = std::thread::id();
 
-	this->core_flg_ = false;
+	this->core_created_flg_ = false;
 
 	return;
 }
@@ -111,7 +111,7 @@ void tml::Thread::DeleteCore(void)
  */
 void tml::Thread::RunCore(void)
 {
-	while (!this->core_flg_) {
+	while (!this->core_created_flg_) {
 	}
 
 	if (this->Start() < 0) {
