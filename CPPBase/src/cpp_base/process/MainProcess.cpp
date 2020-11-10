@@ -5,10 +5,11 @@
 
 
 #include "MainProcess.h"
-#include <array>
 #include "../../lib/tml/memory/MemoryUtil.h"
 #include "../../lib/tml/string/StringUtil.h"
 #include "../../lib/tml/time/TimeUtil.h"
+#include "../../lib/tml/time/Clock.h"
+#include "../../lib/tml/time/Date.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
@@ -129,29 +130,18 @@ INT cpp_base::MainProcess::Start(void)
 	}
 
 	{// Test
-		{// MemoryUtil Test
-			auto allocator_info1 = tml::MemoryUtil::GetAllocatorInfo();
+		tml::Clock clock1;
+		tml::Date date1;
+		tml::Date date2;
+		WCHAR date_str[tml::DateConstantUtil::STRING_LENGTH + 1U] = L"";
 
-			auto p = tml::MemoryUtil::Get<INT>(10U);
+		clock1.SetNowTime();
 
-			auto allocator_info2 = tml::MemoryUtil::GetAllocatorInfo();
+		date1.SetNowTime();
 
-			tml::MemoryUtil::Release<INT>(&p);
+		date1.GetString(date_str, sizeof(date_str));
 
-			auto allocator_info3 = tml::MemoryUtil::GetAllocatorInfo();
-
-			int a = 0;
-		}
-
-		{// RandomUtil Test
-			std::array<INT, 100U> val_ary;
-
-			for (auto &val : val_ary) {
-				val = tml::RandomUtil::GetINT(0, 100);
-			}
-
-			int a = 0;
-		}
+		date2.SetString(date_str);
 
 		int a = 0;
 	}

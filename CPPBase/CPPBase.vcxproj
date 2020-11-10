@@ -192,6 +192,8 @@
     <ClCompile Include="src\cpp_base\ConstantUtil.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadUtil.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\time\Clock.cpp" />
+    <ClCompile Include="src\lib\tml\time\Date.cpp" />
     <ClCompile Include="src\lib\tml\time\DefaultTimeUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\time\FrameRate.cpp" />
     <ClCompile Include="src\lib\tml\time\Timer.cpp" />
@@ -237,6 +239,8 @@
     <ClInclude Include="src\cpp_base\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadUtil.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\time\Clock.h" />
+    <ClInclude Include="src\lib\tml\time\Date.h" />
     <ClInclude Include="src\lib\tml\time\DefaultTimeUtilEngine.h" />
     <ClInclude Include="src\lib\tml\time\FrameRate.h" />
     <ClInclude Include="src\lib\tml\time\Timer.h" />

@@ -78,7 +78,7 @@ INT tml::FrameRate::Start(const UINT limit)
 	this->work_one_start_time_ = this->one_start_time_;
 	this->work_one_elapsed_time_ = this->one_elapsed_time_;
 	this->total_elapsed_time_ = tml::TIME_REAL(0.0);
-	this->one_time_ = tml::TIME_REAL(1.0 / this->limit_);
+	this->one_time_ = (this->limit_ > 0U) ? tml::TIME_REAL(1.0 / this->limit_) : tml::TIME_REAL(0.0);
 	this->sleep_time_ = tml::TIME_REAL(0.001);
 	this->average_sleep_time_ = this->sleep_time_;
 	this->wait_time_ = tml::TIME_REAL(0.0);

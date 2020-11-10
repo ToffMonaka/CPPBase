@@ -1,0 +1,197 @@
+/**
+ * @file
+ * @brief Dateコードファイル
+ */
+
+
+#include "Date.h"
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::Date::Date() :
+	time_(tml::TIME_MILLI(0LL)),
+	year_(0),
+	mon_(0),
+	day_(0),
+	hour_(0),
+	min_(0),
+	sec_(0),
+	week_day_(tml::DateConstantUtil::WEEK_DAY::SUNDAY)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::Date::~Date()
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::Date::Init(void)
+{
+	this->time_ = tml::TIME_MILLI(0LL);
+	this->year_ = 0;
+	this->mon_ = 0;
+	this->day_ = 0;
+	this->hour_ = 0;
+	this->min_ = 0;
+	this->sec_ = 0;
+	this->week_day_ = tml::DateConstantUtil::WEEK_DAY::SUNDAY;
+
+	return;
+}
+
+
+/**
+ * @brief SetTime関数
+ * @param time (time)
+ */
+void tml::Date::SetTime(const tml::TIME_MILLI &time)
+{
+	if (time.count() > 0LL) {
+		this->time_ = time;
+
+		struct tm date;
+		time_t date_time = tml::CastTime<tml::TIME_SECOND>(this->time_).count();
+
+		if (localtime_s(&date, &date_time) == 0) {
+			this->year_ = date.tm_year + 1900;
+			this->mon_ = date.tm_mon + 1;
+			this->day_ = date.tm_mday;
+			this->hour_ = date.tm_hour;
+			this->min_ = date.tm_min;
+			this->sec_ = date.tm_sec;
+			this->week_day_ = static_cast<tml::DateConstantUtil::WEEK_DAY>(date.tm_wday);
+		} else {
+			this->Init();
+		}
+	} else {
+		this->Init();
+	}
+
+	return;
+}
+
+
+/**
+ * @brief GetString関数
+ * @param dst_str (string)
+ * @param dst_str_size (dst_string_size)
+ * @return dst_str (string)
+ */
+WCHAR *tml::Date::GetString(WCHAR *dst_str, const size_t dst_str_size) const
+{
+	if (dst_str_size < ((tml::DateConstantUtil::STRING_LENGTH + 1U) << 1)) {
+		if (dst_str_size > 0U) {
+			dst_str[0] = 0;
+		}
+
+		return (dst_str);
+	}
+
+	_snwprintf_s(dst_str, dst_str_size >> 1, _TRUNCATE,
+				L"%04d-%02d-%02d %02d:%02d:%02d",
+				this->year_, this->mon_, this->day_, this->hour_, this->min_, this->sec_);
+
+	return (dst_str);
+}
+
+
+/**
+ * @brief SetString関数
+ * @param str (string)
+ */
+void tml::Date::SetString(const WCHAR *str)
+{
+	if (wcslen(str) != tml::DateConstantUtil::STRING_LENGTH) {
+		this->Init();
+
+		return;
+	}
+
+	if (wcscmp(str, tml::DateConstantUtil::ZERO_STRING) == 0) {
+		this->Init();
+
+		return;
+	}
+
+	size_t str_adr = 0U;
+	WCHAR parts_str[10] = L"";
+
+	{// Year Set
+		memcpy(parts_str, &str[str_adr], 4 << 1);
+		parts_str[4] = 0;
+		this->year_ = std::stoi(parts_str);
+
+		str_adr += 5;
+	}
+
+	{// Month Set
+		memcpy(parts_str, &str[str_adr], 2 << 1);
+		parts_str[2] = 0;
+		this->mon_ = std::stoi(parts_str);
+
+		str_adr += 3;
+	}
+
+	{// Day Set
+		memcpy(parts_str, &str[str_adr], 2 << 1);
+		parts_str[2] = 0;
+		this->day_ = std::stoi(parts_str);
+
+		str_adr += 3;
+	}
+
+	{// Hour Set
+		memcpy(parts_str, &str[str_adr], 2 << 1);
+		parts_str[2] = 0;
+		this->hour_ = std::stoi(parts_str);
+
+		str_adr += 3;
+	}
+
+	{// Minutes Set
+		memcpy(parts_str, &str[str_adr], 2 << 1);
+		parts_str[2] = 0;
+		this->min_ = std::stoi(parts_str);
+
+		str_adr += 3;
+	}
+
+	{// Seconds Set
+		memcpy(parts_str, &str[str_adr], 2 << 1);
+		parts_str[2] = 0;
+		this->sec_ = std::stoi(parts_str);
+	}
+
+	{// Time Set
+		struct tm date = {};
+
+		date.tm_year = this->year_ - 1900;
+		date.tm_mon = this->mon_ - 1;
+		date.tm_mday = this->day_;
+		date.tm_hour = this->hour_;
+		date.tm_min = this->min_;
+		date.tm_sec = this->sec_;
+		date.tm_isdst = -1;
+
+		time_t date_time = mktime(&date);
+
+		if (date_time < 0LL) {
+			date_time = 0LL;
+		}
+
+		this->SetTime(tml::CastTime<tml::TIME_MILLI>(tml::TIME_SECOND(date_time)));
+	}
+
+	return;
+}
