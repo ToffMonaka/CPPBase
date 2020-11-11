@@ -21,7 +21,7 @@ namespace tml {
 namespace ConstantUtil {
 }
 
-using TIME_SECOND = std::chrono::seconds;
+using TIME_SECONDS = std::chrono::seconds;
 using TIME_MILLI = std::chrono::milliseconds;
 using TIME_MICRO = std::chrono::microseconds;
 using TIME_NANO = std::chrono::nanoseconds;

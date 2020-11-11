@@ -31,63 +31,19 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::RandomUtilEngine> &);
 
-	static CHAR GetCHAR(void);
-	static CHAR GetCHAR(const CHAR, const CHAR);
-	static SHORT GetSHORT(void);
-	static SHORT GetSHORT(const SHORT, const SHORT);
 	static INT GetINT(void);
 	static INT GetINT(const INT, const INT);
+	static UINT GetUINT(void);
+	static UINT GetUINT(const UINT, const UINT);
 	static LONGLONG GetLONGLONG(void);
 	static LONGLONG GetLONGLONG(const LONGLONG, const LONGLONG);
+	static ULONGLONG GetULONGLONG(void);
+	static ULONGLONG GetULONGLONG(const ULONGLONG, const ULONGLONG);
 	static FLOAT GetFLOAT(void);
 	static FLOAT GetFLOAT(const FLOAT, const FLOAT);
 	static DOUBLE GetDOUBLE(void);
 	static DOUBLE GetDOUBLE(const DOUBLE, const DOUBLE);
 };
-}
-
-
-/**
- * @brief GetCHARŠÖ”
- * @return val (value)
- */
-inline CHAR tml::RandomUtil::GetCHAR(void)
-{
-	return (tml::RandomUtil::engine_->GetCHAR());
-}
-
-
-/**
- * @brief GetCHARŠÖ”
- * @param min (min)
- * @param max (max)
- * @return val (value)
- */
-inline CHAR tml::RandomUtil::GetCHAR(const CHAR min, const CHAR max)
-{
-	return (tml::RandomUtil::engine_->GetCHAR(min, max));
-}
-
-
-/**
- * @brief GetSHORTŠÖ”
- * @return val (value)
- */
-inline SHORT tml::RandomUtil::GetSHORT(void)
-{
-	return (tml::RandomUtil::engine_->GetSHORT());
-}
-
-
-/**
- * @brief GetSHORTŠÖ”
- * @param min (min)
- * @param max (max)
- * @return val (value)
- */
-inline SHORT tml::RandomUtil::GetSHORT(const SHORT min, const SHORT max)
-{
-	return (tml::RandomUtil::engine_->GetSHORT(min, max));
 }
 
 
@@ -103,13 +59,35 @@ inline INT tml::RandomUtil::GetINT(void)
 
 /**
  * @brief GetINTŠÖ”
- * @param min (min)
- * @param max (max)
+ * @param min_val (min_value)
+ * @param max_val (max_value)
  * @return val (value)
  */
-inline INT tml::RandomUtil::GetINT(const INT min, const INT max)
+inline INT tml::RandomUtil::GetINT(const INT min_val, const INT max_val)
 {
-	return (tml::RandomUtil::engine_->GetINT(min, max));
+	return (tml::RandomUtil::engine_->GetINT(min_val, max_val));
+}
+
+
+/**
+ * @brief GetUINTŠÖ”
+ * @return val (value)
+ */
+inline UINT tml::RandomUtil::GetUINT(void)
+{
+	return (tml::RandomUtil::engine_->GetUINT());
+}
+
+
+/**
+ * @brief GetUINTŠÖ”
+ * @param min_val (min_value)
+ * @param max_val (max_value)
+ * @return val (value)
+ */
+inline UINT tml::RandomUtil::GetUINT(const UINT min_val, const UINT max_val)
+{
+	return (tml::RandomUtil::engine_->GetUINT(min_val, max_val));
 }
 
 
@@ -125,13 +103,35 @@ inline LONGLONG tml::RandomUtil::GetLONGLONG(void)
 
 /**
  * @brief GetLONGLONGŠÖ”
- * @param min (min)
- * @param max (max)
+ * @param min_val (min_value)
+ * @param max_val (max_value)
  * @return val (value)
  */
-inline LONGLONG tml::RandomUtil::GetLONGLONG(const LONGLONG min, const LONGLONG max)
+inline LONGLONG tml::RandomUtil::GetLONGLONG(const LONGLONG min_val, const LONGLONG max_val)
 {
-	return (tml::RandomUtil::engine_->GetLONGLONG(min, max));
+	return (tml::RandomUtil::engine_->GetLONGLONG(min_val, max_val));
+}
+
+
+/**
+ * @brief GetULONGLONGŠÖ”
+ * @return val (value)
+ */
+inline ULONGLONG tml::RandomUtil::GetULONGLONG(void)
+{
+	return (tml::RandomUtil::engine_->GetULONGLONG());
+}
+
+
+/**
+ * @brief GetULONGLONGŠÖ”
+ * @param min_val (min_value)
+ * @param max_val (max_value)
+ * @return val (value)
+ */
+inline ULONGLONG tml::RandomUtil::GetULONGLONG(const ULONGLONG min_val, const ULONGLONG max_val)
+{
+	return (tml::RandomUtil::engine_->GetULONGLONG(min_val, max_val));
 }
 
 
@@ -147,13 +147,13 @@ inline FLOAT tml::RandomUtil::GetFLOAT(void)
 
 /**
  * @brief GetFLOATŠÖ”
- * @param min (min)
- * @param max (max)
+ * @param min_val (min_value)
+ * @param max_val (max_value)
  * @return val (value)
  */
-inline FLOAT tml::RandomUtil::GetFLOAT(const FLOAT min, const FLOAT max)
+inline FLOAT tml::RandomUtil::GetFLOAT(const FLOAT min_val, const FLOAT max_val)
 {
-	return (tml::RandomUtil::engine_->GetFLOAT(min, max));
+	return (tml::RandomUtil::engine_->GetFLOAT(min_val, max_val));
 }
 
 
@@ -169,11 +169,11 @@ inline DOUBLE tml::RandomUtil::GetDOUBLE(void)
 
 /**
  * @brief GetDOUBLEŠÖ”
- * @param min (min)
- * @param max (max)
+ * @param min_val (min_value)
+ * @param max_val (max_value)
  * @return val (value)
  */
-inline DOUBLE tml::RandomUtil::GetDOUBLE(const DOUBLE min, const DOUBLE max)
+inline DOUBLE tml::RandomUtil::GetDOUBLE(const DOUBLE min_val, const DOUBLE max_val)
 {
-	return (tml::RandomUtil::engine_->GetDOUBLE(min, max));
+	return (tml::RandomUtil::engine_->GetDOUBLE(min_val, max_val));
 }

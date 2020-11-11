@@ -5,13 +5,14 @@
 
 
 #include "Date.h"
+#include "../string/StringUtil.h"
 
 
 /**
  * @brief コンストラクタ
  */
 tml::Date::Date() :
-	time_(tml::TIME_MILLI(0LL)),
+	time_(0LL),
 	year_(0),
 	mon_(0),
 	day_(0),
@@ -38,7 +39,7 @@ tml::Date::~Date()
  */
 void tml::Date::Init(void)
 {
-	this->time_ = tml::TIME_MILLI(0LL);
+	this->time_ = tml::TIME_SECONDS(0LL);
 	this->year_ = 0;
 	this->mon_ = 0;
 	this->day_ = 0;
@@ -55,13 +56,13 @@ void tml::Date::Init(void)
  * @brief SetTime関数
  * @param time (time)
  */
-void tml::Date::SetTime(const tml::TIME_MILLI &time)
+void tml::Date::SetTime(const tml::TIME_SECONDS &time)
 {
 	if (time.count() > 0LL) {
 		this->time_ = time;
 
 		struct tm date;
-		time_t date_time = tml::CastTime<tml::TIME_SECOND>(this->time_).count();
+		time_t date_time = this->time_.count();
 
 		if (localtime_s(&date, &date_time) == 0) {
 			this->year_ = date.tm_year + 1900;
@@ -130,7 +131,7 @@ void tml::Date::SetString(const WCHAR *str)
 	{// Year Set
 		memcpy(parts_str, &str[str_adr], 4 << 1);
 		parts_str[4] = 0;
-		this->year_ = std::stoi(parts_str);
+		this->year_ = tml::StringUtil::GetUINT(parts_str);
 
 		str_adr += 5;
 	}
@@ -138,7 +139,7 @@ void tml::Date::SetString(const WCHAR *str)
 	{// Month Set
 		memcpy(parts_str, &str[str_adr], 2 << 1);
 		parts_str[2] = 0;
-		this->mon_ = std::stoi(parts_str);
+		this->mon_ = tml::StringUtil::GetUINT(parts_str);
 
 		str_adr += 3;
 	}
@@ -146,7 +147,7 @@ void tml::Date::SetString(const WCHAR *str)
 	{// Day Set
 		memcpy(parts_str, &str[str_adr], 2 << 1);
 		parts_str[2] = 0;
-		this->day_ = std::stoi(parts_str);
+		this->day_ = tml::StringUtil::GetUINT(parts_str);
 
 		str_adr += 3;
 	}
@@ -154,7 +155,7 @@ void tml::Date::SetString(const WCHAR *str)
 	{// Hour Set
 		memcpy(parts_str, &str[str_adr], 2 << 1);
 		parts_str[2] = 0;
-		this->hour_ = std::stoi(parts_str);
+		this->hour_ = tml::StringUtil::GetUINT(parts_str);
 
 		str_adr += 3;
 	}
@@ -162,7 +163,7 @@ void tml::Date::SetString(const WCHAR *str)
 	{// Minutes Set
 		memcpy(parts_str, &str[str_adr], 2 << 1);
 		parts_str[2] = 0;
-		this->min_ = std::stoi(parts_str);
+		this->min_ = tml::StringUtil::GetUINT(parts_str);
 
 		str_adr += 3;
 	}
@@ -170,7 +171,7 @@ void tml::Date::SetString(const WCHAR *str)
 	{// Seconds Set
 		memcpy(parts_str, &str[str_adr], 2 << 1);
 		parts_str[2] = 0;
-		this->sec_ = std::stoi(parts_str);
+		this->sec_ = tml::StringUtil::GetUINT(parts_str);
 	}
 
 	{// Time Set
@@ -190,7 +191,7 @@ void tml::Date::SetString(const WCHAR *str)
 			date_time = 0LL;
 		}
 
-		this->SetTime(tml::CastTime<tml::TIME_MILLI>(tml::TIME_SECOND(date_time)));
+		this->SetTime(tml::TIME_SECONDS(date_time));
 	}
 
 	return;

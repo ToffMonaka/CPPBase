@@ -36,14 +36,14 @@ public:
 
 	virtual void Init(void);
 
-	CHAR GetCHAR(void);
-	CHAR GetCHAR(const CHAR, const CHAR);
-	SHORT GetSHORT(void);
-	SHORT GetSHORT(const SHORT, const SHORT);
 	INT GetINT(void);
 	INT GetINT(const INT, const INT);
+	UINT GetUINT(void);
+	UINT GetUINT(const UINT, const UINT);
 	LONGLONG GetLONGLONG(void);
 	LONGLONG GetLONGLONG(const LONGLONG, const LONGLONG);
+	ULONGLONG GetULONGLONG(void);
+	ULONGLONG GetULONGLONG(const ULONGLONG, const ULONGLONG);
 	FLOAT GetFLOAT(void);
 	FLOAT GetFLOAT(const FLOAT, const FLOAT);
 	DOUBLE GetDOUBLE(void);

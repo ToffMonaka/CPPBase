@@ -11,7 +11,7 @@
  * @brief コンストラクタ
  */
 tml::Clock::Clock() :
-	time_(tml::TIME_MILLI(0LL))
+	time_(0LL)
 {
 	return;
 }

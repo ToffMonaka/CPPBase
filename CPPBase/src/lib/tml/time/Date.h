@@ -33,7 +33,7 @@ public: Date(const Date &) = delete;
 public: Date &operator =(const Date &) = delete;
 
 private:
-	tml::TIME_MILLI time_;
+	tml::TIME_SECONDS time_;
 	USHORT year_;
 	UCHAR mon_;
 	UCHAR day_;
@@ -43,7 +43,7 @@ private:
 	tml::DateConstantUtil::WEEK_DAY week_day_;
 
 public:
-	static tml::TIME_MILLI GetNowTime(void);
+	static tml::TIME_SECONDS GetNowTime(void);
 
 public:
 	Date();
@@ -52,8 +52,8 @@ public:
 	void Init(void);
 
 	void SetNowTime(void);
-	tml::TIME_MILLI GetTime(void) const;
-	void SetTime(const tml::TIME_MILLI &);
+	tml::TIME_SECONDS GetTime(void) const;
+	void SetTime(const tml::TIME_SECONDS &);
 	USHORT GetYear(void) const;
 	UCHAR GetMonth(void) const;
 	UCHAR GetDay(void) const;
@@ -71,11 +71,11 @@ public:
  * @brief GetNowTimeä÷êî
  * @return now_time (now_time)
  */
-inline tml::TIME_MILLI tml::Date::GetNowTime(void)
+inline tml::TIME_SECONDS tml::Date::GetNowTime(void)
 {
 	auto now_time = std::chrono::system_clock::now();
 
-	return (tml::CastTime<tml::TIME_MILLI>(now_time.time_since_epoch()));
+	return (tml::CastTime<tml::TIME_SECONDS>(now_time.time_since_epoch()));
 }
 
 
@@ -86,7 +86,7 @@ inline void tml::Date::SetNowTime(void)
 {
 	auto now_time = std::chrono::system_clock::now();
 
-	this->SetTime(tml::CastTime<tml::TIME_MILLI>(now_time.time_since_epoch()));
+	this->SetTime(tml::CastTime<tml::TIME_SECONDS>(now_time.time_since_epoch()));
 
 	return;
 }
@@ -96,7 +96,7 @@ inline void tml::Date::SetNowTime(void)
  * @brief GetTimeä÷êî
  * @return time (time)
  */
-inline tml::TIME_MILLI tml::Date::GetTime(void) const
+inline tml::TIME_SECONDS tml::Date::GetTime(void) const
 {
 	return (this->time_);
 }
