@@ -20,7 +20,8 @@ enum class WEEK_DAY : UCHAR {
 	SATURDAY
 };
 const size_t STRING_LENGTH = 19U;
-const WCHAR ZERO_STRING[] = L"0000-00-00 00:00:00";
+const CHAR ZERO_STRING[] = "0000-00-00 00:00:00";
+const WCHAR ZERO_STRING_W[] = L"0000-00-00 00:00:00";
 }
 
 
@@ -45,6 +46,9 @@ private:
 public:
 	static tml::TIME_SECONDS GetNowTime(void);
 
+private:
+	void SetTime(void);
+
 public:
 	Date();
 	virtual ~Date();
@@ -61,7 +65,11 @@ public:
 	UCHAR GetMinutes(void) const;
 	UCHAR GetSeconds(void) const;
 	tml::DateConstantUtil::WEEK_DAY GetWeekDay(void) const;
-	WCHAR *GetString(WCHAR *, const size_t) const;
+	CHAR *GetString(CHAR *, const size_t) const;
+	WCHAR *GetStringW(WCHAR *, const size_t) const;
+	std::string GetString(void) const;
+	std::wstring GetStringW(void) const;
+	void SetString(const CHAR *);
 	void SetString(const WCHAR *);
 };
 }

@@ -85,7 +85,7 @@ inline tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtil::GetAllocatorInfo(v
 /**
  * @brief Clear関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param p (pointer)
  * @param cnt (count)
@@ -106,7 +106,7 @@ inline void tml::MemoryUtil::Clear(T *p, const size_t cnt)
 /**
  * @brief Copy関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param dst_p (dst_pointer)
  * @param src_p (src_pointer)
@@ -129,7 +129,7 @@ inline void tml::MemoryUtil::Copy(T *dst_p, const T *src_p, const size_t cnt)
 /**
  * @brief CopySame関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param dst_p (dst_pointer)
  * @param src_p (src_pointer)

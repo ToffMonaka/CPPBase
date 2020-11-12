@@ -51,7 +51,7 @@ INT tml::TimeUtil::Create(std::unique_ptr<tml::TimeUtilEngine> &engine)
 /**
  * @brief Sleep関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param time (time)
  * @return elapsed_time (elapsed_time)
@@ -73,7 +73,7 @@ tml::TIME_REAL tml::TimeUtil::Sleep(const tml::TIME_REAL &time)
 /**
  * @brief Wait関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param time (time)
  * @return elapsed_time (elapsed_time)

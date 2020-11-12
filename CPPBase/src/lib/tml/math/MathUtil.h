@@ -52,7 +52,7 @@ public:
 /**
  * @brief Div関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param val1 (value1)
  * @param val2 (value2)
@@ -68,7 +68,7 @@ inline T tml::MathUtil::Div(const T &val1, const T &val2)
 /**
  * @brief Div関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param val1 (value1)
  * @param val2 (value2)
@@ -85,7 +85,7 @@ inline T tml::MathUtil::Div(const T &val1, const T &val2, const T &zero_val)
 /**
  * @brief Mod関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param val1 (value1)
  * @param val2 (value2)
@@ -101,7 +101,7 @@ inline T tml::MathUtil::Mod(const T &val1, const T &val2)
 /**
  * @brief Mod関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param val1 (value1)
  * @param val2 (value2)
@@ -118,7 +118,7 @@ inline T tml::MathUtil::Mod(const T &val1, const T &val2, const T &zero_val)
 /**
  * @brief Min関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param val1 (value1)
  * @param val2 (value2)
@@ -134,7 +134,7 @@ inline T tml::MathUtil::Min(const T &val1, const T &val2)
 /**
  * @brief Max関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param val1 (value1)
  * @param val2 (value2)
@@ -150,7 +150,7 @@ inline T tml::MathUtil::Max(const T &val1, const T &val2)
 /**
  * @brief Clamp関数
  *
- * エンジン不要
+ * Create関数不要
  *
  * @param val (value)
  * @param min_val (min_value)

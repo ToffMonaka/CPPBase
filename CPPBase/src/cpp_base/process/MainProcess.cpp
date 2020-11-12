@@ -139,7 +139,7 @@ INT cpp_base::MainProcess::Start(void)
 
 		date1.SetNowTime();
 
-		date1.GetString(date_str, sizeof(date_str));
+		date1.GetStringW(date_str, sizeof(date_str));
 
 		date2.SetString(date_str);
 
