@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief NewAllocatorコードファイル
+ * @brief NewMemoryAllocatorコードファイル
  */
 
 
-#include "NewAllocator.h"
+#include "NewMemoryAllocator.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::NewAllocator::NewAllocator() :
+tml::NewMemoryAllocator::NewMemoryAllocator() :
 	ms_size_(0U),
 	ms_use_size_(0U),
 	ms_cnt_head_size_(0U)
@@ -22,7 +22,7 @@ tml::NewAllocator::NewAllocator() :
 /**
  * @brief デストラクタ
  */
-tml::NewAllocator::~NewAllocator()
+tml::NewMemoryAllocator::~NewMemoryAllocator()
 {
 	this->Release();
 
@@ -33,14 +33,14 @@ tml::NewAllocator::~NewAllocator()
 /**
  * @brief Release関数
  */
-void tml::NewAllocator::Release(void)
+void tml::NewMemoryAllocator::Release(void)
 {
 	if (this->ms_size_ > 0U) {
 		this->ms_size_ = 0U;
 		this->ms_use_size_ = 0U;
 	}
 
-	tml::Allocator::Release();
+	tml::MemoryAllocator::Release();
 
 	return;
 }
@@ -49,13 +49,13 @@ void tml::NewAllocator::Release(void)
 /**
  * @brief Init関数
  */
-void tml::NewAllocator::Init(void)
+void tml::NewMemoryAllocator::Init(void)
 {
 	this->Release();
 
 	this->ms_cnt_head_size_ = 0U;
 
-	tml::Allocator::Init();
+	tml::MemoryAllocator::Init();
 
 	return;
 }
@@ -66,7 +66,7 @@ void tml::NewAllocator::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::NewAllocator::Create(void)
+INT tml::NewMemoryAllocator::Create(void)
 {
 	if (this->ms_size_ > 0U) {
 		this->Init();
@@ -76,7 +76,7 @@ INT tml::NewAllocator::Create(void)
 
 	this->Release();
 
-	if (tml::Allocator::Create() < 0) {
+	if (tml::MemoryAllocator::Create() < 0) {
 		this->Init();
 
 		return (-1);
@@ -101,9 +101,9 @@ INT tml::NewAllocator::Create(void)
  * @brief GetInfo関数
  * @return info (info)
  */
-tml::Allocator::INFO tml::NewAllocator::GetInfo(void)
+tml::MemoryAllocator::INFO tml::NewMemoryAllocator::GetInfo(void)
 {
-	auto info = tml::Allocator::GetInfo();
+	auto info = tml::MemoryAllocator::GetInfo();
 
 	if (this->ms_size_ <= 0U) {
 		return (info);

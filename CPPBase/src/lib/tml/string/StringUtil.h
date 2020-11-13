@@ -43,18 +43,48 @@ public:
 	static FLOAT GetFLOAT(const WCHAR *, const FLOAT default_val = 0.0f);
 	static DOUBLE GetDOUBLE(const CHAR *, const DOUBLE default_val = 0.0);
 	static DOUBLE GetDOUBLE(const WCHAR *, const DOUBLE default_val = 0.0);
-	static std::string GetString(const INT);
+	static std::string GetStringMB(const INT);
 	static std::wstring GetStringW(const INT);
-	static std::string GetString(const UINT);
+	static std::string GetStringMB(const UINT);
 	static std::wstring GetStringW(const UINT);
-	static std::string GetString(const LONGLONG);
+	static std::string GetStringMB(const LONGLONG);
 	static std::wstring GetStringW(const LONGLONG);
-	static std::string GetString(const ULONGLONG);
+	static std::string GetStringMB(const ULONGLONG);
 	static std::wstring GetStringW(const ULONGLONG);
-	static std::string GetString(const FLOAT);
+	static std::string GetStringMB(const FLOAT);
 	static std::wstring GetStringW(const FLOAT);
-	static std::string GetString(const DOUBLE);
+	static std::string GetStringMB(const DOUBLE);
 	static std::wstring GetStringW(const DOUBLE);
+
+	template <typename T = std::wstring>
+	static T GetString(const INT);
+	template <>
+	static std::string GetString<std::string>(const INT);
+
+	template <typename T = std::wstring>
+	static T GetString(const UINT);
+	template <>
+	static std::string GetString<std::string>(const UINT);
+
+	template <typename T = std::wstring>
+	static T GetString(const LONGLONG);
+	template <>
+	static std::string GetString<std::string>(const LONGLONG);
+
+	template <typename T = std::wstring>
+	static T GetString(const ULONGLONG);
+	template <>
+	static std::string GetString<std::string>(const ULONGLONG);
+
+	template <typename T = std::wstring>
+	static T GetString(const FLOAT);
+	template <>
+	static std::string GetString<std::string>(const FLOAT);
+
+	template <typename T = std::wstring>
+	static T GetString(const DOUBLE);
+	template <>
+	static std::string GetString<std::string>(const DOUBLE);
 };
 }
 
@@ -332,11 +362,11 @@ inline DOUBLE tml::StringUtil::GetDOUBLE(const WCHAR *str, const DOUBLE default_
 
 
 /**
- * @brief GetStringä÷êî
+ * @brief GetStringMBä÷êî
  * @param val (value)
  * @return str (string)
  */
-inline std::string tml::StringUtil::GetString(const INT val)
+inline std::string tml::StringUtil::GetStringMB(const INT val)
 {
 	return (std::to_string(val));
 }
@@ -354,11 +384,11 @@ inline std::wstring tml::StringUtil::GetStringW(const INT val)
 
 
 /**
- * @brief GetStringä÷êî
+ * @brief GetStringMBä÷êî
  * @param val (value)
  * @return str (string)
  */
-inline std::string tml::StringUtil::GetString(const UINT val)
+inline std::string tml::StringUtil::GetStringMB(const UINT val)
 {
 	return (std::to_string(val));
 }
@@ -376,11 +406,11 @@ inline std::wstring tml::StringUtil::GetStringW(const UINT val)
 
 
 /**
- * @brief GetStringä÷êî
+ * @brief GetStringMBä÷êî
  * @param val (value)
  * @return str (string)
  */
-inline std::string tml::StringUtil::GetString(const LONGLONG val)
+inline std::string tml::StringUtil::GetStringMB(const LONGLONG val)
 {
 	return (std::to_string(val));
 }
@@ -398,11 +428,11 @@ inline std::wstring tml::StringUtil::GetStringW(const LONGLONG val)
 
 
 /**
- * @brief GetStringä÷êî
+ * @brief GetStringMBä÷êî
  * @param val (value)
  * @return str (string)
  */
-inline std::string tml::StringUtil::GetString(const ULONGLONG val)
+inline std::string tml::StringUtil::GetStringMB(const ULONGLONG val)
 {
 	return (std::to_string(val));
 }
@@ -420,11 +450,11 @@ inline std::wstring tml::StringUtil::GetStringW(const ULONGLONG val)
 
 
 /**
- * @brief GetStringä÷êî
+ * @brief GetStringMBä÷êî
  * @param val (value)
  * @return str (string)
  */
-inline std::string tml::StringUtil::GetString(const FLOAT val)
+inline std::string tml::StringUtil::GetStringMB(const FLOAT val)
 {
 	return (std::to_string(val));
 }
@@ -442,11 +472,11 @@ inline std::wstring tml::StringUtil::GetStringW(const FLOAT val)
 
 
 /**
- * @brief GetStringä÷êî
+ * @brief GetStringMBä÷êî
  * @param val (value)
  * @return str (string)
  */
-inline std::string tml::StringUtil::GetString(const DOUBLE val)
+inline std::string tml::StringUtil::GetStringMB(const DOUBLE val)
 {
 	return (std::to_string(val));
 }
@@ -460,4 +490,148 @@ inline std::string tml::StringUtil::GetString(const DOUBLE val)
 inline std::wstring tml::StringUtil::GetStringW(const DOUBLE val)
 {
 	return (std::to_wstring(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <typename T>
+inline T tml::StringUtil::GetString(const INT val)
+{
+	return (tml::StringUtil::GetStringW(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <>
+inline std::string tml::StringUtil::GetString<std::string>(const INT val)
+{
+	return (tml::StringUtil::GetStringMB(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <typename T>
+inline T tml::StringUtil::GetString(const UINT val)
+{
+	return (tml::StringUtil::GetStringW(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <>
+inline std::string tml::StringUtil::GetString<std::string>(const UINT val)
+{
+	return (tml::StringUtil::GetStringMB(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <typename T>
+inline T tml::StringUtil::GetString(const LONGLONG val)
+{
+	return (tml::StringUtil::GetStringW(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <>
+inline std::string tml::StringUtil::GetString<std::string>(const LONGLONG val)
+{
+	return (tml::StringUtil::GetStringMB(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <typename T>
+inline T tml::StringUtil::GetString(const ULONGLONG val)
+{
+	return (tml::StringUtil::GetStringW(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <>
+inline std::string tml::StringUtil::GetString<std::string>(const ULONGLONG val)
+{
+	return (tml::StringUtil::GetStringMB(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <typename T>
+inline T tml::StringUtil::GetString(const FLOAT val)
+{
+	return (tml::StringUtil::GetStringW(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <>
+inline std::string tml::StringUtil::GetString<std::string>(const FLOAT val)
+{
+	return (tml::StringUtil::GetStringMB(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <typename T>
+inline T tml::StringUtil::GetString(const DOUBLE val)
+{
+	return (tml::StringUtil::GetStringW(val));
+}
+
+
+/**
+ * @brief GetStringä÷êî
+ * @param val (value)
+ * @return str (string)
+ */
+template <>
+inline std::string tml::StringUtil::GetString<std::string>(const DOUBLE val)
+{
+	return (tml::StringUtil::GetStringMB(val));
 }

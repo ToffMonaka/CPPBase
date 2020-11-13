@@ -9,6 +9,10 @@
 
 
 namespace cpp_base {
+}
+
+
+namespace cpp_base {
 namespace ConstantUtil {
 namespace APPLICATION {
 	const bool DEBUG_FLAG = true;

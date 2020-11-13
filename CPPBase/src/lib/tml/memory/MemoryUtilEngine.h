@@ -6,8 +6,8 @@
 
 
 #include "../ConstantUtil.h"
-#include "NewAllocator.h"
-#include "DlmallocAllocator.h"
+#include "NewMemoryAllocator.h"
+#include "DlmallocMemoryAllocator.h"
 #include "../thread/SpinThreadLock.h"
 
 
@@ -19,7 +19,10 @@ enum class ALLOCATOR_TYPE : UINT {
 	DLMALLOC
 };
 }
+}
 
+
+namespace tml {
 /**
  * @brief MemoryUtilEngineƒNƒ‰ƒX
  *
@@ -57,8 +60,8 @@ public:
 
 private:
 	tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE allocator_type_;
-	tml::NewAllocator *new_allocator_;
-	tml::DlmallocAllocator *dlmalloc_allocator_;
+	tml::NewMemoryAllocator *new_allocator_;
+	tml::DlmallocMemoryAllocator *dlmalloc_allocator_;
 	tml::SpinThreadLock allocator_th_lock_;
 
 protected:

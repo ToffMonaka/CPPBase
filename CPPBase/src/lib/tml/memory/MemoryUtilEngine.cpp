@@ -76,7 +76,7 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 
 		switch (this->allocator_type_) {
 		case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-			this->new_allocator_ = new tml::NewAllocator();
+			this->new_allocator_ = new tml::NewMemoryAllocator();
 
 			if (this->new_allocator_->Create() < 0) {
 				return (-1);
@@ -85,7 +85,7 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 			break;
 		}
 		case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-			this->dlmalloc_allocator_ = new tml::DlmallocAllocator();
+			this->dlmalloc_allocator_ = new tml::DlmallocMemoryAllocator();
 
 			if (this->dlmalloc_allocator_->Create(allocator_size) < 0) {
 				return (-1);
@@ -111,7 +111,7 @@ tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtilEngine::GetAllocatorInfo(vo
 {
 	tml::MemoryUtilEngine::ALLOCATOR_INFO allocator_info;
 	tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE tmp_allocator_type = tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE;
-	tml::Allocator::INFO tmp_allocator_info;
+	tml::MemoryAllocator::INFO tmp_allocator_info;
 
 	{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
 		tmp_allocator_type = this->allocator_type_;

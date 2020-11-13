@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief Allocatorコードファイル
+ * @brief MemoryAllocatorコードファイル
  */
 
 
-#include "Allocator.h"
+#include "MemoryAllocator.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::Allocator::Allocator()
+tml::MemoryAllocator::MemoryAllocator()
 {
 	return;
 }
@@ -19,7 +19,7 @@ tml::Allocator::Allocator()
 /**
  * @brief デストラクタ
  */
-tml::Allocator::~Allocator()
+tml::MemoryAllocator::~MemoryAllocator()
 {
 	return;
 }
@@ -28,7 +28,7 @@ tml::Allocator::~Allocator()
 /**
  * @brief Release関数
  */
-void tml::Allocator::Release(void)
+void tml::MemoryAllocator::Release(void)
 {
 	return;
 }
@@ -37,7 +37,7 @@ void tml::Allocator::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Allocator::Init(void)
+void tml::MemoryAllocator::Init(void)
 {
 	return;
 }
@@ -48,7 +48,7 @@ void tml::Allocator::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Allocator::Create(void)
+INT tml::MemoryAllocator::Create(void)
 {
 	return (0);
 }
@@ -58,9 +58,9 @@ INT tml::Allocator::Create(void)
  * @brief GetInfo関数
  * @return info (info)
  */
-tml::Allocator::INFO tml::Allocator::GetInfo(void)
+tml::MemoryAllocator::INFO tml::MemoryAllocator::GetInfo(void)
 {
-	tml::Allocator::INFO info;
+	tml::MemoryAllocator::INFO info;
 
 	return (info);
 }

@@ -1,40 +1,38 @@
 /**
  * @file
- * @brief DlmallocAllocatorヘッダーファイル
+ * @brief NewMemoryAllocatorヘッダーファイル
  */
 #pragma once
 
 
-#include "../dlmalloc/malloc.h"
-
 #include "../ConstantUtil.h"
-#include "Allocator.h"
+#include "MemoryAllocator.h"
 
 
 namespace tml {
 /**
- * @brief DlmallocAllocatorクラス
+ * @brief NewMemoryAllocatorクラス
  */
-class DlmallocAllocator : public tml::Allocator
+class NewMemoryAllocator : public tml::MemoryAllocator
 {
-public: DlmallocAllocator(const DlmallocAllocator &) = delete;
-public: DlmallocAllocator &operator =(const DlmallocAllocator &) = delete;
+public: NewMemoryAllocator(const NewMemoryAllocator &) = delete;
+public: NewMemoryAllocator &operator =(const NewMemoryAllocator &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	mspace ms_;
-	size_t ms_use_cnt_;
+	size_t ms_size_;
+	size_t ms_use_size_;
 	size_t ms_cnt_head_size_;
 
 private:
 	void Release(void);
 
 public:
-	DlmallocAllocator();
-	virtual ~DlmallocAllocator();
+	NewMemoryAllocator();
+	virtual ~NewMemoryAllocator();
 
 	virtual void Init(void);
-	INT Create(const size_t);
+	INT Create(void);
 
 	template <typename T>
 	T *Get(const size_t);
@@ -48,7 +46,7 @@ public:
 	BYTE *ReleaseDestructorPart(T **);
 	template <typename T>
 	void ReleaseMemorySpacePart(BYTE *, T **);
-	virtual tml::Allocator::INFO GetInfo(void);
+	virtual tml::MemoryAllocator::INFO GetInfo(void);
 };
 }
 
@@ -60,7 +58,7 @@ public:
  * nullptr=失敗
  */
 template <typename T>
-inline T *tml::DlmallocAllocator::Get(const size_t cnt)
+inline T *tml::NewMemoryAllocator::Get(const size_t cnt)
 {
 	return (this->GetConstructorPart<T>(this->GetMemorySpacePart<T>(cnt), cnt));
 }
@@ -73,23 +71,23 @@ inline T *tml::DlmallocAllocator::Get(const size_t cnt)
  * nullptr=失敗
  */
 template <typename T>
-inline BYTE *tml::DlmallocAllocator::GetMemorySpacePart(const size_t cnt)
+inline BYTE *tml::NewMemoryAllocator::GetMemorySpacePart(const size_t cnt)
 {
 	if (cnt <= 0U) {
 		return (nullptr);
 	}
 
-	if (this->ms_ == nullptr) {
+	if (this->ms_size_ <= 0U) {
 		return (nullptr);
 	}
 
-	BYTE *ms_p = static_cast<BYTE *>(mspace_malloc(this->ms_, sizeof(T) * cnt + this->ms_cnt_head_size_));
+	BYTE *ms_p = new BYTE[sizeof(T) * cnt + this->ms_cnt_head_size_];
 
 	if (ms_p == nullptr) {
 		return (nullptr);
 	}
 
-	++this->ms_use_cnt_;
+	++this->ms_use_size_;
 
 	return (ms_p);
 }
@@ -103,7 +101,7 @@ inline BYTE *tml::DlmallocAllocator::GetMemorySpacePart(const size_t cnt)
  * nullptr=失敗
  */
 template <typename T>
-inline T *tml::DlmallocAllocator::GetConstructorPart(BYTE *ms_p, const size_t cnt)
+inline T *tml::NewMemoryAllocator::GetConstructorPart(BYTE *ms_p, const size_t cnt)
 {
 	if (ms_p == nullptr) {
 		return (nullptr);
@@ -134,7 +132,7 @@ inline T *tml::DlmallocAllocator::GetConstructorPart(BYTE *ms_p, const size_t cn
  * @param pp (pointer_pointer)
  */
 template <typename T>
-inline void tml::DlmallocAllocator::Release(T **pp)
+inline void tml::NewMemoryAllocator::Release(T **pp)
 {
 	this->ReleaseMemorySpacePart<T>(this->ReleaseDestructorPart<T>(pp), pp);
 
@@ -149,7 +147,7 @@ inline void tml::DlmallocAllocator::Release(T **pp)
  * nullptr=失敗
  */
 template <typename T>
-inline BYTE *tml::DlmallocAllocator::ReleaseDestructorPart(T **pp)
+inline BYTE *tml::NewMemoryAllocator::ReleaseDestructorPart(T **pp)
 {
 	if ((*pp) == nullptr) {
 		return (nullptr);
@@ -175,17 +173,17 @@ inline BYTE *tml::DlmallocAllocator::ReleaseDestructorPart(T **pp)
  * @param pp (pointer_pointer)
  */
 template <typename T>
-inline void tml::DlmallocAllocator::ReleaseMemorySpacePart(BYTE *ms_p, T **pp)
+inline void tml::NewMemoryAllocator::ReleaseMemorySpacePart(BYTE *ms_p, T **pp)
 {
 	if (ms_p == nullptr) {
 		return;
 	}
 
-	mspace_free(this->ms_, ms_p);
+	delete [] ms_p;
 
 	(*pp) = nullptr;
 
-	--this->ms_use_cnt_;
+	--this->ms_use_size_;
 
 	return;
 }

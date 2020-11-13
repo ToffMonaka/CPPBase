@@ -54,33 +54,6 @@ void tml::Date::Init(void)
 
 /**
  * @brief SetTimeä÷êî
- */
-void tml::Date::SetTime(void)
-{
-	struct tm date = {};
-
-	date.tm_year = this->year_ - 1900;
-	date.tm_mon = this->mon_ - 1;
-	date.tm_mday = this->day_;
-	date.tm_hour = this->hour_;
-	date.tm_min = this->min_;
-	date.tm_sec = this->sec_;
-	date.tm_isdst = -1;
-
-	time_t date_time = mktime(&date);
-
-	if (date_time < 0LL) {
-		date_time = 0LL;
-	}
-
-	this->SetTime(tml::TIME_SECONDS(date_time));
-
-	return;
-}
-
-
-/**
- * @brief SetTimeä÷êî
  * @param time (time)
  */
 void tml::Date::SetTime(const tml::TIME_SECONDS &time)
@@ -116,8 +89,12 @@ void tml::Date::SetTime(const tml::TIME_SECONDS &time)
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-CHAR *tml::Date::GetString(CHAR *dst_str, const size_t dst_str_size) const
+const CHAR *tml::Date::GetString(CHAR *dst_str, const size_t dst_str_size) const
 {
+	if (dst_str == nullptr) {
+		return (dst_str);
+	}
+
 	if (dst_str_size < (tml::DateConstantUtil::STRING_LENGTH + 1U)) {
 		if (dst_str_size > 0U) {
 			dst_str[0] = 0;
@@ -126,22 +103,22 @@ CHAR *tml::Date::GetString(CHAR *dst_str, const size_t dst_str_size) const
 		return (dst_str);
 	}
 
-	_snprintf_s(dst_str, dst_str_size, _TRUNCATE,
-				"%04d-%02d-%02d %02d:%02d:%02d",
-				this->year_, this->mon_, this->day_, this->hour_, this->min_, this->sec_);
-
-	return (dst_str);
+	return (this->GetStringSetStringPart(dst_str, dst_str_size));
 }
 
 
 /**
- * @brief GetStringWä÷êî
+ * @brief GetStringä÷êî
  * @param dst_str (string)
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-WCHAR *tml::Date::GetStringW(WCHAR *dst_str, const size_t dst_str_size) const
+const WCHAR *tml::Date::GetString(WCHAR *dst_str, const size_t dst_str_size) const
 {
+	if (dst_str == nullptr) {
+		return (dst_str);
+	}
+
 	if (dst_str_size < ((tml::DateConstantUtil::STRING_LENGTH + 1U) << 1)) {
 		if (dst_str_size > 0U) {
 			dst_str[0] = 0;
@@ -150,23 +127,19 @@ WCHAR *tml::Date::GetStringW(WCHAR *dst_str, const size_t dst_str_size) const
 		return (dst_str);
 	}
 
-	_snwprintf_s(dst_str, dst_str_size >> 1, _TRUNCATE,
-				L"%04d-%02d-%02d %02d:%02d:%02d",
-				this->year_, this->mon_, this->day_, this->hour_, this->min_, this->sec_);
-
-	return (dst_str);
+	return (this->GetStringSetStringPart(dst_str, dst_str_size));
 }
 
 
 /**
- * @brief GetStringä÷êî
+ * @brief GetStringMBä÷êî
  * @return str (string)
  */
-std::string tml::Date::GetString(void) const
+std::string tml::Date::GetStringMB(void) const
 {
 	CHAR str[tml::DateConstantUtil::STRING_LENGTH + 1U] = "";
 
-	return (std::string(this->GetString(str, sizeof(str))));
+	return (std::string(this->GetStringSetStringPart(str, sizeof(str))));
 }
 
 
@@ -178,7 +151,39 @@ std::wstring tml::Date::GetStringW(void) const
 {
 	WCHAR str[tml::DateConstantUtil::STRING_LENGTH + 1U] = L"";
 
-	return (std::wstring(this->GetStringW(str, sizeof(str))));
+	return (std::wstring(this->GetStringSetStringPart(str, sizeof(str))));
+}
+
+
+/**
+ * @brief GetStringSetStringPartä÷êî
+ * @param dst_str (string)
+ * @param dst_str_size (dst_string_size)
+ * @return dst_str (dst_string)
+ */
+const CHAR *tml::Date::GetStringSetStringPart(CHAR *dst_str, const size_t dst_str_size) const
+{
+	_snprintf_s(dst_str, dst_str_size, _TRUNCATE,
+				"%04d-%02d-%02d %02d:%02d:%02d",
+				this->year_, this->mon_, this->day_, this->hour_, this->min_, this->sec_);
+
+	return (dst_str);
+}
+
+
+/**
+ * @brief GetStringSetStringPartä÷êî
+ * @param dst_str (string)
+ * @param dst_str_size (dst_string_size)
+ * @return dst_str (dst_string)
+ */
+const WCHAR *tml::Date::GetStringSetStringPart(WCHAR *dst_str, const size_t dst_str_size) const
+{
+	_snwprintf_s(dst_str, dst_str_size >> 1, _TRUNCATE,
+				L"%04d-%02d-%02d %02d:%02d:%02d",
+				this->year_, this->mon_, this->day_, this->hour_, this->min_, this->sec_);
+
+	return (dst_str);
 }
 
 
@@ -188,8 +193,9 @@ std::wstring tml::Date::GetStringW(void) const
  */
 void tml::Date::SetString(const CHAR *str)
 {
-	if ((strlen(str) != tml::DateConstantUtil::STRING_LENGTH)
-	|| (strcmp(str, tml::DateConstantUtil::ZERO_STRING) == 0)) {
+	if ((str == nullptr)
+	|| (strlen(str) != tml::DateConstantUtil::STRING_LENGTH)
+	|| (strcmp(str, tml::DateConstantUtil::ZERO_STRING_MB) == 0)) {
 		this->Init();
 
 		return;
@@ -244,7 +250,7 @@ void tml::Date::SetString(const CHAR *str)
 		this->sec_ = tml::StringUtil::GetUINT(parts_str);
 	}
 
-	this->SetTime();
+	this->SetStringSetTimePart();
 
 	return;
 }
@@ -256,7 +262,8 @@ void tml::Date::SetString(const CHAR *str)
  */
 void tml::Date::SetString(const WCHAR *str)
 {
-	if ((wcslen(str) != tml::DateConstantUtil::STRING_LENGTH)
+	if ((str == nullptr)
+	|| (wcslen(str) != tml::DateConstantUtil::STRING_LENGTH)
 	|| (wcscmp(str, tml::DateConstantUtil::ZERO_STRING_W) == 0)) {
 		this->Init();
 
@@ -312,7 +319,34 @@ void tml::Date::SetString(const WCHAR *str)
 		this->sec_ = tml::StringUtil::GetUINT(parts_str);
 	}
 
-	this->SetTime();
+	this->SetStringSetTimePart();
+
+	return;
+}
+
+
+/**
+ * @brief SetStringSetTimePartä÷êî
+ */
+void tml::Date::SetStringSetTimePart(void)
+{
+	struct tm date = {};
+
+	date.tm_year = this->year_ - 1900;
+	date.tm_mon = this->mon_ - 1;
+	date.tm_mday = this->day_;
+	date.tm_hour = this->hour_;
+	date.tm_min = this->min_;
+	date.tm_sec = this->sec_;
+	date.tm_isdst = -1;
+
+	time_t date_time = mktime(&date);
+
+	if (date_time < 0LL) {
+		date_time = 0LL;
+	}
+
+	this->SetTime(tml::TIME_SECONDS(date_time));
 
 	return;
 }

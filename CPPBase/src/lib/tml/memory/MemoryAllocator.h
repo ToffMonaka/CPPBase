@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Allocatorヘッダーファイル
+ * @brief MemoryAllocatorヘッダーファイル
  */
 #pragma once
 
@@ -10,14 +10,14 @@
 
 namespace tml {
 /**
- * @brief Allocatorクラス
+ * @brief MemoryAllocatorクラス
  *
  * インターフェースパターン
  */
-class Allocator
+class MemoryAllocator
 {
-public: Allocator(const Allocator &) = delete;
-public: Allocator &operator =(const Allocator &) = delete;
+public: MemoryAllocator(const MemoryAllocator &) = delete;
+public: MemoryAllocator &operator =(const MemoryAllocator &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
@@ -47,11 +47,11 @@ protected:
 	INT Create(void);
 
 public:
-	Allocator();
-	virtual ~Allocator();
+	MemoryAllocator();
+	virtual ~MemoryAllocator();
 
 	virtual void Init(void);
 
-	virtual tml::Allocator::INFO GetInfo(void);
+	virtual tml::MemoryAllocator::INFO GetInfo(void);
 };
 }

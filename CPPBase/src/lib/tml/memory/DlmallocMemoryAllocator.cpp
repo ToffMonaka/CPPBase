@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief DlmallocAllocatorコードファイル
+ * @brief DlmallocMemoryAllocatorコードファイル
  */
 
 
-#include "DlmallocAllocator.h"
+#include "DlmallocMemoryAllocator.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::DlmallocAllocator::DlmallocAllocator() :
+tml::DlmallocMemoryAllocator::DlmallocMemoryAllocator() :
 	ms_(nullptr),
 	ms_use_cnt_(0U),
 	ms_cnt_head_size_(0U)
@@ -22,7 +22,7 @@ tml::DlmallocAllocator::DlmallocAllocator() :
 /**
  * @brief デストラクタ
  */
-tml::DlmallocAllocator::~DlmallocAllocator()
+tml::DlmallocMemoryAllocator::~DlmallocMemoryAllocator()
 {
 	this->Release();
 
@@ -33,7 +33,7 @@ tml::DlmallocAllocator::~DlmallocAllocator()
 /**
  * @brief Release関数
  */
-void tml::DlmallocAllocator::Release(void)
+void tml::DlmallocMemoryAllocator::Release(void)
 {
 	if (this->ms_ != nullptr) {
 		destroy_mspace(this->ms_);
@@ -42,7 +42,7 @@ void tml::DlmallocAllocator::Release(void)
 		this->ms_use_cnt_ = 0U;
 	}
 
-	tml::Allocator::Release();
+	tml::MemoryAllocator::Release();
 
 	return;
 }
@@ -51,13 +51,13 @@ void tml::DlmallocAllocator::Release(void)
 /**
  * @brief Init関数
  */
-void tml::DlmallocAllocator::Init(void)
+void tml::DlmallocMemoryAllocator::Init(void)
 {
 	this->Release();
 
 	this->ms_cnt_head_size_ = 0U;
 
-	tml::Allocator::Init();
+	tml::MemoryAllocator::Init();
 
 	return;
 }
@@ -69,7 +69,7 @@ void tml::DlmallocAllocator::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::DlmallocAllocator::Create(const size_t size)
+INT tml::DlmallocMemoryAllocator::Create(const size_t size)
 {
 	if (this->ms_ != nullptr) {
 		this->Init();
@@ -79,7 +79,7 @@ INT tml::DlmallocAllocator::Create(const size_t size)
 
 	this->Release();
 
-	if (tml::Allocator::Create() < 0) {
+	if (tml::MemoryAllocator::Create() < 0) {
 		this->Init();
 
 		return (-1);
@@ -104,9 +104,9 @@ INT tml::DlmallocAllocator::Create(const size_t size)
  * @brief GetInfo関数
  * @return info (info)
  */
-tml::Allocator::INFO tml::DlmallocAllocator::GetInfo(void)
+tml::MemoryAllocator::INFO tml::DlmallocMemoryAllocator::GetInfo(void)
 {
-	auto info = tml::Allocator::GetInfo();
+	auto info = tml::MemoryAllocator::GetInfo();
 
 	if (this->ms_ == nullptr) {
 		return (info);

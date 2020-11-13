@@ -88,7 +88,6 @@ INT cpp_base::MainProcess::Create(const HINSTANCE instance_handle, const WCHAR *
 	return (0);
 }
 
-
 /**
  * @brief Startä÷êî
  * @return res (result)<br>
@@ -133,15 +132,18 @@ INT cpp_base::MainProcess::Start(void)
 		tml::Clock clock1;
 		tml::Date date1;
 		tml::Date date2;
-		WCHAR date_str[tml::DateConstantUtil::STRING_LENGTH + 1U] = L"";
 
 		clock1.SetNowTime();
 
 		date1.SetNowTime();
 
-		date1.GetStringW(date_str, sizeof(date_str));
+		WCHAR date_str1[tml::DateConstantUtil::STRING_LENGTH + 1U] = L"";
 
-		date2.SetString(date_str);
+		date1.GetString(date_str1, sizeof(date_str1));
+
+		auto date_str2 = date1.GetString();
+
+		date2.SetString(date_str1);
 
 		int a = 0;
 	}
