@@ -159,9 +159,12 @@
     <ClCompile Include="src\cpp_base\thread\MainThread.cpp" />
     <ClCompile Include="src\lib\tml\ConstantUtil.cpp" />
     <ClCompile Include="src\lib\tml\dlmalloc\malloc.c" />
+    <ClCompile Include="src\lib\tml\file\BinaryFile.cpp" />
     <ClCompile Include="src\lib\tml\file\DefaultFileUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\file\File.cpp" />
     <ClCompile Include="src\lib\tml\file\FileUtil.cpp" />
     <ClCompile Include="src\lib\tml\file\FileUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\file\TextFile.cpp" />
     <ClCompile Include="src\lib\tml\math\DefaultMathUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtil.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtilEngine.cpp" />
@@ -176,6 +179,7 @@
     <ClCompile Include="src\lib\tml\process\ProcessUtil.cpp" />
     <ClCompile Include="src\lib\tml\process\ProcessUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\random\DefaultRandomUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\random\RandomSeed.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtil.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\string\DefaultStringUtilEngine.cpp" />
@@ -206,9 +210,12 @@
     <ClInclude Include="src\cpp_base\thread\MainThread.h" />
     <ClInclude Include="src\lib\tml\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
+    <ClInclude Include="src\lib\tml\file\BinaryFile.h" />
     <ClInclude Include="src\lib\tml\file\DefaultFileUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\file\File.h" />
     <ClInclude Include="src\lib\tml\file\FileUtil.h" />
     <ClInclude Include="src\lib\tml\file\FileUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\file\TextFile.h" />
     <ClInclude Include="src\lib\tml\math\DefaultMathUtilEngine.h" />
     <ClInclude Include="src\lib\tml\math\MathUtil.h" />
     <ClInclude Include="src\lib\tml\math\MathUtilEngine.h" />
@@ -223,6 +230,7 @@
     <ClInclude Include="src\lib\tml\process\ProcessUtil.h" />
     <ClInclude Include="src\lib\tml\process\ProcessUtilEngine.h" />
     <ClInclude Include="src\lib\tml\random\DefaultRandomUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\random\RandomSeed.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtil.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtilEngine.h" />
     <ClInclude Include="src\lib\tml\string\DefaultStringUtilEngine.h" />

@@ -11,9 +11,7 @@
  * @brief コンストラクタ
  */
 tml::MemoryUtilEngine::MemoryUtilEngine() :
-	allocator_type_(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE),
-	new_allocator_(nullptr),
-	dlmalloc_allocator_(nullptr)
+	allocator_type_(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE)
 {
 	return;
 }
@@ -35,18 +33,8 @@ void tml::MemoryUtilEngine::Release(void)
 {
 	{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
 		this->allocator_type_ = tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE;
-
-		if (this->new_allocator_ != nullptr) {
-			delete this->new_allocator_;
-
-			this->new_allocator_ = nullptr;
-		}
-
-		if (this->dlmalloc_allocator_ != nullptr) {
-			delete this->dlmalloc_allocator_;
-
-			this->dlmalloc_allocator_ = nullptr;
-		}
+		this->new_allocator_.reset();
+		this->dlmalloc_allocator_.reset();
 	}
 
 	return;
@@ -76,7 +64,7 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 
 		switch (this->allocator_type_) {
 		case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-			this->new_allocator_ = new tml::NewMemoryAllocator();
+			this->new_allocator_.reset(new tml::NewMemoryAllocator());
 
 			if (this->new_allocator_->Create() < 0) {
 				return (-1);
@@ -85,7 +73,7 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 			break;
 		}
 		case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-			this->dlmalloc_allocator_ = new tml::DlmallocMemoryAllocator();
+			this->dlmalloc_allocator_.reset(new tml::DlmallocMemoryAllocator());
 
 			if (this->dlmalloc_allocator_->Create(allocator_size) < 0) {
 				return (-1);

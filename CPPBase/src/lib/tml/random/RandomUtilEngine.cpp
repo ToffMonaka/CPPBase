@@ -5,7 +5,6 @@
 
 
 #include "RandomUtilEngine.h"
-#include <array>
 
 
 /**
@@ -31,6 +30,10 @@ tml::RandomUtilEngine::~RandomUtilEngine()
  */
 void tml::RandomUtilEngine::Release(void)
 {
+	{tml::ThreadLockBlock th_lock_block(this->seed_th_lock_);
+		this->seed_.Init();
+	}
+
 	return;
 }
 
@@ -51,233 +54,11 @@ void tml::RandomUtilEngine::Init(void)
  */
 INT tml::RandomUtilEngine::Create(void)
 {
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		std::random_device seed_device;
-
-		std::array<std::random_device::result_type, 10U> seed_ary;
-
-		std::generate(seed_ary.begin(), seed_ary.end(), std::ref(seed_device));
-
-		std::seed_seq seed_seq(seed_ary.begin(), seed_ary.end());
-
-		this->gen_.seed(seed_seq);
+	{tml::ThreadLockBlock th_lock_block(this->seed_th_lock_);
+		if (this->seed_.Create() < 0) {
+			return (-1);
+		}
 	}
 
 	return (0);
-}
-
-
-/**
- * @brief GetINTä÷êî
- * @return val (value)
- */
-INT tml::RandomUtilEngine::GetINT(void)
-{
-	INT val = 0;
-	std::uniform_int_distribution<INT> rng(std::numeric_limits<INT>::min(), std::numeric_limits<INT>::max());
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetINTä÷êî
- * @param min_val (min_value)
- * @param max_val (max_value)
- * @return val (value)
- */
-INT tml::RandomUtilEngine::GetINT(const INT min_val, const INT max_val)
-{
-	INT val = 0;
-	std::uniform_int_distribution<INT> rng(min_val, max_val);
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetUINTä÷êî
- * @return val (value)
- */
-UINT tml::RandomUtilEngine::GetUINT(void)
-{
-	UINT val = 0U;
-	std::uniform_int_distribution<UINT> rng(std::numeric_limits<UINT>::min(), std::numeric_limits<UINT>::max());
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetUINTä÷êî
- * @param min_val (min_value)
- * @param max_val (max_value)
- * @return val (value)
- */
-UINT tml::RandomUtilEngine::GetUINT(const UINT min_val, const UINT max_val)
-{
-	UINT val = 0U;
-	std::uniform_int_distribution<UINT> rng(min_val, max_val);
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetLONGLONGä÷êî
- * @return val (value)
- */
-LONGLONG tml::RandomUtilEngine::GetLONGLONG(void)
-{
-	LONGLONG val = 0LL;
-	std::uniform_int_distribution<LONGLONG> rng(std::numeric_limits<LONGLONG>::min(), std::numeric_limits<LONGLONG>::max());
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetLONGLONGä÷êî
- * @param min_val (min_value)
- * @param max_val (max_value)
- * @return val (value)
- */
-LONGLONG tml::RandomUtilEngine::GetLONGLONG(const LONGLONG min_val, const LONGLONG max_val)
-{
-	LONGLONG val = 0LL;
-	std::uniform_int_distribution<LONGLONG> rng(min_val, max_val);
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetULONGLONGä÷êî
- * @return val (value)
- */
-ULONGLONG tml::RandomUtilEngine::GetULONGLONG(void)
-{
-	ULONGLONG val = 0ULL;
-	std::uniform_int_distribution<ULONGLONG> rng(std::numeric_limits<ULONGLONG>::min(), std::numeric_limits<ULONGLONG>::max());
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetULONGLONGä÷êî
- * @param min_val (min_value)
- * @param max_val (max_value)
- * @return val (value)
- */
-ULONGLONG tml::RandomUtilEngine::GetULONGLONG(const ULONGLONG min_val, const ULONGLONG max_val)
-{
-	ULONGLONG val = 0ULL;
-	std::uniform_int_distribution<ULONGLONG> rng(min_val, max_val);
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetFLOATä÷êî
- * @return val (value)
- */
-FLOAT tml::RandomUtilEngine::GetFLOAT(void)
-{
-	FLOAT val = 0.0f;
-	std::uniform_real_distribution<FLOAT> rng(std::numeric_limits<FLOAT>::min(), std::numeric_limits<FLOAT>::max());
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetFLOATä÷êî
- * @param min_val (min_value)
- * @param max_val (max_value)
- * @return val (value)
- */
-FLOAT tml::RandomUtilEngine::GetFLOAT(const FLOAT min_val, const FLOAT max_val)
-{
-	FLOAT val = 0.0f;
-	std::uniform_real_distribution<FLOAT> rng(min_val, max_val);
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetDOUBLEä÷êî
- * @return val (value)
- */
-DOUBLE tml::RandomUtilEngine::GetDOUBLE(void)
-{
-	DOUBLE val = 0.0;
-	std::uniform_real_distribution<DOUBLE> rng(std::numeric_limits<DOUBLE>::min(), std::numeric_limits<DOUBLE>::max());
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
-}
-
-
-/**
- * @brief GetDOUBLEä÷êî
- * @param min_val (min_value)
- * @param max_val (max_value)
- * @return val (value)
- */
-DOUBLE tml::RandomUtilEngine::GetDOUBLE(const DOUBLE min_val, const DOUBLE max_val)
-{
-	DOUBLE val = 0.0;
-	std::uniform_real_distribution<DOUBLE> rng(min_val, max_val);
-
-	{tml::ThreadLockBlock th_lock_block(this->gen_th_lock_);
-		val = rng(this->gen_);
-	}
-
-	return (val);
 }

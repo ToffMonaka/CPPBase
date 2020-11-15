@@ -5,6 +5,7 @@
 
 
 #include "MainProcess.h"
+#include <array>
 #include "../../lib/tml/memory/MemoryUtil.h"
 #include "../../lib/tml/string/StringUtil.h"
 #include "../../lib/tml/time/TimeUtil.h"
@@ -144,6 +145,12 @@ INT cpp_base::MainProcess::Start(void)
 		auto date_str2 = date1.GetString();
 
 		date2.SetString(date_str1);
+
+		std::array<INT, 100U> val_ary;
+
+		for (auto &val : val_ary) {
+			val = tml::RandomUtil::GetINT(0, 100);
+		}
 
 		int a = 0;
 	}

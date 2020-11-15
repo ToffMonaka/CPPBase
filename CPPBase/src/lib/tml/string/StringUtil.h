@@ -363,6 +363,9 @@ inline DOUBLE tml::StringUtil::GetDOUBLE(const WCHAR *str, const DOUBLE default_
 
 /**
  * @brief GetStringMB関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -374,6 +377,9 @@ inline std::string tml::StringUtil::GetStringMB(const INT val)
 
 /**
  * @brief GetStringW関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -385,6 +391,9 @@ inline std::wstring tml::StringUtil::GetStringW(const INT val)
 
 /**
  * @brief GetStringMB関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -396,6 +405,9 @@ inline std::string tml::StringUtil::GetStringMB(const UINT val)
 
 /**
  * @brief GetStringW関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -407,6 +419,9 @@ inline std::wstring tml::StringUtil::GetStringW(const UINT val)
 
 /**
  * @brief GetStringMB関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -418,6 +433,9 @@ inline std::string tml::StringUtil::GetStringMB(const LONGLONG val)
 
 /**
  * @brief GetStringW関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -429,6 +447,9 @@ inline std::wstring tml::StringUtil::GetStringW(const LONGLONG val)
 
 /**
  * @brief GetStringMB関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -440,6 +461,9 @@ inline std::string tml::StringUtil::GetStringMB(const ULONGLONG val)
 
 /**
  * @brief GetStringW関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -451,6 +475,9 @@ inline std::wstring tml::StringUtil::GetStringW(const ULONGLONG val)
 
 /**
  * @brief GetStringMB関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -462,6 +489,9 @@ inline std::string tml::StringUtil::GetStringMB(const FLOAT val)
 
 /**
  * @brief GetStringW関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -473,6 +503,9 @@ inline std::wstring tml::StringUtil::GetStringW(const FLOAT val)
 
 /**
  * @brief GetStringMB関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -484,6 +517,9 @@ inline std::string tml::StringUtil::GetStringMB(const DOUBLE val)
 
 /**
  * @brief GetStringW関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -495,6 +531,9 @@ inline std::wstring tml::StringUtil::GetStringW(const DOUBLE val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -507,6 +546,9 @@ inline T tml::StringUtil::GetString(const INT val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -519,6 +561,9 @@ inline std::string tml::StringUtil::GetString<std::string>(const INT val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -531,6 +576,9 @@ inline T tml::StringUtil::GetString(const UINT val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -543,6 +591,9 @@ inline std::string tml::StringUtil::GetString<std::string>(const UINT val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -555,6 +606,9 @@ inline T tml::StringUtil::GetString(const LONGLONG val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -567,6 +621,9 @@ inline std::string tml::StringUtil::GetString<std::string>(const LONGLONG val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -579,6 +636,9 @@ inline T tml::StringUtil::GetString(const ULONGLONG val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -591,6 +651,9 @@ inline std::string tml::StringUtil::GetString<std::string>(const ULONGLONG val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -603,6 +666,9 @@ inline T tml::StringUtil::GetString(const FLOAT val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -615,6 +681,9 @@ inline std::string tml::StringUtil::GetString<std::string>(const FLOAT val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */
@@ -627,6 +696,9 @@ inline T tml::StringUtil::GetString(const DOUBLE val)
 
 /**
  * @brief GetString関数
+ *
+ * Create関数不要
+ *
  * @param val (value)
  * @return str (string)
  */

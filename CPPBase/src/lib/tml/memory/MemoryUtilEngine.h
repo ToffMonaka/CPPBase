@@ -60,8 +60,8 @@ public:
 
 private:
 	tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE allocator_type_;
-	tml::NewMemoryAllocator *new_allocator_;
-	tml::DlmallocMemoryAllocator *dlmalloc_allocator_;
+	std::unique_ptr<tml::NewMemoryAllocator> new_allocator_;
+	std::unique_ptr<tml::DlmallocMemoryAllocator> dlmalloc_allocator_;
 	tml::SpinThreadLock allocator_th_lock_;
 
 protected:
