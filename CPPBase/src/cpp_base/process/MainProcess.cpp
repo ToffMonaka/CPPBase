@@ -5,15 +5,14 @@
 
 
 #include "MainProcess.h"
-#include <array>
 #include "../../lib/tml/memory/MemoryUtil.h"
 #include "../../lib/tml/string/StringUtil.h"
 #include "../../lib/tml/time/TimeUtil.h"
-#include "../../lib/tml/time/Clock.h"
-#include "../../lib/tml/time/Date.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
+#include "../../lib/tml/file/BinaryFile.h"
+#include "../../lib/tml/file/TextFile.h"
 #include "../../lib/tml/process/ProcessUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
 #include "../thread/MainThread.h"
@@ -130,27 +129,14 @@ INT cpp_base::MainProcess::Start(void)
 	}
 
 	{// Test
-		tml::Clock clock1;
-		tml::Date date1;
-		tml::Date date2;
+		tml::BinaryFile bin_file;
 
-		clock1.SetNowTime();
+		bin_file.read_plan.file_path = L"test1.txt";
 
-		date1.SetNowTime();
+		bin_file.Read();
 
-		WCHAR date_str1[tml::DateConstantUtil::STRING_LENGTH + 1U] = L"";
-
-		date1.GetString(date_str1, sizeof(date_str1));
-
-		auto date_str2 = date1.GetString();
-
-		date2.SetString(date_str1);
-
-		std::array<INT, 100U> val_ary;
-
-		for (auto &val : val_ary) {
-			val = tml::RandomUtil::GetINT(0, 100);
-		}
+		auto buf = bin_file.GetBuffer();
+		auto buf_size = bin_file.GetBufferSize();
 
 		int a = 0;
 	}

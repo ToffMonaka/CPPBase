@@ -29,7 +29,7 @@ public:
 
 	virtual void Init(void);
 
-	virtual void Read(void) = 0;
-	virtual void Write(void) = 0;
+	virtual INT Read(void) = 0;
+	virtual INT Write(void) = 0;
 };
 }

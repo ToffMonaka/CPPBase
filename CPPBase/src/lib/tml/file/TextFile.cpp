@@ -5,6 +5,7 @@
 
 
 #include "TextFile.h"
+#include <fstream>
 
 
 /**
@@ -53,17 +54,21 @@ void tml::TextFile::Init(void)
 
 /**
  * @brief Readä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
  */
-void tml::TextFile::Read(void)
+INT tml::TextFile::Read(void)
 {
-	return;
+	return (0);
 }
 
 
 /**
  * @brief Writeä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
  */
-void tml::TextFile::Write(void)
+INT tml::TextFile::Write(void)
 {
-	return;
+	return (0);
 }
