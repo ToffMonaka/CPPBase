@@ -13,7 +13,7 @@
  * @brief コンストラクタ
  */
 tml::BinaryFileReadPlan::BinaryFileReadPlan() :
-	read_buffer_size(1024U)
+	one_buffer_size(1024U)
 {
 	return;
 }
@@ -33,8 +33,8 @@ tml::BinaryFileReadPlan::~BinaryFileReadPlan()
  */
 void tml::BinaryFileReadPlan::Init(void)
 {
-	this->file_path = L"";
-	this->read_buffer_size = 1024U;
+	this->file_path.clear();
+	this->one_buffer_size = 1024U;
 
 	return;
 }
@@ -43,7 +43,8 @@ void tml::BinaryFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::BinaryFileWritePlan::BinaryFileWritePlan()
+tml::BinaryFileWritePlan::BinaryFileWritePlan() :
+	one_buffer_size(1024U)
 {
 	return;
 }
@@ -63,7 +64,8 @@ tml::BinaryFileWritePlan::~BinaryFileWritePlan()
  */
 void tml::BinaryFileWritePlan::Init(void)
 {
-	this->file_path = L"";
+	this->file_path.clear();
+	this->one_buffer_size = 1024U;
 
 	return;
 }
@@ -130,7 +132,7 @@ INT tml::BinaryFile::Read(void)
 {
 	std::ifstream ifs;
 
-	ifs.open(read_plan.file_path.c_str(), std::ios_base::in | std::ios_base::binary);
+	ifs.open(this->read_plan.file_path.c_str(), std::ios_base::in | std::ios_base::binary);
 
 	if (!ifs) {
 	    return (-1);
@@ -140,8 +142,8 @@ INT tml::BinaryFile::Read(void)
 	size_t buf_size = 0U;
 	BYTE *tmp_buf = nullptr;
 	size_t tmp_buf_size = 0U;
-	CHAR *read_buf = tml::MemoryUtil::Get<CHAR>(this->read_plan.read_buffer_size);
-	size_t read_buf_size = this->read_plan.read_buffer_size;
+	size_t read_buf_size = std::max(this->read_plan.one_buffer_size, sizeof(size_t));
+	CHAR *read_buf = tml::MemoryUtil::Get<CHAR>(read_buf_size);
 	size_t read_size = 0U;
 
 	while (1) {
@@ -170,7 +172,7 @@ INT tml::BinaryFile::Read(void)
 
 	ifs.close();
 
-	tml::MemoryUtil::Release(&this->buf_);
+	tml::MemoryUtil::Release(&read_buf);
 	read_buf_size = 0U;
 
 	tml::MemoryUtil::Release(&this->buf_);
@@ -188,5 +190,43 @@ INT tml::BinaryFile::Read(void)
  */
 INT tml::BinaryFile::Write(void)
 {
+	std::ofstream ofs;
+
+	ofs.open(this->write_plan.file_path.c_str(), std::ios_base::out | std::ios_base::binary);
+
+	if (!ofs) {
+	    return (-1);
+	}
+
+	if (this->buf_size_ <= 0U) {
+		ofs.close();
+
+		return (0);
+	}
+
+	size_t buf_index = 0U;
+	size_t write_buf_size = std::max(this->write_plan.one_buffer_size, sizeof(size_t));
+	CHAR *write_buf = tml::MemoryUtil::Get<CHAR>(write_buf_size);
+	size_t write_size = 0U;
+
+	while (1) {
+		write_size = std::min(this->buf_size_ - buf_index, write_buf_size);
+
+		tml::MemoryUtil::Copy(write_buf, reinterpret_cast<CHAR *>(&this->buf_[buf_index]), write_size);
+
+		ofs.write(write_buf, write_size);
+
+		buf_index += write_size;
+
+		if (buf_index >= this->buf_size_) {
+			break;
+		}
+	}
+
+	ofs.close();
+
+	tml::MemoryUtil::Release(&write_buf);
+	write_buf_size = 0U;
+
 	return (0);
 }

@@ -17,7 +17,7 @@ class BinaryFileReadPlan
 {
 public:
 	std::wstring file_path;
-	size_t read_buffer_size;
+	size_t one_buffer_size;
 
 public:
 	BinaryFileReadPlan();
@@ -36,6 +36,7 @@ class BinaryFileWritePlan
 {
 public:
 	std::wstring file_path;
+	size_t one_buffer_size;
 
 public:
 	BinaryFileWritePlan();
@@ -57,15 +58,15 @@ public: BinaryFile &operator =(const BinaryFile &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	void Release(void);
-
-private:
 	BYTE *buf_;
 	size_t buf_size_;
 
 public:
 	tml::BinaryFileReadPlan read_plan;
 	tml::BinaryFileWritePlan write_plan;
+
+private:
+	void Release(void);
 
 public:
 	BinaryFile();

@@ -138,6 +138,14 @@ INT cpp_base::MainProcess::Start(void)
 		auto buf = bin_file.GetBuffer();
 		auto buf_size = bin_file.GetBufferSize();
 
+		tml::TextFile txt_file;
+
+		txt_file.read_plan.file_path = L"test1.txt";
+
+		txt_file.Read();
+
+		auto line_str_cont = txt_file.GetLineStringContainer();
+
 		int a = 0;
 	}
 
