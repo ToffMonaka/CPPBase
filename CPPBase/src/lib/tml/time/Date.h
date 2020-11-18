@@ -22,34 +22,8 @@ enum class WEEK_DAY : UCHAR {
 const size_t STRING_LENGTH = 19U;
 const CHAR ZERO_STRING_MB[] = "0000-00-00 00:00:00";
 const WCHAR ZERO_STRING_W[] = L"0000-00-00 00:00:00";
-
-template <typename T = WCHAR>
-const T *GetZeroString(void);
-template <>
-const CHAR *GetZeroString<CHAR>(void);
+const WCHAR *ZERO_STRING = tml::DateConstantUtil::ZERO_STRING_W;
 }
-}
-
-
-/**
- * @brief GetZeroStringä÷êî
- * @return zero_str (zero_string)
- */
-template <typename T>
-inline const T *tml::DateConstantUtil::GetZeroString(void)
-{
-	return (tml::DateConstantUtil::ZERO_STRING_W);
-}
-
-
-/**
- * @brief GetZeroStringä÷êî
- * @return zero_str (zero_string)
- */
-template <>
-inline const CHAR *tml::DateConstantUtil::GetZeroString<CHAR>(void)
-{
-	return (tml::DateConstantUtil::ZERO_STRING_MB);
 }
 
 
@@ -98,15 +72,10 @@ public:
 	tml::DateConstantUtil::WEEK_DAY GetWeekDay(void) const;
 	const CHAR *GetString(CHAR *, const size_t) const;
 	const WCHAR *GetString(WCHAR *, const size_t) const;
-	std::string GetStringMB(void) const;
-	std::wstring GetStringW(void) const;
+	std::string &GetString(std::string &) const;
+	std::wstring &GetString(std::wstring &) const;
 	void SetString(const CHAR *);
 	void SetString(const WCHAR *);
-
-	template <typename T = std::wstring>
-	T GetString(void);
-	template <>
-	std::string GetString<std::string>(void);
 };
 }
 
@@ -213,26 +182,4 @@ inline UCHAR tml::Date::GetSeconds(void) const
 inline tml::DateConstantUtil::WEEK_DAY tml::Date::GetWeekDay(void) const
 {
 	return (this->week_day_);
-}
-
-
-/**
- * @brief GetStringä÷êî
- * @return str (string)
- */
-template <typename T>
-inline T tml::Date::GetString(void)
-{
-	return (this->GetStringW());
-}
-
-
-/**
- * @brief GetStringä÷êî
- * @return str (string)
- */
-template <>
-inline std::string tml::Date::GetString<std::string>(void)
-{
-	return (this->GetStringMB());
 }

@@ -6,6 +6,7 @@
 
 
 #include "../ConstantUtil.h"
+#include <list>
 #include "StringUtilEngine.h"
 #include "../thread/ThreadFix.h"
 
@@ -31,6 +32,8 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::StringUtilEngine> &);
 
+	static std::list<std::string> &Split(std::list<std::string> &, const CHAR *, const CHAR *);
+	static std::list<std::wstring> &Split(std::list<std::wstring> &, const WCHAR *, const WCHAR *);
 	static INT GetINT(const CHAR *, const INT default_val = 0, const INT radix = 10);
 	static INT GetINT(const WCHAR *, const INT default_val = 0, const INT radix = 10);
 	static UINT GetUINT(const CHAR *, const UINT default_val = 0U, const INT radix = 10);
@@ -43,48 +46,20 @@ public:
 	static FLOAT GetFLOAT(const WCHAR *, const FLOAT default_val = 0.0f);
 	static DOUBLE GetDOUBLE(const CHAR *, const DOUBLE default_val = 0.0);
 	static DOUBLE GetDOUBLE(const WCHAR *, const DOUBLE default_val = 0.0);
-	static std::string GetStringMB(const INT);
-	static std::wstring GetStringW(const INT);
-	static std::string GetStringMB(const UINT);
-	static std::wstring GetStringW(const UINT);
-	static std::string GetStringMB(const LONGLONG);
-	static std::wstring GetStringW(const LONGLONG);
-	static std::string GetStringMB(const ULONGLONG);
-	static std::wstring GetStringW(const ULONGLONG);
-	static std::string GetStringMB(const FLOAT);
-	static std::wstring GetStringW(const FLOAT);
-	static std::string GetStringMB(const DOUBLE);
-	static std::wstring GetStringW(const DOUBLE);
-
-	template <typename T = std::wstring>
-	static T GetString(const INT);
-	template <>
-	static std::string GetString<std::string>(const INT);
-
-	template <typename T = std::wstring>
-	static T GetString(const UINT);
-	template <>
-	static std::string GetString<std::string>(const UINT);
-
-	template <typename T = std::wstring>
-	static T GetString(const LONGLONG);
-	template <>
-	static std::string GetString<std::string>(const LONGLONG);
-
-	template <typename T = std::wstring>
-	static T GetString(const ULONGLONG);
-	template <>
-	static std::string GetString<std::string>(const ULONGLONG);
-
-	template <typename T = std::wstring>
-	static T GetString(const FLOAT);
-	template <>
-	static std::string GetString<std::string>(const FLOAT);
-
-	template <typename T = std::wstring>
-	static T GetString(const DOUBLE);
-	template <>
-	static std::string GetString<std::string>(const DOUBLE);
+	static std::string &GetString(std::string &, const INT);
+	static std::wstring &GetString(std::wstring &, const INT);
+	static std::string &GetString(std::string &, const UINT);
+	static std::wstring &GetString(std::wstring &, const UINT);
+	static std::string &GetString(std::string &, const LONGLONG);
+	static std::wstring &GetString(std::wstring &, const LONGLONG);
+	static std::string &GetString(std::string &, const ULONGLONG);
+	static std::wstring &GetString(std::wstring &, const ULONGLONG);
+	static std::string &GetString(std::string &, const FLOAT);
+	static std::wstring &GetString(std::wstring &, const FLOAT);
+	static std::string &GetString(std::string &, const DOUBLE);
+	static std::wstring &GetString(std::wstring &, const DOUBLE);
+	static std::string &GetString(std::string &, const WCHAR *);
+	static std::wstring &GetString(std::wstring &, const CHAR *);
 };
 }
 
@@ -362,170 +337,19 @@ inline DOUBLE tml::StringUtil::GetDOUBLE(const WCHAR *str, const DOUBLE default_
 
 
 /**
- * @brief GetStringMB関数
+ * @brief GetString関数
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-inline std::string tml::StringUtil::GetStringMB(const INT val)
+inline std::string &tml::StringUtil::GetString(std::string &dst_str, const INT val)
 {
-	return (std::to_string(val));
-}
+	dst_str = std::to_string(val);
 
-
-/**
- * @brief GetStringW関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::wstring tml::StringUtil::GetStringW(const INT val)
-{
-	return (std::to_wstring(val));
-}
-
-
-/**
- * @brief GetStringMB関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::string tml::StringUtil::GetStringMB(const UINT val)
-{
-	return (std::to_string(val));
-}
-
-
-/**
- * @brief GetStringW関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::wstring tml::StringUtil::GetStringW(const UINT val)
-{
-	return (std::to_wstring(val));
-}
-
-
-/**
- * @brief GetStringMB関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::string tml::StringUtil::GetStringMB(const LONGLONG val)
-{
-	return (std::to_string(val));
-}
-
-
-/**
- * @brief GetStringW関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::wstring tml::StringUtil::GetStringW(const LONGLONG val)
-{
-	return (std::to_wstring(val));
-}
-
-
-/**
- * @brief GetStringMB関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::string tml::StringUtil::GetStringMB(const ULONGLONG val)
-{
-	return (std::to_string(val));
-}
-
-
-/**
- * @brief GetStringW関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::wstring tml::StringUtil::GetStringW(const ULONGLONG val)
-{
-	return (std::to_wstring(val));
-}
-
-
-/**
- * @brief GetStringMB関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::string tml::StringUtil::GetStringMB(const FLOAT val)
-{
-	return (std::to_string(val));
-}
-
-
-/**
- * @brief GetStringW関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::wstring tml::StringUtil::GetStringW(const FLOAT val)
-{
-	return (std::to_wstring(val));
-}
-
-
-/**
- * @brief GetStringMB関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::string tml::StringUtil::GetStringMB(const DOUBLE val)
-{
-	return (std::to_string(val));
-}
-
-
-/**
- * @brief GetStringW関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-inline std::wstring tml::StringUtil::GetStringW(const DOUBLE val)
-{
-	return (std::to_wstring(val));
+	return (dst_str);
 }
 
 
@@ -534,13 +358,15 @@ inline std::wstring tml::StringUtil::GetStringW(const DOUBLE val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <typename T>
-inline T tml::StringUtil::GetString(const INT val)
+inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const INT val)
 {
-	return (tml::StringUtil::GetStringW(val));
+	dst_str = std::to_wstring(val);
+
+	return (dst_str);
 }
 
 
@@ -549,13 +375,15 @@ inline T tml::StringUtil::GetString(const INT val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <>
-inline std::string tml::StringUtil::GetString<std::string>(const INT val)
+inline std::string &tml::StringUtil::GetString(std::string &dst_str, const UINT val)
 {
-	return (tml::StringUtil::GetStringMB(val));
+	dst_str = std::to_string(val);
+
+	return (dst_str);
 }
 
 
@@ -564,13 +392,15 @@ inline std::string tml::StringUtil::GetString<std::string>(const INT val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <typename T>
-inline T tml::StringUtil::GetString(const UINT val)
+inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const UINT val)
 {
-	return (tml::StringUtil::GetStringW(val));
+	dst_str = std::to_wstring(val);
+
+	return (dst_str);
 }
 
 
@@ -579,13 +409,15 @@ inline T tml::StringUtil::GetString(const UINT val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <>
-inline std::string tml::StringUtil::GetString<std::string>(const UINT val)
+inline std::string &tml::StringUtil::GetString(std::string &dst_str, const LONGLONG val)
 {
-	return (tml::StringUtil::GetStringMB(val));
+	dst_str = std::to_string(val);
+
+	return (dst_str);
 }
 
 
@@ -594,13 +426,15 @@ inline std::string tml::StringUtil::GetString<std::string>(const UINT val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <typename T>
-inline T tml::StringUtil::GetString(const LONGLONG val)
+inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const LONGLONG val)
 {
-	return (tml::StringUtil::GetStringW(val));
+	dst_str = std::to_wstring(val);
+
+	return (dst_str);
 }
 
 
@@ -609,13 +443,15 @@ inline T tml::StringUtil::GetString(const LONGLONG val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <>
-inline std::string tml::StringUtil::GetString<std::string>(const LONGLONG val)
+inline std::string &tml::StringUtil::GetString(std::string &dst_str, const ULONGLONG val)
 {
-	return (tml::StringUtil::GetStringMB(val));
+	dst_str = std::to_string(val);
+
+	return (dst_str);
 }
 
 
@@ -624,13 +460,15 @@ inline std::string tml::StringUtil::GetString<std::string>(const LONGLONG val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <typename T>
-inline T tml::StringUtil::GetString(const ULONGLONG val)
+inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const ULONGLONG val)
 {
-	return (tml::StringUtil::GetStringW(val));
+	dst_str = std::to_wstring(val);
+
+	return (dst_str);
 }
 
 
@@ -639,13 +477,15 @@ inline T tml::StringUtil::GetString(const ULONGLONG val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <>
-inline std::string tml::StringUtil::GetString<std::string>(const ULONGLONG val)
+inline std::string &tml::StringUtil::GetString(std::string &dst_str, const FLOAT val)
 {
-	return (tml::StringUtil::GetStringMB(val));
+	dst_str = std::to_string(val);
+
+	return (dst_str);
 }
 
 
@@ -654,13 +494,15 @@ inline std::string tml::StringUtil::GetString<std::string>(const ULONGLONG val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <typename T>
-inline T tml::StringUtil::GetString(const FLOAT val)
+inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const FLOAT val)
 {
-	return (tml::StringUtil::GetStringW(val));
+	dst_str = std::to_wstring(val);
+
+	return (dst_str);
 }
 
 
@@ -669,13 +511,15 @@ inline T tml::StringUtil::GetString(const FLOAT val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <>
-inline std::string tml::StringUtil::GetString<std::string>(const FLOAT val)
+inline std::string &tml::StringUtil::GetString(std::string &dst_str, const DOUBLE val)
 {
-	return (tml::StringUtil::GetStringMB(val));
+	dst_str = std::to_string(val);
+
+	return (dst_str);
 }
 
 
@@ -684,26 +528,13 @@ inline std::string tml::StringUtil::GetString<std::string>(const FLOAT val)
  *
  * Create関数不要
  *
+ * @param dst_str (string)
  * @param val (value)
- * @return str (string)
+ * @return dst_str (dst_string)
  */
-template <typename T>
-inline T tml::StringUtil::GetString(const DOUBLE val)
+inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const DOUBLE val)
 {
-	return (tml::StringUtil::GetStringW(val));
-}
+	dst_str = std::to_wstring(val);
 
-
-/**
- * @brief GetString関数
- *
- * Create関数不要
- *
- * @param val (value)
- * @return str (string)
- */
-template <>
-inline std::string tml::StringUtil::GetString<std::string>(const DOUBLE val)
-{
-	return (tml::StringUtil::GetStringMB(val));
+	return (dst_str);
 }

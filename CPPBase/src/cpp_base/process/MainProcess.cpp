@@ -144,7 +144,7 @@ INT cpp_base::MainProcess::Start(void)
 
 		txt_file.Read();
 
-		auto line_str_cont = txt_file.GetLineStringContainer();
+		auto str_cont = txt_file.GetStringContainer();
 
 		int a = 0;
 	}

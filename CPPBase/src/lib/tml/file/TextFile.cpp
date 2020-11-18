@@ -5,7 +5,9 @@
 
 
 #include "TextFile.h"
-#include <fstream>
+#include "BinaryFile.h"
+#include "../memory/MemoryUtil.h"
+#include "../string/StringUtil.h"
 
 
 /**
@@ -91,7 +93,7 @@ tml::TextFile::~TextFile()
  */
 void tml::TextFile::Release(void)
 {
-	this->line_str_cont_.clear();
+	this->str_cont_.clear();
 
 	tml::File::Release();
 
@@ -122,19 +124,28 @@ void tml::TextFile::Init(void)
  */
 INT tml::TextFile::Read(void)
 {
-	std::ifstream ifs;
+	tml::BinaryFile bin_file;
 
-	ifs.open(this->read_plan.file_path.c_str(), std::ios_base::in);
+	bin_file.read_plan.file_path = this->read_plan.file_path;
 
-	if (!ifs) {
+	if (bin_file.Read()) {
 	    return (-1);
 	}
 
-	std::vector<std::wstring> line_str_cont;
+	BYTE *buf = nullptr;
+	size_t buf_size = bin_file.GetBufferSize() + sizeof(WCHAR);
+	std::wstring buf_str;
 
-	ifs.close();
+	buf = tml::MemoryUtil::Get<BYTE>(buf_size);
+	tml::MemoryUtil::Copy(buf, bin_file.GetBuffer(), bin_file.GetBufferSize());
+	reinterpret_cast<WCHAR *>(&buf[bin_file.GetBufferSize()])[0] = 0;
 
-	this->line_str_cont_ = line_str_cont;
+	tml::StringUtil::GetString(buf_str, reinterpret_cast<CHAR *>(buf));
+
+	tml::StringUtil::Split(this->str_cont_, buf_str.c_str(), L"\r\n");
+
+	tml::MemoryUtil::Release(&buf);
+	buf_size = 0U;
 
 	return (0);
 }
@@ -147,21 +158,5 @@ INT tml::TextFile::Read(void)
  */
 INT tml::TextFile::Write(void)
 {
-	std::ofstream ofs;
-
-	ofs.open(this->write_plan.file_path.c_str(), std::ios_base::out);
-
-	if (!ofs) {
-	    return (-1);
-	}
-
-	if (this->line_str_cont_.size() <= 0U) {
-		ofs.close();
-
-		return (0);
-	}
-
-	ofs.close();
-
 	return (0);
 }

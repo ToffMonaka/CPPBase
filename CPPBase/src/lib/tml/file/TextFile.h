@@ -6,7 +6,7 @@
 
 
 #include "../ConstantUtil.h"
-#include <vector>
+#include <list>
 #include "File.h"
 
 
@@ -57,7 +57,7 @@ public: TextFile &operator =(const TextFile &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	std::vector<std::wstring> line_str_cont_;
+	std::list<std::wstring> str_cont_;
 
 public:
 	tml::TextFileReadPlan read_plan;
@@ -74,16 +74,16 @@ public:
 
 	virtual INT Read(void);
 	virtual INT Write(void);
-	const std::vector<std::wstring> &GetLineStringContainer(void) const;
+	const std::list<std::wstring> &GetStringContainer(void) const;
 };
 }
 
 
 /**
- * @brief GetLineStringContainerä÷êî
- * @return line_str_cont (line_string_container)
+ * @brief GetStringContainerä÷êî
+ * @return str_cont (string_container)
  */
-inline const std::vector<std::wstring> &tml::TextFile::GetLineStringContainer(void) const
+inline const std::list<std::wstring> &tml::TextFile::GetStringContainer(void) const
 {
-	return (this->line_str_cont_);
+	return (this->str_cont_);
 }

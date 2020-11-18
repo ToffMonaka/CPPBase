@@ -93,7 +93,8 @@ inline tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtil::GetAllocatorInfo(v
 template <typename T>
 inline void tml::MemoryUtil::Clear(T *p, const size_t cnt)
 {
-	if (cnt <= 0U) {
+	if ((p == nullptr)
+	|| (cnt <= 0U)) {
 		return;
 	}
 
@@ -115,7 +116,7 @@ inline void tml::MemoryUtil::Clear(T *p, const size_t cnt)
 template <typename T>
 inline void tml::MemoryUtil::Copy(T *dst_p, const T *src_p, const size_t cnt)
 {
-	if ((dst_p == src_p)
+	if ((dst_p == nullptr) || (src_p == nullptr) || (dst_p == src_p)
 	|| (cnt <= 0U)) {
 		return;
 	}
@@ -138,7 +139,7 @@ inline void tml::MemoryUtil::Copy(T *dst_p, const T *src_p, const size_t cnt)
 template <typename T>
 inline void tml::MemoryUtil::CopySame(T *dst_p, const T *src_p, const size_t cnt)
 {
-	if ((dst_p == src_p)
+	if ((dst_p == nullptr) || (src_p == nullptr) || (dst_p == src_p)
 	|| (cnt <= 0U)) {
 		return;
 	}

@@ -132,26 +132,32 @@ const WCHAR *tml::Date::GetString(WCHAR *dst_str, const size_t dst_str_size) con
 
 
 /**
- * @brief GetStringMBŠÖ”
- * @return str (string)
+ * @brief GetStringŠÖ”
+ * @param dst_str (string)
+ * @return dst_str (dst_string)
  */
-std::string tml::Date::GetStringMB(void) const
+std::string &tml::Date::GetString(std::string &dst_str) const
 {
 	CHAR str[tml::DateConstantUtil::STRING_LENGTH + 1U] = "";
 
-	return (std::string(this->GetStringSetStringPart(str, sizeof(str))));
+	dst_str = this->GetStringSetStringPart(str, sizeof(str));
+
+	return (dst_str);
 }
 
 
 /**
- * @brief GetStringWŠÖ”
- * @return str (string)
+ * @brief GetStringŠÖ”
+ * @param dst_str (string)
+ * @return dst_str (dst_string)
  */
-std::wstring tml::Date::GetStringW(void) const
+std::wstring &tml::Date::GetString(std::wstring &dst_str) const
 {
 	WCHAR str[tml::DateConstantUtil::STRING_LENGTH + 1U] = L"";
 
-	return (std::wstring(this->GetStringSetStringPart(str, sizeof(str))));
+	dst_str = this->GetStringSetStringPart(str, sizeof(str));
+
+	return (dst_str);
 }
 
 
