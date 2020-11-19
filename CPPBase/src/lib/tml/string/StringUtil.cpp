@@ -5,12 +5,14 @@
 
 
 #include "StringUtil.h"
-#include <locale.h>
+#include <locale>
 #include "../memory/MemoryUtil.h"
 
 
 tml::ThreadFix tml::StringUtil::th_fix_;
 std::unique_ptr<tml::StringUtilEngine> tml::StringUtil::engine_;
+std::string tml::StringUtil::old_local_name_;
+bool tml::StringUtil::old_local_flg_ = false;
 
 
 /**
@@ -20,6 +22,17 @@ void tml::StringUtil::Init(void)
 {
 	if (!tml::StringUtil::th_fix_.Check()) {
 		return;
+	}
+
+	if (tml::StringUtil::old_local_flg_) {
+		try {
+			std::locale::global(std::locale(tml::StringUtil::old_local_name_));
+		} catch (std::runtime_error &e) {
+			std::cout << e.what() << std::endl;
+		}
+
+		tml::StringUtil::old_local_name_.clear();
+		tml::StringUtil::old_local_flg_ = false;
 	}
 
 	tml::StringUtil::engine_.reset();
@@ -46,7 +59,14 @@ INT tml::StringUtil::Create(std::unique_ptr<tml::StringUtilEngine> &engine)
 
 	tml::StringUtil::engine_ = std::move(engine);
 
-	if (_wsetlocale(LC_ALL, L"Japanese") == nullptr) {
+	try {
+		std::locale old_local = std::locale::global(std::locale(tml::StringUtil::engine_->GetLocaleName()));
+
+		tml::StringUtil::old_local_name_ = old_local.name();
+		tml::StringUtil::old_local_flg_ = true;
+	} catch (std::runtime_error &e) {
+		std::cout << e.what() << std::endl;
+
 		tml::StringUtil::Init();
 
 		return (-1);
@@ -89,14 +109,13 @@ std::list<std::string> &tml::StringUtil::Split(std::list<std::string> &dst_str_c
 	}
 
 	std::string tmp_str = str;
+	size_t tmp_str_index = 0U;
 
 	if (tmp_str.length() <= 0U) {
 		dst_str_cont.push_back(str);
 
 		return (dst_str_cont);
 	}
-
-	size_t tmp_str_index = 0U;
 
 	while (1) {
 		auto sep_str_index = tmp_str.find(sep_str, tmp_str_index);
@@ -149,14 +168,13 @@ std::list<std::wstring> &tml::StringUtil::Split(std::list<std::wstring> &dst_str
 	}
 
 	std::wstring tmp_str = str;
+	size_t tmp_str_index = 0U;
 
 	if (tmp_str.length() <= 0U) {
 		dst_str_cont.push_back(str);
 
 		return (dst_str_cont);
 	}
-
-	size_t tmp_str_index = 0U;
 
 	while (1) {
 		auto sep_str_index = tmp_str.find(sep_str, tmp_str_index);

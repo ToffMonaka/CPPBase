@@ -9,6 +9,7 @@
 #define NOMINMAX
 #include <windows.h>
 #include <stdlib.h>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <chrono>

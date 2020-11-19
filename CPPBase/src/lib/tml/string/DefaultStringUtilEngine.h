@@ -27,6 +27,6 @@ public:
 	virtual ~DefaultStringUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const CHAR *);
 };
 }

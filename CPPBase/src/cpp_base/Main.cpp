@@ -78,7 +78,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// MemoryUtil Create
 		std::unique_ptr<tml::MemoryUtilEngine> engine(new tml::DefaultMemoryUtilEngine());
 
-		if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, 1048576U) < 0) {
+		if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, cpp_base::ConstantUtil::APPLICATION::MEMORY_ALLOCATOR_SIZE) < 0) {
 			cpp_base::InitMain();
 
 			return (exit_code);
@@ -94,7 +94,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// StringUtil Create
 		std::unique_ptr<tml::StringUtilEngine> engine(new tml::DefaultStringUtilEngine());
 
-		if (dynamic_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create() < 0) {
+		if (dynamic_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(cpp_base::ConstantUtil::APPLICATION::LOCALE_NAME) < 0) {
 			cpp_base::InitMain();
 
 			return (exit_code);

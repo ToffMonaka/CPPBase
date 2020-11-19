@@ -39,16 +39,21 @@ void tml::StringUtilEngine::Release(void)
  */
 void tml::StringUtilEngine::Init(void)
 {
+	this->local_name_.clear();
+
 	return;
 }
 
 
 /**
  * @brief Createä÷êî
+ * @param local_name (local_name)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::StringUtilEngine::Create(void)
+INT tml::StringUtilEngine::Create(const CHAR *local_name)
 {
+	this->local_name_ = local_name;
+
 	return (0);
 }
