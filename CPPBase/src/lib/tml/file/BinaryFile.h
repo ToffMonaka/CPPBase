@@ -77,6 +77,7 @@ public:
 	virtual INT Read(void);
 	virtual INT Write(void);
 	const BYTE *GetBuffer(void) const;
+	void SetBuffer(const BYTE *, const size_t);
 	size_t GetBufferSize(void) const;
 };
 }

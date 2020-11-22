@@ -94,25 +94,19 @@ std::list<std::string> &tml::StringUtil::Split(std::list<std::string> &dst_str_c
 		return (dst_str_cont);
 	}
 
-	if (sep_str == nullptr) {
+	if ((sep_str == nullptr)
+	|| (sep_str[0] == 0)) {
 		dst_str_cont.push_back(str);
 
 		return (dst_str_cont);
 	}
 
 	auto sep_str_len = strlen(sep_str);
-
-	if (sep_str_len <= 0U) {
-		dst_str_cont.push_back(str);
-
-		return (dst_str_cont);
-	}
-
 	std::string tmp_str = str;
 	size_t tmp_str_index = 0U;
 
-	if (tmp_str.length() <= 0U) {
-		dst_str_cont.push_back(str);
+	if (tmp_str.empty()) {
+		dst_str_cont.push_back(tmp_str);
 
 		return (dst_str_cont);
 	}
@@ -153,25 +147,19 @@ std::list<std::wstring> &tml::StringUtil::Split(std::list<std::wstring> &dst_str
 		return (dst_str_cont);
 	}
 
-	if (sep_str == nullptr) {
+	if ((sep_str == nullptr)
+	|| (sep_str[0] == 0)) {
 		dst_str_cont.push_back(str);
 
 		return (dst_str_cont);
 	}
 
 	auto sep_str_len = wcslen(sep_str);
-
-	if (sep_str_len <= 0U) {
-		dst_str_cont.push_back(str);
-
-		return (dst_str_cont);
-	}
-
 	std::wstring tmp_str = str;
 	size_t tmp_str_index = 0U;
 
-	if (tmp_str.length() <= 0U) {
-		dst_str_cont.push_back(str);
+	if (tmp_str.empty()) {
+		dst_str_cont.push_back(tmp_str);
 
 		return (dst_str_cont);
 	}
@@ -212,10 +200,8 @@ std::string &tml::StringUtil::GetString(std::string &dst_str, const WCHAR *str)
 		return (dst_str);
 	}
 
-	CHAR *tmp_str = nullptr;
 	size_t tmp_str_size = (wcslen(str) << 1) + 1U;
-
-	tmp_str = tml::MemoryUtil::Get<CHAR>(tmp_str_size);
+	CHAR *tmp_str = tml::MemoryUtil::Get<CHAR>(tmp_str_size);
 
 	if (wcstombs_s(nullptr, tmp_str, tmp_str_size, str, _TRUNCATE) == 0) {
 		dst_str = tmp_str;
@@ -246,10 +232,8 @@ std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const CHAR *str)
 		return (dst_str);
 	}
 
-	WCHAR *tmp_str = nullptr;
 	size_t tmp_str_size = strlen(str) + 1U;
-
-	tmp_str = tml::MemoryUtil::Get<WCHAR>(tmp_str_size);
+	WCHAR *tmp_str = tml::MemoryUtil::Get<WCHAR>(tmp_str_size);
 
 	if (mbstowcs_s(nullptr, tmp_str, tmp_str_size, str, _TRUNCATE) == 0) {
 		dst_str = tmp_str;

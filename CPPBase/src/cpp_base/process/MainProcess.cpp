@@ -129,15 +129,6 @@ INT cpp_base::MainProcess::Start(void)
 	}
 
 	{// Test
-		tml::BinaryFile bin_file;
-
-		bin_file.read_plan.file_path = L"test1.txt";
-
-		bin_file.Read();
-
-		auto buf = bin_file.GetBuffer();
-		auto buf_size = bin_file.GetBufferSize();
-
 		tml::TextFile txt_file;
 
 		txt_file.read_plan.file_path = L"test1.txt";
@@ -145,6 +136,10 @@ INT cpp_base::MainProcess::Start(void)
 		txt_file.Read();
 
 		auto str_cont = txt_file.GetStringContainer();
+
+		txt_file.write_plan.file_path = L"test2.txt";
+
+		txt_file.Write();
 
 		int a = 0;
 	}

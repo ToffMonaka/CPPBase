@@ -158,5 +158,41 @@ INT tml::TextFile::Read(void)
  */
 INT tml::TextFile::Write(void)
 {
+	BYTE *buf = nullptr;
+	size_t buf_size = 0U;
+	std::wstring buf_str;
+	std::string tmp_buf_str;
+
+	size_t str_i = 0U;
+
+	for (auto &str : this->str_cont_) {
+		if (str_i > 0U) {
+			buf_str += L"\r\n";
+		}
+
+		buf_str += str;
+
+		++str_i;
+	}
+
+	tml::StringUtil::GetString(tmp_buf_str, buf_str.c_str());
+
+	buf_size = tmp_buf_str.length();
+	buf = tml::MemoryUtil::Get<BYTE>(buf_size);
+	tml::MemoryUtil::Copy(buf, reinterpret_cast<const BYTE *>(tmp_buf_str.c_str()), buf_size);
+
+	tml::BinaryFile bin_file;
+
+	bin_file.SetBuffer(buf, buf_size);
+
+	tml::MemoryUtil::Release(&buf);
+	buf_size = 0U;
+
+	bin_file.write_plan.file_path = this->write_plan.file_path;
+
+	if (bin_file.Write()) {
+	    return (-1);
+	}
+
 	return (0);
 }

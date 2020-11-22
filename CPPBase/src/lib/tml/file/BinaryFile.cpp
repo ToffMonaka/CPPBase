@@ -142,11 +142,10 @@ INT tml::BinaryFile::Read(void)
 	size_t buf_size = 0U;
 	BYTE *tmp_buf = nullptr;
 	size_t tmp_buf_size = 0U;
-	CHAR *read_buf = nullptr;
-	size_t read_buf_size = std::max(this->read_plan.one_buffer_size, sizeof(size_t));
-	size_t read_size = 0U;
 
-	read_buf = tml::MemoryUtil::Get<CHAR>(read_buf_size);
+	size_t read_buf_size = std::max(this->read_plan.one_buffer_size, sizeof(size_t));
+	CHAR *read_buf = tml::MemoryUtil::Get<CHAR>(read_buf_size);
+	size_t read_size = 0U;
 
 	while (1) {
 		ifs.read(read_buf, read_buf_size);
@@ -207,11 +206,10 @@ INT tml::BinaryFile::Write(void)
 	}
 
 	size_t buf_index = 0U;
-	CHAR *write_buf = nullptr;
-	size_t write_buf_size = std::max(this->write_plan.one_buffer_size, sizeof(size_t));
-	size_t write_size = 0U;
 
-	write_buf = tml::MemoryUtil::Get<CHAR>(write_buf_size);
+	size_t write_buf_size = std::max(this->write_plan.one_buffer_size, sizeof(size_t));
+	CHAR *write_buf = tml::MemoryUtil::Get<CHAR>(write_buf_size);
+	size_t write_size = 0U;
 
 	while (1) {
 		write_size = std::min(this->buf_size_ - buf_index, write_buf_size);
@@ -233,4 +231,21 @@ INT tml::BinaryFile::Write(void)
 	write_buf_size = 0U;
 
 	return (0);
+}
+
+
+/**
+ * @brief SetBufferŠÖ”
+ * @param buf (buffer)
+ * @param buf_size (buffer_size)
+ */
+void tml::BinaryFile::SetBuffer(const BYTE *buf, const size_t buf_size)
+{
+	tml::MemoryUtil::Release(&this->buf_);
+
+	this->buf_ = tml::MemoryUtil::Get<BYTE>(buf_size);
+	tml::MemoryUtil::Copy(this->buf_, buf, buf_size);
+	this->buf_size_ = buf_size;
+
+	return;
 }
