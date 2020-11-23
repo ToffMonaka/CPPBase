@@ -135,7 +135,7 @@ INT cpp_base::MainProcess::Start(void)
 
 		txt_file.Read();
 
-		auto str_cont = txt_file.GetStringContainer();
+		auto &str_cont = txt_file.data.string_container;
 
 		txt_file.write_plan.file_path = L"test2.txt";
 

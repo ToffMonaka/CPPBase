@@ -31,6 +31,7 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::MathUtilEngine> &);
 
+	static bool CheckThreadFix(void);
 	template <typename T>
 	static T Div(const T &, const T &);
 	template <typename T>
@@ -46,6 +47,17 @@ public:
 	template <typename T>
 	static T Clamp(const T &, const T &, const T &);
 };
+}
+
+
+/**
+ * @brief CheckThreadFixä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=é∏îs,true=ê¨å˜
+ */
+inline bool tml::MathUtil::CheckThreadFix(void)
+{
+	return (tml::MathUtil::th_fix_.Check());
 }
 
 

@@ -31,12 +31,24 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::ProcessUtilEngine> &);
 
+	static bool CheckThreadFix(void);
 	static tml::Process *Get(void);
 	static INT Start(std::unique_ptr<tml::Process> &);
 	static void End(const INT exit_code = 0);
 	static tml::ProcessUtilEngine::STATE GetState(void);
 	static INT GetExitCode(void);
 };
+}
+
+
+/**
+ * @brief CheckThreadFixä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=é∏îs,true=ê¨å˜
+ */
+inline bool tml::ProcessUtil::CheckThreadFix(void)
+{
+	return (tml::ProcessUtil::th_fix_.Check());
 }
 
 

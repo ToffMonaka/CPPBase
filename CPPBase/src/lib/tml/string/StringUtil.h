@@ -34,8 +34,11 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::StringUtilEngine> &);
 
+	static bool CheckThreadFix(void);
 	static std::list<std::string> &Split(std::list<std::string> &, const CHAR *, const CHAR *);
 	static std::list<std::wstring> &Split(std::list<std::wstring> &, const WCHAR *, const WCHAR *);
+	static std::string &Join(std::string &, const std::list<std::string> &, const CHAR *);
+	static std::wstring &Join(std::wstring &, const std::list<std::wstring> &, const WCHAR *);
 	static INT GetINT(const CHAR *, const INT default_val = 0, const INT radix = 10);
 	static INT GetINT(const WCHAR *, const INT default_val = 0, const INT radix = 10);
 	static UINT GetUINT(const CHAR *, const UINT default_val = 0U, const INT radix = 10);
@@ -63,6 +66,17 @@ public:
 	static std::string &GetString(std::string &, const WCHAR *);
 	static std::wstring &GetString(std::wstring &, const CHAR *);
 };
+}
+
+
+/**
+ * @brief CheckThreadFixä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=é∏îs,true=ê¨å˜
+ */
+inline bool tml::StringUtil::CheckThreadFix(void)
+{
+	return (tml::StringUtil::th_fix_.Check());
 }
 
 

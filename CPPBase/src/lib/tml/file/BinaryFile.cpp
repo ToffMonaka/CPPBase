@@ -12,6 +12,51 @@
 /**
  * @brief コンストラクタ
  */
+tml::BinaryFileData::BinaryFileData() :
+	buffer(nullptr),
+	buffer_size(0U)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::BinaryFileData::~BinaryFileData()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::BinaryFileData::Release(void)
+{
+	tml::MemoryUtil::Release(&this->buffer);
+	this->buffer_size = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::BinaryFileData::Init(void)
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::BinaryFileReadPlan::BinaryFileReadPlan() :
 	one_buffer_size(1024U)
 {
@@ -74,9 +119,7 @@ void tml::BinaryFileWritePlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::BinaryFile::BinaryFile() :
-	buf_(nullptr),
-	buf_size_(0U)
+tml::BinaryFile::BinaryFile()
 {
 	return;
 }
@@ -98,9 +141,6 @@ tml::BinaryFile::~BinaryFile()
  */
 void tml::BinaryFile::Release(void)
 {
-	tml::MemoryUtil::Release(&this->buf_);
-	this->buf_size_ = 0U;
-
 	tml::File::Release();
 
 	return;
@@ -114,6 +154,7 @@ void tml::BinaryFile::Init(void)
 {
 	this->Release();
 
+	this->data.Init();
 	this->read_plan.Init();
 	this->write_plan.Init();
 
@@ -176,9 +217,9 @@ INT tml::BinaryFile::Read(void)
 	tml::MemoryUtil::Release(&read_buf);
 	read_buf_size = 0U;
 
-	tml::MemoryUtil::Release(&this->buf_);
-	this->buf_ = buf;
-	this->buf_size_ = buf_size;
+	this->data.Init();
+	this->data.buffer = buf;
+	this->data.buffer_size = buf_size;
 
 	return (0);
 }
@@ -199,7 +240,7 @@ INT tml::BinaryFile::Write(void)
 	    return (-1);
 	}
 
-	if (this->buf_size_ <= 0U) {
+	if (this->data.buffer_size <= 0U) {
 		ofs.close();
 
 		return (0);
@@ -212,15 +253,15 @@ INT tml::BinaryFile::Write(void)
 	size_t write_size = 0U;
 
 	while (1) {
-		write_size = std::min(this->buf_size_ - buf_index, write_buf_size);
+		write_size = std::min(this->data.buffer_size - buf_index, write_buf_size);
 
-		tml::MemoryUtil::Copy(write_buf, reinterpret_cast<CHAR *>(&this->buf_[buf_index]), write_size);
+		tml::MemoryUtil::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.buffer[buf_index]), write_size);
 
 		ofs.write(write_buf, write_size);
 
 		buf_index += write_size;
 
-		if (buf_index >= this->buf_size_) {
+		if (buf_index >= this->data.buffer_size) {
 			break;
 		}
 	}
@@ -231,21 +272,4 @@ INT tml::BinaryFile::Write(void)
 	write_buf_size = 0U;
 
 	return (0);
-}
-
-
-/**
- * @brief SetBuffer関数
- * @param buf (buffer)
- * @param buf_size (buffer_size)
- */
-void tml::BinaryFile::SetBuffer(const BYTE *buf, const size_t buf_size)
-{
-	tml::MemoryUtil::Release(&this->buf_);
-
-	this->buf_ = tml::MemoryUtil::Get<BYTE>(buf_size);
-	tml::MemoryUtil::Copy(this->buf_, buf, buf_size);
-	this->buf_size_ = buf_size;
-
-	return;
 }

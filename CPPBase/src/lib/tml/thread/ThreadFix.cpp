@@ -27,7 +27,7 @@ tml::ThreadFix::~ThreadFix()
 
 /**
  * @brief CheckŠÖ”
- * @return ”»’è
+ * @return res_flg (result_flag)<br>
  * false=¸”s,true=¬Œ÷
  */
 bool tml::ThreadFix::Check(void)

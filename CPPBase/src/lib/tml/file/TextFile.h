@@ -12,6 +12,30 @@
 
 namespace tml {
 /**
+ * @brief TextFileDataクラス
+ */
+class TextFileData
+{
+public: TextFileData(const TextFileData &) = delete;
+public: TextFileData &operator =(const TextFileData &) = delete;
+
+public:
+	std::list<std::wstring> string_container;
+
+private:
+	void Release(void);
+
+public:
+	TextFileData();
+	virtual ~TextFileData();
+
+	void Init(void);
+};
+}
+
+
+namespace tml {
+/**
  * @brief TextFileReadPlanクラス
  */
 class TextFileReadPlan
@@ -56,10 +80,8 @@ public: TextFile(const TextFile &) = delete;
 public: TextFile &operator =(const TextFile &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-private:
-	std::list<std::wstring> str_cont_;
-
 public:
+	tml::TextFileData data;
 	tml::TextFileReadPlan read_plan;
 	tml::TextFileWritePlan write_plan;
 
@@ -74,16 +96,5 @@ public:
 
 	virtual INT Read(void);
 	virtual INT Write(void);
-	const std::list<std::wstring> &GetStringContainer(void) const;
 };
-}
-
-
-/**
- * @brief GetStringContainer関数
- * @return str_cont (string_container)
- */
-inline const std::list<std::wstring> &tml::TextFile::GetStringContainer(void) const
-{
-	return (this->str_cont_);
 }

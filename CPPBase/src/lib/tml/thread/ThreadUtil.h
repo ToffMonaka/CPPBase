@@ -31,6 +31,7 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::ThreadUtilEngine> &);
 
+	static bool CheckThreadFix(void);
 	static tml::Thread *Get(void);
 	static INT Start(std::unique_ptr<tml::Thread> &, const bool ready_flg = false);
 	static INT StartAll(void);
@@ -38,6 +39,17 @@ public:
 	static void EndAll(const bool delete_flg = false);
 	static tml::ThreadUtilEngine::STATE GetState(void);
 };
+}
+
+
+/**
+ * @brief CheckThreadFixä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=é∏îs,true=ê¨å˜
+ */
+inline bool tml::ThreadUtil::CheckThreadFix(void)
+{
+	return (tml::ThreadUtil::th_fix_.Check());
 }
 
 

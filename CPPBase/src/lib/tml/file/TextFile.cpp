@@ -13,6 +13,48 @@
 /**
  * @brief コンストラクタ
  */
+tml::TextFileData::TextFileData()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::TextFileData::~TextFileData()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::TextFileData::Release(void)
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::TextFileData::Init(void)
+{
+	this->Release();
+
+	this->string_container.clear();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::TextFileReadPlan::TextFileReadPlan()
 {
 	return;
@@ -93,8 +135,6 @@ tml::TextFile::~TextFile()
  */
 void tml::TextFile::Release(void)
 {
-	this->str_cont_.clear();
-
 	tml::File::Release();
 
 	return;
@@ -108,10 +148,9 @@ void tml::TextFile::Init(void)
 {
 	this->Release();
 
+	this->data.Init();
 	this->read_plan.Init();
 	this->write_plan.Init();
-
-	tml::File::Init();
 
 	return;
 }
@@ -133,16 +172,19 @@ INT tml::TextFile::Read(void)
 	}
 
 	BYTE *buf = nullptr;
-	size_t buf_size = bin_file.GetBufferSize() + sizeof(WCHAR);
+	size_t buf_size = 0U;
 	std::wstring buf_str;
+	CHAR *tmp_buf_str = nullptr;
 
+	buf_size = bin_file.data.buffer_size + sizeof(CHAR);
 	buf = tml::MemoryUtil::Get<BYTE>(buf_size);
-	tml::MemoryUtil::Copy(buf, bin_file.GetBuffer(), bin_file.GetBufferSize());
-	reinterpret_cast<WCHAR *>(&buf[bin_file.GetBufferSize()])[0] = 0;
+	tml::MemoryUtil::Copy(buf, bin_file.data.buffer, bin_file.data.buffer_size);
+	buf[bin_file.data.buffer_size] = 0;
+	tmp_buf_str = reinterpret_cast<CHAR *>(buf);
 
-	tml::StringUtil::GetString(buf_str, reinterpret_cast<CHAR *>(buf));
+	tml::StringUtil::GetString(buf_str, tmp_buf_str);
 
-	tml::StringUtil::Split(this->str_cont_, buf_str.c_str(), L"\r\n");
+	tml::StringUtil::Split(this->data.string_container, buf_str.c_str(), L"\r\n");
 
 	tml::MemoryUtil::Release(&buf);
 	buf_size = 0U;
@@ -163,17 +205,7 @@ INT tml::TextFile::Write(void)
 	std::wstring buf_str;
 	std::string tmp_buf_str;
 
-	size_t str_i = 0U;
-
-	for (auto &str : this->str_cont_) {
-		if (str_i > 0U) {
-			buf_str += L"\r\n";
-		}
-
-		buf_str += str;
-
-		++str_i;
-	}
+	tml::StringUtil::Join(buf_str, this->data.string_container, L"\r\n");
 
 	tml::StringUtil::GetString(tmp_buf_str, buf_str.c_str());
 
@@ -183,10 +215,8 @@ INT tml::TextFile::Write(void)
 
 	tml::BinaryFile bin_file;
 
-	bin_file.SetBuffer(buf, buf_size);
-
-	tml::MemoryUtil::Release(&buf);
-	buf_size = 0U;
+	bin_file.data.buffer = buf;
+	bin_file.data.buffer_size = buf_size;
 
 	bin_file.write_plan.file_path = this->write_plan.file_path;
 

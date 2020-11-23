@@ -31,6 +31,7 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::MemoryUtilEngine> &);
 
+	static bool CheckThreadFix(void);
 	template <typename T>
 	static T *Get(const size_t);
 	template <typename T>
@@ -43,6 +44,17 @@ public:
 	template <typename T>
 	static void CopySame(T *, const T *, const size_t);
 };
+}
+
+
+/**
+ * @brief CheckThreadFixä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=é∏îs,true=ê¨å˜
+ */
+inline bool tml::MemoryUtil::CheckThreadFix(void)
+{
+	return (tml::MemoryUtil::th_fix_.Check());
 }
 
 

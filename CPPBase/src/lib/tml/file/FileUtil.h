@@ -30,5 +30,18 @@ private:
 public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::FileUtilEngine> &);
+
+	static bool CheckThreadFix(void);
 };
+}
+
+
+/**
+ * @brief CheckThreadFixŠÖ”
+ * @return res_flg (result_flag)<br>
+ * false=¸”s,true=¬Œ÷
+ */
+inline bool tml::FileUtil::CheckThreadFix(void)
+{
+	return (tml::FileUtil::th_fix_.Check());
 }

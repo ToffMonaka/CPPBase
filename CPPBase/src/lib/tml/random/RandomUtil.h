@@ -31,6 +31,7 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::RandomUtilEngine> &);
 
+	static bool CheckThreadFix(void);
 	static INT GetINT(void);
 	static INT GetINT(const INT, const INT);
 	static UINT GetUINT(void);
@@ -44,6 +45,17 @@ public:
 	static DOUBLE GetDOUBLE(void);
 	static DOUBLE GetDOUBLE(const DOUBLE, const DOUBLE);
 };
+}
+
+
+/**
+ * @brief CheckThreadFixä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=é∏îs,true=ê¨å˜
+ */
+inline bool tml::RandomUtil::CheckThreadFix(void)
+{
+	return (tml::RandomUtil::th_fix_.Check());
 }
 
 

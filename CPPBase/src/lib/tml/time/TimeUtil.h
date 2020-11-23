@@ -31,7 +31,19 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::TimeUtilEngine> &);
 
+	static bool CheckThreadFix(void);
 	static tml::TIME_REAL Sleep(const tml::TIME_REAL &);
 	static tml::TIME_REAL Wait(const tml::TIME_REAL &);
 };
+}
+
+
+/**
+ * @brief CheckThreadFixä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=é∏îs,true=ê¨å˜
+ */
+inline bool tml::TimeUtil::CheckThreadFix(void)
+{
+	return (tml::TimeUtil::th_fix_.Check());
 }
