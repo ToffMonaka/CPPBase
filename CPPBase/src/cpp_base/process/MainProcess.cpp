@@ -15,6 +15,7 @@
 #include "../../lib/tml/file/TextFile.h"
 #include "../../lib/tml/process/ProcessUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
+#include "../constant/ConstantUtil_WINDOW.h"
 #include "../thread/MainThread.h"
 #include "../resource/resource.h"
 
@@ -96,7 +97,7 @@ INT cpp_base::MainProcess::Create(const HINSTANCE instance_handle, const WCHAR *
 INT cpp_base::MainProcess::Start(void)
 {
 	{// MainThread Start
-		std::unique_ptr<tml::Thread> th(new cpp_base::MainThread());
+		std::unique_ptr<tml::Thread> th = std::make_unique<cpp_base::MainThread>();
 
 		if (dynamic_cast<cpp_base::MainThread *>(th.get())->Create() < 0) {
 			return (-1);
@@ -137,9 +138,11 @@ INT cpp_base::MainProcess::Start(void)
 
 		auto &str_cont = txt_file.data.string_container;
 
+		/*
 		txt_file.write_plan.file_path = L"test2.txt";
 
 		txt_file.Write();
+		*/
 
 		int a = 0;
 	}

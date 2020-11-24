@@ -5,26 +5,8 @@
 #pragma once
 
 
-#include "../ConstantUtil.h"
-
-
-namespace tml {
-namespace DateConstantUtil {
-enum class WEEK_DAY : UCHAR {
-	SUNDAY = 0,
-	MONDAY,
-	TUESDAY,
-	WEDNESDAY,
-	THURSDAY,
-	FRIDAY,
-	SATURDAY
-};
-const size_t STRING_LENGTH = 19U;
-const CHAR ZERO_STRING_MB[] = "0000-00-00 00:00:00";
-const WCHAR ZERO_STRING_W[] = L"0000-00-00 00:00:00";
-const WCHAR *ZERO_STRING = tml::DateConstantUtil::ZERO_STRING_W;
-}
-}
+#include "../constant/ConstantUtil.h"
+#include "../constant/ConstantUtil_DATE.h"
 
 
 namespace tml {
@@ -44,7 +26,7 @@ private:
 	UCHAR hour_;
 	UCHAR min_;
 	UCHAR sec_;
-	tml::DateConstantUtil::WEEK_DAY week_day_;
+	tml::ConstantUtil::DATE::WEEK_DAY week_day_;
 
 public:
 	static tml::TIME_SECONDS GetNowTime(void);
@@ -69,7 +51,7 @@ public:
 	UCHAR GetHour(void) const;
 	UCHAR GetMinutes(void) const;
 	UCHAR GetSeconds(void) const;
-	tml::DateConstantUtil::WEEK_DAY GetWeekDay(void) const;
+	tml::ConstantUtil::DATE::WEEK_DAY GetWeekDay(void) const;
 	const CHAR *GetString(CHAR *, const size_t) const;
 	const WCHAR *GetString(WCHAR *, const size_t) const;
 	std::string &GetString(std::string &) const;
@@ -179,7 +161,7 @@ inline UCHAR tml::Date::GetSeconds(void) const
  * @brief GetWeekDayŠÖ”
  * @return week_day (week_day)
  */
-inline tml::DateConstantUtil::WEEK_DAY tml::Date::GetWeekDay(void) const
+inline tml::ConstantUtil::DATE::WEEK_DAY tml::Date::GetWeekDay(void) const
 {
 	return (this->week_day_);
 }

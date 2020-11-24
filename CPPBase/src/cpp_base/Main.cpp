@@ -21,6 +21,8 @@
 #include "../lib/tml/process/DefaultProcessUtilEngine.h"
 #include "../lib/tml/thread/ThreadUtil.h"
 #include "../lib/tml/thread/DefaultThreadUtilEngine.h"
+#include "constant/ConstantUtil_APPLICATION.h"
+#include "constant/ConstantUtil_WINDOW.h"
 #include "process/MainProcess.h"
 
 
@@ -76,7 +78,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	cpp_base::InitMain();
 
 	{// MemoryUtil Create
-		std::unique_ptr<tml::MemoryUtilEngine> engine(new tml::DefaultMemoryUtilEngine());
+		std::unique_ptr<tml::MemoryUtilEngine> engine = std::make_unique<tml::DefaultMemoryUtilEngine>();
 
 		if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, cpp_base::ConstantUtil::APPLICATION::MEMORY_ALLOCATOR_SIZE) < 0) {
 			cpp_base::InitMain();
@@ -92,7 +94,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	}
 
 	{// StringUtil Create
-		std::unique_ptr<tml::StringUtilEngine> engine(new tml::DefaultStringUtilEngine());
+		std::unique_ptr<tml::StringUtilEngine> engine = std::make_unique<tml::DefaultStringUtilEngine>();
 
 		if (dynamic_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(cpp_base::ConstantUtil::APPLICATION::LOCALE_NAME) < 0) {
 			cpp_base::InitMain();
@@ -108,7 +110,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	}
 
 	{// TimeUtil Create
-		std::unique_ptr<tml::TimeUtilEngine> engine(new tml::DefaultTimeUtilEngine());
+		std::unique_ptr<tml::TimeUtilEngine> engine = std::make_unique<tml::DefaultTimeUtilEngine>();
 
 		if (dynamic_cast<tml::DefaultTimeUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
@@ -124,7 +126,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	}
 
 	{// MathUtil Create
-		std::unique_ptr<tml::MathUtilEngine> engine(new tml::DefaultMathUtilEngine());
+		std::unique_ptr<tml::MathUtilEngine> engine = std::make_unique<tml::DefaultMathUtilEngine>();
 
 		if (dynamic_cast<tml::DefaultMathUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
@@ -140,7 +142,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	}
 
 	{// RandomUtil Create
-		std::unique_ptr<tml::RandomUtilEngine> engine(new tml::DefaultRandomUtilEngine());
+		std::unique_ptr<tml::RandomUtilEngine> engine = std::make_unique<tml::DefaultRandomUtilEngine>();
 
 		if (dynamic_cast<tml::DefaultRandomUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
@@ -156,7 +158,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	}
 
 	{// FileUtil Create
-		std::unique_ptr<tml::FileUtilEngine> engine(new tml::DefaultFileUtilEngine());
+		std::unique_ptr<tml::FileUtilEngine> engine = std::make_unique<tml::DefaultFileUtilEngine>();
 
 		if (dynamic_cast<tml::DefaultFileUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
@@ -172,7 +174,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	}
 
 	{// ProcessUtil Create
-		std::unique_ptr<tml::ProcessUtilEngine> engine(new tml::DefaultProcessUtilEngine());
+		std::unique_ptr<tml::ProcessUtilEngine> engine = std::make_unique<tml::DefaultProcessUtilEngine>();
 
 		if (dynamic_cast<tml::DefaultProcessUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
@@ -188,7 +190,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	}
 
 	{// ThreadUtil Create
-		std::unique_ptr<tml::ThreadUtilEngine> engine(new tml::DefaultThreadUtilEngine());
+		std::unique_ptr<tml::ThreadUtilEngine> engine = std::make_unique<tml::DefaultThreadUtilEngine>();
 
 		if (dynamic_cast<tml::DefaultThreadUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
@@ -204,7 +206,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	}
 
 	{// MainProcess Start
-		std::unique_ptr<tml::Process> proc(new cpp_base::MainProcess());
+		std::unique_ptr<tml::Process> proc = std::make_unique<cpp_base::MainProcess>();
 
 		if (dynamic_cast<cpp_base::MainProcess *>(proc.get())->Create(instance_handle, cpp_base::ConstantUtil::WINDOW::NAME, wnd_show_type) < 0) {
 			cpp_base::InitMain();

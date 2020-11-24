@@ -7,7 +7,7 @@
 
 #include "../dlmalloc/malloc.h"
 
-#include "../ConstantUtil.h"
+#include "../constant/ConstantUtil.h"
 #include "MemoryAllocator.h"
 
 

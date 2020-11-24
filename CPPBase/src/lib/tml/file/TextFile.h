@@ -5,7 +5,8 @@
 #pragma once
 
 
-#include "../ConstantUtil.h"
+#include "../constant/ConstantUtil.h"
+#include "../constant/ConstantUtil_NEWLINE_CODE.h"
 #include <list>
 #include "File.h"
 
@@ -42,6 +43,7 @@ class TextFileReadPlan
 {
 public:
 	std::wstring file_path;
+	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
 public:
 	TextFileReadPlan();
@@ -60,6 +62,7 @@ class TextFileWritePlan
 {
 public:
 	std::wstring file_path;
+	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
 public:
 	TextFileWritePlan();

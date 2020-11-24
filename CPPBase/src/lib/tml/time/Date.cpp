@@ -19,7 +19,7 @@ tml::Date::Date() :
 	hour_(0),
 	min_(0),
 	sec_(0),
-	week_day_(tml::DateConstantUtil::WEEK_DAY::SUNDAY)
+	week_day_(tml::ConstantUtil::DATE::WEEK_DAY::SUNDAY)
 {
 	return;
 }
@@ -46,7 +46,7 @@ void tml::Date::Init(void)
 	this->hour_ = 0;
 	this->min_ = 0;
 	this->sec_ = 0;
-	this->week_day_ = tml::DateConstantUtil::WEEK_DAY::SUNDAY;
+	this->week_day_ = tml::ConstantUtil::DATE::WEEK_DAY::SUNDAY;
 
 	return;
 }
@@ -71,7 +71,7 @@ void tml::Date::SetTime(const tml::TIME_SECONDS &time)
 			this->hour_ = date.tm_hour;
 			this->min_ = date.tm_min;
 			this->sec_ = date.tm_sec;
-			this->week_day_ = static_cast<tml::DateConstantUtil::WEEK_DAY>(date.tm_wday);
+			this->week_day_ = static_cast<tml::ConstantUtil::DATE::WEEK_DAY>(date.tm_wday);
 		} else {
 			this->Init();
 		}
@@ -95,7 +95,7 @@ const CHAR *tml::Date::GetString(CHAR *dst_str, const size_t dst_str_size) const
 		return (dst_str);
 	}
 
-	if (dst_str_size < (tml::DateConstantUtil::STRING_LENGTH + 1U)) {
+	if (dst_str_size < (tml::ConstantUtil::DATE::STRING_LENGTH + 1U)) {
 		if (dst_str_size > 0U) {
 			dst_str[0] = 0;
 		}
@@ -119,7 +119,7 @@ const WCHAR *tml::Date::GetString(WCHAR *dst_str, const size_t dst_str_size) con
 		return (dst_str);
 	}
 
-	if (dst_str_size < ((tml::DateConstantUtil::STRING_LENGTH + 1U) << 1)) {
+	if (dst_str_size < ((tml::ConstantUtil::DATE::STRING_LENGTH + 1U) << 1)) {
 		if (dst_str_size > 0U) {
 			dst_str[0] = 0;
 		}
@@ -138,7 +138,7 @@ const WCHAR *tml::Date::GetString(WCHAR *dst_str, const size_t dst_str_size) con
  */
 std::string &tml::Date::GetString(std::string &dst_str) const
 {
-	CHAR str[tml::DateConstantUtil::STRING_LENGTH + 1U] = "";
+	CHAR str[tml::ConstantUtil::DATE::STRING_LENGTH + 1U] = "";
 
 	dst_str = this->GetStringSetStringPart(str, sizeof(str));
 
@@ -153,7 +153,7 @@ std::string &tml::Date::GetString(std::string &dst_str) const
  */
 std::wstring &tml::Date::GetString(std::wstring &dst_str) const
 {
-	WCHAR str[tml::DateConstantUtil::STRING_LENGTH + 1U] = L"";
+	WCHAR str[tml::ConstantUtil::DATE::STRING_LENGTH + 1U] = L"";
 
 	dst_str = this->GetStringSetStringPart(str, sizeof(str));
 
@@ -200,8 +200,8 @@ const WCHAR *tml::Date::GetStringSetStringPart(WCHAR *dst_str, const size_t dst_
 void tml::Date::SetString(const CHAR *str)
 {
 	if ((str == nullptr)
-	|| (strlen(str) != tml::DateConstantUtil::STRING_LENGTH)
-	|| (strcmp(str, tml::DateConstantUtil::ZERO_STRING_MB) == 0)) {
+	|| (strlen(str) != tml::ConstantUtil::DATE::STRING_LENGTH)
+	|| (strcmp(str, tml::ConstantUtil::DATE::ZERO_STRING_MB) == 0)) {
 		this->Init();
 
 		return;
@@ -269,8 +269,8 @@ void tml::Date::SetString(const CHAR *str)
 void tml::Date::SetString(const WCHAR *str)
 {
 	if ((str == nullptr)
-	|| (wcslen(str) != tml::DateConstantUtil::STRING_LENGTH)
-	|| (wcscmp(str, tml::DateConstantUtil::ZERO_STRING_W) == 0)) {
+	|| (wcslen(str) != tml::ConstantUtil::DATE::STRING_LENGTH)
+	|| (wcscmp(str, tml::ConstantUtil::DATE::ZERO_STRING_W) == 0)) {
 		this->Init();
 
 		return;

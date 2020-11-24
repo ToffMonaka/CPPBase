@@ -5,7 +5,7 @@
 #pragma once
 
 
-#include "../ConstantUtil.h"
+#include "../constant/ConstantUtil.h"
 #include "NewMemoryAllocator.h"
 #include "DlmallocMemoryAllocator.h"
 #include "../thread/SpinThreadLock.h"

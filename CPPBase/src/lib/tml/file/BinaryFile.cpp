@@ -176,7 +176,7 @@ INT tml::BinaryFile::Read(void)
 	ifs.open(this->read_plan.file_path.c_str(), std::ios_base::in | std::ios_base::binary);
 
 	if (!ifs) {
-	    return (-1);
+		return (-1);
 	}
 
 	BYTE *buf = nullptr;
@@ -237,7 +237,7 @@ INT tml::BinaryFile::Write(void)
 	ofs.open(this->write_plan.file_path.c_str(), std::ios_base::out | std::ios_base::binary);
 
 	if (!ofs) {
-	    return (-1);
+		return (-1);
 	}
 
 	if (this->data.buffer_size <= 0U) {

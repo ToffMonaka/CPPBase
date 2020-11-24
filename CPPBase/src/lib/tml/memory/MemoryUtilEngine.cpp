@@ -64,7 +64,7 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 
 		switch (this->allocator_type_) {
 		case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
-			this->new_allocator_.reset(new tml::NewMemoryAllocator());
+			this->new_allocator_ = std::make_unique<tml::NewMemoryAllocator>();
 
 			if (this->new_allocator_->Create() < 0) {
 				return (-1);
@@ -73,7 +73,7 @@ INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineConstantUtil::ALLOC
 			break;
 		}
 		case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
-			this->dlmalloc_allocator_.reset(new tml::DlmallocMemoryAllocator());
+			this->dlmalloc_allocator_ = std::make_unique<tml::DlmallocMemoryAllocator>();
 
 			if (this->dlmalloc_allocator_->Create(allocator_size) < 0) {
 				return (-1);

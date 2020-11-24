@@ -55,7 +55,8 @@ void tml::TextFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::TextFileReadPlan::TextFileReadPlan()
+tml::TextFileReadPlan::TextFileReadPlan() :
+	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
 {
 	return;
 }
@@ -76,6 +77,7 @@ tml::TextFileReadPlan::~TextFileReadPlan()
 void tml::TextFileReadPlan::Init(void)
 {
 	this->file_path.clear();
+	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
 
 	return;
 }
@@ -84,7 +86,8 @@ void tml::TextFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::TextFileWritePlan::TextFileWritePlan()
+tml::TextFileWritePlan::TextFileWritePlan() :
+	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
 {
 	return;
 }
@@ -105,6 +108,7 @@ tml::TextFileWritePlan::~TextFileWritePlan()
 void tml::TextFileWritePlan::Init(void)
 {
 	this->file_path.clear();
+	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
 
 	return;
 }
@@ -168,7 +172,7 @@ INT tml::TextFile::Read(void)
 	bin_file.read_plan.file_path = this->read_plan.file_path;
 
 	if (bin_file.Read()) {
-	    return (-1);
+		return (-1);
 	}
 
 	BYTE *buf = nullptr;
@@ -184,7 +188,7 @@ INT tml::TextFile::Read(void)
 
 	tml::StringUtil::GetString(buf_str, tmp_buf_str);
 
-	tml::StringUtil::Split(this->data.string_container, buf_str.c_str(), L"\r\n");
+	tml::StringUtil::Split(this->data.string_container, buf_str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(this->read_plan.newline_code_type));
 
 	tml::MemoryUtil::Release(&buf);
 	buf_size = 0U;
@@ -205,7 +209,7 @@ INT tml::TextFile::Write(void)
 	std::wstring buf_str;
 	std::string tmp_buf_str;
 
-	tml::StringUtil::Join(buf_str, this->data.string_container, L"\r\n");
+	tml::StringUtil::Join(buf_str, this->data.string_container, tml::ConstantUtil::NEWLINE_CODE::GetString(this->write_plan.newline_code_type));
 
 	tml::StringUtil::GetString(tmp_buf_str, buf_str.c_str());
 
@@ -221,7 +225,7 @@ INT tml::TextFile::Write(void)
 	bin_file.write_plan.file_path = this->write_plan.file_path;
 
 	if (bin_file.Write()) {
-	    return (-1);
+		return (-1);
 	}
 
 	return (0);
