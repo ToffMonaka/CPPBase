@@ -80,7 +80,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// MemoryUtil Create
 		std::unique_ptr<tml::MemoryUtilEngine> engine = std::make_unique<tml::DefaultMemoryUtilEngine>();
 
-		if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC, cpp_base::ConstantUtil::APPLICATION::MEMORY_ALLOCATOR_SIZE) < 0) {
+		if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC, cpp_base::ConstantUtil::APPLICATION::MEMORY_ALLOCATOR_SIZE) < 0) {
 			cpp_base::InitMain();
 
 			return (exit_code);

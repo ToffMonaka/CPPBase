@@ -317,6 +317,9 @@
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_DATE.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_MEMORY.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\cpp_base\resource\resource.rc">

@@ -211,6 +211,7 @@
     <ClInclude Include="src\lib\tml\constant\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_DATE.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_LIBRARY.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_MEMORY.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_NEWLINE_CODE.h" />
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
     <ClInclude Include="src\lib\tml\file\BinaryFile.h" />

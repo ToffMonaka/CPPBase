@@ -6,20 +6,10 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../constant/ConstantUtil_MEMORY.h"
 #include "NewMemoryAllocator.h"
 #include "DlmallocMemoryAllocator.h"
 #include "../thread/SpinThreadLock.h"
-
-
-namespace tml {
-namespace MemoryUtilEngineConstantUtil {
-enum class ALLOCATOR_TYPE : UINT {
-	NONE = 0U,
-	NEW,
-	DLMALLOC
-};
-}
-}
 
 
 namespace tml {
@@ -40,7 +30,7 @@ public:
 	 */
 	typedef struct ALLOCATOR_INFO_
 	{
-		tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE type;
+		tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE type;
 		size_t size;
 		size_t use_size;
 		size_t use_cnt;
@@ -49,7 +39,7 @@ public:
 		 * @brief コンストラクタ
 		 */
 		ALLOCATOR_INFO_() :
-			type(tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NONE),
+			type(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE),
 			size(0U),
 			use_size(0U),
 			use_cnt(0U)
@@ -59,14 +49,14 @@ public:
 	} ALLOCATOR_INFO;
 
 private:
-	tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE allocator_type_;
+	tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE allocator_type_;
 	std::unique_ptr<tml::NewMemoryAllocator> new_allocator_;
 	std::unique_ptr<tml::DlmallocMemoryAllocator> dlmalloc_allocator_;
 	tml::SpinThreadLock allocator_th_lock_;
 
 protected:
 	void Release(void);
-	INT Create(const tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE, const size_t);
+	INT Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE, const size_t);
 
 public:
 	MemoryUtilEngine();
@@ -95,7 +85,7 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 	T *p = nullptr;
 
 	switch (this->allocator_type_) {
-	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
+	case tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NEW: {
 		BYTE *ms_p = nullptr;
 
 		{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
@@ -106,7 +96,7 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 
 		break;
 	}
-	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
+	case tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC: {
 		BYTE *ms_p = nullptr;
 
 		{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
@@ -131,7 +121,7 @@ template <typename T>
 inline void tml::MemoryUtilEngine::Release(T **pp)
 {
 	switch (this->allocator_type_) {
-	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::NEW: {
+	case tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NEW: {
 		BYTE *ms_p = nullptr;
 
 		ms_p = this->new_allocator_->ReleaseDestructorPart<T>(pp);
@@ -142,7 +132,7 @@ inline void tml::MemoryUtilEngine::Release(T **pp)
 
 		break;
 	}
-	case tml::MemoryUtilEngineConstantUtil::ALLOCATOR_TYPE::DLMALLOC: {
+	case tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC: {
 		BYTE *ms_p = nullptr;
 
 		ms_p = this->dlmalloc_allocator_->ReleaseDestructorPart<T>(pp);

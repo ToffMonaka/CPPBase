@@ -160,3 +160,59 @@ inline void tml::MemoryUtil::CopySame(T *dst_p, const T *src_p, const size_t cnt
 
 	return;
 }
+
+
+namespace tml {
+template <class _Ty>
+struct default_delete
+{
+	constexpr default_delete() noexcept = default;
+
+	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
+	default_delete(const default_delete<_Ty2> &) noexcept {};
+
+	void operator()(_Ty *_Ptr) const noexcept {
+		auto p = _Ptr;
+
+		tml::MemoryUtil::Release(&p);
+
+		return;
+	};
+};
+
+template <class _Ty>
+struct default_delete<_Ty[]>
+{
+	constexpr default_delete() noexcept = default;
+
+	template <class _Uty, std::enable_if_t<std::is_convertible_v<_Uty (*)[], _Ty (*)[]>, int> = 0>
+	default_delete(const default_delete<_Uty[]> &) noexcept {};
+
+	template <class _Uty, std::enable_if_t<std::is_convertible_v<_Uty (*)[], _Ty (*)[]>, int> = 0>
+	void operator()(_Uty *_Ptr) const noexcept {
+		auto p = _Ptr;
+
+		tml::MemoryUtil::Release(&p);
+
+		return;
+	};
+};
+
+template <typename T>
+using unique_ptr = std::unique_ptr<T, tml::default_delete<T>>;
+
+template <class _Ty, class... _Types, std::enable_if_t<!std::is_array_v<_Ty>, int> = 0>
+_NODISCARD tml::unique_ptr<_Ty> make_unique(_Types&&... _Args) {
+	return (tml::unique_ptr<_Ty>(tml::MemoryUtil::Get<_Ty>(1U)));
+};
+
+template <class _Ty, std::enable_if_t<std::is_array_v<_Ty> && std::extent_v<_Ty> == 0, int> = 0>
+_NODISCARD tml::unique_ptr<_Ty> make_unique(size_t _Size) {
+    using _Elem = std::remove_extent_t<_Ty>;
+
+	return (tml::unique_ptr<_Ty>(tml::MemoryUtil::Get<_Elem>(_Size)));
+};
+
+template <class _Ty, class... _Types, std::enable_if_t<std::extent_v<_Ty> != 0, int> = 0>
+void make_unique(_Types&&...) = delete;
+}

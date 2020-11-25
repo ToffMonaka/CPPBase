@@ -8,6 +8,8 @@
 #include "../../lib/tml/memory/MemoryUtil.h"
 #include "../../lib/tml/string/StringUtil.h"
 #include "../../lib/tml/time/TimeUtil.h"
+#include "../../lib/tml/time/Clock.h"
+#include "../../lib/tml/time/Date.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
