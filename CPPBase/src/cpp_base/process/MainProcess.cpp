@@ -6,6 +6,8 @@
 
 #include "MainProcess.h"
 #include "../../lib/tml/memory/MemoryUtil.h"
+#include "../../lib/tml/memory/DynamicBuffer.h"
+#include "../../lib/tml/memory/StaticBuffer.h"
 #include "../../lib/tml/string/StringUtil.h"
 #include "../../lib/tml/time/TimeUtil.h"
 #include "../../lib/tml/time/Clock.h"
@@ -145,6 +147,10 @@ INT cpp_base::MainProcess::Start(void)
 
 		txt_file.Write();
 		*/
+
+		tml::DynamicBuffer buf1(128U);
+
+		tml::StaticBuffer<256U> buf2;
 
 		int a = 0;
 	}

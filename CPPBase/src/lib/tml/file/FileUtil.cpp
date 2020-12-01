@@ -9,6 +9,8 @@
 
 tml::ThreadFix tml::FileUtil::th_fix_;
 std::unique_ptr<tml::FileUtilEngine> tml::FileUtil::engine_;
+tml::MutexThreadLock tml::FileUtil::file_th_lock_;
+tml::MutexThreadLock tml::FileUtil::dir_th_lock_;
 
 
 /**
