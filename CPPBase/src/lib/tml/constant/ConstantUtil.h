@@ -25,8 +25,26 @@ using TIME_MICRO = std::chrono::microseconds;
 using TIME_NANO = std::chrono::nanoseconds;
 using TIME_REAL = std::chrono::duration<double>;
 
+template <typename T>
+void SetValue(T *, const T);
 template <typename T1, typename T2>
 T1 CastTime(const T2 &time);
+}
+
+
+/**
+ * @brief SetValueä÷êî
+ * @param dst_val (dst_value)
+ * @param val (value)
+ */
+template <typename T>
+inline void tml::SetValue(T *dst_val, const T val)
+{
+	if (dst_val != nullptr) {
+		(*dst_val) = val;
+	}
+
+	return;
 }
 
 

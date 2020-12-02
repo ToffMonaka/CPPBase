@@ -91,15 +91,14 @@ void tml::Date::SetTime(const tml::TIME_SECONDS &time)
  */
 const CHAR *tml::Date::GetString(CHAR *dst_str, const size_t dst_str_size) const
 {
-	if (dst_str == nullptr) {
+	if ((dst_str == nullptr)
+	|| (dst_str_size <= 0U)) {
 		return (dst_str);
 	}
 
-	if (dst_str_size < (tml::ConstantUtil::DATE::STRING_LENGTH + 1U)) {
-		if (dst_str_size > 0U) {
-			dst_str[0] = 0;
-		}
+	dst_str[0] = 0;
 
+	if (dst_str_size < (tml::ConstantUtil::DATE::STRING_LENGTH + 1U)) {
 		return (dst_str);
 	}
 
@@ -115,15 +114,14 @@ const CHAR *tml::Date::GetString(CHAR *dst_str, const size_t dst_str_size) const
  */
 const WCHAR *tml::Date::GetString(WCHAR *dst_str, const size_t dst_str_size) const
 {
-	if (dst_str == nullptr) {
+	if ((dst_str == nullptr)
+	|| (dst_str_size <= 0U)) {
 		return (dst_str);
 	}
 
-	if (dst_str_size < ((tml::ConstantUtil::DATE::STRING_LENGTH + 1U) << 1)) {
-		if (dst_str_size > 0U) {
-			dst_str[0] = 0;
-		}
+	dst_str[0] = 0;
 
+	if (dst_str_size < ((tml::ConstantUtil::DATE::STRING_LENGTH + 1U) << 1)) {
 		return (dst_str);
 	}
 
