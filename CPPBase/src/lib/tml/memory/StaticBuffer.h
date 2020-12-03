@@ -23,6 +23,10 @@ private:
 	BYTE ary_[N];
 	size_t size_;
 	size_t len_;
+	size_t read_index_;
+	INT read_res_;
+	size_t write_index_;
+	INT write_res_;
 
 private:
 	void Release(void);
@@ -38,6 +42,62 @@ public:
 	size_t GetSize(void) const;
 	size_t GetLength(void) const;
 	void SetLength(const size_t);
+	size_t GetReadIndex(void) const;
+	void SetReadIndex(const size_t);
+	void AddReadIndex(const INT);
+	INT GetReadResult(void) const;
+	void InitReadResult(void);
+	size_t GetWriteIndex(void) const;
+	void SetWriteIndex(const size_t);
+	void AddWriteIndex(const INT);
+	INT GetWriteResult(void) const;
+	void InitWriteResult(void);
+	CHAR ReadCHAR(void);
+	UCHAR ReadUCHAR(void);
+	SHORT ReadSHORT_B(void);
+	SHORT ReadSHORT_L(void);
+	USHORT ReadUSHORT_B(void);
+	USHORT ReadUSHORT_L(void);
+	INT ReadINT_B(void);
+	INT ReadINT_L(void);
+	UINT ReadUINT_B(void);
+	UINT ReadUINT_L(void);
+	LONGLONG ReadLONGLONG_B(void);
+	LONGLONG ReadLONGLONG_L(void);
+	ULONGLONG ReadULONGLONG_B(void);
+	ULONGLONG ReadULONGLONG_L(void);
+	FLOAT ReadFLOAT_B(void);
+	FLOAT ReadFLOAT_L(void);
+	DOUBLE ReadDOUBLE_B(void);
+	DOUBLE ReadDOUBLE_L(void);
+	BYTE *ReadArray(BYTE *, const size_t, const size_t);
+	CHAR *ReadString_B(CHAR *, const size_t);
+	CHAR *ReadString_L(CHAR *, const size_t);
+	WCHAR *ReadString_B(WCHAR *, const size_t);
+	WCHAR *ReadString_L(WCHAR *, const size_t);
+	void WriteCHAR(const CHAR);
+	void WriteUCHAR(const UCHAR);
+	void WriteSHORT_B(const SHORT);
+	void WriteSHORT_L(const SHORT);
+	void WriteUSHORT_B(const USHORT);
+	void WriteUSHORT_L(const USHORT);
+	void WriteINT_B(const INT);
+	void WriteINT_L(const INT);
+	void WriteUINT_B(const UINT);
+	void WriteUINT_L(const UINT);
+	void WriteLONGLONG_B(const LONGLONG);
+	void WriteLONGLONG_L(const LONGLONG);
+	void WriteULONGLONG_B(const ULONGLONG);
+	void WriteULONGLONG_L(const ULONGLONG);
+	void WriteFLOAT_B(const FLOAT);
+	void WriteFLOAT_L(const FLOAT);
+	void WriteDOUBLE_B(const DOUBLE);
+	void WriteDOUBLE_L(const DOUBLE);
+	void WriteArray(const BYTE *, const size_t, const size_t);
+	void WriteString_B(const CHAR *);
+	void WriteString_L(const CHAR *);
+	void WriteString_B(const WCHAR *);
+	void WriteString_L(const WCHAR *);
 };
 }
 
@@ -48,7 +108,11 @@ public:
 template <size_t N>
 inline tml::StaticBuffer<N>::StaticBuffer() :
 	size_(N),
-	len_(0U)
+	len_(0U),
+	read_index_(0U),
+	read_res_(0),
+	write_index_(0U),
+	write_res_(0)
 {
 	return;
 }
@@ -86,6 +150,10 @@ inline void tml::StaticBuffer<N>::Init(void)
 
 	this->size_ = N;
 	this->len_ = 0U;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = 0U;
+	this->write_res_ = 0;
 
 	return;
 }
@@ -116,6 +184,10 @@ inline void tml::StaticBuffer<N>::SetArray(const BYTE *ary, const size_t len)
 
 	tml::MemoryUtil::Copy(this->ary_, ary, len);
 	this->len_ = len;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = len;
+	this->write_res_ = 0;
 
 	return;
 }
@@ -151,6 +223,720 @@ template <size_t N>
 void tml::StaticBuffer<N>::SetLength(const size_t len)
 {
 	this->len_ = std::min(len, this->size_);
+	this->read_index_ = std::min(this->read_index_, this->len_);
+	this->write_index_ = std::min(this->write_index_, this->len_);
+
+	return;
+}
+
+
+/**
+ * @brief GetReadIndexä÷êî
+ * @return read_index (read_index)
+ */
+template <size_t N>
+inline size_t tml::StaticBuffer<N>::GetReadIndex(void) const
+{
+	return (this->read_index_);
+}
+
+
+/**
+ * @brief SetReadIndexä÷êî
+ * @param index (index)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::SetReadIndex(const size_t index)
+{
+	tml::MemoryUtil::SetBufferIndex(this->size_, this->read_index_, index, &this->read_res_);
+
+	return;
+}
+
+
+/**
+ * @brief AddReadIndexä÷êî
+ * @param add_index (add_index)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::AddReadIndex(const INT add_index)
+{
+	tml::MemoryUtil::AddBufferIndex(this->size_, this->read_index_, add_index, &this->read_res_);
+
+	return;
+}
+
+
+/**
+ * @brief GetReadResultä÷êî
+ * @return read_res (read_result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+template <size_t N>
+inline INT tml::StaticBuffer<N>::GetReadResult(void) const
+{
+	return (this->read_res_);
+}
+
+
+/**
+ * @brief InitReadResultä÷êî
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::InitReadResult(void)
+{
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+
+	return;
+}
+
+
+/**
+ * @brief GetWriteIndexä÷êî
+ * @return write_index (write_index)
+ */
+template <size_t N>
+inline size_t tml::StaticBuffer<N>::GetWriteIndex(void) const
+{
+	return (this->write_index_);
+}
+
+
+/**
+ * @brief SetWriteIndexä÷êî
+ * @param index (index)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::SetWriteIndex(const size_t index)
+{
+	tml::MemoryUtil::SetBufferIndex(this->size_, this->write_index_, index, &this->write_res_);
+
+	return;
+}
+
+
+/**
+ * @brief AddWriteIndexä÷êî
+ * @param add_index (add_index)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::AddWriteIndex(const INT add_index)
+{
+	tml::MemoryUtil::AddBufferIndex(this->size_, this->write_index_, add_index, &this->write_res_);
+
+	return;
+}
+
+
+/**
+ * @brief GetWriteResultä÷êî
+ * @return write_res (write_result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+template <size_t N>
+inline INT tml::StaticBuffer<N>::GetWriteResult(void) const
+{
+	return (this->write_res_);
+}
+
+
+/**
+ * @brief InitWriteResultä÷êî
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::InitWriteResult(void)
+{
+	this->write_index_ = 0U;
+	this->write_res_ = 0;
+
+	return;
+}
+
+
+/**
+ * @brief ReadCHARä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline CHAR tml::StaticBuffer<N>::ReadCHAR(void)
+{
+	return (tml::MemoryUtil::ReadBufferCHAR(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadUCHARä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline UCHAR tml::StaticBuffer<N>::ReadUCHAR(void)
+{
+	return (tml::MemoryUtil::ReadBufferUCHAR(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadSHORT_Bä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline SHORT tml::StaticBuffer<N>::ReadSHORT_B(void)
+{
+	return (tml::MemoryUtil::ReadBufferSHORT_B(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadSHORT_Lä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline SHORT tml::StaticBuffer<N>::ReadSHORT_L(void)
+{
+	return (tml::MemoryUtil::ReadBufferSHORT_L(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadUSHORT_Bä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline USHORT tml::StaticBuffer<N>::ReadUSHORT_B(void)
+{
+	return (tml::MemoryUtil::ReadBufferUSHORT_B(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadUSHORT_Lä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline USHORT tml::StaticBuffer<N>::ReadUSHORT_L(void)
+{
+	return (tml::MemoryUtil::ReadBufferUSHORT_L(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadINT_Bä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline INT tml::StaticBuffer<N>::ReadINT_B(void)
+{
+	return (tml::MemoryUtil::ReadBufferINT_B(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadINT_Lä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline INT tml::StaticBuffer<N>::ReadINT_L(void)
+{
+	return (tml::MemoryUtil::ReadBufferINT_L(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadUINT_Bä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline UINT tml::StaticBuffer<N>::ReadUINT_B(void)
+{
+	return (tml::MemoryUtil::ReadBufferUINT_B(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadUINT_Lä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline UINT tml::StaticBuffer<N>::ReadUINT_L(void)
+{
+	return (tml::MemoryUtil::ReadBufferUINT_L(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadLONGLONG_Bä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline LONGLONG tml::StaticBuffer<N>::ReadLONGLONG_B(void)
+{
+	return (tml::MemoryUtil::ReadBufferLONGLONG_B(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadLONGLONG_Lä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline LONGLONG tml::StaticBuffer<N>::ReadLONGLONG_L(void)
+{
+	return (tml::MemoryUtil::ReadBufferLONGLONG_L(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadULONGLONG_Bä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline ULONGLONG tml::StaticBuffer<N>::ReadULONGLONG_B(void)
+{
+	return (tml::MemoryUtil::ReadBufferULONGLONG_B(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadULONGLONG_Lä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline ULONGLONG tml::StaticBuffer<N>::ReadULONGLONG_L(void)
+{
+	return (tml::MemoryUtil::ReadBufferULONGLONG_L(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadFLOAT_Bä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline FLOAT tml::StaticBuffer<N>::ReadFLOAT_B(void)
+{
+	return (tml::MemoryUtil::ReadBufferFLOAT_B(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadFLOAT_Lä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline FLOAT tml::StaticBuffer<N>::ReadFLOAT_L(void)
+{
+	return (tml::MemoryUtil::ReadBufferFLOAT_L(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadDOUBLE_Bä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline DOUBLE tml::StaticBuffer<N>::ReadDOUBLE_B(void)
+{
+	return (tml::MemoryUtil::ReadBufferDOUBLE_B(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadDOUBLE_Lä÷êî
+ * @return val (value)
+ */
+template <size_t N>
+inline DOUBLE tml::StaticBuffer<N>::ReadDOUBLE_L(void)
+{
+	return (tml::MemoryUtil::ReadBufferDOUBLE_L(this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadArrayä÷êî
+ * @param dst_ary (dst_array)
+ * @param dst_ary_size (dst_array_size)
+ * @param read_size (read_size)
+ * @return dst_ary (dst_array)
+ */
+template <size_t N>
+inline BYTE *tml::StaticBuffer<N>::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const size_t read_size)
+{
+	return (tml::MemoryUtil::ReadBufferArray(dst_ary, dst_ary_size, this->ary_, this->len_, this->read_index_, read_size, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadString_Bä÷êî
+ * @param dst_str (dst_string)
+ * @param dst_str_size (dst_string_size)
+ * @return dst_str (dst_string)
+ */
+template <size_t N>
+inline CHAR *tml::StaticBuffer<N>::ReadString_B(CHAR *dst_str, const size_t dst_str_size)
+{
+	return (tml::MemoryUtil::ReadBufferString_B(dst_str, dst_str_size, this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadString_Lä÷êî
+ * @param dst_str (dst_string)
+ * @param dst_str_size (dst_string_size)
+ * @return dst_str (dst_string)
+ */
+template <size_t N>
+inline CHAR *tml::StaticBuffer<N>::ReadString_L(CHAR *dst_str, const size_t dst_str_size)
+{
+	return (tml::MemoryUtil::ReadBufferString_L(dst_str, dst_str_size, this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadString_Bä÷êî
+ * @param dst_str (dst_string)
+ * @param dst_str_size (dst_string_size)
+ * @return dst_str (dst_string)
+ */
+template <size_t N>
+inline WCHAR *tml::StaticBuffer<N>::ReadString_B(WCHAR *dst_str, const size_t dst_str_size)
+{
+	return (tml::MemoryUtil::ReadBufferString_B(dst_str, dst_str_size, this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief ReadString_Lä÷êî
+ * @param dst_str (dst_string)
+ * @param dst_str_size (dst_string_size)
+ * @return dst_str (dst_string)
+ */
+template <size_t N>
+inline WCHAR *tml::StaticBuffer<N>::ReadString_L(WCHAR *dst_str, const size_t dst_str_size)
+{
+	return (tml::MemoryUtil::ReadBufferString_L(dst_str, dst_str_size, this->ary_, this->len_, this->read_index_, &this->read_res_));
+}
+
+
+/**
+ * @brief WriteCHARä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteCHAR(const CHAR val)
+{
+	tml::MemoryUtil::WriteBufferCHAR(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteUCHARä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteUCHAR(const UCHAR val)
+{
+	tml::MemoryUtil::WriteBufferUCHAR(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteSHORT_Bä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteSHORT_B(const SHORT val)
+{
+	tml::MemoryUtil::WriteBufferSHORT_B(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteSHORT_Lä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteSHORT_L(const SHORT val)
+{
+	tml::MemoryUtil::WriteBufferSHORT_L(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteUSHORT_Bä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteUSHORT_B(const USHORT val)
+{
+	tml::MemoryUtil::WriteBufferUSHORT_B(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteUSHORT_Lä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteUSHORT_L(const USHORT val)
+{
+	tml::MemoryUtil::WriteBufferUSHORT_L(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteINT_Bä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteINT_B(const INT val)
+{
+	tml::MemoryUtil::WriteBufferINT_B(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteINT_Lä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteINT_L(const INT val)
+{
+	tml::MemoryUtil::WriteBufferINT_L(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteUINT_Bä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteUINT_B(const UINT val)
+{
+	tml::MemoryUtil::WriteBufferUINT_B(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteUINT_Lä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteUINT_L(const UINT val)
+{
+	tml::MemoryUtil::WriteBufferUINT_L(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteLONGLONG_Bä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteLONGLONG_B(const LONGLONG val)
+{
+	tml::MemoryUtil::WriteBufferLONGLONG_B(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteLONGLONG_Lä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteLONGLONG_L(const LONGLONG val)
+{
+	tml::MemoryUtil::WriteBufferLONGLONG_L(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteULONGLONG_Bä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteULONGLONG_B(const ULONGLONG val)
+{
+	tml::MemoryUtil::WriteBufferULONGLONG_B(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteULONGLONG_Lä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteULONGLONG_L(const ULONGLONG val)
+{
+	tml::MemoryUtil::WriteBufferULONGLONG_L(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteFLOAT_Bä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteFLOAT_B(const FLOAT val)
+{
+	tml::MemoryUtil::WriteBufferFLOAT_B(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteFLOAT_Lä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteFLOAT_L(const FLOAT val)
+{
+	tml::MemoryUtil::WriteBufferFLOAT_L(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteDOUBLE_Bä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteDOUBLE_B(const DOUBLE val)
+{
+	tml::MemoryUtil::WriteBufferDOUBLE_B(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteDOUBLE_Lä÷êî
+ * @param val (value)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteDOUBLE_L(const DOUBLE val)
+{
+	tml::MemoryUtil::WriteBufferDOUBLE_L(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteArrayä÷êî
+ * @param ary (array)
+ * @param ary_size (array_size)
+ * @param write_size (write_size)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteArray(const BYTE *ary, const size_t ary_size, const size_t write_size)
+{
+	tml::MemoryUtil::WriteBufferArray(this->ary_, this->size_, this->write_index_, ary, ary_size, write_size, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteString_Bä÷êî
+ * @param str (string)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteString_B(const CHAR *str)
+{
+	tml::MemoryUtil::WriteBufferString_B(this->ary_, this->size_, this->write_index_, str, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteString_Lä÷êî
+ * @param str (string)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteString_L(const CHAR *str)
+{
+	tml::MemoryUtil::WriteBufferString_L(this->ary_, this->size_, this->write_index_, str, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteString_Bä÷êî
+ * @param str (string)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteString_B(const WCHAR *str)
+{
+	tml::MemoryUtil::WriteBufferString_B(this->ary_, this->size_, this->write_index_, str, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
+
+	return;
+}
+
+
+/**
+ * @brief WriteString_Lä÷êî
+ * @param str (string)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::WriteString_L(const WCHAR *str)
+{
+	tml::MemoryUtil::WriteBufferString_L(this->ary_, this->size_, this->write_index_, str, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
 
 	return;
 }

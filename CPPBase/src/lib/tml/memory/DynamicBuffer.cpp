@@ -5,7 +5,6 @@
 
 
 #include "DynamicBuffer.h"
-#include "MemoryUtil.h"
 
 
 /**
@@ -14,7 +13,11 @@
 tml::DynamicBuffer::DynamicBuffer() :
 	ary_(nullptr),
 	size_(0U),
-	len_(0U)
+	len_(0U),
+	read_index_(0U),
+	read_res_(0),
+	write_index_(0U),
+	write_res_(0)
 {
 	return;
 }
@@ -29,6 +32,10 @@ tml::DynamicBuffer::DynamicBuffer(const size_t size)
 	this->ary_ = tml::MemoryUtil::Get<BYTE>(size);
 	this->size_ = size;
 	this->len_ = 0U;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = 0U;
+	this->write_res_ = 0;
 
 	return;
 }
@@ -65,6 +72,10 @@ void tml::DynamicBuffer::Init(void)
 
 	this->size_ = 0U;
 	this->len_ = 0U;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = 0U;
+	this->write_res_ = 0;
 
 	return;
 }
@@ -83,6 +94,10 @@ void tml::DynamicBuffer::SetArray(const BYTE *ary, const size_t len)
 
 	tml::MemoryUtil::Copy(this->ary_, ary, len);
 	this->len_ = len;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = len;
+	this->write_res_ = 0;
 
 	return;
 }
@@ -107,7 +122,9 @@ void tml::DynamicBuffer::SetSize(const size_t size, const bool keep_flg)
 			this->size_ = size;
 		}
 
-		this->len_ = std::min(this->len_, size);
+		this->len_ = std::min(this->len_, this->size_);
+		this->read_index_ = std::min(this->read_index_, this->len_);
+		this->write_index_ = std::min(this->write_index_, this->len_);
 	} else {
 		if (size != this->size_) {
 			tml::MemoryUtil::Release(&this->ary_);
@@ -117,19 +134,11 @@ void tml::DynamicBuffer::SetSize(const size_t size, const bool keep_flg)
 		}
 
 		this->len_ = 0U;
+		this->read_index_ = 0U;
+		this->read_res_ = 0;
+		this->write_index_ = 0U;
+		this->write_res_ = 0;
 	}
-
-	return;
-}
-
-
-/**
- * @brief SetLengthŠÖ”
- * @param len (length)
- */
-void tml::DynamicBuffer::SetLength(const size_t len)
-{
-	this->len_ = std::min(len, this->size_);
 
 	return;
 }

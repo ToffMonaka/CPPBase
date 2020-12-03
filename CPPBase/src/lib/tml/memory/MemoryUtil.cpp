@@ -49,7 +49,68 @@ INT tml::MemoryUtil::Create(std::unique_ptr<tml::MemoryUtilEngine> &engine)
 
 
 /**
- * @brief ReadCHAR関数
+ * @brief SetBufferIndex関数
+ *
+ * Create関数不要
+ *
+ * @param buf_size (buffer_size)
+ * @param buf_index (buffer_index)
+ * @param index (index)
+ * @param dst_res (dst_result)<br>
+ * NULLP=指定無し,0未満=失敗
+ */
+void tml::MemoryUtil::SetBufferIndex(const size_t buf_size, size_t &buf_index, const size_t index, INT *dst_res)
+{
+	if (tml::CheckResult(dst_res)) {
+		return;
+	}
+
+	if (index > buf_size) {
+		tml::SetResult(dst_res, -1);
+
+		return;
+	}
+
+	buf_index = index;
+
+	return;
+}
+
+
+/**
+ * @brief AddBufferIndex関数
+ *
+ * Create関数不要
+ *
+ * @param buf_size (buffer_size)
+ * @param buf_index (buffer_index)
+ * @param add_index (add_index)
+ * @param dst_res (dst_result)<br>
+ * NULLP=指定無し,0未満=失敗
+ */
+void tml::MemoryUtil::AddBufferIndex(const size_t buf_size, size_t &buf_index, const INT add_index, INT *dst_res)
+{
+	if (tml::CheckResult(dst_res)) {
+		return;
+	}
+
+	LONGLONG tmp_index = static_cast<LONGLONG>(buf_index) + add_index;
+
+	if ((tmp_index < 0LL)
+	|| (tmp_index > static_cast<LONGLONG>(buf_size))) {
+		tml::SetResult(dst_res, -1);
+
+		return;
+	}
+
+	buf_index = static_cast<size_t>(tmp_index);
+
+	return;
+}
+
+
+/**
+ * @brief ReadBufferCHAR関数
  *
  * Create関数不要
  *
@@ -60,19 +121,17 @@ INT tml::MemoryUtil::Create(std::unique_ptr<tml::MemoryUtilEngine> &engine)
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-CHAR tml::MemoryUtil::ReadCHAR(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+CHAR tml::MemoryUtil::ReadBufferCHAR(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	CHAR val = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(CHAR)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -84,7 +143,7 @@ CHAR tml::MemoryUtil::ReadCHAR(const BYTE *buf, const size_t buf_size, size_t &b
 
 
 /**
- * @brief ReadUCHAR関数
+ * @brief ReadBufferUCHAR関数
  *
  * Create関数不要
  *
@@ -95,19 +154,17 @@ CHAR tml::MemoryUtil::ReadCHAR(const BYTE *buf, const size_t buf_size, size_t &b
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-UCHAR tml::MemoryUtil::ReadUCHAR(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+UCHAR tml::MemoryUtil::ReadBufferUCHAR(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	UCHAR val = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(UCHAR)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -119,7 +176,7 @@ UCHAR tml::MemoryUtil::ReadUCHAR(const BYTE *buf, const size_t buf_size, size_t 
 
 
 /**
- * @brief ReadSHORT_B関数
+ * @brief ReadBufferSHORT_B関数
  *
  * Create関数不要
  *
@@ -130,19 +187,17 @@ UCHAR tml::MemoryUtil::ReadUCHAR(const BYTE *buf, const size_t buf_size, size_t 
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-SHORT tml::MemoryUtil::ReadSHORT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+SHORT tml::MemoryUtil::ReadBufferSHORT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	SHORT val = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(SHORT)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -155,7 +210,7 @@ SHORT tml::MemoryUtil::ReadSHORT_B(const BYTE *buf, const size_t buf_size, size_
 
 
 /**
- * @brief ReadSHORT_L関数
+ * @brief ReadBufferSHORT_L関数
  *
  * Create関数不要
  *
@@ -166,19 +221,17 @@ SHORT tml::MemoryUtil::ReadSHORT_B(const BYTE *buf, const size_t buf_size, size_
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-SHORT tml::MemoryUtil::ReadSHORT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+SHORT tml::MemoryUtil::ReadBufferSHORT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	SHORT val = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(SHORT)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -191,7 +244,7 @@ SHORT tml::MemoryUtil::ReadSHORT_L(const BYTE *buf, const size_t buf_size, size_
 
 
 /**
- * @brief ReadUSHORT_B関数
+ * @brief ReadBufferUSHORT_B関数
  *
  * Create関数不要
  *
@@ -202,19 +255,17 @@ SHORT tml::MemoryUtil::ReadSHORT_L(const BYTE *buf, const size_t buf_size, size_
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-USHORT tml::MemoryUtil::ReadUSHORT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+USHORT tml::MemoryUtil::ReadBufferUSHORT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	USHORT val = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(USHORT)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -227,7 +278,7 @@ USHORT tml::MemoryUtil::ReadUSHORT_B(const BYTE *buf, const size_t buf_size, siz
 
 
 /**
- * @brief ReadUSHORT_L関数
+ * @brief ReadBufferUSHORT_L関数
  *
  * Create関数不要
  *
@@ -238,19 +289,17 @@ USHORT tml::MemoryUtil::ReadUSHORT_B(const BYTE *buf, const size_t buf_size, siz
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-USHORT tml::MemoryUtil::ReadUSHORT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+USHORT tml::MemoryUtil::ReadBufferUSHORT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	USHORT val = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(USHORT)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -263,7 +312,7 @@ USHORT tml::MemoryUtil::ReadUSHORT_L(const BYTE *buf, const size_t buf_size, siz
 
 
 /**
- * @brief ReadINT_B関数
+ * @brief ReadBufferINT_B関数
  *
  * Create関数不要
  *
@@ -274,19 +323,17 @@ USHORT tml::MemoryUtil::ReadUSHORT_L(const BYTE *buf, const size_t buf_size, siz
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-INT tml::MemoryUtil::ReadINT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+INT tml::MemoryUtil::ReadBufferINT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	INT val = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(INT)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -301,7 +348,7 @@ INT tml::MemoryUtil::ReadINT_B(const BYTE *buf, const size_t buf_size, size_t &b
 
 
 /**
- * @brief ReadINT_L関数
+ * @brief ReadBufferINT_L関数
  *
  * Create関数不要
  *
@@ -312,19 +359,17 @@ INT tml::MemoryUtil::ReadINT_B(const BYTE *buf, const size_t buf_size, size_t &b
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-INT tml::MemoryUtil::ReadINT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+INT tml::MemoryUtil::ReadBufferINT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	INT val = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(INT)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -339,7 +384,7 @@ INT tml::MemoryUtil::ReadINT_L(const BYTE *buf, const size_t buf_size, size_t &b
 
 
 /**
- * @brief ReadUINT_B関数
+ * @brief ReadBufferUINT_B関数
  *
  * Create関数不要
  *
@@ -350,19 +395,17 @@ INT tml::MemoryUtil::ReadINT_L(const BYTE *buf, const size_t buf_size, size_t &b
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-UINT tml::MemoryUtil::ReadUINT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+UINT tml::MemoryUtil::ReadBufferUINT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	UINT val = 0U;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(UINT)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -377,7 +420,7 @@ UINT tml::MemoryUtil::ReadUINT_B(const BYTE *buf, const size_t buf_size, size_t 
 
 
 /**
- * @brief ReadUINT_L関数
+ * @brief ReadBufferUINT_L関数
  *
  * Create関数不要
  *
@@ -388,19 +431,17 @@ UINT tml::MemoryUtil::ReadUINT_B(const BYTE *buf, const size_t buf_size, size_t 
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-UINT tml::MemoryUtil::ReadUINT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+UINT tml::MemoryUtil::ReadBufferUINT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	UINT val = 0U;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(UINT)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -415,7 +456,7 @@ UINT tml::MemoryUtil::ReadUINT_L(const BYTE *buf, const size_t buf_size, size_t 
 
 
 /**
- * @brief ReadLONGLONG_B関数
+ * @brief ReadBufferLONGLONG_B関数
  *
  * Create関数不要
  *
@@ -426,19 +467,17 @@ UINT tml::MemoryUtil::ReadUINT_L(const BYTE *buf, const size_t buf_size, size_t 
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-LONGLONG tml::MemoryUtil::ReadLONGLONG_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+LONGLONG tml::MemoryUtil::ReadBufferLONGLONG_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	LONGLONG val = 0LL;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(LONGLONG)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -457,7 +496,7 @@ LONGLONG tml::MemoryUtil::ReadLONGLONG_B(const BYTE *buf, const size_t buf_size,
 
 
 /**
- * @brief ReadLONGLONG_L関数
+ * @brief ReadBufferLONGLONG_L関数
  *
  * Create関数不要
  *
@@ -468,19 +507,17 @@ LONGLONG tml::MemoryUtil::ReadLONGLONG_B(const BYTE *buf, const size_t buf_size,
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-LONGLONG tml::MemoryUtil::ReadLONGLONG_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+LONGLONG tml::MemoryUtil::ReadBufferLONGLONG_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	LONGLONG val = 0LL;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(LONGLONG)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -499,7 +536,7 @@ LONGLONG tml::MemoryUtil::ReadLONGLONG_L(const BYTE *buf, const size_t buf_size,
 
 
 /**
- * @brief ReadULONGLONG_B関数
+ * @brief ReadBufferULONGLONG_B関数
  *
  * Create関数不要
  *
@@ -510,19 +547,17 @@ LONGLONG tml::MemoryUtil::ReadLONGLONG_L(const BYTE *buf, const size_t buf_size,
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-ULONGLONG tml::MemoryUtil::ReadULONGLONG_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+ULONGLONG tml::MemoryUtil::ReadBufferULONGLONG_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	ULONGLONG val = 0ULL;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(ULONGLONG)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -541,7 +576,7 @@ ULONGLONG tml::MemoryUtil::ReadULONGLONG_B(const BYTE *buf, const size_t buf_siz
 
 
 /**
- * @brief ReadULONGLONG_L関数
+ * @brief ReadBufferULONGLONG_L関数
  *
  * Create関数不要
  *
@@ -552,19 +587,17 @@ ULONGLONG tml::MemoryUtil::ReadULONGLONG_B(const BYTE *buf, const size_t buf_siz
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-ULONGLONG tml::MemoryUtil::ReadULONGLONG_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+ULONGLONG tml::MemoryUtil::ReadBufferULONGLONG_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	ULONGLONG val = 0ULL;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(ULONGLONG)) > buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (val);
 	}
@@ -583,7 +616,7 @@ ULONGLONG tml::MemoryUtil::ReadULONGLONG_L(const BYTE *buf, const size_t buf_siz
 
 
 /**
- * @brief ReadFLOAT_B関数
+ * @brief ReadBufferFLOAT_B関数
  *
  * Create関数不要
  *
@@ -594,15 +627,13 @@ ULONGLONG tml::MemoryUtil::ReadULONGLONG_L(const BYTE *buf, const size_t buf_siz
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-FLOAT tml::MemoryUtil::ReadFLOAT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+FLOAT tml::MemoryUtil::ReadBufferFLOAT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	FLOAT val = 0.0f;
-	UINT tmp_val = tml::MemoryUtil::ReadUINT_B(buf, buf_size, buf_index, dst_res);
+	UINT tmp_val = tml::MemoryUtil::ReadBufferUINT_B(buf, buf_size, buf_index, dst_res);
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	tml::MemoryUtil::Copy(&val, reinterpret_cast<FLOAT *>(&tmp_val), 1U);
@@ -616,7 +647,7 @@ FLOAT tml::MemoryUtil::ReadFLOAT_B(const BYTE *buf, const size_t buf_size, size_
 
 
 /**
- * @brief ReadFLOAT_L関数
+ * @brief ReadBufferFLOAT_L関数
  *
  * Create関数不要
  *
@@ -627,15 +658,13 @@ FLOAT tml::MemoryUtil::ReadFLOAT_B(const BYTE *buf, const size_t buf_size, size_
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-FLOAT tml::MemoryUtil::ReadFLOAT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+FLOAT tml::MemoryUtil::ReadBufferFLOAT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	FLOAT val = 0.0f;
-	UINT tmp_val = tml::MemoryUtil::ReadUINT_L(buf, buf_size, buf_index, dst_res);
+	UINT tmp_val = tml::MemoryUtil::ReadBufferUINT_L(buf, buf_size, buf_index, dst_res);
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	tml::MemoryUtil::Copy(&val, reinterpret_cast<FLOAT *>(&tmp_val), 1U);
@@ -649,7 +678,7 @@ FLOAT tml::MemoryUtil::ReadFLOAT_L(const BYTE *buf, const size_t buf_size, size_
 
 
 /**
- * @brief ReadDOUBLE_B関数
+ * @brief ReadBufferDOUBLE_B関数
  *
  * Create関数不要
  *
@@ -660,15 +689,13 @@ FLOAT tml::MemoryUtil::ReadFLOAT_L(const BYTE *buf, const size_t buf_size, size_
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-DOUBLE tml::MemoryUtil::ReadDOUBLE_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+DOUBLE tml::MemoryUtil::ReadBufferDOUBLE_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	DOUBLE val = 0.0;
-	ULONGLONG tmp_val = tml::MemoryUtil::ReadULONGLONG_B(buf, buf_size, buf_index, dst_res);
+	ULONGLONG tmp_val = tml::MemoryUtil::ReadBufferULONGLONG_B(buf, buf_size, buf_index, dst_res);
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	tml::MemoryUtil::Copy(&val, reinterpret_cast<DOUBLE *>(&tmp_val), 1U);
@@ -682,7 +709,7 @@ DOUBLE tml::MemoryUtil::ReadDOUBLE_B(const BYTE *buf, const size_t buf_size, siz
 
 
 /**
- * @brief ReadDOUBLE_L関数
+ * @brief ReadBufferDOUBLE_L関数
  *
  * Create関数不要
  *
@@ -693,15 +720,13 @@ DOUBLE tml::MemoryUtil::ReadDOUBLE_B(const BYTE *buf, const size_t buf_size, siz
  * NULLP=指定無し,0未満=失敗
  * @return val (value)
  */
-DOUBLE tml::MemoryUtil::ReadDOUBLE_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+DOUBLE tml::MemoryUtil::ReadBufferDOUBLE_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
 	DOUBLE val = 0.0;
-	ULONGLONG tmp_val = tml::MemoryUtil::ReadULONGLONG_L(buf, buf_size, buf_index, dst_res);
+	ULONGLONG tmp_val = tml::MemoryUtil::ReadBufferULONGLONG_L(buf, buf_size, buf_index, dst_res);
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (val);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (val);
 	}
 
 	tml::MemoryUtil::Copy(&val, reinterpret_cast<DOUBLE *>(&tmp_val), 1U);
@@ -715,7 +740,7 @@ DOUBLE tml::MemoryUtil::ReadDOUBLE_L(const BYTE *buf, const size_t buf_size, siz
 
 
 /**
- * @brief ReadArray関数
+ * @brief ReadBufferArray関数
  *
  * Create関数不要
  *
@@ -729,18 +754,16 @@ DOUBLE tml::MemoryUtil::ReadDOUBLE_L(const BYTE *buf, const size_t buf_size, siz
  * NULLP=指定無し,0未満=失敗
  * @return dst_ary (dst_array)
  */
-BYTE *tml::MemoryUtil::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const BYTE *buf, const size_t buf_size, size_t &buf_index, const size_t read_size, INT *dst_res)
+BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size, const BYTE *buf, const size_t buf_size, size_t &buf_index, const size_t read_size, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (dst_ary);
-		}
+	if (tml::CheckResult(dst_res)) {
+		return (dst_ary);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + read_size) > buf_size)
 	|| (read_size > dst_ary_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_ary);
 	}
@@ -753,7 +776,7 @@ BYTE *tml::MemoryUtil::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const
 
 
 /**
- * @brief ReadString_B関数
+ * @brief ReadBufferString_B関数
  *
  * Create関数不要
  *
@@ -766,28 +789,31 @@ BYTE *tml::MemoryUtil::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const
  * NULLP=指定無し,0未満=失敗
  * @return dst_str (dst_string)
  */
-CHAR *tml::MemoryUtil::ReadString_B(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+CHAR *tml::MemoryUtil::ReadBufferString_B(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
+	if (tml::CheckResult(dst_res)) {
+		if ((dst_str != nullptr)
+		&& (dst_str_size > 0U)) {
+			dst_str[0] = 0;
+		}
+
+		return (dst_str);
+	}
+
 	if ((dst_str == nullptr)
 	|| (dst_str_size <= 0U)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
 	}
 
 	dst_str[0] = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (dst_str);
-		}
-	}
-
-	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadUSHORT_B(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
+	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUSHORT_B(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
 
 	if (((buf_index + str_size) > buf_size)
 	|| ((str_size + sizeof(CHAR)) > dst_str_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
 	}
@@ -802,7 +828,7 @@ CHAR *tml::MemoryUtil::ReadString_B(CHAR *dst_str, const size_t dst_str_size, BY
 
 
 /**
- * @brief ReadString_L関数
+ * @brief ReadBufferString_L関数
  *
  * Create関数不要
  *
@@ -815,28 +841,31 @@ CHAR *tml::MemoryUtil::ReadString_B(CHAR *dst_str, const size_t dst_str_size, BY
  * NULLP=指定無し,0未満=失敗
  * @return dst_str (dst_string)
  */
-CHAR *tml::MemoryUtil::ReadString_L(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+CHAR *tml::MemoryUtil::ReadBufferString_L(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
+	if (tml::CheckResult(dst_res)) {
+		if ((dst_str != nullptr)
+		&& (dst_str_size > 0U)) {
+			dst_str[0] = 0;
+		}
+
+		return (dst_str);
+	}
+
 	if ((dst_str == nullptr)
 	|| (dst_str_size <= 0U)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
 	}
 
 	dst_str[0] = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (dst_str);
-		}
-	}
-
-	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadUSHORT_L(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
+	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUSHORT_L(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
 
 	if (((buf_index + str_size) > buf_size)
 	|| ((str_size + sizeof(CHAR)) > dst_str_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
 	}
@@ -851,7 +880,7 @@ CHAR *tml::MemoryUtil::ReadString_L(CHAR *dst_str, const size_t dst_str_size, BY
 
 
 /**
- * @brief ReadString_B関数
+ * @brief ReadBufferString_B関数
  *
  * Create関数不要
  *
@@ -864,28 +893,31 @@ CHAR *tml::MemoryUtil::ReadString_L(CHAR *dst_str, const size_t dst_str_size, BY
  * NULLP=指定無し,0未満=失敗
  * @return dst_str (dst_string)
  */
-WCHAR *tml::MemoryUtil::ReadString_B(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+WCHAR *tml::MemoryUtil::ReadBufferString_B(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
+	if (tml::CheckResult(dst_res)) {
+		if ((dst_str != nullptr)
+		&& (dst_str_size > 0U)) {
+			dst_str[0] = 0;
+		}
+
+		return (dst_str);
+	}
+
 	if ((dst_str == nullptr)
 	|| (dst_str_size <= 0U)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
 	}
 
 	dst_str[0] = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (dst_str);
-		}
-	}
-
-	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadUSHORT_B(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
+	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUSHORT_B(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
 
 	if (((buf_index + str_size) > buf_size)
 	|| ((str_size + sizeof(WCHAR)) > dst_str_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
 	}
@@ -900,7 +932,7 @@ WCHAR *tml::MemoryUtil::ReadString_B(WCHAR *dst_str, const size_t dst_str_size, 
 
 
 /**
- * @brief ReadString_L関数
+ * @brief ReadBufferString_L関数
  *
  * Create関数不要
  *
@@ -913,28 +945,31 @@ WCHAR *tml::MemoryUtil::ReadString_B(WCHAR *dst_str, const size_t dst_str_size, 
  * NULLP=指定無し,0未満=失敗
  * @return dst_str (dst_string)
  */
-WCHAR *tml::MemoryUtil::ReadString_L(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+WCHAR *tml::MemoryUtil::ReadBufferString_L(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
 {
+	if (tml::CheckResult(dst_res)) {
+		if ((dst_str != nullptr)
+		&& (dst_str_size > 0U)) {
+			dst_str[0] = 0;
+		}
+
+		return (dst_str);
+	}
+
 	if ((dst_str == nullptr)
 	|| (dst_str_size <= 0U)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
 	}
 
 	dst_str[0] = 0;
 
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return (dst_str);
-		}
-	}
-
-	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadUSHORT_L(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
+	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUSHORT_L(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
 
 	if (((buf_index + str_size) > buf_size)
 	|| ((str_size + sizeof(WCHAR)) > dst_str_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
 	}
@@ -949,7 +984,7 @@ WCHAR *tml::MemoryUtil::ReadString_L(WCHAR *dst_str, const size_t dst_str_size, 
 
 
 /**
- * @brief WriteCHAR関数
+ * @brief WriteBufferCHAR関数
  *
  * Create関数不要
  *
@@ -960,17 +995,15 @@ WCHAR *tml::MemoryUtil::ReadString_L(WCHAR *dst_str, const size_t dst_str_size, 
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(CHAR)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -982,7 +1015,7 @@ void tml::MemoryUtil::WriteCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_t
 
 
 /**
- * @brief WriteUCHAR関数
+ * @brief WriteBufferUCHAR関数
  *
  * Create関数不要
  *
@@ -993,17 +1026,15 @@ void tml::MemoryUtil::WriteCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_t
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteUCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UCHAR val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UCHAR val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(UCHAR)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1015,7 +1046,7 @@ void tml::MemoryUtil::WriteUCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_
 
 
 /**
- * @brief WriteSHORT_B関数
+ * @brief WriteBufferSHORT_B関数
  *
  * Create関数不要
  *
@@ -1026,17 +1057,15 @@ void tml::MemoryUtil::WriteUCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(SHORT)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1049,7 +1078,7 @@ void tml::MemoryUtil::WriteSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, siz
 
 
 /**
- * @brief WriteSHORT_L関数
+ * @brief WriteBufferSHORT_L関数
  *
  * Create関数不要
  *
@@ -1060,17 +1089,15 @@ void tml::MemoryUtil::WriteSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, siz
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(SHORT)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1083,7 +1110,7 @@ void tml::MemoryUtil::WriteSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, siz
 
 
 /**
- * @brief WriteUSHORT_B関数
+ * @brief WriteBufferUSHORT_B関数
  *
  * Create関数不要
  *
@@ -1094,17 +1121,15 @@ void tml::MemoryUtil::WriteSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, siz
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteUSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(USHORT)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1117,7 +1142,7 @@ void tml::MemoryUtil::WriteUSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, si
 
 
 /**
- * @brief WriteUSHORT_L関数
+ * @brief WriteBufferUSHORT_L関数
  *
  * Create関数不要
  *
@@ -1128,17 +1153,15 @@ void tml::MemoryUtil::WriteUSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, si
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteUSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(USHORT)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1151,7 +1174,7 @@ void tml::MemoryUtil::WriteUSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, si
 
 
 /**
- * @brief WriteINT_B関数
+ * @brief WriteBufferINT_B関数
  *
  * Create関数不要
  *
@@ -1162,17 +1185,15 @@ void tml::MemoryUtil::WriteUSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, si
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteINT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferINT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(INT)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1187,7 +1208,7 @@ void tml::MemoryUtil::WriteINT_B(BYTE *dst_buf, const size_t dst_buf_size, size_
 
 
 /**
- * @brief WriteINT_L関数
+ * @brief WriteBufferINT_L関数
  *
  * Create関数不要
  *
@@ -1198,17 +1219,15 @@ void tml::MemoryUtil::WriteINT_B(BYTE *dst_buf, const size_t dst_buf_size, size_
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteINT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferINT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(INT)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1223,7 +1242,7 @@ void tml::MemoryUtil::WriteINT_L(BYTE *dst_buf, const size_t dst_buf_size, size_
 
 
 /**
- * @brief WriteUINT_B関数
+ * @brief WriteBufferUINT_B関数
  *
  * Create関数不要
  *
@@ -1234,17 +1253,15 @@ void tml::MemoryUtil::WriteINT_L(BYTE *dst_buf, const size_t dst_buf_size, size_
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteUINT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUINT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(UINT)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1259,7 +1276,7 @@ void tml::MemoryUtil::WriteUINT_B(BYTE *dst_buf, const size_t dst_buf_size, size
 
 
 /**
- * @brief WriteUINT_L関数
+ * @brief WriteBufferUINT_L関数
  *
  * Create関数不要
  *
@@ -1270,17 +1287,15 @@ void tml::MemoryUtil::WriteUINT_B(BYTE *dst_buf, const size_t dst_buf_size, size
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteUINT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUINT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(UINT)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1295,7 +1310,7 @@ void tml::MemoryUtil::WriteUINT_L(BYTE *dst_buf, const size_t dst_buf_size, size
 
 
 /**
- * @brief WriteLONGLONG_B関数
+ * @brief WriteBufferLONGLONG_B関数
  *
  * Create関数不要
  *
@@ -1306,17 +1321,15 @@ void tml::MemoryUtil::WriteUINT_L(BYTE *dst_buf, const size_t dst_buf_size, size
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteLONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferLONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(LONGLONG)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1335,7 +1348,7 @@ void tml::MemoryUtil::WriteLONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size, 
 
 
 /**
- * @brief WriteLONGLONG_L関数
+ * @brief WriteBufferLONGLONG_L関数
  *
  * Create関数不要
  *
@@ -1346,17 +1359,15 @@ void tml::MemoryUtil::WriteLONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size, 
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteLONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferLONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(LONGLONG)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1375,7 +1386,7 @@ void tml::MemoryUtil::WriteLONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size, 
 
 
 /**
- * @brief WriteULONGLONG_B関数
+ * @brief WriteBufferULONGLONG_B関数
  *
  * Create関数不要
  *
@@ -1386,17 +1397,15 @@ void tml::MemoryUtil::WriteLONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size, 
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteULONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferULONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(ULONGLONG)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1415,7 +1424,7 @@ void tml::MemoryUtil::WriteULONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size,
 
 
 /**
- * @brief WriteULONGLONG_L関数
+ * @brief WriteBufferULONGLONG_L関数
  *
  * Create関数不要
  *
@@ -1426,17 +1435,15 @@ void tml::MemoryUtil::WriteULONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteULONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferULONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(ULONGLONG)) > dst_buf_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1455,7 +1462,7 @@ void tml::MemoryUtil::WriteULONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size,
 
 
 /**
- * @brief WriteFLOAT_B関数
+ * @brief WriteBufferFLOAT_B関数
  *
  * Create関数不要
  *
@@ -1466,26 +1473,24 @@ void tml::MemoryUtil::WriteULONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteFLOAT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferFLOAT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	UINT tmp_val = 0U;
 
 	tml::MemoryUtil::Copy(&tmp_val, reinterpret_cast<const UINT *>(&val), 1U);
 
-	tml::MemoryUtil::WriteUINT_B(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
+	tml::MemoryUtil::WriteBufferUINT_B(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
 
 	return;
 }
 
 
 /**
- * @brief WriteFLOAT_L関数
+ * @brief WriteBufferFLOAT_L関数
  *
  * Create関数不要
  *
@@ -1496,26 +1501,24 @@ void tml::MemoryUtil::WriteFLOAT_B(BYTE *dst_buf, const size_t dst_buf_size, siz
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteFLOAT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferFLOAT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	UINT tmp_val = 0U;
 
 	tml::MemoryUtil::Copy(&tmp_val, reinterpret_cast<const UINT *>(&val), 1U);
 
-	tml::MemoryUtil::WriteUINT_L(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
+	tml::MemoryUtil::WriteBufferUINT_L(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
 
 	return;
 }
 
 
 /**
- * @brief WriteDOUBLE_B関数
+ * @brief WriteBufferDOUBLE_B関数
  *
  * Create関数不要
  *
@@ -1526,26 +1529,24 @@ void tml::MemoryUtil::WriteFLOAT_L(BYTE *dst_buf, const size_t dst_buf_size, siz
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteDOUBLE_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferDOUBLE_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	ULONGLONG tmp_val = 0ULL;
 
 	tml::MemoryUtil::Copy(&tmp_val, reinterpret_cast<const ULONGLONG *>(&val), 1U);
 
-	tml::MemoryUtil::WriteULONGLONG_B(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
+	tml::MemoryUtil::WriteBufferULONGLONG_B(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
 
 	return;
 }
 
 
 /**
- * @brief WriteDOUBLE_L関数
+ * @brief WriteBufferDOUBLE_L関数
  *
  * Create関数不要
  *
@@ -1556,26 +1557,24 @@ void tml::MemoryUtil::WriteDOUBLE_B(BYTE *dst_buf, const size_t dst_buf_size, si
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteDOUBLE_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferDOUBLE_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	ULONGLONG tmp_val = 0ULL;
 
 	tml::MemoryUtil::Copy(&tmp_val, reinterpret_cast<const ULONGLONG *>(&val), 1U);
 
-	tml::MemoryUtil::WriteULONGLONG_L(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
+	tml::MemoryUtil::WriteBufferULONGLONG_L(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
 
 	return;
 }
 
 
 /**
- * @brief WriteArray関数
+ * @brief WriteBufferArray関数
  *
  * Create関数不要
  *
@@ -1588,18 +1587,16 @@ void tml::MemoryUtil::WriteDOUBLE_L(BYTE *dst_buf, const size_t dst_buf_size, si
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteArray(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const BYTE *ary, const size_t ary_size, const size_t write_size, INT *dst_res)
+void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const BYTE *ary, const size_t ary_size, const size_t write_size, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + write_size) > dst_buf_size)
 	|| (write_size > ary_size)) {
-		tml::SetValue(dst_res, -1);
+		tml::SetResult(dst_res, -1);
 
 		return;
 	}
@@ -1612,7 +1609,7 @@ void tml::MemoryUtil::WriteArray(BYTE *dst_buf, const size_t dst_buf_size, size_
 
 
 /**
- * @brief WriteString_B関数
+ * @brief WriteBufferString_B関数
  *
  * Create関数不要
  *
@@ -1623,25 +1620,23 @@ void tml::MemoryUtil::WriteArray(BYTE *dst_buf, const size_t dst_buf_size, size_
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteString_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_res)
+void tml::MemoryUtil::WriteBufferString_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	size_t str_size = strlen(str);
 
-	tml::MemoryUtil::WriteUSHORT_B(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
-	tml::MemoryUtil::WriteArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
+	tml::MemoryUtil::WriteBufferUSHORT_B(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
+	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
 
 	return;
 }
 
 
 /**
- * @brief WriteString_L関数
+ * @brief WriteBufferString_L関数
  *
  * Create関数不要
  *
@@ -1652,25 +1647,23 @@ void tml::MemoryUtil::WriteString_B(BYTE *dst_buf, const size_t dst_buf_size, si
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteString_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_res)
+void tml::MemoryUtil::WriteBufferString_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	size_t str_size = strlen(str);
 
-	tml::MemoryUtil::WriteUSHORT_L(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
-	tml::MemoryUtil::WriteArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
+	tml::MemoryUtil::WriteBufferUSHORT_L(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
+	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
 
 	return;
 }
 
 
 /**
- * @brief WriteString_B関数
+ * @brief WriteBufferString_B関数
  *
  * Create関数不要
  *
@@ -1681,25 +1674,23 @@ void tml::MemoryUtil::WriteString_L(BYTE *dst_buf, const size_t dst_buf_size, si
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteString_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_res)
+void tml::MemoryUtil::WriteBufferString_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	size_t str_size = wcslen(str) << 1;
 
-	tml::MemoryUtil::WriteUSHORT_B(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
-	tml::MemoryUtil::WriteArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
+	tml::MemoryUtil::WriteBufferUSHORT_B(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
+	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
 
 	return;
 }
 
 
 /**
- * @brief WriteString_L関数
+ * @brief WriteBufferString_L関数
  *
  * Create関数不要
  *
@@ -1710,18 +1701,16 @@ void tml::MemoryUtil::WriteString_B(BYTE *dst_buf, const size_t dst_buf_size, si
  * @param dst_res (dst_result)<br>
  * NULLP=指定無し,0未満=失敗
  */
-void tml::MemoryUtil::WriteString_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_res)
+void tml::MemoryUtil::WriteBufferString_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_res)
 {
-	if (dst_res != nullptr) {
-		if ((*dst_res) < 0) {
-			return;
-		}
+	if (tml::CheckResult(dst_res)) {
+		return;
 	}
 
 	size_t str_size = wcslen(str) << 1;
 
-	tml::MemoryUtil::WriteUSHORT_L(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
-	tml::MemoryUtil::WriteArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
+	tml::MemoryUtil::WriteBufferUSHORT_L(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
+	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
 
 	return;
 }

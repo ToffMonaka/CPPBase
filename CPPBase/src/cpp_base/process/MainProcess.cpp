@@ -148,9 +148,14 @@ INT cpp_base::MainProcess::Start(void)
 		txt_file.Write();
 		*/
 
-		tml::DynamicBuffer buf1(128U);
+		tml::DynamicBuffer buf(128U);
+		//tml::StaticBuffer<128U> buf;
 
-		tml::StaticBuffer<256U> buf2;
+		buf.WriteString_B(L"‚ ‚¢‚¤‚¦‚¨");
+
+		WCHAR str[128] = L"";
+
+		buf.ReadString_B(str, sizeof(str));
 
 		int a = 0;
 	}

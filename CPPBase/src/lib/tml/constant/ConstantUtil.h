@@ -25,26 +25,10 @@ using TIME_MICRO = std::chrono::microseconds;
 using TIME_NANO = std::chrono::nanoseconds;
 using TIME_REAL = std::chrono::duration<double>;
 
-template <typename T>
-void SetValue(T *, const T);
 template <typename T1, typename T2>
 T1 CastTime(const T2 &time);
-}
-
-
-/**
- * @brief SetValue関数
- * @param dst_val (dst_value)
- * @param val (value)
- */
-template <typename T>
-inline void tml::SetValue(T *dst_val, const T val)
-{
-	if (dst_val != nullptr) {
-		(*dst_val) = val;
-	}
-
-	return;
+bool CheckResult(const INT *);
+void SetResult(INT *, const INT);
 }
 
 
@@ -57,6 +41,33 @@ template <typename T1, typename T2>
 inline T1 tml::CastTime(const T2 &time)
 {
 	return (std::chrono::duration_cast<T1>(time));
+}
+
+
+/**
+ * @brief CheckResult関数
+ * @param res (result)
+ * @return error_flg (error_flag)<br>
+ * false=エラー無し,true=エラー有り
+ */
+inline bool tml::CheckResult(const INT *res)
+{
+	return ((res != nullptr) && ((*res) < 0));
+}
+
+
+/**
+ * @brief SetResult関数
+ * @param dst_res (dst_result)
+ * @param res (result)
+ */
+inline void tml::SetResult(INT *dst_res, const INT res)
+{
+	if (dst_res != nullptr) {
+		(*dst_res) = res;
+	}
+
+	return;
 }
 
 
