@@ -20,8 +20,8 @@ namespace tml {
 class ProcessUtil
 {
 public: ProcessUtil() = delete;
-public: ProcessUtil(const ProcessUtil &) = delete;
-public: ProcessUtil &operator =(const ProcessUtil &) = delete;
+public: ProcessUtil(const tml::ProcessUtil &) = delete;
+public: tml::ProcessUtil &operator =(const tml::ProcessUtil &) = delete;
 
 private:
 	static tml::ThreadFix th_fix_;

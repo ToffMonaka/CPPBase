@@ -15,8 +15,8 @@ namespace tml {
  */
 class DefaultMemoryUtilEngine : public tml::MemoryUtilEngine
 {
-public: DefaultMemoryUtilEngine(const DefaultMemoryUtilEngine &) = delete;
-public: DefaultMemoryUtilEngine &operator =(const DefaultMemoryUtilEngine &) = delete;
+public: DefaultMemoryUtilEngine(const tml::DefaultMemoryUtilEngine &) = delete;
+public: tml::DefaultMemoryUtilEngine &operator =(const tml::DefaultMemoryUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

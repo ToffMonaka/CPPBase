@@ -16,9 +16,6 @@ namespace tml {
 template <size_t N>
 class StaticBuffer
 {
-public: StaticBuffer(const StaticBuffer &) = delete;
-public: StaticBuffer &operator =(const StaticBuffer &) = delete;
-
 private:
 	BYTE ary_[N];
 	size_t size_;
@@ -33,6 +30,11 @@ private:
 
 public:
 	StaticBuffer();
+	StaticBuffer(const size_t);
+	StaticBuffer(const tml::StaticBuffer<N> &);
+	tml::StaticBuffer<N> &operator =(const tml::StaticBuffer<N> &);
+	StaticBuffer(tml::StaticBuffer<N> &&) noexcept;
+	tml::StaticBuffer<N> &operator =(tml::StaticBuffer<N> &&) noexcept;
 	virtual ~StaticBuffer();
 
 	void Init(void);
@@ -40,6 +42,7 @@ public:
 	BYTE *GetArray(void);
 	void SetArray(const BYTE *, const size_t);
 	size_t GetSize(void) const;
+	void SetSize(const size_t, const bool keep_flg = false);
 	size_t GetLength(void) const;
 	void SetLength(const size_t);
 	size_t GetReadIndex(void) const;
@@ -115,6 +118,124 @@ inline tml::StaticBuffer<N>::StaticBuffer() :
 	write_res_(0)
 {
 	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param size (size)
+ */
+template <size_t N>
+inline tml::StaticBuffer<N>::StaticBuffer(const size_t size)
+{
+	this->size_ = size;
+	this->len_ = 0U;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = 0U;
+	this->write_res_ = 0;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+template <size_t N>
+inline tml::StaticBuffer<N>::StaticBuffer(const tml::StaticBuffer<N> &src)
+{
+	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	this->size_ = src.size_;
+	this->len_ = src.len_;
+	this->read_index_ = src.read_index_;
+	this->read_res_ = src.read_res_;
+	this->write_index_ = src.write_index_;
+	this->write_res_ = src.write_res_;
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+template <size_t N>
+inline tml::StaticBuffer<N> &tml::StaticBuffer<N>::operator =(const tml::StaticBuffer<N> &src)
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	this->size_ = src.size_;
+	this->len_ = src.len_;
+	this->read_index_ = src.read_index_;
+	this->read_res_ = src.read_res_;
+	this->write_index_ = src.write_index_;
+	this->write_res_ = src.write_res_;
+
+	return ((*this));
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+template <size_t N>
+inline tml::StaticBuffer<N>::StaticBuffer(tml::StaticBuffer<N> &&src) noexcept
+{
+	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	this->size_ = src.size_;
+	this->len_ = src.len_;
+	this->read_index_ = src.read_index_;
+	this->read_res_ = src.read_res_;
+	this->write_index_ = src.write_index_;
+	this->write_res_ = src.write_res_;
+
+	src.size_ = 0U;
+	src.len_ = 0U;
+	src.read_index_ = 0U;
+	src.read_res_ = 0;
+	src.write_index_ = 0U;
+	src.write_res_ = 0;
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+template <size_t N>
+inline tml::StaticBuffer<N> &tml::StaticBuffer<N>::operator =(tml::StaticBuffer<N> &&src) noexcept
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	this->size_ = src.size_;
+	this->len_ = src.len_;
+	this->read_index_ = src.read_index_;
+	this->read_res_ = src.read_res_;
+	this->write_index_ = src.write_index_;
+	this->write_res_ = src.write_res_;
+
+	src.size_ = 0U;
+	src.len_ = 0U;
+	src.read_index_ = 0U;
+	src.read_res_ = 0;
+	src.write_index_ = 0U;
+	src.write_res_ = 0;
+
+	return ((*this));
 }
 
 
@@ -205,6 +326,32 @@ inline size_t tml::StaticBuffer<N>::GetSize(void) const
 
 
 /**
+ * @brief SetSize関数
+ * @param size (size)
+ * @param keep_flg (keep_flag)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::SetSize(const size_t size, const bool keep_flg)
+{
+	this->size_ = size;
+
+	if (keep_flg) {
+		this->len_ = std::min(this->len_, this->size_);
+		this->read_index_ = std::min(this->read_index_, this->len_);
+		this->write_index_ = std::min(this->write_index_, this->len_);
+	} else {
+		this->len_ = 0U;
+		this->read_index_ = 0U;
+		this->read_res_ = 0;
+		this->write_index_ = 0U;
+		this->write_res_ = 0;
+	}
+
+	return;
+}
+
+
+/**
  * @brief GetLength関数
  * @return len (length)
  */
@@ -220,7 +367,7 @@ inline size_t tml::StaticBuffer<N>::GetLength(void) const
  * @param len (length)
  */
 template <size_t N>
-void tml::StaticBuffer<N>::SetLength(const size_t len)
+inline void tml::StaticBuffer<N>::SetLength(const size_t len)
 {
 	this->len_ = std::min(len, this->size_);
 	this->read_index_ = std::min(this->read_index_, this->len_);
@@ -248,7 +395,7 @@ inline size_t tml::StaticBuffer<N>::GetReadIndex(void) const
 template <size_t N>
 inline void tml::StaticBuffer<N>::SetReadIndex(const size_t index)
 {
-	tml::MemoryUtil::SetBufferIndex(this->size_, this->read_index_, index, &this->read_res_);
+	tml::MemoryUtil::SetBufferIndex(this->len_, this->read_index_, index, &this->read_res_);
 
 	return;
 }
@@ -261,7 +408,7 @@ inline void tml::StaticBuffer<N>::SetReadIndex(const size_t index)
 template <size_t N>
 inline void tml::StaticBuffer<N>::AddReadIndex(const INT add_index)
 {
-	tml::MemoryUtil::AddBufferIndex(this->size_, this->read_index_, add_index, &this->read_res_);
+	tml::MemoryUtil::AddBufferIndex(this->len_, this->read_index_, add_index, &this->read_res_);
 
 	return;
 }
@@ -311,6 +458,7 @@ template <size_t N>
 inline void tml::StaticBuffer<N>::SetWriteIndex(const size_t index)
 {
 	tml::MemoryUtil::SetBufferIndex(this->size_, this->write_index_, index, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
 
 	return;
 }
@@ -324,6 +472,7 @@ template <size_t N>
 inline void tml::StaticBuffer<N>::AddWriteIndex(const INT add_index)
 {
 	tml::MemoryUtil::AddBufferIndex(this->size_, this->write_index_, add_index, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
 
 	return;
 }

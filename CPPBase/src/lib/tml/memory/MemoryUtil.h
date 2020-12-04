@@ -20,8 +20,8 @@ namespace tml {
 class MemoryUtil
 {
 public: MemoryUtil() = delete;
-public: MemoryUtil(const MemoryUtil &) = delete;
-public: MemoryUtil &operator =(const MemoryUtil &) = delete;
+public: MemoryUtil(const tml::MemoryUtil &) = delete;
+public: tml::MemoryUtil &operator =(const tml::MemoryUtil &) = delete;
 
 private:
 	static tml::ThreadFix th_fix_;

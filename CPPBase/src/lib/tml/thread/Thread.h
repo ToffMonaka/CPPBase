@@ -19,8 +19,8 @@ namespace tml {
  */
 class Thread
 {
-public: Thread(const Thread &) = delete;
-public: Thread &operator =(const Thread &) = delete;
+public: Thread(const tml::Thread &) = delete;
+public: tml::Thread &operator =(const tml::Thread &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:

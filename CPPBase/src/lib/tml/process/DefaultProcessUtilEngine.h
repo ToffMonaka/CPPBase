@@ -15,8 +15,8 @@ namespace tml {
  */
 class DefaultProcessUtilEngine : public tml::ProcessUtilEngine
 {
-public: DefaultProcessUtilEngine(const DefaultProcessUtilEngine &) = delete;
-public: DefaultProcessUtilEngine &operator =(const DefaultProcessUtilEngine &) = delete;
+public: DefaultProcessUtilEngine(const tml::DefaultProcessUtilEngine &) = delete;
+public: tml::DefaultProcessUtilEngine &operator =(const tml::DefaultProcessUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

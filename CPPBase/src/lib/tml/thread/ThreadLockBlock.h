@@ -15,8 +15,8 @@ namespace tml {
  */
 class ThreadLockBlock
 {
-public: ThreadLockBlock(const ThreadLockBlock &) = delete;
-public: ThreadLockBlock &operator =(const ThreadLockBlock &) = delete;
+public: ThreadLockBlock(const tml::ThreadLockBlock &) = delete;
+public: tml::ThreadLockBlock &operator =(const tml::ThreadLockBlock &) = delete;
 
 private:
 	tml::ThreadLock &th_lock_;

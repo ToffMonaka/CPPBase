@@ -20,8 +20,8 @@ namespace tml {
  */
 class MemoryUtilEngine
 {
-public: MemoryUtilEngine(const MemoryUtilEngine &) = delete;
-public: MemoryUtilEngine &operator =(const MemoryUtilEngine &) = delete;
+public: MemoryUtilEngine(const tml::MemoryUtilEngine &) = delete;
+public: tml::MemoryUtilEngine &operator =(const tml::MemoryUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:

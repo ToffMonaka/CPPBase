@@ -15,8 +15,8 @@ namespace tml {
  */
 class DefaultThreadUtilEngine : public tml::ThreadUtilEngine
 {
-public: DefaultThreadUtilEngine(const DefaultThreadUtilEngine &) = delete;
-public: DefaultThreadUtilEngine &operator =(const DefaultThreadUtilEngine &) = delete;
+public: DefaultThreadUtilEngine(const tml::DefaultThreadUtilEngine &) = delete;
+public: tml::DefaultThreadUtilEngine &operator =(const tml::DefaultThreadUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

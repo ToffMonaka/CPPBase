@@ -15,8 +15,8 @@ namespace tml {
  */
 class DefaultTimeUtilEngine : public tml::TimeUtilEngine
 {
-public: DefaultTimeUtilEngine(const DefaultTimeUtilEngine &) = delete;
-public: DefaultTimeUtilEngine &operator =(const DefaultTimeUtilEngine &) = delete;
+public: DefaultTimeUtilEngine(const tml::DefaultTimeUtilEngine &) = delete;
+public: tml::DefaultTimeUtilEngine &operator =(const tml::DefaultTimeUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

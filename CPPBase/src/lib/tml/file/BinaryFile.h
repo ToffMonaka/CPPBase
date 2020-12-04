@@ -15,8 +15,8 @@ namespace tml {
  */
 class BinaryFileData
 {
-public: BinaryFileData(const BinaryFileData &) = delete;
-public: BinaryFileData &operator =(const BinaryFileData &) = delete;
+public: BinaryFileData(const tml::BinaryFileData &) = delete;
+public: tml::BinaryFileData &operator =(const tml::BinaryFileData &) = delete;
 
 public:
 	BYTE *buffer;
@@ -78,8 +78,8 @@ namespace tml {
  */
 class BinaryFile : public tml::File
 {
-public: BinaryFile(const BinaryFile &) = delete;
-public: BinaryFile &operator =(const BinaryFile &) = delete;
+public: BinaryFile(const tml::BinaryFile &) = delete;
+public: tml::BinaryFile &operator =(const tml::BinaryFile &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:

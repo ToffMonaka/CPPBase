@@ -18,8 +18,8 @@ namespace tml {
  */
 class ProcessUtilEngine
 {
-public: ProcessUtilEngine(const ProcessUtilEngine &) = delete;
-public: ProcessUtilEngine &operator =(const ProcessUtilEngine &) = delete;
+public: ProcessUtilEngine(const tml::ProcessUtilEngine &) = delete;
+public: tml::ProcessUtilEngine &operator =(const tml::ProcessUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:

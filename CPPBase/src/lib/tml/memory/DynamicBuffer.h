@@ -15,9 +15,6 @@ namespace tml {
  */
 class DynamicBuffer
 {
-public: DynamicBuffer(const DynamicBuffer &) = delete;
-public: DynamicBuffer &operator =(const DynamicBuffer &) = delete;
-
 private:
 	BYTE *ary_;
 	size_t size_;
@@ -33,6 +30,10 @@ private:
 public:
 	DynamicBuffer();
 	DynamicBuffer(const size_t);
+	DynamicBuffer(const tml::DynamicBuffer &);
+	tml::DynamicBuffer &operator =(const tml::DynamicBuffer &);
+	DynamicBuffer(tml::DynamicBuffer &&) noexcept;
+	tml::DynamicBuffer &operator =(tml::DynamicBuffer &&) noexcept;
 	virtual ~DynamicBuffer();
 
 	void Init(void);
@@ -163,7 +164,7 @@ inline size_t tml::DynamicBuffer::GetReadIndex(void) const
  */
 inline void tml::DynamicBuffer::SetReadIndex(const size_t index)
 {
-	tml::MemoryUtil::SetBufferIndex(this->size_, this->read_index_, index, &this->read_res_);
+	tml::MemoryUtil::SetBufferIndex(this->len_, this->read_index_, index, &this->read_res_);
 
 	return;
 }
@@ -175,7 +176,7 @@ inline void tml::DynamicBuffer::SetReadIndex(const size_t index)
  */
 inline void tml::DynamicBuffer::AddReadIndex(const INT add_index)
 {
-	tml::MemoryUtil::AddBufferIndex(this->size_, this->read_index_, add_index, &this->read_res_);
+	tml::MemoryUtil::AddBufferIndex(this->len_, this->read_index_, add_index, &this->read_res_);
 
 	return;
 }
@@ -221,6 +222,7 @@ inline size_t tml::DynamicBuffer::GetWriteIndex(void) const
 inline void tml::DynamicBuffer::SetWriteIndex(const size_t index)
 {
 	tml::MemoryUtil::SetBufferIndex(this->size_, this->write_index_, index, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
 
 	return;
 }
@@ -233,6 +235,7 @@ inline void tml::DynamicBuffer::SetWriteIndex(const size_t index)
 inline void tml::DynamicBuffer::AddWriteIndex(const INT add_index)
 {
 	tml::MemoryUtil::AddBufferIndex(this->size_, this->write_index_, add_index, &this->write_res_);
+	this->len_ = std::max(this->len_, this->write_index_);
 
 	return;
 }

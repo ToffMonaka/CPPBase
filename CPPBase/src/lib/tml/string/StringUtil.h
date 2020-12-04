@@ -21,8 +21,8 @@ namespace tml {
 class StringUtil
 {
 public: StringUtil() = delete;
-public: StringUtil(const StringUtil &) = delete;
-public: StringUtil &operator =(const StringUtil &) = delete;
+public: StringUtil(const tml::StringUtil &) = delete;
+public: tml::StringUtil &operator =(const tml::StringUtil &) = delete;
 
 private:
 	static tml::ThreadFix th_fix_;

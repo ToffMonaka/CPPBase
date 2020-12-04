@@ -16,8 +16,8 @@ namespace cpp_base {
  */
 class MainProcess : public tml::Process
 {
-public: MainProcess(const MainProcess &) = delete;
-public: MainProcess &operator =(const MainProcess &) = delete;
+public: MainProcess(const cpp_base::MainProcess &) = delete;
+public: cpp_base::MainProcess &operator =(const cpp_base::MainProcess &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

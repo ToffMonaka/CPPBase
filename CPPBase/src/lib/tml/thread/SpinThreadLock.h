@@ -17,8 +17,8 @@ namespace tml {
  */
 class SpinThreadLock : public tml::ThreadLock
 {
-public: SpinThreadLock(const SpinThreadLock &) = delete;
-public: SpinThreadLock &operator =(const SpinThreadLock &) = delete;
+public: SpinThreadLock(const tml::SpinThreadLock &) = delete;
+public: tml::SpinThreadLock &operator =(const tml::SpinThreadLock &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

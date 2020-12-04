@@ -20,8 +20,8 @@ namespace tml {
 class TimeUtil
 {
 public: TimeUtil() = delete;
-public: TimeUtil(const TimeUtil &) = delete;
-public: TimeUtil &operator =(const TimeUtil &) = delete;
+public: TimeUtil(const tml::TimeUtil &) = delete;
+public: tml::TimeUtil &operator =(const tml::TimeUtil &) = delete;
 
 private:
 	static tml::ThreadFix th_fix_;

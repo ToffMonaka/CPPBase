@@ -16,8 +16,8 @@ namespace tml {
  */
 class MathUtilEngine
 {
-public: MathUtilEngine(const MathUtilEngine &) = delete;
-public: MathUtilEngine &operator =(const MathUtilEngine &) = delete;
+public: MathUtilEngine(const tml::MathUtilEngine &) = delete;
+public: tml::MathUtilEngine &operator =(const tml::MathUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 protected:

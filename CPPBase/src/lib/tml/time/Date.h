@@ -15,8 +15,8 @@ namespace tml {
  */
 class Date
 {
-public: Date(const Date &) = delete;
-public: Date &operator =(const Date &) = delete;
+public: Date(const tml::Date &) = delete;
+public: tml::Date &operator =(const tml::Date &) = delete;
 
 private:
 	tml::TIME_SECONDS time_;

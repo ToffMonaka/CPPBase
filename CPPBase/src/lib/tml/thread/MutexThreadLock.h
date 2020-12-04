@@ -17,8 +17,8 @@ namespace tml {
  */
 class MutexThreadLock : public tml::ThreadLock
 {
-public: MutexThreadLock(const MutexThreadLock &) = delete;
-public: MutexThreadLock &operator =(const MutexThreadLock &) = delete;
+public: MutexThreadLock(const tml::MutexThreadLock &) = delete;
+public: tml::MutexThreadLock &operator =(const tml::MutexThreadLock &) = delete;
 protected: virtual void InterfaceDummy(void) {return;}
 
 private:

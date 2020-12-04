@@ -17,8 +17,8 @@ namespace tml {
  */
 class DlmallocMemoryAllocator : public tml::MemoryAllocator
 {
-public: DlmallocMemoryAllocator(const DlmallocMemoryAllocator &) = delete;
-public: DlmallocMemoryAllocator &operator =(const DlmallocMemoryAllocator &) = delete;
+public: DlmallocMemoryAllocator(const tml::DlmallocMemoryAllocator &) = delete;
+public: tml::DlmallocMemoryAllocator &operator =(const tml::DlmallocMemoryAllocator &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

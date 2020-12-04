@@ -16,8 +16,8 @@ namespace tml {
  */
 class FileUtilEngine
 {
-public: FileUtilEngine(const FileUtilEngine &) = delete;
-public: FileUtilEngine &operator =(const FileUtilEngine &) = delete;
+public: FileUtilEngine(const tml::FileUtilEngine &) = delete;
+public: tml::FileUtilEngine &operator =(const tml::FileUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 protected:

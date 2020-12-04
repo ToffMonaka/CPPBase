@@ -17,8 +17,8 @@ namespace tml {
  */
 class Process
 {
-public: Process(const Process &) = delete;
-public: Process &operator =(const Process &) = delete;
+public: Process(const tml::Process &) = delete;
+public: tml::Process &operator =(const tml::Process &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:

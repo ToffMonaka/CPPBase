@@ -20,8 +20,8 @@ namespace tml {
 class MathUtil
 {
 public: MathUtil() = delete;
-public: MathUtil(const MathUtil &) = delete;
-public: MathUtil &operator =(const MathUtil &) = delete;
+public: MathUtil(const tml::MathUtil &) = delete;
+public: tml::MathUtil &operator =(const tml::MathUtil &) = delete;
 
 private:
 	static tml::ThreadFix th_fix_;

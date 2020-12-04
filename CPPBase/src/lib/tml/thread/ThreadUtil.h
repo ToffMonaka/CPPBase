@@ -20,8 +20,8 @@ namespace tml {
 class ThreadUtil
 {
 public: ThreadUtil() = delete;
-public: ThreadUtil(const ThreadUtil &) = delete;
-public: ThreadUtil &operator =(const ThreadUtil &) = delete;
+public: ThreadUtil(const tml::ThreadUtil &) = delete;
+public: tml::ThreadUtil &operator =(const tml::ThreadUtil &) = delete;
 
 private:
 	static tml::ThreadFix th_fix_;

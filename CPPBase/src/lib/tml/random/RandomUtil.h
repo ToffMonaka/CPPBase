@@ -20,8 +20,8 @@ namespace tml {
 class RandomUtil
 {
 public: RandomUtil() = delete;
-public: RandomUtil(const RandomUtil &) = delete;
-public: RandomUtil &operator =(const RandomUtil &) = delete;
+public: RandomUtil(const tml::RandomUtil &) = delete;
+public: tml::RandomUtil &operator =(const tml::RandomUtil &) = delete;
 
 private:
 	static tml::ThreadFix th_fix_;

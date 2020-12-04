@@ -16,8 +16,8 @@ namespace tml {
  */
 class TimeUtilEngine
 {
-public: TimeUtilEngine(const TimeUtilEngine &) = delete;
-public: TimeUtilEngine &operator =(const TimeUtilEngine &) = delete;
+public: TimeUtilEngine(const tml::TimeUtilEngine &) = delete;
+public: tml::TimeUtilEngine &operator =(const tml::TimeUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 protected:

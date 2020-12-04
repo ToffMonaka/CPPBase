@@ -18,8 +18,8 @@ namespace tml {
  */
 class RandomUtilEngine
 {
-public: RandomUtilEngine(const RandomUtilEngine &) = delete;
-public: RandomUtilEngine &operator =(const RandomUtilEngine &) = delete;
+public: RandomUtilEngine(const tml::RandomUtilEngine &) = delete;
+public: tml::RandomUtilEngine &operator =(const tml::RandomUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:

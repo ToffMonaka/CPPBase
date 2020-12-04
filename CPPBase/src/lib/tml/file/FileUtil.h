@@ -21,8 +21,8 @@ namespace tml {
 class FileUtil
 {
 public: FileUtil() = delete;
-public: FileUtil(const FileUtil &) = delete;
-public: FileUtil &operator =(const FileUtil &) = delete;
+public: FileUtil(const tml::FileUtil &) = delete;
+public: tml::FileUtil &operator =(const tml::FileUtil &) = delete;
 
 private:
 	static tml::ThreadFix th_fix_;

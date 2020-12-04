@@ -15,8 +15,8 @@ namespace tml {
  */
 class RandomSeed
 {
-public: RandomSeed(const RandomSeed &) = delete;
-public: RandomSeed &operator =(const RandomSeed &) = delete;
+public: RandomSeed(const tml::RandomSeed &) = delete;
+public: tml::RandomSeed &operator =(const tml::RandomSeed &) = delete;
 
 private:
 	std::mt19937 seed_;

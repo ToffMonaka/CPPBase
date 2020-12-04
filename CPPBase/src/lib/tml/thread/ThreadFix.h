@@ -15,8 +15,8 @@ namespace tml {
  */
 class ThreadFix
 {
-public: ThreadFix(const ThreadFix &) = delete;
-public: ThreadFix &operator =(const ThreadFix &) = delete;
+public: ThreadFix(const tml::ThreadFix &) = delete;
+public: tml::ThreadFix &operator =(const tml::ThreadFix &) = delete;
 
 private:
 	std::thread::id th_id_;

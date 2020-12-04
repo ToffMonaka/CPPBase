@@ -17,8 +17,8 @@ namespace tml {
  */
 class TextFileData
 {
-public: TextFileData(const TextFileData &) = delete;
-public: TextFileData &operator =(const TextFileData &) = delete;
+public: TextFileData(const tml::TextFileData &) = delete;
+public: tml::TextFileData &operator =(const tml::TextFileData &) = delete;
 
 public:
 	std::list<std::wstring> string_container;
@@ -79,8 +79,8 @@ namespace tml {
  */
 class TextFile : public tml::File
 {
-public: TextFile(const TextFile &) = delete;
-public: TextFile &operator =(const TextFile &) = delete;
+public: TextFile(const tml::TextFile &) = delete;
+public: tml::TextFile &operator =(const tml::TextFile &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:

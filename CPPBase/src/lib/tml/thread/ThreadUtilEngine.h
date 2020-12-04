@@ -20,8 +20,8 @@ namespace tml {
  */
 class ThreadUtilEngine
 {
-public: ThreadUtilEngine(const ThreadUtilEngine &) = delete;
-public: ThreadUtilEngine &operator =(const ThreadUtilEngine &) = delete;
+public: ThreadUtilEngine(const tml::ThreadUtilEngine &) = delete;
+public: tml::ThreadUtilEngine &operator =(const tml::ThreadUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:

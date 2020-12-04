@@ -16,8 +16,8 @@ namespace cpp_base {
  */
 class MainThread : public tml::Thread
 {
-public: MainThread(const MainThread &) = delete;
-public: MainThread &operator =(const MainThread &) = delete;
+public: MainThread(const cpp_base::MainThread &) = delete;
+public: cpp_base::MainThread &operator =(const cpp_base::MainThread &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

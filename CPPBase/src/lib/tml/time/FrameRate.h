@@ -14,8 +14,8 @@ namespace tml {
  */
 class FrameRate
 {
-public: FrameRate(const FrameRate &) = delete;
-public: FrameRate &operator =(const FrameRate &) = delete;
+public: FrameRate(const tml::FrameRate &) = delete;
+public: tml::FrameRate &operator =(const tml::FrameRate &) = delete;
 
 private:
 	UINT limit_;

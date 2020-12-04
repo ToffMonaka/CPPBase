@@ -15,8 +15,8 @@ namespace tml {
  */
 class NewMemoryAllocator : public tml::MemoryAllocator
 {
-public: NewMemoryAllocator(const NewMemoryAllocator &) = delete;
-public: NewMemoryAllocator &operator =(const NewMemoryAllocator &) = delete;
+public: NewMemoryAllocator(const tml::NewMemoryAllocator &) = delete;
+public: tml::NewMemoryAllocator &operator =(const tml::NewMemoryAllocator &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:

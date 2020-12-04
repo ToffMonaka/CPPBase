@@ -14,8 +14,8 @@ namespace tml {
  */
 class Timer
 {
-public: Timer(const Timer &) = delete;
-public: Timer &operator =(const Timer &) = delete;
+public: Timer(const tml::Timer &) = delete;
+public: tml::Timer &operator =(const tml::Timer &) = delete;
 
 private:
 	std::chrono::steady_clock::time_point start_time_;

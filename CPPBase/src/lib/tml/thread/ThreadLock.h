@@ -16,8 +16,8 @@ namespace tml {
  */
 class ThreadLock
 {
-public: ThreadLock(const ThreadLock &) = delete;
-public: ThreadLock &operator =(const ThreadLock &) = delete;
+public: ThreadLock(const tml::ThreadLock &) = delete;
+public: tml::ThreadLock &operator =(const tml::ThreadLock &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:

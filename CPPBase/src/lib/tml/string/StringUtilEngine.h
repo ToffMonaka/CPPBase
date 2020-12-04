@@ -16,8 +16,8 @@ namespace tml {
  */
 class StringUtilEngine
 {
-public: StringUtilEngine(const StringUtilEngine &) = delete;
-public: StringUtilEngine &operator =(const StringUtilEngine &) = delete;
+public: StringUtilEngine(const tml::StringUtilEngine &) = delete;
+public: tml::StringUtilEngine &operator =(const tml::StringUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:

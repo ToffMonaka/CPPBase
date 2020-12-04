@@ -16,8 +16,8 @@ namespace tml {
  */
 class MemoryAllocator
 {
-public: MemoryAllocator(const MemoryAllocator &) = delete;
-public: MemoryAllocator &operator =(const MemoryAllocator &) = delete;
+public: MemoryAllocator(const tml::MemoryAllocator &) = delete;
+public: tml::MemoryAllocator &operator =(const tml::MemoryAllocator &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:

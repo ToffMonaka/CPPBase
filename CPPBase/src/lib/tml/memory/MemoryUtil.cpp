@@ -793,7 +793,7 @@ CHAR *tml::MemoryUtil::ReadBufferString_B(CHAR *dst_str, const size_t dst_str_si
 {
 	if (tml::CheckResult(dst_res)) {
 		if ((dst_str != nullptr)
-		&& (dst_str_size > 0U)) {
+		&& (dst_str_size >= sizeof(CHAR))) {
 			dst_str[0] = 0;
 		}
 
@@ -801,7 +801,7 @@ CHAR *tml::MemoryUtil::ReadBufferString_B(CHAR *dst_str, const size_t dst_str_si
 	}
 
 	if ((dst_str == nullptr)
-	|| (dst_str_size <= 0U)) {
+	|| (dst_str_size < sizeof(CHAR))) {
 		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
@@ -845,7 +845,7 @@ CHAR *tml::MemoryUtil::ReadBufferString_L(CHAR *dst_str, const size_t dst_str_si
 {
 	if (tml::CheckResult(dst_res)) {
 		if ((dst_str != nullptr)
-		&& (dst_str_size > 0U)) {
+		&& (dst_str_size >= sizeof(CHAR))) {
 			dst_str[0] = 0;
 		}
 
@@ -853,7 +853,7 @@ CHAR *tml::MemoryUtil::ReadBufferString_L(CHAR *dst_str, const size_t dst_str_si
 	}
 
 	if ((dst_str == nullptr)
-	|| (dst_str_size <= 0U)) {
+	|| (dst_str_size < sizeof(CHAR))) {
 		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
@@ -897,7 +897,7 @@ WCHAR *tml::MemoryUtil::ReadBufferString_B(WCHAR *dst_str, const size_t dst_str_
 {
 	if (tml::CheckResult(dst_res)) {
 		if ((dst_str != nullptr)
-		&& (dst_str_size > 0U)) {
+		&& (dst_str_size >= sizeof(WCHAR))) {
 			dst_str[0] = 0;
 		}
 
@@ -905,7 +905,7 @@ WCHAR *tml::MemoryUtil::ReadBufferString_B(WCHAR *dst_str, const size_t dst_str_
 	}
 
 	if ((dst_str == nullptr)
-	|| (dst_str_size <= 0U)) {
+	|| (dst_str_size < sizeof(WCHAR))) {
 		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
@@ -949,7 +949,7 @@ WCHAR *tml::MemoryUtil::ReadBufferString_L(WCHAR *dst_str, const size_t dst_str_
 {
 	if (tml::CheckResult(dst_res)) {
 		if ((dst_str != nullptr)
-		&& (dst_str_size > 0U)) {
+		&& (dst_str_size >= sizeof(WCHAR))) {
 			dst_str[0] = 0;
 		}
 
@@ -957,7 +957,7 @@ WCHAR *tml::MemoryUtil::ReadBufferString_L(WCHAR *dst_str, const size_t dst_str_
 	}
 
 	if ((dst_str == nullptr)
-	|| (dst_str_size <= 0U)) {
+	|| (dst_str_size < sizeof(WCHAR))) {
 		tml::SetResult(dst_res, -1);
 
 		return (dst_str);
