@@ -25,17 +25,38 @@ tml::DynamicBuffer::DynamicBuffer() :
 
 /**
  * @brief コンストラクタ
+ * @param ary (array)
  * @param size (size)
  */
-tml::DynamicBuffer::DynamicBuffer(const size_t size)
+tml::DynamicBuffer::DynamicBuffer(const BYTE *ary, const size_t size) :
+	ary_(nullptr),
+	size_(0U),
+	len_(0U),
+	read_index_(0U),
+	read_res_(0),
+	write_index_(0U),
+	write_res_(0)
 {
-	this->ary_ = tml::MemoryUtil::Get<BYTE>(size);
-	this->size_ = size;
-	this->len_ = 0U;
-	this->read_index_ = 0U;
-	this->read_res_ = 0;
-	this->write_index_ = 0U;
-	this->write_res_ = 0;
+	this->SetArray(ary, size);
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param size (size)
+ */
+tml::DynamicBuffer::DynamicBuffer(const size_t size) :
+	ary_(nullptr),
+	size_(0U),
+	len_(0U),
+	read_index_(0U),
+	read_res_(0),
+	write_index_(0U),
+	write_res_(0)
+{
+	this->SetSize(size);
 
 	return;
 }
@@ -48,7 +69,7 @@ tml::DynamicBuffer::DynamicBuffer(const size_t size)
 tml::DynamicBuffer::DynamicBuffer(const tml::DynamicBuffer &src)
 {
 	this->ary_ = tml::MemoryUtil::Get<BYTE>(src.size_);
-	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.size_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -71,10 +92,10 @@ tml::DynamicBuffer &tml::DynamicBuffer::operator =(const tml::DynamicBuffer &src
 		return ((*this));
 	}
 
-	tml::MemoryUtil::Release(&this->ary_);
+	this->Release();
 
 	this->ary_ = tml::MemoryUtil::Get<BYTE>(src.size_);
-	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.size_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -101,12 +122,8 @@ tml::DynamicBuffer::DynamicBuffer(tml::DynamicBuffer &&src) noexcept
 	this->write_res_ = src.write_res_;
 
 	src.ary_ = nullptr;
-	src.size_ = 0U;
-	src.len_ = 0U;
-	src.read_index_ = 0U;
-	src.read_res_ = 0;
-	src.write_index_ = 0U;
-	src.write_res_ = 0;
+
+	src.Init();
 
 	return;
 }
@@ -123,7 +140,7 @@ tml::DynamicBuffer &tml::DynamicBuffer::operator =(tml::DynamicBuffer &&src) noe
 		return ((*this));
 	}
 
-	tml::MemoryUtil::Release(&this->ary_);
+	this->Release();
 
 	this->ary_ = src.ary_;
 	this->size_ = src.size_;
@@ -134,12 +151,8 @@ tml::DynamicBuffer &tml::DynamicBuffer::operator =(tml::DynamicBuffer &&src) noe
 	this->write_res_ = src.write_res_;
 
 	src.ary_ = nullptr;
-	src.size_ = 0U;
-	src.len_ = 0U;
-	src.read_index_ = 0U;
-	src.read_res_ = 0;
-	src.write_index_ = 0U;
-	src.write_res_ = 0;
+
+	src.Init();
 
 	return ((*this));
 }
@@ -188,20 +201,21 @@ void tml::DynamicBuffer::Init(void)
 /**
  * @brief SetArray関数
  * @param ary (array)
- * @param len (length)
+ * @param size (size)
  */
-void tml::DynamicBuffer::SetArray(const BYTE *ary, const size_t len)
+void tml::DynamicBuffer::SetArray(const BYTE *ary, const size_t size)
 {
-	if (len > this->size_) {
-		return;
+	if (size != this->size_) {
+		tml::MemoryUtil::Release(&this->ary_);
+
+		this->ary_ = tml::MemoryUtil::Get<BYTE>(size);
+		this->size_ = size;
 	}
 
-	tml::MemoryUtil::Copy(this->ary_, ary, len);
-	this->len_ = len;
+	tml::MemoryUtil::Copy(this->ary_, ary, this->size_);
+	this->len_ = this->size_;
 	this->read_index_ = 0U;
-	this->read_res_ = 0;
-	this->write_index_ = len;
-	this->write_res_ = 0;
+	this->write_index_ = this->size_;
 
 	return;
 }
@@ -239,9 +253,7 @@ void tml::DynamicBuffer::SetSize(const size_t size, const bool keep_flg)
 
 		this->len_ = 0U;
 		this->read_index_ = 0U;
-		this->read_res_ = 0;
 		this->write_index_ = 0U;
-		this->write_res_ = 0;
 	}
 
 	return;

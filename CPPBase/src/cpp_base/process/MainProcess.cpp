@@ -6,12 +6,8 @@
 
 #include "MainProcess.h"
 #include "../../lib/tml/memory/MemoryUtil.h"
-#include "../../lib/tml/memory/DynamicBuffer.h"
-#include "../../lib/tml/memory/StaticBuffer.h"
 #include "../../lib/tml/string/StringUtil.h"
 #include "../../lib/tml/time/TimeUtil.h"
-#include "../../lib/tml/time/Clock.h"
-#include "../../lib/tml/time/Date.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
@@ -147,19 +143,6 @@ INT cpp_base::MainProcess::Start(void)
 
 		txt_file.Write();
 		*/
-
-		tml::DynamicBuffer buf1(128U);
-		tml::DynamicBuffer buf2(128U);
-		//tml::StaticBuffer<128U> buf1;
-		//tml::StaticBuffer<128U> buf2;
-
-		buf1.WriteString_B(L"‚ ‚¢‚¤‚¦‚¨");
-
-		buf2 = buf1;
-
-		WCHAR str[128] = L"";
-
-		buf2.ReadString_B(str, sizeof(str));
 
 		int a = 0;
 	}

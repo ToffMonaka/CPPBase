@@ -43,6 +43,7 @@ class TextFileReadPlan
 {
 public:
 	std::wstring file_path;
+	size_t one_buffer_size;
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
 public:
@@ -62,6 +63,8 @@ class TextFileWritePlan
 {
 public:
 	std::wstring file_path;
+	size_t one_buffer_size;
+	bool add_flag;
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
 public:

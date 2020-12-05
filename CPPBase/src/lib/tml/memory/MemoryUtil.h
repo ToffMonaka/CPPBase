@@ -256,7 +256,7 @@ _NODISCARD tml::unique_ptr<_Ty> make_unique(_Types&&... _Args) {
 
 template <class _Ty, std::enable_if_t<std::is_array_v<_Ty> && std::extent_v<_Ty> == 0, int> = 0>
 _NODISCARD tml::unique_ptr<_Ty> make_unique(size_t _Size) {
-    using _Elem = std::remove_extent_t<_Ty>;
+	using _Elem = std::remove_extent_t<_Ty>;
 
 	return (tml::unique_ptr<_Ty>(tml::MemoryUtil::Get<_Elem>(_Size)));
 };

@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "File.h"
+#include "../memory/DynamicBuffer.h"
 
 
 namespace tml {
@@ -19,8 +20,7 @@ public: BinaryFileData(const tml::BinaryFileData &) = delete;
 public: tml::BinaryFileData &operator =(const tml::BinaryFileData &) = delete;
 
 public:
-	BYTE *buffer;
-	size_t buffer_size;
+	tml::DynamicBuffer buffer;
 
 private:
 	void Release(void);
@@ -62,6 +62,7 @@ class BinaryFileWritePlan
 public:
 	std::wstring file_path;
 	size_t one_buffer_size;
+	bool add_flag;
 
 public:
 	BinaryFileWritePlan();

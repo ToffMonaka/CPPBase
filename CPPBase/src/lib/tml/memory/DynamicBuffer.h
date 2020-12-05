@@ -29,6 +29,7 @@ private:
 
 public:
 	DynamicBuffer();
+	DynamicBuffer(const BYTE *, const size_t);
 	DynamicBuffer(const size_t);
 	DynamicBuffer(const tml::DynamicBuffer &);
 	tml::DynamicBuffer &operator =(const tml::DynamicBuffer &);
@@ -198,7 +199,6 @@ inline INT tml::DynamicBuffer::GetReadResult(void) const
  */
 inline void tml::DynamicBuffer::InitReadResult(void)
 {
-	this->read_index_ = 0U;
 	this->read_res_ = 0;
 
 	return;
@@ -257,7 +257,6 @@ inline INT tml::DynamicBuffer::GetWriteResult(void) const
  */
 inline void tml::DynamicBuffer::InitWriteResult(void)
 {
-	this->write_index_ = 0U;
 	this->write_res_ = 0;
 
 	return;
