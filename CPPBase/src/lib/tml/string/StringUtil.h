@@ -27,8 +27,8 @@ public: tml::StringUtil &operator =(const tml::StringUtil &) = delete;
 private:
 	static tml::ThreadFix th_fix_;
 	static std::unique_ptr<tml::StringUtilEngine> engine_;
-	static std::string old_local_name_;
-	static bool old_local_flg_;
+	static std::string old_locale_name_;
+	static bool old_locale_flg_;
 
 public:
 	static void Init(void);

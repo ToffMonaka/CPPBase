@@ -53,15 +53,15 @@ void tml::DefaultStringUtilEngine::Init(void)
 
 /**
  * @brief Createä÷êî
- * @param local_name (local_name)
+ * @param locale_name (locale_name)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::DefaultStringUtilEngine::Create(const CHAR *local_name)
+INT tml::DefaultStringUtilEngine::Create(const CHAR *locale_name)
 {
 	this->Release();
 
-	if (tml::StringUtilEngine::Create(local_name) < 0) {
+	if (tml::StringUtilEngine::Create(locale_name) < 0) {
 		this->Init();
 
 		return (-1);

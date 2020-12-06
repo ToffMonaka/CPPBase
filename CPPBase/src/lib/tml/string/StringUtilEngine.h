@@ -21,7 +21,7 @@ public: tml::StringUtilEngine &operator =(const tml::StringUtilEngine &) = delet
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
-	std::string local_name_;
+	std::string locale_name_;
 
 protected:
 	void Release(void);
@@ -40,9 +40,9 @@ public:
 
 /**
  * @brief GetLocaleNameŠÖ”
- * @return local_name (local_name)
+ * @return locale_name (locale_name)
  */
 inline const std::string &tml::StringUtilEngine::GetLocaleName(void) const
 {
-	return (this->local_name_);
+	return (this->locale_name_);
 }

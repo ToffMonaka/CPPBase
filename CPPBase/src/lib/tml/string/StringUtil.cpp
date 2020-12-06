@@ -11,8 +11,8 @@
 
 tml::ThreadFix tml::StringUtil::th_fix_;
 std::unique_ptr<tml::StringUtilEngine> tml::StringUtil::engine_;
-std::string tml::StringUtil::old_local_name_;
-bool tml::StringUtil::old_local_flg_ = false;
+std::string tml::StringUtil::old_locale_name_;
+bool tml::StringUtil::old_locale_flg_ = false;
 
 
 /**
@@ -24,15 +24,15 @@ void tml::StringUtil::Init(void)
 		return;
 	}
 
-	if (tml::StringUtil::old_local_flg_) {
+	if (tml::StringUtil::old_locale_flg_) {
 		try {
-			std::locale::global(std::locale(tml::StringUtil::old_local_name_));
+			std::locale::global(std::locale(tml::StringUtil::old_locale_name_));
 		} catch (std::runtime_error &e) {
 			std::cout << e.what() << std::endl;
 		}
 
-		tml::StringUtil::old_local_name_.clear();
-		tml::StringUtil::old_local_flg_ = false;
+		tml::StringUtil::old_locale_name_.clear();
+		tml::StringUtil::old_locale_flg_ = false;
 	}
 
 	tml::StringUtil::engine_.reset();
@@ -60,10 +60,10 @@ INT tml::StringUtil::Create(std::unique_ptr<tml::StringUtilEngine> &engine)
 	tml::StringUtil::engine_ = std::move(engine);
 
 	try {
-		std::locale old_local = std::locale::global(std::locale(tml::StringUtil::engine_->GetLocaleName()));
+		std::locale old_locale = std::locale::global(std::locale(tml::StringUtil::engine_->GetLocaleName()));
 
-		tml::StringUtil::old_local_name_ = old_local.name();
-		tml::StringUtil::old_local_flg_ = true;
+		tml::StringUtil::old_locale_name_ = old_locale.name();
+		tml::StringUtil::old_locale_flg_ = true;
 	} catch (std::runtime_error &e) {
 		std::cout << e.what() << std::endl;
 

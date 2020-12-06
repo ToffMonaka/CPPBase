@@ -39,7 +39,7 @@ void tml::StringUtilEngine::Release(void)
  */
 void tml::StringUtilEngine::Init(void)
 {
-	this->local_name_.clear();
+	this->locale_name_.clear();
 
 	return;
 }
@@ -47,13 +47,13 @@ void tml::StringUtilEngine::Init(void)
 
 /**
  * @brief Createä÷êî
- * @param local_name (local_name)
+ * @param locale_name (locale_name)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::StringUtilEngine::Create(const CHAR *local_name)
+INT tml::StringUtilEngine::Create(const CHAR *locale_name)
 {
-	this->local_name_ = local_name;
+	this->locale_name_ = locale_name;
 
 	return (0);
 }

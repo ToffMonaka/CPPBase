@@ -762,6 +762,7 @@ BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size,
 
 	if ((buf == nullptr)
 	|| ((buf_index + read_size) > buf_size)
+	|| (buf == dst_ary)
 	|| (read_size > dst_ary_size)) {
 		tml::SetResult(dst_res, -1);
 
@@ -1595,6 +1596,7 @@ void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size,
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + write_size) > dst_buf_size)
+	|| (dst_buf == ary)
 	|| (write_size > ary_size)) {
 		tml::SetResult(dst_res, -1);
 
