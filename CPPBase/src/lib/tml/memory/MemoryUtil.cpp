@@ -57,7 +57,7 @@ INT tml::MemoryUtil::Create(std::unique_ptr<tml::MemoryUtilEngine> &engine)
  * @param buf_index (buffer_index)
  * @param index (index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::SetBufferIndex(const size_t buf_size, size_t &buf_index, const size_t index, INT *dst_res)
 {
@@ -86,7 +86,7 @@ void tml::MemoryUtil::SetBufferIndex(const size_t buf_size, size_t &buf_index, c
  * @param buf_index (buffer_index)
  * @param add_index (add_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::AddBufferIndex(const size_t buf_size, size_t &buf_index, const INT add_index, INT *dst_res)
 {
@@ -118,7 +118,7 @@ void tml::MemoryUtil::AddBufferIndex(const size_t buf_size, size_t &buf_index, c
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 CHAR tml::MemoryUtil::ReadBufferCHAR(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -151,7 +151,7 @@ CHAR tml::MemoryUtil::ReadBufferCHAR(const BYTE *buf, const size_t buf_size, siz
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 UCHAR tml::MemoryUtil::ReadBufferUCHAR(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -184,7 +184,7 @@ UCHAR tml::MemoryUtil::ReadBufferUCHAR(const BYTE *buf, const size_t buf_size, s
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 SHORT tml::MemoryUtil::ReadBufferSHORT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -218,7 +218,7 @@ SHORT tml::MemoryUtil::ReadBufferSHORT_B(const BYTE *buf, const size_t buf_size,
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 SHORT tml::MemoryUtil::ReadBufferSHORT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -252,7 +252,7 @@ SHORT tml::MemoryUtil::ReadBufferSHORT_L(const BYTE *buf, const size_t buf_size,
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 USHORT tml::MemoryUtil::ReadBufferUSHORT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -286,7 +286,7 @@ USHORT tml::MemoryUtil::ReadBufferUSHORT_B(const BYTE *buf, const size_t buf_siz
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 USHORT tml::MemoryUtil::ReadBufferUSHORT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -320,7 +320,7 @@ USHORT tml::MemoryUtil::ReadBufferUSHORT_L(const BYTE *buf, const size_t buf_siz
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 INT tml::MemoryUtil::ReadBufferINT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -356,7 +356,7 @@ INT tml::MemoryUtil::ReadBufferINT_B(const BYTE *buf, const size_t buf_size, siz
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 INT tml::MemoryUtil::ReadBufferINT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -392,7 +392,7 @@ INT tml::MemoryUtil::ReadBufferINT_L(const BYTE *buf, const size_t buf_size, siz
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 UINT tml::MemoryUtil::ReadBufferUINT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -428,7 +428,7 @@ UINT tml::MemoryUtil::ReadBufferUINT_B(const BYTE *buf, const size_t buf_size, s
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 UINT tml::MemoryUtil::ReadBufferUINT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -464,7 +464,7 @@ UINT tml::MemoryUtil::ReadBufferUINT_L(const BYTE *buf, const size_t buf_size, s
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 LONGLONG tml::MemoryUtil::ReadBufferLONGLONG_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -504,7 +504,7 @@ LONGLONG tml::MemoryUtil::ReadBufferLONGLONG_B(const BYTE *buf, const size_t buf
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 LONGLONG tml::MemoryUtil::ReadBufferLONGLONG_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -544,7 +544,7 @@ LONGLONG tml::MemoryUtil::ReadBufferLONGLONG_L(const BYTE *buf, const size_t buf
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 ULONGLONG tml::MemoryUtil::ReadBufferULONGLONG_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -584,7 +584,7 @@ ULONGLONG tml::MemoryUtil::ReadBufferULONGLONG_B(const BYTE *buf, const size_t b
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 ULONGLONG tml::MemoryUtil::ReadBufferULONGLONG_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -624,7 +624,7 @@ ULONGLONG tml::MemoryUtil::ReadBufferULONGLONG_L(const BYTE *buf, const size_t b
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 FLOAT tml::MemoryUtil::ReadBufferFLOAT_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -655,7 +655,7 @@ FLOAT tml::MemoryUtil::ReadBufferFLOAT_B(const BYTE *buf, const size_t buf_size,
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 FLOAT tml::MemoryUtil::ReadBufferFLOAT_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -686,7 +686,7 @@ FLOAT tml::MemoryUtil::ReadBufferFLOAT_L(const BYTE *buf, const size_t buf_size,
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 DOUBLE tml::MemoryUtil::ReadBufferDOUBLE_B(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -717,7 +717,7 @@ DOUBLE tml::MemoryUtil::ReadBufferDOUBLE_B(const BYTE *buf, const size_t buf_siz
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return val (value)
  */
 DOUBLE tml::MemoryUtil::ReadBufferDOUBLE_L(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -751,7 +751,7 @@ DOUBLE tml::MemoryUtil::ReadBufferDOUBLE_L(const BYTE *buf, const size_t buf_siz
  * @param buf_index (buffer_index)
  * @param read_size (read_size)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return dst_ary (dst_array)
  */
 BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size, const BYTE *buf, const size_t buf_size, size_t &buf_index, const size_t read_size, INT *dst_res)
@@ -787,7 +787,7 @@ BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size,
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return dst_str (dst_string)
  */
 CHAR *tml::MemoryUtil::ReadBufferString_B(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -839,7 +839,7 @@ CHAR *tml::MemoryUtil::ReadBufferString_B(CHAR *dst_str, const size_t dst_str_si
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return dst_str (dst_string)
  */
 CHAR *tml::MemoryUtil::ReadBufferString_L(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -891,7 +891,7 @@ CHAR *tml::MemoryUtil::ReadBufferString_L(CHAR *dst_str, const size_t dst_str_si
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return dst_str (dst_string)
  */
 WCHAR *tml::MemoryUtil::ReadBufferString_B(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -943,7 +943,7 @@ WCHAR *tml::MemoryUtil::ReadBufferString_B(WCHAR *dst_str, const size_t dst_str_
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  * @return dst_str (dst_string)
  */
 WCHAR *tml::MemoryUtil::ReadBufferString_L(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
@@ -994,7 +994,7 @@ WCHAR *tml::MemoryUtil::ReadBufferString_L(WCHAR *dst_str, const size_t dst_str_
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR val, INT *dst_res)
 {
@@ -1025,7 +1025,7 @@ void tml::MemoryUtil::WriteBufferCHAR(BYTE *dst_buf, const size_t dst_buf_size, 
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferUCHAR(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UCHAR val, INT *dst_res)
 {
@@ -1056,7 +1056,7 @@ void tml::MemoryUtil::WriteBufferUCHAR(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_res)
 {
@@ -1088,7 +1088,7 @@ void tml::MemoryUtil::WriteBufferSHORT_B(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_res)
 {
@@ -1120,7 +1120,7 @@ void tml::MemoryUtil::WriteBufferSHORT_L(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferUSHORT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_res)
 {
@@ -1152,7 +1152,7 @@ void tml::MemoryUtil::WriteBufferUSHORT_B(BYTE *dst_buf, const size_t dst_buf_si
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferUSHORT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_res)
 {
@@ -1184,7 +1184,7 @@ void tml::MemoryUtil::WriteBufferUSHORT_L(BYTE *dst_buf, const size_t dst_buf_si
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferINT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_res)
 {
@@ -1218,7 +1218,7 @@ void tml::MemoryUtil::WriteBufferINT_B(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferINT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_res)
 {
@@ -1252,7 +1252,7 @@ void tml::MemoryUtil::WriteBufferINT_L(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferUINT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_res)
 {
@@ -1286,7 +1286,7 @@ void tml::MemoryUtil::WriteBufferUINT_B(BYTE *dst_buf, const size_t dst_buf_size
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferUINT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_res)
 {
@@ -1320,7 +1320,7 @@ void tml::MemoryUtil::WriteBufferUINT_L(BYTE *dst_buf, const size_t dst_buf_size
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferLONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_res)
 {
@@ -1358,7 +1358,7 @@ void tml::MemoryUtil::WriteBufferLONGLONG_B(BYTE *dst_buf, const size_t dst_buf_
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferLONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_res)
 {
@@ -1396,7 +1396,7 @@ void tml::MemoryUtil::WriteBufferLONGLONG_L(BYTE *dst_buf, const size_t dst_buf_
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferULONGLONG_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_res)
 {
@@ -1434,7 +1434,7 @@ void tml::MemoryUtil::WriteBufferULONGLONG_B(BYTE *dst_buf, const size_t dst_buf
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferULONGLONG_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_res)
 {
@@ -1472,7 +1472,7 @@ void tml::MemoryUtil::WriteBufferULONGLONG_L(BYTE *dst_buf, const size_t dst_buf
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferFLOAT_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_res)
 {
@@ -1500,7 +1500,7 @@ void tml::MemoryUtil::WriteBufferFLOAT_B(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferFLOAT_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_res)
 {
@@ -1528,7 +1528,7 @@ void tml::MemoryUtil::WriteBufferFLOAT_L(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferDOUBLE_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_res)
 {
@@ -1556,7 +1556,7 @@ void tml::MemoryUtil::WriteBufferDOUBLE_B(BYTE *dst_buf, const size_t dst_buf_si
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferDOUBLE_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_res)
 {
@@ -1586,7 +1586,7 @@ void tml::MemoryUtil::WriteBufferDOUBLE_L(BYTE *dst_buf, const size_t dst_buf_si
  * @param ary_size (array_size)
  * @param write_size (write_size)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const BYTE *ary, const size_t ary_size, const size_t write_size, INT *dst_res)
 {
@@ -1620,7 +1620,7 @@ void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_buf_index (dst_buffer_index)
  * @param str (string)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferString_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_res)
 {
@@ -1647,7 +1647,7 @@ void tml::MemoryUtil::WriteBufferString_B(BYTE *dst_buf, const size_t dst_buf_si
  * @param dst_buf_index (dst_buffer_index)
  * @param str (string)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferString_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_res)
 {
@@ -1674,7 +1674,7 @@ void tml::MemoryUtil::WriteBufferString_L(BYTE *dst_buf, const size_t dst_buf_si
  * @param dst_buf_index (dst_buffer_index)
  * @param str (string)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferString_B(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_res)
 {
@@ -1701,7 +1701,7 @@ void tml::MemoryUtil::WriteBufferString_B(BYTE *dst_buf, const size_t dst_buf_si
  * @param dst_buf_index (dst_buffer_index)
  * @param str (string)
  * @param dst_res (dst_result)<br>
- * NULLP=Žw’è–³‚µ,0–¢–ž=Ž¸”s
+ * nullptr=Žw’è–³‚µ,0–¢–ž=Ž¸”s
  */
 void tml::MemoryUtil::WriteBufferString_L(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_res)
 {

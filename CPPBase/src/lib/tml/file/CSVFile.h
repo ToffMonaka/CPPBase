@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_NEWLINE_CODE.h"
+#include <vector>
 #include "File.h"
 
 
@@ -20,6 +21,7 @@ public: CSVFileData(const tml::CSVFileData &) = delete;
 public: tml::CSVFileData &operator =(const tml::CSVFileData &) = delete;
 
 public:
+	std::vector<std::vector<std::wstring>> value_container;
 
 private:
 	void Release(void);
@@ -29,7 +31,56 @@ public:
 	virtual ~CSVFileData();
 
 	void Init(void);
+
+	size_t GetRowCount(void) const;
+	size_t GetColumnCount(void) const;
+	std::wstring *GetValue(const size_t, const size_t);
 };
+}
+
+
+/**
+ * @brief GetRowCountä÷êî
+ * @return row_cnt (row_count)
+ */
+inline size_t tml::CSVFileData::GetRowCount(void) const
+{
+	return (this->value_container.size());
+}
+
+
+/**
+ * @brief GetColumnCountä÷êî
+ * @return column_cnt (column_count)
+ */
+inline size_t tml::CSVFileData::GetColumnCount(void) const
+{
+	if (this->value_container.size() <= 0U) {
+		return (0U);
+	}
+	
+	return (this->value_container[0].size());
+}
+
+
+/**
+ * @brief GetValueä÷êî
+ * @param row_cnt (row_index)
+ * @param column_cnt (column_index)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline std::wstring *tml::CSVFileData::GetValue(const size_t row_index, const size_t column_index)
+{
+	if (row_index >= this->value_container.size()) {
+		return (nullptr);
+	}
+
+	if (column_index >= this->value_container[row_index].size()) {
+		return (nullptr);
+	}
+
+	return (&this->value_container[row_index][column_index]);
 }
 
 

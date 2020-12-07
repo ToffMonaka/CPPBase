@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <vector>
 #include <list>
 #include "StringUtilEngine.h"
 #include "../thread/ThreadFix.h"
@@ -35,8 +36,12 @@ public:
 	static INT Create(std::unique_ptr<tml::StringUtilEngine> &);
 
 	static bool CheckThreadFix(void);
+	static std::vector<std::string> &Split(std::vector<std::string> &, const CHAR *, const CHAR *);
+	static std::vector<std::wstring> &Split(std::vector<std::wstring> &, const WCHAR *, const WCHAR *);
 	static std::list<std::string> &Split(std::list<std::string> &, const CHAR *, const CHAR *);
 	static std::list<std::wstring> &Split(std::list<std::wstring> &, const WCHAR *, const WCHAR *);
+	static std::string &Join(std::string &, const std::vector<std::string> &, const CHAR *);
+	static std::wstring &Join(std::wstring &, const std::vector<std::wstring> &, const WCHAR *);
 	static std::string &Join(std::string &, const std::list<std::string> &, const CHAR *);
 	static std::wstring &Join(std::wstring &, const std::list<std::wstring> &, const WCHAR *);
 	static INT GetINT(const CHAR *, const INT default_val = 0, const INT radix = 10);

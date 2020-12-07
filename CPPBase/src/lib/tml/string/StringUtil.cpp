@@ -86,7 +86,7 @@ INT tml::StringUtil::Create(std::unique_ptr<tml::StringUtilEngine> &engine)
  * @param sep_str (separator_string)
  * @return dst_str_cont (dst_string_container)
  */
-std::list<std::string> &tml::StringUtil::Split(std::list<std::string> &dst_str_cont, const CHAR *str, const CHAR *sep_str)
+std::vector<std::string> &tml::StringUtil::Split(std::vector<std::string> &dst_str_cont, const CHAR *str, const CHAR *sep_str)
 {
 	dst_str_cont.clear();
 
@@ -94,7 +94,8 @@ std::list<std::string> &tml::StringUtil::Split(std::list<std::string> &dst_str_c
 		return (dst_str_cont);
 	}
 
-	if ((sep_str == nullptr)
+	if ((str[0] == 0)
+	|| (sep_str == nullptr)
 	|| (sep_str[0] == 0)) {
 		dst_str_cont.push_back(str);
 
@@ -105,11 +106,101 @@ std::list<std::string> &tml::StringUtil::Split(std::list<std::string> &dst_str_c
 	std::string tmp_str = str;
 	size_t tmp_str_index = 0U;
 
-	if (tmp_str.empty()) {
-		dst_str_cont.push_back(tmp_str);
+	while (1) {
+		auto sep_str_index = tmp_str.find(sep_str, tmp_str_index);
+
+		if (sep_str_index == std::string::npos) {
+			dst_str_cont.push_back(tmp_str.substr(tmp_str_index));
+
+			break;
+		}
+
+		dst_str_cont.push_back(tmp_str.substr(tmp_str_index, sep_str_index - tmp_str_index));
+
+		tmp_str_index = sep_str_index + sep_str_len;
+	}
+
+	return (dst_str_cont);
+}
+
+
+/**
+ * @brief Split関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str_cont (dst_string_container)
+ * @param str (string)
+ * @param sep_str (separator_string)
+ * @return dst_str_cont (dst_string_container)
+ */
+std::vector<std::wstring> &tml::StringUtil::Split(std::vector<std::wstring> &dst_str_cont, const WCHAR *str, const WCHAR *sep_str)
+{
+	dst_str_cont.clear();
+
+	if (str == nullptr) {
+		return (dst_str_cont);
+	}
+
+	if ((str[0] == 0)
+	|| (sep_str == nullptr)
+	|| (sep_str[0] == 0)) {
+		dst_str_cont.push_back(str);
 
 		return (dst_str_cont);
 	}
+
+	auto sep_str_len = wcslen(sep_str);
+	std::wstring tmp_str = str;
+	size_t tmp_str_index = 0U;
+
+	while (1) {
+		auto sep_str_index = tmp_str.find(sep_str, tmp_str_index);
+
+		if (sep_str_index == std::wstring::npos) {
+			dst_str_cont.push_back(tmp_str.substr(tmp_str_index));
+
+			break;
+		}
+
+		dst_str_cont.push_back(tmp_str.substr(tmp_str_index, sep_str_index - tmp_str_index));
+
+		tmp_str_index = sep_str_index + sep_str_len;
+	}
+
+	return (dst_str_cont);
+}
+
+
+/**
+ * @brief Split関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str_cont (dst_string_container)
+ * @param str (string)
+ * @param sep_str (separator_string)
+ * @return dst_str_cont (dst_string_container)
+ */
+std::list<std::string> &tml::StringUtil::Split(std::list<std::string> &dst_str_cont, const CHAR *str, const CHAR *sep_str)
+{
+	dst_str_cont.clear();
+
+	if (str == nullptr) {
+		return (dst_str_cont);
+	}
+
+	if ((str[0] == 0)
+	|| (sep_str == nullptr)
+	|| (sep_str[0] == 0)) {
+		dst_str_cont.push_back(str);
+
+		return (dst_str_cont);
+	}
+
+	auto sep_str_len = strlen(sep_str);
+	std::string tmp_str = str;
+	size_t tmp_str_index = 0U;
 
 	while (1) {
 		auto sep_str_index = tmp_str.find(sep_str, tmp_str_index);
@@ -147,7 +238,8 @@ std::list<std::wstring> &tml::StringUtil::Split(std::list<std::wstring> &dst_str
 		return (dst_str_cont);
 	}
 
-	if ((sep_str == nullptr)
+	if ((str[0] == 0)
+	|| (sep_str == nullptr)
 	|| (sep_str[0] == 0)) {
 		dst_str_cont.push_back(str);
 
@@ -157,12 +249,6 @@ std::list<std::wstring> &tml::StringUtil::Split(std::list<std::wstring> &dst_str
 	auto sep_str_len = wcslen(sep_str);
 	std::wstring tmp_str = str;
 	size_t tmp_str_index = 0U;
-
-	if (tmp_str.empty()) {
-		dst_str_cont.push_back(tmp_str);
-
-		return (dst_str_cont);
-	}
 
 	while (1) {
 		auto sep_str_index = tmp_str.find(sep_str, tmp_str_index);
@@ -179,6 +265,84 @@ std::list<std::wstring> &tml::StringUtil::Split(std::list<std::wstring> &dst_str
 	}
 
 	return (dst_str_cont);
+}
+
+
+/**
+ * @brief Join関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param str_cont (string_container)
+ * @param sep_str (separator_string)
+ * @return dst_str (dst_string)
+ */
+std::string &tml::StringUtil::Join(std::string &dst_str, const std::vector<std::string> &str_cont, const CHAR *sep_str)
+{
+	dst_str.clear();
+
+	if ((sep_str == nullptr)
+	|| (sep_str[0] == 0)) {
+		for (auto &str : str_cont) {
+			dst_str += str;
+		}
+
+		return (dst_str);
+	}
+
+	size_t str_i = 0U;
+
+	for (auto &str : str_cont) {
+		if (str_i > 0U) {
+			dst_str += sep_str;
+		}
+
+		dst_str += str;
+
+		++str_i;
+	}
+
+	return (dst_str);
+}
+
+
+/**
+ * @brief Join関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param str_cont (string_container)
+ * @param sep_str (separator_string)
+ * @return dst_str (dst_string)
+ */
+std::wstring &tml::StringUtil::Join(std::wstring &dst_str, const std::vector<std::wstring> &str_cont, const WCHAR *sep_str)
+{
+	dst_str.clear();
+
+	if ((sep_str == nullptr)
+	|| (sep_str[0] == 0)) {
+		for (auto &str : str_cont) {
+			dst_str += str;
+		}
+
+		return (dst_str);
+	}
+
+	size_t str_i = 0U;
+
+	for (auto &str : str_cont) {
+		if (str_i > 0U) {
+			dst_str += sep_str;
+		}
+
+		dst_str += str;
+
+		++str_i;
+	}
+
+	return (dst_str);
 }
 
 

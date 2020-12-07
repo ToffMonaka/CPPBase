@@ -133,19 +133,14 @@ INT cpp_base::MainProcess::Start(void)
 	}
 
 	{// Test
-		tml::TextFile txt_file;
+		tml::CSVFile csv_file;
 
-		txt_file.read_plan.file_path = L"test1.txt";
+		csv_file.read_plan.file_path = L"test_csv1.csv";
 
-		txt_file.Read();
+		csv_file.Read();
 
-		auto &str_cont = txt_file.data.string_container;
-
-		/*
-		txt_file.write_plan.file_path = L"test2.txt";
-
-		txt_file.Write();
-		*/
+		auto &val_cont = csv_file.data.value_container;
+		auto val = csv_file.data.GetValue(1U, 1U);
 
 		int a = 0;
 	}
