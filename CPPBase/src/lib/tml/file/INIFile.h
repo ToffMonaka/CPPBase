@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_NEWLINE_CODE.h"
+#include <map>
 #include "File.h"
 
 
@@ -20,6 +21,7 @@ public: INIFileData(const tml::INIFileData &) = delete;
 public: tml::INIFileData &operator =(const tml::INIFileData &) = delete;
 
 public:
+	std::map<std::wstring, std::map<std::wstring, std::wstring>> value_container;
 
 private:
 	void Release(void);
@@ -29,7 +31,53 @@ public:
 	virtual ~INIFileData();
 
 	void Init(void);
+
+	std::map<std::wstring, std::wstring> *GetValueNameContainer(const WCHAR *);
+	std::wstring *GetValue(const WCHAR *, const WCHAR *);
 };
+}
+
+
+/**
+ * @brief GetValueNameContainerä÷êî
+ * @param section_name (section_name)
+ * @return val_name_cont (valalue_name_container)<br>
+ * nullptr=é∏îs
+ */
+inline std::map<std::wstring, std::wstring> *tml::INIFileData::GetValueNameContainer(const WCHAR *section_name)
+{
+	auto val_name_itr = this->value_container.find(section_name);
+
+	if (val_name_itr == this->value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&val_name_itr->second);
+}
+
+
+/**
+ * @brief GetValueä÷êî
+ * @param section_name (section_name)
+ * @param val_name (valalue_name)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline std::wstring *tml::INIFileData::GetValue(const WCHAR *section_name, const WCHAR *val_name)
+{
+	auto val_name_itr = this->value_container.find(section_name);
+
+	if (val_name_itr == this->value_container.end()) {
+		return (nullptr);
+	}
+
+	auto val_itr = val_name_itr->second.find(val_name);
+
+	if (val_itr == val_name_itr->second.end()) {
+		return (nullptr);
+	}
+
+	return (&val_itr->second);
 }
 
 

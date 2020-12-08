@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_NEWLINE_CODE.h"
+#include <map>
 #include "File.h"
 
 
@@ -20,6 +21,7 @@ public: ConfigFileData(const tml::ConfigFileData &) = delete;
 public: tml::ConfigFileData &operator =(const tml::ConfigFileData &) = delete;
 
 public:
+	std::map<std::wstring, std::wstring> value_container;
 
 private:
 	void Release(void);
@@ -29,7 +31,27 @@ public:
 	virtual ~ConfigFileData();
 
 	void Init(void);
+
+	std::wstring *GetValue(const WCHAR *);
 };
+}
+
+
+/**
+ * @brief GetValueä÷êî
+ * @param val_name (value_name)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline std::wstring *tml::ConfigFileData::GetValue(const WCHAR *val_name)
+{
+	auto val_itr = this->value_container.find(val_name);
+
+	if (val_itr == this->value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&val_itr->second);
 }
 
 

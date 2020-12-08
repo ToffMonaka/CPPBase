@@ -29,8 +29,8 @@ private:
 
 public:
 	DynamicBuffer();
-	DynamicBuffer(const BYTE *, const size_t);
 	DynamicBuffer(const size_t);
+	DynamicBuffer(const BYTE *, const size_t);
 	DynamicBuffer(const tml::DynamicBuffer &);
 	tml::DynamicBuffer &operator =(const tml::DynamicBuffer &);
 	DynamicBuffer(tml::DynamicBuffer &&) noexcept;
@@ -39,10 +39,10 @@ public:
 
 	void Init(void);
 
-	BYTE *GetArray(void);
-	void SetArray(const BYTE *, const size_t);
+	BYTE *Get(void);
+	void Set(const size_t, const bool keep_flg = false);
+	void Set(const BYTE *, const size_t);
 	size_t GetSize(void) const;
-	void SetSize(const size_t, const bool keep_flg = false);
 	size_t GetLength(void) const;
 	void SetLength(const size_t);
 	size_t GetReadIndex(void) const;
@@ -106,10 +106,10 @@ public:
 
 
 /**
- * @brief GetArrayŠÖ”
+ * @brief GetŠÖ”
  * @return ary (array)
  */
-inline BYTE *tml::DynamicBuffer::GetArray(void)
+inline BYTE *tml::DynamicBuffer::Get(void)
 {
 	return (this->ary_);
 }

@@ -30,8 +30,8 @@ private:
 
 public:
 	StaticBuffer();
-	StaticBuffer(const BYTE *, const size_t);
 	StaticBuffer(const size_t);
+	StaticBuffer(const BYTE *, const size_t);
 	StaticBuffer(const tml::StaticBuffer<N> &);
 	tml::StaticBuffer<N> &operator =(const tml::StaticBuffer<N> &);
 	StaticBuffer(tml::StaticBuffer<N> &&) noexcept;
@@ -40,10 +40,10 @@ public:
 
 	void Init(void);
 
-	BYTE *GetArray(void);
-	void SetArray(const BYTE *, const size_t);
+	BYTE *Get(void);
+	void Set(const size_t, const bool keep_flg = false);
+	void Set(const BYTE *, const size_t);
 	size_t GetSize(void) const;
-	void SetSize(const size_t, const bool keep_flg = false);
 	size_t GetLength(void) const;
 	void SetLength(const size_t);
 	size_t GetReadIndex(void) const;
@@ -124,6 +124,25 @@ inline tml::StaticBuffer<N>::StaticBuffer() :
 
 /**
  * @brief コンストラクタ
+ * @param size (size)
+ */
+template <size_t N>
+inline tml::StaticBuffer<N>::StaticBuffer(const size_t size) :
+	size_(N),
+	len_(0U),
+	read_index_(0U),
+	read_res_(0),
+	write_index_(0U),
+	write_res_(0)
+{
+	this->Set(size);
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
  * @param ary (array)
  * @param size (size)
  */
@@ -136,26 +155,7 @@ inline tml::StaticBuffer<N>::StaticBuffer(const BYTE *ary, const size_t size) :
 	write_index_(0U),
 	write_res_(0)
 {
-	this->SetArray(ary, size);
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- * @param size (size)
- */
-template <size_t N>
-inline tml::StaticBuffer<N>::StaticBuffer(const size_t size) :
-	size_(N),
-	len_(0U),
-	read_index_(0U),
-	read_res_(0),
-	write_index_(0U),
-	write_res_(0)
-{
-	this->SetSize(size);
+	this->Set(ary, size);
 
 	return;
 }
@@ -297,23 +297,53 @@ inline void tml::StaticBuffer<N>::Init(void)
 
 
 /**
- * @brief GetArray関数
+ * @brief Get関数
  * @return ary (array)
  */
 template <size_t N>
-inline BYTE *tml::StaticBuffer<N>::GetArray(void)
+inline BYTE *tml::StaticBuffer<N>::Get(void)
 {
 	return (this->ary_);
 }
 
 
 /**
- * @brief SetArray関数
+ * @brief Set関数
+ * @param size (size)
+ * @param keep_flg (keep_flag)
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::Set(const size_t size, const bool keep_flg)
+{
+	if (keep_flg) {
+		if (size <= N) {
+			this->size_ = size;
+
+			this->len_ = std::min(this->len_, this->size_);
+			this->read_index_ = std::min(this->read_index_, this->len_);
+			this->write_index_ = std::min(this->write_index_, this->len_);
+		}
+	} else {
+		if (size <= N) {
+			this->size_ = size;
+
+			this->len_ = 0U;
+			this->read_index_ = 0U;
+			this->write_index_ = 0U;
+		}
+	}
+
+	return;
+}
+
+
+/**
+ * @brief Set関数
  * @param ary (array)
  * @param size (size)
  */
 template <size_t N>
-inline void tml::StaticBuffer<N>::SetArray(const BYTE *ary, const size_t size)
+inline void tml::StaticBuffer<N>::Set(const BYTE *ary, const size_t size)
 {
 	if (ary == this->ary_) {
 		return;
@@ -340,36 +370,6 @@ template <size_t N>
 inline size_t tml::StaticBuffer<N>::GetSize(void) const
 {
 	return (this->size_);
-}
-
-
-/**
- * @brief SetSize関数
- * @param size (size)
- * @param keep_flg (keep_flag)
- */
-template <size_t N>
-inline void tml::StaticBuffer<N>::SetSize(const size_t size, const bool keep_flg)
-{
-	if (keep_flg) {
-		if (size <= N) {
-			this->size_ = size;
-
-			this->len_ = std::min(this->len_, this->size_);
-			this->read_index_ = std::min(this->read_index_, this->len_);
-			this->write_index_ = std::min(this->write_index_, this->len_);
-		}
-	} else {
-		if (size <= N) {
-			this->size_ = size;
-
-			this->len_ = 0U;
-			this->read_index_ = 0U;
-			this->write_index_ = 0U;
-		}
-	}
-
-	return;
 }
 
 

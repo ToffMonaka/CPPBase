@@ -55,7 +55,7 @@ inline size_t tml::CSVFileData::GetRowCount(void) const
  */
 inline size_t tml::CSVFileData::GetColumnCount(void) const
 {
-	if (this->value_container.size() <= 0U) {
+	if (this->value_container.empty()) {
 		return (0U);
 	}
 	
@@ -72,11 +72,8 @@ inline size_t tml::CSVFileData::GetColumnCount(void) const
  */
 inline std::wstring *tml::CSVFileData::GetValue(const size_t row_index, const size_t column_index)
 {
-	if (row_index >= this->value_container.size()) {
-		return (nullptr);
-	}
-
-	if (column_index >= this->value_container[row_index].size()) {
+	if ((row_index >= this->value_container.size())
+	|| (column_index >= this->value_container[row_index].size())) {
 		return (nullptr);
 	}
 

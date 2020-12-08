@@ -133,14 +133,32 @@ INT cpp_base::MainProcess::Start(void)
 	}
 
 	{// Test
+		tml::ConfigFile conf_file;
+
+		conf_file.read_plan.file_path = L"test_conf1.conf";
+
+		conf_file.Read();
+
+		auto &conf_file_val_cont = conf_file.data.value_container;
+		auto conf_file_val = conf_file.data.GetValue(L"TEST2");
+
+		tml::INIFile ini_file;
+
+		ini_file.read_plan.file_path = L"test_ini1.ini";
+
+		ini_file.Read();
+
+		auto &ini_file_val_cont = ini_file.data.value_container;
+		auto ini_file_val = ini_file.data.GetValue(L"TEST2", L"TEST2");
+
 		tml::CSVFile csv_file;
 
 		csv_file.read_plan.file_path = L"test_csv1.csv";
 
 		csv_file.Read();
 
-		auto &val_cont = csv_file.data.value_container;
-		auto val = csv_file.data.GetValue(1U, 1U);
+		auto &csv_file_val_cont = csv_file.data.value_container;
+		auto csv_file_val = csv_file.data.GetValue(1U, 1U);
 
 		int a = 0;
 	}

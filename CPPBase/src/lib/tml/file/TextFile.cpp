@@ -181,11 +181,11 @@ INT tml::TextFile::Read(void)
 		return (-1);
 	}
 
-	bin_file.data.buffer.SetSize(bin_file.data.buffer.GetSize() + sizeof(CHAR), true);
+	bin_file.data.buffer.Set(bin_file.data.buffer.GetSize() + sizeof(CHAR), true);
 	bin_file.data.buffer.WriteCHAR(0);
 
 	std::wstring buf_str;
-	CHAR *tmp_buf_str = reinterpret_cast<CHAR *>(bin_file.data.buffer.GetArray());
+	CHAR *tmp_buf_str = reinterpret_cast<CHAR *>(bin_file.data.buffer.Get());
 
 	tml::StringUtil::GetString(buf_str, tmp_buf_str);
 
@@ -211,7 +211,7 @@ INT tml::TextFile::Write(void)
 
 	tml::BinaryFile bin_file;
 
-	bin_file.data.buffer.SetSize(tmp_buf_str.length());
+	bin_file.data.buffer.Set(tmp_buf_str.length());
 	bin_file.data.buffer.WriteArray(reinterpret_cast<const BYTE *>(tmp_buf_str.c_str()), tmp_buf_str.length(), tmp_buf_str.length());
 
 	bin_file.write_plan.file_path = this->write_plan.file_path;

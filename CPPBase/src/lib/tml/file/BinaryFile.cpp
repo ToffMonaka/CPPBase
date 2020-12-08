@@ -195,7 +195,7 @@ INT tml::BinaryFile::Read(void)
 			read_size = static_cast<size_t>(ifs.gcount());
 
 			if (read_size > 0U) {
-				buf.SetSize(buf.GetSize() + read_size, true);
+				buf.Set(buf.GetSize() + read_size, true);
 				buf.WriteArray(reinterpret_cast<BYTE *>(read_buf), read_size, read_size);
 			}
 
@@ -255,7 +255,7 @@ INT tml::BinaryFile::Write(void)
 		while (1) {
 			write_size = std::min(this->data.buffer.GetLength() - buf_index, write_buf_size);
 
-			tml::MemoryUtil::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.buffer.GetArray()[buf_index]), write_size);
+			tml::MemoryUtil::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.buffer.Get()[buf_index]), write_size);
 
 			ofs.write(write_buf, write_size);
 

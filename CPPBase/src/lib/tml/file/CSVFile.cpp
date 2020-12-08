@@ -185,11 +185,12 @@ INT tml::CSVFile::Read(void)
 
 	this->data.value_container.clear();
 
-	if (txt_file.data.string_container.size() <= 0U) {
+	if (txt_file.data.string_container.empty()) {
 		return (0);
 	}
 
 	std::wstring empty_str = L"";
+	std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	std::wstring comment_str = L"#";
 	size_t comment_str_index = 0U;
 	std::wstring dq_str = L"\"";
@@ -201,7 +202,6 @@ INT tml::CSVFile::Read(void)
 	std::wstring space_str = L" ";
 	std::wstring split_str = L",";
 	size_t split_str_index = 0U;
-	std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetString(this->read_plan.newline_code_type);
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
@@ -211,7 +211,7 @@ INT tml::CSVFile::Read(void)
 			continue;
 		}
 
-		{// コメント削除
+		{// コメントを削除
 			dq_str_index = 0U;
 			dq_str_sub_index = 0U;
 			dq_str_cnt = 0U;
@@ -300,7 +300,7 @@ INT tml::CSVFile::Read(void)
 				dq_str_index = column_val.find(dq_str);
 
 				if (dq_str_index != std::wstring::npos) {
-					column_val.erase(0, dq_str_index + dq_str.length());
+					column_val.erase(0U, dq_str_index + dq_str.length());
 				}
 			}
 
