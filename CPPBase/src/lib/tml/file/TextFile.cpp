@@ -5,7 +5,6 @@
 
 
 #include "TextFile.h"
-#include "BinaryFile.h"
 #include "../string/StringUtil.h"
 
 
@@ -55,7 +54,6 @@ void tml::TextFileData::Init(void)
  * @brief コンストラクタ
  */
 tml::TextFileReadPlan::TextFileReadPlan() :
-	one_buffer_size(1024U),
 	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
 {
 	return;
@@ -76,9 +74,9 @@ tml::TextFileReadPlan::~TextFileReadPlan()
  */
 void tml::TextFileReadPlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
 	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+
+	tml::BinaryFileReadPlan::Init();
 
 	return;
 }
@@ -88,9 +86,8 @@ void tml::TextFileReadPlan::Init(void)
  * @brief コンストラクタ
  */
 tml::TextFileWritePlan::TextFileWritePlan() :
-	one_buffer_size(1024U),
-	add_flag(false),
-	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
+	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF),
+	add_newline_code_count(1U)
 {
 	return;
 }
@@ -110,10 +107,10 @@ tml::TextFileWritePlan::~TextFileWritePlan()
  */
 void tml::TextFileWritePlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
-	this->add_flag = false;
 	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	this->add_newline_code_count = 1U;
+
+	tml::BinaryFileWritePlan::Init();
 
 	return;
 }
@@ -206,6 +203,19 @@ INT tml::TextFile::Write(void)
 	std::string tmp_buf_str;
 
 	tml::StringUtil::Join(buf_str, this->data.string_container, tml::ConstantUtil::NEWLINE_CODE::GetString(this->write_plan.newline_code_type));
+
+	if (!buf_str.empty()) {
+		if ((this->write_plan.add_flag)
+		&& (this->write_plan.add_newline_code_count > 0U)) {
+			std::wstring add_newline_code_str;
+
+			for (size_t add_newline_code_i = 0U; add_newline_code_i < this->write_plan.add_newline_code_count; ++add_newline_code_i) {
+				add_newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetString(this->write_plan.newline_code_type);
+			}
+
+			buf_str.insert(0U, add_newline_code_str);
+		}
+	}
 
 	tml::StringUtil::GetString(tmp_buf_str, buf_str.c_str());
 

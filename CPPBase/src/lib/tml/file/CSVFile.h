@@ -6,9 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_NEWLINE_CODE.h"
 #include <vector>
-#include "File.h"
+#include "TextFile.h"
 
 
 namespace tml {
@@ -85,13 +84,8 @@ namespace tml {
 /**
  * @brief CSVFileReadPlanクラス
  */
-class CSVFileReadPlan
+class CSVFileReadPlan : public tml::TextFileReadPlan
 {
-public:
-	std::wstring file_path;
-	size_t one_buffer_size;
-	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
-
 public:
 	CSVFileReadPlan();
 	virtual ~CSVFileReadPlan();
@@ -105,14 +99,8 @@ namespace tml {
 /**
  * @brief CSVFileWritePlanクラス
  */
-class CSVFileWritePlan
+class CSVFileWritePlan : public tml::TextFileWritePlan
 {
-public:
-	std::wstring file_path;
-	size_t one_buffer_size;
-	bool add_flag;
-	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
-
 public:
 	CSVFileWritePlan();
 	virtual ~CSVFileWritePlan();

@@ -142,6 +142,12 @@ INT cpp_base::MainProcess::Start(void)
 		auto &conf_file_val_cont = conf_file.data.value_container;
 		auto conf_file_val = conf_file.data.GetValue(L"TEST2");
 
+		/*
+		conf_file.write_plan.file_path = L"test_conf2.conf";
+
+		conf_file.Write();
+		*/
+
 		tml::INIFile ini_file;
 
 		ini_file.read_plan.file_path = L"test_ini1.ini";
@@ -151,6 +157,12 @@ INT cpp_base::MainProcess::Start(void)
 		auto &ini_file_val_cont = ini_file.data.value_container;
 		auto ini_file_val = ini_file.data.GetValue(L"TEST2", L"TEST2");
 
+		/*
+		ini_file.write_plan.file_path = L"test_ini2.ini";
+
+		ini_file.Write();
+		*/
+
 		tml::CSVFile csv_file;
 
 		csv_file.read_plan.file_path = L"test_csv1.csv";
@@ -159,6 +171,12 @@ INT cpp_base::MainProcess::Start(void)
 
 		auto &csv_file_val_cont = csv_file.data.value_container;
 		auto csv_file_val = csv_file.data.GetValue(1U, 1U);
+
+		/*
+		csv_file.write_plan.file_path = L"test_csv2.csv";
+
+		csv_file.Write();
+		*/
 
 		int a = 0;
 	}

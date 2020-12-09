@@ -6,7 +6,6 @@
 
 #include "ConfigFile.h"
 #include <regex>
-#include "TextFile.h"
 #include "../string/StringUtil.h"
 
 
@@ -55,9 +54,7 @@ void tml::ConfigFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileReadPlan::ConfigFileReadPlan() :
-	one_buffer_size(1024U),
-	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
+tml::ConfigFileReadPlan::ConfigFileReadPlan()
 {
 	return;
 }
@@ -77,9 +74,7 @@ tml::ConfigFileReadPlan::~ConfigFileReadPlan()
  */
 void tml::ConfigFileReadPlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
-	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	tml::TextFileReadPlan::Init();
 
 	return;
 }
@@ -88,10 +83,7 @@ void tml::ConfigFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileWritePlan::ConfigFileWritePlan() :
-	one_buffer_size(1024U),
-	add_flag(false),
-	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
+tml::ConfigFileWritePlan::ConfigFileWritePlan()
 {
 	return;
 }
@@ -111,10 +103,7 @@ tml::ConfigFileWritePlan::~ConfigFileWritePlan()
  */
 void tml::ConfigFileWritePlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
-	this->add_flag = false;
-	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	tml::TextFileWritePlan::Init();
 
 	return;
 }
@@ -247,5 +236,29 @@ INT tml::ConfigFile::Read(void)
  */
 INT tml::ConfigFile::Write(void)
 {
-	return (-1);
+	tml::TextFile txt_file;
+
+	std::wstring empty_str = L"";
+	std::wstring equal_str = L"=";
+	std::wstring str;
+
+	for (auto &val : this->data.value_container) {
+		str = val.first + equal_str + val.second;
+
+		txt_file.data.string_container.push_back(str);
+	}
+
+	txt_file.data.string_container.push_back(empty_str);
+
+	txt_file.write_plan.file_path = this->write_plan.file_path;
+	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
+	txt_file.write_plan.add_flag = this->write_plan.add_flag;
+	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
+	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
+
+	if (txt_file.Write()) {
+		return (-1);
+	}
+
+	return (0);
 }

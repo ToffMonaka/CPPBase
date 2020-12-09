@@ -6,7 +6,6 @@
 
 #include "INIFile.h"
 #include <regex>
-#include "TextFile.h"
 #include "../string/StringUtil.h"
 
 
@@ -55,9 +54,7 @@ void tml::INIFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::INIFileReadPlan::INIFileReadPlan() :
-	one_buffer_size(1024U),
-	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
+tml::INIFileReadPlan::INIFileReadPlan()
 {
 	return;
 }
@@ -77,9 +74,7 @@ tml::INIFileReadPlan::~INIFileReadPlan()
  */
 void tml::INIFileReadPlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
-	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	tml::TextFileReadPlan::Init();
 
 	return;
 }
@@ -88,10 +83,7 @@ void tml::INIFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::INIFileWritePlan::INIFileWritePlan() :
-	one_buffer_size(1024U),
-	add_flag(false),
-	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
+tml::INIFileWritePlan::INIFileWritePlan()
 {
 	return;
 }
@@ -111,10 +103,7 @@ tml::INIFileWritePlan::~INIFileWritePlan()
  */
 void tml::INIFileWritePlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
-	this->add_flag = false;
-	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	tml::TextFileWritePlan::Init();
 
 	return;
 }
@@ -193,12 +182,12 @@ INT tml::INIFile::Read(void)
 	std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	std::wstring comment_str = L";";
 	size_t comment_str_index = 0U;
-	std::wstring equal_str = L"=";
-	size_t equal_str_index = 0U;
 	std::wstring section_start_str = L"[";
 	size_t section_start_str_index = 0U;
 	std::wstring section_end_str = L"]";
 	size_t section_end_str_index = 0U;
+	std::wstring equal_str = L"=";
+	size_t equal_str_index = 0U;
 	std::wstring section_name;
 	std::wstring tmp_section_name;
 	std::wstring val_name;
@@ -285,5 +274,41 @@ INT tml::INIFile::Read(void)
  */
 INT tml::INIFile::Write(void)
 {
-	return (-1);
+	tml::TextFile txt_file;
+
+	std::wstring empty_str = L"";
+	std::wstring section_start_str = L"[";
+	std::wstring section_end_str = L"]";
+	std::wstring equal_str = L"=";
+	std::wstring str;
+
+	for (auto &val_name_cont : this->data.value_container) {
+		str = section_start_str + val_name_cont.first + section_end_str;
+
+		txt_file.data.string_container.push_back(str);
+
+		for (auto &val : val_name_cont.second) {
+			str = val.first + equal_str + val.second;
+
+			txt_file.data.string_container.push_back(str);
+		}
+
+		txt_file.data.string_container.push_back(empty_str);
+	}
+
+	if (txt_file.data.string_container.empty()) {
+		txt_file.data.string_container.push_back(empty_str);
+	}
+
+	txt_file.write_plan.file_path = this->write_plan.file_path;
+	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
+	txt_file.write_plan.add_flag = this->write_plan.add_flag;
+	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
+	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
+
+	if (txt_file.Write()) {
+		return (-1);
+	}
+
+	return (0);
 }

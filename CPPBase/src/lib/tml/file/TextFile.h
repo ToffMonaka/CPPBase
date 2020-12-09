@@ -8,7 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_NEWLINE_CODE.h"
 #include <list>
-#include "File.h"
+#include "BinaryFile.h"
 
 
 namespace tml {
@@ -39,11 +39,9 @@ namespace tml {
 /**
  * @brief TextFileReadPlanクラス
  */
-class TextFileReadPlan
+class TextFileReadPlan : public tml::BinaryFileReadPlan
 {
 public:
-	std::wstring file_path;
-	size_t one_buffer_size;
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
 public:
@@ -59,13 +57,11 @@ namespace tml {
 /**
  * @brief TextFileWritePlanクラス
  */
-class TextFileWritePlan
+class TextFileWritePlan : public tml::BinaryFileWritePlan
 {
 public:
-	std::wstring file_path;
-	size_t one_buffer_size;
-	bool add_flag;
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
+	size_t add_newline_code_count;
 
 public:
 	TextFileWritePlan();

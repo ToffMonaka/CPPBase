@@ -6,7 +6,6 @@
 
 #include "CSVFile.h"
 #include <regex>
-#include "TextFile.h"
 #include "../string/StringUtil.h"
 
 
@@ -55,9 +54,7 @@ void tml::CSVFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::CSVFileReadPlan::CSVFileReadPlan() :
-	one_buffer_size(1024U),
-	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
+tml::CSVFileReadPlan::CSVFileReadPlan()
 {
 	return;
 }
@@ -77,9 +74,7 @@ tml::CSVFileReadPlan::~CSVFileReadPlan()
  */
 void tml::CSVFileReadPlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
-	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	tml::TextFileReadPlan::Init();
 
 	return;
 }
@@ -88,10 +83,7 @@ void tml::CSVFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::CSVFileWritePlan::CSVFileWritePlan() :
-	one_buffer_size(1024U),
-	add_flag(false),
-	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
+tml::CSVFileWritePlan::CSVFileWritePlan()
 {
 	return;
 }
@@ -111,10 +103,7 @@ tml::CSVFileWritePlan::~CSVFileWritePlan()
  */
 void tml::CSVFileWritePlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
-	this->add_flag = false;
-	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	tml::TextFileWritePlan::Init();
 
 	return;
 }
@@ -193,15 +182,14 @@ INT tml::CSVFile::Read(void)
 	std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	std::wstring comment_str = L"#";
 	size_t comment_str_index = 0U;
+	std::wstring comma_str = L",";
+	size_t comma_str_index = 0U;
 	std::wstring dq_str = L"\"";
 	size_t dq_str_index = 0U;
 	size_t dq_str_sub_index = 0U;
 	size_t dq_str_cnt = 0U;
 	std::wstring double_dq_str = L"\"\"";
 	size_t double_dq_str_index = 0U;
-	std::wstring space_str = L" ";
-	std::wstring split_str = L",";
-	size_t split_str_index = 0U;
 	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetString(this->read_plan.newline_code_type);
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
@@ -254,13 +242,13 @@ INT tml::CSVFile::Read(void)
 			dq_str_sub_index = 0U;
 			dq_str_cnt = 0U;
 
-			split_str_index = txt_str.find(split_str);
+			comma_str_index = txt_str.find(comma_str);
 
-			while (split_str_index != std::wstring::npos) {
+			while (comma_str_index != std::wstring::npos) {
 				dq_str_index = txt_str.find(dq_str, dq_str_sub_index);
 
 				while (dq_str_index != std::wstring::npos) {
-					if (dq_str_index >= split_str_index) {
+					if (dq_str_index >= comma_str_index) {
 						break;
 					}
 
@@ -270,15 +258,15 @@ INT tml::CSVFile::Read(void)
 				}
 
 				if ((dq_str_cnt & 1U) == 0U) {
-					txt_str.replace(split_str_index, split_str.length(), newline_code_str);
+					txt_str.replace(comma_str_index, comma_str.length(), newline_code_str);
 
-					dq_str_sub_index = split_str_index + newline_code_str.length();
+					dq_str_sub_index = comma_str_index + newline_code_str.length();
 
-					split_str_index = txt_str.find(split_str, split_str_index + newline_code_str.length());
+					comma_str_index = txt_str.find(comma_str, comma_str_index + newline_code_str.length());
 				} else {
-					dq_str_sub_index = split_str_index + split_str.length();
+					dq_str_sub_index = comma_str_index + comma_str.length();
 
-					split_str_index = txt_str.find(split_str, split_str_index + split_str.length());
+					comma_str_index = txt_str.find(comma_str, comma_str_index + comma_str.length());
 				}
 			}
 		}
@@ -339,5 +327,29 @@ INT tml::CSVFile::Read(void)
  */
 INT tml::CSVFile::Write(void)
 {
-	return (-1);
+	tml::TextFile txt_file;
+
+	std::wstring empty_str = L"";
+	std::wstring comma_str = L",";
+	std::wstring str;
+
+	for (auto &val_cont : this->data.value_container) {
+		tml::StringUtil::Join(str, val_cont, comma_str.c_str());
+
+		txt_file.data.string_container.push_back(str);
+	}
+
+	txt_file.data.string_container.push_back(empty_str);
+
+	txt_file.write_plan.file_path = this->write_plan.file_path;
+	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
+	txt_file.write_plan.add_flag = this->write_plan.add_flag;
+	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
+	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
+
+	if (txt_file.Write()) {
+		return (-1);
+	}
+
+	return (0);
 }

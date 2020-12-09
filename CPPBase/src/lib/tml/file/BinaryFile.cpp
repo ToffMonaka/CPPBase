@@ -7,7 +7,6 @@
 #include "BinaryFile.h"
 #include <fstream>
 #include "FileUtil.h"
-#include "../memory/MemoryUtil.h"
 
 
 /**
@@ -109,8 +108,8 @@ tml::BinaryFileWritePlan::~BinaryFileWritePlan()
 void tml::BinaryFileWritePlan::Init(void)
 {
 	this->file_path.clear();
-	this->add_flag = false;
 	this->one_buffer_size = 1024U;
+	this->add_flag = false;
 
 	return;
 }

@@ -6,9 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_NEWLINE_CODE.h"
 #include <map>
-#include "File.h"
+#include "TextFile.h"
 
 
 namespace tml {
@@ -59,13 +58,8 @@ namespace tml {
 /**
  * @brief ConfigFileReadPlanクラス
  */
-class ConfigFileReadPlan
+class ConfigFileReadPlan : public tml::TextFileReadPlan
 {
-public:
-	std::wstring file_path;
-	size_t one_buffer_size;
-	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
-
 public:
 	ConfigFileReadPlan();
 	virtual ~ConfigFileReadPlan();
@@ -79,14 +73,8 @@ namespace tml {
 /**
  * @brief ConfigFileWritePlanクラス
  */
-class ConfigFileWritePlan
+class ConfigFileWritePlan : public tml::TextFileWritePlan
 {
-public:
-	std::wstring file_path;
-	size_t one_buffer_size;
-	bool add_flag;
-	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
-
 public:
 	ConfigFileWritePlan();
 	virtual ~ConfigFileWritePlan();
