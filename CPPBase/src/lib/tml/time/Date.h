@@ -32,8 +32,8 @@ public:
 	static tml::TIME_SECONDS GetNowTime(void);
 
 private:
-	const CHAR *GetStringSetStringPart(CHAR *, const size_t) const;
-	const WCHAR *GetStringSetStringPart(WCHAR *, const size_t) const;
+	CHAR *GetStringSetStringPart(CHAR *, const size_t) const;
+	WCHAR *GetStringSetStringPart(WCHAR *, const size_t) const;
 	void SetStringSetTimePart(void);
 
 public:
@@ -52,8 +52,8 @@ public:
 	UCHAR GetMinutes(void) const;
 	UCHAR GetSeconds(void) const;
 	tml::ConstantUtil::DATE::WEEK_DAY GetWeekDay(void) const;
-	const CHAR *GetString(CHAR *, const size_t) const;
-	const WCHAR *GetString(WCHAR *, const size_t) const;
+	CHAR *GetString(CHAR *, const size_t) const;
+	WCHAR *GetString(WCHAR *, const size_t) const;
 	std::string &GetString(std::string &) const;
 	std::wstring &GetString(std::wstring &) const;
 	void SetString(const CHAR *);

@@ -20,7 +20,7 @@ public: BinaryFileData(const tml::BinaryFileData &) = delete;
 public: tml::BinaryFileData &operator =(const tml::BinaryFileData &) = delete;
 
 public:
-	tml::DynamicBuffer buffer;
+	tml::DynamicBuffer file_buffer;
 
 private:
 	void Release(void);
@@ -42,6 +42,7 @@ class BinaryFileReadPlan
 {
 public:
 	std::wstring file_path;
+	tml::DynamicBuffer file_buffer;
 	size_t one_buffer_size;
 
 public:

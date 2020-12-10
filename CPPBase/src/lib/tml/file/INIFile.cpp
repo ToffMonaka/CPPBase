@@ -164,15 +164,30 @@ INT tml::INIFile::Read(void)
 {
 	tml::TextFile txt_file;
 
-	txt_file.read_plan.file_path = this->read_plan.file_path;
-	txt_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
-	txt_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
+	if (this->read_plan.file_path.empty()) {
+		txt_file.read_plan.file_path = this->read_plan.file_path;
+		txt_file.read_plan.file_buffer = std::move(this->read_plan.file_buffer);
+		txt_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
+		txt_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
 
-	if (txt_file.Read()) {
-		return (-1);
+		if (txt_file.Read()) {
+			this->read_plan.file_buffer = std::move(txt_file.read_plan.file_buffer);
+
+			return (-1);
+		}
+
+		this->read_plan.file_buffer = std::move(txt_file.read_plan.file_buffer);
+	} else {
+		txt_file.read_plan.file_path = this->read_plan.file_path;
+		txt_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
+		txt_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
+
+		if (txt_file.Read()) {
+			return (-1);
+		}
 	}
 
-	this->data.value_container.clear();
+	this->data.Init();
 
 	if (txt_file.data.string_container.empty()) {
 		return (0);
@@ -263,7 +278,7 @@ INT tml::INIFile::Read(void)
 		val_name_itr->second.insert(std::make_pair(val_name, val));
 	}
 
-	return (-1);
+	return (0);
 }
 
 
@@ -274,6 +289,10 @@ INT tml::INIFile::Read(void)
  */
 INT tml::INIFile::Write(void)
 {
+	if (this->write_plan.file_path.empty()) {
+		return (-1);
+	}
+
 	tml::TextFile txt_file;
 
 	std::wstring empty_str = L"";

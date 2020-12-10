@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\cpp_base\file\SystemConfigFile.cpp" />
     <ClCompile Include="src\cpp_base\process\MainProcess.cpp" />
     <ClCompile Include="src\cpp_base\thread\MainThread.cpp" />
     <ClCompile Include="src\lib\tml\dlmalloc\malloc.c" />
@@ -210,6 +211,7 @@
   <ItemGroup>
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_APPLICATION.h" />
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_WINDOW.h" />
+    <ClInclude Include="src\cpp_base\file\SystemConfigFile.h" />
     <ClInclude Include="src\cpp_base\resource\resource.h" />
     <ClInclude Include="src\cpp_base\process\MainProcess.h" />
     <ClInclude Include="src\cpp_base\thread\MainThread.h" />

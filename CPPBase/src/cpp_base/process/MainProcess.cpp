@@ -11,16 +11,12 @@
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
-#include "../../lib/tml/file/BinaryFile.h"
-#include "../../lib/tml/file/TextFile.h"
-#include "../../lib/tml/file/ConfigFile.h"
-#include "../../lib/tml/file/INIFile.h"
-#include "../../lib/tml/file/CSVFile.h"
 #include "../../lib/tml/process/ProcessUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../thread/MainThread.h"
 #include "../resource/resource.h"
+#include "../file/SystemConfigFile.h"
 
 
 /**
@@ -133,50 +129,11 @@ INT cpp_base::MainProcess::Start(void)
 	}
 
 	{// Test
-		tml::ConfigFile conf_file;
+		cpp_base::SystemConfigFile sys_conf_file;
 
-		conf_file.read_plan.file_path = L"test_conf1.conf";
+		sys_conf_file.read_plan.file_path = L"dat/sys_conf.ini";
 
-		conf_file.Read();
-
-		auto &conf_file_val_cont = conf_file.data.value_container;
-		auto conf_file_val = conf_file.data.GetValue(L"TEST2");
-
-		/*
-		conf_file.write_plan.file_path = L"test_conf2.conf";
-
-		conf_file.Write();
-		*/
-
-		tml::INIFile ini_file;
-
-		ini_file.read_plan.file_path = L"test_ini1.ini";
-
-		ini_file.Read();
-
-		auto &ini_file_val_cont = ini_file.data.value_container;
-		auto ini_file_val = ini_file.data.GetValue(L"TEST2", L"TEST2");
-
-		/*
-		ini_file.write_plan.file_path = L"test_ini2.ini";
-
-		ini_file.Write();
-		*/
-
-		tml::CSVFile csv_file;
-
-		csv_file.read_plan.file_path = L"test_csv1.csv";
-
-		csv_file.Read();
-
-		auto &csv_file_val_cont = csv_file.data.value_container;
-		auto csv_file_val = csv_file.data.GetValue(1U, 1U);
-
-		/*
-		csv_file.write_plan.file_path = L"test_csv2.csv";
-
-		csv_file.Write();
-		*/
+		sys_conf_file.Read();
 
 		int a = 0;
 	}

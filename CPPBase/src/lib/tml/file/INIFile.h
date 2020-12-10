@@ -33,6 +33,7 @@ public:
 
 	std::map<std::wstring, std::wstring> *GetValueNameContainer(const WCHAR *);
 	std::wstring *GetValue(const WCHAR *, const WCHAR *);
+	std::wstring *GetValue(std::map<std::wstring, std::wstring> &, const WCHAR *);
 };
 }
 
@@ -73,6 +74,25 @@ inline std::wstring *tml::INIFileData::GetValue(const WCHAR *section_name, const
 	auto val_itr = val_name_itr->second.find(val_name);
 
 	if (val_itr == val_name_itr->second.end()) {
+		return (nullptr);
+	}
+
+	return (&val_itr->second);
+}
+
+
+/**
+ * @brief GetValueä÷êî
+ * @param val_name_cont (valalue_name_container)
+ * @param val_name (valalue_name)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline std::wstring *tml::INIFileData::GetValue(std::map<std::wstring, std::wstring> &val_name_cont, const WCHAR *val_name)
+{
+	auto val_itr = val_name_cont.find(val_name);
+
+	if (val_itr == val_name_cont.end()) {
 		return (nullptr);
 	}
 

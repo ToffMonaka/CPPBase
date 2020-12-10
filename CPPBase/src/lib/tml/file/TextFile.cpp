@@ -171,18 +171,40 @@ INT tml::TextFile::Read(void)
 {
 	tml::BinaryFile bin_file;
 
-	bin_file.read_plan.file_path = this->read_plan.file_path;
-	bin_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
+	if (this->read_plan.file_path.empty()) {
+		bin_file.read_plan.file_path = this->read_plan.file_path;
+		bin_file.read_plan.file_buffer = std::move(this->read_plan.file_buffer);
+		bin_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
 
-	if (bin_file.Read()) {
-		return (-1);
+		if (bin_file.Read()) {
+			this->read_plan.file_buffer = std::move(bin_file.read_plan.file_buffer);
+
+			return (-1);
+		}
+
+		this->read_plan.file_buffer = std::move(bin_file.read_plan.file_buffer);
+	} else {
+		bin_file.read_plan.file_path = this->read_plan.file_path;
+		bin_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
+
+		if (bin_file.Read()) {
+			return (-1);
+		}
 	}
 
-	bin_file.data.buffer.Set(bin_file.data.buffer.GetSize() + sizeof(CHAR), true);
-	bin_file.data.buffer.WriteCHAR(0);
+	this->data.Init();
+
+	if (bin_file.data.file_buffer.GetSize() <= 0U) {
+		this->data.string_container.push_back(L"");
+
+		return (0);
+	}
+
+	bin_file.data.file_buffer.Set(bin_file.data.file_buffer.GetSize() + sizeof(CHAR), true);
+	bin_file.data.file_buffer.WriteCHAR(0);
 
 	std::wstring buf_str;
-	CHAR *tmp_buf_str = reinterpret_cast<CHAR *>(bin_file.data.buffer.Get());
+	CHAR *tmp_buf_str = reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get());
 
 	tml::StringUtil::GetString(buf_str, tmp_buf_str);
 
@@ -199,6 +221,10 @@ INT tml::TextFile::Read(void)
  */
 INT tml::TextFile::Write(void)
 {
+	if (this->write_plan.file_path.empty()) {
+		return (-1);
+	}
+
 	std::wstring buf_str;
 	std::string tmp_buf_str;
 
@@ -221,8 +247,8 @@ INT tml::TextFile::Write(void)
 
 	tml::BinaryFile bin_file;
 
-	bin_file.data.buffer.Set(tmp_buf_str.length());
-	bin_file.data.buffer.WriteArray(reinterpret_cast<const BYTE *>(tmp_buf_str.c_str()), tmp_buf_str.length(), tmp_buf_str.length());
+	bin_file.data.file_buffer.Set(tmp_buf_str.length());
+	bin_file.data.file_buffer.WriteArray(reinterpret_cast<const BYTE *>(tmp_buf_str.c_str()), tmp_buf_str.length(), tmp_buf_str.length());
 
 	bin_file.write_plan.file_path = this->write_plan.file_path;
 	bin_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
