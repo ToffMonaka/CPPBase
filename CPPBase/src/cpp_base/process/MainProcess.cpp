@@ -16,7 +16,6 @@
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../thread/MainThread.h"
 #include "../resource/resource.h"
-#include "../file/SystemConfigFile.h"
 
 
 /**
@@ -57,6 +56,7 @@ void cpp_base::MainProcess::Init(void)
 {
 	this->Release();
 
+	this->sys_conf_file_.Init();
 	this->frame_rate_.Init();
 
 	tml::Process::Init();
@@ -83,6 +83,7 @@ INT cpp_base::MainProcess::Create(const HINSTANCE instance_handle, const WCHAR *
 		return (-1);
 	}
 
+	this->sys_conf_file_.Init();
 	this->frame_rate_.Init();
 
 	return (0);
@@ -95,6 +96,14 @@ INT cpp_base::MainProcess::Create(const HINSTANCE instance_handle, const WCHAR *
  */
 INT cpp_base::MainProcess::Start(void)
 {
+	{// SystemConfigFile Read
+		this->sys_conf_file_.read_plan.file_path = L"dat/sys_conf.ini";
+
+		if (this->sys_conf_file_.Read() < 0) {
+			return (-1);
+		}
+	}
+
 	{// MainThread Start
 		std::unique_ptr<tml::Thread> th = std::make_unique<cpp_base::MainThread>();
 
@@ -129,12 +138,6 @@ INT cpp_base::MainProcess::Start(void)
 	}
 
 	{// Test
-		cpp_base::SystemConfigFile sys_conf_file;
-
-		sys_conf_file.read_plan.file_path = L"dat/sys_conf.ini";
-
-		sys_conf_file.Read();
-
 		int a = 0;
 	}
 

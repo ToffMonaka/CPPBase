@@ -16,14 +16,8 @@ namespace tml {
  */
 class INIFileData
 {
-public: INIFileData(const tml::INIFileData &) = delete;
-public: tml::INIFileData &operator =(const tml::INIFileData &) = delete;
-
 public:
 	std::map<std::wstring, std::map<std::wstring, std::wstring>> value_container;
-
-private:
-	void Release(void);
 
 public:
 	INIFileData();

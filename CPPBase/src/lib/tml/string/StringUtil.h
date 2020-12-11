@@ -44,20 +44,30 @@ public:
 	static std::wstring &Join(std::wstring &, const std::vector<std::wstring> &, const WCHAR *);
 	static std::string &Join(std::string &, const std::list<std::string> &, const CHAR *);
 	static std::wstring &Join(std::wstring &, const std::list<std::wstring> &, const WCHAR *);
-	static INT GetValue(INT &, const CHAR *, const INT radix = 10);
-	static INT GetValue(INT &, const WCHAR *, const INT radix = 10);
-	static UINT GetValue(UINT &, const CHAR *, const INT radix = 10);
-	static UINT GetValue(UINT &, const WCHAR *, const INT radix = 10);
-	static LONGLONG GetValue(LONGLONG &, const CHAR *, const INT radix = 10);
-	static LONGLONG GetValue(LONGLONG &, const WCHAR *, const INT radix = 10);
-	static ULONGLONG GetValue(ULONGLONG &, const CHAR *, const INT radix = 10);
-	static ULONGLONG GetValue(ULONGLONG &, const WCHAR *, const INT radix = 10);
-	static FLOAT GetValue(FLOAT &, const CHAR *);
-	static FLOAT GetValue(FLOAT &, const WCHAR *);
-	static DOUBLE GetValue(DOUBLE &, const CHAR *);
-	static DOUBLE GetValue(DOUBLE &, const WCHAR *);
-	static std::string &GetString(std::string &, const WCHAR *);
-	static std::wstring &GetString(std::wstring &, const CHAR *);
+	static INT GetINT(const CHAR *, const INT radix = 10);
+	static INT GetINT(const WCHAR *, const INT radix = 10);
+	static UINT GetUINT(const CHAR *, const INT radix = 10);
+	static UINT GetUINT(const WCHAR *, const INT radix = 10);
+	static LONGLONG GetLONGLONG(const CHAR *, const INT radix = 10);
+	static LONGLONG GetLONGLONG(const WCHAR *, const INT radix = 10);
+	static ULONGLONG GetULONGLONG(const CHAR *, const INT radix = 10);
+	static ULONGLONG GetULONGLONG(const WCHAR *, const INT radix = 10);
+	static FLOAT GetFLOAT(const CHAR *);
+	static FLOAT GetFLOAT(const WCHAR *);
+	static DOUBLE GetDOUBLE(const CHAR *);
+	static DOUBLE GetDOUBLE(const WCHAR *);
+	static INT &GetValue(INT &, const CHAR *, const INT radix = 10);
+	static INT &GetValue(INT &, const WCHAR *, const INT radix = 10);
+	static UINT &GetValue(UINT &, const CHAR *, const INT radix = 10);
+	static UINT &GetValue(UINT &, const WCHAR *, const INT radix = 10);
+	static LONGLONG &GetValue(LONGLONG &, const CHAR *, const INT radix = 10);
+	static LONGLONG &GetValue(LONGLONG &, const WCHAR *, const INT radix = 10);
+	static ULONGLONG &GetValue(ULONGLONG &, const CHAR *, const INT radix = 10);
+	static ULONGLONG &GetValue(ULONGLONG &, const WCHAR *, const INT radix = 10);
+	static FLOAT &GetValue(FLOAT &, const CHAR *);
+	static FLOAT &GetValue(FLOAT &, const WCHAR *);
+	static DOUBLE &GetValue(DOUBLE &, const CHAR *);
+	static DOUBLE &GetValue(DOUBLE &, const WCHAR *);
 	static const CHAR *GetString(const std::string *);
 	static const WCHAR *GetString(const std::wstring *);
 	static std::string &GetString(std::string &, const INT);
@@ -72,6 +82,8 @@ public:
 	static std::wstring &GetString(std::wstring &, const FLOAT);
 	static std::string &GetString(std::string &, const DOUBLE);
 	static std::wstring &GetString(std::wstring &, const DOUBLE);
+	static std::string &GetString(std::string &, const WCHAR *);
+	static std::wstring &GetString(std::wstring &, const CHAR *);
 };
 }
 
@@ -88,145 +100,314 @@ inline bool tml::StringUtil::CheckThreadFix(void)
 
 
 /**
- * @brief GetValue関数
+ * @brief GetINT関数
  *
  * Create関数不要
  *
- * @param dst_val (dst_value)
  * @param str (string)
  * @param radix (radix)
  * @return val (value)
  */
-inline INT tml::StringUtil::GetValue(INT &dst_val, const CHAR *str, const INT radix)
+inline INT tml::StringUtil::GetINT(const CHAR *str, const INT radix)
 {
-	dst_val = 0;
+	INT val = 0;
 
 	if (str == nullptr) {
-		return (dst_val);
+		return (val);
 	}
 
 	CHAR *end_p = nullptr;
-	auto val = static_cast<INT>(std::strtol(str, &end_p, radix));
 
-	if (end_p != str) {
-		dst_val = val;
-	}
+	val = static_cast<INT>(std::strtol(str, &end_p, radix));
 
-	return (dst_val);
+	return ((end_p == str) ? 0 : val);
 }
 
 
 /**
- * @brief GetValue関数
+ * @brief GetINT関数
  *
  * Create関数不要
  *
- * @param dst_val (dst_value)
  * @param str (string)
  * @param radix (radix)
  * @return val (value)
  */
-inline INT tml::StringUtil::GetValue(INT &dst_val, const WCHAR *str, const INT radix)
+inline INT tml::StringUtil::GetINT(const WCHAR *str, const INT radix)
 {
-	dst_val = 0;
+	INT val = 0;
 
 	if (str == nullptr) {
-		return (dst_val);
+		return (val);
 	}
 
 	WCHAR *end_p = nullptr;
-	auto val = static_cast<INT>(std::wcstol(str, &end_p, radix));
 
-	if (end_p != str) {
-		dst_val = val;
-	}
+	val = static_cast<INT>(std::wcstol(str, &end_p, radix));
 
-	return (dst_val);
+	return ((end_p == str) ? 0 : val);
 }
 
 
 /**
- * @brief GetValue関数
+ * @brief GetUINT関数
  *
  * Create関数不要
  *
- * @param dst_val (dst_value)
  * @param str (string)
  * @param radix (radix)
  * @return val (value)
  */
-inline UINT tml::StringUtil::GetValue(UINT &dst_val, const CHAR *str, const INT radix)
+inline UINT tml::StringUtil::GetUINT(const CHAR *str, const INT radix)
 {
-	dst_val = 0U;
+	UINT val = 0U;
 
 	if (str == nullptr) {
-		return (dst_val);
+		return (val);
 	}
 
 	CHAR *end_p = nullptr;
-	auto val = static_cast<UINT>(std::strtoul(str, &end_p, radix));
 
-	if (end_p != str) {
-		dst_val = val;
-	}
+	val = static_cast<UINT>(std::strtoul(str, &end_p, radix));
 
-	return (dst_val);
+	return ((end_p == str) ? 0U : val);
 }
 
 
 /**
- * @brief GetValue関数
+ * @brief GetUINT関数
  *
  * Create関数不要
  *
- * @param dst_val (dst_value)
  * @param str (string)
  * @param radix (radix)
  * @return val (value)
  */
-inline UINT tml::StringUtil::GetValue(UINT &dst_val, const WCHAR *str, const INT radix)
+inline UINT tml::StringUtil::GetUINT(const WCHAR *str, const INT radix)
 {
-	dst_val = 0U;
+	UINT val = 0U;
 
 	if (str == nullptr) {
-		return (dst_val);
+		return (val);
 	}
 
 	WCHAR *end_p = nullptr;
-	auto val = static_cast<UINT>(std::wcstoul(str, &end_p, radix));
 
-	if (end_p != str) {
-		dst_val = val;
-	}
+	val = static_cast<UINT>(std::wcstoul(str, &end_p, radix));
 
-	return (dst_val);
+	return ((end_p == str) ? 0U : val);
 }
 
 
 /**
- * @brief GetValue関数
+ * @brief GetLONGLONG関数
  *
  * Create関数不要
  *
- * @param dst_val (dst_value)
  * @param str (string)
  * @param radix (radix)
  * @return val (value)
  */
-inline LONGLONG tml::StringUtil::GetValue(LONGLONG &dst_val, const CHAR *str, const INT radix)
+inline LONGLONG tml::StringUtil::GetLONGLONG(const CHAR *str, const INT radix)
 {
-	dst_val = 0LL;
+	LONGLONG val = 0LL;
 
 	if (str == nullptr) {
-		return (dst_val);
+		return (val);
 	}
 
 	CHAR *end_p = nullptr;
-	auto val = std::strtoll(str, &end_p, radix);
 
-	if (end_p != str) {
-		dst_val = val;
+	val = std::strtoll(str, &end_p, radix);
+
+	return ((end_p == str) ? 0LL : val);
+}
+
+
+/**
+ * @brief GetLONGLONG関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @param radix (radix)
+ * @return val (value)
+ */
+inline LONGLONG tml::StringUtil::GetLONGLONG(const WCHAR *str, const INT radix)
+{
+	LONGLONG val = 0LL;
+
+	if (str == nullptr) {
+		return (val);
 	}
+
+	WCHAR *end_p = nullptr;
+
+	val = std::wcstoll(str, &end_p, radix);
+
+	return ((end_p == str) ? 0LL : val);
+}
+
+
+/**
+ * @brief GetULONGLONG関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @param radix (radix)
+ * @return val (value)
+ */
+inline ULONGLONG tml::StringUtil::GetULONGLONG(const CHAR *str, const INT radix)
+{
+	ULONGLONG val = 0ULL;
+
+	if (str == nullptr) {
+		return (val);
+	}
+
+	CHAR *end_p = nullptr;
+
+	val = std::strtoull(str, &end_p, radix);
+
+	return ((end_p == str) ? 0ULL : val);
+}
+
+
+/**
+ * @brief GetULONGLONG関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @param radix (radix)
+ * @return val (value)
+ */
+inline ULONGLONG tml::StringUtil::GetULONGLONG(const WCHAR *str, const INT radix)
+{
+	ULONGLONG val = 0ULL;
+
+	if (str == nullptr) {
+		return (val);
+	}
+
+	WCHAR *end_p = nullptr;
+
+	val = std::wcstoull(str, &end_p, radix);
+
+	return ((end_p == str) ? 0ULL : val);
+}
+
+
+/**
+ * @brief GetFLOAT関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @return val (value)
+ */
+inline FLOAT tml::StringUtil::GetFLOAT(const CHAR *str)
+{
+	FLOAT val = 0.0f;
+
+	if (str == nullptr) {
+		return (val);
+	}
+
+	CHAR *end_p = nullptr;
+
+	val = std::strtof(str, &end_p);
+
+	return ((end_p == str) ? 0.0f : val);
+}
+
+
+/**
+ * @brief GetFLOAT関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @return val (value)
+ */
+inline FLOAT tml::StringUtil::GetFLOAT(const WCHAR *str)
+{
+	FLOAT val = 0.0f;
+
+	if (str == nullptr) {
+		return (val);
+	}
+
+	WCHAR *end_p = nullptr;
+
+	val = std::wcstof(str, &end_p);
+
+	return ((end_p == str) ? 0.0f : val);
+}
+
+
+/**
+ * @brief GetDOUBLE関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @return val (value)
+ */
+inline DOUBLE tml::StringUtil::GetDOUBLE(const CHAR *str)
+{
+	DOUBLE val = 0.0;
+
+	if (str == nullptr) {
+		return (val);
+	}
+
+	CHAR *end_p = nullptr;
+
+	val = std::strtod(str, &end_p);
+
+	return ((end_p == str) ? 0.0 : val);
+}
+
+
+/**
+ * @brief GetDOUBLE関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @return val (value)
+ */
+inline DOUBLE tml::StringUtil::GetDOUBLE(const WCHAR *str)
+{
+	DOUBLE val = 0.0;
+
+	if (str == nullptr) {
+		return (val);
+	}
+
+	WCHAR *end_p = nullptr;
+
+	val = std::wcstod(str, &end_p);
+
+	return ((end_p == str) ? 0.0 : val);
+}
+
+
+/**
+ * @brief GetValue関数
+ *
+ * Create関数不要
+ *
+ * @param dst_val (dst_value)
+ * @param str (string)
+ * @param radix (radix)
+ * @return dst_val (dst_value)
+ */
+inline INT &tml::StringUtil::GetValue(INT &dst_val, const CHAR *str, const INT radix)
+{
+	dst_val = tml::StringUtil::GetINT(str, radix);
 
 	return (dst_val);
 }
@@ -240,22 +421,11 @@ inline LONGLONG tml::StringUtil::GetValue(LONGLONG &dst_val, const CHAR *str, co
  * @param dst_val (dst_value)
  * @param str (string)
  * @param radix (radix)
- * @return val (value)
+ * @return dst_val (dst_value)
  */
-inline LONGLONG tml::StringUtil::GetValue(LONGLONG &dst_val, const WCHAR *str, const INT radix)
+inline INT &tml::StringUtil::GetValue(INT &dst_val, const WCHAR *str, const INT radix)
 {
-	dst_val = 0LL;
-
-	if (str == nullptr) {
-		return (dst_val);
-	}
-
-	WCHAR *end_p = nullptr;
-	auto val = std::wcstoll(str, &end_p, radix);
-
-	if (end_p != str) {
-		dst_val = val;
-	}
+	dst_val = tml::StringUtil::GetINT(str, radix);
 
 	return (dst_val);
 }
@@ -269,22 +439,11 @@ inline LONGLONG tml::StringUtil::GetValue(LONGLONG &dst_val, const WCHAR *str, c
  * @param dst_val (dst_value)
  * @param str (string)
  * @param radix (radix)
- * @return val (value)
+ * @return dst_val (dst_value)
  */
-inline ULONGLONG tml::StringUtil::GetValue(ULONGLONG &dst_val, const CHAR *str, const INT radix)
+inline UINT &tml::StringUtil::GetValue(UINT &dst_val, const CHAR *str, const INT radix)
 {
-	dst_val = 0ULL;
-
-	if (str == nullptr) {
-		return (dst_val);
-	}
-
-	CHAR *end_p = nullptr;
-	auto val = std::strtoull(str, &end_p, radix);
-
-	if (end_p != str) {
-		dst_val = val;
-	}
+	dst_val = tml::StringUtil::GetUINT(str, radix);
 
 	return (dst_val);
 }
@@ -298,22 +457,11 @@ inline ULONGLONG tml::StringUtil::GetValue(ULONGLONG &dst_val, const CHAR *str, 
  * @param dst_val (dst_value)
  * @param str (string)
  * @param radix (radix)
- * @return val (value)
+ * @return dst_val (dst_value)
  */
-inline ULONGLONG tml::StringUtil::GetValue(ULONGLONG &dst_val, const WCHAR *str, const INT radix)
+inline UINT &tml::StringUtil::GetValue(UINT &dst_val, const WCHAR *str, const INT radix)
 {
-	dst_val = 0ULL;
-
-	if (str == nullptr) {
-		return (dst_val);
-	}
-
-	WCHAR *end_p = nullptr;
-	auto val = std::wcstoull(str, &end_p, radix);
-
-	if (end_p != str) {
-		dst_val = val;
-	}
+	dst_val = tml::StringUtil::GetUINT(str, radix);
 
 	return (dst_val);
 }
@@ -326,22 +474,12 @@ inline ULONGLONG tml::StringUtil::GetValue(ULONGLONG &dst_val, const WCHAR *str,
  *
  * @param dst_val (dst_value)
  * @param str (string)
- * @return val (value)
+ * @param radix (radix)
+ * @return dst_val (dst_value)
  */
-inline FLOAT tml::StringUtil::GetValue(FLOAT &dst_val, const CHAR *str)
+inline LONGLONG &tml::StringUtil::GetValue(LONGLONG &dst_val, const CHAR *str, const INT radix)
 {
-	dst_val = 0.0f;
-
-	if (str == nullptr) {
-		return (dst_val);
-	}
-
-	CHAR *end_p = nullptr;
-	auto val = std::strtof(str, &end_p);
-
-	if (end_p != str) {
-		dst_val = val;
-	}
+	dst_val = tml::StringUtil::GetLONGLONG(str, radix);
 
 	return (dst_val);
 }
@@ -354,22 +492,12 @@ inline FLOAT tml::StringUtil::GetValue(FLOAT &dst_val, const CHAR *str)
  *
  * @param dst_val (dst_value)
  * @param str (string)
- * @return val (value)
+ * @param radix (radix)
+ * @return dst_val (dst_value)
  */
-inline FLOAT tml::StringUtil::GetValue(FLOAT &dst_val, const WCHAR *str)
+inline LONGLONG &tml::StringUtil::GetValue(LONGLONG &dst_val, const WCHAR *str, const INT radix)
 {
-	dst_val = 0.0f;
-
-	if (str == nullptr) {
-		return (dst_val);
-	}
-
-	WCHAR *end_p = nullptr;
-	auto val = std::wcstof(str, &end_p);
-
-	if (end_p != str) {
-		dst_val = val;
-	}
+	dst_val = tml::StringUtil::GetLONGLONG(str, radix);
 
 	return (dst_val);
 }
@@ -382,22 +510,12 @@ inline FLOAT tml::StringUtil::GetValue(FLOAT &dst_val, const WCHAR *str)
  *
  * @param dst_val (dst_value)
  * @param str (string)
- * @return val (value)
+ * @param radix (radix)
+ * @return dst_val (dst_value)
  */
-inline DOUBLE tml::StringUtil::GetValue(DOUBLE &dst_val, const CHAR *str)
+inline ULONGLONG &tml::StringUtil::GetValue(ULONGLONG &dst_val, const CHAR *str, const INT radix)
 {
-	dst_val = 0.0;
-
-	if (str == nullptr) {
-		return (dst_val);
-	}
-
-	CHAR *end_p = nullptr;
-	auto val = std::strtod(str, &end_p);
-
-	if (end_p != str) {
-		dst_val = val;
-	}
+	dst_val = tml::StringUtil::GetULONGLONG(str, radix);
 
 	return (dst_val);
 }
@@ -410,22 +528,80 @@ inline DOUBLE tml::StringUtil::GetValue(DOUBLE &dst_val, const CHAR *str)
  *
  * @param dst_val (dst_value)
  * @param str (string)
- * @return val (value)
+ * @param radix (radix)
+ * @return dst_val (dst_value)
  */
-inline DOUBLE tml::StringUtil::GetValue(DOUBLE &dst_val, const WCHAR *str)
+inline ULONGLONG &tml::StringUtil::GetValue(ULONGLONG &dst_val, const WCHAR *str, const INT radix)
 {
-	dst_val = 0.0;
+	dst_val = tml::StringUtil::GetULONGLONG(str, radix);
 
-	if (str == nullptr) {
-		return (dst_val);
-	}
+	return (dst_val);
+}
 
-	WCHAR *end_p = nullptr;
-	auto val = std::wcstod(str, &end_p);
 
-	if (end_p != str) {
-		dst_val = val;
-	}
+/**
+ * @brief GetValue関数
+ *
+ * Create関数不要
+ *
+ * @param dst_val (dst_value)
+ * @param str (string)
+ * @return dst_val (dst_value)
+ */
+inline FLOAT &tml::StringUtil::GetValue(FLOAT &dst_val, const CHAR *str)
+{
+	dst_val = tml::StringUtil::GetFLOAT(str);
+
+	return (dst_val);
+}
+
+
+/**
+ * @brief GetValue関数
+ *
+ * Create関数不要
+ *
+ * @param dst_val (dst_value)
+ * @param str (string)
+ * @return dst_val (dst_value)
+ */
+inline FLOAT &tml::StringUtil::GetValue(FLOAT &dst_val, const WCHAR *str)
+{
+	dst_val = tml::StringUtil::GetFLOAT(str);
+
+	return (dst_val);
+}
+
+
+/**
+ * @brief GetValue関数
+ *
+ * Create関数不要
+ *
+ * @param dst_val (dst_value)
+ * @param str (string)
+ * @return dst_val (dst_value)
+ */
+inline DOUBLE &tml::StringUtil::GetValue(DOUBLE &dst_val, const CHAR *str)
+{
+	dst_val = tml::StringUtil::GetDOUBLE(str);
+
+	return (dst_val);
+}
+
+
+/**
+ * @brief GetValue関数
+ *
+ * Create関数不要
+ *
+ * @param dst_val (dst_value)
+ * @param str (string)
+ * @return dst_val (dst_value)
+ */
+inline DOUBLE &tml::StringUtil::GetValue(DOUBLE &dst_val, const WCHAR *str)
+{
+	dst_val = tml::StringUtil::GetDOUBLE(str);
 
 	return (dst_val);
 }

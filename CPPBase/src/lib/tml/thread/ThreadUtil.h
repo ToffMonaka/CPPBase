@@ -60,6 +60,10 @@ inline bool tml::ThreadUtil::CheckThreadFix(void)
  */
 inline tml::Thread *tml::ThreadUtil::Get(void)
 {
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return (nullptr);
+	}
+
 	return (tml::ThreadUtil::engine_->Get());
 }
 
@@ -73,6 +77,10 @@ inline tml::Thread *tml::ThreadUtil::Get(void)
  */
 inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::Thread> &th, const bool ready_flg)
 {
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return (-1);
+	}
+
 	return (tml::ThreadUtil::engine_->Start(th, ready_flg));
 }
 
@@ -84,6 +92,10 @@ inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::Thread> &th, const bool r
  */
 inline INT tml::ThreadUtil::StartAll(void)
 {
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return (-1);
+	}
+
 	return (tml::ThreadUtil::engine_->StartAll());
 }
 
@@ -94,6 +106,10 @@ inline INT tml::ThreadUtil::StartAll(void)
  */
 inline void tml::ThreadUtil::End(const bool finish_flg)
 {
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return;
+	}
+
 	tml::ThreadUtil::engine_->End(finish_flg);
 
 	return;
@@ -106,6 +122,10 @@ inline void tml::ThreadUtil::End(const bool finish_flg)
  */
 inline void tml::ThreadUtil::EndAll(const bool delete_flg)
 {
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return;
+	}
+
 	tml::ThreadUtil::engine_->EndAll(delete_flg);
 
 	return;
@@ -118,5 +138,9 @@ inline void tml::ThreadUtil::EndAll(const bool delete_flg)
  */
 inline tml::ThreadUtilEngine::STATE tml::ThreadUtil::GetState(void)
 {
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return (tml::ThreadUtilEngine::STATE());
+	}
+
 	return (tml::ThreadUtil::engine_->GetState());
 }

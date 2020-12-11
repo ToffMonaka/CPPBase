@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../../lib/tml/time/FrameRate.h"
 #include "../../lib/tml/process/Process.h"
+#include "../file/SystemConfigFile.h"
 
 
 namespace cpp_base {
@@ -21,6 +22,7 @@ public: cpp_base::MainProcess &operator =(const cpp_base::MainProcess &) = delet
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	cpp_base::SystemConfigFile sys_conf_file_;
 	tml::FrameRate frame_rate_;
 
 private:

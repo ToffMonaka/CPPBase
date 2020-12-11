@@ -23,17 +23,6 @@ tml::BinaryFileData::BinaryFileData()
  */
 tml::BinaryFileData::~BinaryFileData()
 {
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-void tml::BinaryFileData::Release(void)
-{
 	return;
 }
 
@@ -43,8 +32,6 @@ void tml::BinaryFileData::Release(void)
  */
 void tml::BinaryFileData::Init(void)
 {
-	this->Release();
-
 	this->file_buffer.Init();
 
 	return;

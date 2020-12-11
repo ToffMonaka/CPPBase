@@ -115,6 +115,10 @@ inline bool tml::MemoryUtil::CheckThreadFix(void)
 template <typename T>
 inline T *tml::MemoryUtil::Get(const size_t cnt)
 {
+	if (tml::MemoryUtil::engine_ == nullptr) {
+		return (nullptr);
+	}
+
 	return (tml::MemoryUtil::engine_->Get<T>(cnt));
 }
 
@@ -126,6 +130,12 @@ inline T *tml::MemoryUtil::Get(const size_t cnt)
 template <typename T>
 inline void tml::MemoryUtil::Release(T **pp)
 {
+	if (tml::MemoryUtil::engine_ == nullptr) {
+		(*pp) = nullptr;
+
+		return;
+	}
+
 	tml::MemoryUtil::engine_->Release(pp);
 
 	return;
@@ -138,6 +148,10 @@ inline void tml::MemoryUtil::Release(T **pp)
  */
 inline tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtil::GetAllocatorInfo(void)
 {
+	if (tml::MemoryUtil::engine_ == nullptr) {
+		return (tml::MemoryUtilEngine::ALLOCATOR_INFO());
+	}
+
 	return (tml::MemoryUtil::engine_->GetAllocatorInfo());
 }
 

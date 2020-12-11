@@ -23,17 +23,6 @@ tml::ConfigFileData::ConfigFileData()
  */
 tml::ConfigFileData::~ConfigFileData()
 {
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-void tml::ConfigFileData::Release(void)
-{
 	return;
 }
 
@@ -43,8 +32,6 @@ void tml::ConfigFileData::Release(void)
  */
 void tml::ConfigFileData::Init(void)
 {
-	this->Release();
-
 	this->value_container.clear();
 
 	return;

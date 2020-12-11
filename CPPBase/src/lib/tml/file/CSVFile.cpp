@@ -23,17 +23,6 @@ tml::CSVFileData::CSVFileData()
  */
 tml::CSVFileData::~CSVFileData()
 {
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-void tml::CSVFileData::Release(void)
-{
 	return;
 }
 
@@ -43,8 +32,6 @@ void tml::CSVFileData::Release(void)
  */
 void tml::CSVFileData::Init(void)
 {
-	this->Release();
-
 	this->value_container.clear();
 
 	return;

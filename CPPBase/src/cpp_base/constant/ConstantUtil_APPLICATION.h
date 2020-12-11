@@ -19,8 +19,6 @@ namespace APPLICATION {
 	const WCHAR NAME[] = L"CPP ベースプロジェクト";
 	const WCHAR COMPANY_NAME[] = L"Toff Monaka Project";
 	const WCHAR VERSION_NAME[] = L"1.0.0";
-	const size_t MEMORY_ALLOCATOR_SIZE = 1048576U;
-	const CHAR LOCALE_NAME[] = "Japanese";
 }
 }
 }

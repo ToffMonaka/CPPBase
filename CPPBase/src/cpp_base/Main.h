@@ -9,6 +9,6 @@
 
 
 namespace cpp_base {
-void InitMain(void);
+INT InitMain(void);
 INT CreateMain(const HINSTANCE, const HINSTANCE, const WCHAR *, const INT);
 }

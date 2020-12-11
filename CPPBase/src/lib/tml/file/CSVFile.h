@@ -16,14 +16,8 @@ namespace tml {
  */
 class CSVFileData
 {
-public: CSVFileData(const tml::CSVFileData &) = delete;
-public: tml::CSVFileData &operator =(const tml::CSVFileData &) = delete;
-
 public:
 	std::vector<std::vector<std::wstring>> value_container;
-
-private:
-	void Release(void);
 
 public:
 	CSVFileData();

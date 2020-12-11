@@ -59,6 +59,10 @@ inline bool tml::ProcessUtil::CheckThreadFix(void)
  */
 inline tml::Process *tml::ProcessUtil::Get(void)
 {
+	if (tml::ProcessUtil::engine_ == nullptr) {
+		return (nullptr);
+	}
+
 	return (tml::ProcessUtil::engine_->Get());
 }
 
@@ -71,6 +75,10 @@ inline tml::Process *tml::ProcessUtil::Get(void)
  */
 inline INT tml::ProcessUtil::Start(std::unique_ptr<tml::Process> &proc)
 {
+	if (tml::ProcessUtil::engine_ == nullptr) {
+		return (-1);
+	}
+
 	return (tml::ProcessUtil::engine_->Start(proc));
 }
 
@@ -81,6 +89,10 @@ inline INT tml::ProcessUtil::Start(std::unique_ptr<tml::Process> &proc)
  */
 inline void tml::ProcessUtil::End(const INT exit_code)
 {
+	if (tml::ProcessUtil::engine_ == nullptr) {
+		return;
+	}
+
 	tml::ProcessUtil::engine_->End(exit_code);
 
 	return;
@@ -93,6 +105,10 @@ inline void tml::ProcessUtil::End(const INT exit_code)
  */
 inline tml::ProcessUtilEngine::STATE tml::ProcessUtil::GetState(void)
 {
+	if (tml::ProcessUtil::engine_ == nullptr) {
+		return (tml::ProcessUtilEngine::STATE());
+	}
+
 	return (tml::ProcessUtil::engine_->GetState());
 }
 
@@ -104,5 +120,9 @@ inline tml::ProcessUtilEngine::STATE tml::ProcessUtil::GetState(void)
  */
 inline INT tml::ProcessUtil::GetExitCode(void)
 {
+	if (tml::ProcessUtil::engine_ == nullptr) {
+		return (0);
+	}
+
 	return (tml::ProcessUtil::engine_->GetExitCode());
 }

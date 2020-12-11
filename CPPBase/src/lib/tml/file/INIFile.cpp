@@ -23,17 +23,6 @@ tml::INIFileData::INIFileData()
  */
 tml::INIFileData::~INIFileData()
 {
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-void tml::INIFileData::Release(void)
-{
 	return;
 }
 
@@ -43,8 +32,6 @@ void tml::INIFileData::Release(void)
  */
 void tml::INIFileData::Init(void)
 {
-	this->Release();
-
 	this->value_container.clear();
 
 	return;

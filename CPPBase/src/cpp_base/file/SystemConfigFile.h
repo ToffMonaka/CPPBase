@@ -15,9 +15,6 @@ namespace cpp_base {
  */
 class SystemConfigFileData
 {
-public: SystemConfigFileData(const cpp_base::SystemConfigFileData &) = delete;
-public: cpp_base::SystemConfigFileData &operator =(const cpp_base::SystemConfigFileData &) = delete;
-
 public:
 	size_t application_memory_allocator_size;
 	std::string application_locale_name;
@@ -25,9 +22,6 @@ public:
 	size_t window_y;
 	size_t window_width;
 	size_t window_height;
-
-private:
-	void Release(void);
 
 public:
 	SystemConfigFileData();

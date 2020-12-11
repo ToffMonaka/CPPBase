@@ -28,17 +28,6 @@ cpp_base::SystemConfigFileData::SystemConfigFileData() :
  */
 cpp_base::SystemConfigFileData::~SystemConfigFileData()
 {
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-void cpp_base::SystemConfigFileData::Release(void)
-{
 	return;
 }
 
@@ -48,8 +37,6 @@ void cpp_base::SystemConfigFileData::Release(void)
  */
 void cpp_base::SystemConfigFileData::Init(void)
 {
-	this->Release();
-
 	this->application_memory_allocator_size = 1048576U;
 	this->application_locale_name = "Japanese";
 	this->window_x = 0U;
@@ -199,23 +186,55 @@ INT cpp_base::SystemConfigFile::Read(void)
 
 	this->data.Init();
 
-	{// APPLICATION section set
+	{// APPLICATION Section Set
 		auto val_name_cont = ini_file.data.GetValueNameContainer(L"APPLICATION");
 
 		if (val_name_cont != nullptr) {
-			tml::StringUtil::GetValue(this->data.application_memory_allocator_size, tml::StringUtil::GetString(ini_file.data.GetValue((*val_name_cont), L"MEM_ALLOCATOR_SIZE")));
-			tml::StringUtil::GetString(this->data.application_locale_name, tml::StringUtil::GetString(ini_file.data.GetValue((*val_name_cont), L"LOCALE_NAME")));
+			std::wstring *val = nullptr;
+
+			val = ini_file.data.GetValue((*val_name_cont), L"MEM_ALLOCATOR_SIZE");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.application_memory_allocator_size, val->c_str());
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"LOCALE_NAME");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetString(this->data.application_locale_name, val->c_str());
+			}
 		}
 	}
 
-	{// WINDOW section set
+	{// WINDOW Section Set
 		auto val_name_cont = ini_file.data.GetValueNameContainer(L"WINDOW");
 
 		if (val_name_cont != nullptr) {
-			tml::StringUtil::GetValue(this->data.window_x, tml::StringUtil::GetString(ini_file.data.GetValue((*val_name_cont), L"X")));
-			tml::StringUtil::GetValue(this->data.window_y, tml::StringUtil::GetString(ini_file.data.GetValue((*val_name_cont), L"Y")));
-			tml::StringUtil::GetValue(this->data.window_width, tml::StringUtil::GetString(ini_file.data.GetValue((*val_name_cont), L"W")));
-			tml::StringUtil::GetValue(this->data.window_height, tml::StringUtil::GetString(ini_file.data.GetValue((*val_name_cont), L"H")));
+			std::wstring *val = nullptr;
+
+			val = ini_file.data.GetValue((*val_name_cont), L"X");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.window_x, val->c_str());
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"Y");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.window_y, val->c_str());
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"W");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.window_width, val->c_str());
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"H");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.window_height, val->c_str());
+			}
 		}
 	}
 

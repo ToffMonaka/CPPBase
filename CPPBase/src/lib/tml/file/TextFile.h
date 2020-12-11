@@ -17,14 +17,8 @@ namespace tml {
  */
 class TextFileData
 {
-public: TextFileData(const tml::TextFileData &) = delete;
-public: tml::TextFileData &operator =(const tml::TextFileData &) = delete;
-
 public:
 	std::list<std::wstring> string_container;
-
-private:
-	void Release(void);
 
 public:
 	TextFileData();

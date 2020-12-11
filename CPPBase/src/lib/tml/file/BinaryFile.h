@@ -16,14 +16,8 @@ namespace tml {
  */
 class BinaryFileData
 {
-public: BinaryFileData(const tml::BinaryFileData &) = delete;
-public: tml::BinaryFileData &operator =(const tml::BinaryFileData &) = delete;
-
 public:
 	tml::DynamicBuffer file_buffer;
-
-private:
-	void Release(void);
 
 public:
 	BinaryFileData();

@@ -22,17 +22,6 @@ tml::TextFileData::TextFileData()
  */
 tml::TextFileData::~TextFileData()
 {
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-void tml::TextFileData::Release(void)
-{
 	return;
 }
 
@@ -42,8 +31,6 @@ void tml::TextFileData::Release(void)
  */
 void tml::TextFileData::Init(void)
 {
-	this->Release();
-
 	this->string_container.clear();
 
 	return;
