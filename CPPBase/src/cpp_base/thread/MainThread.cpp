@@ -5,6 +5,16 @@
 
 
 #include "MainThread.h"
+#include "../../lib/tml/memory/MemoryUtil.h"
+#include "../../lib/tml/string/StringUtil.h"
+#include "../../lib/tml/time/TimeUtil.h"
+#include "../../lib/tml/math/MathUtil.h"
+#include "../../lib/tml/random/RandomUtil.h"
+#include "../../lib/tml/file/FileUtil.h"
+#include "../../lib/tml/thread/ThreadUtil.h"
+#include "../constant/ConstantUtil_WINDOW.h"
+#include "../resource/resource.h"
+#include "../thread/TestThread.h"
 
 
 /**
@@ -32,7 +42,7 @@ cpp_base::MainThread::~MainThread()
  */
 void cpp_base::MainThread::Release(void)
 {
-	tml::Thread::Release();
+	tml::MainThread::Release();
 
 	return;
 }
@@ -45,9 +55,10 @@ void cpp_base::MainThread::Init(void)
 {
 	this->Release();
 
+	this->sys_conf_file_.Init();
 	this->frame_rate_.Init();
 
-	tml::Thread::Init();
+	tml::MainThread::Init();
 
 	return;
 }
@@ -55,19 +66,23 @@ void cpp_base::MainThread::Init(void)
 
 /**
  * @brief Createä÷êî
+ * @param instance_handle (instance_handle)
+ * @param wnd_name (window_name)
+ * @param wnd_show_type (window_show_type)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::MainThread::Create(void)
+INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *wnd_name, const INT wnd_show_type)
 {
 	this->Release();
 
-	if (tml::Thread::Create() < 0) {
+	if (tml::MainThread::Create(instance_handle, wnd_name, wnd_show_type) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
+	this->sys_conf_file_.Init();
 	this->frame_rate_.Init();
 
 	return (0);
@@ -81,6 +96,51 @@ INT cpp_base::MainThread::Create(void)
  */
 INT cpp_base::MainThread::Start(void)
 {
+	{// SystemConfigFile Read
+		this->sys_conf_file_.read_plan.file_path = L"dat/sys_conf.ini";
+
+		if (this->sys_conf_file_.Read() < 0) {
+			return (-1);
+		}
+	}
+
+	{// TestThread Start
+		std::unique_ptr<tml::SubThread> th = std::make_unique<cpp_base::TestThread>();
+
+		if (dynamic_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
+			return (-1);
+		}
+
+		if (tml::ThreadUtil::Start(th) < 0) {
+			return (-1);
+		}
+	}
+
+	{// Window Create
+		WNDCLASSEX wnd_class = {};
+
+		wnd_class.cbSize = sizeof(wnd_class);
+		wnd_class.style = CS_HREDRAW | CS_VREDRAW;
+		wnd_class.lpfnWndProc = cpp_base::MainThread::WindowProcedure;
+		wnd_class.cbClsExtra = 0;
+		wnd_class.cbWndExtra = 0;
+		wnd_class.hInstance = this->GetInstanceHandle();
+		wnd_class.hIcon = LoadIcon(this->GetInstanceHandle(), MAKEINTRESOURCE(IDI_APPLICATION_ICON1));
+		wnd_class.hCursor = LoadCursor(this->GetInstanceHandle(), IDC_ARROW);
+		wnd_class.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
+		wnd_class.lpszMenuName = nullptr;
+		wnd_class.lpszClassName = cpp_base::ConstantUtil::WINDOW::CLASS_NAME;
+		wnd_class.hIconSm = nullptr;
+
+		if (this->CreateWindow_(wnd_class) < 0) {
+			return (-1);
+		}
+	}
+
+	{// Test
+		int a = 0;
+	}
+
 	this->frame_rate_.Start(60U);
 
 	return (0);
@@ -104,4 +164,27 @@ void cpp_base::MainThread::Update(void)
 	this->frame_rate_.Update();
 
 	return;
+}
+
+
+/**
+ * @brief WindowProcedureä÷êî
+ * @param wnd_handle (window_handle)
+ * @param msg_type (message_type)
+ * @param msg_param1 (message_parameter1)
+ * @param msg_param2 (message_parameter2)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg_type, WPARAM msg_param1, LPARAM msg_param2)
+{
+	switch (msg_type) {
+	case WM_DESTROY: {
+		PostQuitMessage(0);
+
+		return (0);
+	}
+	}
+
+	return (DefWindowProc(wnd_handle, msg_type, msg_param1, msg_param2));
 }

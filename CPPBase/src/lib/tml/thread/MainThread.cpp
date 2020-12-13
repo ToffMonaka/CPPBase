@@ -1,18 +1,17 @@
 /**
  * @file
- * @brief Processコードファイル
+ * @brief MainThreadコードファイル
  */
 
 
-#include "Process.h"
-#include "ProcessUtil.h"
+#include "MainThread.h"
 #include "../memory/MemoryUtil.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::Process::Process() :
+tml::MainThread::MainThread() :
 	instance_handle_(nullptr),
 	wnd_handle_(nullptr),
 	wnd_show_type_(0)
@@ -27,7 +26,7 @@ tml::Process::Process() :
 /**
  * @brief デストラクタ
  */
-tml::Process::~Process()
+tml::MainThread::~MainThread()
 {
 	return;
 }
@@ -36,9 +35,11 @@ tml::Process::~Process()
 /**
  * @brief Release関数
  */
-void tml::Process::Release(void)
+void tml::MainThread::Release(void)
 {
 	this->DeleteWindow_();
+
+	tml::Thread::Release();
 
 	return;
 }
@@ -47,12 +48,13 @@ void tml::Process::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Process::Init(void)
+void tml::MainThread::Init(void)
 {
-	this->th_id_ = std::thread::id();
 	this->instance_handle_ = nullptr;
 	this->wnd_name_.clear();
 	this->wnd_show_type_ = 0;
+
+	tml::Thread::Init();
 
 	return;
 }
@@ -66,9 +68,12 @@ void tml::Process::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Process::Create(const HINSTANCE instance_handle, const WCHAR *wnd_name, const INT wnd_show_type)
+INT tml::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *wnd_name, const INT wnd_show_type)
 {
-	this->th_id_ = std::this_thread::get_id();
+	if (tml::Thread::Create(tml::ConstantUtil::THREAD::TYPE::MAIN) < 0) {
+		return (-1);
+	}
+
 	this->instance_handle_ = instance_handle;
 	this->wnd_name_ = wnd_name;
 	this->wnd_show_type_ = wnd_show_type;
@@ -83,7 +88,7 @@ INT tml::Process::Create(const HINSTANCE instance_handle, const WCHAR *wnd_name,
  * @return res (result)<br>
  * 0未満=失敗,-2=多重起動
  */
-INT tml::Process::CreateWindow_(const WNDCLASSEX &wnd_class)
+INT tml::MainThread::CreateWindow_(const WNDCLASSEX &wnd_class)
 {
 	if (this->wnd_handle_ != nullptr) {
 		return (-1);
@@ -126,7 +131,7 @@ INT tml::Process::CreateWindow_(const WNDCLASSEX &wnd_class)
 /**
  * @brief DeleteWindow_関数
  */
-void tml::Process::DeleteWindow_(void)
+void tml::MainThread::DeleteWindow_(void)
 {
 	if (this->wnd_handle_ != nullptr) {
 		DestroyWindow(this->wnd_handle_);

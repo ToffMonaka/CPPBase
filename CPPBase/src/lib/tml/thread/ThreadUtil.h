@@ -33,11 +33,13 @@ public:
 
 	static bool CheckThreadFix(void);
 	static tml::Thread *Get(void);
-	static INT Start(std::unique_ptr<tml::Thread> &, const bool ready_flg = false);
+	static INT Start(std::unique_ptr<tml::MainThread> &);
+	static INT Start(std::unique_ptr<tml::SubThread> &);
 	static INT StartAll(void);
 	static void End(const bool finish_flg = false);
 	static void EndAll(const bool delete_flg = false);
 	static tml::ThreadUtilEngine::STATE GetState(void);
+	static INT GetExitCode(void);
 };
 }
 
@@ -71,17 +73,32 @@ inline tml::Thread *tml::ThreadUtil::Get(void)
 /**
  * @brief Startä÷êî
  * @param th (thread)
- * @param ready_flg (ready_flag)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::Thread> &th, const bool ready_flg)
+inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::MainThread> &th)
 {
 	if (tml::ThreadUtil::engine_ == nullptr) {
 		return (-1);
 	}
 
-	return (tml::ThreadUtil::engine_->Start(th, ready_flg));
+	return (tml::ThreadUtil::engine_->Start(th));
+}
+
+
+/**
+ * @brief Startä÷êî
+ * @param th (thread)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::SubThread> &th)
+{
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return (-1);
+	}
+
+	return (tml::ThreadUtil::engine_->Start(th));
 }
 
 
@@ -143,4 +160,19 @@ inline tml::ThreadUtilEngine::STATE tml::ThreadUtil::GetState(void)
 	}
 
 	return (tml::ThreadUtil::engine_->GetState());
+}
+
+
+/**
+ * @brief GetExitCodeä÷êî
+ * @return exit_code (exit_code)<br>
+ * 0à»äO=é∏îs
+ */
+inline INT tml::ThreadUtil::GetExitCode(void)
+{
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return (0);
+	}
+
+	return (tml::ThreadUtil::engine_->GetExitCode());
 }

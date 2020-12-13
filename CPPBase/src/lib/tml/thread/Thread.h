@@ -9,6 +9,7 @@
 #include <thread>
 #include <atomic>
 #include "MutexThreadLock.h"
+#include "SpinThreadLock.h"
 
 
 namespace tml {
@@ -25,14 +26,15 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	std::thread::id th_id_;
+	tml::ConstantUtil::THREAD::TYPE type_;
+	std::atomic<bool> loop_flg_;
 	std::thread core_;
 	std::atomic<bool> core_created_flg_;
 	tml::MutexThreadLock core_th_lock_;
-	std::atomic<bool> loop_flg_;
 
 protected:
 	void Release(void);
-	INT Create(void);
+	INT Create(const tml::ConstantUtil::THREAD::TYPE);
 
 public:
 	Thread();
@@ -44,11 +46,12 @@ public:
 	virtual void End(void) = 0;
 	virtual void Update(void) = 0;
 	const std::thread::id &GetThreadID(void) const;
+	tml::ConstantUtil::THREAD::TYPE GetType(void) const;
+	bool GetLoopFlag(void) const;
+	void SetLoopFlag(const bool);
 	INT CreateCore(void);
 	void DeleteCore(void);
 	void RunCore(void);
-	bool GetLoopFlag(void) const;
-	void SetLoopFlag(const bool);
 };
 }
 
@@ -60,6 +63,16 @@ public:
 inline const std::thread::id &tml::Thread::GetThreadID(void) const
 {
 	return (this->th_id_);
+}
+
+
+/**
+ * @brief GetTypeŠÖ”
+ * @return type (type)
+ */
+inline tml::ConstantUtil::THREAD::TYPE tml::Thread::GetType(void) const
+{
+	return (this->type_);
 }
 
 

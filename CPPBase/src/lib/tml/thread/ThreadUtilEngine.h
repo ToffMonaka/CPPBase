@@ -8,8 +8,8 @@
 #include "../constant/ConstantUtil.h"
 #include <list>
 #include <map>
-#include "Thread.h"
-#include "../thread/SpinThreadLock.h"
+#include "MainThread.h"
+#include "SubThread.h"
 
 
 namespace tml {
@@ -30,20 +30,25 @@ public:
 	 */
 	typedef struct STATE_
 	{
-		bool ended_flg;
+		bool all_started_flg;
+		bool all_ended_flg;
+		INT exit_code;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		STATE_() :
-			ended_flg(false)
+			all_started_flg(false),
+			all_ended_flg(false),
+			exit_code(0)
 		{
 			return;
 		}
 	} STATE;
 
 private:
-	std::list<std::unique_ptr<tml::Thread>> th_cont_;
+	std::unique_ptr<tml::MainThread> main_th_;
+	std::list<std::unique_ptr<tml::SubThread>> sub_th_cont_;
 	std::list<tml::Thread *> ready_th_cont_;
 	std::list<tml::Thread *> start_th_cont_;
 	std::map<std::thread::id, tml::Thread *> start_th_cont_with_th_id_;
@@ -61,11 +66,13 @@ public:
 	virtual void Init(void);
 
 	tml::Thread *Get(void);
-	INT Start(std::unique_ptr<tml::Thread> &, const bool ready_flg = false);
+	INT Start(std::unique_ptr<tml::MainThread> &);
+	INT Start(std::unique_ptr<tml::SubThread> &);
 	INT StartAll(void);
 	void End(const bool finish_flg = false);
 	void EndAll(const bool delete_flg = false);
 	tml::ThreadUtilEngine::STATE GetState(void);
+	INT GetExitCode(void);
 };
 }
 
@@ -99,4 +106,15 @@ inline tml::Thread *tml::ThreadUtilEngine::Get(void)
 inline tml::ThreadUtilEngine::STATE tml::ThreadUtilEngine::GetState(void)
 {tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 	return (this->stat_);
+}
+
+
+/**
+ * @brief GetExitCode関数
+ * @return exit_code (exit_code)<br>
+ * 0以外=失敗
+ */
+inline INT tml::ThreadUtilEngine::GetExitCode(void)
+{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+	return (this->stat_.exit_code);
 }

@@ -17,13 +17,11 @@
 #include "../lib/tml/random/DefaultRandomUtilEngine.h"
 #include "../lib/tml/file/FileUtil.h"
 #include "../lib/tml/file/DefaultFileUtilEngine.h"
-#include "../lib/tml/process/ProcessUtil.h"
-#include "../lib/tml/process/DefaultProcessUtilEngine.h"
 #include "../lib/tml/thread/ThreadUtil.h"
 #include "../lib/tml/thread/DefaultThreadUtilEngine.h"
 #include "constant/ConstantUtil_WINDOW.h"
-#include "process/MainProcess.h"
 #include "file/SystemConfigFile.h"
+#include "thread/MainThread.h"
 
 
 /**
@@ -53,10 +51,9 @@ INT APIENTRY wWinMain(_In_ HINSTANCE instance_handle, _In_opt_ HINSTANCE prev_in
  */
 INT cpp_base::InitMain(void)
 {
-	auto exit_code = tml::ProcessUtil::GetExitCode();
+	auto exit_code = tml::ThreadUtil::GetExitCode();
 
 	tml::ThreadUtil::Init();
-	tml::ProcessUtil::Init();
 	tml::FileUtil::Init();
 	tml::RandomUtil::Init();
 	tml::MathUtil::Init();
@@ -213,22 +210,6 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 		}
 	}
 
-	{// ProcessUtil Create
-		std::unique_ptr<tml::ProcessUtilEngine> engine = std::make_unique<tml::DefaultProcessUtilEngine>();
-
-		if (dynamic_cast<tml::DefaultProcessUtilEngine *>(engine.get())->Create() < 0) {
-			cpp_base::InitMain();
-
-			return (-1);
-		}
-
-		if (tml::ProcessUtil::Create(engine) < 0) {
-			cpp_base::InitMain();
-
-			return (-1);
-		}
-	}
-
 	{// ThreadUtil Create
 		std::unique_ptr<tml::ThreadUtilEngine> engine = std::make_unique<tml::DefaultThreadUtilEngine>();
 
@@ -245,16 +226,16 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 		}
 	}
 
-	{// MainProcess Start
-		std::unique_ptr<tml::Process> proc = std::make_unique<cpp_base::MainProcess>();
+	{// MainThread Start
+		std::unique_ptr<tml::MainThread> th = std::make_unique<cpp_base::MainThread>();
 
-		if (dynamic_cast<cpp_base::MainProcess *>(proc.get())->Create(instance_handle, cpp_base::ConstantUtil::WINDOW::NAME, wnd_show_type) < 0) {
+		if (dynamic_cast<cpp_base::MainThread *>(th.get())->Create(instance_handle, cpp_base::ConstantUtil::WINDOW::NAME, wnd_show_type) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
 		}
 
-		if (tml::ProcessUtil::Start(proc) < 0) {
+		if (tml::ThreadUtil::Start(th) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);

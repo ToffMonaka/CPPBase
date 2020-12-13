@@ -1,28 +1,27 @@
 /**
  * @file
- * @brief Processヘッダーファイル
+ * @brief MainThreadヘッダーファイル
  */
 #pragma once
 
 
 #include "../constant/ConstantUtil.h"
-#include <thread>
+#include "Thread.h"
 
 
 namespace tml {
 /**
- * @brief Processクラス
+ * @brief MainThreadクラス
  *
  * インターフェースパターン
  */
-class Process
+class MainThread : public tml::Thread
 {
-public: Process(const tml::Process &) = delete;
-public: tml::Process &operator =(const tml::Process &) = delete;
+public: MainThread(const tml::MainThread &) = delete;
+public: tml::MainThread &operator =(const tml::MainThread &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
-	std::thread::id th_id_;
 	HINSTANCE instance_handle_;
 	HWND wnd_handle_;
 	std::wstring wnd_name_;
@@ -38,15 +37,14 @@ protected:
 	void DeleteWindow_(void);
 
 public:
-	Process();
-	virtual ~Process();
+	MainThread();
+	virtual ~MainThread();
 
 	virtual void Init(void);
 
 	virtual INT Start(void) = 0;
 	virtual void End(void) = 0;
 	virtual void Update(void) = 0;
-	const std::thread::id &GetThreadID(void) const;
 	HINSTANCE GetInstanceHandle(void) const;
 	HWND GetWindowHandle(void) const;
 	const std::wstring &GetWindowName(void) const;
@@ -56,20 +54,10 @@ public:
 
 
 /**
- * @brief GetThreadID関数
- * @return th_id (thread_id)
- */
-inline const std::thread::id &tml::Process::GetThreadID(void) const
-{
-	return (this->th_id_);
-}
-
-
-/**
  * @brief GetInstanceHandle関数
  * @return instance_handle (instance_handle)
  */
-inline HINSTANCE tml::Process::GetInstanceHandle(void) const
+inline HINSTANCE tml::MainThread::GetInstanceHandle(void) const
 {
 	return (this->instance_handle_);
 }
@@ -79,7 +67,7 @@ inline HINSTANCE tml::Process::GetInstanceHandle(void) const
  * @brief GetWindowHandle関数
  * @return wnd_handle (window_handle)
  */
-inline HWND tml::Process::GetWindowHandle(void) const
+inline HWND tml::MainThread::GetWindowHandle(void) const
 {
 	return (this->wnd_handle_);
 }
@@ -89,7 +77,7 @@ inline HWND tml::Process::GetWindowHandle(void) const
  * @brief GetWindowName関数
  * @return wnd_name (window_name)
  */
-inline const std::wstring &tml::Process::GetWindowName(void) const
+inline const std::wstring &tml::MainThread::GetWindowName(void) const
 {
 	return (this->wnd_name_);
 }
@@ -99,7 +87,7 @@ inline const std::wstring &tml::Process::GetWindowName(void) const
  * @brief GetWindowShowType関数
  * @return wnd_show_type (window_show_type)
  */
-inline INT tml::Process::GetWindowShowType(void) const
+inline INT tml::MainThread::GetWindowShowType(void) const
 {
 	return (this->wnd_show_type_);
 }

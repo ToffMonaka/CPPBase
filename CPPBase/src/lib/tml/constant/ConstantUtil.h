@@ -73,5 +73,12 @@ inline void tml::SetResult(INT *dst_res, const INT res)
 
 namespace tml {
 namespace ConstantUtil {
+namespace THREAD {
+	enum class TYPE : UINT {
+		NONE = 0U,
+		MAIN,
+		SUB
+	};
+}
 }
 }

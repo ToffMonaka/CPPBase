@@ -5,7 +5,6 @@
 
 
 #include "ThreadUtilEngine.h"
-#include "../process/ProcessUtil.h"
 
 
 /**
@@ -31,25 +30,7 @@ tml::ThreadUtilEngine::~ThreadUtilEngine()
  */
 void tml::ThreadUtilEngine::Release(void)
 {
-	std::list<std::unique_ptr<tml::Thread>> th_cont;
-
-	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_.ended_flg = true;
-
-		this->ready_th_cont_.clear();
-
-		for (auto th : this->start_th_cont_) {
-			th->SetLoopFlag(false);
-		}
-
-		for (auto &th : this->th_cont_) {
-			th_cont.push_back(std::move(th));
-		}
-
-		this->th_cont_.clear();
-	}
-
-	th_cont.clear();
+	this->EndAll(true);
 
 	return;
 }
@@ -86,24 +67,54 @@ INT tml::ThreadUtilEngine::Create(void)
 /**
  * @brief Startä÷êî
  * @param th (thread)
- * @param ready_flg (ready_flag)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::Thread> &th, const bool ready_flg)
+INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
 {
-	if (tml::ProcessUtil::Get() == nullptr) {
-		return (-1);
-	}
-
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		if (this->stat_.ended_flg) {
+		if (this->stat_.all_ended_flg) {
 			return (-1);
 		}
 
 		auto tmp_th = th.get();
 
-		if (!ready_flg) {
+		if (this->stat_.all_started_flg) {
+			return (-1);
+		} else {
+			this->start_th_cont_.push_back(tmp_th);
+			this->start_th_cont_with_th_id_.insert(std::make_pair(tmp_th->GetThreadID(), tmp_th));
+		}
+
+		this->main_th_ = std::move(th);
+	}
+
+	if (this->StartAll() < 0) {
+		return (-1);
+	}
+
+	this->EndAll(true);
+
+	return (0);
+}
+
+
+/**
+ * @brief Startä÷êî
+ * @param th (thread)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::SubThread> &th)
+{
+	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+		if (this->stat_.all_ended_flg) {
+			return (-1);
+		}
+
+		auto tmp_th = th.get();
+
+		if (this->stat_.all_started_flg) {
 			tmp_th->CreateCore();
 
 			this->start_th_cont_.push_back(tmp_th);
@@ -112,7 +123,7 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::Thread> &th, const bool re
 			this->ready_th_cont_.push_back(tmp_th);
 		}
 
-		this->th_cont_.push_back(std::move(th));
+		this->sub_th_cont_.push_back(std::move(th));
 	}
 
 	return (0);
@@ -126,14 +137,18 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::Thread> &th, const bool re
  */
 INT tml::ThreadUtilEngine::StartAll(void)
 {
-	if (tml::ProcessUtil::Get() == nullptr) {
+	if (this->main_th_->Start() < 0) {
+		this->End(true);
+
 		return (-1);
 	}
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		if (this->stat_.ended_flg) {
+		if (this->stat_.all_ended_flg) {
 			return (-1);
 		}
+
+		this->stat_.all_started_flg = true;
 
 		for (auto tmp_th : this->ready_th_cont_) {
 			tmp_th->CreateCore();
@@ -143,6 +158,35 @@ INT tml::ThreadUtilEngine::StartAll(void)
 		}
 
 		this->ready_th_cont_.clear();
+	}
+
+	if (this->main_th_->GetWindowHandle() != nullptr) {
+		MSG msg = {};
+
+		do {
+			while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE)) {
+				if (msg.message == WM_QUIT) {
+					{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
+						this->stat_.exit_code = static_cast<INT>(msg.wParam);
+
+						this->main_th_->SetLoopFlag(false);
+					}
+
+					break;
+				}
+
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+
+			if (this->main_th_->GetLoopFlag()) {
+				this->main_th_->Update();
+			}
+		} while (this->main_th_->GetLoopFlag());
+	} else {
+		do {
+			this->main_th_->Update();
+		} while (this->main_th_->GetLoopFlag());
 	}
 
 	return (0);
@@ -155,10 +199,6 @@ INT tml::ThreadUtilEngine::StartAll(void)
  */
 void tml::ThreadUtilEngine::End(const bool finish_flg)
 {
-	if (tml::ProcessUtil::Get() == nullptr) {
-		return;
-	}
-
 	auto th_id = std::this_thread::get_id();
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
@@ -188,14 +228,11 @@ void tml::ThreadUtilEngine::End(const bool finish_flg)
  */
 void tml::ThreadUtilEngine::EndAll(const bool delete_flg)
 {
-	if (tml::ProcessUtil::Get() == nullptr) {
-		return;
-	}
-
-	std::list<std::unique_ptr<tml::Thread>> th_cont;
+	std::unique_ptr<tml::Thread> main_th;
+	std::list<std::unique_ptr<tml::Thread>> sub_th_cont;
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_.ended_flg = true;
+		this->stat_.all_ended_flg = true;
 
 		this->ready_th_cont_.clear();
 
@@ -204,15 +241,27 @@ void tml::ThreadUtilEngine::EndAll(const bool delete_flg)
 		}
 
 		if (delete_flg) {
-			for (auto &th : this->th_cont_) {
-				th_cont.push_back(std::move(th));
+			main_th = std::move(this->main_th_);
+
+			for (auto &sub_th : this->sub_th_cont_) {
+				sub_th_cont.push_back(std::move(sub_th));
 			}
 
-			this->th_cont_.clear();
+			this->sub_th_cont_.clear();
 		}
 	}
 
-	th_cont.clear();
+	if (!sub_th_cont.empty()) {
+		sub_th_cont.clear();
+	}
+
+	if (main_th != nullptr) {
+		main_th->End();
+
+		this->End(true);
+
+		main_th.reset();
+	}
 
 	return;
 }

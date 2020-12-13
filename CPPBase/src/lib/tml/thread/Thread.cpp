@@ -6,15 +6,15 @@
 
 #include "Thread.h"
 #include "ThreadUtil.h"
-#include "../memory/MemoryUtil.h"
 
 
 /**
  * @brief コンストラクタ
  */
 tml::Thread::Thread() :
-	core_created_flg_(false),
-	loop_flg_(true)
+	type_(tml::ConstantUtil::THREAD::TYPE::NONE),
+	loop_flg_(true),
+	core_created_flg_(false)
 {
 	return;
 }
@@ -45,6 +45,15 @@ void tml::Thread::Release(void)
  */
 void tml::Thread::Init(void)
 {
+	switch (this->type_) {
+	case tml::ConstantUtil::THREAD::TYPE::MAIN: {
+		this->th_id_ = std::thread::id();
+
+		break;
+	}
+	}
+
+	this->type_ = tml::ConstantUtil::THREAD::TYPE::NONE;
 	this->loop_flg_ = true;
 
 	return;
@@ -53,11 +62,21 @@ void tml::Thread::Init(void)
 
 /**
  * @brief Create関数
+ * @param type (type)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Thread::Create(void)
+INT tml::Thread::Create(const tml::ConstantUtil::THREAD::TYPE type)
 {
+	switch (type) {
+	case tml::ConstantUtil::THREAD::TYPE::MAIN: {
+		this->th_id_ = std::this_thread::get_id();
+
+		break;
+	}
+	}
+
+	this->type_ = type;
 	this->loop_flg_ = true;
 
 	return (0);
@@ -70,16 +89,22 @@ INT tml::Thread::Create(void)
  * 0未満=失敗
  */
 INT tml::Thread::CreateCore(void)
-{tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
-	if (this->core_created_flg_) {
-		return (0);
+{
+	if (this->type_ != tml::ConstantUtil::THREAD::TYPE::SUB) {
+		return (-1);
 	}
 
-	this->core_ = std::thread(&tml::Thread::RunCore, this);
+	{tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
+		if (this->core_created_flg_) {
+			return (0);
+		}
 
-	this->th_id_ = this->core_.get_id();
+		this->core_ = std::thread(&tml::Thread::RunCore, this);
 
-	this->core_created_flg_ = true;
+		this->th_id_ = this->core_.get_id();
+
+		this->core_created_flg_ = true;
+	}
 
 	return (0);
 }
@@ -89,18 +114,24 @@ INT tml::Thread::CreateCore(void)
  * @brief DeleteCore関数
  */
 void tml::Thread::DeleteCore(void)
-{tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
-	if (!this->core_created_flg_) {
+{
+	if (this->type_ != tml::ConstantUtil::THREAD::TYPE::SUB) {
 		return;
 	}
 
-	if (this->core_.joinable()) {
-		this->core_.join();
+	{tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
+		if (!this->core_created_flg_) {
+			return;
+		}
+
+		if (this->core_.joinable()) {
+			this->core_.join();
+		}
+
+		this->th_id_ = std::thread::id();
+
+		this->core_created_flg_ = false;
 	}
-
-	this->th_id_ = std::thread::id();
-
-	this->core_created_flg_ = false;
 
 	return;
 }
