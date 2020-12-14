@@ -207,7 +207,7 @@
     <ClCompile Include="src\lib\tml\time\TimeUtilEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\cpp_base\constant\ConstantUtil_APPLICATION.h" />
+    <ClInclude Include="src\cpp_base\constant\ConstantUtil_FILE.h" />
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_WINDOW.h" />
     <ClInclude Include="src\cpp_base\file\SystemConfigFile.h" />
     <ClInclude Include="src\cpp_base\resource\resource.h" />
@@ -215,9 +215,9 @@
     <ClInclude Include="src\cpp_base\thread\TestThread.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_DATE.h" />
-    <ClInclude Include="src\lib\tml\constant\ConstantUtil_LIBRARY.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_MEMORY.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_NEWLINE_CODE.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_THREAD.h" />
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
     <ClInclude Include="src\lib\tml\file\BinaryFile.h" />
     <ClInclude Include="src\lib\tml\file\ConfigFile.h" />

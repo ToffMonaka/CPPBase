@@ -19,6 +19,7 @@
 #include "../lib/tml/file/DefaultFileUtilEngine.h"
 #include "../lib/tml/thread/ThreadUtil.h"
 #include "../lib/tml/thread/DefaultThreadUtilEngine.h"
+#include "constant/ConstantUtil_FILE.h"
 #include "constant/ConstantUtil_WINDOW.h"
 #include "file/SystemConfigFile.h"
 #include "thread/MainThread.h"
@@ -97,7 +98,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 			}
 		}
 
-		sys_conf_file.read_plan.file_path = L"dat/sys_conf.ini";
+		sys_conf_file.read_plan.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
 
 		if (sys_conf_file.Read() < 0) {
 			cpp_base::InitMain();

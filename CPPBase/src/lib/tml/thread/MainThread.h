@@ -33,7 +33,7 @@ protected:
 	void Release(void);
 	INT Create(const HINSTANCE, const WCHAR *, const INT);
 
-	INT CreateWindow_(const WNDCLASSEX &);
+	INT CreateWindow_(const WNDCLASSEX &, const size_t, const size_t, const size_t, const size_t);
 	void DeleteWindow_(void);
 
 public:

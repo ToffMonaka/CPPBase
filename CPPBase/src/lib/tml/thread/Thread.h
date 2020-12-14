@@ -6,8 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include <thread>
-#include <atomic>
+#include "../constant/ConstantUtil_THREAD.h"
 #include "MutexThreadLock.h"
 #include "SpinThreadLock.h"
 

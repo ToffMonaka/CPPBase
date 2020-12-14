@@ -37,8 +37,7 @@ public:
 	static INT Start(std::unique_ptr<tml::SubThread> &);
 	static INT StartAll(void);
 	static void End(const bool finish_flg = false);
-	static void EndAll(const bool delete_flg = false);
-	static tml::ThreadUtilEngine::STATE GetState(void);
+	static void EndAll(const bool finish_flg = false);
 	static INT GetExitCode(void);
 };
 }
@@ -135,31 +134,17 @@ inline void tml::ThreadUtil::End(const bool finish_flg)
 
 /**
  * @brief EndAllŠÖ”
- * @param delete_flg (delete_flag)
+ * @param finish_flg (finish_flg)
  */
-inline void tml::ThreadUtil::EndAll(const bool delete_flg)
+inline void tml::ThreadUtil::EndAll(const bool finish_flg)
 {
 	if (tml::ThreadUtil::engine_ == nullptr) {
 		return;
 	}
 
-	tml::ThreadUtil::engine_->EndAll(delete_flg);
+	tml::ThreadUtil::engine_->EndAll(finish_flg);
 
 	return;
-}
-
-
-/**
- * @brief GetStateŠÖ”
- * @return stat (state)
- */
-inline tml::ThreadUtilEngine::STATE tml::ThreadUtil::GetState(void)
-{
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return (tml::ThreadUtilEngine::STATE());
-	}
-
-	return (tml::ThreadUtil::engine_->GetState());
 }
 
 

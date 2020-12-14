@@ -10,7 +10,8 @@
 /**
  * @brief コンストラクタ
  */
-tml::MemoryAllocator::MemoryAllocator()
+tml::MemoryAllocator::MemoryAllocator() :
+	type_(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE)
 {
 	return;
 }
@@ -39,17 +40,22 @@ void tml::MemoryAllocator::Release(void)
  */
 void tml::MemoryAllocator::Init(void)
 {
+	this->type_ = tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE;
+
 	return;
 }
 
 
 /**
  * @brief Create関数
+ * @param type (type)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::MemoryAllocator::Create(void)
+INT tml::MemoryAllocator::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE type)
 {
+	this->type_ = type;
+
 	return (0);
 }
 
@@ -61,6 +67,8 @@ INT tml::MemoryAllocator::Create(void)
 tml::MemoryAllocator::INFO tml::MemoryAllocator::GetInfo(void)
 {
 	tml::MemoryAllocator::INFO info;
+
+	info.type = this->type_;
 
 	return (info);
 }

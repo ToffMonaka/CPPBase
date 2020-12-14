@@ -12,6 +12,7 @@
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
+#include "../constant/ConstantUtil_FILE.h"
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
@@ -97,7 +98,7 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
 INT cpp_base::MainThread::Start(void)
 {
 	{// SystemConfigFile Read
-		this->sys_conf_file_.read_plan.file_path = L"dat/sys_conf.ini";
+		this->sys_conf_file_.read_plan.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
 
 		if (this->sys_conf_file_.Read() < 0) {
 			return (-1);
@@ -132,7 +133,10 @@ INT cpp_base::MainThread::Start(void)
 		wnd_class.lpszClassName = cpp_base::ConstantUtil::WINDOW::CLASS_NAME;
 		wnd_class.hIconSm = nullptr;
 
-		if (this->CreateWindow_(wnd_class) < 0) {
+		if (this->CreateWindow_(
+			wnd_class,
+			this->sys_conf_file_.data.window_x, this->sys_conf_file_.data.window_y, this->sys_conf_file_.data.window_width, this->sys_conf_file_.data.window_height
+		) < 0) {
 			return (-1);
 		}
 	}

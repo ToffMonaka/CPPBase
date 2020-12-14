@@ -79,7 +79,7 @@ INT tml::DlmallocMemoryAllocator::Create(const size_t size)
 
 	this->Release();
 
-	if (tml::MemoryAllocator::Create() < 0) {
+	if (tml::MemoryAllocator::Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC) < 0) {
 		this->Init();
 
 		return (-1);
@@ -106,12 +106,11 @@ INT tml::DlmallocMemoryAllocator::Create(const size_t size)
  */
 tml::MemoryAllocator::INFO tml::DlmallocMemoryAllocator::GetInfo(void)
 {
-	auto info = tml::MemoryAllocator::GetInfo();
-
 	if (this->ms_ == nullptr) {
-		return (info);
+		return (tml::MemoryAllocator::INFO());
 	}
 
+	auto info = tml::MemoryAllocator::GetInfo();
 	auto ms_info = mspace_mallinfo(this->ms_);
 
 	info.size = ms_info.usmblks;

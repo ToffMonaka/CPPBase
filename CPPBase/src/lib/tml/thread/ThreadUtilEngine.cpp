@@ -72,8 +72,13 @@ INT tml::ThreadUtilEngine::Create(void)
  */
 INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
 {
+	if (th == nullptr) {
+		return (-1);
+	}
+
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		if (this->stat_.all_ended_flg) {
+		if ((this->main_th_ != nullptr)
+		|| (this->stat_.all_ended_flg)) {
 			return (-1);
 		}
 
@@ -90,6 +95,8 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
 	}
 
 	if (this->StartAll() < 0) {
+		this->EndAll(true);
+
 		return (-1);
 	}
 
@@ -107,8 +114,13 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
  */
 INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::SubThread> &th)
 {
+	if (th == nullptr) {
+		return (-1);
+	}
+
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		if (this->stat_.all_ended_flg) {
+		if ((this->main_th_ == nullptr)
+		|| (this->stat_.all_ended_flg)) {
 			return (-1);
 		}
 
@@ -137,17 +149,16 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::SubThread> &th)
  */
 INT tml::ThreadUtilEngine::StartAll(void)
 {
-	if (this->main_th_->Start() < 0) {
+	tml::MainThread *main_th = this->main_th_.get();
+	tml::ThreadUtilEngine::STATE stat;
+
+	if (main_th->Start() < 0) {
 		this->End(true);
 
 		return (-1);
 	}
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		if (this->stat_.all_ended_flg) {
-			return (-1);
-		}
-
 		this->stat_.all_started_flg = true;
 
 		for (auto tmp_th : this->ready_th_cont_) {
@@ -158,9 +169,11 @@ INT tml::ThreadUtilEngine::StartAll(void)
 		}
 
 		this->ready_th_cont_.clear();
+
+		stat = this->stat_;
 	}
 
-	if (this->main_th_->GetWindowHandle() != nullptr) {
+	if (main_th->GetWindowHandle() != nullptr) {
 		MSG msg = {};
 
 		do {
@@ -169,7 +182,7 @@ INT tml::ThreadUtilEngine::StartAll(void)
 					{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 						this->stat_.exit_code = static_cast<INT>(msg.wParam);
 
-						this->main_th_->SetLoopFlag(false);
+						main_th->SetLoopFlag(false);
 					}
 
 					break;
@@ -179,14 +192,14 @@ INT tml::ThreadUtilEngine::StartAll(void)
 				DispatchMessage(&msg);
 			}
 
-			if (this->main_th_->GetLoopFlag()) {
-				this->main_th_->Update();
+			if (main_th->GetLoopFlag()) {
+				main_th->Update();
 			}
-		} while (this->main_th_->GetLoopFlag());
+		} while (main_th->GetLoopFlag());
 	} else {
 		do {
-			this->main_th_->Update();
-		} while (this->main_th_->GetLoopFlag());
+			main_th->Update();
+		} while (main_th->GetLoopFlag());
 	}
 
 	return (0);
@@ -224,12 +237,13 @@ void tml::ThreadUtilEngine::End(const bool finish_flg)
 
 /**
  * @brief EndAllä÷êî
- * @param delete_flg (delete_flag)
+ * @param finish_flg (finish_flg)
  */
-void tml::ThreadUtilEngine::EndAll(const bool delete_flg)
+void tml::ThreadUtilEngine::EndAll(const bool finish_flg)
 {
 	std::unique_ptr<tml::Thread> main_th;
 	std::list<std::unique_ptr<tml::Thread>> sub_th_cont;
+	tml::ThreadUtilEngine::STATE stat;
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		this->stat_.all_ended_flg = true;
@@ -240,7 +254,7 @@ void tml::ThreadUtilEngine::EndAll(const bool delete_flg)
 			th->SetLoopFlag(false);
 		}
 
-		if (delete_flg) {
+		if (finish_flg) {
 			main_th = std::move(this->main_th_);
 
 			for (auto &sub_th : this->sub_th_cont_) {
@@ -249,6 +263,8 @@ void tml::ThreadUtilEngine::EndAll(const bool delete_flg)
 
 			this->sub_th_cont_.clear();
 		}
+
+		stat = this->stat_;
 	}
 
 	if (!sub_th_cont.empty()) {
@@ -256,9 +272,11 @@ void tml::ThreadUtilEngine::EndAll(const bool delete_flg)
 	}
 
 	if (main_th != nullptr) {
-		main_th->End();
+		if (stat.all_started_flg) {
+			main_th->End();
 
-		this->End(true);
+			this->End(true);
+		}
 
 		main_th.reset();
 	}

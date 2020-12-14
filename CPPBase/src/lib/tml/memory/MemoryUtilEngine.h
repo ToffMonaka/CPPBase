@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_MEMORY.h"
 #include "NewMemoryAllocator.h"
 #include "DlmallocMemoryAllocator.h"
 #include "../thread/SpinThreadLock.h"
@@ -23,30 +22,6 @@ class MemoryUtilEngine
 public: MemoryUtilEngine(const tml::MemoryUtilEngine &) = delete;
 public: tml::MemoryUtilEngine &operator =(const tml::MemoryUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
-
-public:
-	/**
-	 * @brief ALLOCATOR_INFO構造体
-	 */
-	typedef struct ALLOCATOR_INFO_
-	{
-		tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE type;
-		size_t size;
-		size_t use_size;
-		size_t use_cnt;
-
-		/**
-		 * @brief コンストラクタ
-		 */
-		ALLOCATOR_INFO_() :
-			type(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE),
-			size(0U),
-			use_size(0U),
-			use_cnt(0U)
-		{
-			return;
-		}
-	} ALLOCATOR_INFO;
 
 private:
 	tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE allocator_type_;
@@ -68,7 +43,7 @@ public:
 	T *Get(const size_t);
 	template <typename T>
 	void Release(T **);
-	tml::MemoryUtilEngine::ALLOCATOR_INFO GetAllocatorInfo(void);
+	tml::MemoryAllocator::INFO GetAllocatorInfo(void);
 };
 }
 

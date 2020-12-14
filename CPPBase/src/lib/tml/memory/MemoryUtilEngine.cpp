@@ -95,33 +95,24 @@ INT tml::MemoryUtilEngine::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYP
  * @brief GetAllocatorInfoŠÖ”
  * @return allocator_info (allocator_info)
  */
-tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtilEngine::GetAllocatorInfo(void)
+tml::MemoryAllocator::INFO tml::MemoryUtilEngine::GetAllocatorInfo(void)
 {
-	tml::MemoryUtilEngine::ALLOCATOR_INFO allocator_info;
-	tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE tmp_allocator_type = tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE;
-	tml::MemoryAllocator::INFO tmp_allocator_info;
+	tml::MemoryAllocator::INFO allocator_info;
 
 	{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
-		tmp_allocator_type = this->allocator_type_;
-
 		switch (this->allocator_type_) {
 		case tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NEW: {
-			tmp_allocator_info = this->new_allocator_->GetInfo();
+			allocator_info = this->new_allocator_->GetInfo();
 
 			break;
 		}
 		case tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC: {
-			tmp_allocator_info = this->dlmalloc_allocator_->GetInfo();
+			allocator_info = this->dlmalloc_allocator_->GetInfo();
 
 			break;
 		}
 		}
 	}
-
-	allocator_info.type = tmp_allocator_type;
-	allocator_info.size = tmp_allocator_info.size;
-	allocator_info.use_size = tmp_allocator_info.use_size;
-	allocator_info.use_cnt = tmp_allocator_info.use_cnt;
 
 	return (allocator_info);
 }

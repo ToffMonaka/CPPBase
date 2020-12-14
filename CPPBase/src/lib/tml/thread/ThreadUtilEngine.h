@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <list>
-#include <map>
+#include <unordered_map>
 #include "MainThread.h"
 #include "SubThread.h"
 
@@ -51,7 +51,7 @@ private:
 	std::list<std::unique_ptr<tml::SubThread>> sub_th_cont_;
 	std::list<tml::Thread *> ready_th_cont_;
 	std::list<tml::Thread *> start_th_cont_;
-	std::map<std::thread::id, tml::Thread *> start_th_cont_with_th_id_;
+	std::unordered_map<std::thread::id, tml::Thread *> start_th_cont_with_th_id_;
 	tml::ThreadUtilEngine::STATE stat_;
 	tml::SpinThreadLock stat_th_lock_;
 
@@ -70,8 +70,7 @@ public:
 	INT Start(std::unique_ptr<tml::SubThread> &);
 	INT StartAll(void);
 	void End(const bool finish_flg = false);
-	void EndAll(const bool delete_flg = false);
-	tml::ThreadUtilEngine::STATE GetState(void);
+	void EndAll(const bool finish_flg = false);
 	INT GetExitCode(void);
 };
 }
@@ -96,16 +95,6 @@ inline tml::Thread *tml::ThreadUtilEngine::Get(void)
 	}
 
 	return (th);
-}
-
-
-/**
- * @brief GetStateŠÖ”
- * @return stat (state)
- */
-inline tml::ThreadUtilEngine::STATE tml::ThreadUtilEngine::GetState(void)
-{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-	return (this->stat_);
 }
 
 

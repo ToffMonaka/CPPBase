@@ -14,10 +14,10 @@
 cpp_base::SystemConfigFileData::SystemConfigFileData() :
 	application_memory_allocator_size(1048576U),
 	application_locale_name("Japanese"),
-	window_x(0U),
-	window_y(0U),
-	window_width(1280U),
-	window_height(800U)
+	window_x(0),
+	window_y(0),
+	window_width(1280),
+	window_height(800)
 {
 	return;
 }

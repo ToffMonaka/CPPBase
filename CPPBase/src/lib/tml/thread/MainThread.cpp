@@ -85,10 +85,17 @@ INT tml::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *wnd_na
 /**
  * @brief CreateWindow_ä÷êî
  * @param wnd_class (window_class)
+ * @param x (x)
+ * @param y (y)
+ * @param w (width)
+ * @param h (height)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs,-2=ëΩèdãNìÆ
  */
-INT tml::MainThread::CreateWindow_(const WNDCLASSEX &wnd_class)
+INT tml::MainThread::CreateWindow_(
+	const WNDCLASSEX &wnd_class,
+	const size_t x, const size_t y, const size_t w, const size_t h
+)
 {
 	if (this->wnd_handle_ != nullptr) {
 		return (-1);
@@ -110,7 +117,7 @@ INT tml::MainThread::CreateWindow_(const WNDCLASSEX &wnd_class)
 	this->wnd_handle_ = CreateWindow(
 		this->wnd_class_.lpszClassName, this->wnd_name_.c_str(),
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+		x, y, w, h,
 		nullptr, nullptr, this->instance_handle_,
 		nullptr
 	);

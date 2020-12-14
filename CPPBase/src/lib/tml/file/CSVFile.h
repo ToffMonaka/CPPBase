@@ -58,8 +58,8 @@ inline size_t tml::CSVFileData::GetColumnCount(void) const
 
 /**
  * @brief GetValueä÷êî
- * @param row_cnt (row_index)
- * @param column_cnt (column_index)
+ * @param row_index (row_index)
+ * @param column_index (column_index)
  * @return val (value)<br>
  * nullptr=é∏îs
  */

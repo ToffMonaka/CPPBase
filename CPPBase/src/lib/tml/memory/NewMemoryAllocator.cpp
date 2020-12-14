@@ -76,7 +76,7 @@ INT tml::NewMemoryAllocator::Create(void)
 
 	this->Release();
 
-	if (tml::MemoryAllocator::Create() < 0) {
+	if (tml::MemoryAllocator::Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NEW) < 0) {
 		this->Init();
 
 		return (-1);
@@ -103,11 +103,11 @@ INT tml::NewMemoryAllocator::Create(void)
  */
 tml::MemoryAllocator::INFO tml::NewMemoryAllocator::GetInfo(void)
 {
-	auto info = tml::MemoryAllocator::GetInfo();
-
 	if (this->ms_size_ <= 0U) {
-		return (info);
+		return (tml::MemoryAllocator::INFO());
 	}
+
+	auto info = tml::MemoryAllocator::GetInfo();
 
 	info.size = this->ms_size_;
 	info.use_size = this->ms_use_size_;

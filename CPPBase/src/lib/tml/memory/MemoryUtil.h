@@ -36,7 +36,7 @@ public:
 	static T *Get(const size_t);
 	template <typename T>
 	static void Release(T **);
-	static tml::MemoryUtilEngine::ALLOCATOR_INFO GetAllocatorInfo(void);
+	static tml::MemoryAllocator::INFO GetAllocatorInfo(void);
 	template <typename T>
 	static void Clear(T *, const size_t);
 	template <typename T>
@@ -146,10 +146,10 @@ inline void tml::MemoryUtil::Release(T **pp)
  * @brief GetAllocatorInfoŠÖ”
  * @return allocator_info (allocator_info)
  */
-inline tml::MemoryUtilEngine::ALLOCATOR_INFO tml::MemoryUtil::GetAllocatorInfo(void)
+inline tml::MemoryAllocator::INFO tml::MemoryUtil::GetAllocatorInfo(void)
 {
 	if (tml::MemoryUtil::engine_ == nullptr) {
-		return (tml::MemoryUtilEngine::ALLOCATOR_INFO());
+		return (tml::MemoryAllocator::INFO());
 	}
 
 	return (tml::MemoryUtil::engine_->GetAllocatorInfo());
