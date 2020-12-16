@@ -23,7 +23,7 @@ public:
 	INIFileData();
 	virtual ~INIFileData();
 
-	void Init(void);
+	virtual void Init(void);
 
 	std::map<std::wstring, std::wstring> *GetValueNameContainer(const WCHAR *);
 	std::wstring *GetValue(const WCHAR *, const WCHAR *);
@@ -104,7 +104,7 @@ public:
 	INIFileReadPlan();
 	virtual ~INIFileReadPlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -119,7 +119,7 @@ public:
 	INIFileWritePlan();
 	virtual ~INIFileWritePlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 

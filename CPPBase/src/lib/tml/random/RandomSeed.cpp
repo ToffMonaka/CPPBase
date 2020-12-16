@@ -5,7 +5,6 @@
 
 
 #include "RandomSeed.h"
-#include <array>
 
 
 /**
@@ -13,6 +12,16 @@
  */
 tml::RandomSeed::RandomSeed()
 {
+	this->seed_val_cont_.resize(10U);
+
+	std::random_device device;
+
+	std::generate(this->seed_val_cont_.begin(), this->seed_val_cont_.end(), std::ref(device));
+
+	std::seed_seq seed_seq(this->seed_val_cont_.begin(), this->seed_val_cont_.end());
+
+	this->seed_.seed(seed_seq);
+
 	return;
 }
 
@@ -22,49 +31,5 @@ tml::RandomSeed::RandomSeed()
  */
 tml::RandomSeed::~RandomSeed()
 {
-	this->Release();
-
 	return;
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-void tml::RandomSeed::Release(void)
-{
-	return;
-}
-
-
-/**
- * @brief InitŠÖ”
- */
-void tml::RandomSeed::Init(void)
-{
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief CreateŠÖ”
- * @return res (result)<br>
- * 0–¢–=¸”s
- */
-INT tml::RandomSeed::Create(void)
-{
-	this->Release();
-
-	std::random_device device;
-	std::array<std::random_device::result_type, 10U> device_val_ary;
-
-	std::generate(device_val_ary.begin(), device_val_ary.end(), std::ref(device));
-
-	std::seed_seq seed_seq(device_val_ary.begin(), device_val_ary.end());
-
-	this->seed_.seed(seed_seq);
-
-	return (0);
 }

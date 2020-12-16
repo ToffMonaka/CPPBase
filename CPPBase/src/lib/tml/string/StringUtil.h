@@ -8,8 +8,8 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include <list>
-#include "StringUtilEngine.h"
 #include "../thread/ThreadFix.h"
+#include "StringUtilEngine.h"
 
 
 namespace tml {

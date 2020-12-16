@@ -27,7 +27,7 @@ public:
 	SystemConfigFileData();
 	virtual ~SystemConfigFileData();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -42,7 +42,7 @@ public:
 	SystemConfigFileReadPlan();
 	virtual ~SystemConfigFileReadPlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -57,7 +57,7 @@ public:
 	SystemConfigFileWritePlan();
 	virtual ~SystemConfigFileWritePlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 

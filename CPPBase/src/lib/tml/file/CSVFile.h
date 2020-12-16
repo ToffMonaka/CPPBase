@@ -23,7 +23,7 @@ public:
 	CSVFileData();
 	virtual ~CSVFileData();
 
-	void Init(void);
+	virtual void Init(void);
 
 	size_t GetRowCount(void) const;
 	size_t GetColumnCount(void) const;
@@ -84,7 +84,7 @@ public:
 	CSVFileReadPlan();
 	virtual ~CSVFileReadPlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -99,7 +99,7 @@ public:
 	CSVFileWritePlan();
 	virtual ~CSVFileWritePlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 

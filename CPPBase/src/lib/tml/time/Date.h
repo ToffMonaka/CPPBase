@@ -40,7 +40,7 @@ public:
 	Date();
 	virtual ~Date();
 
-	void Init(void);
+	virtual void Init(void);
 
 	void SetNowTime(void);
 	tml::TIME_SECONDS GetTime(void) const;

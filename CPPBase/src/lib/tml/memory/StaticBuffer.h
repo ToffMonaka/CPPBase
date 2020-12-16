@@ -38,7 +38,7 @@ public:
 	tml::StaticBuffer<N> &operator =(tml::StaticBuffer<N> &&) noexcept;
 	virtual ~StaticBuffer();
 
-	void Init(void);
+	virtual void Init(void);
 
 	BYTE *Get(void);
 	void Set(const size_t, const bool keep_flg = false);

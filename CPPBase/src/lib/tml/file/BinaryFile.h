@@ -23,7 +23,7 @@ public:
 	BinaryFileData();
 	virtual ~BinaryFileData();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -43,7 +43,7 @@ public:
 	BinaryFileReadPlan();
 	virtual ~BinaryFileReadPlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -63,7 +63,7 @@ public:
 	BinaryFileWritePlan();
 	virtual ~BinaryFileWritePlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 

@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief RandomUtilEngineコードファイル
+ * @brief SoundManagerコードファイル
  */
 
 
-#include "RandomUtilEngine.h"
+#include "SoundManager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::RandomUtilEngine::RandomUtilEngine()
+tml::SoundManager::SoundManager()
 {
 	return;
 }
@@ -19,8 +19,10 @@ tml::RandomUtilEngine::RandomUtilEngine()
 /**
  * @brief デストラクタ
  */
-tml::RandomUtilEngine::~RandomUtilEngine()
+tml::SoundManager::~SoundManager()
 {
+	this->Release();
+
 	return;
 }
 
@@ -28,7 +30,7 @@ tml::RandomUtilEngine::~RandomUtilEngine()
 /**
  * @brief Release関数
  */
-void tml::RandomUtilEngine::Release(void)
+void tml::SoundManager::Release(void)
 {
 	return;
 }
@@ -37,8 +39,10 @@ void tml::RandomUtilEngine::Release(void)
 /**
  * @brief Init関数
  */
-void tml::RandomUtilEngine::Init(void)
+void tml::SoundManager::Init(void)
 {
+	this->Release();
+
 	return;
 }
 
@@ -48,7 +52,7 @@ void tml::RandomUtilEngine::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::RandomUtilEngine::Create(void)
+INT tml::SoundManager::Create(void)
 {
 	return (0);
 }

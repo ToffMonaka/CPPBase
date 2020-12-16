@@ -12,8 +12,8 @@
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
-#include "../constant/ConstantUtil_FILE.h"
 #include "../constant/ConstantUtil_WINDOW.h"
+#include "../constant/ConstantUtil_FILE.h"
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 
@@ -56,8 +56,11 @@ void cpp_base::MainThread::Init(void)
 {
 	this->Release();
 
-	this->sys_conf_file_.Init();
 	this->frame_rate_.Init();
+	this->sys_conf_file_.Init();
+	this->input_mgr_.Init();
+	this->graphic_mgr_.Init();
+	this->sound_mgr_.Init();
 
 	tml::MainThread::Init();
 
@@ -83,8 +86,32 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
 		return (-1);
 	}
 
-	this->sys_conf_file_.Init();
 	this->frame_rate_.Init();
+
+	{// SystemConfigFile Read
+		this->sys_conf_file_.Init();
+
+		this->sys_conf_file_.read_plan.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
+
+		if (this->sys_conf_file_.Read() < 0) {
+			return (-1);
+		}
+	}
+
+	// InputManager Create
+	if (this->input_mgr_.Create() < 0) {
+		return (-1);
+	}
+
+	// GraphicManager Create
+	if (this->graphic_mgr_.Create() < 0) {
+		return (-1);
+	}
+
+	// SoundManager Create
+	if (this->sound_mgr_.Create() < 0) {
+		return (-1);
+	}
 
 	return (0);
 }
@@ -97,26 +124,6 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
  */
 INT cpp_base::MainThread::Start(void)
 {
-	{// SystemConfigFile Read
-		this->sys_conf_file_.read_plan.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
-
-		if (this->sys_conf_file_.Read() < 0) {
-			return (-1);
-		}
-	}
-
-	{// TestThread Start
-		std::unique_ptr<tml::SubThread> th = std::make_unique<cpp_base::TestThread>();
-
-		if (dynamic_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
-			return (-1);
-		}
-
-		if (tml::ThreadUtil::Start(th) < 0) {
-			return (-1);
-		}
-	}
-
 	{// Window Create
 		WNDCLASSEX wnd_class = {};
 
@@ -142,6 +149,18 @@ INT cpp_base::MainThread::Start(void)
 	}
 
 	{// Test
+		{// TestThread Start
+			std::unique_ptr<tml::SubThread> th = std::make_unique<cpp_base::TestThread>();
+
+			if (dynamic_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
+				return (-1);
+			}
+
+			if (tml::ThreadUtil::Start(th) < 0) {
+				return (-1);
+			}
+		}
+
 		int a = 0;
 	}
 

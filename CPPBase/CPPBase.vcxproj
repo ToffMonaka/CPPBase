@@ -168,6 +168,8 @@
     <ClCompile Include="src\lib\tml\file\FileUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\file\INIFile.cpp" />
     <ClCompile Include="src\lib\tml\file\TextFile.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\GraphicManager.cpp" />
+    <ClCompile Include="src\lib\tml\input\InputManager.cpp" />
     <ClCompile Include="src\lib\tml\math\DefaultMathUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtil.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtilEngine.cpp" />
@@ -183,6 +185,7 @@
     <ClCompile Include="src\lib\tml\random\RandomSeed.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtil.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\sound\SoundManager.cpp" />
     <ClCompile Include="src\lib\tml\string\DefaultStringUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\string\StringUtil.cpp" />
     <ClCompile Include="src\lib\tml\string\StringUtilEngine.cpp" />
@@ -228,6 +231,8 @@
     <ClInclude Include="src\lib\tml\file\FileUtilEngine.h" />
     <ClInclude Include="src\lib\tml\file\INIFile.h" />
     <ClInclude Include="src\lib\tml\file\TextFile.h" />
+    <ClInclude Include="src\lib\tml\graphic\GraphicManager.h" />
+    <ClInclude Include="src\lib\tml\input\InputManager.h" />
     <ClInclude Include="src\lib\tml\math\DefaultMathUtilEngine.h" />
     <ClInclude Include="src\lib\tml\math\MathUtil.h" />
     <ClInclude Include="src\lib\tml\math\MathUtilEngine.h" />
@@ -243,6 +248,7 @@
     <ClInclude Include="src\lib\tml\random\RandomSeed.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtil.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\sound\SoundManager.h" />
     <ClInclude Include="src\lib\tml\string\DefaultStringUtilEngine.h" />
     <ClInclude Include="src\lib\tml\string\StringUtil.h" />
     <ClInclude Include="src\lib\tml\string\StringUtilEngine.h" />

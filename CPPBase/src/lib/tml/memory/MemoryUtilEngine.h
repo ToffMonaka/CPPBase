@@ -6,9 +6,9 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../thread/SpinThreadLock.h"
 #include "NewMemoryAllocator.h"
 #include "DlmallocMemoryAllocator.h"
-#include "../thread/SpinThreadLock.h"
 
 
 namespace tml {

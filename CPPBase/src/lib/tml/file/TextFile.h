@@ -24,7 +24,7 @@ public:
 	TextFileData();
 	virtual ~TextFileData();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -42,7 +42,7 @@ public:
 	TextFileReadPlan();
 	virtual ~TextFileReadPlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -61,7 +61,7 @@ public:
 	TextFileWritePlan();
 	virtual ~TextFileWritePlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 

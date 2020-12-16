@@ -26,7 +26,7 @@ public:
 	Timer();
 	virtual ~Timer();
 
-	void Init(void);
+	virtual void Init(void);
 
 	INT Start(void);
 	void Stop(void);

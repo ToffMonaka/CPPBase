@@ -37,7 +37,7 @@ public:
 	tml::DynamicBuffer &operator =(tml::DynamicBuffer &&) noexcept;
 	virtual ~DynamicBuffer();
 
-	void Init(void);
+	virtual void Init(void);
 
 	BYTE *Get(void);
 	void Set(const size_t, const bool keep_flg = false);

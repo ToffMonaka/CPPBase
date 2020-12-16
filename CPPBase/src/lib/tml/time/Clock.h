@@ -27,7 +27,7 @@ public:
 	Clock();
 	virtual ~Clock();
 
-	void Init(void);
+	virtual void Init(void);
 
 	void SetNowTime(void);
 	tml::TIME_MILLI GetTime(void) const;

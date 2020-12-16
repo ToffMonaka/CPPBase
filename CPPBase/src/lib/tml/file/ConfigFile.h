@@ -23,7 +23,7 @@ public:
 	ConfigFileData();
 	virtual ~ConfigFileData();
 
-	void Init(void);
+	virtual void Init(void);
 
 	std::wstring *GetValue(const WCHAR *);
 };
@@ -58,7 +58,7 @@ public:
 	ConfigFileReadPlan();
 	virtual ~ConfigFileReadPlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 
@@ -73,7 +73,7 @@ public:
 	ConfigFileWritePlan();
 	virtual ~ConfigFileWritePlan();
 
-	void Init(void);
+	virtual void Init(void);
 };
 }
 

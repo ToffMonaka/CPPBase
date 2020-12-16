@@ -37,7 +37,7 @@ public:
 	FrameRate();
 	virtual ~FrameRate();
 
-	void Init(void);
+	virtual void Init(void);
 
 	INT Start(const UINT);
 	void Stop(void);

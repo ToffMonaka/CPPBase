@@ -6,8 +6,9 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "RandomUtilEngine.h"
 #include "../thread/ThreadFix.h"
+#include "RandomUtilEngine.h"
+#include "RandomSeed.h"
 
 
 namespace tml {
@@ -26,12 +27,16 @@ public: tml::RandomUtil &operator =(const tml::RandomUtil &) = delete;
 private:
 	static tml::ThreadFix th_fix_;
 	static std::unique_ptr<tml::RandomUtilEngine> engine_;
+	static tml::RandomSeed seed_;
+	static tml::SpinThreadLock seed_th_lock_;
 
 public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::RandomUtilEngine> &);
 
 	static bool CheckThreadFix(void);
+	static std::vector<tml::RandomSeed::SEED_VALUE_TYPE> GetSeedValueContainer(void);
+	static void SetSeedValueContainer(const std::vector<tml::RandomSeed::SEED_VALUE_TYPE> &);
 	static INT GetINT(void);
 	static INT GetINT(const INT, const INT);
 	static UINT GetUINT(void);
@@ -72,187 +77,206 @@ inline bool tml::RandomUtil::CheckThreadFix(void)
 
 
 /**
- * @brief GetINT関数
- * @return val (value)
+ * @brief GetSeedValueContainer関数
+ *
+ * Create関数不要
+ *
+ * @return seed_val_cont (seed_value_container)
  */
-inline INT tml::RandomUtil::GetINT(void)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (0);
-	}
+inline std::vector<tml::RandomSeed::SEED_VALUE_TYPE> tml::RandomUtil::GetSeedValueContainer(void)
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetSeedValueContainer());
+}
 
-	return (tml::RandomUtil::engine_->GetINT());
+
+/**
+ * @brief SetSeedValueContainer関数
+ *
+ * Create関数不要
+ *
+ * @param seed_val_cont (seed_value_container)
+ */
+inline void tml::RandomUtil::SetSeedValueContainer(const std::vector<tml::RandomSeed::SEED_VALUE_TYPE> &seed_val_cont)
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	tml::RandomUtil::seed_.SetSeedValueContainer(seed_val_cont);
+
+	return;
 }
 
 
 /**
  * @brief GetINT関数
+ *
+ * Create関数不要
+ *
+ * @return val (value)
+ */
+inline INT tml::RandomUtil::GetINT(void)
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetINT());
+}
+
+
+/**
+ * @brief GetINT関数
+ *
+ * Create関数不要
+ *
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
 inline INT tml::RandomUtil::GetINT(const INT min_val, const INT max_val)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (min_val);
-	}
-
-	return (tml::RandomUtil::engine_->GetINT(min_val, max_val));
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetINT(min_val, max_val));
 }
 
 
 /**
  * @brief GetUINT関数
+ *
+ * Create関数不要
+ *
  * @return val (value)
  */
 inline UINT tml::RandomUtil::GetUINT(void)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (0U);
-	}
-
-	return (tml::RandomUtil::engine_->GetUINT());
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetUINT());
 }
 
 
 /**
  * @brief GetUINT関数
+ *
+ * Create関数不要
+ *
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
 inline UINT tml::RandomUtil::GetUINT(const UINT min_val, const UINT max_val)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (min_val);
-	}
-
-	return (tml::RandomUtil::engine_->GetUINT(min_val, max_val));
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetUINT(min_val, max_val));
 }
 
 
 /**
  * @brief GetLONGLONG関数
+ *
+ * Create関数不要
+ *
  * @return val (value)
  */
 inline LONGLONG tml::RandomUtil::GetLONGLONG(void)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (0LL);
-	}
-
-	return (tml::RandomUtil::engine_->GetLONGLONG());
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetLONGLONG());
 }
 
 
 /**
  * @brief GetLONGLONG関数
+ *
+ * Create関数不要
+ *
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
 inline LONGLONG tml::RandomUtil::GetLONGLONG(const LONGLONG min_val, const LONGLONG max_val)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (min_val);
-	}
-
-	return (tml::RandomUtil::engine_->GetLONGLONG(min_val, max_val));
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetLONGLONG(min_val, max_val));
 }
 
 
 /**
  * @brief GetULONGLONG関数
+ *
+ * Create関数不要
+ *
  * @return val (value)
  */
 inline ULONGLONG tml::RandomUtil::GetULONGLONG(void)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (0ULL);
-	}
-
-	return (tml::RandomUtil::engine_->GetULONGLONG());
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetULONGLONG());
 }
 
 
 /**
  * @brief GetULONGLONG関数
+ *
+ * Create関数不要
+ *
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
 inline ULONGLONG tml::RandomUtil::GetULONGLONG(const ULONGLONG min_val, const ULONGLONG max_val)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (min_val);
-	}
-
-	return (tml::RandomUtil::engine_->GetULONGLONG(min_val, max_val));
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetULONGLONG(min_val, max_val));
 }
 
 
 /**
  * @brief GetFLOAT関数
+ *
+ * Create関数不要
+ *
  * @return val (value)
  */
 inline FLOAT tml::RandomUtil::GetFLOAT(void)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (0.0f);
-	}
-
-	return (tml::RandomUtil::engine_->GetFLOAT());
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetFLOAT());
 }
 
 
 /**
  * @brief GetFLOAT関数
+ *
+ * Create関数不要
+ *
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
 inline FLOAT tml::RandomUtil::GetFLOAT(const FLOAT min_val, const FLOAT max_val)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (min_val);
-	}
-
-	return (tml::RandomUtil::engine_->GetFLOAT(min_val, max_val));
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetFLOAT(min_val, max_val));
 }
 
 
 /**
  * @brief GetDOUBLE関数
+ *
+ * Create関数不要
+ *
  * @return val (value)
  */
 inline DOUBLE tml::RandomUtil::GetDOUBLE(void)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (0.0);
-	}
-
-	return (tml::RandomUtil::engine_->GetDOUBLE());
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetDOUBLE());
 }
 
 
 /**
  * @brief GetDOUBLE関数
+ *
+ * Create関数不要
+ *
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
 inline DOUBLE tml::RandomUtil::GetDOUBLE(const DOUBLE min_val, const DOUBLE max_val)
-{
-	if (tml::RandomUtil::engine_ == nullptr) {
-		return (min_val);
-	}
-
-	return (tml::RandomUtil::engine_->GetDOUBLE(min_val, max_val));
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetDOUBLE(min_val, max_val));
 }
 
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @return dst_val (dst_value)
  */
@@ -266,6 +290,9 @@ inline INT &tml::RandomUtil::GetValue(INT &dst_val)
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @param min_val (min_value)
  * @param max_val (max_value)
@@ -281,6 +308,9 @@ inline INT &tml::RandomUtil::GetValue(INT &dst_val, const INT min_val, const INT
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @return dst_val (dst_value)
  */
@@ -294,6 +324,9 @@ inline UINT &tml::RandomUtil::GetValue(UINT &dst_val)
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @param min_val (min_value)
  * @param max_val (max_value)
@@ -309,6 +342,9 @@ inline UINT &tml::RandomUtil::GetValue(UINT &dst_val, const UINT min_val, const 
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @return dst_val (dst_value)
  */
@@ -322,6 +358,9 @@ inline LONGLONG &tml::RandomUtil::GetValue(LONGLONG &dst_val)
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @param min_val (min_value)
  * @param max_val (max_value)
@@ -337,6 +376,9 @@ inline LONGLONG &tml::RandomUtil::GetValue(LONGLONG &dst_val, const LONGLONG min
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @return dst_val (dst_value)
  */
@@ -350,6 +392,9 @@ inline ULONGLONG &tml::RandomUtil::GetValue(ULONGLONG &dst_val)
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @param min_val (min_value)
  * @param max_val (max_value)
@@ -365,6 +410,9 @@ inline ULONGLONG &tml::RandomUtil::GetValue(ULONGLONG &dst_val, const ULONGLONG 
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @return dst_val (dst_value)
  */
@@ -378,6 +426,9 @@ inline FLOAT &tml::RandomUtil::GetValue(FLOAT &dst_val)
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @param min_val (min_value)
  * @param max_val (max_value)
@@ -393,6 +444,9 @@ inline FLOAT &tml::RandomUtil::GetValue(FLOAT &dst_val, const FLOAT min_val, con
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @return dst_val (dst_value)
  */
@@ -406,6 +460,9 @@ inline DOUBLE &tml::RandomUtil::GetValue(DOUBLE &dst_val)
 
 /**
  * @brief GetValue関数
+ *
+ * Create関数不要
+ *
  * @param dst_val (dst_value)
  * @param min_val (min_value)
  * @param max_val (max_value)

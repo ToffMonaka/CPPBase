@@ -9,6 +9,8 @@
 
 tml::ThreadFix tml::RandomUtil::th_fix_;
 std::unique_ptr<tml::RandomUtilEngine> tml::RandomUtil::engine_;
+tml::RandomSeed tml::RandomUtil::seed_;
+tml::SpinThreadLock tml::RandomUtil::seed_th_lock_;
 
 
 /**

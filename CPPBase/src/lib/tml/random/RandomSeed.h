@@ -18,19 +18,19 @@ class RandomSeed
 public: RandomSeed(const tml::RandomSeed &) = delete;
 public: tml::RandomSeed &operator =(const tml::RandomSeed &) = delete;
 
-private:
-	std::mt19937 seed_;
+public:
+	using SEED_VALUE_TYPE = std::random_device::result_type;
 
 private:
-	void Release(void);
+	std::mt19937 seed_;
+	std::vector<tml::RandomSeed::SEED_VALUE_TYPE> seed_val_cont_;
 
 public:
 	RandomSeed();
 	virtual ~RandomSeed();
 
-	void Init(void);
-	INT Create(void);
-
+	std::vector<tml::RandomSeed::SEED_VALUE_TYPE> GetSeedValueContainer(void) const;
+	void SetSeedValueContainer(const std::vector<tml::RandomSeed::SEED_VALUE_TYPE> &);
 	INT GetINT(void);
 	INT GetINT(const INT, const INT);
 	UINT GetUINT(void);
@@ -56,6 +56,32 @@ public:
 	DOUBLE &GetValue(DOUBLE &);
 	DOUBLE &GetValue(DOUBLE &, const DOUBLE, const DOUBLE);
 };
+}
+
+
+/**
+ * @brief GetSeedValueContainerä÷êî
+ * @return seed_val_cont (seed_value_container)
+ */
+inline std::vector<tml::RandomSeed::SEED_VALUE_TYPE> tml::RandomSeed::GetSeedValueContainer(void) const
+{
+	return (this->seed_val_cont_);
+}
+
+
+/**
+ * @brief SetSeedValueContainerä÷êî
+ * @param seed_val_cont (seed_value_container)
+ */
+inline void tml::RandomSeed::SetSeedValueContainer(const std::vector<tml::RandomSeed::SEED_VALUE_TYPE> &seed_val_cont)
+{
+	this->seed_val_cont_ = seed_val_cont;
+
+	std::seed_seq seed_seq(this->seed_val_cont_.begin(), this->seed_val_cont_.end());
+
+	this->seed_.seed(seed_seq);
+
+	return;
 }
 
 
