@@ -94,22 +94,30 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
 		this->sys_conf_file_.read_plan.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
 
 		if (this->sys_conf_file_.Read() < 0) {
+			this->Init();
+
 			return (-1);
 		}
 	}
 
 	// InputManager Create
 	if (this->input_mgr_.Create() < 0) {
+		this->Init();
+
 		return (-1);
 	}
 
 	// GraphicManager Create
 	if (this->graphic_mgr_.Create() < 0) {
+		this->Init();
+
 		return (-1);
 	}
 
 	// SoundManager Create
 	if (this->sound_mgr_.Create() < 0) {
+		this->Init();
+
 		return (-1);
 	}
 
