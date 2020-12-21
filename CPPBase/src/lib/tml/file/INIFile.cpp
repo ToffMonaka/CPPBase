@@ -180,16 +180,16 @@ INT tml::INIFile::Read(void)
 		return (0);
 	}
 
-	std::wstring empty_str = L"";
-	std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
-	std::wstring comment_str = L";";
-	size_t comment_str_index = 0U;
-	std::wstring section_start_str = L"[";
+	const std::wstring empty_str = L"";
+	const std::wstring section_start_str = L"[";
+	const std::wstring section_end_str = L"]";
+	const std::wstring equal_str = L"=";
+	const std::wstring comment_str = L";";
+	const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	size_t section_start_str_index = 0U;
-	std::wstring section_end_str = L"]";
 	size_t section_end_str_index = 0U;
-	std::wstring equal_str = L"=";
 	size_t equal_str_index = 0U;
+	size_t comment_str_index = 0U;
 	std::wstring section_name;
 	std::wstring tmp_section_name;
 	std::wstring val_name;
@@ -282,35 +282,33 @@ INT tml::INIFile::Write(void)
 
 	tml::TextFile txt_file;
 
-	std::wstring empty_str = L"";
-	std::wstring section_start_str = L"[";
-	std::wstring section_end_str = L"]";
-	std::wstring equal_str = L"=";
-	std::wstring str;
+	if (!this->data.value_container.empty()) {
+		const std::wstring empty_str = L"";
+		const std::wstring section_start_str = L"[";
+		const std::wstring section_end_str = L"]";
+		const std::wstring equal_str = L"=";
+		std::wstring str;
 
-	for (auto &val_name_cont : this->data.value_container) {
-		str = section_start_str + val_name_cont.first + section_end_str;
-
-		txt_file.data.string_container.push_back(str);
-
-		for (auto &val : val_name_cont.second) {
-			str = val.first + equal_str + val.second;
+		for (auto &val_name_cont : this->data.value_container) {
+			str = section_start_str + val_name_cont.first + section_end_str;
 
 			txt_file.data.string_container.push_back(str);
+
+			for (auto &val : val_name_cont.second) {
+				str = val.first + equal_str + val.second;
+
+				txt_file.data.string_container.push_back(str);
+			}
+
+			txt_file.data.string_container.push_back(empty_str);
 		}
-
-		txt_file.data.string_container.push_back(empty_str);
-	}
-
-	if (txt_file.data.string_container.empty()) {
-		txt_file.data.string_container.push_back(empty_str);
 	}
 
 	txt_file.write_plan.file_path = this->write_plan.file_path;
 	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
 	txt_file.write_plan.add_flag = this->write_plan.add_flag;
-	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
 	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
+	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
 
 	if (txt_file.Write()) {
 		return (-1);

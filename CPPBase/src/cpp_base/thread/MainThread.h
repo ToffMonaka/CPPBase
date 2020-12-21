@@ -11,7 +11,7 @@
 #include "../../lib/tml/input/InputManager.h"
 #include "../../lib/tml/graphic/GraphicManager.h"
 #include "../../lib/tml/sound/SoundManager.h"
-#include "../file/SystemConfigFile.h"
+#include "../data/SystemConfigFile.h"
 
 
 namespace cpp_base {

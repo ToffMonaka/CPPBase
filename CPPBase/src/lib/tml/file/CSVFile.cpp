@@ -180,18 +180,18 @@ INT tml::CSVFile::Read(void)
 		return (0);
 	}
 
-	std::wstring empty_str = L"";
-	std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
-	std::wstring comment_str = L"#";
-	size_t comment_str_index = 0U;
-	std::wstring comma_str = L",";
+	const std::wstring empty_str = L"";
+	const std::wstring comma_str = L",";
+	const std::wstring dq_str = L"\"";
+	const std::wstring double_dq_str = L"\"\"";
+	const std::wstring comment_str = L"#";
+	const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	size_t comma_str_index = 0U;
-	std::wstring dq_str = L"\"";
 	size_t dq_str_index = 0U;
 	size_t dq_str_sub_index = 0U;
 	size_t dq_str_cnt = 0U;
-	std::wstring double_dq_str = L"\"\"";
 	size_t double_dq_str_index = 0U;
+	size_t comment_str_index = 0U;
 	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetString(this->read_plan.newline_code_type);
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
@@ -335,23 +335,25 @@ INT tml::CSVFile::Write(void)
 
 	tml::TextFile txt_file;
 
-	std::wstring empty_str = L"";
-	std::wstring comma_str = L",";
-	std::wstring str;
+	if (!this->data.value_container.empty()) {
+		const std::wstring empty_str = L"";
+		const std::wstring comma_str = L",";
+		std::wstring str;
 
-	for (auto &val_cont : this->data.value_container) {
-		tml::StringUtil::Join(str, val_cont, comma_str.c_str());
+		for (auto &val_cont : this->data.value_container) {
+			tml::StringUtil::Join(str, val_cont, comma_str.c_str());
 
-		txt_file.data.string_container.push_back(str);
+			txt_file.data.string_container.push_back(str);
+		}
+
+		txt_file.data.string_container.push_back(empty_str);
 	}
-
-	txt_file.data.string_container.push_back(empty_str);
 
 	txt_file.write_plan.file_path = this->write_plan.file_path;
 	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
 	txt_file.write_plan.add_flag = this->write_plan.add_flag;
-	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
 	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
+	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
 
 	if (txt_file.Write()) {
 		return (-1);

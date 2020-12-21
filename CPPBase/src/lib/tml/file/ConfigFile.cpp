@@ -180,12 +180,12 @@ INT tml::ConfigFile::Read(void)
 		return (0);
 	}
 
-	std::wstring empty_str = L"";
-	std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
-	std::wstring comment_str = L"#";
-	size_t comment_str_index = 0U;
-	std::wstring equal_str = L"=";
+	const std::wstring empty_str = L"";
+	const std::wstring equal_str = L"=";
+	const std::wstring comment_str = L"#";
+	const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	size_t equal_str_index = 0U;
+	size_t comment_str_index = 0U;
 	std::wstring val_name;
 	std::wstring val;
 
@@ -244,23 +244,25 @@ INT tml::ConfigFile::Write(void)
 
 	tml::TextFile txt_file;
 
-	std::wstring empty_str = L"";
-	std::wstring equal_str = L"=";
-	std::wstring str;
+	if (!this->data.value_container.empty()) {
+		const std::wstring empty_str = L"";
+		const std::wstring equal_str = L"=";
+		std::wstring str;
 
-	for (auto &val : this->data.value_container) {
-		str = val.first + equal_str + val.second;
+		for (auto &val : this->data.value_container) {
+			str = val.first + equal_str + val.second;
 
-		txt_file.data.string_container.push_back(str);
+			txt_file.data.string_container.push_back(str);
+		}
+
+		txt_file.data.string_container.push_back(empty_str);
 	}
-
-	txt_file.data.string_container.push_back(empty_str);
 
 	txt_file.write_plan.file_path = this->write_plan.file_path;
 	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
 	txt_file.write_plan.add_flag = this->write_plan.add_flag;
-	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
 	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
+	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
 
 	if (txt_file.Write()) {
 		return (-1);

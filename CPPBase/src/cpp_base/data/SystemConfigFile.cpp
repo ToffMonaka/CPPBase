@@ -14,10 +14,10 @@
 cpp_base::SystemConfigFileData::SystemConfigFileData() :
 	application_memory_allocator_size(1048576U),
 	application_locale_name("Japanese"),
-	window_x(0),
-	window_y(0),
-	window_width(1280),
-	window_height(800)
+	window_x(0U),
+	window_y(0U),
+	window_width(1280U),
+	window_height(800U)
 {
 	return;
 }
@@ -186,12 +186,17 @@ INT cpp_base::SystemConfigFile::Read(void)
 
 	this->data.Init();
 
-	{// APPLICATION Section Set
-		auto val_name_cont = ini_file.data.GetValueNameContainer(L"APPLICATION");
+	if (ini_file.data.value_container.empty()) {
+		return (0);
+	}
+
+	std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	std::wstring *val = nullptr;
+
+	{// APPLICATION Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"APPLICATION");
 
 		if (val_name_cont != nullptr) {
-			std::wstring *val = nullptr;
-
 			val = ini_file.data.GetValue((*val_name_cont), L"MEM_ALLOCATOR_SIZE");
 
 			if (val != nullptr) {
@@ -206,12 +211,10 @@ INT cpp_base::SystemConfigFile::Read(void)
 		}
 	}
 
-	{// WINDOW Section Set
-		auto val_name_cont = ini_file.data.GetValueNameContainer(L"WINDOW");
+	{// WINDOW Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"WINDOW");
 
 		if (val_name_cont != nullptr) {
-			std::wstring *val = nullptr;
-
 			val = ini_file.data.GetValue((*val_name_cont), L"X");
 
 			if (val != nullptr) {
@@ -249,5 +252,43 @@ INT cpp_base::SystemConfigFile::Read(void)
  */
 INT cpp_base::SystemConfigFile::Write(void)
 {
-	return (-1);
+	if (this->write_plan.file_path.empty()) {
+		return (-1);
+	}
+
+	tml::TextFile txt_file;
+
+	const std::wstring empty_str = L"";
+	const std::wstring section_start_str = L"[";
+	const std::wstring section_end_str = L"]";
+	const std::wstring equal_str = L"=";
+	std::wstring val;
+
+	{// APPLICATION Section Write
+		txt_file.data.string_container.push_back(section_start_str + L"MEM_ALLOCATOR_SIZE" + section_end_str);
+		txt_file.data.string_container.push_back(empty_str + L"MEM_ALLOCATOR_SIZE" + equal_str + tml::StringUtil::GetString(val, this->data.application_memory_allocator_size));
+		txt_file.data.string_container.push_back(empty_str + L"LOCALE_NAME" + equal_str + tml::StringUtil::GetString(val, this->data.application_locale_name.c_str()));
+		txt_file.data.string_container.push_back(empty_str);
+	}
+
+	{// WINDOW Section Write
+		txt_file.data.string_container.push_back(section_start_str + L"WINDOW" + section_end_str);
+		txt_file.data.string_container.push_back(empty_str + L"X" + equal_str + tml::StringUtil::GetString(val, this->data.window_x));
+		txt_file.data.string_container.push_back(empty_str + L"Y" + equal_str + tml::StringUtil::GetString(val, this->data.window_y));
+		txt_file.data.string_container.push_back(empty_str + L"W" + equal_str + tml::StringUtil::GetString(val, this->data.window_width));
+		txt_file.data.string_container.push_back(empty_str + L"H" + equal_str + tml::StringUtil::GetString(val, this->data.window_height));
+		txt_file.data.string_container.push_back(empty_str);
+	}
+
+	txt_file.write_plan.file_path = this->write_plan.file_path;
+	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
+	txt_file.write_plan.add_flag = this->write_plan.add_flag;
+	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
+	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
+
+	if (txt_file.Write()) {
+		return (-1);
+	}
+
+	return (0);
 }

@@ -5,6 +5,7 @@
 
 
 #include "GraphicManager.h"
+#include "../memory/MemoryUtil.h"
 
 
 /**
@@ -14,6 +15,8 @@ tml::GraphicManager::GraphicManager() :
 	dxgi_factory_(nullptr),
 	dxgi_adapter_(nullptr)
 {
+	tml::MemoryUtil::Clear(&this->dxgi_adapter_desc_, 1U);
+
 	return;
 }
 
@@ -38,6 +41,7 @@ void tml::GraphicManager::Release(void)
 		this->dxgi_adapter_->Release();
 
 		this->dxgi_adapter_ = nullptr;
+		tml::MemoryUtil::Clear(&this->dxgi_adapter_desc_, 1U);
 	}
 
 	if (this->dxgi_factory_ != nullptr) {
@@ -56,6 +60,8 @@ void tml::GraphicManager::Release(void)
 void tml::GraphicManager::Init(void)
 {
 	this->Release();
+
+	tml::MemoryUtil::Clear(&this->dxgi_adapter_desc_, 1U);
 
 	return;
 }
@@ -76,15 +82,22 @@ INT tml::GraphicManager::Create(void)
 		return (-1);
 	}
 
-	if (FAILED(this->dxgi_factory_->EnumAdapters1(0U, &this->dxgi_adapter_))) {
-		this->Init();
+	UINT dxgi_adapter_index = 0U;
 
-		return (-1);
+	while (!FAILED(this->dxgi_factory_->EnumAdapters1(dxgi_adapter_index, &this->dxgi_adapter_))) {
+		this->dxgi_adapter_->GetDesc1(&this->dxgi_adapter_desc_);
+
+		if (this->dxgi_adapter_desc_.Flags == DXGI_ADAPTER_FLAG_NONE) {
+			break;
+		}
+
+		this->dxgi_adapter_->Release();
+
+		this->dxgi_adapter_ = nullptr;
+		tml::MemoryUtil::Clear(&this->dxgi_adapter_desc_, 1U);
+
+		++dxgi_adapter_index;
 	}
-
-	DXGI_ADAPTER_DESC1 dxgi_adapter_desc;
-
-	this->dxgi_adapter_->GetDesc1(&dxgi_adapter_desc);
 
 	return (0);
 }

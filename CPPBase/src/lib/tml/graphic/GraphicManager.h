@@ -25,6 +25,7 @@ public: tml::GraphicManager &operator =(const tml::GraphicManager &) = delete;
 private:
 	IDXGIFactory1 *dxgi_factory_;
 	IDXGIAdapter1 *dxgi_adapter_;
+	DXGI_ADAPTER_DESC1 dxgi_adapter_desc_;
 
 private:
 	void Release(void);

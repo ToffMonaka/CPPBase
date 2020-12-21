@@ -182,8 +182,6 @@ INT tml::TextFile::Read(void)
 	this->data.Init();
 
 	if (bin_file.data.file_buffer.GetSize() <= 0U) {
-		this->data.string_container.push_back(L"");
-
 		return (0);
 	}
 
