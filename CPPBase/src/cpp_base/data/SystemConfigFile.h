@@ -18,10 +18,10 @@ class SystemConfigFileData
 public:
 	size_t application_memory_allocator_size;
 	std::string application_locale_name;
-	size_t window_x;
-	size_t window_y;
-	size_t window_width;
-	size_t window_height;
+	UINT window_x;
+	UINT window_y;
+	UINT window_width;
+	UINT window_height;
 
 public:
 	SystemConfigFileData();

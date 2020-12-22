@@ -54,7 +54,7 @@ void tml::SoundManager::Init(void)
  */
 INT tml::SoundManager::Create(void)
 {
-	this->Release();
+	this->Init();
 
 	return (0);
 }

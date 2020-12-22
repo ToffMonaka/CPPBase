@@ -60,7 +60,7 @@ void tml::DefaultMemoryUtilEngine::Init(void)
  */
 INT tml::DefaultMemoryUtilEngine::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE allocator_type, const size_t allocator_size)
 {
-	this->Release();
+	this->Init();
 
 	if (tml::MemoryUtilEngine::Create(allocator_type, allocator_size) < 0) {
 		this->Init();

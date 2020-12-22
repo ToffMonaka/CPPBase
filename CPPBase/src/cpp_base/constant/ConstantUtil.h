@@ -15,7 +15,7 @@ namespace cpp_base {
 namespace cpp_base {
 namespace ConstantUtil {
 namespace APPLICATION {
-#ifdef _DEBUG
+#if defined(DEBUG) || defined(_DEBUG)
 	const bool DEBUG_FLAG = true;
 #else
 	const bool DEBUG_FLAG = false;

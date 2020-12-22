@@ -54,7 +54,7 @@ void tml::InputManager::Init(void)
  */
 INT tml::InputManager::Create(void)
 {
-	this->Release();
+	this->Init();
 
 	return (0);
 }

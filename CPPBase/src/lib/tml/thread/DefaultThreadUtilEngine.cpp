@@ -58,7 +58,7 @@ void tml::DefaultThreadUtilEngine::Init(void)
  */
 INT tml::DefaultThreadUtilEngine::Create(void)
 {
-	this->Release();
+	this->Init();
 
 	if (tml::ThreadUtilEngine::Create() < 0) {
 		this->Init();

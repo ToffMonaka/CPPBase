@@ -58,7 +58,7 @@ void tml::DefaultMathUtilEngine::Init(void)
  */
 INT tml::DefaultMathUtilEngine::Create(void)
 {
-	this->Release();
+	this->Init();
 
 	if (tml::MathUtilEngine::Create() < 0) {
 		this->Init();

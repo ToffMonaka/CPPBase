@@ -58,7 +58,7 @@ void tml::DefaultRandomUtilEngine::Init(void)
  */
 INT tml::DefaultRandomUtilEngine::Create(void)
 {
-	this->Release();
+	this->Init();
 
 	if (tml::RandomUtilEngine::Create() < 0) {
 		this->Init();

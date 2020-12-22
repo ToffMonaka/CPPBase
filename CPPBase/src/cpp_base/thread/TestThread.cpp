@@ -60,15 +60,13 @@ void cpp_base::TestThread::Init(void)
  */
 INT cpp_base::TestThread::Create(void)
 {
-	this->Release();
+	this->Init();
 
 	if (tml::SubThread::Create() < 0) {
 		this->Init();
 
 		return (-1);
 	}
-
-	this->frame_rate_.Init();
 
 	return (0);
 }

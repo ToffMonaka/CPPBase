@@ -59,7 +59,7 @@ void tml::DefaultStringUtilEngine::Init(void)
  */
 INT tml::DefaultStringUtilEngine::Create(const CHAR *locale_name)
 {
-	this->Release();
+	this->Init();
 
 	if (tml::StringUtilEngine::Create(locale_name) < 0) {
 		this->Init();

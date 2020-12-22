@@ -74,7 +74,7 @@ inline void tml::SetResult(INT *dst_res, const INT res)
 namespace tml {
 namespace ConstantUtil {
 namespace LIBRARY {
-#ifdef _DEBUG
+#if defined(DEBUG) || defined(_DEBUG)
 	const bool DEBUG_FLAG = true;
 #else
 	const bool DEBUG_FLAG = false;

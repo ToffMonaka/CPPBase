@@ -74,7 +74,7 @@ INT tml::NewMemoryAllocator::Create(void)
 		return (-1);
 	}
 
-	this->Release();
+	this->Init();
 
 	if (tml::MemoryAllocator::Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NEW) < 0) {
 		this->Init();

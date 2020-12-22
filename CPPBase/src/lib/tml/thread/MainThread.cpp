@@ -94,7 +94,7 @@ INT tml::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *wnd_na
  */
 INT tml::MainThread::CreateWindow_(
 	const WNDCLASSEX &wnd_class,
-	const size_t x, const size_t y, const size_t w, const size_t h
+	const UINT x, const UINT y, const UINT w, const UINT h
 )
 {
 	if (this->wnd_handle_ != nullptr) {

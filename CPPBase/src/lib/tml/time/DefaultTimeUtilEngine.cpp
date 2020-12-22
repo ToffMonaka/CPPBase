@@ -58,7 +58,7 @@ void tml::DefaultTimeUtilEngine::Init(void)
  */
 INT tml::DefaultTimeUtilEngine::Create(void)
 {
-	this->Release();
+	this->Init();
 
 	if (tml::TimeUtilEngine::Create() < 0) {
 		this->Init();

@@ -98,8 +98,6 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 			}
 		}
 
-		sys_conf_file.Init();
-
 		sys_conf_file.read_plan.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
 
 		if (sys_conf_file.Read() < 0) {

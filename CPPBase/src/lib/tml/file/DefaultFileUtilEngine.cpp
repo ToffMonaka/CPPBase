@@ -58,7 +58,7 @@ void tml::DefaultFileUtilEngine::Init(void)
  */
 INT tml::DefaultFileUtilEngine::Create(void)
 {
-	this->Release();
+	this->Init();
 
 	if (tml::FileUtilEngine::Create() < 0) {
 		this->Init();

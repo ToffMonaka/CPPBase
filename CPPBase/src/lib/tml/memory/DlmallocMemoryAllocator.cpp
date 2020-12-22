@@ -77,7 +77,7 @@ INT tml::DlmallocMemoryAllocator::Create(const size_t size)
 		return (-1);
 	}
 
-	this->Release();
+	this->Init();
 
 	if (tml::MemoryAllocator::Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC) < 0) {
 		this->Init();
