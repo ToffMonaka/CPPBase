@@ -131,25 +131,28 @@ INT cpp_base::MainThread::Start(void)
 		}
 	}
 
-	// InputManager Create
-	if (this->input_mgr_.Create() < 0) {
-		this->Init();
+	{// InputManager Create
+		if (this->input_mgr_.Create() < 0) {
+			this->Init();
 
-		return (-1);
+			return (-1);
+		}
 	}
 
-	// GraphicManager Create
-	if (this->graphic_mgr_.Create(this->GetWindowHandle(), this->sys_conf_file_.data.window_width, this->sys_conf_file_.data.window_height) < 0) {
-		this->Init();
+	{// GraphicManager Create
+		if (this->graphic_mgr_.Create(this->GetWindowHandle(), this->sys_conf_file_.data.window_width, this->sys_conf_file_.data.window_height) < 0) {
+			this->Init();
 
-		return (-1);
+			return (-1);
+		}
 	}
 
-	// SoundManager Create
-	if (this->sound_mgr_.Create() < 0) {
-		this->Init();
+	{// SoundManager Create
+		if (this->sound_mgr_.Create() < 0) {
+			this->Init();
 
-		return (-1);
+			return (-1);
+		}
 	}
 
 	{// Test
@@ -188,6 +191,12 @@ void cpp_base::MainThread::End(void)
  */
 void cpp_base::MainThread::Update(void)
 {
+	while (this->graphic_mgr_.StartDraw()) {
+	}
+
+	this->graphic_mgr_.EndDraw();
+	this->graphic_mgr_.SwapDraw();
+
 	this->frame_rate_.Update();
 
 	return;

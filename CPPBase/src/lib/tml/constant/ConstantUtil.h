@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 #include <chrono>
+#include <array>
 
 
 using DOUBLE = double;

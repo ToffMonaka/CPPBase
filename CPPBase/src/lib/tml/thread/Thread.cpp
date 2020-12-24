@@ -47,7 +47,7 @@ void tml::Thread::Init(void)
 {
 	switch (this->type_) {
 	case tml::ConstantUtil::THREAD::TYPE::MAIN: {
-		this->th_id_ = std::thread::id();
+		this->id_ = std::thread::id();
 
 		break;
 	}
@@ -70,7 +70,7 @@ INT tml::Thread::Create(const tml::ConstantUtil::THREAD::TYPE type)
 {
 	switch (type) {
 	case tml::ConstantUtil::THREAD::TYPE::MAIN: {
-		this->th_id_ = std::this_thread::get_id();
+		this->id_ = std::this_thread::get_id();
 
 		break;
 	}
@@ -101,7 +101,7 @@ INT tml::Thread::CreateCore(void)
 
 		this->core_ = std::thread(&tml::Thread::RunCore, this);
 
-		this->th_id_ = this->core_.get_id();
+		this->id_ = this->core_.get_id();
 
 		this->core_created_flg_ = true;
 	}
@@ -128,7 +128,7 @@ void tml::Thread::DeleteCore(void)
 			this->core_.join();
 		}
 
-		this->th_id_ = std::thread::id();
+		this->id_ = std::thread::id();
 
 		this->core_created_flg_ = false;
 	}

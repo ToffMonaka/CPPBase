@@ -24,7 +24,7 @@ public: tml::Thread &operator =(const tml::Thread &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
-	std::thread::id th_id_;
+	std::thread::id id_;
 	tml::ConstantUtil::THREAD::TYPE type_;
 	std::atomic<bool> loop_flg_;
 	std::thread core_;
@@ -44,7 +44,7 @@ public:
 	virtual INT Start(void) = 0;
 	virtual void End(void) = 0;
 	virtual void Update(void) = 0;
-	const std::thread::id &GetThreadID(void) const;
+	const std::thread::id &GetID(void) const;
 	tml::ConstantUtil::THREAD::TYPE GetType(void) const;
 	bool GetLoopFlag(void) const;
 	void SetLoopFlag(const bool);
@@ -56,12 +56,12 @@ public:
 
 
 /**
- * @brief GetThreadIDŠÖ”
- * @return th_id (thread_id)
+ * @brief GetIDŠÖ”
+ * @return id (id)
  */
-inline const std::thread::id &tml::Thread::GetThreadID(void) const
+inline const std::thread::id &tml::Thread::GetID(void) const
 {
-	return (this->th_id_);
+	return (this->id_);
 }
 
 

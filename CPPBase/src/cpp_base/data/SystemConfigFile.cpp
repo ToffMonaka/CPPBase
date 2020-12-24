@@ -266,17 +266,17 @@ INT cpp_base::SystemConfigFile::Write(void)
 
 	{// APPLICATION Section Write
 		txt_file.data.string_container.push_back(section_start_str + L"MEM_ALLOCATOR_SIZE" + section_end_str);
-		txt_file.data.string_container.push_back(empty_str + L"MEM_ALLOCATOR_SIZE" + equal_str + tml::StringUtil::GetString(val, this->data.application_memory_allocator_size));
-		txt_file.data.string_container.push_back(empty_str + L"LOCALE_NAME" + equal_str + tml::StringUtil::GetString(val, this->data.application_locale_name.c_str()));
+		txt_file.data.string_container.push_back(L"MEM_ALLOCATOR_SIZE" + equal_str + tml::StringUtil::GetString(val, this->data.application_memory_allocator_size));
+		txt_file.data.string_container.push_back(L"LOCALE_NAME" + equal_str + tml::StringUtil::GetString(val, this->data.application_locale_name.c_str()));
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
 	{// WINDOW Section Write
 		txt_file.data.string_container.push_back(section_start_str + L"WINDOW" + section_end_str);
-		txt_file.data.string_container.push_back(empty_str + L"X" + equal_str + tml::StringUtil::GetString(val, this->data.window_x));
-		txt_file.data.string_container.push_back(empty_str + L"Y" + equal_str + tml::StringUtil::GetString(val, this->data.window_y));
-		txt_file.data.string_container.push_back(empty_str + L"W" + equal_str + tml::StringUtil::GetString(val, this->data.window_width));
-		txt_file.data.string_container.push_back(empty_str + L"H" + equal_str + tml::StringUtil::GetString(val, this->data.window_height));
+		txt_file.data.string_container.push_back(L"X" + equal_str + tml::StringUtil::GetString(val, this->data.window_x));
+		txt_file.data.string_container.push_back(L"Y" + equal_str + tml::StringUtil::GetString(val, this->data.window_y));
+		txt_file.data.string_container.push_back(L"W" + equal_str + tml::StringUtil::GetString(val, this->data.window_width));
+		txt_file.data.string_container.push_back(L"H" + equal_str + tml::StringUtil::GetString(val, this->data.window_height));
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
