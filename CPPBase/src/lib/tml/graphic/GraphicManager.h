@@ -6,27 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#pragma warning(push)
-#pragma warning(disable: 4005)
-#include <d3d11.h>
-#include <d3dx11.h>
-#pragma warning(pop)
-
-
-namespace tml {
-namespace ConstantUtil {
-namespace GRAPHIC {
-	const UINT RT_LIMIT = D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT;
-	const UINT DT_LIMIT = 1U;
-	const UINT SCB_SR_LIMIT = D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT;
-	const UINT SSB_SR_LIMIT = 16U;
-	const UINT SSB_UA_SR_LIMIT = 4U;
-	const UINT TEXTURE_SR_LIMIT = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT - 16U;
-	const UINT TEXTURE_UA_SR_LIMIT = D3D11_PS_CS_UAV_REGISTER_COUNT - 4U;
-	const UINT SAMPLER_SR_LIMIT = D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT;
-}
-}
-}
+#include "../constant/ConstantUtil_GRAPHIC.h"
+#include "Viewport.h"
 
 
 namespace tml {
@@ -59,6 +40,33 @@ private:
 	ID3D11SamplerState *clear_samp_sr_;
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> clear_samp_sr_ary_;
 	bool vsync_flg_;
+	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE samp_quality_type_;
+	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE motion_quality_type_;
+	UINT motion_frame_rate_limit_;
+	tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE shadow_quality_type_;
+	FLOAT shadow_per_;
+	FLOAT shadow_rng_;
+	FLOAT shadow_rng_exponent_;
+	FLOAT shadow_size_;
+	UINT shadow_interval_cnt_;
+	UINT shadow_blur_weight_cnt_;
+	FLOAT shadow_blur_dispersion_val_;
+	tml::Viewport shadow_vp_;
+	tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE ao_quality_type_;
+	FLOAT ao_per_;
+	FLOAT ao_rng_;
+	FLOAT ao_rng_exponent_;
+	UINT ao_ray_cnt_;
+	FLOAT ao_ray_radius_;
+	FLOAT ao_ray_radius_scale_;
+	UINT ao_blur_weight_cnt_;
+	FLOAT ao_blur_dispersion_val_;
+	FLOAT ao_blur_sharp_val_;
+	tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE bloom_quality_type_;
+	FLOAT bloom_per_;
+	UINT bloom_blur_weight_cnt_;
+	FLOAT bloom_blur_dispersion_val_;
+	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
 
 private:
 	void Release(void);
@@ -70,8 +78,6 @@ public:
 	virtual void Init(void);
 	INT Create(const HWND, const UINT, const UINT);
 
-	bool StartDraw(void);
-	void EndDraw(void);
-	void SwapDraw(void);
+	void Draw(void);
 };
 }

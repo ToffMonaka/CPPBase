@@ -28,7 +28,33 @@ tml::GraphicManager::GraphicManager() :
 	clear_tex_ua_sr_init_cnt_ary_{},
 	clear_samp_sr_(nullptr),
 	clear_samp_sr_ary_{},
-	vsync_flg_(true)
+	vsync_flg_(true),
+	samp_quality_type_(tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE),
+	motion_quality_type_(tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE),
+	motion_frame_rate_limit_(0U),
+	shadow_quality_type_(tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE::NONE),
+	shadow_per_(0.0f),
+	shadow_rng_(0.0f),
+	shadow_rng_exponent_(0.0f),
+	shadow_size_(0.0f),
+	shadow_interval_cnt_(0U),
+	shadow_blur_weight_cnt_(0U),
+	shadow_blur_dispersion_val_(0.0f),
+	ao_quality_type_(tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE::NONE),
+	ao_per_(0.0f),
+	ao_rng_(0.0f),
+	ao_rng_exponent_(0.0f),
+	ao_ray_cnt_(0U),
+	ao_ray_radius_(0.0f),
+	ao_ray_radius_scale_(0.0f),
+	ao_blur_weight_cnt_(0U),
+	ao_blur_dispersion_val_(0.0f),
+	ao_blur_sharp_val_(0.0f),
+	bloom_quality_type_(tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE::NONE),
+	bloom_per_(0.0f),
+	bloom_blur_weight_cnt_(0U),
+	bloom_blur_dispersion_val_(0.0f),
+	aa_quality_type_(tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE)
 {
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
@@ -135,6 +161,33 @@ void tml::GraphicManager::Init(void)
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
 	this->vsync_flg_ = false;
+	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE;
+	this->motion_quality_type_ = tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE;
+	this->motion_frame_rate_limit_ = 0U;
+	this->shadow_quality_type_ = tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE::NONE;
+	this->shadow_per_ = 0.0f;
+	this->shadow_rng_ = 0.0f;
+	this->shadow_rng_exponent_ = 0.0f;
+	this->shadow_size_ = 0.0f;
+	this->shadow_interval_cnt_ = 0U;
+	this->shadow_blur_weight_cnt_ = 0U;
+	this->shadow_blur_dispersion_val_ = 0.0f;
+	this->shadow_vp_.Init();
+	this->ao_quality_type_ = tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE::NONE;
+	this->ao_per_ = 0.0f;
+	this->ao_rng_ = 0.0f;
+	this->ao_rng_exponent_ = 0.0f;
+	this->ao_ray_cnt_ = 0U;
+	this->ao_ray_radius_ = 0.0f;
+	this->ao_ray_radius_scale_ = 0.0f;
+	this->ao_blur_weight_cnt_ = 0U;
+	this->ao_blur_dispersion_val_ = 0.0f;
+	this->ao_blur_sharp_val_ = 0.0f;
+	this->bloom_quality_type_ = tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE::NONE;
+	this->bloom_per_ = 0.0f;
+	this->bloom_blur_weight_cnt_ = 0U;
+	this->bloom_blur_dispersion_val_ = 0.0f;
+	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE;
 
 	return;
 }
@@ -216,10 +269,10 @@ INT tml::GraphicManager::Create(const HWND wnd_handle, const UINT wnd_w, const U
 		mode_desc.Scaling = DXGI_MODE_SCALING_CENTERED;
 
 		DXGI_SAMPLE_DESC ms_desc = {};
-		UINT ms_max_cnt = 1U;
-		//UINT ms_max_cnt = D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT;
+		UINT ms_limit = 1U;
+		//UINT ms_limit = D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT;
 
-		for (UINT ms_cnt = 1U; ms_cnt <= ms_max_cnt; ms_cnt <<= 1) {
+		for (UINT ms_cnt = 1U; ms_cnt <= ms_limit; ms_cnt <<= 1) {
 			UINT ms_quality = 0U;
 
 			if (SUCCEEDED(this->device_->CheckMultisampleQualityLevels(DXGI_FORMAT_D24_UNORM_S8_UINT, ms_cnt, &ms_quality))) {
@@ -300,36 +353,84 @@ INT tml::GraphicManager::Create(const HWND wnd_handle, const UINT wnd_w, const U
 	this->device_context_->CSSetUnorderedAccessViews(0U, this->clear_tex_ua_sr_ary_.size(), this->clear_tex_ua_sr_ary_.data(), this->clear_tex_ua_sr_init_cnt_ary_.data());
 	this->device_context_->CSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
 
+	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC2;
+
+	this->motion_quality_type_ = tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::MEDIUM;
+
+	switch (this->motion_quality_type_) {
+	case tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::LOW: {
+		this->motion_frame_rate_limit_ = 30U;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::MEDIUM: {
+		this->motion_frame_rate_limit_ = 60U;
+
+		break;
+	}
+	default: {
+		this->Init();
+
+		return (-1);
+	}
+	}
+
+	this->shadow_quality_type_ = tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE::MEDIUM;
+
+	switch (this->shadow_quality_type_) {
+	case tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE::MEDIUM: {
+		this->shadow_per_ = 1.0f;
+		this->shadow_rng_ = 50.0f;
+		this->shadow_rng_exponent_ = 4.0f;
+		this->shadow_size_ = 1024.0f;
+		this->shadow_interval_cnt_ = 3U;
+		this->shadow_blur_weight_cnt_ = 3U;
+		this->shadow_blur_dispersion_val_ = 1.0f;
+
+		break;
+	}
+	}
+
+	this->ao_quality_type_ = tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE::MEDIUM;
+
+	switch (this->ao_quality_type_) {
+	case tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE::MEDIUM: {
+		this->ao_per_ = 1.0f;
+		this->ao_rng_ = 20.0f;
+		this->ao_rng_exponent_ = 4.0f;
+		this->ao_ray_cnt_ = 10U;
+		this->ao_ray_radius_ = 0.4f;
+		this->ao_ray_radius_scale_ = 300.0f;
+		this->ao_blur_weight_cnt_ = 4U;
+		this->ao_blur_dispersion_val_ = 8.0f;
+		this->ao_blur_sharp_val_ = 0.5f;
+
+		break;
+	}
+	}
+
+	this->bloom_quality_type_ = tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE::MEDIUM;
+
+	switch (this->bloom_quality_type_) {
+	case tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE::MEDIUM: {
+		this->bloom_per_ = 1.0f;
+		this->bloom_blur_weight_cnt_ = 8U;
+		this->bloom_blur_dispersion_val_ = 4.0f;
+
+		break;
+	}
+	}
+
+	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::FXAA;
+
 	return (0);
 }
 
 
 /**
- * @brief StartDrawä÷êî
- * @return continue_flg (continue_flag)<br>
- * false=åpë±ñ≥Çµ,true=åpë±óLÇË
+ * @brief Drawä÷êî
  */
-bool tml::GraphicManager::StartDraw(void)
-{
-	bool continue_flg = false;
-
-	return (continue_flg);
-}
-
-
-/**
- * @brief EndDrawä÷êî
- */
-void tml::GraphicManager::EndDraw(void)
-{
-	return;
-}
-
-
-/**
- * @brief SwapDrawä÷êî
- */
-void tml::GraphicManager::SwapDraw(void)
+void tml::GraphicManager::Draw(void)
 {
 	this->swap_chain_->Present(this->vsync_flg_, 0U);
 

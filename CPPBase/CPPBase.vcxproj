@@ -181,6 +181,7 @@
     <ClCompile Include="src\lib\tml\file\INIFile.cpp" />
     <ClCompile Include="src\lib\tml\file\TextFile.cpp" />
     <ClCompile Include="src\lib\tml\graphic\GraphicManager.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Viewport.cpp" />
     <ClCompile Include="src\lib\tml\input\InputManager.cpp" />
     <ClCompile Include="src\lib\tml\math\DefaultMathUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtil.cpp" />
@@ -230,8 +231,11 @@
     <ClInclude Include="src\cpp_base\thread\TestThread.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_DATE.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_GRAPHIC.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_INPUT.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_MEMORY.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_NEWLINE_CODE.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_SOUND.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_THREAD.h" />
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h" />
     <ClInclude Include="src\lib\tml\file\BinaryFile.h" />
@@ -244,6 +248,7 @@
     <ClInclude Include="src\lib\tml\file\INIFile.h" />
     <ClInclude Include="src\lib\tml\file\TextFile.h" />
     <ClInclude Include="src\lib\tml\graphic\GraphicManager.h" />
+    <ClInclude Include="src\lib\tml\graphic\Viewport.h" />
     <ClInclude Include="src\lib\tml\input\InputManager.h" />
     <ClInclude Include="src\lib\tml\math\DefaultMathUtilEngine.h" />
     <ClInclude Include="src\lib\tml\math\MathUtil.h" />

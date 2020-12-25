@@ -191,11 +191,7 @@ void cpp_base::MainThread::End(void)
  */
 void cpp_base::MainThread::Update(void)
 {
-	while (this->graphic_mgr_.StartDraw()) {
-	}
-
-	this->graphic_mgr_.EndDraw();
-	this->graphic_mgr_.SwapDraw();
+	this->graphic_mgr_.Draw();
 
 	this->frame_rate_.Update();
 
