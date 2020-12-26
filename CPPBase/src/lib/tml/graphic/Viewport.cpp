@@ -22,7 +22,7 @@ tml::Viewport::Viewport() :
  * @param pos (position)
  * @param size (size)
  */
-tml::Viewport::Viewport(const XMFLOAT2 &pos, const XMFLOAT2 &size) :
+tml::Viewport::Viewport(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size) :
 	vp_(pos.x, pos.y, size.x, size.y, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH)
 {
 	return;

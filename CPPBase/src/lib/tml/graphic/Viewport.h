@@ -11,10 +11,7 @@
 #include <d3d11.h>
 #include <d3dx11.h>
 #pragma warning(pop)
-#pragma warning(push)
-#pragma warning(disable: 4838)
-#include <xnamath.h>
-#pragma warning(pop)
+#include "../math/XNAMath.h"
 
 
 namespace tml {
@@ -31,13 +28,13 @@ private:
 
 public:
 	Viewport();
-	Viewport(const XMFLOAT2 &, const XMFLOAT2 &);
+	Viewport(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
 	virtual ~Viewport();
 
 	virtual void Init(void);
 
 	const CD3D11_VIEWPORT &Get(void) const;
-	void Set(const XMFLOAT2 &, const XMFLOAT2 &);
+	void Set(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
 	void SetX(const FLOAT);
 	void SetY(const FLOAT);
 	void SetWidth(const FLOAT);
@@ -61,7 +58,7 @@ inline const CD3D11_VIEWPORT &tml::Viewport::Get(void) const
  * @param pos (position)
  * @param size (size)
  */
-inline void tml::Viewport::Set(const XMFLOAT2 &pos, const XMFLOAT2 &size)
+inline void tml::Viewport::Set(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size)
 {
 	this->vp_ = CD3D11_VIEWPORT(pos.x, pos.y, size.x, size.y, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH);
 
