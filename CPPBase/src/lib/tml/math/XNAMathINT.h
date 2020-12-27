@@ -18,8 +18,8 @@
  */
 typedef struct XMINT2_
 {
-    INT x;
-    INT y;
+	INT x;
+	INT y;
 
 	XMINT2_()
 	{
@@ -40,9 +40,9 @@ typedef struct XMINT2_
  */
 typedef struct XMINT3_
 {
-    INT x;
-    INT y;
-    INT z;
+	INT x;
+	INT y;
+	INT z;
 
 	XMINT3_()
 	{
@@ -64,10 +64,10 @@ typedef struct XMINT3_
  */
 typedef struct XMINT4_
 {
-    INT x;
-    INT y;
-    INT z;
-    INT w;
+	INT x;
+	INT y;
+	INT z;
+	INT w;
 
 	XMINT4_()
 	{
@@ -91,7 +91,7 @@ namespace tml {
  */
 typedef struct XMINT2EX_ : public XMINT2
 {
-	tml::XMINT2EX_() :
+	XMINT2EX_() :
 		XMINT2(0, 0)
 	{
 		return;
@@ -295,7 +295,7 @@ typedef struct XMINT2EX_ : public XMINT2
  */
 typedef struct XMINT3EX_ : public XMINT3
 {
-	tml::XMINT3EX_() :
+	XMINT3EX_() :
 		XMINT3(0, 0, 0)
 	{
 		return;
@@ -526,7 +526,7 @@ typedef struct XMINT3EX_ : public XMINT3
  */
 typedef struct XMINT4EX_ : public XMINT4
 {
-	tml::XMINT4EX_() :
+	XMINT4EX_() :
 		XMINT4(0, 0, 0, 0)
 	{
 		return;

@@ -18,10 +18,15 @@ tml::GraphicManager::GraphicManager() :
 	device_(nullptr),
 	device_context_(nullptr),
 	clear_rt_(nullptr),
+	//clear_rt_ary_{},
 	clear_dt_(nullptr),
+	clear_dt_ary_{},
 	clear_tex_sr_(nullptr),
+	clear_tex_sr_ary_{},
 	clear_tex_ua_sr_(nullptr),
+	clear_tex_ua_sr_ary_{},
 	clear_samp_sr_(nullptr),
+	clear_samp_sr_ary_{},
 	vsync_flg_(true),
 	samp_quality_type_(tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE),
 	motion_quality_type_(tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE),
@@ -53,12 +58,7 @@ tml::GraphicManager::GraphicManager() :
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
-	this->clear_rt_ary_.fill(nullptr);
-	this->clear_dt_ary_.fill(nullptr);
-	this->clear_tex_sr_ary_.fill(nullptr);
-	this->clear_tex_ua_sr_ary_.fill(nullptr);
 	this->clear_tex_ua_sr_init_cnt_ary_.fill(static_cast<UINT>(-1));
-	this->clear_samp_sr_ary_.fill(nullptr);
 
 	return;
 }
@@ -84,30 +84,35 @@ void tml::GraphicManager::Release(void)
 		this->clear_samp_sr_->Release();
 
 		this->clear_samp_sr_ = nullptr;
+		this->clear_samp_sr_ary_.fill(nullptr);
 	}
 
 	if (this->clear_tex_ua_sr_ != nullptr) {
 		this->clear_tex_ua_sr_->Release();
 
 		this->clear_tex_ua_sr_ = nullptr;
+		this->clear_tex_ua_sr_ary_.fill(nullptr);
 	}
 
 	if (this->clear_tex_sr_ != nullptr) {
 		this->clear_tex_sr_->Release();
 
 		this->clear_tex_sr_ = nullptr;
+		this->clear_tex_sr_ary_.fill(nullptr);
 	}
 
 	if (this->clear_dt_ != nullptr) {
 		this->clear_dt_->Release();
 
 		this->clear_dt_ = nullptr;
+		this->clear_dt_ary_.fill(nullptr);
 	}
 
 	if (this->clear_rt_ != nullptr) {
 		this->clear_rt_->Release();
 
 		this->clear_rt_ = nullptr;
+		this->clear_rt_ary_.fill(nullptr);
 	}
 
 	if (this->swap_chain_ != nullptr) {
@@ -154,12 +159,6 @@ void tml::GraphicManager::Init(void)
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
-	this->clear_rt_ary_.fill(nullptr);
-	this->clear_dt_ary_.fill(nullptr);
-	this->clear_tex_sr_ary_.fill(nullptr);
-	this->clear_tex_ua_sr_ary_.fill(nullptr);
-	this->clear_tex_ua_sr_init_cnt_ary_.fill(static_cast<UINT>(-1));
-	this->clear_samp_sr_ary_.fill(nullptr);
 	this->vsync_flg_ = true;
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE;
 	this->motion_quality_type_ = tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE;

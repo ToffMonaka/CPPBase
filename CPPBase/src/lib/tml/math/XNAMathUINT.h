@@ -14,12 +14,12 @@
 
 
 /**
- * @brief tml::XMUINT2構造体
+ * @brief XMUINT2構造体
  */
 typedef struct XMUINT2_
 {
-    UINT x;
-    UINT y;
+	UINT x;
+	UINT y;
 
 	XMUINT2_()
 	{
@@ -36,13 +36,13 @@ typedef struct XMUINT2_
 
 
 /**
- * @brief tml::XMUINT3構造体
+ * @brief XMUINT3構造体
  */
 typedef struct XMUINT3_
 {
-    UINT x;
-    UINT y;
-    UINT z;
+	UINT x;
+	UINT y;
+	UINT z;
 
 	XMUINT3_()
 	{
@@ -60,14 +60,14 @@ typedef struct XMUINT3_
 
 
 /**
- * @brief tml::XMUINT4構造体
+ * @brief XMUINT4構造体
  */
 typedef struct XMUINT4_
 {
-    UINT x;
-    UINT y;
-    UINT z;
-    UINT w;
+	UINT x;
+	UINT y;
+	UINT z;
+	UINT w;
 
 	XMUINT4_()
 	{
@@ -87,7 +87,7 @@ typedef struct XMUINT4_
 
 namespace tml {
 /**
- * @brief tml::XMUINT2EX構造体
+ * @brief XMUINT2EX構造体
  */
 typedef struct XMUINT2EX_ : public XMUINT2
 {
@@ -110,7 +110,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 	}
 
 	explicit XMUINT2EX_(const XMUINT2 &val) :
-		XMUINT2(val.x, val.x)
+		XMUINT2(val.x, val.y)
 	{
 		return;
 	}
@@ -286,7 +286,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 
 
 /**
- * @brief tml::XMUINT3EX構造体
+ * @brief XMUINT3EX構造体
  */
 typedef struct XMUINT3EX_ : public XMUINT3
 {
@@ -512,7 +512,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 
 
 /**
- * @brief tml::XMUINT4EX構造体
+ * @brief XMUINT4EX構造体
  */
 typedef struct XMUINT4EX_ : public XMUINT4
 {

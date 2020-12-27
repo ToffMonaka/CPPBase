@@ -677,7 +677,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
  */
 typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 {
-	tml::XMFLOAT3X3EX_() :
+	XMFLOAT3X3EX_() :
 		XMFLOAT3X3(
 			0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
@@ -958,7 +958,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
  */
 typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 {
-	tml::XMFLOAT4X3EX_() :
+	XMFLOAT4X3EX_() :
 		XMFLOAT4X3(
 			0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
@@ -1269,7 +1269,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
  */
 typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 {
-	tml::XMFLOAT4X4EX_() :
+	XMFLOAT4X4EX_() :
 		XMFLOAT4X4(
 			0.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f, 0.0f,

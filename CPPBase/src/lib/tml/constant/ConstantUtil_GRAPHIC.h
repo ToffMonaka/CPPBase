@@ -55,6 +55,7 @@ namespace GRAPHIC {
 		NONE = 0U,
 		FXAA
 	};
+	const UINT BLEND_STATE_FACTOR_COUNT = 4U;
 }
 }
 }

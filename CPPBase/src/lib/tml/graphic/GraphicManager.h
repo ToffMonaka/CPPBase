@@ -79,5 +79,93 @@ public:
 	INT Create(const HWND, const UINT, const UINT);
 
 	void Draw(void);
+	IDXGIFactory1 *GetFactory(void) const;
+	IDXGIAdapter1 *GetAdapter(void) const;
+	const DXGI_ADAPTER_DESC1 &GetAdapterDesc(void) const;
+	IDXGISwapChain *GetSwapChain(void) const;
+	const DXGI_SWAP_CHAIN_DESC &GetSwapChainDesc(void) const;
+	ID3D11Device *GetDevice(void) const;
+	ID3D11DeviceContext *GetDeviceContext(void) const;
+	D3D_FEATURE_LEVEL GetDeviceFeatureLevel(void) const;
 };
+}
+
+
+/**
+ * @brief GetFactoryŠÖ”
+ * @return factory (factory)
+ */
+inline IDXGIFactory1 *tml::GraphicManager::GetFactory(void) const
+{
+	return (this->factory_);
+}
+
+
+/**
+ * @brief GetAdapterŠÖ”
+ * @return adapter (adapter)
+ */
+inline IDXGIAdapter1 *tml::GraphicManager::GetAdapter(void) const
+{
+	return (this->adapter_);
+}
+
+
+/**
+ * @brief GetAdapterDescŠÖ”
+ * @return adapter_desc (adapter_desc)
+ */
+inline const DXGI_ADAPTER_DESC1 &tml::GraphicManager::GetAdapterDesc(void) const
+{
+	return (this->adapter_desc_);
+}
+
+
+/**
+ * @brief GetSwapChainŠÖ”
+ * @return swap_chain (swap_chain)
+ */
+inline IDXGISwapChain *tml::GraphicManager::GetSwapChain(void) const
+{
+	return (this->swap_chain_);
+}
+
+
+/**
+ * @brief GetSwapChainDescŠÖ”
+ * @return swap_chain_desc (swap_chain_desc)
+ */
+inline const DXGI_SWAP_CHAIN_DESC &tml::GraphicManager::GetSwapChainDesc(void) const
+{
+	return (this->swap_chain_desc_);
+}
+
+
+/**
+ * @brief GetDeviceŠÖ”
+ * @return device (device)
+ */
+inline ID3D11Device *tml::GraphicManager::GetDevice(void) const
+{
+	return (this->device_);
+}
+
+
+/**
+ * @brief GetDeviceContextŠÖ”
+ * @return device_context (device_context)
+ */
+inline ID3D11DeviceContext *tml::GraphicManager::GetDeviceContext(void) const
+{
+	return (this->device_context_);
+}
+
+
+/**
+ * @brief GetDeviceFeatureLevelŠÖ”
+ * @return device_future_lv (device_future_level)
+ */
+inline D3D_FEATURE_LEVEL tml::GraphicManager::GetDeviceFeatureLevel(void) const
+{
+	return (this->device_future_lv_);
 }
