@@ -72,8 +72,6 @@ void tml::DlmallocMemoryAllocator::Init(void)
 INT tml::DlmallocMemoryAllocator::Create(const size_t size)
 {
 	if (this->ms_ != nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 

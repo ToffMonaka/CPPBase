@@ -84,6 +84,10 @@ void tml::GraphicResource::Init(void)
  */
 INT tml::GraphicResource::Create(const tml::GraphicResourceDesc &desc)
 {
+	if (desc.manager == nullptr) {
+		return (-1);
+	}
+
 	this->mgr_ = desc.manager;
 
 	return (0);

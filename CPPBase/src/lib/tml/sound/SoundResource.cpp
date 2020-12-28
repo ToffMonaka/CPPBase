@@ -84,6 +84,10 @@ void tml::SoundResource::Init(void)
  */
 INT tml::SoundResource::Create(const tml::SoundResourceDesc &desc)
 {
+	if (desc.manager == nullptr) {
+		return (-1);
+	}
+
 	this->mgr_ = desc.manager;
 
 	return (0);

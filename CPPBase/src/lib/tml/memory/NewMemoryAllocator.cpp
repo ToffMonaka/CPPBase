@@ -69,8 +69,6 @@ void tml::NewMemoryAllocator::Init(void)
 INT tml::NewMemoryAllocator::Create(void)
 {
 	if (this->ms_size_ > 0U) {
-		this->Init();
-
 		return (-1);
 	}
 

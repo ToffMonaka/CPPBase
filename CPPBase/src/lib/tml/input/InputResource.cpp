@@ -84,6 +84,10 @@ void tml::InputResource::Init(void)
  */
 INT tml::InputResource::Create(const tml::InputResourceDesc &desc)
 {
+	if (desc.manager == nullptr) {
+		return (-1);
+	}
+
 	this->mgr_ = desc.manager;
 
 	return (0);

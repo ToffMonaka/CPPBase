@@ -18,13 +18,13 @@ tml::GraphicManager::GraphicManager() :
 	device_(nullptr),
 	device_context_(nullptr),
 	clear_rt_(nullptr),
-	//clear_rt_ary_{},
+	clear_rt_ary_{},
 	clear_dt_(nullptr),
 	clear_dt_ary_{},
 	clear_tex_sr_(nullptr),
 	clear_tex_sr_ary_{},
-	clear_tex_ua_sr_(nullptr),
-	clear_tex_ua_sr_ary_{},
+	clear_tex_uasr_(nullptr),
+	clear_tex_uasr_ary_{},
 	clear_samp_sr_(nullptr),
 	clear_samp_sr_ary_{},
 	vsync_flg_(true),
@@ -58,7 +58,7 @@ tml::GraphicManager::GraphicManager() :
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
-	this->clear_tex_ua_sr_init_cnt_ary_.fill(static_cast<UINT>(-1));
+	this->clear_tex_uasr_init_cnt_ary_.fill(static_cast<UINT>(-1));
 
 	return;
 }
@@ -87,11 +87,11 @@ void tml::GraphicManager::Release(void)
 		this->clear_samp_sr_ary_.fill(nullptr);
 	}
 
-	if (this->clear_tex_ua_sr_ != nullptr) {
-		this->clear_tex_ua_sr_->Release();
+	if (this->clear_tex_uasr_ != nullptr) {
+		this->clear_tex_uasr_->Release();
 
-		this->clear_tex_ua_sr_ = nullptr;
-		this->clear_tex_ua_sr_ary_.fill(nullptr);
+		this->clear_tex_uasr_ = nullptr;
+		this->clear_tex_uasr_ary_.fill(nullptr);
 	}
 
 	if (this->clear_tex_sr_ != nullptr) {
@@ -320,8 +320,8 @@ INT tml::GraphicManager::Create(const HWND wnd_handle, const UINT wnd_w, const U
 	}
 
 	{// ClearTextureUASR Create
-		this->clear_tex_ua_sr_ = nullptr;
-		this->clear_tex_ua_sr_ary_.fill(this->clear_tex_ua_sr_);
+		this->clear_tex_uasr_ = nullptr;
+		this->clear_tex_uasr_ary_.fill(this->clear_tex_uasr_);
 	}
 
 	{// ClearSamplerSR Create
@@ -348,7 +348,7 @@ INT tml::GraphicManager::Create(const HWND wnd_handle, const UINT wnd_w, const U
 	this->device_context_->PSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
 	this->device_context_->CSSetShader(nullptr, nullptr, 0U);
 	this->device_context_->CSSetShaderResources(0U, this->clear_tex_sr_ary_.size(), this->clear_tex_sr_ary_.data());
-	this->device_context_->CSSetUnorderedAccessViews(0U, this->clear_tex_ua_sr_ary_.size(), this->clear_tex_ua_sr_ary_.data(), this->clear_tex_ua_sr_init_cnt_ary_.data());
+	this->device_context_->CSSetUnorderedAccessViews(0U, this->clear_tex_uasr_ary_.size(), this->clear_tex_uasr_ary_.data(), this->clear_tex_uasr_init_cnt_ary_.data());
 	this->device_context_->CSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
 
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC2;

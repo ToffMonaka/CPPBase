@@ -14,8 +14,6 @@
 tml::RasterizerStateDesc::RasterizerStateDesc() :
 	desc(CD3D11_DEFAULT())
 {
-	this->desc.CullMode = D3D11_CULL_NONE;
-
 	return;
 }
 
@@ -35,7 +33,6 @@ tml::RasterizerStateDesc::~RasterizerStateDesc()
 void tml::RasterizerStateDesc::Init(void)
 {
 	this->desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
-	this->desc.CullMode = D3D11_CULL_NONE;
 
 	tml::GraphicResourceDesc::Init();
 
