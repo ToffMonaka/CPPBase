@@ -99,7 +99,9 @@ void tml::CSVFileWritePlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::CSVFile::CSVFile()
+tml::CSVFile::CSVFile() :
+	parent_read_plan(nullptr),
+	parent_write_plan(nullptr)
 {
 	return;
 }
@@ -136,7 +138,9 @@ void tml::CSVFile::Init(void)
 
 	this->data.Init();
 	this->read_plan.Init();
+	this->parent_read_plan = nullptr;
 	this->write_plan.Init();
+	this->parent_write_plan = nullptr;
 
 	return;
 }
@@ -149,29 +153,14 @@ void tml::CSVFile::Init(void)
  */
 INT tml::CSVFile::Read(void)
 {
+	tml::CSVFileReadPlan *read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+
 	tml::TextFile txt_file;
 
-	if (this->read_plan.file_path.empty()) {
-		txt_file.read_plan.file_path = this->read_plan.file_path;
-		txt_file.read_plan.file_buffer = std::move(this->read_plan.file_buffer);
-		txt_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
-		txt_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
+	txt_file.parent_read_plan = read_plan;
 
-		if (txt_file.Read()) {
-			this->read_plan.file_buffer = std::move(txt_file.read_plan.file_buffer);
-
-			return (-1);
-		}
-
-		this->read_plan.file_buffer = std::move(txt_file.read_plan.file_buffer);
-	} else {
-		txt_file.read_plan.file_path = this->read_plan.file_path;
-		txt_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
-		txt_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
-
-		if (txt_file.Read()) {
-			return (-1);
-		}
+	if (txt_file.Read()) {
+		return (-1);
 	}
 
 	this->data.Init();
@@ -192,7 +181,7 @@ INT tml::CSVFile::Read(void)
 	size_t dq_str_cnt = 0U;
 	size_t double_dq_str_index = 0U;
 	size_t comment_str_index = 0U;
-	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetString(this->read_plan.newline_code_type);
+	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetString(read_plan->newline_code_type);
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
 
@@ -329,7 +318,9 @@ INT tml::CSVFile::Read(void)
  */
 INT tml::CSVFile::Write(void)
 {
-	if (this->write_plan.file_path.empty()) {
+	tml::CSVFileWritePlan *write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+
+	if (write_plan->file_path.empty()) {
 		return (-1);
 	}
 
@@ -349,11 +340,7 @@ INT tml::CSVFile::Write(void)
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
-	txt_file.write_plan.file_path = this->write_plan.file_path;
-	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
-	txt_file.write_plan.add_flag = this->write_plan.add_flag;
-	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
-	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
+	txt_file.parent_write_plan = write_plan;
 
 	if (txt_file.Write()) {
 		return (-1);

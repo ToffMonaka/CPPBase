@@ -99,7 +99,9 @@ void tml::ConfigFileWritePlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFile::ConfigFile()
+tml::ConfigFile::ConfigFile() :
+	parent_read_plan(nullptr),
+	parent_write_plan(nullptr)
 {
 	return;
 }
@@ -136,7 +138,9 @@ void tml::ConfigFile::Init(void)
 
 	this->data.Init();
 	this->read_plan.Init();
+	this->parent_read_plan = nullptr;
 	this->write_plan.Init();
+	this->parent_write_plan = nullptr;
 
 	return;
 }
@@ -149,29 +153,14 @@ void tml::ConfigFile::Init(void)
  */
 INT tml::ConfigFile::Read(void)
 {
+	tml::ConfigFileReadPlan *read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+
 	tml::TextFile txt_file;
 
-	if (this->read_plan.file_path.empty()) {
-		txt_file.read_plan.file_path = this->read_plan.file_path;
-		txt_file.read_plan.file_buffer = std::move(this->read_plan.file_buffer);
-		txt_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
-		txt_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
+	txt_file.parent_read_plan = read_plan;
 
-		if (txt_file.Read()) {
-			this->read_plan.file_buffer = std::move(txt_file.read_plan.file_buffer);
-
-			return (-1);
-		}
-
-		this->read_plan.file_buffer = std::move(txt_file.read_plan.file_buffer);
-	} else {
-		txt_file.read_plan.file_path = this->read_plan.file_path;
-		txt_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
-		txt_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
-
-		if (txt_file.Read()) {
-			return (-1);
-		}
+	if (txt_file.Read()) {
+		return (-1);
 	}
 
 	this->data.Init();
@@ -238,7 +227,9 @@ INT tml::ConfigFile::Read(void)
  */
 INT tml::ConfigFile::Write(void)
 {
-	if (this->write_plan.file_path.empty()) {
+	tml::ConfigFileWritePlan *write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+
+	if (write_plan->file_path.empty()) {
 		return (-1);
 	}
 
@@ -258,11 +249,7 @@ INT tml::ConfigFile::Write(void)
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
-	txt_file.write_plan.file_path = this->write_plan.file_path;
-	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
-	txt_file.write_plan.add_flag = this->write_plan.add_flag;
-	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
-	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
+	txt_file.parent_write_plan = write_plan;
 
 	if (txt_file.Write()) {
 		return (-1);

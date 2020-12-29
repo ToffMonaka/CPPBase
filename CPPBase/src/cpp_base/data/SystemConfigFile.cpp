@@ -109,7 +109,9 @@ void cpp_base::SystemConfigFileWritePlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-cpp_base::SystemConfigFile::SystemConfigFile()
+cpp_base::SystemConfigFile::SystemConfigFile() :
+	parent_read_plan(nullptr),
+	parent_write_plan(nullptr)
 {
 	return;
 }
@@ -146,7 +148,9 @@ void cpp_base::SystemConfigFile::Init(void)
 
 	this->data.Init();
 	this->read_plan.Init();
+	this->parent_read_plan = nullptr;
 	this->write_plan.Init();
+	this->parent_write_plan = nullptr;
 
 	return;
 }
@@ -159,29 +163,14 @@ void cpp_base::SystemConfigFile::Init(void)
  */
 INT cpp_base::SystemConfigFile::Read(void)
 {
+	cpp_base::SystemConfigFileReadPlan *read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+
 	tml::INIFile ini_file;
 
-	if (this->read_plan.file_path.empty()) {
-		ini_file.read_plan.file_path = this->read_plan.file_path;
-		ini_file.read_plan.file_buffer = std::move(this->read_plan.file_buffer);
-		ini_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
-		ini_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
+	ini_file.parent_read_plan = read_plan;
 
-		if (ini_file.Read()) {
-			this->read_plan.file_buffer = std::move(ini_file.read_plan.file_buffer);
-
-			return (-1);
-		}
-
-		this->read_plan.file_buffer = std::move(ini_file.read_plan.file_buffer);
-	} else {
-		ini_file.read_plan.file_path = this->read_plan.file_path;
-		ini_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
-		ini_file.read_plan.newline_code_type = this->read_plan.newline_code_type;
-
-		if (ini_file.Read()) {
-			return (-1);
-		}
+	if (ini_file.Read()) {
+		return (-1);
 	}
 
 	this->data.Init();
@@ -252,7 +241,9 @@ INT cpp_base::SystemConfigFile::Read(void)
  */
 INT cpp_base::SystemConfigFile::Write(void)
 {
-	if (this->write_plan.file_path.empty()) {
+	cpp_base::SystemConfigFileWritePlan *write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+
+	if (write_plan->file_path.empty()) {
 		return (-1);
 	}
 
@@ -265,7 +256,7 @@ INT cpp_base::SystemConfigFile::Write(void)
 	std::wstring val;
 
 	{// APPLICATION Section Write
-		txt_file.data.string_container.push_back(section_start_str + L"MEM_ALLOCATOR_SIZE" + section_end_str);
+		txt_file.data.string_container.push_back(section_start_str + L"APPLICATION" + section_end_str);
 		txt_file.data.string_container.push_back(L"MEM_ALLOCATOR_SIZE" + equal_str + tml::StringUtil::GetString(val, this->data.application_memory_allocator_size));
 		txt_file.data.string_container.push_back(L"LOCALE_NAME" + equal_str + tml::StringUtil::GetString(val, this->data.application_locale_name.c_str()));
 		txt_file.data.string_container.push_back(empty_str);
@@ -280,11 +271,7 @@ INT cpp_base::SystemConfigFile::Write(void)
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
-	txt_file.write_plan.file_path = this->write_plan.file_path;
-	txt_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
-	txt_file.write_plan.add_flag = this->write_plan.add_flag;
-	txt_file.write_plan.newline_code_type = this->write_plan.newline_code_type;
-	txt_file.write_plan.add_newline_code_count = this->write_plan.add_newline_code_count;
+	txt_file.parent_write_plan = write_plan;
 
 	if (txt_file.Write()) {
 		return (-1);

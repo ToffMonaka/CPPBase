@@ -79,7 +79,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::TextFileData data;
 	tml::TextFileReadPlan read_plan;
+	tml::TextFileReadPlan *parent_read_plan;
 	tml::TextFileWritePlan write_plan;
+	tml::TextFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);

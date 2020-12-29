@@ -106,7 +106,9 @@ void tml::TextFileWritePlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::TextFile::TextFile()
+tml::TextFile::TextFile() :
+	parent_read_plan(nullptr),
+	parent_write_plan(nullptr)
 {
 	return;
 }
@@ -143,7 +145,9 @@ void tml::TextFile::Init(void)
 
 	this->data.Init();
 	this->read_plan.Init();
+	this->parent_read_plan = nullptr;
 	this->write_plan.Init();
+	this->parent_write_plan = nullptr;
 
 	return;
 }
@@ -156,27 +160,14 @@ void tml::TextFile::Init(void)
  */
 INT tml::TextFile::Read(void)
 {
+	tml::TextFileReadPlan *read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+
 	tml::BinaryFile bin_file;
 
-	if (this->read_plan.file_path.empty()) {
-		bin_file.read_plan.file_path = this->read_plan.file_path;
-		bin_file.read_plan.file_buffer = std::move(this->read_plan.file_buffer);
-		bin_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
+	bin_file.parent_read_plan = read_plan;
 
-		if (bin_file.Read()) {
-			this->read_plan.file_buffer = std::move(bin_file.read_plan.file_buffer);
-
-			return (-1);
-		}
-
-		this->read_plan.file_buffer = std::move(bin_file.read_plan.file_buffer);
-	} else {
-		bin_file.read_plan.file_path = this->read_plan.file_path;
-		bin_file.read_plan.one_buffer_size = this->read_plan.one_buffer_size;
-
-		if (bin_file.Read()) {
-			return (-1);
-		}
+	if (bin_file.Read()) {
+		return (-1);
 	}
 
 	this->data.Init();
@@ -193,7 +184,7 @@ INT tml::TextFile::Read(void)
 
 	tml::StringUtil::GetString(buf_str, tmp_buf_str);
 
-	tml::StringUtil::Split(this->data.string_container, buf_str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(this->read_plan.newline_code_type));
+	tml::StringUtil::Split(this->data.string_container, buf_str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(read_plan->newline_code_type));
 
 	return (0);
 }
@@ -206,22 +197,24 @@ INT tml::TextFile::Read(void)
  */
 INT tml::TextFile::Write(void)
 {
-	if (this->write_plan.file_path.empty()) {
+	tml::TextFileWritePlan *write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+
+	if (write_plan->file_path.empty()) {
 		return (-1);
 	}
 
 	std::wstring buf_str;
 	std::string tmp_buf_str;
 
-	tml::StringUtil::Join(buf_str, this->data.string_container, tml::ConstantUtil::NEWLINE_CODE::GetString(this->write_plan.newline_code_type));
+	tml::StringUtil::Join(buf_str, this->data.string_container, tml::ConstantUtil::NEWLINE_CODE::GetString(write_plan->newline_code_type));
 
 	if (!buf_str.empty()) {
-		if ((this->write_plan.add_flag)
-		&& (this->write_plan.add_newline_code_count > 0U)) {
+		if ((write_plan->add_flag)
+		&& (write_plan->add_newline_code_count > 0U)) {
 			std::wstring add_newline_code_str;
 
-			for (size_t add_newline_code_i = 0U; add_newline_code_i < this->write_plan.add_newline_code_count; ++add_newline_code_i) {
-				add_newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetString(this->write_plan.newline_code_type);
+			for (size_t add_newline_code_i = 0U; add_newline_code_i < write_plan->add_newline_code_count; ++add_newline_code_i) {
+				add_newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetString(write_plan->newline_code_type);
 			}
 
 			buf_str.insert(0U, add_newline_code_str);
@@ -235,9 +228,7 @@ INT tml::TextFile::Write(void)
 	bin_file.data.file_buffer.Set(tmp_buf_str.length());
 	bin_file.data.file_buffer.WriteArray(reinterpret_cast<const BYTE *>(tmp_buf_str.c_str()), tmp_buf_str.length(), tmp_buf_str.length());
 
-	bin_file.write_plan.file_path = this->write_plan.file_path;
-	bin_file.write_plan.one_buffer_size = this->write_plan.one_buffer_size;
-	bin_file.write_plan.add_flag = this->write_plan.add_flag;
+	bin_file.parent_write_plan = write_plan;
 
 	if (bin_file.Write()) {
 		return (-1);

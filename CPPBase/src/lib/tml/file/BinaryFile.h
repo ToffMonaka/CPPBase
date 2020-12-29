@@ -6,8 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "File.h"
 #include "../memory/DynamicBuffer.h"
+#include "File.h"
 
 
 namespace tml {
@@ -81,7 +81,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::BinaryFileData data;
 	tml::BinaryFileReadPlan read_plan;
+	tml::BinaryFileReadPlan *parent_read_plan;
 	tml::BinaryFileWritePlan write_plan;
+	tml::BinaryFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);

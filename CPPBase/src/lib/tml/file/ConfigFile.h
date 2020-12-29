@@ -91,7 +91,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::ConfigFileData data;
 	tml::ConfigFileReadPlan read_plan;
+	tml::ConfigFileReadPlan *parent_read_plan;
 	tml::ConfigFileWritePlan write_plan;
+	tml::ConfigFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);

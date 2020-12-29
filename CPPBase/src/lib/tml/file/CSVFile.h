@@ -117,7 +117,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::CSVFileData data;
 	tml::CSVFileReadPlan read_plan;
+	tml::CSVFileReadPlan *parent_read_plan;
 	tml::CSVFileWritePlan write_plan;
+	tml::CSVFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);

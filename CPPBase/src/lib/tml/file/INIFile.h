@@ -137,7 +137,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::INIFileData data;
 	tml::INIFileReadPlan read_plan;
+	tml::INIFileReadPlan *parent_read_plan;
 	tml::INIFileWritePlan write_plan;
+	tml::INIFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);
