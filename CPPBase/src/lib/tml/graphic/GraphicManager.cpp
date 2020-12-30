@@ -11,6 +11,40 @@
 /**
  * @brief コンストラクタ
  */
+tml::GraphicManagerDesc::GraphicManagerDesc() :
+	window_handle(nullptr),
+	window_width(0U),
+	window_height(0U)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::GraphicManagerDesc::~GraphicManagerDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::GraphicManagerDesc::Init(void)
+{
+	this->window_handle = nullptr;
+	this->window_width = 0U;
+	this->window_height = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::GraphicManager::GraphicManager() :
 	factory_(nullptr),
 	adapter_(nullptr),
@@ -194,13 +228,11 @@ void tml::GraphicManager::Init(void)
 
 /**
  * @brief Create関数
- * @param wnd_handle (window_handle)
- * @param wnd_w (window_width)
- * @param wnd_h (window_height)
+ * @param desc (desc)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::GraphicManager::Create(const HWND wnd_handle, const UINT wnd_w, const UINT wnd_h)
+INT tml::GraphicManager::Create(const tml::GraphicManagerDesc &desc)
 {
 	this->Init();
 
@@ -259,8 +291,8 @@ INT tml::GraphicManager::Create(const HWND wnd_handle, const UINT wnd_w, const U
 	{// SwapChain Create
 		DXGI_MODE_DESC mode_desc = {};
 
-		mode_desc.Width = wnd_w;
-		mode_desc.Height = wnd_h;
+		mode_desc.Width = desc.window_width;
+		mode_desc.Height = desc.window_height;
 		mode_desc.RefreshRate.Numerator = 60U;
 		mode_desc.RefreshRate.Denominator = 1U;
 		mode_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -292,7 +324,7 @@ INT tml::GraphicManager::Create(const HWND wnd_handle, const UINT wnd_w, const U
 		this->swap_chain_desc_.SampleDesc = ms_desc;
 		this->swap_chain_desc_.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_UNORDERED_ACCESS;
 		this->swap_chain_desc_.BufferCount = 1U;
-		this->swap_chain_desc_.OutputWindow = wnd_handle;
+		this->swap_chain_desc_.OutputWindow = desc.window_handle;
 		this->swap_chain_desc_.Windowed = true;
 		this->swap_chain_desc_.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		this->swap_chain_desc_.Flags = 0U;

@@ -12,6 +12,26 @@
 
 namespace tml {
 /**
+ * @brief GraphicManagerDescクラス
+ */
+class GraphicManagerDesc
+{
+public:
+	HWND window_handle;
+	UINT window_width;
+	UINT window_height;
+
+public:
+	GraphicManagerDesc();
+	virtual ~GraphicManagerDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+namespace tml {
+/**
  * @brief GraphicManagerクラス
  */
 class GraphicManager
@@ -76,7 +96,7 @@ public:
 	virtual ~GraphicManager();
 
 	virtual void Init(void);
-	INT Create(const HWND, const UINT, const UINT);
+	INT Create(const tml::GraphicManagerDesc &);
 
 	void Draw(void);
 	IDXGIFactory1 *GetFactory(void) const;

@@ -11,6 +11,23 @@
 
 namespace tml {
 /**
+ * @brief SoundManagerDescクラス
+ */
+class SoundManagerDesc
+{
+public:
+
+public:
+	SoundManagerDesc();
+	virtual ~SoundManagerDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+namespace tml {
+/**
  * @brief SoundManagerクラス
  */
 class SoundManager
@@ -26,6 +43,6 @@ public:
 	virtual ~SoundManager();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::SoundManagerDesc &);
 };
 }

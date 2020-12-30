@@ -11,6 +11,23 @@
 
 namespace tml {
 /**
+ * @brief InputManagerDescクラス
+ */
+class InputManagerDesc
+{
+public:
+
+public:
+	InputManagerDesc();
+	virtual ~InputManagerDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+namespace tml {
+/**
  * @brief InputManagerクラス
  */
 class InputManager
@@ -26,6 +43,6 @@ public:
 	virtual ~InputManager();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::InputManagerDesc &);
 };
 }

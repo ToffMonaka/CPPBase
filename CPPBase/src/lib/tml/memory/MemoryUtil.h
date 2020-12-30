@@ -263,18 +263,16 @@ struct default_delete<_Ty[]>
 template <typename T>
 using unique_ptr = std::unique_ptr<T, tml::default_delete<T>>;
 
-template <class _Ty, class... _Types, std::enable_if_t<!std::is_array_v<_Ty>, int> = 0>
-_NODISCARD tml::unique_ptr<_Ty> make_unique(_Types&&... _Args) {
-	return (tml::unique_ptr<_Ty>(tml::MemoryUtil::Get<_Ty>(1U)));
+template <typename T>
+_NODISCARD tml::unique_ptr<T> make_unique(const size_t size) {
+	return (tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(size)));
 };
 
-template <class _Ty, std::enable_if_t<std::is_array_v<_Ty> && std::extent_v<_Ty> == 0, int> = 0>
-_NODISCARD tml::unique_ptr<_Ty> make_unique(size_t _Size) {
-	using _Elem = std::remove_extent_t<_Ty>;
+template <typename T>
+using shared_ptr = std::shared_ptr<T>;
 
-	return (tml::unique_ptr<_Ty>(tml::MemoryUtil::Get<_Elem>(_Size)));
+template <typename T>
+_NODISCARD tml::shared_ptr<T> make_shared(const size_t size) {
+	return (tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size), tml::default_delete<T>()));
 };
-
-template <class _Ty, class... _Types, std::enable_if_t<std::extent_v<_Ty> != 0, int> = 0>
-void make_unique(_Types&&...) = delete;
 }
