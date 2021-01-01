@@ -213,6 +213,12 @@
     <ClCompile Include="src\lib\tml\math\XNAMathPosition.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\lib\tml\graphic\ShaderConstantBuffer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lib\tml\graphic\ShaderStructuredBuffer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lib\tml\dlmalloc\malloc.h">
@@ -450,6 +456,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\tml\math\XNAMathPosition.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\graphic\ShaderConstantBuffer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\graphic\ShaderStructuredBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
