@@ -102,7 +102,8 @@ void tml::ShaderConstantBuffer::Init(void)
  */
 INT tml::ShaderConstantBuffer::Create(const tml::ShaderConstantBufferDesc &desc)
 {
-	if ((desc.element_size % 16) > 0) {
+	if ((desc.element_size <= 0U)
+	|| ((desc.element_size % 16) > 0)) {
 		return (-1);
 	}
 
@@ -134,10 +135,6 @@ INT tml::ShaderConstantBuffer::Create(const tml::ShaderConstantBufferDesc &desc)
  */
 void tml::ShaderConstantBuffer::Update(void *element)
 {
-	if (this->GetManager() == nullptr) {
-		return;
-	}
-
 	if (this->cpu_flg_) {
 		D3D11_MAPPED_SUBRESOURCE msr;
 

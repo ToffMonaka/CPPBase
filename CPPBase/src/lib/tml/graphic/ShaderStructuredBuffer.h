@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../memory/DynamicBuffer.h"
 #include "GraphicResource.h"
 
 
@@ -70,6 +69,10 @@ public:
 	ID3D11Buffer *Get(void) const;
 	ID3D11ShaderResourceView *GetSR(void) const;
 	ID3D11UnorderedAccessView *GetUASR(void) const;
+	UINT GetElementSize(void) const;
+	UINT GetElementLimit(void) const;
+	UINT GetElementCount(void) const;
+	void SetElementCount(const UINT);
 };
 }
 
@@ -101,6 +104,48 @@ inline ID3D11ShaderResourceView *tml::ShaderStructuredBuffer::GetSR(void) const
 inline ID3D11UnorderedAccessView *tml::ShaderStructuredBuffer::GetUASR(void) const
 {
 	return (this->uasr_);
+}
+
+
+/**
+ * @brief GetElementSizeŠÖ”
+ * @return element_size (element_size)
+ */
+inline UINT tml::ShaderStructuredBuffer::GetElementSize(void) const
+{
+	return (this->element_size_);
+}
+
+
+/**
+ * @brief GetElementLimitŠÖ”
+ * @return element_limit (element_limit)
+ */
+inline UINT tml::ShaderStructuredBuffer::GetElementLimit(void) const
+{
+	return (this->element_limit_);
+}
+
+
+/**
+ * @brief GetElementCountŠÖ”
+ * @return element_cnt (element_count)
+ */
+inline UINT tml::ShaderStructuredBuffer::GetElementCount(void) const
+{
+	return (this->element_cnt_);
+}
+
+
+/**
+ * @brief SetElementCountŠÖ”
+ * @param element_cnt (element_count)
+ */
+inline void tml::ShaderStructuredBuffer::SetElementCount(const UINT element_cnt)
+{
+	this->element_cnt_ = element_cnt;
+
+	return;
 }
 
 

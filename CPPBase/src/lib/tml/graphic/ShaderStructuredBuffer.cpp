@@ -126,7 +126,8 @@ void tml::ShaderStructuredBuffer::Init(void)
  */
 INT tml::ShaderStructuredBuffer::Create(const tml::ShaderStructuredBufferDesc &desc)
 {
-	if ((desc.element_size % 16) > 0) {
+	if (((this->element_size_ * this->element_limit_) <= 0U)
+	|| ((desc.element_size % 16) > 0)) {
 		return (-1);
 	}
 
@@ -159,9 +160,15 @@ INT tml::ShaderStructuredBuffer::Create(const tml::ShaderStructuredBufferDesc &d
 
 		this->element_cnt_ = 0U;
 	} else {
-		CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_ * this->element_limit_, D3D11_BIND_UNORDERED_ACCESS, D3D11_USAGE_DEFAULT, 0U, D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, this->element_size_);
+		CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_ * this->element_limit_, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS, D3D11_USAGE_DEFAULT, 0U, D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, this->element_size_);
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&buf_desc, nullptr, &this->buf_))) {
+			return (-1);
+		}
+
+		CD3D11_SHADER_RESOURCE_VIEW_DESC sr_desc = CD3D11_SHADER_RESOURCE_VIEW_DESC(D3D11_SRV_DIMENSION_BUFFER, DXGI_FORMAT_UNKNOWN, 0U, this->element_limit_);
+
+		if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->buf_, &sr_desc, &this->sr_))) {
 			return (-1);
 		}
 
@@ -184,8 +191,7 @@ INT tml::ShaderStructuredBuffer::Create(const tml::ShaderStructuredBufferDesc &d
  */
 void tml::ShaderStructuredBuffer::Update(void *element_ary)
 {
-	if ((this->GetManager() == nullptr)
-	|| (this->element_cnt_ <= 0U)) {
+	if (this->element_cnt_ <= 0U) {
 		return;
 	}
 
@@ -220,8 +226,9 @@ void tml::ShaderStructuredBuffer::Update(void *element_ary)
 			D3D11_MAPPED_SUBRESOURCE msr;
 
 			if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(cpu_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
-				if (msr.DepthPitch <= (this->element_size_ * this->element_cnt_)) {
-					memcpy(static_cast<BYTE *>(element_ary), static_cast<BYTE *>(msr.pData), msr.DepthPitch);
+				if ((msr.DepthPitch >= (this->element_size_ * this->element_cnt_))
+				&& (msr.DepthPitch <= (this->element_size_ * this->element_limit_))) {
+					memcpy(static_cast<BYTE *>(element_ary), static_cast<BYTE *>(msr.pData), this->element_size_ * this->element_cnt_);
 				}
 
 				this->GetManager()->GetDeviceContext()->Unmap(cpu_buf, 0U);

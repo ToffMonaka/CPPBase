@@ -60,6 +60,7 @@ public:
 	virtual void Init(void);
 
 	ID3D11Buffer *Get(void) const;
+	UINT GetElementSize(void) const;
 };
 }
 
@@ -71,6 +72,16 @@ public:
 inline ID3D11Buffer *tml::ShaderConstantBuffer::Get(void) const
 {
 	return (this->buf_);
+}
+
+
+/**
+ * @brief GetElementSizeŠÖ”
+ * @return element_size (element_size)
+ */
+inline UINT tml::ShaderConstantBuffer::GetElementSize(void) const
+{
+	return (this->element_size_);
 }
 
 
