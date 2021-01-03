@@ -45,15 +45,17 @@ public:
 
 	virtual void Init(void);
 
+	const tml::XMFLOAT3EX &Get(void) const;
+	void Set(const tml::XMFLOAT3EX &);
+	void Set(const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &);
+	void Set(const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
 	void Move(const tml::XMFLOAT3EX &);
 	void Move(const tml::XMFLOAT3EX &, const FLOAT);
-	void Rotation(const tml::XMFLOAT4EX &);
 	void Rotation(const tml::XMFLOAT3EX &);
 	void Rotation(const tml::XMFLOAT3EX &, const FLOAT);
-	void LookVector(const tml::XMFLOAT3EX &);
-	void LookPosition(const tml::XMFLOAT3EX &);
-	const tml::XMFLOAT3EX &GetPosition(void) const;
-	void SetPosition(const tml::XMFLOAT3EX &);
+	void Rotation(const tml::XMFLOAT4EX &);
+	void Look(const tml::XMFLOAT3EX &);
+	void Look(const tml::XMFLOAT3EX &, const FLOAT);
 	const tml::XMFLOAT4EX &GetQuaternion(void) const;
 	void SetQuaternion(const tml::XMFLOAT4EX &);
 	const tml::XMFLOAT3EX &GetAngle(void) const;
@@ -64,6 +66,62 @@ public:
 	FLOAT GetLength(const tml::XMFLOAT3EX &) const;
 	void SetLength(const tml::XMFLOAT3EX &, const FLOAT);
 };
+}
+
+
+/**
+ * @brief GetŠÖ”
+ * @return pos (position)
+ */
+inline const tml::XMFLOAT3EX &tml::XMPosition::Get(void) const
+{
+	return (this->pos_);
+}
+
+
+/**
+ * @brief SetŠÖ”
+ * @param pos (position)
+ */
+inline void tml::XMPosition::Set(const tml::XMFLOAT3EX &pos)
+{
+	this->pos_ = pos;
+
+	return;
+}
+
+
+/**
+ * @brief SetŠÖ”
+ * @param pos (position)
+ * @param quat (quaternion)
+ */
+inline void tml::XMPosition::Set(const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat)
+{
+	this->pos_ = pos;
+	this->quat_ = quat;
+
+	this->UpdateAngleFromQuaternion();
+	this->UpdateXYZAxisVectorFromQuaternion();
+
+	return;
+}
+
+
+/**
+ * @brief SetŠÖ”
+ * @param pos (position)
+ * @param angle (angle)
+ */
+inline void tml::XMPosition::Set(const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle)
+{
+	this->pos_ = pos;
+	this->angle_ = angle;
+
+	this->UpdateQuaternionFromAngle();
+	this->UpdateXYZAxisVectorFromQuaternion();
+
+	return;
 }
 
 
@@ -82,26 +140,11 @@ inline void tml::XMPosition::Move(const tml::XMFLOAT3EX &pos)
 /**
  * @brief MoveŠÖ”
  * @param axis_vec (axis_vector)
- * @param distance (distance)
+ * @param len (length)
  */
-inline void tml::XMPosition::Move(const tml::XMFLOAT3EX &axis_vec, const FLOAT distance)
+inline void tml::XMPosition::Move(const tml::XMFLOAT3EX &axis_vec, const FLOAT len)
 {
-	this->pos_ += axis_vec * distance;
-
-	return;
-}
-
-
-/**
- * @brief RotationŠÖ”
- * @param quat (quaternion)
- */
-inline void tml::XMPosition::Rotation(const tml::XMFLOAT4EX &quat)
-{
-	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionMultiply(XMLoadFloat4(&this->quat_), XMLoadFloat4(&quat))));
-
-	this->UpdateAngleFromQuaternion();
-	this->UpdateXYZAxisVectorFromQuaternion();
+	this->pos_ += axis_vec * len;
 
 	return;
 }
@@ -139,28 +182,12 @@ inline void tml::XMPosition::Rotation(const tml::XMFLOAT3EX &axis_vec, const FLO
 
 
 /**
- * @brief LookVectorŠÖ”
- * @param vec (vector)
+ * @brief RotationŠÖ”
+ * @param quat (quaternion)
  */
-inline void tml::XMPosition::LookVector(const tml::XMFLOAT3EX &vec)
+inline void tml::XMPosition::Rotation(const tml::XMFLOAT4EX &quat)
 {
-	XMVECTOR determinant;
-
-	XMVECTOR tmp_pos = XMLoadFloat3(&this->pos_);
-	XMVECTOR tmp_vec = XMLoadFloat3(&vec);
-
-	if (XMVectorGetX(XMVector3LengthSq(tmp_vec)) <= 0.0f) {
-		tmp_vec = g_XMIdentityR2;
-	}
-
-	XMMATRIX rot_mat = XMMatrixInverse(&determinant, XMMatrixLookToLH(tmp_pos, tmp_vec, XMLoadFloat3(&this->y_axis_vec_)));
-
-	if (XMMatrixIsNaN(rot_mat)) {
-		tmp_vec = XMVectorAdd(tmp_vec, XMVectorSet(0.0f, 0.0f, 0.0001f, 0.0f));
-		rot_mat = XMMatrixInverse(&determinant, XMMatrixLookToLH(tmp_pos, tmp_vec, XMLoadFloat3(&this->y_axis_vec_)));
-	}
-
-	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionRotationMatrix(rot_mat)));
+	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionMultiply(XMLoadFloat4(&this->quat_), XMLoadFloat4(&quat))));
 
 	this->UpdateAngleFromQuaternion();
 	this->UpdateXYZAxisVectorFromQuaternion();
@@ -170,10 +197,10 @@ inline void tml::XMPosition::LookVector(const tml::XMFLOAT3EX &vec)
 
 
 /**
- * @brief LookPositionŠÖ”
+ * @brief LookŠÖ”
  * @param pos (position)
  */
-inline void tml::XMPosition::LookPosition(const tml::XMFLOAT3EX &pos)
+inline void tml::XMPosition::Look(const tml::XMFLOAT3EX &pos)
 {
 	XMVECTOR determinant;
 
@@ -201,22 +228,32 @@ inline void tml::XMPosition::LookPosition(const tml::XMFLOAT3EX &pos)
 
 
 /**
- * @brief GetPositionŠÖ”
- * @return pos (position)
+ * @brief LookŠÖ”
+ * @param axis_vec (axis_vector)
+ * @param len (length)
  */
-inline const tml::XMFLOAT3EX &tml::XMPosition::GetPosition(void) const
+inline void tml::XMPosition::Look(const tml::XMFLOAT3EX &axis_vec, const FLOAT len)
 {
-	return (this->pos_);
-}
+	XMVECTOR determinant;
 
-		
-/**
- * @brief SetPositionŠÖ”
- * @param pos (position)
- */
-inline void tml::XMPosition::SetPosition(const tml::XMFLOAT3EX &pos)
-{
-	this->pos_ = pos;
+	XMVECTOR tmp_pos = XMLoadFloat3(&this->pos_);
+	XMVECTOR tmp_vec = XMVectorSubtract(XMVectorMultiply(XMLoadFloat3(&axis_vec), XMVectorSet(len, len, len, 0.0f)), tmp_pos);
+
+	if (XMVectorGetX(XMVector3LengthSq(tmp_vec)) <= 0.0f) {
+		tmp_vec = g_XMIdentityR2;
+	}
+
+	XMMATRIX rot_mat = XMMatrixInverse(&determinant, XMMatrixLookToLH(tmp_pos, tmp_vec, XMLoadFloat3(&this->y_axis_vec_)));
+
+	if (XMMatrixIsNaN(rot_mat)) {
+		tmp_vec = XMVectorAdd(tmp_vec, XMVectorSet(0.0f, 0.0f, 0.0001f, 0.0f));
+		rot_mat = XMMatrixInverse(&determinant, XMMatrixLookToLH(tmp_pos, tmp_vec, XMLoadFloat3(&this->y_axis_vec_)));
+	}
+
+	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionRotationMatrix(rot_mat)));
+
+	this->UpdateAngleFromQuaternion();
+	this->UpdateXYZAxisVectorFromQuaternion();
 
 	return;
 }

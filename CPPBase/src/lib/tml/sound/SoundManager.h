@@ -36,6 +36,8 @@ public: SoundManager(const tml::SoundManager &) = delete;
 public: tml::SoundManager &operator =(const tml::SoundManager &) = delete;
 
 private:
+
+private:
 	void Release(void);
 
 public:

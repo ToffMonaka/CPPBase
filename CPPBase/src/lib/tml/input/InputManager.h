@@ -36,6 +36,8 @@ public: InputManager(const tml::InputManager &) = delete;
 public: tml::InputManager &operator =(const tml::InputManager &) = delete;
 
 private:
+
+private:
 	void Release(void);
 
 public:
