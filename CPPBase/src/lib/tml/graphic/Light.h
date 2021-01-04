@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMath.h"
 #include "GraphicResource.h"
 
 
@@ -16,6 +17,18 @@ namespace tml {
 class LightDesc : public tml::GraphicResourceDesc
 {
 public:
+	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type;
+	tml::XMPosition position;
+	tml::XMFLOAT3EX color;
+	FLOAT mul_value;
+	FLOAT add_value;
+	FLOAT exp_value;
+	tml::XMFLOAT3EX attenuation;
+	FLOAT range;
+	FLOAT range_exp_value;
+	FLOAT cut_angle;
+	FLOAT soft_angle;
+	bool shadow_flag;
 
 public:
 	LightDesc();
@@ -37,6 +50,22 @@ public: tml::Light &operator =(const tml::Light &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type_;
+	tml::XMFLOAT3EX col_;
+	FLOAT mul_val_;
+	FLOAT add_val_;
+	FLOAT exp_val_;
+	tml::XMFLOAT3EX atten_;
+	FLOAT rng_;
+	FLOAT rng_exp_val_;
+	FLOAT cut_angle_;
+	FLOAT soft_angle_;
+	FLOAT cut_val_;
+	FLOAT soft_val_;
+	bool shadow_flg_;
+
+public:
+	tml::XMPosition position;
 
 private:
 	void Release(void);
@@ -47,5 +76,231 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::LightDesc &);
+
+	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE GetType(void) const;
+	const tml::XMFLOAT3EX &GetColor(void) const;
+	void SetColor(const tml::XMFLOAT3EX &);
+	FLOAT GetMulValue(void) const;
+	void SetMulValue(const FLOAT);
+	FLOAT GetAddValue(void) const;
+	void SetAddValue(const FLOAT);
+	FLOAT GetExpValue(void) const;
+	void SetExpValue(const FLOAT);
+	const tml::XMFLOAT3EX &GetAttenuation(void) const;
+	void SetAttenuation(const tml::XMFLOAT3EX &);
+	FLOAT GetRange(void) const;
+	void SetRange(const FLOAT);
+	FLOAT GetRangeExpValue(void) const;
+	void SetRangeExpValue(const FLOAT);
+	FLOAT GetCutAngle(void) const;
+	void SetCutAngle(const FLOAT);
+	FLOAT GetSoftAngle(void) const;
+	void SetSoftAngle(const FLOAT);
+	FLOAT GetCutValue(void) const;
+	FLOAT GetSoftValue(void) const;
 };
+}
+
+
+/**
+ * @brief GetTypeŠÖ”
+ * @return type (type)
+ */
+inline tml::ConstantUtil::GRAPHIC::LIGHT_TYPE tml::Light::GetType(void) const
+{
+	return (this->type_);
+}
+
+
+/**
+ * @brief GetColorŠÖ”
+ * @return col (color)
+ */
+inline const tml::XMFLOAT3EX &tml::Light::GetColor(void) const
+{
+	return (this->col_);
+}
+
+
+/**
+ * @brief SetColorŠÖ”
+ * @param col (color)
+ */
+inline void tml::Light::SetColor(const tml::XMFLOAT3EX &col)
+{
+	this->col_ = col;
+
+	return;
+}
+
+
+/**
+ * @brief GetMulValue“¾ŠÖ”
+ * @return mul_val (mul_value)
+ */
+inline FLOAT tml::Light::GetMulValue(void) const
+{
+	return (this->mul_val_);
+}
+
+
+/**
+ * @brief SetMulValueŠÖ”
+ * @param mul_val (mul_value)
+ */
+inline void tml::Light::SetMulValue(const FLOAT mul_val)
+{
+	this->mul_val_ = mul_val;
+
+	return;
+}
+
+
+/**
+ * @brief GetAddValueŠÖ”
+ * @return add_val (add_value)
+ */
+inline FLOAT tml::Light::GetAddValue(void) const
+{
+	return (this->add_val_);
+}
+
+
+/**
+ * @brief SetAddValueŠÖ”
+ * @param add_val (add_value)
+ */
+inline void tml::Light::SetAddValue(const FLOAT add_val)
+{
+	this->add_val_ = add_val;
+
+	return;
+}
+
+
+/**
+ * @brief GetExpValueŠÖ”
+ * @return exp_val (exp_value)
+ */
+inline FLOAT tml::Light::GetExpValue(void) const
+{
+	return (this->exp_val_);
+}
+
+
+/**
+ * @brief SetExpValueŠÖ”
+ * @param exp_val (exp_value)
+ */
+inline void tml::Light::SetExpValue(const FLOAT exp_val)
+{
+	this->exp_val_ = exp_val;
+
+	return;
+}
+
+
+/**
+ * @brief GetAttenuationŠÖ”
+ * @return atten (attenuation)
+ */
+inline const tml::XMFLOAT3EX &tml::Light::GetAttenuation(void) const
+{
+	return (this->atten_);
+}
+
+
+/**
+ * @brief SetAttenuationŠÖ”
+ * @param atten (attenuation)
+ */
+inline void tml::Light::SetAttenuation(const tml::XMFLOAT3EX &atten)
+{
+	this->atten_ = atten;
+
+	return;
+}
+
+
+/**
+ * @brief GetRangeŠÖ”
+ * @return rng (range)
+ */
+inline FLOAT tml::Light::GetRange(void) const
+{
+	return (this->rng_);
+}
+
+
+/**
+ * @brief SetRangeŠÖ”
+ * @param rng (range)
+ */
+inline void tml::Light::SetRange(const FLOAT rng)
+{
+	this->rng_ = rng;
+
+	return;
+}
+
+
+/**
+ * @brief GetRangeExpValueŠÖ”
+ * @return rng_exp_val (range_exp_value)
+ */
+inline FLOAT tml::Light::GetRangeExpValue(void) const
+{
+	return (this->rng_exp_val_);
+}
+
+
+/**
+ * @brief SetRangeExpValueŠÖ”
+ * @param rng_exp_val (range_exp_value)
+ */
+inline void tml::Light::SetRangeExpValue(const FLOAT rng_exp_val)
+{
+	this->rng_exp_val_ = rng_exp_val;
+
+	return;
+}
+
+
+/**
+ * @brief GetCutAngleŠÖ”
+ * @return cut_angle (cut_angle)
+ */
+inline FLOAT tml::Light::GetCutAngle(void) const
+{
+	return (this->cut_angle_);
+}
+
+
+/**
+ * @brief GetSoftAngleŠÖ”
+ * @return soft_angle (soft_angle)
+ */
+inline FLOAT tml::Light::GetSoftAngle(void) const
+{
+	return (this->soft_angle_);
+}
+
+
+/**
+ * @brief GetCutValueŠÖ”
+ * @return cut_val (cut_value)
+ */
+inline FLOAT tml::Light::GetCutValue(void) const
+{
+	return (this->cut_val_);
+}
+
+
+/**
+ * @brief GetSoftValueŠÖ”
+ * @return soft_val (soft_value)
+ */
+inline FLOAT tml::Light::GetSoftValue(void) const
+{
+	return (this->soft_val_);
 }

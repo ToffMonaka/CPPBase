@@ -61,6 +61,18 @@ namespace GRAPHIC {
 		PERSPECTIVE,
 		ORTHOGRAPHIC
 	};
+	enum class LIGHT_TYPE : UINT {
+		NONE = 0U,
+		AMBIENT,
+		DIRECTIONAL,
+		POINT,
+		SPOT
+	};
+	enum class FOG_TYPE : UINT {
+		NONE = 0U,
+		WIDTH,
+		HEIGHT
+	};
 }
 }
 }

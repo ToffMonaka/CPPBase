@@ -18,11 +18,11 @@ class CameraDesc : public tml::GraphicResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type;
+	tml::XMPosition position;
 	FLOAT fov_angle;
 	tml::XMFLOAT2EX fov_size;
 	FLOAT near_clip;
 	FLOAT far_clip;
-	tml::XMPosition position;
 
 public:
 	CameraDesc();
