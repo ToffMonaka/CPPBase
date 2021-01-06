@@ -97,7 +97,7 @@ void tml::DepthState::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::DepthState::Create(const tml::DepthStateDesc &desc)
+INT tml::DepthState::Create(tml::DepthStateDesc &desc)
 {
 	this->Init();
 

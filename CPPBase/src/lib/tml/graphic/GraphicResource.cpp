@@ -82,7 +82,7 @@ void tml::GraphicResource::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::GraphicResource::Create(const tml::GraphicResourceDesc &desc)
+INT tml::GraphicResource::Create(tml::GraphicResourceDesc &desc)
 {
 	if (desc.manager == nullptr) {
 		return (-1);

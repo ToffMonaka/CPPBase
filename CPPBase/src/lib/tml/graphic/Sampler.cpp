@@ -97,7 +97,7 @@ void tml::Sampler::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::Sampler::Create(const tml::SamplerDesc &desc)
+INT tml::Sampler::Create(tml::SamplerDesc &desc)
 {
 	this->Init();
 

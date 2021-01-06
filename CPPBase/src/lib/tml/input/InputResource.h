@@ -48,7 +48,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::InputResourceDesc &);
+	INT Create(tml::InputResourceDesc &);
 
 public:
 	InputResource();

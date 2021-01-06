@@ -82,7 +82,7 @@ void tml::SoundResource::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::SoundResource::Create(const tml::SoundResourceDesc &desc)
+INT tml::SoundResource::Create(tml::SoundResourceDesc &desc)
 {
 	if (desc.manager == nullptr) {
 		return (-1);

@@ -42,6 +42,7 @@ public:
 	BYTE *Get(void);
 	void Set(const size_t, const bool keep_flg = false);
 	void Set(const BYTE *, const size_t);
+	void Clear(void);
 	size_t GetSize(void) const;
 	size_t GetLength(void) const;
 	void SetLength(const size_t);

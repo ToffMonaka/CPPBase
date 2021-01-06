@@ -81,7 +81,7 @@ void tml::SoundManager::Init(void)
  * @return res (result)<br>
  * 0–¢–=¸”s
  */
-INT tml::SoundManager::Create(const tml::SoundManagerDesc &desc)
+INT tml::SoundManager::Create(tml::SoundManagerDesc &desc)
 {
 	this->Init();
 

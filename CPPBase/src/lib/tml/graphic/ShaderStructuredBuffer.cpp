@@ -124,7 +124,7 @@ void tml::ShaderStructuredBuffer::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::ShaderStructuredBuffer::Create(const tml::ShaderStructuredBufferDesc &desc)
+INT tml::ShaderStructuredBuffer::Create(tml::ShaderStructuredBufferDesc &desc)
 {
 	if (((this->element_size_ * this->element_limit_) <= 0U)
 	|| ((desc.element_size % 16) > 0)) {

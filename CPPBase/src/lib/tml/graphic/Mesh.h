@@ -46,6 +46,6 @@ public:
 	virtual ~Mesh();
 
 	virtual void Init(void);
-	INT Create(const tml::MeshDesc &);
+	INT Create(tml::MeshDesc &);
 };
 }

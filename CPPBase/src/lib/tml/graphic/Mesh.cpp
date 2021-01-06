@@ -87,7 +87,7 @@ void tml::Mesh::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::Mesh::Create(const tml::MeshDesc &desc)
+INT tml::Mesh::Create(tml::MeshDesc &desc)
 {
 	this->Init();
 

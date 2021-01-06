@@ -83,7 +83,7 @@ void tml::Model::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::Model::Create(const tml::ModelDesc &desc)
+INT tml::Model::Create(tml::ModelDesc &desc)
 {
 	if (tml::GraphicResource::Create(desc) < 0) {
 		return (-1);

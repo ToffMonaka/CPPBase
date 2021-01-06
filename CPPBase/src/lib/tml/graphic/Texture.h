@@ -46,6 +46,6 @@ public:
 	virtual ~Texture();
 
 	virtual void Init(void);
-	INT Create(const tml::TextureDesc &);
+	INT Create(tml::TextureDesc &);
 };
 }

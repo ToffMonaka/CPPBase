@@ -153,7 +153,7 @@ void tml::ConfigFile::Init(void)
  */
 INT tml::ConfigFile::Read(void)
 {
-	tml::ConfigFileReadPlan *read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+	auto read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
 
 	tml::TextFile txt_file;
 
@@ -227,7 +227,7 @@ INT tml::ConfigFile::Read(void)
  */
 INT tml::ConfigFile::Write(void)
 {
-	tml::ConfigFileWritePlan *write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+	auto write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
 
 	if (write_plan->file_path.empty()) {
 		return (-1);

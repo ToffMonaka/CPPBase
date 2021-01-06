@@ -71,7 +71,7 @@ public:
 	virtual ~Material();
 
 	virtual void Init(void);
-	INT Create(const tml::MaterialDesc &);
+	INT Create(tml::MaterialDesc &);
 
 	const tml::XMFLOAT3EX &GetDiffuseColor(void) const;
 	void SetDiffuseColor(const tml::XMFLOAT3EX &);

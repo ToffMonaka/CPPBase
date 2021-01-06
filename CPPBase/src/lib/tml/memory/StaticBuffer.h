@@ -43,6 +43,7 @@ public:
 	BYTE *Get(void);
 	void Set(const size_t, const bool keep_flg = false);
 	void Set(const BYTE *, const size_t);
+	void Clear(void);
 	size_t GetSize(void) const;
 	size_t GetLength(void) const;
 	void SetLength(const size_t);
@@ -357,6 +358,23 @@ inline void tml::StaticBuffer<N>::Set(const BYTE *ary, const size_t size)
 		this->read_index_ = 0U;
 		this->write_index_ = this->size_;
 	}
+
+	return;
+}
+
+
+/**
+ * @brief Clearä÷êî
+ */
+template <size_t N>
+inline void tml::StaticBuffer<N>::Clear(void)
+{
+	this->size_ = N;
+	this->len_ = 0U;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = 0U;
+	this->write_res_ = 0;
 
 	return;
 }

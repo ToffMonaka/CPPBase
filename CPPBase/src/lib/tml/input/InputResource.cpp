@@ -82,7 +82,7 @@ void tml::InputResource::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::InputResource::Create(const tml::InputResourceDesc &desc)
+INT tml::InputResource::Create(tml::InputResourceDesc &desc)
 {
 	if (desc.manager == nullptr) {
 		return (-1);

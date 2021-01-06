@@ -48,7 +48,7 @@ public:
 	virtual ~Sampler();
 
 	virtual void Init(void);
-	INT Create(const tml::SamplerDesc &);
+	INT Create(tml::SamplerDesc &);
 
 	ID3D11SamplerState *Get(void) const;
 };

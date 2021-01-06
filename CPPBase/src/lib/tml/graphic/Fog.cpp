@@ -115,7 +115,7 @@ void tml::Fog::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::Fog::Create(const tml::FogDesc &desc)
+INT tml::Fog::Create(tml::FogDesc &desc)
 {
 	this->Init();
 

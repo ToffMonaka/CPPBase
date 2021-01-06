@@ -96,7 +96,7 @@ public:
 	virtual ~GraphicManager();
 
 	virtual void Init(void);
-	INT Create(const tml::GraphicManagerDesc &);
+	INT Create(tml::GraphicManagerDesc &);
 
 	void Draw(void);
 	IDXGIFactory1 *GetFactory(void) const;

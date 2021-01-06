@@ -50,7 +50,7 @@ public:
 	virtual ~BlendState();
 
 	virtual void Init(void);
-	INT Create(const tml::BlendStateDesc &);
+	INT Create(tml::BlendStateDesc &);
 
 	ID3D11BlendState *Get(void) const;
 	const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &GetFactorArray(void) const;

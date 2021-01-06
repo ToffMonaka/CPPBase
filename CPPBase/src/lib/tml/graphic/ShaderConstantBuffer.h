@@ -47,7 +47,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ShaderConstantBufferDesc &);
+	INT Create(tml::ShaderConstantBufferDesc &);
 
 	void Update(void *);
 	template <typename T>

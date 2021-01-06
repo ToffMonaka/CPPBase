@@ -102,7 +102,7 @@ void tml::BlendState::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::BlendState::Create(const tml::BlendStateDesc &desc)
+INT tml::BlendState::Create(tml::BlendStateDesc &desc)
 {
 	this->Init();
 

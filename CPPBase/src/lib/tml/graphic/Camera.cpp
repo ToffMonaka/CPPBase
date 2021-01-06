@@ -111,7 +111,7 @@ void tml::Camera::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::Camera::Create(const tml::CameraDesc &desc)
+INT tml::Camera::Create(tml::CameraDesc &desc)
 {
 	if (desc.type == tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE) {
 		this->Init();

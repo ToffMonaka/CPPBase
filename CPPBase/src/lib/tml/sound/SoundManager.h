@@ -45,6 +45,6 @@ public:
 	virtual ~SoundManager();
 
 	virtual void Init(void);
-	INT Create(const tml::SoundManagerDesc &);
+	INT Create(tml::SoundManagerDesc &);
 };
 }

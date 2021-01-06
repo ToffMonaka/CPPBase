@@ -163,7 +163,7 @@ void cpp_base::SystemConfigFile::Init(void)
  */
 INT cpp_base::SystemConfigFile::Read(void)
 {
-	cpp_base::SystemConfigFileReadPlan *read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+	auto read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
 
 	tml::INIFile ini_file;
 
@@ -241,7 +241,7 @@ INT cpp_base::SystemConfigFile::Read(void)
  */
 INT cpp_base::SystemConfigFile::Write(void)
 {
-	cpp_base::SystemConfigFileWritePlan *write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+	auto write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
 
 	if (write_plan->file_path.empty()) {
 		return (-1);

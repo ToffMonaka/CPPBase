@@ -87,7 +87,7 @@ void tml::Texture::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::Texture::Create(const tml::TextureDesc &desc)
+INT tml::Texture::Create(tml::TextureDesc &desc)
 {
 	this->Init();
 

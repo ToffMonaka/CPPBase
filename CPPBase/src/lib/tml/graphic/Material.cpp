@@ -137,7 +137,7 @@ void tml::Material::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::Material::Create(const tml::MaterialDesc &desc)
+INT tml::Material::Create(tml::MaterialDesc &desc)
 {
 	this->Init();
 

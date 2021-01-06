@@ -61,7 +61,7 @@ public:
 	virtual ~Camera();
 
 	virtual void Init(void);
-	INT Create(const tml::CameraDesc &);
+	INT Create(tml::CameraDesc &);
 
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE GetType(void) const;
 	FLOAT GetFOVAngle(void) const;

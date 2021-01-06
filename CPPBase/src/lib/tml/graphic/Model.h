@@ -42,7 +42,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ModelDesc &);
+	INT Create(tml::ModelDesc &);
 
 public:
 	Model();

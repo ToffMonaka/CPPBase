@@ -153,7 +153,7 @@ void tml::INIFile::Init(void)
  */
 INT tml::INIFile::Read(void)
 {
-	tml::INIFileReadPlan *read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+	auto read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
 
 	tml::TextFile txt_file;
 
@@ -265,7 +265,7 @@ INT tml::INIFile::Read(void)
  */
 INT tml::INIFile::Write(void)
 {
-	tml::INIFileWritePlan *write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+	auto write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
 
 	if (write_plan->file_path.empty()) {
 		return (-1);

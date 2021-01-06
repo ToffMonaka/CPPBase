@@ -100,7 +100,7 @@ void tml::ShaderConstantBuffer::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::ShaderConstantBuffer::Create(const tml::ShaderConstantBufferDesc &desc)
+INT tml::ShaderConstantBuffer::Create(tml::ShaderConstantBufferDesc &desc)
 {
 	if ((desc.element_size <= 0U)
 	|| ((desc.element_size % 16) > 0)) {

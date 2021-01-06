@@ -139,7 +139,7 @@ void tml::Light::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::Light::Create(const tml::LightDesc &desc)
+INT tml::Light::Create(tml::LightDesc &desc)
 {
 	this->Init();
 

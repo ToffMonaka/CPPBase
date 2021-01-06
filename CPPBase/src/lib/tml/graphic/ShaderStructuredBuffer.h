@@ -54,7 +54,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ShaderStructuredBufferDesc &);
+	INT Create(tml::ShaderStructuredBufferDesc &);
 
 	void Update(void *);
 	template <typename T>

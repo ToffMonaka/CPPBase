@@ -97,7 +97,7 @@ void tml::RasterizerState::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::RasterizerState::Create(const tml::RasterizerStateDesc &desc)
+INT tml::RasterizerState::Create(tml::RasterizerStateDesc &desc)
 {
 	this->Init();
 

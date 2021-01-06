@@ -48,7 +48,7 @@ public:
 	virtual ~RasterizerState();
 
 	virtual void Init(void);
-	INT Create(const tml::RasterizerStateDesc &);
+	INT Create(tml::RasterizerStateDesc &);
 
 	ID3D11RasterizerState *Get(void) const;
 };

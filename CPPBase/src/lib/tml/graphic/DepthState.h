@@ -48,7 +48,7 @@ public:
 	virtual ~DepthState();
 
 	virtual void Init(void);
-	INT Create(const tml::DepthStateDesc &);
+	INT Create(tml::DepthStateDesc &);
 
 	ID3D11DepthStencilState *Get(void) const;
 };

@@ -63,7 +63,7 @@ public:
 	virtual ~Fog();
 
 	virtual void Init(void);
-	INT Create(const tml::FogDesc &);
+	INT Create(tml::FogDesc &);
 
 
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE GetType(void) const;

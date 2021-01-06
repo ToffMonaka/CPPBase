@@ -262,3 +262,20 @@ void tml::DynamicBuffer::Set(const BYTE *ary, const size_t size)
 
 	return;
 }
+
+
+/**
+ * @brief ClearŠÖ”
+ */
+void tml::DynamicBuffer::Clear(void)
+{
+	this->ary_ = nullptr;
+	this->size_ = 0U;
+	this->len_ = 0U;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = 0U;
+	this->write_res_ = 0;
+
+	return;
+}

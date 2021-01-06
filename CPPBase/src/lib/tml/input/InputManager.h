@@ -45,6 +45,6 @@ public:
 	virtual ~InputManager();
 
 	virtual void Init(void);
-	INT Create(const tml::InputManagerDesc &);
+	INT Create(tml::InputManagerDesc &);
 };
 }

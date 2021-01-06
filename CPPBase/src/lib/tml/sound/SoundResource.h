@@ -48,7 +48,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::SoundResourceDesc &);
+	INT Create(tml::SoundResourceDesc &);
 
 public:
 	SoundResource();

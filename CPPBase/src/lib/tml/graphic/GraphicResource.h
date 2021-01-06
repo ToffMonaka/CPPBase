@@ -49,7 +49,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::GraphicResourceDesc &);
+	INT Create(tml::GraphicResourceDesc &);
 
 public:
 	GraphicResource();
