@@ -56,7 +56,7 @@ INT tml::ShaderInclude::Create(const WCHAR *dir_path)
 
 /**
  * @brief Open関数
- * @param include_type (include_type)
+ * @param inc_type (include_type)
  * @param file_name (file_name)
  * @param parent_dat (parent_data)
  * @param dst_dat (dst_data)
@@ -64,7 +64,7 @@ INT tml::ShaderInclude::Create(const WCHAR *dir_path)
  * @return res (result)<br>
  * 0未満=失敗
  */
-HRESULT __stdcall tml::ShaderInclude::Open(D3D_INCLUDE_TYPE include_type, LPCSTR file_name, LPCVOID parent_dat, LPCVOID *dst_dat, UINT *dst_dat_len)
+HRESULT __stdcall tml::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, LPCSTR file_name, LPCVOID parent_dat, LPCVOID *dst_dat, UINT *dst_dat_len)
 {
 	tml::BinaryFile bin_file;
 	std::wstring bin_file_name;
@@ -106,7 +106,9 @@ HRESULT __stdcall tml::ShaderInclude::Close(LPCVOID dat)
  * @brief コンストラクタ
  */
 tml::ShaderDesc::ShaderDesc() :
-	parent_file_read_plan(nullptr)
+	parent_file_read_plan(nullptr),
+	vertex_input_element_desc_count(0U),
+	vertex_input_element_desc_array(nullptr)
 {
 	return;
 }
@@ -129,18 +131,20 @@ void tml::ShaderDesc::Init(void)
 	this->file_read_plan.Init();
 	this->parent_file_read_plan = nullptr;
 	this->include_directory_path.clear();
-	this->vertex_shader_function_name.clear();
-	this->vertex_shader_model_name.clear();
-	this->hull_shader_function_name.clear();
-	this->hull_shader_model_name.clear();
-	this->domain_shader_function_name.clear();
-	this->domain_shader_model_name.clear();
-	this->geometry_shader_function_name.clear();
-	this->geometry_shader_model_name.clear();
-	this->pixel_shader_function_name.clear();
-	this->pixel_shader_model_name.clear();
-	this->compute_shaderh_function_name.clear();
-	this->compute_shaderh_model_name.clear();
+	this->vertex_function_name.clear();
+	this->vertex_model_name.clear();
+	this->vertex_input_element_desc_count = 0U;
+	this->vertex_input_element_desc_array = nullptr;
+	this->hull_function_name.clear();
+	this->hull_model_name.clear();
+	this->domain_function_name.clear();
+	this->domain_model_name.clear();
+	this->geometry_function_name.clear();
+	this->geometry_model_name.clear();
+	this->pixel_function_name.clear();
+	this->pixel_model_name.clear();
+	this->compute_function_name.clear();
+	this->compute_model_name.clear();
 	this->macro_container.clear();
 
 	tml::GraphicResourceDesc::Init();
@@ -154,6 +158,7 @@ void tml::ShaderDesc::Init(void)
  */
 tml::Shader::Shader() :
 	vsh_(nullptr),
+	vsh_input_layout_(nullptr),
 	hsh_(nullptr),
 	dsh_(nullptr),
 	gsh_(nullptr),
@@ -208,6 +213,12 @@ void tml::Shader::Release(void)
 		this->hsh_->Release();
 
 		this->hsh_ = nullptr;
+	}
+
+	if (this->vsh_input_layout_ != nullptr) {
+		this->vsh_input_layout_->Release();
+
+		this->vsh_input_layout_ = nullptr;
 	}
 
 	if (this->vsh_ != nullptr) {
@@ -292,9 +303,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		macro_ary[macro_i].Definition = nullptr;
 	}
 
-
-	if (!(desc.vertex_shader_function_name.empty())) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.vertex_shader_function_name.c_str(), desc.vertex_shader_model_name.c_str(), macro_ary.data());
+	if (!desc.vertex_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.vertex_function_name.c_str(), desc.vertex_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -310,11 +320,19 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 			return (-1);
 		}
 
+		if (FAILED(this->GetManager()->GetDevice()->CreateInputLayout(desc.vertex_input_element_desc_array, desc.vertex_input_element_desc_count, blob->GetBufferPointer(), blob->GetBufferSize(), &this->vsh_input_layout_))) {
+			this->ReleaseBlob(&blob);
+
+			this->Init();
+
+			return (-1);
+		}
+
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!(desc.hull_shader_function_name.empty())) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.hull_shader_function_name.c_str(), desc.hull_shader_model_name.c_str(), macro_ary.data());
+	if (!desc.hull_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.hull_function_name.c_str(), desc.hull_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -333,8 +351,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!(desc.domain_shader_function_name.empty())) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.domain_shader_function_name.c_str(), desc.domain_shader_model_name.c_str(), macro_ary.data());
+	if (!desc.domain_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.domain_function_name.c_str(), desc.domain_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -353,8 +371,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!(desc.geometry_shader_function_name.empty())) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.geometry_shader_function_name.c_str(), desc.geometry_shader_model_name.c_str(), macro_ary.data());
+	if (!desc.geometry_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.geometry_function_name.c_str(), desc.geometry_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -373,8 +391,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!(desc.pixel_shader_function_name.empty())) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.pixel_shader_function_name.c_str(), desc.pixel_shader_model_name.c_str(), macro_ary.data());
+	if (!desc.pixel_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.pixel_function_name.c_str(), desc.pixel_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -393,8 +411,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!(desc.compute_shaderh_function_name.empty())) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.compute_shaderh_function_name.c_str(), desc.compute_shaderh_model_name.c_str(), macro_ary.data());
+	if (!desc.compute_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.compute_function_name.c_str(), desc.compute_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -420,7 +438,7 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 /**
  * @brief GetBlob関数
  * @param file_buf (file_buf)
- * @param include_dir_path (include_directory_path)
+ * @param inc_dir_path (include_directory_path)
  * @param func_name (function_name)
  * @param model_name (model_name)
  * @param macro_ary (macro_array)<br>
@@ -428,11 +446,11 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
  * @return blob (blob)<br>
  * nullptr=失敗
  */
-ID3DBlob *tml::Shader::GetBlob(tml::DynamicBuffer &file_buf, const WCHAR *include_dir_path, const WCHAR *func_name, const WCHAR *model_name, const D3D10_SHADER_MACRO *macro_ary)
+ID3DBlob *tml::Shader::GetBlob(tml::DynamicBuffer &file_buf, const WCHAR *inc_dir_path, const WCHAR *func_name, const WCHAR *model_name, const D3D10_SHADER_MACRO *macro_ary)
 {
-	tml::ShaderInclude include;
+	tml::ShaderInclude inc;
 
-	if (include.Create(include_dir_path) < 0) {
+	if (inc.Create(inc_dir_path) < 0) {
 		return (nullptr);
 	}
 
@@ -453,7 +471,7 @@ ID3DBlob *tml::Shader::GetBlob(tml::DynamicBuffer &file_buf, const WCHAR *includ
 	ID3DBlob *blob = nullptr;
 	ID3DBlob *err_blob = nullptr;
 
-	if (FAILED(D3DX11CompileFromMemory(reinterpret_cast<LPCSTR>(file_buf.Get()), file_buf.GetLength(), nullptr, macro_ary, &include, tmp_func_name.c_str(), tmp_model_name.c_str(), compile_flg, 0U, nullptr, &blob, &err_blob, nullptr))) {
+	if (FAILED(D3DX11CompileFromMemory(reinterpret_cast<LPCSTR>(file_buf.Get()), file_buf.GetLength(), nullptr, macro_ary, &inc, tmp_func_name.c_str(), tmp_model_name.c_str(), compile_flg, 0U, nullptr, &blob, &err_blob, nullptr))) {
 		this->ReleaseBlob(&err_blob);
 
 		return (nullptr);

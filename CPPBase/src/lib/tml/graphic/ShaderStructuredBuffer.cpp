@@ -135,10 +135,11 @@ INT tml::ShaderStructuredBuffer::Create(tml::ShaderStructuredBufferDesc &desc)
 		return (-1);
 	}
 
-	this->element_size_ = desc.element_size;
-	this->element_limit_ = desc.element_limit;
 	this->cpu_flg_ = desc.cpu_flag;
 	this->uasr_flg_ = desc.uasr_flag;
+
+	this->element_size_ = desc.element_size;
+	this->element_limit_ = desc.element_limit;
 
 	if (!this->uasr_flg_) {
 		CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_ * this->element_limit_, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DEFAULT, 0U, D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, this->element_size_);

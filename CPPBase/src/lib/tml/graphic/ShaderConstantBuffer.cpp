@@ -111,8 +111,9 @@ INT tml::ShaderConstantBuffer::Create(tml::ShaderConstantBufferDesc &desc)
 		return (-1);
 	}
 
-	this->element_size_ = desc.element_size;
 	this->cpu_flg_ = desc.cpu_flag;
+
+	this->element_size_ = desc.element_size;
 
 	CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_, D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0U);
 

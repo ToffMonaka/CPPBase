@@ -46,18 +46,20 @@ public:
 	tml::BinaryFileReadPlan file_read_plan;
 	tml::BinaryFileReadPlan *parent_file_read_plan;
 	std::wstring include_directory_path;
-	std::wstring vertex_shader_function_name;
-	std::wstring vertex_shader_model_name;
-	std::wstring hull_shader_function_name;
-	std::wstring hull_shader_model_name;
-	std::wstring domain_shader_function_name;
-	std::wstring domain_shader_model_name;
-	std::wstring geometry_shader_function_name;
-	std::wstring geometry_shader_model_name;
-	std::wstring pixel_shader_function_name;
-	std::wstring pixel_shader_model_name;
-	std::wstring compute_shaderh_function_name;
-	std::wstring compute_shaderh_model_name;
+	std::wstring vertex_function_name;
+	std::wstring vertex_model_name;
+	UINT vertex_input_element_desc_count;
+	const D3D11_INPUT_ELEMENT_DESC *vertex_input_element_desc_array;
+	std::wstring hull_function_name;
+	std::wstring hull_model_name;
+	std::wstring domain_function_name;
+	std::wstring domain_model_name;
+	std::wstring geometry_function_name;
+	std::wstring geometry_model_name;
+	std::wstring pixel_function_name;
+	std::wstring pixel_model_name;
+	std::wstring compute_function_name;
+	std::wstring compute_model_name;
 	std::list<std::pair<std::wstring, std::wstring>> macro_container;
 
 public:
@@ -81,6 +83,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	ID3D11VertexShader *vsh_;
+	ID3D11InputLayout *vsh_input_layout_;
 	ID3D11HullShader *hsh_;
 	ID3D11DomainShader *dsh_;
 	ID3D11GeometryShader *gsh_;
@@ -101,6 +104,7 @@ public:
 	INT Create(tml::ShaderDesc &);
 
 	ID3D11VertexShader *GetVertex(void) const;
+	ID3D11InputLayout *GetVertexInputLayout(void) const;
 	ID3D11HullShader *GetHull(void) const;
 	ID3D11DomainShader *GetDomain(void) const;
 	ID3D11GeometryShader *GetGeometry(void) const;
@@ -117,6 +121,16 @@ public:
 inline ID3D11VertexShader *tml::Shader::GetVertex(void) const
 {
 	return (this->vsh_);
+}
+
+
+/**
+ * @brief GetVertexInputLayoutŠÖ”
+ * @return vsh_input_layout (vertex_shader_input_layout)
+ */
+inline ID3D11InputLayout *tml::Shader::GetVertexInputLayout(void) const
+{
+	return (this->vsh_input_layout_);
 }
 
 
