@@ -16,7 +16,7 @@ namespace tml {
 class RasterizerStateDesc : public tml::GraphicResourceDesc
 {
 public:
-	CD3D11_RASTERIZER_DESC desc;
+	CD3D11_RASTERIZER_DESC rasterizer_state_desc;
 
 public:
 	RasterizerStateDesc();
@@ -50,16 +50,16 @@ public:
 	virtual void Init(void);
 	INT Create(tml::RasterizerStateDesc &);
 
-	ID3D11RasterizerState *Get(void) const;
+	ID3D11RasterizerState *GetRasterizerState(void) const;
 };
 }
 
 
 /**
- * @brief GetŠÖ”
+ * @brief GetRasterizerStateŠÖ”
  * @return rs (rasterizer_state)
  */
-inline ID3D11RasterizerState *tml::RasterizerState::Get(void) const
+inline ID3D11RasterizerState *tml::RasterizerState::GetRasterizerState(void) const
 {
 	return (this->rs_);
 }

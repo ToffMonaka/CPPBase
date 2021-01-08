@@ -68,9 +68,7 @@ tml::Mesh::Mesh() :
 	ib_element_cnt_(0U),
 	ib_element_ary_(nullptr),
 	ib_format_(DXGI_FORMAT_UNKNOWN),
-	pt_(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED),
-	cpu_dat_flg_(false),
-	gpu_dat_flg_(false)
+	pt_(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED)
 {
 	return;
 }
@@ -127,8 +125,6 @@ void tml::Mesh::Init(void)
 	this->ib_element_cnt_ = 0U;
 	this->ib_format_ = DXGI_FORMAT_UNKNOWN;
 	this->pt_ = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
-	this->cpu_dat_flg_ = false;
-	this->gpu_dat_flg_ = false;
 
 	tml::GraphicResource::Init();
 
@@ -152,21 +148,18 @@ INT tml::Mesh::Create(tml::MeshDesc &desc)
 		return (-1);
 	}
 
-	this->cpu_dat_flg_ = desc.cpu_data_flag;
-	this->gpu_dat_flg_ = desc.gpu_data_flag;
-
 	this->vb_element_size_ = desc.vertex_buffer_element_size;
 	this->vb_element_cnt_ = desc.vertex_buffer_element_count;
 
 	UINT vb_size = this->vb_element_size_ * this->vb_element_cnt_;
 
 	if (vb_size > 0U) {
-		if (this->cpu_dat_flg_) {
+		if (desc.cpu_data_flag) {
 			this->vb_element_ary_ = tml::MemoryUtil::Get<BYTE>(vb_size);
 			tml::MemoryUtil::Copy(this->vb_element_ary_, desc.vertex_buffer_element_array, vb_size);
 		}
 
-		if (this->gpu_dat_flg_) {
+		if (desc.gpu_data_flag) {
 			CD3D11_BUFFER_DESC vb_desc = CD3D11_BUFFER_DESC(vb_size, D3D11_BIND_VERTEX_BUFFER);
 			D3D11_SUBRESOURCE_DATA vb_srd = {};
 
@@ -186,12 +179,12 @@ INT tml::Mesh::Create(tml::MeshDesc &desc)
 	UINT ib_size = this->ib_element_size_ * this->ib_element_cnt_;
 
 	if (ib_size > 0U) {
-		if (this->cpu_dat_flg_) {
+		if (desc.cpu_data_flag) {
 			this->ib_element_ary_ = tml::MemoryUtil::Get<UINT>(this->ib_element_cnt_);
 			tml::MemoryUtil::Copy(this->ib_element_ary_, desc.index_buffer_element_array, this->ib_element_cnt_);
 		}
 
-		if (this->gpu_dat_flg_) {
+		if (desc.gpu_data_flag) {
 			CD3D11_BUFFER_DESC ib_desc = CD3D11_BUFFER_DESC(ib_size, D3D11_BIND_INDEX_BUFFER);
 			D3D11_SUBRESOURCE_DATA ib_srd = {};
 

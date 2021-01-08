@@ -187,10 +187,10 @@ INT tml::ShaderStructuredBuffer::Create(tml::ShaderStructuredBufferDesc &desc)
 
 
 /**
- * @brief UpdateŠÖ”
+ * @brief UpdateBufferŠÖ”
  * @param element_ary (element_array)
  */
-void tml::ShaderStructuredBuffer::Update(void *element_ary)
+void tml::ShaderStructuredBuffer::UpdateBuffer(void *element_ary)
 {
 	if (this->element_cnt_ <= 0U) {
 		return;

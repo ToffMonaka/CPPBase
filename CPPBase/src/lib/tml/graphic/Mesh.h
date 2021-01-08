@@ -55,8 +55,6 @@ private:
 	UINT *ib_element_ary_;
 	DXGI_FORMAT ib_format_;
 	D3D11_PRIMITIVE_TOPOLOGY pt_;
-	bool cpu_dat_flg_;
-	bool gpu_dat_flg_;
 
 private:
 	void Release(void);

@@ -16,7 +16,7 @@ namespace tml {
 class SamplerDesc : public tml::GraphicResourceDesc
 {
 public:
-	CD3D11_SAMPLER_DESC desc;
+	CD3D11_SAMPLER_DESC sampler_desc;
 
 public:
 	SamplerDesc();
@@ -50,16 +50,16 @@ public:
 	virtual void Init(void);
 	INT Create(tml::SamplerDesc &);
 
-	ID3D11SamplerState *Get(void) const;
+	ID3D11SamplerState *GetSampler(void) const;
 };
 }
 
 
 /**
- * @brief GetŠÖ”
+ * @brief GetSamplerŠÖ”
  * @return samp (sampler)
  */
-inline ID3D11SamplerState *tml::Sampler::Get(void) const
+inline ID3D11SamplerState *tml::Sampler::GetSampler(void) const
 {
 	return (this->samp_);
 }

@@ -106,9 +106,9 @@ HRESULT __stdcall tml::ShaderInclude::Close(LPCVOID dat)
  * @brief コンストラクタ
  */
 tml::ShaderDesc::ShaderDesc() :
-	parent_file_read_plan(nullptr),
-	vertex_input_element_desc_count(0U),
-	vertex_input_element_desc_array(nullptr)
+	file_parent_read_plan(nullptr),
+	vertex_shader_input_element_desc_count(0U),
+	vertex_shader_input_element_desc_array(nullptr)
 {
 	return;
 }
@@ -129,22 +129,22 @@ tml::ShaderDesc::~ShaderDesc()
 void tml::ShaderDesc::Init(void)
 {
 	this->file_read_plan.Init();
-	this->parent_file_read_plan = nullptr;
+	this->file_parent_read_plan = nullptr;
 	this->include_directory_path.clear();
-	this->vertex_function_name.clear();
-	this->vertex_model_name.clear();
-	this->vertex_input_element_desc_count = 0U;
-	this->vertex_input_element_desc_array = nullptr;
-	this->hull_function_name.clear();
-	this->hull_model_name.clear();
-	this->domain_function_name.clear();
-	this->domain_model_name.clear();
-	this->geometry_function_name.clear();
-	this->geometry_model_name.clear();
-	this->pixel_function_name.clear();
-	this->pixel_model_name.clear();
-	this->compute_function_name.clear();
-	this->compute_model_name.clear();
+	this->vertex_shader_function_name.clear();
+	this->vertex_shader_model_name.clear();
+	this->vertex_shader_input_element_desc_count = 0U;
+	this->vertex_shader_input_element_desc_array = nullptr;
+	this->hull_shader_function_name.clear();
+	this->hull_shader_model_name.clear();
+	this->domain_shader_function_name.clear();
+	this->domain_shader_model_name.clear();
+	this->geometry_shader_function_name.clear();
+	this->geometry_shader_model_name.clear();
+	this->pixel_shader_function_name.clear();
+	this->pixel_shader_model_name.clear();
+	this->compute_shader_function_name.clear();
+	this->compute_shader_model_name.clear();
 	this->macro_container.clear();
 
 	tml::GraphicResourceDesc::Init();
@@ -262,9 +262,11 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		return (-1);
 	}
 
+	auto file_read_plan = (desc.file_parent_read_plan != nullptr) ? desc.file_parent_read_plan : &desc.file_read_plan;
+
 	tml::BinaryFile bin_file;
 
-	bin_file.parent_read_plan = (desc.parent_file_read_plan != nullptr) ? desc.parent_file_read_plan : &desc.file_read_plan;
+	bin_file.parent_read_plan = file_read_plan;
 
 	if (bin_file.Read()) {
 		this->Init();
@@ -303,8 +305,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		macro_ary[macro_i].Definition = nullptr;
 	}
 
-	if (!desc.vertex_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.vertex_function_name.c_str(), desc.vertex_model_name.c_str(), macro_ary.data());
+	if (!desc.vertex_shader_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.vertex_shader_function_name.c_str(), desc.vertex_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -320,7 +322,7 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateInputLayout(desc.vertex_input_element_desc_array, desc.vertex_input_element_desc_count, blob->GetBufferPointer(), blob->GetBufferSize(), &this->vsh_input_layout_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateInputLayout(desc.vertex_shader_input_element_desc_array, desc.vertex_shader_input_element_desc_count, blob->GetBufferPointer(), blob->GetBufferSize(), &this->vsh_input_layout_))) {
 			this->ReleaseBlob(&blob);
 
 			this->Init();
@@ -331,8 +333,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.hull_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.hull_function_name.c_str(), desc.hull_model_name.c_str(), macro_ary.data());
+	if (!desc.hull_shader_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.hull_shader_function_name.c_str(), desc.hull_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -351,8 +353,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.domain_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.domain_function_name.c_str(), desc.domain_model_name.c_str(), macro_ary.data());
+	if (!desc.domain_shader_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.domain_shader_function_name.c_str(), desc.domain_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -371,8 +373,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.geometry_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.geometry_function_name.c_str(), desc.geometry_model_name.c_str(), macro_ary.data());
+	if (!desc.geometry_shader_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.geometry_shader_function_name.c_str(), desc.geometry_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -391,8 +393,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.pixel_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.pixel_function_name.c_str(), desc.pixel_model_name.c_str(), macro_ary.data());
+	if (!desc.pixel_shader_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.pixel_shader_function_name.c_str(), desc.pixel_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -411,8 +413,8 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.compute_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.compute_function_name.c_str(), desc.compute_model_name.c_str(), macro_ary.data());
+	if (!desc.compute_shader_function_name.empty()) {
+		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.compute_shader_function_name.c_str(), desc.compute_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();

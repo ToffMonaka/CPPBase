@@ -12,7 +12,7 @@
  * @brief コンストラクタ
  */
 tml::BlendStateDesc::BlendStateDesc() :
-	desc(CD3D11_DEFAULT()),
+	blend_state_desc(CD3D11_DEFAULT()),
 	factor_array{}
 {
 	return;
@@ -33,7 +33,7 @@ tml::BlendStateDesc::~BlendStateDesc()
  */
 void tml::BlendStateDesc::Init(void)
 {
-	this->desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
+	this->blend_state_desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
 	this->factor_array.fill(0.0f);
 
 	tml::GraphicResourceDesc::Init();
@@ -112,7 +112,7 @@ INT tml::BlendState::Create(tml::BlendStateDesc &desc)
 		return (-1);
 	}
 
-	if (FAILED(this->GetManager()->GetDevice()->CreateBlendState(&desc.desc, &this->bs_))) {
+	if (FAILED(this->GetManager()->GetDevice()->CreateBlendState(&desc.blend_state_desc, &this->bs_))) {
 		this->Init();
 
 		return (-1);

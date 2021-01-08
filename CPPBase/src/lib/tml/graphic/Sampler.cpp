@@ -12,7 +12,7 @@
  * @brief コンストラクタ
  */
 tml::SamplerDesc::SamplerDesc() :
-	desc(CD3D11_DEFAULT())
+	sampler_desc(CD3D11_DEFAULT())
 {
 	return;
 }
@@ -32,7 +32,7 @@ tml::SamplerDesc::~SamplerDesc()
  */
 void tml::SamplerDesc::Init(void)
 {
-	this->desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
+	this->sampler_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
 
 	tml::GraphicResourceDesc::Init();
 
@@ -107,7 +107,7 @@ INT tml::Sampler::Create(tml::SamplerDesc &desc)
 		return (-1);
 	}
 
-	if (FAILED(this->GetManager()->GetDevice()->CreateSamplerState(&desc.desc, &this->samp_))) {
+	if (FAILED(this->GetManager()->GetDevice()->CreateSamplerState(&desc.sampler_desc, &this->samp_))) {
 		this->Init();
 
 		return (-1);

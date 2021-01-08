@@ -16,7 +16,7 @@ namespace tml {
 class BlendStateDesc : public tml::GraphicResourceDesc
 {
 public:
-	CD3D11_BLEND_DESC desc;
+	CD3D11_BLEND_DESC blend_state_desc;
 	std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> factor_array;
 
 public:
@@ -52,17 +52,17 @@ public:
 	virtual void Init(void);
 	INT Create(tml::BlendStateDesc &);
 
-	ID3D11BlendState *Get(void) const;
+	ID3D11BlendState *GetBlendState(void) const;
 	const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &GetFactorArray(void) const;
 };
 }
 
 
 /**
- * @brief GetŠÖ”
+ * @brief GetBlendStateŠÖ”
  * @return bs (blend_state)
  */
-inline ID3D11BlendState *tml::BlendState::Get(void) const
+inline ID3D11BlendState *tml::BlendState::GetBlendState(void) const
 {
 	return (this->bs_);
 }

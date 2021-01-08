@@ -12,7 +12,7 @@
  * @brief コンストラクタ
  */
 tml::RasterizerStateDesc::RasterizerStateDesc() :
-	desc(CD3D11_DEFAULT())
+	rasterizer_state_desc(CD3D11_DEFAULT())
 {
 	return;
 }
@@ -32,7 +32,7 @@ tml::RasterizerStateDesc::~RasterizerStateDesc()
  */
 void tml::RasterizerStateDesc::Init(void)
 {
-	this->desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
+	this->rasterizer_state_desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
 
 	tml::GraphicResourceDesc::Init();
 
@@ -107,7 +107,7 @@ INT tml::RasterizerState::Create(tml::RasterizerStateDesc &desc)
 		return (-1);
 	}
 
-	if (FAILED(this->GetManager()->GetDevice()->CreateRasterizerState(&desc.desc, &this->rs_))) {
+	if (FAILED(this->GetManager()->GetDevice()->CreateRasterizerState(&desc.rasterizer_state_desc, &this->rs_))) {
 		this->Init();
 
 		return (-1);

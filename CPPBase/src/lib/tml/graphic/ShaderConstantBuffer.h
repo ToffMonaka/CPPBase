@@ -49,7 +49,7 @@ protected:
 	void Release(void);
 	INT Create(tml::ShaderConstantBufferDesc &);
 
-	void Update(void *);
+	void UpdateBuffer(void *);
 	template <typename T>
 	T *GetElement(T *);
 
@@ -59,17 +59,17 @@ public:
 
 	virtual void Init(void);
 
-	ID3D11Buffer *Get(void) const;
+	ID3D11Buffer *GetBuffer(void) const;
 	UINT GetElementSize(void) const;
 };
 }
 
 
 /**
- * @brief GetŠÖ”
+ * @brief GetBufferŠÖ”
  * @return buf (buffer)
  */
-inline ID3D11Buffer *tml::ShaderConstantBuffer::Get(void) const
+inline ID3D11Buffer *tml::ShaderConstantBuffer::GetBuffer(void) const
 {
 	return (this->buf_);
 }

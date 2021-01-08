@@ -6,6 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMath.h"
+#include "../file/BinaryFile.h"
 #include "GraphicResource.h"
 
 
@@ -16,6 +18,19 @@ namespace tml {
 class TextureDesc : public tml::GraphicResourceDesc
 {
 public:
+	tml::BinaryFileReadPlan file_read_plan;
+	tml::BinaryFileReadPlan *file_parent_read_plan;
+	CD3D11_TEXTURE2D_DESC texture_desc;
+	DXGI_FORMAT render_target_format;
+	bool render_target_desc_null_flag;
+	DXGI_FORMAT depth_target_format;
+	bool depth_target_desc_null_flag;
+	DXGI_FORMAT sr_format;
+	bool sr_desc_null_flag;
+	DXGI_FORMAT uasr_format;
+	bool uasr_desc_null_flag;
+	bool swap_chain_flag;
+	bool array_flag;
 
 public:
 	TextureDesc();
@@ -37,6 +52,12 @@ public: tml::Texture &operator =(const tml::Texture &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	ID3D11Texture2D *tex_;
+	tml::XMFLOAT2EX size_;
+	ID3D11RenderTargetView *rt_;
+	ID3D11DepthStencilView *dt_;
+	ID3D11ShaderResourceView *sr_;
+	ID3D11UnorderedAccessView *uasr_;
 
 private:
 	void Release(void);
@@ -47,5 +68,74 @@ public:
 
 	virtual void Init(void);
 	INT Create(tml::TextureDesc &);
+
+	ID3D11Texture2D *GetTexture(void) const;
+	const tml::XMFLOAT2EX &GetSize(void) const;
+	ID3D11RenderTargetView *GetRenderTarget(void) const;
+	void ClearRenderTarget(const tml::XMFLOAT4EX &);
+	ID3D11DepthStencilView *GetDepthTarget(void) const;
+	void ClearDepthTarget(void);
+	ID3D11ShaderResourceView *GetSR(void) const;
+	ID3D11UnorderedAccessView *GetUASR(void) const;
 };
+}
+
+
+/**
+ * @brief GetTextureŠÖ”
+ * @return tex (texture)
+ */
+inline ID3D11Texture2D *tml::Texture::GetTexture(void) const
+{
+	return (this->tex_);
+}
+
+
+/**
+ * @brief GetSizeŠÖ”
+ * @return size (size)
+ */
+inline const tml::XMFLOAT2EX &tml::Texture::GetSize(void) const
+{
+	return (this->size_);
+}
+
+
+/**
+ * @brief GetRenderTargetŠÖ”
+ * @return rt (render_target)
+ */
+inline ID3D11RenderTargetView *tml::Texture::GetRenderTarget(void) const
+{
+	return (this->rt_);
+}
+
+
+/**
+ * @brief GetDepthTargetŠÖ”
+ * @return dt (depth_target)
+ */
+inline ID3D11DepthStencilView *tml::Texture::GetDepthTarget(void) const
+{
+	return (this->dt_);
+}
+
+
+/**
+ * @brief GetSRŠÖ”
+ * @return sr (sr)
+ */
+inline ID3D11ShaderResourceView *tml::Texture::GetSR(void) const
+{
+	return (this->sr_);
+}
+
+
+/**
+ * @brief GetUASRŠÖ”
+ * @return uasr (uasr)
+ */
+inline ID3D11UnorderedAccessView *tml::Texture::GetUASR(void) const
+{
+	return (this->uasr_);
 }

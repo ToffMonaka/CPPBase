@@ -12,7 +12,7 @@
  * @brief コンストラクタ
  */
 tml::DepthStateDesc::DepthStateDesc() :
-	desc(CD3D11_DEFAULT())
+	depth_state_desc(CD3D11_DEFAULT())
 {
 	return;
 }
@@ -32,7 +32,7 @@ tml::DepthStateDesc::~DepthStateDesc()
  */
 void tml::DepthStateDesc::Init(void)
 {
-	this->desc = CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT());
+	this->depth_state_desc = CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT());
 
 	tml::GraphicResourceDesc::Init();
 
@@ -107,7 +107,7 @@ INT tml::DepthState::Create(tml::DepthStateDesc &desc)
 		return (-1);
 	}
 
-	if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilState(&desc.desc, &this->ds_))) {
+	if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilState(&desc.depth_state_desc, &this->ds_))) {
 		this->Init();
 
 		return (-1);

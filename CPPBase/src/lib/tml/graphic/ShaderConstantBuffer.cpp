@@ -131,10 +131,10 @@ INT tml::ShaderConstantBuffer::Create(tml::ShaderConstantBufferDesc &desc)
 
 
 /**
- * @brief UpdateŠÖ”
+ * @brief UpdateBufferŠÖ”
  * @param element (element)
  */
-void tml::ShaderConstantBuffer::Update(void *element)
+void tml::ShaderConstantBuffer::UpdateBuffer(void *element)
 {
 	if (this->cpu_flg_) {
 		D3D11_MAPPED_SUBRESOURCE msr;

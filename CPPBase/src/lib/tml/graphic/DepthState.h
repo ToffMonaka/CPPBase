@@ -16,7 +16,7 @@ namespace tml {
 class DepthStateDesc : public tml::GraphicResourceDesc
 {
 public:
-	CD3D11_DEPTH_STENCIL_DESC desc;
+	CD3D11_DEPTH_STENCIL_DESC depth_state_desc;
 
 public:
 	DepthStateDesc();
@@ -50,16 +50,16 @@ public:
 	virtual void Init(void);
 	INT Create(tml::DepthStateDesc &);
 
-	ID3D11DepthStencilState *Get(void) const;
+	ID3D11DepthStencilState *GetDepthState(void) const;
 };
 }
 
 
 /**
- * @brief GetŠÖ”
+ * @brief GetDepthStateŠÖ”
  * @return ds (depth_state)
  */
-inline ID3D11DepthStencilState *tml::DepthState::Get(void) const
+inline ID3D11DepthStencilState *tml::DepthState::GetDepthState(void) const
 {
 	return (this->ds_);
 }

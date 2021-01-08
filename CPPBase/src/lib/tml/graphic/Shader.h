@@ -44,22 +44,22 @@ class ShaderDesc : public tml::GraphicResourceDesc
 {
 public:
 	tml::BinaryFileReadPlan file_read_plan;
-	tml::BinaryFileReadPlan *parent_file_read_plan;
+	tml::BinaryFileReadPlan *file_parent_read_plan;
 	std::wstring include_directory_path;
-	std::wstring vertex_function_name;
-	std::wstring vertex_model_name;
-	UINT vertex_input_element_desc_count;
-	const D3D11_INPUT_ELEMENT_DESC *vertex_input_element_desc_array;
-	std::wstring hull_function_name;
-	std::wstring hull_model_name;
-	std::wstring domain_function_name;
-	std::wstring domain_model_name;
-	std::wstring geometry_function_name;
-	std::wstring geometry_model_name;
-	std::wstring pixel_function_name;
-	std::wstring pixel_model_name;
-	std::wstring compute_function_name;
-	std::wstring compute_model_name;
+	std::wstring vertex_shader_function_name;
+	std::wstring vertex_shader_model_name;
+	UINT vertex_shader_input_element_desc_count;
+	const D3D11_INPUT_ELEMENT_DESC *vertex_shader_input_element_desc_array;
+	std::wstring hull_shader_function_name;
+	std::wstring hull_shader_model_name;
+	std::wstring domain_shader_function_name;
+	std::wstring domain_shader_model_name;
+	std::wstring geometry_shader_function_name;
+	std::wstring geometry_shader_model_name;
+	std::wstring pixel_shader_function_name;
+	std::wstring pixel_shader_model_name;
+	std::wstring compute_shader_function_name;
+	std::wstring compute_shader_model_name;
 	std::list<std::pair<std::wstring, std::wstring>> macro_container;
 
 public:
@@ -103,82 +103,82 @@ public:
 	virtual void Init(void);
 	INT Create(tml::ShaderDesc &);
 
-	ID3D11VertexShader *GetVertex(void) const;
-	ID3D11InputLayout *GetVertexInputLayout(void) const;
-	ID3D11HullShader *GetHull(void) const;
-	ID3D11DomainShader *GetDomain(void) const;
-	ID3D11GeometryShader *GetGeometry(void) const;
-	ID3D11PixelShader *GetPixel(void) const;
-	ID3D11ComputeShader *GetCompute(void) const;
+	ID3D11VertexShader *GetVertexShader(void) const;
+	ID3D11InputLayout *GetVertexShaderInputLayout(void) const;
+	ID3D11HullShader *GetHullShader(void) const;
+	ID3D11DomainShader *GetDomainShader(void) const;
+	ID3D11GeometryShader *GetGeometryShader(void) const;
+	ID3D11PixelShader *GetPixelShader(void) const;
+	ID3D11ComputeShader *GetComputeShader(void) const;
 };
 }
 
 
 /**
- * @brief GetVertexŠÖ”
+ * @brief GetVertexShaderŠÖ”
  * @return vsh (vertex_shader)
  */
-inline ID3D11VertexShader *tml::Shader::GetVertex(void) const
+inline ID3D11VertexShader *tml::Shader::GetVertexShader(void) const
 {
 	return (this->vsh_);
 }
 
 
 /**
- * @brief GetVertexInputLayoutŠÖ”
+ * @brief GetVertexShaderInputLayoutŠÖ”
  * @return vsh_input_layout (vertex_shader_input_layout)
  */
-inline ID3D11InputLayout *tml::Shader::GetVertexInputLayout(void) const
+inline ID3D11InputLayout *tml::Shader::GetVertexShaderInputLayout(void) const
 {
 	return (this->vsh_input_layout_);
 }
 
 
 /**
- * @brief GetHullŠÖ”
+ * @brief GetHullShaderŠÖ”
  * @return hsh (hull_shader)
  */
-inline ID3D11HullShader *tml::Shader::GetHull(void) const
+inline ID3D11HullShader *tml::Shader::GetHullShader(void) const
 {
 	return (this->hsh_);
 }
 
 
 /**
- * @brief GetDomainŠÖ”
+ * @brief GetDomainShaderŠÖ”
  * @return dsh (domain_shader)
  */
-inline ID3D11DomainShader *tml::Shader::GetDomain(void) const
+inline ID3D11DomainShader *tml::Shader::GetDomainShader(void) const
 {
 	return (this->dsh_);
 }
 
 
 /**
- * @brief GetGeometryŠÖ”
+ * @brief GetGeometryShaderŠÖ”
  * @return gsh (geometry_shader)
  */
-inline ID3D11GeometryShader *tml::Shader::GetGeometry(void) const
+inline ID3D11GeometryShader *tml::Shader::GetGeometryShader(void) const
 {
 	return (this->gsh_);
 }
 
 
 /**
- * @brief GetPixelŠÖ”
+ * @brief GetPixelShaderŠÖ”
  * @return psh (pixel_shader)
  */
-inline ID3D11PixelShader *tml::Shader::GetPixel(void) const
+inline ID3D11PixelShader *tml::Shader::GetPixelShader(void) const
 {
 	return (this->psh_);
 }
 
 
 /**
- * @brief GetComputeŠÖ”
+ * @brief GetComputeShaderŠÖ”
  * @return csh (compute_shader)
  */
-inline ID3D11ComputeShader *tml::Shader::GetCompute(void) const
+inline ID3D11ComputeShader *tml::Shader::GetComputeShader(void) const
 {
 	return (this->csh_);
 }

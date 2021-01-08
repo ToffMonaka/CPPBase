@@ -56,7 +56,7 @@ protected:
 	void Release(void);
 	INT Create(tml::ShaderStructuredBufferDesc &);
 
-	void Update(void *);
+	void UpdateBuffer(void *);
 	template <typename T>
 	T *GetElement(T *, const UINT);
 
@@ -66,7 +66,7 @@ public:
 
 	virtual void Init(void);
 
-	ID3D11Buffer *Get(void) const;
+	ID3D11Buffer *GetBuffer(void) const;
 	ID3D11ShaderResourceView *GetSR(void) const;
 	ID3D11UnorderedAccessView *GetUASR(void) const;
 	UINT GetElementSize(void) const;
@@ -78,10 +78,10 @@ public:
 
 
 /**
- * @brief GetŠÖ”
+ * @brief GetBufferŠÖ”
  * @return buf (buffer)
  */
-inline ID3D11Buffer *tml::ShaderStructuredBuffer::Get(void) const
+inline ID3D11Buffer *tml::ShaderStructuredBuffer::GetBuffer(void) const
 {
 	return (this->buf_);
 }
