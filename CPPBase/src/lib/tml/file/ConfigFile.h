@@ -50,13 +50,59 @@ inline std::wstring *tml::ConfigFileData::GetValue(const WCHAR *val_name)
 
 namespace tml {
 /**
+ * @brief ConfigFileReadPlanDataクラス
+ */
+class ConfigFileReadPlanData : public tml::TextFileReadPlanData
+{
+public:
+	ConfigFileReadPlanData();
+	virtual ~ConfigFileReadPlanData();
+
+	virtual void Init(void);
+};
+}
+
+
+namespace tml {
+/**
  * @brief ConfigFileReadPlanクラス
  */
-class ConfigFileReadPlan : public tml::TextFileReadPlan
+class ConfigFileReadPlan
 {
+public:
+	tml::ConfigFileReadPlanData data;
+	tml::ConfigFileReadPlanData *parent_data;
+
 public:
 	ConfigFileReadPlan();
 	virtual ~ConfigFileReadPlan();
+
+	virtual void Init(void);
+
+	tml::ConfigFileReadPlanData *GetDataByParent(void);
+};
+}
+
+
+/**
+ * @brief GetDataByParent関数
+ * @return dat (data)
+ */
+inline tml::ConfigFileReadPlanData *tml::ConfigFileReadPlan::GetDataByParent(void)
+{
+	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+}
+
+
+namespace tml {
+/**
+ * @brief ConfigFileWritePlanDataクラス
+ */
+class ConfigFileWritePlanData : public tml::TextFileWritePlanData
+{
+public:
+	ConfigFileWritePlanData();
+	virtual ~ConfigFileWritePlanData();
 
 	virtual void Init(void);
 };
@@ -67,14 +113,30 @@ namespace tml {
 /**
  * @brief ConfigFileWritePlanクラス
  */
-class ConfigFileWritePlan : public tml::TextFileWritePlan
+class ConfigFileWritePlan
 {
+public:
+	tml::ConfigFileWritePlanData data;
+	tml::ConfigFileWritePlanData *parent_data;
+
 public:
 	ConfigFileWritePlan();
 	virtual ~ConfigFileWritePlan();
 
 	virtual void Init(void);
+
+	tml::ConfigFileWritePlanData *GetDataByParent(void);
 };
+}
+
+
+/**
+ * @brief GetDataByParent関数
+ * @return dat (data)
+ */
+inline tml::ConfigFileWritePlanData *tml::ConfigFileWritePlan::GetDataByParent(void)
+{
+	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
 
 
@@ -91,9 +153,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::ConfigFileData data;
 	tml::ConfigFileReadPlan read_plan;
-	tml::ConfigFileReadPlan *parent_read_plan;
 	tml::ConfigFileWritePlan write_plan;
-	tml::ConfigFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);

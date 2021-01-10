@@ -34,36 +34,6 @@ public:
 
 namespace cpp_base {
 /**
- * @brief SystemConfigFileReadPlanクラス
- */
-class SystemConfigFileReadPlan : public tml::INIFileReadPlan
-{
-public:
-	SystemConfigFileReadPlan();
-	virtual ~SystemConfigFileReadPlan();
-
-	virtual void Init(void);
-};
-}
-
-
-namespace cpp_base {
-/**
- * @brief SystemConfigFileWritePlanクラス
- */
-class SystemConfigFileWritePlan : public tml::INIFileWritePlan
-{
-public:
-	SystemConfigFileWritePlan();
-	virtual ~SystemConfigFileWritePlan();
-
-	virtual void Init(void);
-};
-}
-
-
-namespace cpp_base {
-/**
  * @brief SystemConfigFileクラス
  */
 class SystemConfigFile : public tml::File
@@ -74,10 +44,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	cpp_base::SystemConfigFileData data;
-	cpp_base::SystemConfigFileReadPlan read_plan;
-	cpp_base::SystemConfigFileReadPlan *parent_read_plan;
-	cpp_base::SystemConfigFileWritePlan write_plan;
-	cpp_base::SystemConfigFileWritePlan *parent_write_plan;
+	tml::INIFileReadPlan read_plan;
+	tml::INIFileWritePlan write_plan;
 
 private:
 	void Release(void);

@@ -41,8 +41,40 @@ void tml::BinaryFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::BinaryFileReadPlan::BinaryFileReadPlan() :
+tml::BinaryFileReadPlanData::BinaryFileReadPlanData() :
 	one_buffer_size(1024U)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::BinaryFileReadPlanData::~BinaryFileReadPlanData()
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::BinaryFileReadPlanData::Init(void)
+{
+	this->file_path.clear();
+	this->file_buffer.Init();
+	this->one_buffer_size = 1024U;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::BinaryFileReadPlan::BinaryFileReadPlan() :
+	parent_data(nullptr)
 {
 	return;
 }
@@ -62,9 +94,41 @@ tml::BinaryFileReadPlan::~BinaryFileReadPlan()
  */
 void tml::BinaryFileReadPlan::Init(void)
 {
+	this->data.Init();
+	this->parent_data = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::BinaryFileWritePlanData::BinaryFileWritePlanData() :
+	one_buffer_size(1024U),
+	add_flag(false)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::BinaryFileWritePlanData::~BinaryFileWritePlanData()
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::BinaryFileWritePlanData::Init(void)
+{
 	this->file_path.clear();
-	this->file_buffer.Init();
 	this->one_buffer_size = 1024U;
+	this->add_flag = false;
 
 	return;
 }
@@ -74,8 +138,7 @@ void tml::BinaryFileReadPlan::Init(void)
  * @brief コンストラクタ
  */
 tml::BinaryFileWritePlan::BinaryFileWritePlan() :
-	one_buffer_size(1024U),
-	add_flag(false)
+	parent_data(nullptr)
 {
 	return;
 }
@@ -95,9 +158,8 @@ tml::BinaryFileWritePlan::~BinaryFileWritePlan()
  */
 void tml::BinaryFileWritePlan::Init(void)
 {
-	this->file_path.clear();
-	this->one_buffer_size = 1024U;
-	this->add_flag = false;
+	this->data.Init();
+	this->parent_data = nullptr;
 
 	return;
 }
@@ -106,9 +168,7 @@ void tml::BinaryFileWritePlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::BinaryFile::BinaryFile() :
-	parent_read_plan(nullptr),
-	parent_write_plan(nullptr)
+tml::BinaryFile::BinaryFile()
 {
 	return;
 }
@@ -145,9 +205,7 @@ void tml::BinaryFile::Init(void)
 
 	this->data.Init();
 	this->read_plan.Init();
-	this->parent_read_plan = nullptr;
 	this->write_plan.Init();
-	this->parent_write_plan = nullptr;
 
 	tml::File::Init();
 
@@ -162,12 +220,12 @@ void tml::BinaryFile::Init(void)
  */
 INT tml::BinaryFile::Read(void)
 {
-	auto read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+	auto read_plan_dat = this->read_plan.GetDataByParent();
 
 	tml::DynamicBuffer file_buf;
 
-	if (read_plan->file_path.empty()) {
-		file_buf = std::move(read_plan->file_buffer);
+	if (read_plan_dat->file_path.empty()) {
+		file_buf = std::move(read_plan_dat->file_buffer);
 	} else {
 		CHAR *read_buf = nullptr;
 		size_t read_buf_size = 0U;
@@ -176,13 +234,13 @@ INT tml::BinaryFile::Read(void)
 		{tml::ThreadLockBlock th_lock_block(tml::FileUtil::GetFileThreadLock());
 			std::ifstream ifs;
 
-			ifs.open(read_plan->file_path.c_str(), std::ios_base::in | std::ios_base::binary);
+			ifs.open(read_plan_dat->file_path.c_str(), std::ios_base::in | std::ios_base::binary);
 
 			if (!ifs) {
 				return (-1);
 			}
 
-			read_buf_size = std::max(read_plan->one_buffer_size, sizeof(size_t));
+			read_buf_size = std::max(read_plan_dat->one_buffer_size, sizeof(size_t));
 			read_buf = tml::MemoryUtil::Get<CHAR>(read_buf_size);
 
 			while (1) {
@@ -222,9 +280,9 @@ INT tml::BinaryFile::Read(void)
  */
 INT tml::BinaryFile::Write(void)
 {
-	auto write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+	auto write_plan_dat = this->write_plan.GetDataByParent();
 
-	if (write_plan->file_path.empty()) {
+	if (write_plan_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -236,10 +294,10 @@ INT tml::BinaryFile::Write(void)
 	{tml::ThreadLockBlock th_lock_block(tml::FileUtil::GetFileThreadLock());
 		std::ofstream ofs;
 
-		if (write_plan->add_flag) {
-			ofs.open(write_plan->file_path.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::app);
+		if (write_plan_dat->add_flag) {
+			ofs.open(write_plan_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::app);
 		} else {
-			ofs.open(write_plan->file_path.c_str(), std::ios_base::out | std::ios_base::binary);
+			ofs.open(write_plan_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary);
 		}
 
 		if (!ofs) {
@@ -252,7 +310,7 @@ INT tml::BinaryFile::Write(void)
 			return (0);
 		}
 
-		write_buf_size = std::max(write_plan->one_buffer_size, sizeof(size_t));
+		write_buf_size = std::max(write_plan_dat->one_buffer_size, sizeof(size_t));
 		write_buf = tml::MemoryUtil::Get<CHAR>(write_buf_size);
 
 		while (1) {

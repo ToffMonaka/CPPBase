@@ -51,67 +51,7 @@ void cpp_base::SystemConfigFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-cpp_base::SystemConfigFileReadPlan::SystemConfigFileReadPlan()
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-cpp_base::SystemConfigFileReadPlan::~SystemConfigFileReadPlan()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void cpp_base::SystemConfigFileReadPlan::Init(void)
-{
-	tml::INIFileReadPlan::Init();
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
-cpp_base::SystemConfigFileWritePlan::SystemConfigFileWritePlan()
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-cpp_base::SystemConfigFileWritePlan::~SystemConfigFileWritePlan()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void cpp_base::SystemConfigFileWritePlan::Init(void)
-{
-	tml::INIFileWritePlan::Init();
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
-cpp_base::SystemConfigFile::SystemConfigFile() :
-	parent_read_plan(nullptr),
-	parent_write_plan(nullptr)
+cpp_base::SystemConfigFile::SystemConfigFile()
 {
 	return;
 }
@@ -148,9 +88,7 @@ void cpp_base::SystemConfigFile::Init(void)
 
 	this->data.Init();
 	this->read_plan.Init();
-	this->parent_read_plan = nullptr;
 	this->write_plan.Init();
-	this->parent_write_plan = nullptr;
 
 	return;
 }
@@ -163,11 +101,11 @@ void cpp_base::SystemConfigFile::Init(void)
  */
 INT cpp_base::SystemConfigFile::Read(void)
 {
-	auto read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+	auto read_plan_dat = this->read_plan.GetDataByParent();
 
 	tml::INIFile ini_file;
 
-	ini_file.parent_read_plan = read_plan;
+	ini_file.read_plan.parent_data = read_plan_dat;
 
 	if (ini_file.Read()) {
 		return (-1);
@@ -241,9 +179,9 @@ INT cpp_base::SystemConfigFile::Read(void)
  */
 INT cpp_base::SystemConfigFile::Write(void)
 {
-	auto write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+	auto write_plan_dat = this->write_plan.GetDataByParent();
 
-	if (write_plan->file_path.empty()) {
+	if (write_plan_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -271,7 +209,7 @@ INT cpp_base::SystemConfigFile::Write(void)
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
-	txt_file.parent_write_plan = write_plan;
+	txt_file.write_plan.parent_data = write_plan_dat;
 
 	if (txt_file.Write()) {
 		return (-1);

@@ -40,8 +40,40 @@ void tml::TextFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::TextFileReadPlan::TextFileReadPlan() :
+tml::TextFileReadPlanData::TextFileReadPlanData() :
 	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::TextFileReadPlanData::~TextFileReadPlanData()
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::TextFileReadPlanData::Init(void)
+{
+	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+
+	tml::BinaryFileReadPlanData::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::TextFileReadPlan::TextFileReadPlan() :
+	parent_data(nullptr)
 {
 	return;
 }
@@ -61,9 +93,42 @@ tml::TextFileReadPlan::~TextFileReadPlan()
  */
 void tml::TextFileReadPlan::Init(void)
 {
-	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	this->data.Init();
+	this->parent_data = nullptr;
 
-	tml::BinaryFileReadPlan::Init();
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::TextFileWritePlanData::TextFileWritePlanData() :
+	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF),
+	add_newline_code_count(1U)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::TextFileWritePlanData::~TextFileWritePlanData()
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::TextFileWritePlanData::Init(void)
+{
+	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
+	this->add_newline_code_count = 1U;
+
+	tml::BinaryFileWritePlanData::Init();
 
 	return;
 }
@@ -73,8 +138,7 @@ void tml::TextFileReadPlan::Init(void)
  * @brief コンストラクタ
  */
 tml::TextFileWritePlan::TextFileWritePlan() :
-	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF),
-	add_newline_code_count(1U)
+	parent_data(nullptr)
 {
 	return;
 }
@@ -94,10 +158,8 @@ tml::TextFileWritePlan::~TextFileWritePlan()
  */
 void tml::TextFileWritePlan::Init(void)
 {
-	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
-	this->add_newline_code_count = 1U;
-
-	tml::BinaryFileWritePlan::Init();
+	this->data.Init();
+	this->parent_data = nullptr;
 
 	return;
 }
@@ -106,9 +168,7 @@ void tml::TextFileWritePlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::TextFile::TextFile() :
-	parent_read_plan(nullptr),
-	parent_write_plan(nullptr)
+tml::TextFile::TextFile()
 {
 	return;
 }
@@ -145,9 +205,7 @@ void tml::TextFile::Init(void)
 
 	this->data.Init();
 	this->read_plan.Init();
-	this->parent_read_plan = nullptr;
 	this->write_plan.Init();
-	this->parent_write_plan = nullptr;
 
 	return;
 }
@@ -160,11 +218,11 @@ void tml::TextFile::Init(void)
  */
 INT tml::TextFile::Read(void)
 {
-	auto read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+	auto read_plan_dat = this->read_plan.GetDataByParent();
 
 	tml::BinaryFile bin_file;
 
-	bin_file.parent_read_plan = read_plan;
+	bin_file.read_plan.parent_data = read_plan_dat;
 
 	if (bin_file.Read()) {
 		return (-1);
@@ -184,7 +242,7 @@ INT tml::TextFile::Read(void)
 
 	tml::StringUtil::GetString(buf_str, tmp_buf_str);
 
-	tml::StringUtil::Split(this->data.string_container, buf_str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(read_plan->newline_code_type));
+	tml::StringUtil::Split(this->data.string_container, buf_str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(read_plan_dat->newline_code_type));
 
 	return (0);
 }
@@ -197,24 +255,24 @@ INT tml::TextFile::Read(void)
  */
 INT tml::TextFile::Write(void)
 {
-	auto write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+	auto write_plan_dat = this->write_plan.GetDataByParent();
 
-	if (write_plan->file_path.empty()) {
+	if (write_plan_dat->file_path.empty()) {
 		return (-1);
 	}
 
 	std::wstring buf_str;
 	std::string tmp_buf_str;
 
-	tml::StringUtil::Join(buf_str, this->data.string_container, tml::ConstantUtil::NEWLINE_CODE::GetString(write_plan->newline_code_type));
+	tml::StringUtil::Join(buf_str, this->data.string_container, tml::ConstantUtil::NEWLINE_CODE::GetString(write_plan_dat->newline_code_type));
 
 	if (!buf_str.empty()) {
-		if ((write_plan->add_flag)
-		&& (write_plan->add_newline_code_count > 0U)) {
+		if ((write_plan_dat->add_flag)
+		&& (write_plan_dat->add_newline_code_count > 0U)) {
 			std::wstring add_newline_code_str;
 
-			for (size_t add_newline_code_i = 0U; add_newline_code_i < write_plan->add_newline_code_count; ++add_newline_code_i) {
-				add_newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetString(write_plan->newline_code_type);
+			for (size_t add_newline_code_i = 0U; add_newline_code_i < write_plan_dat->add_newline_code_count; ++add_newline_code_i) {
+				add_newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetString(write_plan_dat->newline_code_type);
 			}
 
 			buf_str.insert(0U, add_newline_code_str);
@@ -228,7 +286,7 @@ INT tml::TextFile::Write(void)
 	bin_file.data.file_buffer.Set(tmp_buf_str.length());
 	bin_file.data.file_buffer.WriteArray(reinterpret_cast<const BYTE *>(tmp_buf_str.c_str()), tmp_buf_str.length(), tmp_buf_str.length());
 
-	bin_file.parent_write_plan = write_plan;
+	bin_file.write_plan.parent_data = write_plan_dat;
 
 	if (bin_file.Write()) {
 		return (-1);

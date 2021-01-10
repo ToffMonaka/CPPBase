@@ -14,6 +14,8 @@
 tml::SamplerDesc::SamplerDesc() :
 	sampler_desc(CD3D11_DEFAULT())
 {
+	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+
 	return;
 }
 
@@ -33,6 +35,7 @@ tml::SamplerDesc::~SamplerDesc()
 void tml::SamplerDesc::Init(void)
 {
 	this->sampler_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
+	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 
 	tml::GraphicResourceDesc::Init();
 

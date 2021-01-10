@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <list>
 #include "../math/XNAMath.h"
 #include "../file/BinaryFile.h"
 #include "GraphicResource.h"
@@ -18,8 +19,7 @@ namespace tml {
 class TextureDesc : public tml::GraphicResourceDesc
 {
 public:
-	tml::BinaryFileReadPlan file_read_plan;
-	tml::BinaryFileReadPlan *file_parent_read_plan;
+	std::list<tml::BinaryFileReadPlan> file_read_plan_container;
 	CD3D11_TEXTURE2D_DESC texture_desc;
 	DXGI_FORMAT render_target_format;
 	bool render_target_desc_null_flag;

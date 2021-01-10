@@ -41,7 +41,37 @@ void tml::ConfigFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileReadPlan::ConfigFileReadPlan()
+tml::ConfigFileReadPlanData::ConfigFileReadPlanData()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::ConfigFileReadPlanData::~ConfigFileReadPlanData()
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::ConfigFileReadPlanData::Init(void)
+{
+	tml::TextFileReadPlanData::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::ConfigFileReadPlan::ConfigFileReadPlan() :
+	parent_data(nullptr)
 {
 	return;
 }
@@ -61,7 +91,8 @@ tml::ConfigFileReadPlan::~ConfigFileReadPlan()
  */
 void tml::ConfigFileReadPlan::Init(void)
 {
-	tml::TextFileReadPlan::Init();
+	this->data.Init();
+	this->parent_data = nullptr;
 
 	return;
 }
@@ -70,7 +101,37 @@ void tml::ConfigFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileWritePlan::ConfigFileWritePlan()
+tml::ConfigFileWritePlanData::ConfigFileWritePlanData()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::ConfigFileWritePlanData::~ConfigFileWritePlanData()
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::ConfigFileWritePlanData::Init(void)
+{
+	tml::TextFileWritePlanData::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::ConfigFileWritePlan::ConfigFileWritePlan() :
+	parent_data(nullptr)
 {
 	return;
 }
@@ -90,7 +151,8 @@ tml::ConfigFileWritePlan::~ConfigFileWritePlan()
  */
 void tml::ConfigFileWritePlan::Init(void)
 {
-	tml::TextFileWritePlan::Init();
+	this->data.Init();
+	this->parent_data = nullptr;
 
 	return;
 }
@@ -99,9 +161,7 @@ void tml::ConfigFileWritePlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFile::ConfigFile() :
-	parent_read_plan(nullptr),
-	parent_write_plan(nullptr)
+tml::ConfigFile::ConfigFile()
 {
 	return;
 }
@@ -138,9 +198,7 @@ void tml::ConfigFile::Init(void)
 
 	this->data.Init();
 	this->read_plan.Init();
-	this->parent_read_plan = nullptr;
 	this->write_plan.Init();
-	this->parent_write_plan = nullptr;
 
 	return;
 }
@@ -153,11 +211,11 @@ void tml::ConfigFile::Init(void)
  */
 INT tml::ConfigFile::Read(void)
 {
-	auto read_plan = (this->parent_read_plan != nullptr) ? this->parent_read_plan : &this->read_plan;
+	auto read_plan_dat = this->read_plan.GetDataByParent();
 
 	tml::TextFile txt_file;
 
-	txt_file.parent_read_plan = read_plan;
+	txt_file.read_plan.parent_data = read_plan_dat;
 
 	if (txt_file.Read()) {
 		return (-1);
@@ -227,9 +285,9 @@ INT tml::ConfigFile::Read(void)
  */
 INT tml::ConfigFile::Write(void)
 {
-	auto write_plan = (this->parent_write_plan != nullptr) ? this->parent_write_plan : &this->write_plan;
+	auto write_plan_dat = this->write_plan.GetDataByParent();
 
-	if (write_plan->file_path.empty()) {
+	if (write_plan_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -249,7 +307,7 @@ INT tml::ConfigFile::Write(void)
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
-	txt_file.parent_write_plan = write_plan;
+	txt_file.write_plan.parent_data = write_plan_dat;
 
 	if (txt_file.Write()) {
 		return (-1);

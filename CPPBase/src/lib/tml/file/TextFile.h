@@ -31,16 +31,66 @@ public:
 
 namespace tml {
 /**
- * @brief TextFileReadPlanクラス
+ * @brief TextFileReadPlanDataクラス
  */
-class TextFileReadPlan : public tml::BinaryFileReadPlan
+class TextFileReadPlanData : public tml::BinaryFileReadPlanData
 {
 public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
 public:
+	TextFileReadPlanData();
+	virtual ~TextFileReadPlanData();
+
+	virtual void Init(void);
+};
+}
+
+
+namespace tml {
+/**
+ * @brief TextFileReadPlanクラス
+ */
+class TextFileReadPlan
+{
+public:
+	tml::TextFileReadPlanData data;
+	tml::TextFileReadPlanData *parent_data;
+
+public:
 	TextFileReadPlan();
 	virtual ~TextFileReadPlan();
+
+	virtual void Init(void);
+
+	tml::TextFileReadPlanData *GetDataByParent(void);
+};
+}
+
+
+/**
+ * @brief GetDataByParent関数
+ * @return dat (data)
+ */
+inline tml::TextFileReadPlanData *tml::TextFileReadPlan::GetDataByParent(void)
+{
+	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+}
+
+
+namespace tml {
+/**
+ * @brief TextFileWritePlanDataクラス
+ */
+class TextFileWritePlanData : public tml::BinaryFileWritePlanData
+{
+public:
+	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
+	size_t add_newline_code_count;
+
+public:
+	TextFileWritePlanData();
+	virtual ~TextFileWritePlanData();
 
 	virtual void Init(void);
 };
@@ -51,18 +101,30 @@ namespace tml {
 /**
  * @brief TextFileWritePlanクラス
  */
-class TextFileWritePlan : public tml::BinaryFileWritePlan
+class TextFileWritePlan
 {
 public:
-	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
-	size_t add_newline_code_count;
+	tml::TextFileWritePlanData data;
+	tml::TextFileWritePlanData *parent_data;
 
 public:
 	TextFileWritePlan();
 	virtual ~TextFileWritePlan();
 
 	virtual void Init(void);
+
+	tml::TextFileWritePlanData *GetDataByParent(void);
 };
+}
+
+
+/**
+ * @brief GetDataByParent関数
+ * @return dat (data)
+ */
+inline tml::TextFileWritePlanData *tml::TextFileWritePlan::GetDataByParent(void)
+{
+	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
 
 
@@ -79,9 +141,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::TextFileData data;
 	tml::TextFileReadPlan read_plan;
-	tml::TextFileReadPlan *parent_read_plan;
 	tml::TextFileWritePlan write_plan;
-	tml::TextFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);

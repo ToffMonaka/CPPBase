@@ -12,7 +12,6 @@
  * @brief コンストラクタ
  */
 tml::TextureDesc::TextureDesc() :
-	file_parent_read_plan(nullptr),
 	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U),
 	render_target_format(DXGI_FORMAT_UNKNOWN),
 	render_target_desc_null_flag(false),
@@ -45,8 +44,7 @@ tml::TextureDesc::~TextureDesc()
  */
 void tml::TextureDesc::Init(void)
 {
-	this->file_read_plan.Init();
-	this->file_parent_read_plan = nullptr;
+	this->file_read_plan_container.clear();
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
 	this->texture_desc.BindFlags = 0U;
 	this->render_target_format = DXGI_FORMAT_UNKNOWN;
@@ -171,14 +169,13 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 			return (-1);
 		}
 	} else if (desc.array_flag) {
-	/*
-	} else if (desc.flg & tm_l::graphic::_Texture::_FLAG::_ARRAY) { //配列有りの時
-		if (desc.tex_desc.ArraySize <= 0U) { //配列無しの時
+		if (desc.file_read_plan_container.empty()) {
 			this->Init();
 
 			return (-1);
 		}
 
+		/*
 		std::list<D3D11_SUBRESOURCE_DATA> srd_cont;
 		std::list<tm_l::buffer::DynamicBuffer> srd_buf_cont;
 		bool tex_desc_fix_flg = false;
@@ -355,15 +352,20 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 
 			return (-1);
 		}
-	}
-	*/
+		*/
 	} else {
-		auto file_read_plan = (desc.file_parent_read_plan != nullptr) ? desc.file_parent_read_plan : &desc.file_read_plan;
+		if (desc.file_read_plan_container.empty()) {
+			this->Init();
 
-		if (!file_read_plan->file_path.empty() || file_read_plan->file_buffer.GetLength() > 0U) {
+			return (-1);
+		}
+
+		auto file_read_plan_dat = desc.file_read_plan_container.front().GetDataByParent();
+
+		if (!file_read_plan_dat->file_path.empty() || file_read_plan_dat->file_buffer.GetLength() > 0U) {
 			tml::BinaryFile bin_file;
 
-			bin_file.parent_read_plan = file_read_plan;
+			bin_file.read_plan.parent_data = file_read_plan_dat;
 
 			if (bin_file.Read()) {
 				this->Init();

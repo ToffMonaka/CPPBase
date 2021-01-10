@@ -96,13 +96,59 @@ inline std::wstring *tml::INIFileData::GetValue(std::map<std::wstring, std::wstr
 
 namespace tml {
 /**
+ * @brief INIFileReadPlanDataクラス
+ */
+class INIFileReadPlanData : public tml::TextFileReadPlanData
+{
+public:
+	INIFileReadPlanData();
+	virtual ~INIFileReadPlanData();
+
+	virtual void Init(void);
+};
+}
+
+
+namespace tml {
+/**
  * @brief INIFileReadPlanクラス
  */
-class INIFileReadPlan : public tml::TextFileReadPlan
+class INIFileReadPlan
 {
+public:
+	tml::INIFileReadPlanData data;
+	tml::INIFileReadPlanData *parent_data;
+
 public:
 	INIFileReadPlan();
 	virtual ~INIFileReadPlan();
+
+	virtual void Init(void);
+
+	tml::INIFileReadPlanData *GetDataByParent(void);
+};
+}
+
+
+/**
+ * @brief GetDataByParent関数
+ * @return dat (data)
+ */
+inline tml::INIFileReadPlanData *tml::INIFileReadPlan::GetDataByParent(void)
+{
+	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+}
+
+
+namespace tml {
+/**
+ * @brief INIFileWritePlanDataクラス
+ */
+class INIFileWritePlanData : public tml::TextFileWritePlanData
+{
+public:
+	INIFileWritePlanData();
+	virtual ~INIFileWritePlanData();
 
 	virtual void Init(void);
 };
@@ -113,14 +159,30 @@ namespace tml {
 /**
  * @brief INIFileWritePlanクラス
  */
-class INIFileWritePlan : public tml::TextFileWritePlan
+class INIFileWritePlan
 {
+public:
+	tml::INIFileWritePlanData data;
+	tml::INIFileWritePlanData *parent_data;
+
 public:
 	INIFileWritePlan();
 	virtual ~INIFileWritePlan();
 
 	virtual void Init(void);
+
+	tml::INIFileWritePlanData *GetDataByParent(void);
 };
+}
+
+
+/**
+ * @brief GetDataByParent関数
+ * @return dat (data)
+ */
+inline tml::INIFileWritePlanData *tml::INIFileWritePlan::GetDataByParent(void)
+{
+	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
 
 
@@ -137,9 +199,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::INIFileData data;
 	tml::INIFileReadPlan read_plan;
-	tml::INIFileReadPlan *parent_read_plan;
 	tml::INIFileWritePlan write_plan;
-	tml::INIFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);

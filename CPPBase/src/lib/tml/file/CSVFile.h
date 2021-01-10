@@ -76,13 +76,59 @@ inline std::wstring *tml::CSVFileData::GetValue(const size_t row_index, const si
 
 namespace tml {
 /**
+ * @brief CSVFileReadPlanDataクラス
+ */
+class CSVFileReadPlanData : public tml::TextFileReadPlanData
+{
+public:
+	CSVFileReadPlanData();
+	virtual ~CSVFileReadPlanData();
+
+	virtual void Init(void);
+};
+}
+
+
+namespace tml {
+/**
  * @brief CSVFileReadPlanクラス
  */
-class CSVFileReadPlan : public tml::TextFileReadPlan
+class CSVFileReadPlan
 {
+public:
+	tml::CSVFileReadPlanData data;
+	tml::CSVFileReadPlanData *parent_data;
+
 public:
 	CSVFileReadPlan();
 	virtual ~CSVFileReadPlan();
+
+	virtual void Init(void);
+
+	tml::CSVFileReadPlanData *GetDataByParent(void);
+};
+}
+
+
+/**
+ * @brief GetDataByParent関数
+ * @return dat (data)
+ */
+inline tml::CSVFileReadPlanData *tml::CSVFileReadPlan::GetDataByParent(void)
+{
+	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+}
+
+
+namespace tml {
+/**
+ * @brief CSVFileWritePlanDataクラス
+ */
+class CSVFileWritePlanData : public tml::TextFileWritePlanData
+{
+public:
+	CSVFileWritePlanData();
+	virtual ~CSVFileWritePlanData();
 
 	virtual void Init(void);
 };
@@ -93,14 +139,30 @@ namespace tml {
 /**
  * @brief CSVFileWritePlanクラス
  */
-class CSVFileWritePlan : public tml::TextFileWritePlan
+class CSVFileWritePlan
 {
+public:
+	tml::CSVFileWritePlanData data;
+	tml::CSVFileWritePlanData *parent_data;
+
 public:
 	CSVFileWritePlan();
 	virtual ~CSVFileWritePlan();
 
 	virtual void Init(void);
+
+	tml::CSVFileWritePlanData *GetDataByParent(void);
 };
+}
+
+
+/**
+ * @brief GetDataByParent関数
+ * @return dat (data)
+ */
+inline tml::CSVFileWritePlanData *tml::CSVFileWritePlan::GetDataByParent(void)
+{
+	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
 
 
@@ -117,9 +179,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::CSVFileData data;
 	tml::CSVFileReadPlan read_plan;
-	tml::CSVFileReadPlan *parent_read_plan;
 	tml::CSVFileWritePlan write_plan;
-	tml::CSVFileWritePlan *parent_write_plan;
 
 private:
 	void Release(void);
