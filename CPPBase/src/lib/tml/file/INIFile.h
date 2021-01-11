@@ -96,13 +96,13 @@ inline std::wstring *tml::INIFileData::GetValue(std::map<std::wstring, std::wstr
 
 namespace tml {
 /**
- * @brief INIFileReadPlanDataクラス
+ * @brief INIFileReadDescDataクラス
  */
-class INIFileReadPlanData : public tml::TextFileReadPlanData
+class INIFileReadDescData : public tml::TextFileReadDescData
 {
 public:
-	INIFileReadPlanData();
-	virtual ~INIFileReadPlanData();
+	INIFileReadDescData();
+	virtual ~INIFileReadDescData();
 
 	virtual void Init(void);
 };
@@ -111,21 +111,21 @@ public:
 
 namespace tml {
 /**
- * @brief INIFileReadPlanクラス
+ * @brief INIFileReadDescクラス
  */
-class INIFileReadPlan
+class INIFileReadDesc
 {
 public:
-	tml::INIFileReadPlanData data;
-	tml::INIFileReadPlanData *parent_data;
+	tml::INIFileReadDescData data;
+	tml::INIFileReadDescData *parent_data;
 
 public:
-	INIFileReadPlan();
-	virtual ~INIFileReadPlan();
+	INIFileReadDesc();
+	virtual ~INIFileReadDesc();
 
 	virtual void Init(void);
 
-	tml::INIFileReadPlanData *GetDataByParent(void);
+	tml::INIFileReadDescData *GetDataByParent(void);
 };
 }
 
@@ -134,7 +134,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::INIFileReadPlanData *tml::INIFileReadPlan::GetDataByParent(void)
+inline tml::INIFileReadDescData *tml::INIFileReadDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -142,13 +142,13 @@ inline tml::INIFileReadPlanData *tml::INIFileReadPlan::GetDataByParent(void)
 
 namespace tml {
 /**
- * @brief INIFileWritePlanDataクラス
+ * @brief INIFileWriteDescDataクラス
  */
-class INIFileWritePlanData : public tml::TextFileWritePlanData
+class INIFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
-	INIFileWritePlanData();
-	virtual ~INIFileWritePlanData();
+	INIFileWriteDescData();
+	virtual ~INIFileWriteDescData();
 
 	virtual void Init(void);
 };
@@ -157,21 +157,21 @@ public:
 
 namespace tml {
 /**
- * @brief INIFileWritePlanクラス
+ * @brief INIFileWriteDescクラス
  */
-class INIFileWritePlan
+class INIFileWriteDesc
 {
 public:
-	tml::INIFileWritePlanData data;
-	tml::INIFileWritePlanData *parent_data;
+	tml::INIFileWriteDescData data;
+	tml::INIFileWriteDescData *parent_data;
 
 public:
-	INIFileWritePlan();
-	virtual ~INIFileWritePlan();
+	INIFileWriteDesc();
+	virtual ~INIFileWriteDesc();
 
 	virtual void Init(void);
 
-	tml::INIFileWritePlanData *GetDataByParent(void);
+	tml::INIFileWriteDescData *GetDataByParent(void);
 };
 }
 
@@ -180,7 +180,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::INIFileWritePlanData *tml::INIFileWritePlan::GetDataByParent(void)
+inline tml::INIFileWriteDescData *tml::INIFileWriteDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -198,8 +198,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::INIFileData data;
-	tml::INIFileReadPlan read_plan;
-	tml::INIFileWritePlan write_plan;
+	tml::INIFileReadDesc read_desc;
+	tml::INIFileWriteDesc write_desc;
 
 private:
 	void Release(void);

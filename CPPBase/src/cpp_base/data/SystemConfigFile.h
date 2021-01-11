@@ -44,8 +44,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	cpp_base::SystemConfigFileData data;
-	tml::INIFileReadPlan read_plan;
-	tml::INIFileWritePlan write_plan;
+	tml::INIFileReadDesc read_desc;
+	tml::INIFileWriteDesc write_desc;
 
 private:
 	void Release(void);

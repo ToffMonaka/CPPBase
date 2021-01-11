@@ -43,7 +43,7 @@ namespace tml {
 class ShaderDesc : public tml::GraphicResourceDesc
 {
 public:
-	tml::BinaryFileReadPlan file_read_plan;
+	tml::BinaryFileReadDesc file_read_desc;
 	std::wstring include_directory_path;
 	std::wstring vertex_shader_function_name;
 	std::wstring vertex_shader_model_name;

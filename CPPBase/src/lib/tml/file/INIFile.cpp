@@ -41,7 +41,7 @@ void tml::INIFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::INIFileReadPlanData::INIFileReadPlanData()
+tml::INIFileReadDescData::INIFileReadDescData()
 {
 	return;
 }
@@ -50,7 +50,7 @@ tml::INIFileReadPlanData::INIFileReadPlanData()
 /**
  * @brief デストラクタ
  */
-tml::INIFileReadPlanData::~INIFileReadPlanData()
+tml::INIFileReadDescData::~INIFileReadDescData()
 {
 	return;
 }
@@ -59,9 +59,9 @@ tml::INIFileReadPlanData::~INIFileReadPlanData()
 /**
  * @brief Init関数
  */
-void tml::INIFileReadPlanData::Init(void)
+void tml::INIFileReadDescData::Init(void)
 {
-	tml::TextFileReadPlanData::Init();
+	tml::TextFileReadDescData::Init();
 
 	return;
 }
@@ -70,7 +70,7 @@ void tml::INIFileReadPlanData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::INIFileReadPlan::INIFileReadPlan() :
+tml::INIFileReadDesc::INIFileReadDesc() :
 	parent_data(nullptr)
 {
 	return;
@@ -80,7 +80,7 @@ tml::INIFileReadPlan::INIFileReadPlan() :
 /**
  * @brief デストラクタ
  */
-tml::INIFileReadPlan::~INIFileReadPlan()
+tml::INIFileReadDesc::~INIFileReadDesc()
 {
 	return;
 }
@@ -89,7 +89,7 @@ tml::INIFileReadPlan::~INIFileReadPlan()
 /**
  * @brief Init関数
  */
-void tml::INIFileReadPlan::Init(void)
+void tml::INIFileReadDesc::Init(void)
 {
 	this->data.Init();
 	this->parent_data = nullptr;
@@ -101,7 +101,7 @@ void tml::INIFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::INIFileWritePlanData::INIFileWritePlanData()
+tml::INIFileWriteDescData::INIFileWriteDescData()
 {
 	return;
 }
@@ -110,7 +110,7 @@ tml::INIFileWritePlanData::INIFileWritePlanData()
 /**
  * @brief デストラクタ
  */
-tml::INIFileWritePlanData::~INIFileWritePlanData()
+tml::INIFileWriteDescData::~INIFileWriteDescData()
 {
 	return;
 }
@@ -119,9 +119,9 @@ tml::INIFileWritePlanData::~INIFileWritePlanData()
 /**
  * @brief Init関数
  */
-void tml::INIFileWritePlanData::Init(void)
+void tml::INIFileWriteDescData::Init(void)
 {
-	tml::TextFileWritePlanData::Init();
+	tml::TextFileWriteDescData::Init();
 
 	return;
 }
@@ -130,7 +130,7 @@ void tml::INIFileWritePlanData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::INIFileWritePlan::INIFileWritePlan() :
+tml::INIFileWriteDesc::INIFileWriteDesc() :
 	parent_data(nullptr)
 {
 	return;
@@ -140,7 +140,7 @@ tml::INIFileWritePlan::INIFileWritePlan() :
 /**
  * @brief デストラクタ
  */
-tml::INIFileWritePlan::~INIFileWritePlan()
+tml::INIFileWriteDesc::~INIFileWriteDesc()
 {
 	return;
 }
@@ -149,7 +149,7 @@ tml::INIFileWritePlan::~INIFileWritePlan()
 /**
  * @brief Init関数
  */
-void tml::INIFileWritePlan::Init(void)
+void tml::INIFileWriteDesc::Init(void)
 {
 	this->data.Init();
 	this->parent_data = nullptr;
@@ -197,8 +197,8 @@ void tml::INIFile::Init(void)
 	this->Release();
 
 	this->data.Init();
-	this->read_plan.Init();
-	this->write_plan.Init();
+	this->read_desc.Init();
+	this->write_desc.Init();
 
 	return;
 }
@@ -211,11 +211,11 @@ void tml::INIFile::Init(void)
  */
 INT tml::INIFile::Read(void)
 {
-	auto read_plan_dat = this->read_plan.GetDataByParent();
+	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::TextFile txt_file;
 
-	txt_file.read_plan.parent_data = read_plan_dat;
+	txt_file.read_desc.parent_data = read_desc_dat;
 
 	if (txt_file.Read()) {
 		return (-1);
@@ -323,9 +323,9 @@ INT tml::INIFile::Read(void)
  */
 INT tml::INIFile::Write(void)
 {
-	auto write_plan_dat = this->write_plan.GetDataByParent();
+	auto write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (write_plan_dat->file_path.empty()) {
+	if (write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -353,7 +353,7 @@ INT tml::INIFile::Write(void)
 		}
 	}
 
-	txt_file.write_plan.parent_data = write_plan_dat;
+	txt_file.write_desc.parent_data = write_desc_dat;
 
 	if (txt_file.Write()) {
 		return (-1);

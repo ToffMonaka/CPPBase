@@ -41,7 +41,7 @@ void tml::ConfigFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileReadPlanData::ConfigFileReadPlanData()
+tml::ConfigFileReadDescData::ConfigFileReadDescData()
 {
 	return;
 }
@@ -50,7 +50,7 @@ tml::ConfigFileReadPlanData::ConfigFileReadPlanData()
 /**
  * @brief デストラクタ
  */
-tml::ConfigFileReadPlanData::~ConfigFileReadPlanData()
+tml::ConfigFileReadDescData::~ConfigFileReadDescData()
 {
 	return;
 }
@@ -59,9 +59,9 @@ tml::ConfigFileReadPlanData::~ConfigFileReadPlanData()
 /**
  * @brief Init関数
  */
-void tml::ConfigFileReadPlanData::Init(void)
+void tml::ConfigFileReadDescData::Init(void)
 {
-	tml::TextFileReadPlanData::Init();
+	tml::TextFileReadDescData::Init();
 
 	return;
 }
@@ -70,7 +70,7 @@ void tml::ConfigFileReadPlanData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileReadPlan::ConfigFileReadPlan() :
+tml::ConfigFileReadDesc::ConfigFileReadDesc() :
 	parent_data(nullptr)
 {
 	return;
@@ -80,7 +80,7 @@ tml::ConfigFileReadPlan::ConfigFileReadPlan() :
 /**
  * @brief デストラクタ
  */
-tml::ConfigFileReadPlan::~ConfigFileReadPlan()
+tml::ConfigFileReadDesc::~ConfigFileReadDesc()
 {
 	return;
 }
@@ -89,7 +89,7 @@ tml::ConfigFileReadPlan::~ConfigFileReadPlan()
 /**
  * @brief Init関数
  */
-void tml::ConfigFileReadPlan::Init(void)
+void tml::ConfigFileReadDesc::Init(void)
 {
 	this->data.Init();
 	this->parent_data = nullptr;
@@ -101,7 +101,7 @@ void tml::ConfigFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileWritePlanData::ConfigFileWritePlanData()
+tml::ConfigFileWriteDescData::ConfigFileWriteDescData()
 {
 	return;
 }
@@ -110,7 +110,7 @@ tml::ConfigFileWritePlanData::ConfigFileWritePlanData()
 /**
  * @brief デストラクタ
  */
-tml::ConfigFileWritePlanData::~ConfigFileWritePlanData()
+tml::ConfigFileWriteDescData::~ConfigFileWriteDescData()
 {
 	return;
 }
@@ -119,9 +119,9 @@ tml::ConfigFileWritePlanData::~ConfigFileWritePlanData()
 /**
  * @brief Init関数
  */
-void tml::ConfigFileWritePlanData::Init(void)
+void tml::ConfigFileWriteDescData::Init(void)
 {
-	tml::TextFileWritePlanData::Init();
+	tml::TextFileWriteDescData::Init();
 
 	return;
 }
@@ -130,7 +130,7 @@ void tml::ConfigFileWritePlanData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileWritePlan::ConfigFileWritePlan() :
+tml::ConfigFileWriteDesc::ConfigFileWriteDesc() :
 	parent_data(nullptr)
 {
 	return;
@@ -140,7 +140,7 @@ tml::ConfigFileWritePlan::ConfigFileWritePlan() :
 /**
  * @brief デストラクタ
  */
-tml::ConfigFileWritePlan::~ConfigFileWritePlan()
+tml::ConfigFileWriteDesc::~ConfigFileWriteDesc()
 {
 	return;
 }
@@ -149,7 +149,7 @@ tml::ConfigFileWritePlan::~ConfigFileWritePlan()
 /**
  * @brief Init関数
  */
-void tml::ConfigFileWritePlan::Init(void)
+void tml::ConfigFileWriteDesc::Init(void)
 {
 	this->data.Init();
 	this->parent_data = nullptr;
@@ -197,8 +197,8 @@ void tml::ConfigFile::Init(void)
 	this->Release();
 
 	this->data.Init();
-	this->read_plan.Init();
-	this->write_plan.Init();
+	this->read_desc.Init();
+	this->write_desc.Init();
 
 	return;
 }
@@ -211,11 +211,11 @@ void tml::ConfigFile::Init(void)
  */
 INT tml::ConfigFile::Read(void)
 {
-	auto read_plan_dat = this->read_plan.GetDataByParent();
+	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::TextFile txt_file;
 
-	txt_file.read_plan.parent_data = read_plan_dat;
+	txt_file.read_desc.parent_data = read_desc_dat;
 
 	if (txt_file.Read()) {
 		return (-1);
@@ -285,9 +285,9 @@ INT tml::ConfigFile::Read(void)
  */
 INT tml::ConfigFile::Write(void)
 {
-	auto write_plan_dat = this->write_plan.GetDataByParent();
+	auto write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (write_plan_dat->file_path.empty()) {
+	if (write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -307,7 +307,7 @@ INT tml::ConfigFile::Write(void)
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
-	txt_file.write_plan.parent_data = write_plan_dat;
+	txt_file.write_desc.parent_data = write_desc_dat;
 
 	if (txt_file.Write()) {
 		return (-1);

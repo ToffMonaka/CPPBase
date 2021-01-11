@@ -31,16 +31,16 @@ public:
 
 namespace tml {
 /**
- * @brief TextFileReadPlanDataクラス
+ * @brief TextFileReadDescDataクラス
  */
-class TextFileReadPlanData : public tml::BinaryFileReadPlanData
+class TextFileReadDescData : public tml::BinaryFileReadDescData
 {
 public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
 public:
-	TextFileReadPlanData();
-	virtual ~TextFileReadPlanData();
+	TextFileReadDescData();
+	virtual ~TextFileReadDescData();
 
 	virtual void Init(void);
 };
@@ -49,21 +49,21 @@ public:
 
 namespace tml {
 /**
- * @brief TextFileReadPlanクラス
+ * @brief TextFileReadDescクラス
  */
-class TextFileReadPlan
+class TextFileReadDesc
 {
 public:
-	tml::TextFileReadPlanData data;
-	tml::TextFileReadPlanData *parent_data;
+	tml::TextFileReadDescData data;
+	tml::TextFileReadDescData *parent_data;
 
 public:
-	TextFileReadPlan();
-	virtual ~TextFileReadPlan();
+	TextFileReadDesc();
+	virtual ~TextFileReadDesc();
 
 	virtual void Init(void);
 
-	tml::TextFileReadPlanData *GetDataByParent(void);
+	tml::TextFileReadDescData *GetDataByParent(void);
 };
 }
 
@@ -72,7 +72,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::TextFileReadPlanData *tml::TextFileReadPlan::GetDataByParent(void)
+inline tml::TextFileReadDescData *tml::TextFileReadDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -80,17 +80,17 @@ inline tml::TextFileReadPlanData *tml::TextFileReadPlan::GetDataByParent(void)
 
 namespace tml {
 /**
- * @brief TextFileWritePlanDataクラス
+ * @brief TextFileWriteDescDataクラス
  */
-class TextFileWritePlanData : public tml::BinaryFileWritePlanData
+class TextFileWriteDescData : public tml::BinaryFileWriteDescData
 {
 public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 	size_t add_newline_code_count;
 
 public:
-	TextFileWritePlanData();
-	virtual ~TextFileWritePlanData();
+	TextFileWriteDescData();
+	virtual ~TextFileWriteDescData();
 
 	virtual void Init(void);
 };
@@ -99,21 +99,21 @@ public:
 
 namespace tml {
 /**
- * @brief TextFileWritePlanクラス
+ * @brief TextFileWriteDescクラス
  */
-class TextFileWritePlan
+class TextFileWriteDesc
 {
 public:
-	tml::TextFileWritePlanData data;
-	tml::TextFileWritePlanData *parent_data;
+	tml::TextFileWriteDescData data;
+	tml::TextFileWriteDescData *parent_data;
 
 public:
-	TextFileWritePlan();
-	virtual ~TextFileWritePlan();
+	TextFileWriteDesc();
+	virtual ~TextFileWriteDesc();
 
 	virtual void Init(void);
 
-	tml::TextFileWritePlanData *GetDataByParent(void);
+	tml::TextFileWriteDescData *GetDataByParent(void);
 };
 }
 
@@ -122,7 +122,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::TextFileWritePlanData *tml::TextFileWritePlan::GetDataByParent(void)
+inline tml::TextFileWriteDescData *tml::TextFileWriteDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -140,8 +140,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::TextFileData data;
-	tml::TextFileReadPlan read_plan;
-	tml::TextFileWritePlan write_plan;
+	tml::TextFileReadDesc read_desc;
+	tml::TextFileWriteDesc write_desc;
 
 private:
 	void Release(void);

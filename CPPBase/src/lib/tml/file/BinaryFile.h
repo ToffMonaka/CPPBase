@@ -30,9 +30,9 @@ public:
 
 namespace tml {
 /**
- * @brief BinaryFileReadPlanDataクラス
+ * @brief BinaryFileReadDescDataクラス
  */
-class BinaryFileReadPlanData
+class BinaryFileReadDescData
 {
 public:
 	std::wstring file_path;
@@ -40,8 +40,8 @@ public:
 	size_t one_buffer_size;
 
 public:
-	BinaryFileReadPlanData();
-	virtual ~BinaryFileReadPlanData();
+	BinaryFileReadDescData();
+	virtual ~BinaryFileReadDescData();
 
 	virtual void Init(void);
 };
@@ -50,21 +50,21 @@ public:
 
 namespace tml {
 /**
- * @brief BinaryFileReadPlanクラス
+ * @brief BinaryFileReadDescクラス
  */
-class BinaryFileReadPlan
+class BinaryFileReadDesc
 {
 public:
-	tml::BinaryFileReadPlanData data;
-	tml::BinaryFileReadPlanData *parent_data;
+	tml::BinaryFileReadDescData data;
+	tml::BinaryFileReadDescData *parent_data;
 
 public:
-	BinaryFileReadPlan();
-	virtual ~BinaryFileReadPlan();
+	BinaryFileReadDesc();
+	virtual ~BinaryFileReadDesc();
 
 	virtual void Init(void);
 
-	tml::BinaryFileReadPlanData *GetDataByParent(void);
+	tml::BinaryFileReadDescData *GetDataByParent(void);
 };
 }
 
@@ -73,7 +73,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::BinaryFileReadPlanData *tml::BinaryFileReadPlan::GetDataByParent(void)
+inline tml::BinaryFileReadDescData *tml::BinaryFileReadDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -81,9 +81,9 @@ inline tml::BinaryFileReadPlanData *tml::BinaryFileReadPlan::GetDataByParent(voi
 
 namespace tml {
 /**
- * @brief BinaryFileWritePlanDataクラス
+ * @brief BinaryFileWriteDescDataクラス
  */
-class BinaryFileWritePlanData
+class BinaryFileWriteDescData
 {
 public:
 	std::wstring file_path;
@@ -91,8 +91,8 @@ public:
 	bool add_flag;
 
 public:
-	BinaryFileWritePlanData();
-	virtual ~BinaryFileWritePlanData();
+	BinaryFileWriteDescData();
+	virtual ~BinaryFileWriteDescData();
 
 	virtual void Init(void);
 };
@@ -101,21 +101,21 @@ public:
 
 namespace tml {
 /**
- * @brief BinaryFileWritePlanクラス
+ * @brief BinaryFileWriteDescクラス
  */
-class BinaryFileWritePlan
+class BinaryFileWriteDesc
 {
 public:
-	tml::BinaryFileWritePlanData data;
-	tml::BinaryFileWritePlanData *parent_data;
+	tml::BinaryFileWriteDescData data;
+	tml::BinaryFileWriteDescData *parent_data;
 
 public:
-	BinaryFileWritePlan();
-	virtual ~BinaryFileWritePlan();
+	BinaryFileWriteDesc();
+	virtual ~BinaryFileWriteDesc();
 
 	virtual void Init(void);
 
-	tml::BinaryFileWritePlanData *GetDataByParent(void);
+	tml::BinaryFileWriteDescData *GetDataByParent(void);
 };
 }
 
@@ -124,7 +124,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::BinaryFileWritePlanData *tml::BinaryFileWritePlan::GetDataByParent(void)
+inline tml::BinaryFileWriteDescData *tml::BinaryFileWriteDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -142,8 +142,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::BinaryFileData data;
-	tml::BinaryFileReadPlan read_plan;
-	tml::BinaryFileWritePlan write_plan;
+	tml::BinaryFileReadDesc read_desc;
+	tml::BinaryFileWriteDesc write_desc;
 
 private:
 	void Release(void);

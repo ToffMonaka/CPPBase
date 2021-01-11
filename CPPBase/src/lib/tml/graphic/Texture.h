@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <vector>
 #include <list>
 #include "../math/XNAMath.h"
 #include "../file/BinaryFile.h"
@@ -19,7 +20,7 @@ namespace tml {
 class TextureDesc : public tml::GraphicResourceDesc
 {
 public:
-	std::list<tml::BinaryFileReadPlan> file_read_plan_container;
+	std::list<tml::BinaryFileReadDesc> file_read_desc_container;
 	CD3D11_TEXTURE2D_DESC texture_desc;
 	DXGI_FORMAT render_target_format;
 	bool render_target_desc_null_flag;
@@ -58,6 +59,12 @@ private:
 	ID3D11DepthStencilView *dt_;
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
+	bool swap_chain_flg_;
+	bool ary_flg_;
+
+private:
+	static tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, tml::GraphicManager *, ID3D11Texture2D *, INT *dst_res = nullptr);
+	static std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, tml::GraphicManager *, ID3D11Texture2D *, INT *dst_res = nullptr);
 
 private:
 	void Release(void);

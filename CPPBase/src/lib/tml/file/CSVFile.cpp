@@ -41,7 +41,7 @@ void tml::CSVFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::CSVFileReadPlanData::CSVFileReadPlanData()
+tml::CSVFileReadDescData::CSVFileReadDescData()
 {
 	return;
 }
@@ -50,7 +50,7 @@ tml::CSVFileReadPlanData::CSVFileReadPlanData()
 /**
  * @brief デストラクタ
  */
-tml::CSVFileReadPlanData::~CSVFileReadPlanData()
+tml::CSVFileReadDescData::~CSVFileReadDescData()
 {
 	return;
 }
@@ -59,9 +59,9 @@ tml::CSVFileReadPlanData::~CSVFileReadPlanData()
 /**
  * @brief Init関数
  */
-void tml::CSVFileReadPlanData::Init(void)
+void tml::CSVFileReadDescData::Init(void)
 {
-	tml::TextFileReadPlanData::Init();
+	tml::TextFileReadDescData::Init();
 
 	return;
 }
@@ -70,7 +70,7 @@ void tml::CSVFileReadPlanData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::CSVFileReadPlan::CSVFileReadPlan() :
+tml::CSVFileReadDesc::CSVFileReadDesc() :
 	parent_data(nullptr)
 {
 	return;
@@ -80,7 +80,7 @@ tml::CSVFileReadPlan::CSVFileReadPlan() :
 /**
  * @brief デストラクタ
  */
-tml::CSVFileReadPlan::~CSVFileReadPlan()
+tml::CSVFileReadDesc::~CSVFileReadDesc()
 {
 	return;
 }
@@ -89,7 +89,7 @@ tml::CSVFileReadPlan::~CSVFileReadPlan()
 /**
  * @brief Init関数
  */
-void tml::CSVFileReadPlan::Init(void)
+void tml::CSVFileReadDesc::Init(void)
 {
 	this->data.Init();
 	this->parent_data = nullptr;
@@ -101,7 +101,7 @@ void tml::CSVFileReadPlan::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::CSVFileWritePlanData::CSVFileWritePlanData()
+tml::CSVFileWriteDescData::CSVFileWriteDescData()
 {
 	return;
 }
@@ -110,7 +110,7 @@ tml::CSVFileWritePlanData::CSVFileWritePlanData()
 /**
  * @brief デストラクタ
  */
-tml::CSVFileWritePlanData::~CSVFileWritePlanData()
+tml::CSVFileWriteDescData::~CSVFileWriteDescData()
 {
 	return;
 }
@@ -119,9 +119,9 @@ tml::CSVFileWritePlanData::~CSVFileWritePlanData()
 /**
  * @brief Init関数
  */
-void tml::CSVFileWritePlanData::Init(void)
+void tml::CSVFileWriteDescData::Init(void)
 {
-	tml::TextFileWritePlanData::Init();
+	tml::TextFileWriteDescData::Init();
 
 	return;
 }
@@ -130,7 +130,7 @@ void tml::CSVFileWritePlanData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::CSVFileWritePlan::CSVFileWritePlan() :
+tml::CSVFileWriteDesc::CSVFileWriteDesc() :
 	parent_data(nullptr)
 {
 	return;
@@ -140,7 +140,7 @@ tml::CSVFileWritePlan::CSVFileWritePlan() :
 /**
  * @brief デストラクタ
  */
-tml::CSVFileWritePlan::~CSVFileWritePlan()
+tml::CSVFileWriteDesc::~CSVFileWriteDesc()
 {
 	return;
 }
@@ -149,7 +149,7 @@ tml::CSVFileWritePlan::~CSVFileWritePlan()
 /**
  * @brief Init関数
  */
-void tml::CSVFileWritePlan::Init(void)
+void tml::CSVFileWriteDesc::Init(void)
 {
 	this->data.Init();
 	this->parent_data = nullptr;
@@ -197,8 +197,8 @@ void tml::CSVFile::Init(void)
 	this->Release();
 
 	this->data.Init();
-	this->read_plan.Init();
-	this->write_plan.Init();
+	this->read_desc.Init();
+	this->write_desc.Init();
 
 	return;
 }
@@ -211,11 +211,11 @@ void tml::CSVFile::Init(void)
  */
 INT tml::CSVFile::Read(void)
 {
-	auto read_plan_dat = this->read_plan.GetDataByParent();
+	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::TextFile txt_file;
 
-	txt_file.read_plan.parent_data = read_plan_dat;
+	txt_file.read_desc.parent_data = read_desc_dat;
 
 	if (txt_file.Read()) {
 		return (-1);
@@ -239,7 +239,7 @@ INT tml::CSVFile::Read(void)
 	size_t dq_str_cnt = 0U;
 	size_t double_dq_str_index = 0U;
 	size_t comment_str_index = 0U;
-	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetString(read_plan_dat->newline_code_type);
+	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetString(read_desc_dat->newline_code_type);
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
 
@@ -376,9 +376,9 @@ INT tml::CSVFile::Read(void)
  */
 INT tml::CSVFile::Write(void)
 {
-	auto write_plan_dat = this->write_plan.GetDataByParent();
+	auto write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (write_plan_dat->file_path.empty()) {
+	if (write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -398,7 +398,7 @@ INT tml::CSVFile::Write(void)
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
-	txt_file.write_plan.parent_data = write_plan_dat;
+	txt_file.write_desc.parent_data = write_desc_dat;
 
 	if (txt_file.Write()) {
 		return (-1);

@@ -76,13 +76,13 @@ inline std::wstring *tml::CSVFileData::GetValue(const size_t row_index, const si
 
 namespace tml {
 /**
- * @brief CSVFileReadPlanDataクラス
+ * @brief CSVFileReadDescDataクラス
  */
-class CSVFileReadPlanData : public tml::TextFileReadPlanData
+class CSVFileReadDescData : public tml::TextFileReadDescData
 {
 public:
-	CSVFileReadPlanData();
-	virtual ~CSVFileReadPlanData();
+	CSVFileReadDescData();
+	virtual ~CSVFileReadDescData();
 
 	virtual void Init(void);
 };
@@ -91,21 +91,21 @@ public:
 
 namespace tml {
 /**
- * @brief CSVFileReadPlanクラス
+ * @brief CSVFileReadDescクラス
  */
-class CSVFileReadPlan
+class CSVFileReadDesc
 {
 public:
-	tml::CSVFileReadPlanData data;
-	tml::CSVFileReadPlanData *parent_data;
+	tml::CSVFileReadDescData data;
+	tml::CSVFileReadDescData *parent_data;
 
 public:
-	CSVFileReadPlan();
-	virtual ~CSVFileReadPlan();
+	CSVFileReadDesc();
+	virtual ~CSVFileReadDesc();
 
 	virtual void Init(void);
 
-	tml::CSVFileReadPlanData *GetDataByParent(void);
+	tml::CSVFileReadDescData *GetDataByParent(void);
 };
 }
 
@@ -114,7 +114,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::CSVFileReadPlanData *tml::CSVFileReadPlan::GetDataByParent(void)
+inline tml::CSVFileReadDescData *tml::CSVFileReadDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -122,13 +122,13 @@ inline tml::CSVFileReadPlanData *tml::CSVFileReadPlan::GetDataByParent(void)
 
 namespace tml {
 /**
- * @brief CSVFileWritePlanDataクラス
+ * @brief CSVFileWriteDescDataクラス
  */
-class CSVFileWritePlanData : public tml::TextFileWritePlanData
+class CSVFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
-	CSVFileWritePlanData();
-	virtual ~CSVFileWritePlanData();
+	CSVFileWriteDescData();
+	virtual ~CSVFileWriteDescData();
 
 	virtual void Init(void);
 };
@@ -137,21 +137,21 @@ public:
 
 namespace tml {
 /**
- * @brief CSVFileWritePlanクラス
+ * @brief CSVFileWriteDescクラス
  */
-class CSVFileWritePlan
+class CSVFileWriteDesc
 {
 public:
-	tml::CSVFileWritePlanData data;
-	tml::CSVFileWritePlanData *parent_data;
+	tml::CSVFileWriteDescData data;
+	tml::CSVFileWriteDescData *parent_data;
 
 public:
-	CSVFileWritePlan();
-	virtual ~CSVFileWritePlan();
+	CSVFileWriteDesc();
+	virtual ~CSVFileWriteDesc();
 
 	virtual void Init(void);
 
-	tml::CSVFileWritePlanData *GetDataByParent(void);
+	tml::CSVFileWriteDescData *GetDataByParent(void);
 };
 }
 
@@ -160,7 +160,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::CSVFileWritePlanData *tml::CSVFileWritePlan::GetDataByParent(void)
+inline tml::CSVFileWriteDescData *tml::CSVFileWriteDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -178,8 +178,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::CSVFileData data;
-	tml::CSVFileReadPlan read_plan;
-	tml::CSVFileWritePlan write_plan;
+	tml::CSVFileReadDesc read_desc;
+	tml::CSVFileWriteDesc write_desc;
 
 private:
 	void Release(void);

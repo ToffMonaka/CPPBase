@@ -44,7 +44,7 @@ tml::TextureDesc::~TextureDesc()
  */
 void tml::TextureDesc::Init(void)
 {
-	this->file_read_plan_container.clear();
+	this->file_read_desc_container.clear();
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
 	this->texture_desc.BindFlags = 0U;
 	this->render_target_format = DXGI_FORMAT_UNKNOWN;
@@ -73,7 +73,9 @@ tml::Texture::Texture() :
 	rt_(nullptr),
 	dt_(nullptr),
 	sr_(nullptr),
-	uasr_(nullptr)
+	uasr_(nullptr),
+	swap_chain_flg_(false),
+	ary_flg_(false)
 {
 	return;
 }
@@ -139,6 +141,8 @@ void tml::Texture::Init(void)
 	this->Release();
 
 	this->size_ = 0.0f;
+	this->swap_chain_flg_ = false;
+	this->ary_flg_ = false;
 
 	tml::GraphicResource::Init();
 
@@ -162,176 +166,111 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 		return (-1);
 	}
 
-	if (desc.swap_chain_flag) {
+	this->swap_chain_flg_ = desc.swap_chain_flag;
+	this->ary_flg_ = desc.array_flag;
+
+	if (this->swap_chain_flg_) {
 		if (FAILED(this->GetManager()->GetSwapChain()->GetBuffer(0U, IID_PPV_ARGS(&this->tex_)))) {
 			this->Init();
 
 			return (-1);
 		}
-	} else if (desc.array_flag) {
-		if (desc.file_read_plan_container.empty()) {
+	} else if (this->ary_flg_) {
+		if (desc.file_read_desc_container.empty()) {
 			this->Init();
 
 			return (-1);
 		}
 
-		/*
+		desc.texture_desc.ArraySize = desc.file_read_desc_container.size();
+
 		std::list<D3D11_SUBRESOURCE_DATA> srd_cont;
-		std::list<tm_l::buffer::DynamicBuffer> srd_buf_cont;
-		bool tex_desc_fix_flg = false;
+		std::list<tml::DynamicBuffer> srd_buf_cont;
+		ID3D11Texture2D *tex = nullptr;
+		CD3D11_TEXTURE2D_DESC tex_desc;
+		bool tex_desc_fixed_flg = false;
 
-		auto tex_file_desc_itr = desc.tex_file_desc_cont.begin();
+		for (auto &file_read_desc : desc.file_read_desc_container) {
+			auto file_read_desc_dat = file_read_desc.GetDataByParent();
 
-		for (UINT_M ary_i = 0U; ary_i < desc.tex_desc.ArraySize; ++ary_i) {
-			if (tex_file_desc_itr != desc.tex_file_desc_cont.end()) { //テクスチャファイルディスクリプション有りの時
-				auto &tex_file_desc = (*tex_file_desc_itr);
+			if (!file_read_desc_dat->file_path.empty() || file_read_desc_dat->file_buffer.GetLength() > 0U) {
+				tml::BinaryFile bin_file;
 
-				++tex_file_desc_itr;
+				bin_file.read_desc.parent_data = file_read_desc_dat;
 
-				if (tex_file_desc.buf != nullptr) { //テクスチャファイルバッファ有りの時
-					if (tex_file_desc.buf->GetLength() <= 0) { //バッファレングス無しの時
-						this->Init();
+				if (bin_file.Read()) {
+					this->Init();
 
-						return (-1);
-					}
-
-					ID3D11Texture2D *tex = nullptr;
-					CD3D11_TEXTURE2D_DESC tex_desc;
-					D3DX11_IMAGE_LOAD_INFO img_load_info;
-
-					img_load_info.Width = (desc.tex_desc.Width <= 0U) ? D3DX11_DEFAULT : desc.tex_desc.Width;
-					img_load_info.Height = (desc.tex_desc.Height <= 0U) ? D3DX11_DEFAULT : desc.tex_desc.Height;
-					img_load_info.FirstMipLevel = 0U;
-					img_load_info.MipLevels = desc.tex_desc.MipLevels;
-					img_load_info.Format = (desc.tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : desc.tex_desc.Format;
-
-					if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(tex_file_desc.buf->Get()), tex_file_desc.buf->GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) { //失敗の時
-						this->Init();
-
-						return (-1);
-					}
-
-					tex->GetDesc(&tex_desc);
-
-					if (!(this->IsTextureDesc(desc.tex_desc, tex_desc, tex_desc_fix_flg))) { //非一致の時
-						tex->Release();
-
-						this->Init();
-
-						return (-1);
-					}
-
-					std::vector<tm_l::buffer::DynamicBuffer> buf_cont;
-					std::vector<FLOAT> pitch_cont;
-					INT_M res = 0;
-
-					tm_l::graphic::Texture::GetBuffer(&buf_cont, this->GetManager(), tex, &pitch_cont, &res);
-
-					if (res < 0) { //失敗の時
-						tex->Release();
-
-						this->Init();
-
-						return (-1);
-					}
-
-					tex->Release();
-
-					this->SetSubResourceData(srd_cont, srd_buf_cont, buf_cont, pitch_cont);
-
-					this->tex_file_path_cont.push_back(L"");
-
-					continue;
-				} else if (!(tex_file_desc.path.empty())) { //テクスチャファイルパス有りの時
-					tm_l::file::BinaryFile tex_bin_file;
-
-					tex_bin_file.Read(tex_file_desc.path.c_str(), 0);
-
-					if (tex_bin_file.GetBuffer()->GetLength() <= 0) { //バッファレングス無しの時
-						this->Init();
-
-						return (-1);
-					}
-
-					ID3D11Texture2D *tex = nullptr;
-					CD3D11_TEXTURE2D_DESC tex_desc;
-					D3DX11_IMAGE_LOAD_INFO img_load_info;
-
-					img_load_info.Width = (desc.tex_desc.Width <= 0U) ? D3DX11_DEFAULT : desc.tex_desc.Width;
-					img_load_info.Height = (desc.tex_desc.Height <= 0U) ? D3DX11_DEFAULT : desc.tex_desc.Height;
-					img_load_info.FirstMipLevel = 0U;
-					img_load_info.MipLevels = desc.tex_desc.MipLevels;
-					img_load_info.Format = (desc.tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : desc.tex_desc.Format;
-
-					if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(tex_bin_file.GetBuffer()->Get()), tex_bin_file.GetBuffer()->GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) { //失敗の時
-						this->Init();
-
-						return (-1);
-					}
-
-					tex->GetDesc(&tex_desc);
-
-					if (!(this->IsTextureDesc(desc.tex_desc, tex_desc, tex_desc_fix_flg))) { //非一致の時
-						tex->Release();
-
-						this->Init();
-
-						return (-1);
-					}
-
-					std::vector<tm_l::buffer::DynamicBuffer> buf_cont;
-					std::vector<FLOAT> pitch_cont;
-					INT_M res = 0;
-
-					tm_l::graphic::Texture::GetBuffer(&buf_cont, this->GetManager(), tex, &pitch_cont, &res);
-
-					if (res < 0) { //失敗の時
-						tex->Release();
-
-						this->Init();
-
-						return (-1);
-					}
-
-					tex->Release();
-
-					this->SetSubResourceData(srd_cont, srd_buf_cont, buf_cont, pitch_cont);
-
-					this->tex_file_path_cont.push_back(tex_file_desc.path);
-
-					continue;
+					return (-1);
 				}
-			}
 
-			ID3D11Texture2D *tex = nullptr;
-			CD3D11_TEXTURE2D_DESC tex_desc = desc.tex_desc;
+				if (bin_file.data.file_buffer.GetSize() <= 0U) {
+					this->Init();
 
-			tex_desc.ArraySize = 1U;
+					return (-1);
+				}
 
-			if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tex_desc, nullptr, &tex))) { //失敗の時
-				this->Init();
+				D3DX11_IMAGE_LOAD_INFO img_load_info;
 
-				return (-1);
+				img_load_info.Width = (desc.texture_desc.Width <= 0U) ? D3DX11_DEFAULT : desc.texture_desc.Width;
+				img_load_info.Height = (desc.texture_desc.Height <= 0U) ? D3DX11_DEFAULT : desc.texture_desc.Height;
+				img_load_info.FirstMipLevel = 0U;
+				img_load_info.MipLevels = desc.texture_desc.MipLevels;
+				img_load_info.Usage = static_cast<D3D11_USAGE>(D3DX11_DEFAULT);
+				img_load_info.BindFlags = D3DX11_DEFAULT;
+				img_load_info.CpuAccessFlags = D3DX11_DEFAULT;
+				img_load_info.Format = (desc.texture_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : desc.texture_desc.Format;
+
+				if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(bin_file.data.file_buffer.Get()), bin_file.data.file_buffer.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) {
+					this->Init();
+
+					return (-1);
+				}
+			} else {
+				tex_desc = desc.texture_desc;
+				tex_desc.ArraySize = 1U;
+
+				if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tex_desc, nullptr, &tex))) {
+					this->Init();
+
+					return (-1);
+				}
 			}
 
 			tex->GetDesc(&tex_desc);
 
-			if (!(this->IsTextureDesc(desc.tex_desc, tex_desc, tex_desc_fix_flg))) { //非一致の時
-				tex->Release();
+			if (tex_desc_fixed_flg) {
+				if ((desc.texture_desc.Width != tex_desc.Width)
+				|| (desc.texture_desc.Height != tex_desc.Height)
+				|| (desc.texture_desc.MipLevels != tex_desc.MipLevels)
+				|| (desc.texture_desc.Format != tex_desc.Format)) {
+					tex->Release();
 
-				this->Init();
+					tex = nullptr;
 
-				return (-1);
+					this->Init();
+
+					return (-1);
+				}
+			} else {
+				desc.texture_desc.Width = tex_desc.Width;
+				desc.texture_desc.Height = tex_desc.Height;
+				desc.texture_desc.MipLevels = tex_desc.MipLevels;
+				desc.texture_desc.Format = tex_desc.Format;
+
+				tex_desc_fixed_flg = true;
 			}
 
-			std::vector<tm_l::buffer::DynamicBuffer> buf_cont;
-			std::vector<FLOAT> pitch_cont;
-			INT_M res = 0;
+			std::vector<tml::DynamicBuffer> buf_cont;
+			std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont;
+			INT res = 0;
 
-			tm_l::graphic::Texture::GetBuffer(&buf_cont, this->GetManager(), tex, &pitch_cont, &res);
+			tml::Texture::GetBuffer(buf_cont, msr_cont, this->GetManager(), tex, &res);
 
-			if (res < 0) { //失敗の時
+			if (res < 0) {
 				tex->Release();
+
+				tex = nullptr;
 
 				this->Init();
 
@@ -340,32 +279,43 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 
 			tex->Release();
 
-			this->SetSubResourceData(srd_cont, srd_buf_cont, buf_cont, pitch_cont);
+			tex = nullptr;
 
-			this->tex_file_path_cont.push_back(L"");
+			for (size_t buf_i = 0U; buf_i < buf_cont.size(); ++buf_i) {
+				srd_cont.emplace_back();
+				srd_buf_cont.emplace_back();
+
+				auto &srd = srd_cont.back();
+				auto &srd_buf = srd_buf_cont.back();
+
+				srd.pSysMem = buf_cont[buf_i].Get();
+				srd.SysMemPitch = msr_cont[buf_i].RowPitch;
+				srd_buf = std::move(buf_cont[buf_i]);
+			}
 		}
 
 		std::vector<D3D11_SUBRESOURCE_DATA> tmp_srd_cont(srd_cont.begin(), srd_cont.end());
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&desc.tex_desc, tmp_srd_cont.data(), &this->tex))) { //失敗の時
+		if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&desc.texture_desc, tmp_srd_cont.data(), &this->tex_))) {
 			this->Init();
 
 			return (-1);
 		}
-		*/
 	} else {
-		if (desc.file_read_plan_container.empty()) {
+		if (desc.file_read_desc_container.empty()) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto file_read_plan_dat = desc.file_read_plan_container.front().GetDataByParent();
+		desc.texture_desc.ArraySize = 1U;
 
-		if (!file_read_plan_dat->file_path.empty() || file_read_plan_dat->file_buffer.GetLength() > 0U) {
+		auto file_read_desc_dat = desc.file_read_desc_container.front().GetDataByParent();
+
+		if (!file_read_desc_dat->file_path.empty() || file_read_desc_dat->file_buffer.GetLength() > 0U) {
 			tml::BinaryFile bin_file;
 
-			bin_file.read_plan.parent_data = file_read_plan_dat;
+			bin_file.read_desc.parent_data = file_read_desc_dat;
 
 			if (bin_file.Read()) {
 				this->Init();
@@ -383,11 +333,11 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 
 			img_load_info.Width = (desc.texture_desc.Width <= 0U) ? D3DX11_DEFAULT : desc.texture_desc.Width;
 			img_load_info.Height = (desc.texture_desc.Height <= 0U) ? D3DX11_DEFAULT : desc.texture_desc.Height;
+			img_load_info.FirstMipLevel = 0U;
+			img_load_info.MipLevels = desc.texture_desc.MipLevels;
 			img_load_info.Usage = desc.texture_desc.Usage;
 			img_load_info.BindFlags = desc.texture_desc.BindFlags;
 			img_load_info.CpuAccessFlags = desc.texture_desc.CPUAccessFlags;
-			img_load_info.FirstMipLevel = 0U;
-			img_load_info.MipLevels = desc.texture_desc.MipLevels;
 			img_load_info.Format = (desc.texture_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : desc.texture_desc.Format;
 
 			if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(bin_file.data.file_buffer.Get()), bin_file.data.file_buffer.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&this->tex_), nullptr))) {
@@ -422,13 +372,13 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 			if (tex_desc.SampleDesc.Count > 1U) {
 				dimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
 
-				if (desc.array_flag) {
+				if (this->ary_flg_) {
 					dimension = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
 				}
 			} else {
 				dimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
-				if (desc.array_flag) {
+				if (this->ary_flg_) {
 					dimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
 				}
 			}
@@ -460,13 +410,13 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 			D3D11_DSV_DIMENSION dimension;
 
 			if (tex_desc.SampleDesc.Count > 1U) {
-				if (desc.array_flag) {
+				if (this->ary_flg_) {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY;
 				} else {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 				}
 			} else {
-				if (desc.array_flag) {
+				if (this->ary_flg_) {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -500,13 +450,13 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 			D3D11_SRV_DIMENSION dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 
 			if (tex_desc.SampleDesc.Count > 1U) {
-				if (desc.array_flag) {
+				if (this->ary_flg_) {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
 				} else {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 				}
 			} else {
-				if (desc.array_flag) {
+				if (this->ary_flg_) {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -544,7 +494,7 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 
 				return (-1);
 			} else {
-				if (desc.array_flag) {
+				if (this->ary_flg_) {
 					dimension = D3D11_UAV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_UAV_DIMENSION_TEXTURE2D;
@@ -598,4 +548,140 @@ void tml::Texture::ClearDepthTarget(void)
 	this->GetManager()->GetDeviceContext()->ClearDepthStencilView(this->dt_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	return;
+}
+
+
+/**
+ * @brief GetBuffer関数
+ * @param dst_buf (dst_buffer)
+ * @param dst_msr (dst_mapped_subresource)
+ * @param mgr (manager)
+ * @param tex (texture)
+ * @param dst_res (dst_result)<br>
+ * nullptr=指定無し,0未満=失敗
+ * @return dst_buf (dst_buffer)
+ */
+tml::DynamicBuffer &tml::Texture::GetBuffer(tml::DynamicBuffer &dst_buf, D3D11_MAPPED_SUBRESOURCE &dst_msr, tml::GraphicManager *mgr, ID3D11Texture2D *tex, INT *dst_res)
+{
+	dst_buf.Init();
+	tml::MemoryUtil::Clear(&dst_msr, 1U);
+
+	if ((mgr == nullptr)
+	|| (tex == nullptr)) {
+		tml::SetResult(dst_res, -1);
+
+		return (dst_buf);
+	}
+
+	ID3D11Texture2D *cpu_tex = nullptr;
+	CD3D11_TEXTURE2D_DESC cpu_tex_desc;
+
+	tex->GetDesc(&cpu_tex_desc);
+
+	cpu_tex_desc.Usage = D3D11_USAGE_STAGING;
+	cpu_tex_desc.BindFlags = 0U;
+	cpu_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	cpu_tex_desc.MiscFlags = 0U;
+
+	if (FAILED(mgr->GetDevice()->CreateTexture2D(&cpu_tex_desc, nullptr, &cpu_tex))) {
+		tml::SetResult(dst_res, -1);
+
+		return (dst_buf);
+	}
+
+	mgr->GetDeviceContext()->CopyResource(cpu_tex, tex);
+
+	D3D11_MAPPED_SUBRESOURCE msr;
+
+	if (FAILED(mgr->GetDeviceContext()->Map(cpu_tex, 0U, D3D11_MAP_READ, 0U, &msr))) {
+		cpu_tex->Release();
+
+		tml::SetResult(dst_res, -1);
+
+		return (dst_buf);
+	}
+
+	dst_buf.Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
+	dst_msr = msr;
+	dst_msr.pData = nullptr;
+
+	mgr->GetDeviceContext()->Unmap(cpu_tex, 0U);
+
+	cpu_tex->Release();
+
+	tml::SetResult(dst_res, 0);
+
+	return (dst_buf);
+}
+
+
+/**
+ * @brief GetBuffer関数
+ * @param dst_buf_cont (dst_buffer_container)
+ * @param dst_msr_cont (dst_mapped_subresource_container)
+ * @param mgr (manager)
+ * @param tex (texture)
+ * @param dst_res (dst_result)<br>
+ * nullptr=指定無し,0未満=失敗
+ * @return dst_buf_cont (dst_buffer_container)
+ */
+std::vector<tml::DynamicBuffer> &tml::Texture::GetBuffer(std::vector<tml::DynamicBuffer> &dst_buf_cont, std::vector<D3D11_MAPPED_SUBRESOURCE> &dst_msr_cont, tml::GraphicManager *mgr, ID3D11Texture2D *tex, INT *dst_res)
+{
+	dst_buf_cont.clear();
+	dst_buf_cont.clear();
+
+	if ((mgr == nullptr)
+	|| (tex == nullptr)) {
+		tml::SetResult(dst_res, -1);
+
+		return (dst_buf_cont);
+	}
+
+	ID3D11Texture2D *cpu_tex = nullptr;
+	CD3D11_TEXTURE2D_DESC cpu_tex_desc;
+
+	tex->GetDesc(&cpu_tex_desc);
+
+	cpu_tex_desc.Usage = D3D11_USAGE_STAGING;
+	cpu_tex_desc.BindFlags = 0U;
+	cpu_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	cpu_tex_desc.MiscFlags = 0U;
+
+	if (FAILED(mgr->GetDevice()->CreateTexture2D(&cpu_tex_desc, nullptr, &cpu_tex))) {
+		tml::SetResult(dst_res, -1);
+
+		return (dst_buf_cont);
+	}
+
+	mgr->GetDeviceContext()->CopyResource(cpu_tex, tex);
+
+	dst_buf_cont.resize(cpu_tex_desc.MipLevels);
+	dst_msr_cont.resize(cpu_tex_desc.MipLevels);
+
+	for (UINT mm_i = 0U; mm_i < cpu_tex_desc.MipLevels; ++mm_i) {
+		D3D11_MAPPED_SUBRESOURCE msr;
+
+		if (FAILED(mgr->GetDeviceContext()->Map(cpu_tex, mm_i, D3D11_MAP_READ, 0U, &msr))) {
+			cpu_tex->Release();
+
+			dst_buf_cont.clear();
+			dst_buf_cont.clear();
+
+			tml::SetResult(dst_res, -1);
+
+			return (dst_buf_cont);
+		}
+
+		dst_buf_cont[mm_i].Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
+		dst_msr_cont[mm_i] = msr;
+		dst_msr_cont[mm_i].pData = nullptr;
+
+		mgr->GetDeviceContext()->Unmap(cpu_tex, mm_i);
+	}
+
+	cpu_tex->Release();
+
+	tml::SetResult(dst_res, 0);
+
+	return (dst_buf_cont);
 }

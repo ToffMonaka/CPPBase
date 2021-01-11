@@ -69,9 +69,9 @@ HRESULT __stdcall tml::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, LPCSTR fil
 	tml::BinaryFile bin_file;
 	std::wstring bin_file_name;
 
-	bin_file.read_plan.data.file_path = this->dir_path_;
-	bin_file.read_plan.data.file_path += L"/";
-	bin_file.read_plan.data.file_path += tml::StringUtil::GetString(bin_file_name, file_name);
+	bin_file.read_desc.data.file_path = this->dir_path_;
+	bin_file.read_desc.data.file_path += L"/";
+	bin_file.read_desc.data.file_path += tml::StringUtil::GetString(bin_file_name, file_name);
 
 	if (bin_file.Read()) {
 		return (E_FAIL);
@@ -127,7 +127,7 @@ tml::ShaderDesc::~ShaderDesc()
  */
 void tml::ShaderDesc::Init(void)
 {
-	this->file_read_plan.Init();
+	this->file_read_desc.Init();
 	this->include_directory_path.clear();
 	this->vertex_shader_function_name.clear();
 	this->vertex_shader_model_name.clear();
@@ -260,11 +260,11 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
 		return (-1);
 	}
 
-	auto file_read_plan_dat = desc.file_read_plan.GetDataByParent();
+	auto file_read_desc_dat = desc.file_read_desc.GetDataByParent();
 
 	tml::BinaryFile bin_file;
 
-	bin_file.read_plan.parent_data = file_read_plan_dat;
+	bin_file.read_desc.parent_data = file_read_desc_dat;
 
 	if (bin_file.Read()) {
 		this->Init();

@@ -87,8 +87,8 @@ void cpp_base::SystemConfigFile::Init(void)
 	this->Release();
 
 	this->data.Init();
-	this->read_plan.Init();
-	this->write_plan.Init();
+	this->read_desc.Init();
+	this->write_desc.Init();
 
 	return;
 }
@@ -101,11 +101,11 @@ void cpp_base::SystemConfigFile::Init(void)
  */
 INT cpp_base::SystemConfigFile::Read(void)
 {
-	auto read_plan_dat = this->read_plan.GetDataByParent();
+	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::INIFile ini_file;
 
-	ini_file.read_plan.parent_data = read_plan_dat;
+	ini_file.read_desc.parent_data = read_desc_dat;
 
 	if (ini_file.Read()) {
 		return (-1);
@@ -179,9 +179,9 @@ INT cpp_base::SystemConfigFile::Read(void)
  */
 INT cpp_base::SystemConfigFile::Write(void)
 {
-	auto write_plan_dat = this->write_plan.GetDataByParent();
+	auto write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (write_plan_dat->file_path.empty()) {
+	if (write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -209,7 +209,7 @@ INT cpp_base::SystemConfigFile::Write(void)
 		txt_file.data.string_container.push_back(empty_str);
 	}
 
-	txt_file.write_plan.parent_data = write_plan_dat;
+	txt_file.write_desc.parent_data = write_desc_dat;
 
 	if (txt_file.Write()) {
 		return (-1);

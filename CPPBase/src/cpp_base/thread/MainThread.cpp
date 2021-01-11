@@ -87,7 +87,7 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
 	}
 
 	{// SystemConfigFile Read
-		this->sys_conf_file_.read_plan.data.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
+		this->sys_conf_file_.read_desc.data.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
 
 		if (this->sys_conf_file_.Read() < 0) {
 			this->Init();

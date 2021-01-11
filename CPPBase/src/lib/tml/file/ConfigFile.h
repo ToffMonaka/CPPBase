@@ -50,13 +50,13 @@ inline std::wstring *tml::ConfigFileData::GetValue(const WCHAR *val_name)
 
 namespace tml {
 /**
- * @brief ConfigFileReadPlanDataクラス
+ * @brief ConfigFileReadDescDataクラス
  */
-class ConfigFileReadPlanData : public tml::TextFileReadPlanData
+class ConfigFileReadDescData : public tml::TextFileReadDescData
 {
 public:
-	ConfigFileReadPlanData();
-	virtual ~ConfigFileReadPlanData();
+	ConfigFileReadDescData();
+	virtual ~ConfigFileReadDescData();
 
 	virtual void Init(void);
 };
@@ -65,21 +65,21 @@ public:
 
 namespace tml {
 /**
- * @brief ConfigFileReadPlanクラス
+ * @brief ConfigFileReadDescクラス
  */
-class ConfigFileReadPlan
+class ConfigFileReadDesc
 {
 public:
-	tml::ConfigFileReadPlanData data;
-	tml::ConfigFileReadPlanData *parent_data;
+	tml::ConfigFileReadDescData data;
+	tml::ConfigFileReadDescData *parent_data;
 
 public:
-	ConfigFileReadPlan();
-	virtual ~ConfigFileReadPlan();
+	ConfigFileReadDesc();
+	virtual ~ConfigFileReadDesc();
 
 	virtual void Init(void);
 
-	tml::ConfigFileReadPlanData *GetDataByParent(void);
+	tml::ConfigFileReadDescData *GetDataByParent(void);
 };
 }
 
@@ -88,7 +88,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::ConfigFileReadPlanData *tml::ConfigFileReadPlan::GetDataByParent(void)
+inline tml::ConfigFileReadDescData *tml::ConfigFileReadDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -96,13 +96,13 @@ inline tml::ConfigFileReadPlanData *tml::ConfigFileReadPlan::GetDataByParent(voi
 
 namespace tml {
 /**
- * @brief ConfigFileWritePlanDataクラス
+ * @brief ConfigFileWriteDescDataクラス
  */
-class ConfigFileWritePlanData : public tml::TextFileWritePlanData
+class ConfigFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
-	ConfigFileWritePlanData();
-	virtual ~ConfigFileWritePlanData();
+	ConfigFileWriteDescData();
+	virtual ~ConfigFileWriteDescData();
 
 	virtual void Init(void);
 };
@@ -111,21 +111,21 @@ public:
 
 namespace tml {
 /**
- * @brief ConfigFileWritePlanクラス
+ * @brief ConfigFileWriteDescクラス
  */
-class ConfigFileWritePlan
+class ConfigFileWriteDesc
 {
 public:
-	tml::ConfigFileWritePlanData data;
-	tml::ConfigFileWritePlanData *parent_data;
+	tml::ConfigFileWriteDescData data;
+	tml::ConfigFileWriteDescData *parent_data;
 
 public:
-	ConfigFileWritePlan();
-	virtual ~ConfigFileWritePlan();
+	ConfigFileWriteDesc();
+	virtual ~ConfigFileWriteDesc();
 
 	virtual void Init(void);
 
-	tml::ConfigFileWritePlanData *GetDataByParent(void);
+	tml::ConfigFileWriteDescData *GetDataByParent(void);
 };
 }
 
@@ -134,7 +134,7 @@ public:
  * @brief GetDataByParent関数
  * @return dat (data)
  */
-inline tml::ConfigFileWritePlanData *tml::ConfigFileWritePlan::GetDataByParent(void)
+inline tml::ConfigFileWriteDescData *tml::ConfigFileWriteDesc::GetDataByParent(void)
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -152,8 +152,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::ConfigFileData data;
-	tml::ConfigFileReadPlan read_plan;
-	tml::ConfigFileWritePlan write_plan;
+	tml::ConfigFileReadDesc read_desc;
+	tml::ConfigFileWriteDesc write_desc;
 
 private:
 	void Release(void);

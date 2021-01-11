@@ -98,7 +98,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 			}
 		}
 
-		sys_conf_file.read_plan.data.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
+		sys_conf_file.read_desc.data.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
 
 		if (sys_conf_file.Read() < 0) {
 			cpp_base::InitMain();
