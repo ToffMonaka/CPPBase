@@ -55,42 +55,15 @@ namespace tml {
 class ConfigFileReadDescData : public tml::TextFileReadDescData
 {
 public:
+
+public:
 	ConfigFileReadDescData();
 	virtual ~ConfigFileReadDescData();
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief ConfigFileReadDescクラス
- */
-class ConfigFileReadDesc
-{
-public:
-	tml::ConfigFileReadDescData data;
-	tml::ConfigFileReadDescData *parent_data;
-
-public:
-	ConfigFileReadDesc();
-	virtual ~ConfigFileReadDesc();
-
-	virtual void Init(void);
-
-	tml::ConfigFileReadDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::ConfigFileReadDescData *tml::ConfigFileReadDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using ConfigFileReadDesc = tml::FileReadDesc<tml::ConfigFileReadDescData>;
 }
 
 
@@ -101,42 +74,15 @@ namespace tml {
 class ConfigFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
+
+public:
 	ConfigFileWriteDescData();
 	virtual ~ConfigFileWriteDescData();
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief ConfigFileWriteDescクラス
- */
-class ConfigFileWriteDesc
-{
-public:
-	tml::ConfigFileWriteDescData data;
-	tml::ConfigFileWriteDescData *parent_data;
-
-public:
-	ConfigFileWriteDesc();
-	virtual ~ConfigFileWriteDesc();
-
-	virtual void Init(void);
-
-	tml::ConfigFileWriteDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::ConfigFileWriteDescData *tml::ConfigFileWriteDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using ConfigFileWriteDesc = tml::FileWriteDesc<tml::ConfigFileWriteDescData>;
 }
 
 

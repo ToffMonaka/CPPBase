@@ -6,14 +6,15 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief ShaderStructuredBufferDescクラス
  */
-class ShaderStructuredBufferDesc : public tml::GraphicResourceDesc
+class ShaderStructuredBufferDesc : public tml::graphic::ResourceDesc
 {
 public:
 	UINT element_size;
@@ -28,18 +29,20 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief ShaderStructuredBufferクラス
  *
  * インターフェースパターン
  */
-class ShaderStructuredBuffer : public tml::GraphicResource
+class ShaderStructuredBuffer : public tml::graphic::Resource
 {
-public: ShaderStructuredBuffer(const tml::ShaderStructuredBuffer &) = delete;
-public: tml::ShaderStructuredBuffer &operator =(const tml::ShaderStructuredBuffer &) = delete;
+public: ShaderStructuredBuffer(const tml::graphic::ShaderStructuredBuffer &) = delete;
+public: tml::graphic::ShaderStructuredBuffer &operator =(const tml::graphic::ShaderStructuredBuffer &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
@@ -54,7 +57,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(tml::ShaderStructuredBufferDesc &);
+	INT Create(tml::graphic::ShaderStructuredBufferDesc &);
 
 	void UpdateBuffer(void *);
 	template <typename T>
@@ -75,13 +78,14 @@ public:
 	void SetElementCount(const UINT);
 };
 }
+}
 
 
 /**
  * @brief GetBuffer関数
  * @return buf (buffer)
  */
-inline ID3D11Buffer *tml::ShaderStructuredBuffer::GetBuffer(void) const
+inline ID3D11Buffer *tml::graphic::ShaderStructuredBuffer::GetBuffer(void) const
 {
 	return (this->buf_);
 }
@@ -91,7 +95,7 @@ inline ID3D11Buffer *tml::ShaderStructuredBuffer::GetBuffer(void) const
  * @brief GetSR関数
  * @return sr (sr)
  */
-inline ID3D11ShaderResourceView *tml::ShaderStructuredBuffer::GetSR(void) const
+inline ID3D11ShaderResourceView *tml::graphic::ShaderStructuredBuffer::GetSR(void) const
 {
 	return (this->sr_);
 }
@@ -101,7 +105,7 @@ inline ID3D11ShaderResourceView *tml::ShaderStructuredBuffer::GetSR(void) const
  * @brief GetUASR関数
  * @return uasr (uasr)
  */
-inline ID3D11UnorderedAccessView *tml::ShaderStructuredBuffer::GetUASR(void) const
+inline ID3D11UnorderedAccessView *tml::graphic::ShaderStructuredBuffer::GetUASR(void) const
 {
 	return (this->uasr_);
 }
@@ -111,7 +115,7 @@ inline ID3D11UnorderedAccessView *tml::ShaderStructuredBuffer::GetUASR(void) con
  * @brief GetElementSize関数
  * @return element_size (element_size)
  */
-inline UINT tml::ShaderStructuredBuffer::GetElementSize(void) const
+inline UINT tml::graphic::ShaderStructuredBuffer::GetElementSize(void) const
 {
 	return (this->element_size_);
 }
@@ -121,7 +125,7 @@ inline UINT tml::ShaderStructuredBuffer::GetElementSize(void) const
  * @brief GetElementLimit関数
  * @return element_limit (element_limit)
  */
-inline UINT tml::ShaderStructuredBuffer::GetElementLimit(void) const
+inline UINT tml::graphic::ShaderStructuredBuffer::GetElementLimit(void) const
 {
 	return (this->element_limit_);
 }
@@ -131,7 +135,7 @@ inline UINT tml::ShaderStructuredBuffer::GetElementLimit(void) const
  * @brief GetElementCount関数
  * @return element_cnt (element_count)
  */
-inline UINT tml::ShaderStructuredBuffer::GetElementCount(void) const
+inline UINT tml::graphic::ShaderStructuredBuffer::GetElementCount(void) const
 {
 	return (this->element_cnt_);
 }
@@ -141,7 +145,7 @@ inline UINT tml::ShaderStructuredBuffer::GetElementCount(void) const
  * @brief SetElementCount関数
  * @param element_cnt (element_count)
  */
-inline void tml::ShaderStructuredBuffer::SetElementCount(const UINT element_cnt)
+inline void tml::graphic::ShaderStructuredBuffer::SetElementCount(const UINT element_cnt)
 {
 	this->element_cnt_ = element_cnt;
 
@@ -157,7 +161,7 @@ inline void tml::ShaderStructuredBuffer::SetElementCount(const UINT element_cnt)
  * nullptr=失敗
  */
 template <typename T>
-inline T *tml::ShaderStructuredBuffer::GetElement(T *element_ary, const UINT index)
+inline T *tml::graphic::ShaderStructuredBuffer::GetElement(T *element_ary, const UINT index)
 {
 	if (index >= this->element_limit_) {
 		return (nullptr);

@@ -5,13 +5,13 @@
 
 
 #include "Texture.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::TextureDesc::TextureDesc() :
+tml::graphic::TextureDesc::TextureDesc() :
 	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U),
 	render_target_format(DXGI_FORMAT_UNKNOWN),
 	render_target_desc_null_flag(false),
@@ -33,7 +33,7 @@ tml::TextureDesc::TextureDesc() :
 /**
  * @brief デストラクタ
  */
-tml::TextureDesc::~TextureDesc()
+tml::graphic::TextureDesc::~TextureDesc()
 {
 	return;
 }
@@ -42,7 +42,7 @@ tml::TextureDesc::~TextureDesc()
 /**
  * @brief Init関数
  */
-void tml::TextureDesc::Init(void)
+void tml::graphic::TextureDesc::Init(void)
 {
 	this->file_read_desc_container.clear();
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
@@ -58,7 +58,7 @@ void tml::TextureDesc::Init(void)
 	this->swap_chain_flag = false;
 	this->array_flag = false;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -67,7 +67,7 @@ void tml::TextureDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Texture::Texture() :
+tml::graphic::Texture::Texture() :
 	tex_(nullptr),
 	size_(0.0f, 0.0f),
 	rt_(nullptr),
@@ -84,7 +84,7 @@ tml::Texture::Texture() :
 /**
  * @brief デストラクタ
  */
-tml::Texture::~Texture()
+tml::graphic::Texture::~Texture()
 {
 	this->Release();
 
@@ -95,7 +95,7 @@ tml::Texture::~Texture()
 /**
  * @brief Release関数
  */
-void tml::Texture::Release(void)
+void tml::graphic::Texture::Release(void)
 {
 	if (this->uasr_ != nullptr) {
 		this->uasr_->Release();
@@ -127,7 +127,7 @@ void tml::Texture::Release(void)
 		this->tex_ = nullptr;
 	}
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -136,7 +136,7 @@ void tml::Texture::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Texture::Init(void)
+void tml::graphic::Texture::Init(void)
 {
 	this->Release();
 
@@ -144,7 +144,7 @@ void tml::Texture::Init(void)
 	this->swap_chain_flg_ = false;
 	this->ary_flg_ = false;
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -156,11 +156,11 @@ void tml::Texture::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Texture::Create(tml::TextureDesc &desc)
+INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
@@ -265,7 +265,7 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
 			std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont;
 			INT res = 0;
 
-			tml::Texture::GetBuffer(buf_cont, msr_cont, this->GetManager(), tex, &res);
+			this->GetManager()->GetBuffer(buf_cont, msr_cont, tex, &res);
 
 			if (res < 0) {
 				tex->Release();
@@ -525,7 +525,7 @@ INT tml::Texture::Create(tml::TextureDesc &desc)
  * @brief ClearRenderTarget関数
  * @param col (color)
  */
-void tml::Texture::ClearRenderTarget(const tml::XMFLOAT4EX &col)
+void tml::graphic::Texture::ClearRenderTarget(const tml::XMFLOAT4EX &col)
 {
 	FLOAT col_ary[4] = {
 		col.x,
@@ -543,145 +543,9 @@ void tml::Texture::ClearRenderTarget(const tml::XMFLOAT4EX &col)
 /**
  * @brief ClearDepthTarget関数
  */
-void tml::Texture::ClearDepthTarget(void)
+void tml::graphic::Texture::ClearDepthTarget(void)
 {
 	this->GetManager()->GetDeviceContext()->ClearDepthStencilView(this->dt_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	return;
-}
-
-
-/**
- * @brief GetBuffer関数
- * @param dst_buf (dst_buffer)
- * @param dst_msr (dst_mapped_subresource)
- * @param mgr (manager)
- * @param tex (texture)
- * @param dst_res (dst_result)<br>
- * nullptr=指定無し,0未満=失敗
- * @return dst_buf (dst_buffer)
- */
-tml::DynamicBuffer &tml::Texture::GetBuffer(tml::DynamicBuffer &dst_buf, D3D11_MAPPED_SUBRESOURCE &dst_msr, tml::GraphicManager *mgr, ID3D11Texture2D *tex, INT *dst_res)
-{
-	dst_buf.Init();
-	tml::MemoryUtil::Clear(&dst_msr, 1U);
-
-	if ((mgr == nullptr)
-	|| (tex == nullptr)) {
-		tml::SetResult(dst_res, -1);
-
-		return (dst_buf);
-	}
-
-	ID3D11Texture2D *cpu_tex = nullptr;
-	CD3D11_TEXTURE2D_DESC cpu_tex_desc;
-
-	tex->GetDesc(&cpu_tex_desc);
-
-	cpu_tex_desc.Usage = D3D11_USAGE_STAGING;
-	cpu_tex_desc.BindFlags = 0U;
-	cpu_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	cpu_tex_desc.MiscFlags = 0U;
-
-	if (FAILED(mgr->GetDevice()->CreateTexture2D(&cpu_tex_desc, nullptr, &cpu_tex))) {
-		tml::SetResult(dst_res, -1);
-
-		return (dst_buf);
-	}
-
-	mgr->GetDeviceContext()->CopyResource(cpu_tex, tex);
-
-	D3D11_MAPPED_SUBRESOURCE msr;
-
-	if (FAILED(mgr->GetDeviceContext()->Map(cpu_tex, 0U, D3D11_MAP_READ, 0U, &msr))) {
-		cpu_tex->Release();
-
-		tml::SetResult(dst_res, -1);
-
-		return (dst_buf);
-	}
-
-	dst_buf.Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
-	dst_msr = msr;
-	dst_msr.pData = nullptr;
-
-	mgr->GetDeviceContext()->Unmap(cpu_tex, 0U);
-
-	cpu_tex->Release();
-
-	tml::SetResult(dst_res, 0);
-
-	return (dst_buf);
-}
-
-
-/**
- * @brief GetBuffer関数
- * @param dst_buf_cont (dst_buffer_container)
- * @param dst_msr_cont (dst_mapped_subresource_container)
- * @param mgr (manager)
- * @param tex (texture)
- * @param dst_res (dst_result)<br>
- * nullptr=指定無し,0未満=失敗
- * @return dst_buf_cont (dst_buffer_container)
- */
-std::vector<tml::DynamicBuffer> &tml::Texture::GetBuffer(std::vector<tml::DynamicBuffer> &dst_buf_cont, std::vector<D3D11_MAPPED_SUBRESOURCE> &dst_msr_cont, tml::GraphicManager *mgr, ID3D11Texture2D *tex, INT *dst_res)
-{
-	dst_buf_cont.clear();
-	dst_buf_cont.clear();
-
-	if ((mgr == nullptr)
-	|| (tex == nullptr)) {
-		tml::SetResult(dst_res, -1);
-
-		return (dst_buf_cont);
-	}
-
-	ID3D11Texture2D *cpu_tex = nullptr;
-	CD3D11_TEXTURE2D_DESC cpu_tex_desc;
-
-	tex->GetDesc(&cpu_tex_desc);
-
-	cpu_tex_desc.Usage = D3D11_USAGE_STAGING;
-	cpu_tex_desc.BindFlags = 0U;
-	cpu_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	cpu_tex_desc.MiscFlags = 0U;
-
-	if (FAILED(mgr->GetDevice()->CreateTexture2D(&cpu_tex_desc, nullptr, &cpu_tex))) {
-		tml::SetResult(dst_res, -1);
-
-		return (dst_buf_cont);
-	}
-
-	mgr->GetDeviceContext()->CopyResource(cpu_tex, tex);
-
-	dst_buf_cont.resize(cpu_tex_desc.MipLevels);
-	dst_msr_cont.resize(cpu_tex_desc.MipLevels);
-
-	for (UINT mm_i = 0U; mm_i < cpu_tex_desc.MipLevels; ++mm_i) {
-		D3D11_MAPPED_SUBRESOURCE msr;
-
-		if (FAILED(mgr->GetDeviceContext()->Map(cpu_tex, mm_i, D3D11_MAP_READ, 0U, &msr))) {
-			cpu_tex->Release();
-
-			dst_buf_cont.clear();
-			dst_buf_cont.clear();
-
-			tml::SetResult(dst_res, -1);
-
-			return (dst_buf_cont);
-		}
-
-		dst_buf_cont[mm_i].Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
-		dst_msr_cont[mm_i] = msr;
-		dst_msr_cont[mm_i].pData = nullptr;
-
-		mgr->GetDeviceContext()->Unmap(cpu_tex, mm_i);
-	}
-
-	cpu_tex->Release();
-
-	tml::SetResult(dst_res, 0);
-
-	return (dst_buf_cont);
 }

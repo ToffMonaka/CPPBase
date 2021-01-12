@@ -7,14 +7,15 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMath.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief MaterialDescクラス
  */
-class MaterialDesc : public tml::GraphicResourceDesc
+class MaterialDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::XMFLOAT3EX diffuse_color;
@@ -37,16 +38,18 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief Materialクラス
  */
-class Material : public tml::GraphicResource
+class Material : public tml::graphic::Resource
 {
-public: Material(const tml::Material &) = delete;
-public: tml::Material &operator =(const tml::Material &) = delete;
+public: Material(const tml::graphic::Material &) = delete;
+public: tml::graphic::Material &operator =(const tml::graphic::Material &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -71,7 +74,7 @@ public:
 	virtual ~Material();
 
 	virtual void Init(void);
-	INT Create(tml::MaterialDesc &);
+	INT Create(tml::graphic::MaterialDesc &);
 
 	const tml::XMFLOAT3EX &GetDiffuseColor(void) const;
 	void SetDiffuseColor(const tml::XMFLOAT3EX &);
@@ -95,13 +98,14 @@ public:
 	void SetRimExpValue(const FLOAT);
 };
 }
+}
 
 
 /**
  * @brief GetDiffuseColor関数
  * @return diffuse_col (diffuse_color)
  */
-inline const tml::XMFLOAT3EX &tml::Material::GetDiffuseColor(void) const
+inline const tml::XMFLOAT3EX &tml::graphic::Material::GetDiffuseColor(void) const
 {
 	return (this->diffuse_col_);
 }
@@ -111,7 +115,7 @@ inline const tml::XMFLOAT3EX &tml::Material::GetDiffuseColor(void) const
  * @brief SetDiffuseColor関数
  * @param diffuse_col (diffuse_color)
  */
-inline void tml::Material::SetDiffuseColor(const tml::XMFLOAT3EX &diffuse_col)
+inline void tml::graphic::Material::SetDiffuseColor(const tml::XMFLOAT3EX &diffuse_col)
 {
 	this->diffuse_col_ = diffuse_col;
 
@@ -123,7 +127,7 @@ inline void tml::Material::SetDiffuseColor(const tml::XMFLOAT3EX &diffuse_col)
  * @brief GetDiffuseMulValue関数
  * @return diffuse_mul_val (diffuse_mul_value)
  */
-inline FLOAT tml::Material::GetDiffuseMulValue(void) const
+inline FLOAT tml::graphic::Material::GetDiffuseMulValue(void) const
 {
 	return (this->diffuse_mul_val_);
 }
@@ -133,7 +137,7 @@ inline FLOAT tml::Material::GetDiffuseMulValue(void) const
  * @brief SetDiffuseMulValue関数
  * @param diffuse_mul_val (diffuse_mul_value)
  */
-inline void tml::Material::SetDiffuseMulValue(const FLOAT diffuse_mul_val)
+inline void tml::graphic::Material::SetDiffuseMulValue(const FLOAT diffuse_mul_val)
 {
 	this->diffuse_mul_val_ = diffuse_mul_val;
 	
@@ -145,7 +149,7 @@ inline void tml::Material::SetDiffuseMulValue(const FLOAT diffuse_mul_val)
  * @brief GetTransparentMulValue関数
  * @return transparent_mul_val (transparent_mul_value)
  */
-inline FLOAT tml::Material::GetTransparentMulValue(void) const
+inline FLOAT tml::graphic::Material::GetTransparentMulValue(void) const
 {
 	return (this->transparent_mul_val_);
 }
@@ -155,7 +159,7 @@ inline FLOAT tml::Material::GetTransparentMulValue(void) const
  * @brief SetTransparentMulValue関数
  * @param transparent_mul_val (transparent_mul_value)
  */
-inline void tml::Material::SetTransparentMulValue(const FLOAT transparent_mul_val)
+inline void tml::graphic::Material::SetTransparentMulValue(const FLOAT transparent_mul_val)
 {
 	this->transparent_mul_val_ = transparent_mul_val;
 	
@@ -167,7 +171,7 @@ inline void tml::Material::SetTransparentMulValue(const FLOAT transparent_mul_va
  * @brief GetBurnMulValue関数
  * @return burn_mul_val (burn_mul_value)
  */
-inline FLOAT tml::Material::GetBurnMulValue(void) const
+inline FLOAT tml::graphic::Material::GetBurnMulValue(void) const
 {
 	return (this->burn_mul_val_);
 }
@@ -177,7 +181,7 @@ inline FLOAT tml::Material::GetBurnMulValue(void) const
  * @brief SetBurnMulValue関数
  * @param burn_mul_val (burn_mul_value)
  */
-inline void tml::Material::SetBurnMulValue(const FLOAT burn_mul_val)
+inline void tml::graphic::Material::SetBurnMulValue(const FLOAT burn_mul_val)
 {
 	this->burn_mul_val_ = burn_mul_val;
 	
@@ -189,7 +193,7 @@ inline void tml::Material::SetBurnMulValue(const FLOAT burn_mul_val)
  * @brief GetEmissiveMulValue関数
  * @return emissive_mul_val (emissive_mul_value)
  */
-inline FLOAT tml::Material::GetEmissiveMulValue(void) const
+inline FLOAT tml::graphic::Material::GetEmissiveMulValue(void) const
 {
 	return (this->emissive_mul_val_);
 }
@@ -199,7 +203,7 @@ inline FLOAT tml::Material::GetEmissiveMulValue(void) const
  * @brief SetEmissiveMulValue関数
  * @param emissive_mul_val (emissive_mul_value)
  */
-inline void tml::Material::SetEmissiveMulValue(const FLOAT emissive_mul_val)
+inline void tml::graphic::Material::SetEmissiveMulValue(const FLOAT emissive_mul_val)
 {
 	this->emissive_mul_val_ = emissive_mul_val;
 	
@@ -211,7 +215,7 @@ inline void tml::Material::SetEmissiveMulValue(const FLOAT emissive_mul_val)
  * @brief GetBloomMulValue関数
  * @return bloom_mul_val (bloom_mul_value)
  */
-inline FLOAT tml::Material::GetBloomMulValue(void) const
+inline FLOAT tml::graphic::Material::GetBloomMulValue(void) const
 {
 	return (this->bloom_mul_val_);
 }
@@ -221,7 +225,7 @@ inline FLOAT tml::Material::GetBloomMulValue(void) const
  * @brief SetBloomMulValue関数
  * @param bloom_mul_val (bloom_mul_value)
  */
-inline void tml::Material::SetBloomMulValue(const FLOAT bloom_mul_val)
+inline void tml::graphic::Material::SetBloomMulValue(const FLOAT bloom_mul_val)
 {
 	this->bloom_mul_val_ = bloom_mul_val;
 	
@@ -233,7 +237,7 @@ inline void tml::Material::SetBloomMulValue(const FLOAT bloom_mul_val)
  * @brief GetSpecularMulValue関数
  * @return specular_mul_val (specular_mul_value)
  */
-inline FLOAT tml::Material::GetSpecularMulValue(void) const
+inline FLOAT tml::graphic::Material::GetSpecularMulValue(void) const
 {
 	return (this->specular_mul_val_);
 }
@@ -243,7 +247,7 @@ inline FLOAT tml::Material::GetSpecularMulValue(void) const
  * @brief SetSpecularMulValue関数
  * @param specular_mul_val (specular_mul_value)
  */
-inline void tml::Material::SetSpecularMulValue(const FLOAT specular_mul_val)
+inline void tml::graphic::Material::SetSpecularMulValue(const FLOAT specular_mul_val)
 {
 	this->specular_mul_val_ = specular_mul_val;
 	
@@ -255,7 +259,7 @@ inline void tml::Material::SetSpecularMulValue(const FLOAT specular_mul_val)
  * @brief GetSpecularExpValue関数
  * @return specular_exp_val (specular_exp_value)
  */
-inline FLOAT tml::Material::GetSpecularExpValue(void) const
+inline FLOAT tml::graphic::Material::GetSpecularExpValue(void) const
 {
 	return (this->specular_exp_val_);
 }
@@ -265,7 +269,7 @@ inline FLOAT tml::Material::GetSpecularExpValue(void) const
  * @brief SetSpecularExpValue関数
  * @param specular_exp_val (specular_exp_value)
  */
-inline void tml::Material::SetSpecularExpValue(const FLOAT specular_exp_val)
+inline void tml::graphic::Material::SetSpecularExpValue(const FLOAT specular_exp_val)
 {
 	this->specular_exp_val_ = specular_exp_val;
 	
@@ -277,7 +281,7 @@ inline void tml::Material::SetSpecularExpValue(const FLOAT specular_exp_val)
  * @brief GetRimMulValue関数
  * @return rim_mul_val (rim_mul_value)
  */
-inline FLOAT tml::Material::GetRimMulValue(void) const
+inline FLOAT tml::graphic::Material::GetRimMulValue(void) const
 {
 	return (this->rim_mul_val_);
 }
@@ -287,7 +291,7 @@ inline FLOAT tml::Material::GetRimMulValue(void) const
  * @brief SetRimMulValue関数
  * @param rim_mul_val (rim_mul_value)
  */
-inline void tml::Material::SetRimMulValue(const FLOAT rim_mul_val)
+inline void tml::graphic::Material::SetRimMulValue(const FLOAT rim_mul_val)
 {
 	this->rim_mul_val_ = rim_mul_val;
 	
@@ -299,7 +303,7 @@ inline void tml::Material::SetRimMulValue(const FLOAT rim_mul_val)
  * @brief GetRimExpValue関数
  * @return rim_exp_val (rim_exp_value)
  */
-inline FLOAT tml::Material::GetRimExpValue(void) const
+inline FLOAT tml::graphic::Material::GetRimExpValue(void) const
 {
 	return (this->rim_exp_val_);
 }
@@ -309,7 +313,7 @@ inline FLOAT tml::Material::GetRimExpValue(void) const
  * @brief SetRimExpValue関数
  * @param rim_exp_val (rim_exp_value)
  */
-inline void tml::Material::SetRimExpValue(const FLOAT rim_exp_val)
+inline void tml::graphic::Material::SetRimExpValue(const FLOAT rim_exp_val)
 {
 	this->rim_exp_val_ = rim_exp_val;
 	

@@ -44,37 +44,8 @@ public:
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief TextFileReadDescクラス
- */
-class TextFileReadDesc
-{
-public:
-	tml::TextFileReadDescData data;
-	tml::TextFileReadDescData *parent_data;
-
-public:
-	TextFileReadDesc();
-	virtual ~TextFileReadDesc();
-
-	virtual void Init(void);
-
-	tml::TextFileReadDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::TextFileReadDescData *tml::TextFileReadDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using TextFileReadDesc = tml::FileReadDesc<tml::TextFileReadDescData>;
 }
 
 
@@ -94,37 +65,8 @@ public:
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief TextFileWriteDescクラス
- */
-class TextFileWriteDesc
-{
-public:
-	tml::TextFileWriteDescData data;
-	tml::TextFileWriteDescData *parent_data;
-
-public:
-	TextFileWriteDesc();
-	virtual ~TextFileWriteDesc();
-
-	virtual void Init(void);
-
-	tml::TextFileWriteDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::TextFileWriteDescData *tml::TextFileWriteDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using TextFileWriteDesc = tml::FileWriteDesc<tml::TextFileWriteDescData>;
 }
 
 

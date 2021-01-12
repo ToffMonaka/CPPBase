@@ -5,13 +5,13 @@
 
 
 #include "RasterizerState.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::RasterizerStateDesc::RasterizerStateDesc() :
+tml::graphic::RasterizerStateDesc::RasterizerStateDesc() :
 	rasterizer_state_desc(CD3D11_DEFAULT())
 {
 	this->rasterizer_state_desc.CullMode = D3D11_CULL_NONE;
@@ -23,7 +23,7 @@ tml::RasterizerStateDesc::RasterizerStateDesc() :
 /**
  * @brief デストラクタ
  */
-tml::RasterizerStateDesc::~RasterizerStateDesc()
+tml::graphic::RasterizerStateDesc::~RasterizerStateDesc()
 {
 	return;
 }
@@ -32,12 +32,12 @@ tml::RasterizerStateDesc::~RasterizerStateDesc()
 /**
  * @brief Init関数
  */
-void tml::RasterizerStateDesc::Init(void)
+void tml::graphic::RasterizerStateDesc::Init(void)
 {
 	this->rasterizer_state_desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
 	this->rasterizer_state_desc.CullMode = D3D11_CULL_NONE;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -46,7 +46,7 @@ void tml::RasterizerStateDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::RasterizerState::RasterizerState() :
+tml::graphic::RasterizerState::RasterizerState() :
 	rs_(nullptr)
 {
 	return;
@@ -56,7 +56,7 @@ tml::RasterizerState::RasterizerState() :
 /**
  * @brief デストラクタ
  */
-tml::RasterizerState::~RasterizerState()
+tml::graphic::RasterizerState::~RasterizerState()
 {
 	this->Release();
 
@@ -67,7 +67,7 @@ tml::RasterizerState::~RasterizerState()
 /**
  * @brief Release関数
  */
-void tml::RasterizerState::Release(void)
+void tml::graphic::RasterizerState::Release(void)
 {
 	if (this->rs_ != nullptr) {
 		this->rs_->Release();
@@ -75,7 +75,7 @@ void tml::RasterizerState::Release(void)
 		this->rs_ = nullptr;
 	}
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -84,11 +84,11 @@ void tml::RasterizerState::Release(void)
 /**
  * @brief Init関数
  */
-void tml::RasterizerState::Init(void)
+void tml::graphic::RasterizerState::Init(void)
 {
 	this->Release();
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -100,11 +100,11 @@ void tml::RasterizerState::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::RasterizerState::Create(tml::RasterizerStateDesc &desc)
+INT tml::graphic::RasterizerState::Create(tml::graphic::RasterizerStateDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

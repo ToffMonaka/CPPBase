@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief InputResourceコードファイル
+ * @brief Resourceコードファイル
  */
 
 
-#include "InputResource.h"
+#include "Resource.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::InputResourceDesc::InputResourceDesc() :
+tml::input::ResourceDesc::ResourceDesc() :
 	manager(nullptr)
 {
 	return;
@@ -20,7 +20,7 @@ tml::InputResourceDesc::InputResourceDesc() :
 /**
  * @brief デストラクタ
  */
-tml::InputResourceDesc::~InputResourceDesc()
+tml::input::ResourceDesc::~ResourceDesc()
 {
 	return;
 }
@@ -29,7 +29,7 @@ tml::InputResourceDesc::~InputResourceDesc()
 /**
  * @brief Init関数
  */
-void tml::InputResourceDesc::Init(void)
+void tml::input::ResourceDesc::Init(void)
 {
 	this->manager = nullptr;
 
@@ -40,7 +40,7 @@ void tml::InputResourceDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::InputResource::InputResource() :
+tml::input::Resource::Resource() :
 	mgr_(nullptr)
 {
 	return;
@@ -50,7 +50,7 @@ tml::InputResource::InputResource() :
 /**
  * @brief デストラクタ
  */
-tml::InputResource::~InputResource()
+tml::input::Resource::~Resource()
 {
 	return;
 }
@@ -59,7 +59,7 @@ tml::InputResource::~InputResource()
 /**
  * @brief Release関数
  */
-void tml::InputResource::Release(void)
+void tml::input::Resource::Release(void)
 {
 	return;
 }
@@ -68,7 +68,7 @@ void tml::InputResource::Release(void)
 /**
  * @brief Init関数
  */
-void tml::InputResource::Init(void)
+void tml::input::Resource::Init(void)
 {
 	this->mgr_ = nullptr;
 
@@ -82,7 +82,7 @@ void tml::InputResource::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::InputResource::Create(tml::InputResourceDesc &desc)
+INT tml::input::Resource::Create(tml::input::ResourceDesc &desc)
 {
 	if (desc.manager == nullptr) {
 		return (-1);

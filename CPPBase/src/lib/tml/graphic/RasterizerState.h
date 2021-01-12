@@ -6,14 +6,15 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief RasterizerStateDescクラス
  */
-class RasterizerStateDesc : public tml::GraphicResourceDesc
+class RasterizerStateDesc : public tml::graphic::ResourceDesc
 {
 public:
 	CD3D11_RASTERIZER_DESC rasterizer_state_desc;
@@ -25,16 +26,18 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief RasterizerStateクラス
  */
-class RasterizerState : public tml::GraphicResource
+class RasterizerState : public tml::graphic::Resource
 {
-public: RasterizerState(const tml::RasterizerState &) = delete;
-public: tml::RasterizerState &operator =(const tml::RasterizerState &) = delete;
+public: RasterizerState(const tml::graphic::RasterizerState &) = delete;
+public: tml::graphic::RasterizerState &operator =(const tml::graphic::RasterizerState &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -48,10 +51,11 @@ public:
 	virtual ~RasterizerState();
 
 	virtual void Init(void);
-	INT Create(tml::RasterizerStateDesc &);
+	INT Create(tml::graphic::RasterizerStateDesc &);
 
 	ID3D11RasterizerState *GetRasterizerState(void) const;
 };
+}
 }
 
 
@@ -59,7 +63,7 @@ public:
  * @brief GetRasterizerState関数
  * @return rs (rasterizer_state)
  */
-inline ID3D11RasterizerState *tml::RasterizerState::GetRasterizerState(void) const
+inline ID3D11RasterizerState *tml::graphic::RasterizerState::GetRasterizerState(void) const
 {
 	return (this->rs_);
 }

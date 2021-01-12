@@ -6,14 +6,15 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief ShaderConstantBufferDescクラス
  */
-class ShaderConstantBufferDesc : public tml::GraphicResourceDesc
+class ShaderConstantBufferDesc : public tml::graphic::ResourceDesc
 {
 public:
 	UINT element_size;
@@ -26,18 +27,20 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief ShaderConstantBufferクラス
  *
  * インターフェースパターン
  */
-class ShaderConstantBuffer : public tml::GraphicResource
+class ShaderConstantBuffer : public tml::graphic::Resource
 {
-public: ShaderConstantBuffer(const tml::ShaderConstantBuffer &) = delete;
-public: tml::ShaderConstantBuffer &operator =(const tml::ShaderConstantBuffer &) = delete;
+public: ShaderConstantBuffer(const tml::graphic::ShaderConstantBuffer &) = delete;
+public: tml::graphic::ShaderConstantBuffer &operator =(const tml::graphic::ShaderConstantBuffer &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
@@ -47,7 +50,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(tml::ShaderConstantBufferDesc &);
+	INT Create(tml::graphic::ShaderConstantBufferDesc &);
 
 	void UpdateBuffer(void *);
 	template <typename T>
@@ -63,13 +66,14 @@ public:
 	UINT GetElementSize(void) const;
 };
 }
+}
 
 
 /**
  * @brief GetBuffer関数
  * @return buf (buffer)
  */
-inline ID3D11Buffer *tml::ShaderConstantBuffer::GetBuffer(void) const
+inline ID3D11Buffer *tml::graphic::ShaderConstantBuffer::GetBuffer(void) const
 {
 	return (this->buf_);
 }
@@ -79,7 +83,7 @@ inline ID3D11Buffer *tml::ShaderConstantBuffer::GetBuffer(void) const
  * @brief GetElementSize関数
  * @return element_size (element_size)
  */
-inline UINT tml::ShaderConstantBuffer::GetElementSize(void) const
+inline UINT tml::graphic::ShaderConstantBuffer::GetElementSize(void) const
 {
 	return (this->element_size_);
 }
@@ -92,7 +96,7 @@ inline UINT tml::ShaderConstantBuffer::GetElementSize(void) const
  * nullptr=失敗
  */
 template <typename T>
-inline T *tml::ShaderConstantBuffer::GetElement(T *element)
+inline T *tml::graphic::ShaderConstantBuffer::GetElement(T *element)
 {
 	return (element);
 }

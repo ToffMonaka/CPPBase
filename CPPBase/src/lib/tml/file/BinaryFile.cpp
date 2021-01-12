@@ -62,40 +62,9 @@ tml::BinaryFileReadDescData::~BinaryFileReadDescData()
  */
 void tml::BinaryFileReadDescData::Init(void)
 {
-	this->file_path.clear();
-	this->file_buffer.Init();
 	this->one_buffer_size = 1024U;
 
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
-tml::BinaryFileReadDesc::BinaryFileReadDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::BinaryFileReadDesc::~BinaryFileReadDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::BinaryFileReadDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
+	tml::FileReadDescData::Init();
 
 	return;
 }
@@ -126,40 +95,10 @@ tml::BinaryFileWriteDescData::~BinaryFileWriteDescData()
  */
 void tml::BinaryFileWriteDescData::Init(void)
 {
-	this->file_path.clear();
 	this->one_buffer_size = 1024U;
 	this->add_flag = false;
 
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
-tml::BinaryFileWriteDesc::BinaryFileWriteDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::BinaryFileWriteDesc::~BinaryFileWriteDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::BinaryFileWriteDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
+	tml::FileWriteDescData::Init();
 
 	return;
 }

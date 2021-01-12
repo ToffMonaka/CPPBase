@@ -6,13 +6,13 @@
 
 #include "Mesh.h"
 #include "../memory/MemoryUtil.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::MeshDesc::MeshDesc() :
+tml::graphic::MeshDesc::MeshDesc() :
 	vertex_buffer_element_size(0U),
 	vertex_buffer_element_count(0U),
 	vertex_buffer_element_array(nullptr),
@@ -29,7 +29,7 @@ tml::MeshDesc::MeshDesc() :
 /**
  * @brief デストラクタ
  */
-tml::MeshDesc::~MeshDesc()
+tml::graphic::MeshDesc::~MeshDesc()
 {
 	return;
 }
@@ -38,7 +38,7 @@ tml::MeshDesc::~MeshDesc()
 /**
  * @brief Init関数
  */
-void tml::MeshDesc::Init(void)
+void tml::graphic::MeshDesc::Init(void)
 {
 	this->vertex_buffer_element_size = 0U;
 	this->vertex_buffer_element_count = 0U;
@@ -49,7 +49,7 @@ void tml::MeshDesc::Init(void)
 	this->cpu_data_flag = false;
 	this->gpu_data_flag = false;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -58,7 +58,7 @@ void tml::MeshDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Mesh::Mesh() :
+tml::graphic::Mesh::Mesh() :
 	vb_(nullptr),
 	vb_element_size_(0U),
 	vb_element_cnt_(0U),
@@ -77,7 +77,7 @@ tml::Mesh::Mesh() :
 /**
  * @brief デストラクタ
  */
-tml::Mesh::~Mesh()
+tml::graphic::Mesh::~Mesh()
 {
 	this->Release();
 
@@ -88,7 +88,7 @@ tml::Mesh::~Mesh()
 /**
  * @brief Release関数
  */
-void tml::Mesh::Release(void)
+void tml::graphic::Mesh::Release(void)
 {
 	if (this->ib_ != nullptr) {
 		this->ib_->Release();
@@ -106,7 +106,7 @@ void tml::Mesh::Release(void)
 
 	tml::MemoryUtil::Release(&this->vb_element_ary_);
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -115,7 +115,7 @@ void tml::Mesh::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Mesh::Init(void)
+void tml::graphic::Mesh::Init(void)
 {
 	this->Release();
 
@@ -126,7 +126,7 @@ void tml::Mesh::Init(void)
 	this->ib_format_ = DXGI_FORMAT_UNKNOWN;
 	this->pt_ = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -138,11 +138,11 @@ void tml::Mesh::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Mesh::Create(tml::MeshDesc &desc)
+INT tml::graphic::Mesh::Create(tml::graphic::MeshDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

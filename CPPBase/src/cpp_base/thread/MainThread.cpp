@@ -132,7 +132,7 @@ INT cpp_base::MainThread::Start(void)
 	}
 
 	{// InputManager Create
-		tml::InputManagerDesc desc;
+		tml::input::ManagerDesc desc;
 
 		if (this->input_mgr_.Create(desc) < 0) {
 			this->Init();
@@ -142,7 +142,7 @@ INT cpp_base::MainThread::Start(void)
 	}
 
 	{// GraphicManager Create
-		tml::GraphicManagerDesc desc;
+		tml::graphic::ManagerDesc desc;
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_width = this->sys_conf_file_.data.window_width;
@@ -156,7 +156,7 @@ INT cpp_base::MainThread::Start(void)
 	}
 
 	{// SoundManager Create
-		tml::SoundManagerDesc desc;
+		tml::sound::ManagerDesc desc;
 
 		if (this->sound_mgr_.Create(desc) < 0) {
 			this->Init();

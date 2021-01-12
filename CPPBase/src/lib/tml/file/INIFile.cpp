@@ -70,37 +70,6 @@ void tml::INIFileReadDescData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::INIFileReadDesc::INIFileReadDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::INIFileReadDesc::~INIFileReadDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::INIFileReadDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
 tml::INIFileWriteDescData::INIFileWriteDescData()
 {
 	return;
@@ -122,37 +91,6 @@ tml::INIFileWriteDescData::~INIFileWriteDescData()
 void tml::INIFileWriteDescData::Init(void)
 {
 	tml::TextFileWriteDescData::Init();
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
-tml::INIFileWriteDesc::INIFileWriteDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::INIFileWriteDesc::~INIFileWriteDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::INIFileWriteDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
 
 	return;
 }

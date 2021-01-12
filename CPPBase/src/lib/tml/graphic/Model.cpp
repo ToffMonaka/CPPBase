@@ -5,13 +5,13 @@
 
 
 #include "Model.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::ModelDesc::ModelDesc()
+tml::graphic::ModelDesc::ModelDesc()
 {
 	return;
 }
@@ -20,7 +20,7 @@ tml::ModelDesc::ModelDesc()
 /**
  * @brief デストラクタ
  */
-tml::ModelDesc::~ModelDesc()
+tml::graphic::ModelDesc::~ModelDesc()
 {
 	return;
 }
@@ -29,9 +29,9 @@ tml::ModelDesc::~ModelDesc()
 /**
  * @brief Init関数
  */
-void tml::ModelDesc::Init(void)
+void tml::graphic::ModelDesc::Init(void)
 {
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -40,7 +40,7 @@ void tml::ModelDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Model::Model()
+tml::graphic::Model::Model()
 {
 	return;
 }
@@ -49,7 +49,7 @@ tml::Model::Model()
 /**
  * @brief デストラクタ
  */
-tml::Model::~Model()
+tml::graphic::Model::~Model()
 {
 	return;
 }
@@ -58,9 +58,9 @@ tml::Model::~Model()
 /**
  * @brief Release関数
  */
-void tml::Model::Release(void)
+void tml::graphic::Model::Release(void)
 {
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -69,9 +69,9 @@ void tml::Model::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Model::Init(void)
+void tml::graphic::Model::Init(void)
 {
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -83,9 +83,9 @@ void tml::Model::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Model::Create(tml::ModelDesc &desc)
+INT tml::graphic::Model::Create(tml::graphic::ModelDesc &desc)
 {
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		return (-1);
 	}
 

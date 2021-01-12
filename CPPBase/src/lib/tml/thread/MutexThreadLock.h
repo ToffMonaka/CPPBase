@@ -19,7 +19,7 @@ class MutexThreadLock : public tml::ThreadLock
 {
 public: MutexThreadLock(const tml::MutexThreadLock &) = delete;
 public: tml::MutexThreadLock &operator =(const tml::MutexThreadLock &) = delete;
-protected: virtual void InterfaceDummy(void) {return;}
+protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	std::recursive_timed_mutex mtx_;

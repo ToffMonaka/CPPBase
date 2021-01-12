@@ -101,42 +101,15 @@ namespace tml {
 class INIFileReadDescData : public tml::TextFileReadDescData
 {
 public:
+
+public:
 	INIFileReadDescData();
 	virtual ~INIFileReadDescData();
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief INIFileReadDescクラス
- */
-class INIFileReadDesc
-{
-public:
-	tml::INIFileReadDescData data;
-	tml::INIFileReadDescData *parent_data;
-
-public:
-	INIFileReadDesc();
-	virtual ~INIFileReadDesc();
-
-	virtual void Init(void);
-
-	tml::INIFileReadDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::INIFileReadDescData *tml::INIFileReadDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using INIFileReadDesc = tml::FileReadDesc<tml::INIFileReadDescData>;
 }
 
 
@@ -147,42 +120,15 @@ namespace tml {
 class INIFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
+
+public:
 	INIFileWriteDescData();
 	virtual ~INIFileWriteDescData();
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief INIFileWriteDescクラス
- */
-class INIFileWriteDesc
-{
-public:
-	tml::INIFileWriteDescData data;
-	tml::INIFileWriteDescData *parent_data;
-
-public:
-	INIFileWriteDesc();
-	virtual ~INIFileWriteDesc();
-
-	virtual void Init(void);
-
-	tml::INIFileWriteDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::INIFileWriteDescData *tml::INIFileWriteDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using INIFileWriteDesc = tml::FileWriteDesc<tml::INIFileWriteDescData>;
 }
 
 

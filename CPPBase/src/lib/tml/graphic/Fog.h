@@ -7,14 +7,15 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMath.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief FogDescクラス
  */
-class FogDesc : public tml::GraphicResourceDesc
+class FogDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE type;
@@ -31,16 +32,18 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief Fogクラス
  */
-class Fog : public tml::GraphicResource
+class Fog : public tml::graphic::Resource
 {
-public: Fog(const tml::Fog &) = delete;
-public: tml::Fog &operator =(const tml::Fog &) = delete;
+public: Fog(const tml::graphic::Fog &) = delete;
+public: tml::graphic::Fog &operator =(const tml::graphic::Fog &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -63,7 +66,7 @@ public:
 	virtual ~Fog();
 
 	virtual void Init(void);
-	INT Create(tml::FogDesc &);
+	INT Create(tml::graphic::FogDesc &);
 
 
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE GetType(void) const;
@@ -79,13 +82,14 @@ public:
 	FLOAT GetRangeValue2(void) const;
 };
 }
+}
 
 
 /**
  * @brief GetType関数
  * @return type (type)
  */
-inline tml::ConstantUtil::GRAPHIC::FOG_TYPE tml::Fog::GetType(void) const
+inline tml::ConstantUtil::GRAPHIC::FOG_TYPE tml::graphic::Fog::GetType(void) const
 {
 	return (this->type_);
 }
@@ -95,7 +99,7 @@ inline tml::ConstantUtil::GRAPHIC::FOG_TYPE tml::Fog::GetType(void) const
  * @brief GetColor関数
  * @return col (color)
  */
-inline const tml::XMFLOAT3EX &tml::Fog::GetColor(void) const
+inline const tml::XMFLOAT3EX &tml::graphic::Fog::GetColor(void) const
 {
 	return (this->col_);
 }
@@ -105,7 +109,7 @@ inline const tml::XMFLOAT3EX &tml::Fog::GetColor(void) const
  * @brief SetColor関数
  * @param col (color)
  */
-inline void tml::Fog::SetColor(const tml::XMFLOAT3EX &col)
+inline void tml::graphic::Fog::SetColor(const tml::XMFLOAT3EX &col)
 {
 	this->col_ = col;
 
@@ -117,7 +121,7 @@ inline void tml::Fog::SetColor(const tml::XMFLOAT3EX &col)
  * @brief GetMulValue関数
  * @return mul_val (mul_value)
  */
-inline FLOAT tml::Fog::GetMulValue(void) const
+inline FLOAT tml::graphic::Fog::GetMulValue(void) const
 {
 	return (this->mul_val_);
 }
@@ -127,7 +131,7 @@ inline FLOAT tml::Fog::GetMulValue(void) const
  * @brief SetMulValue関数
  * @param mul_val (mul_value)
  */
-inline void tml::Fog::SetMulValue(const FLOAT mul_val)
+inline void tml::graphic::Fog::SetMulValue(const FLOAT mul_val)
 {
 	this->mul_val_ = mul_val;
 
@@ -139,7 +143,7 @@ inline void tml::Fog::SetMulValue(const FLOAT mul_val)
  * @brief GetNearRange関数
  * @return near_rng (near_range)
  */
-inline FLOAT tml::Fog::GetNearRange(void) const
+inline FLOAT tml::graphic::Fog::GetNearRange(void) const
 {
 	return (this->near_rng_);
 }
@@ -149,7 +153,7 @@ inline FLOAT tml::Fog::GetNearRange(void) const
  * @brief GetFarRange関数
  * @return far_rng (far_range)
  */
-inline FLOAT tml::Fog::GetFarRange(void) const
+inline FLOAT tml::graphic::Fog::GetFarRange(void) const
 {
 	return (this->far_rng_);
 }
@@ -159,7 +163,7 @@ inline FLOAT tml::Fog::GetFarRange(void) const
  * @brief GetRangeValue1関数
  * @return rng_val1 (range_value1)
  */
-inline FLOAT tml::Fog::GetRangeValue1(void) const
+inline FLOAT tml::graphic::Fog::GetRangeValue1(void) const
 {
 	return (this->rng_val1_);
 }
@@ -169,7 +173,7 @@ inline FLOAT tml::Fog::GetRangeValue1(void) const
  * @brief GetRangeValue2関数
  * @return rng_val2 (range_value2)
  */
-inline FLOAT tml::Fog::GetRangeValue2(void) const
+inline FLOAT tml::graphic::Fog::GetRangeValue2(void) const
 {
 	return (this->rng_val2_);
 }

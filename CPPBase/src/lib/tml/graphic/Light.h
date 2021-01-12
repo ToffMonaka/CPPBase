@@ -7,14 +7,15 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMath.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief LightDescクラス
  */
-class LightDesc : public tml::GraphicResourceDesc
+class LightDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type;
@@ -37,16 +38,18 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief Lightクラス
  */
-class Light : public tml::GraphicResource
+class Light : public tml::graphic::Resource
 {
-public: Light(const tml::Light &) = delete;
-public: tml::Light &operator =(const tml::Light &) = delete;
+public: Light(const tml::graphic::Light &) = delete;
+public: tml::graphic::Light &operator =(const tml::graphic::Light &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -75,7 +78,7 @@ public:
 	virtual ~Light();
 
 	virtual void Init(void);
-	INT Create(tml::LightDesc &);
+	INT Create(tml::graphic::LightDesc &);
 
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE GetType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;
@@ -100,13 +103,14 @@ public:
 	FLOAT GetSoftValue(void) const;
 };
 }
+}
 
 
 /**
  * @brief GetType関数
  * @return type (type)
  */
-inline tml::ConstantUtil::GRAPHIC::LIGHT_TYPE tml::Light::GetType(void) const
+inline tml::ConstantUtil::GRAPHIC::LIGHT_TYPE tml::graphic::Light::GetType(void) const
 {
 	return (this->type_);
 }
@@ -116,7 +120,7 @@ inline tml::ConstantUtil::GRAPHIC::LIGHT_TYPE tml::Light::GetType(void) const
  * @brief GetColor関数
  * @return col (color)
  */
-inline const tml::XMFLOAT3EX &tml::Light::GetColor(void) const
+inline const tml::XMFLOAT3EX &tml::graphic::Light::GetColor(void) const
 {
 	return (this->col_);
 }
@@ -126,7 +130,7 @@ inline const tml::XMFLOAT3EX &tml::Light::GetColor(void) const
  * @brief SetColor関数
  * @param col (color)
  */
-inline void tml::Light::SetColor(const tml::XMFLOAT3EX &col)
+inline void tml::graphic::Light::SetColor(const tml::XMFLOAT3EX &col)
 {
 	this->col_ = col;
 
@@ -138,7 +142,7 @@ inline void tml::Light::SetColor(const tml::XMFLOAT3EX &col)
  * @brief GetMulValue得関数
  * @return mul_val (mul_value)
  */
-inline FLOAT tml::Light::GetMulValue(void) const
+inline FLOAT tml::graphic::Light::GetMulValue(void) const
 {
 	return (this->mul_val_);
 }
@@ -148,7 +152,7 @@ inline FLOAT tml::Light::GetMulValue(void) const
  * @brief SetMulValue関数
  * @param mul_val (mul_value)
  */
-inline void tml::Light::SetMulValue(const FLOAT mul_val)
+inline void tml::graphic::Light::SetMulValue(const FLOAT mul_val)
 {
 	this->mul_val_ = mul_val;
 
@@ -160,7 +164,7 @@ inline void tml::Light::SetMulValue(const FLOAT mul_val)
  * @brief GetAddValue関数
  * @return add_val (add_value)
  */
-inline FLOAT tml::Light::GetAddValue(void) const
+inline FLOAT tml::graphic::Light::GetAddValue(void) const
 {
 	return (this->add_val_);
 }
@@ -170,7 +174,7 @@ inline FLOAT tml::Light::GetAddValue(void) const
  * @brief SetAddValue関数
  * @param add_val (add_value)
  */
-inline void tml::Light::SetAddValue(const FLOAT add_val)
+inline void tml::graphic::Light::SetAddValue(const FLOAT add_val)
 {
 	this->add_val_ = add_val;
 
@@ -182,7 +186,7 @@ inline void tml::Light::SetAddValue(const FLOAT add_val)
  * @brief GetExpValue関数
  * @return exp_val (exp_value)
  */
-inline FLOAT tml::Light::GetExpValue(void) const
+inline FLOAT tml::graphic::Light::GetExpValue(void) const
 {
 	return (this->exp_val_);
 }
@@ -192,7 +196,7 @@ inline FLOAT tml::Light::GetExpValue(void) const
  * @brief SetExpValue関数
  * @param exp_val (exp_value)
  */
-inline void tml::Light::SetExpValue(const FLOAT exp_val)
+inline void tml::graphic::Light::SetExpValue(const FLOAT exp_val)
 {
 	this->exp_val_ = exp_val;
 
@@ -204,7 +208,7 @@ inline void tml::Light::SetExpValue(const FLOAT exp_val)
  * @brief GetAttenuation関数
  * @return atten (attenuation)
  */
-inline const tml::XMFLOAT3EX &tml::Light::GetAttenuation(void) const
+inline const tml::XMFLOAT3EX &tml::graphic::Light::GetAttenuation(void) const
 {
 	return (this->atten_);
 }
@@ -214,7 +218,7 @@ inline const tml::XMFLOAT3EX &tml::Light::GetAttenuation(void) const
  * @brief SetAttenuation関数
  * @param atten (attenuation)
  */
-inline void tml::Light::SetAttenuation(const tml::XMFLOAT3EX &atten)
+inline void tml::graphic::Light::SetAttenuation(const tml::XMFLOAT3EX &atten)
 {
 	this->atten_ = atten;
 
@@ -226,7 +230,7 @@ inline void tml::Light::SetAttenuation(const tml::XMFLOAT3EX &atten)
  * @brief GetRange関数
  * @return rng (range)
  */
-inline FLOAT tml::Light::GetRange(void) const
+inline FLOAT tml::graphic::Light::GetRange(void) const
 {
 	return (this->rng_);
 }
@@ -236,7 +240,7 @@ inline FLOAT tml::Light::GetRange(void) const
  * @brief SetRange関数
  * @param rng (range)
  */
-inline void tml::Light::SetRange(const FLOAT rng)
+inline void tml::graphic::Light::SetRange(const FLOAT rng)
 {
 	this->rng_ = rng;
 
@@ -248,7 +252,7 @@ inline void tml::Light::SetRange(const FLOAT rng)
  * @brief GetRangeExpValue関数
  * @return rng_exp_val (range_exp_value)
  */
-inline FLOAT tml::Light::GetRangeExpValue(void) const
+inline FLOAT tml::graphic::Light::GetRangeExpValue(void) const
 {
 	return (this->rng_exp_val_);
 }
@@ -258,7 +262,7 @@ inline FLOAT tml::Light::GetRangeExpValue(void) const
  * @brief SetRangeExpValue関数
  * @param rng_exp_val (range_exp_value)
  */
-inline void tml::Light::SetRangeExpValue(const FLOAT rng_exp_val)
+inline void tml::graphic::Light::SetRangeExpValue(const FLOAT rng_exp_val)
 {
 	this->rng_exp_val_ = rng_exp_val;
 
@@ -270,7 +274,7 @@ inline void tml::Light::SetRangeExpValue(const FLOAT rng_exp_val)
  * @brief GetCutAngle関数
  * @return cut_angle (cut_angle)
  */
-inline FLOAT tml::Light::GetCutAngle(void) const
+inline FLOAT tml::graphic::Light::GetCutAngle(void) const
 {
 	return (this->cut_angle_);
 }
@@ -280,7 +284,7 @@ inline FLOAT tml::Light::GetCutAngle(void) const
  * @brief GetSoftAngle関数
  * @return soft_angle (soft_angle)
  */
-inline FLOAT tml::Light::GetSoftAngle(void) const
+inline FLOAT tml::graphic::Light::GetSoftAngle(void) const
 {
 	return (this->soft_angle_);
 }
@@ -290,7 +294,7 @@ inline FLOAT tml::Light::GetSoftAngle(void) const
  * @brief GetCutValue関数
  * @return cut_val (cut_value)
  */
-inline FLOAT tml::Light::GetCutValue(void) const
+inline FLOAT tml::graphic::Light::GetCutValue(void) const
 {
 	return (this->cut_val_);
 }
@@ -300,7 +304,7 @@ inline FLOAT tml::Light::GetCutValue(void) const
  * @brief GetSoftValue関数
  * @return soft_val (soft_value)
  */
-inline FLOAT tml::Light::GetSoftValue(void) const
+inline FLOAT tml::graphic::Light::GetSoftValue(void) const
 {
 	return (this->soft_val_);
 }

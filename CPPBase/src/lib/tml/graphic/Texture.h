@@ -6,18 +6,18 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include <vector>
 #include <list>
 #include "../math/XNAMath.h"
 #include "../file/BinaryFile.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief TextureDescクラス
  */
-class TextureDesc : public tml::GraphicResourceDesc
+class TextureDesc : public tml::graphic::ResourceDesc
 {
 public:
 	std::list<tml::BinaryFileReadDesc> file_read_desc_container;
@@ -40,16 +40,18 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief Textureクラス
  */
-class Texture : public tml::GraphicResource
+class Texture : public tml::graphic::Resource
 {
-public: Texture(const tml::Texture &) = delete;
-public: tml::Texture &operator =(const tml::Texture &) = delete;
+public: Texture(const tml::graphic::Texture &) = delete;
+public: tml::graphic::Texture &operator =(const tml::graphic::Texture &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -63,10 +65,6 @@ private:
 	bool ary_flg_;
 
 private:
-	static tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, tml::GraphicManager *, ID3D11Texture2D *, INT *dst_res = nullptr);
-	static std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, tml::GraphicManager *, ID3D11Texture2D *, INT *dst_res = nullptr);
-
-private:
 	void Release(void);
 
 public:
@@ -74,7 +72,7 @@ public:
 	virtual ~Texture();
 
 	virtual void Init(void);
-	INT Create(tml::TextureDesc &);
+	INT Create(tml::graphic::TextureDesc &);
 
 	ID3D11Texture2D *GetTexture(void) const;
 	const tml::XMFLOAT2EX &GetSize(void) const;
@@ -86,13 +84,14 @@ public:
 	ID3D11UnorderedAccessView *GetUASR(void) const;
 };
 }
+}
 
 
 /**
  * @brief GetTexture関数
  * @return tex (texture)
  */
-inline ID3D11Texture2D *tml::Texture::GetTexture(void) const
+inline ID3D11Texture2D *tml::graphic::Texture::GetTexture(void) const
 {
 	return (this->tex_);
 }
@@ -102,7 +101,7 @@ inline ID3D11Texture2D *tml::Texture::GetTexture(void) const
  * @brief GetSize関数
  * @return size (size)
  */
-inline const tml::XMFLOAT2EX &tml::Texture::GetSize(void) const
+inline const tml::XMFLOAT2EX &tml::graphic::Texture::GetSize(void) const
 {
 	return (this->size_);
 }
@@ -112,7 +111,7 @@ inline const tml::XMFLOAT2EX &tml::Texture::GetSize(void) const
  * @brief GetRenderTarget関数
  * @return rt (render_target)
  */
-inline ID3D11RenderTargetView *tml::Texture::GetRenderTarget(void) const
+inline ID3D11RenderTargetView *tml::graphic::Texture::GetRenderTarget(void) const
 {
 	return (this->rt_);
 }
@@ -122,7 +121,7 @@ inline ID3D11RenderTargetView *tml::Texture::GetRenderTarget(void) const
  * @brief GetDepthTarget関数
  * @return dt (depth_target)
  */
-inline ID3D11DepthStencilView *tml::Texture::GetDepthTarget(void) const
+inline ID3D11DepthStencilView *tml::graphic::Texture::GetDepthTarget(void) const
 {
 	return (this->dt_);
 }
@@ -132,7 +131,7 @@ inline ID3D11DepthStencilView *tml::Texture::GetDepthTarget(void) const
  * @brief GetSR関数
  * @return sr (sr)
  */
-inline ID3D11ShaderResourceView *tml::Texture::GetSR(void) const
+inline ID3D11ShaderResourceView *tml::graphic::Texture::GetSR(void) const
 {
 	return (this->sr_);
 }
@@ -142,7 +141,7 @@ inline ID3D11ShaderResourceView *tml::Texture::GetSR(void) const
  * @brief GetUASR関数
  * @return uasr (uasr)
  */
-inline ID3D11UnorderedAccessView *tml::Texture::GetUASR(void) const
+inline ID3D11UnorderedAccessView *tml::graphic::Texture::GetUASR(void) const
 {
 	return (this->uasr_);
 }

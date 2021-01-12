@@ -8,9 +8,9 @@
 #include "../constant/ConstantUtil.h"
 #include "../../lib/tml/time/FrameRate.h"
 #include "../../lib/tml/thread/MainThread.h"
-#include "../../lib/tml/input/InputManager.h"
-#include "../../lib/tml/graphic/GraphicManager.h"
-#include "../../lib/tml/sound/SoundManager.h"
+#include "../../lib/tml/input/Manager.h"
+#include "../../lib/tml/graphic/Manager.h"
+#include "../../lib/tml/sound/Manager.h"
 #include "../data/SystemConfigFile.h"
 
 
@@ -27,9 +27,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	tml::FrameRate frame_rate_;
 	cpp_base::SystemConfigFile sys_conf_file_;
-	tml::InputManager input_mgr_;
-	tml::GraphicManager graphic_mgr_;
-	tml::SoundManager sound_mgr_;
+	tml::input::Manager input_mgr_;
+	tml::graphic::Manager graphic_mgr_;
+	tml::sound::Manager sound_mgr_;
 
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);

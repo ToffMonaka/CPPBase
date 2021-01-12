@@ -72,37 +72,6 @@ void tml::TextFileReadDescData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::TextFileReadDesc::TextFileReadDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::TextFileReadDesc::~TextFileReadDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::TextFileReadDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
 tml::TextFileWriteDescData::TextFileWriteDescData() :
 	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF),
 	add_newline_code_count(1U)
@@ -129,37 +98,6 @@ void tml::TextFileWriteDescData::Init(void)
 	this->add_newline_code_count = 1U;
 
 	tml::BinaryFileWriteDescData::Init();
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
-tml::TextFileWriteDesc::TextFileWriteDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::TextFileWriteDesc::~TextFileWriteDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::TextFileWriteDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
 
 	return;
 }

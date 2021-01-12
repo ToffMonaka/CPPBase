@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../memory/DynamicBuffer.h"
 #include "File.h"
 
 
@@ -32,11 +31,11 @@ namespace tml {
 /**
  * @brief BinaryFileReadDescDataクラス
  */
-class BinaryFileReadDescData
+class BinaryFileReadDescData : public tml::FileReadDescData
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
-	std::wstring file_path;
-	tml::DynamicBuffer file_buffer;
 	size_t one_buffer_size;
 
 public:
@@ -45,37 +44,8 @@ public:
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief BinaryFileReadDescクラス
- */
-class BinaryFileReadDesc
-{
-public:
-	tml::BinaryFileReadDescData data;
-	tml::BinaryFileReadDescData *parent_data;
-
-public:
-	BinaryFileReadDesc();
-	virtual ~BinaryFileReadDesc();
-
-	virtual void Init(void);
-
-	tml::BinaryFileReadDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::BinaryFileReadDescData *tml::BinaryFileReadDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using BinaryFileReadDesc = tml::FileReadDesc<tml::BinaryFileReadDescData>;
 }
 
 
@@ -83,10 +53,11 @@ namespace tml {
 /**
  * @brief BinaryFileWriteDescDataクラス
  */
-class BinaryFileWriteDescData
+class BinaryFileWriteDescData : public tml::FileWriteDescData
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
-	std::wstring file_path;
 	size_t one_buffer_size;
 	bool add_flag;
 
@@ -96,37 +67,8 @@ public:
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief BinaryFileWriteDescクラス
- */
-class BinaryFileWriteDesc
-{
-public:
-	tml::BinaryFileWriteDescData data;
-	tml::BinaryFileWriteDescData *parent_data;
-
-public:
-	BinaryFileWriteDesc();
-	virtual ~BinaryFileWriteDesc();
-
-	virtual void Init(void);
-
-	tml::BinaryFileWriteDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::BinaryFileWriteDescData *tml::BinaryFileWriteDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using BinaryFileWriteDesc = tml::FileWriteDesc<tml::BinaryFileWriteDescData>;
 }
 
 

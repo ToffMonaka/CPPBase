@@ -5,13 +5,13 @@
 
 
 #include "Material.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::MaterialDesc::MaterialDesc() :
+tml::graphic::MaterialDesc::MaterialDesc() :
 	diffuse_color(0.0f),
 	diffuse_mul_value(0.0f),
 	transparent_mul_value(0.0f),
@@ -32,7 +32,7 @@ tml::MaterialDesc::MaterialDesc() :
 /**
  * @brief デストラクタ
  */
-tml::MaterialDesc::~MaterialDesc()
+tml::graphic::MaterialDesc::~MaterialDesc()
 {
 	return;
 }
@@ -41,7 +41,7 @@ tml::MaterialDesc::~MaterialDesc()
 /**
  * @brief Init関数
  */
-void tml::MaterialDesc::Init(void)
+void tml::graphic::MaterialDesc::Init(void)
 {
 	this->diffuse_color = 0.0f;
 	this->diffuse_mul_value = 0.0f;
@@ -56,7 +56,7 @@ void tml::MaterialDesc::Init(void)
 	this->light_flag = false;
 	this->fog_flag = false;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -65,7 +65,7 @@ void tml::MaterialDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Material::Material() :
+tml::graphic::Material::Material() :
 	diffuse_col_(0.0f),
 	diffuse_mul_val_(0.0f),
 	transparent_mul_val_(0.0f),
@@ -86,7 +86,7 @@ tml::Material::Material() :
 /**
  * @brief デストラクタ
  */
-tml::Material::~Material()
+tml::graphic::Material::~Material()
 {
 	this->Release();
 
@@ -97,9 +97,9 @@ tml::Material::~Material()
 /**
  * @brief Release関数
  */
-void tml::Material::Release(void)
+void tml::graphic::Material::Release(void)
 {
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -108,7 +108,7 @@ void tml::Material::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Material::Init(void)
+void tml::graphic::Material::Init(void)
 {
 	this->Release();
 
@@ -125,7 +125,7 @@ void tml::Material::Init(void)
 	this->light_flg_ = false;
 	this->fog_flg_ = false;
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -137,11 +137,11 @@ void tml::Material::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Material::Create(tml::MaterialDesc &desc)
+INT tml::graphic::Material::Create(tml::graphic::MaterialDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

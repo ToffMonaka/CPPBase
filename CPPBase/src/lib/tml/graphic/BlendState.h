@@ -6,14 +6,15 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief BlendStateDescクラス
  */
-class BlendStateDesc : public tml::GraphicResourceDesc
+class BlendStateDesc : public tml::graphic::ResourceDesc
 {
 public:
 	CD3D11_BLEND_DESC blend_state_desc;
@@ -26,16 +27,18 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief BlendStateクラス
  */
-class BlendState : public tml::GraphicResource
+class BlendState : public tml::graphic::Resource
 {
-public: BlendState(const tml::BlendState &) = delete;
-public: tml::BlendState &operator =(const tml::BlendState &) = delete;
+public: BlendState(const tml::graphic::BlendState &) = delete;
+public: tml::graphic::BlendState &operator =(const tml::graphic::BlendState &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -50,11 +53,12 @@ public:
 	virtual ~BlendState();
 
 	virtual void Init(void);
-	INT Create(tml::BlendStateDesc &);
+	INT Create(tml::graphic::BlendStateDesc &);
 
 	ID3D11BlendState *GetBlendState(void) const;
 	const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &GetFactorArray(void) const;
 };
+}
 }
 
 
@@ -62,7 +66,7 @@ public:
  * @brief GetBlendState関数
  * @return bs (blend_state)
  */
-inline ID3D11BlendState *tml::BlendState::GetBlendState(void) const
+inline ID3D11BlendState *tml::graphic::BlendState::GetBlendState(void) const
 {
 	return (this->bs_);
 }
@@ -72,7 +76,7 @@ inline ID3D11BlendState *tml::BlendState::GetBlendState(void) const
  * @brief GetFactorArray関数
  * @return factor_ary (factor_array)
  */
-inline const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &tml::BlendState::GetFactorArray(void) const
+inline const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &tml::graphic::BlendState::GetFactorArray(void) const
 {
 	return (this->factor_ary_);
 }

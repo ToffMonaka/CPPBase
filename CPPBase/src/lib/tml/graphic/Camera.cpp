@@ -5,13 +5,13 @@
 
 
 #include "Camera.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::CameraDesc::CameraDesc() :
+tml::graphic::CameraDesc::CameraDesc() :
 	type(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE),
 	fov_angle(0.0f),
 	fov_size(0.0f, 0.0f),
@@ -25,7 +25,7 @@ tml::CameraDesc::CameraDesc() :
 /**
  * @brief デストラクタ
  */
-tml::CameraDesc::~CameraDesc()
+tml::graphic::CameraDesc::~CameraDesc()
 {
 	return;
 }
@@ -34,7 +34,7 @@ tml::CameraDesc::~CameraDesc()
 /**
  * @brief Init関数
  */
-void tml::CameraDesc::Init(void)
+void tml::graphic::CameraDesc::Init(void)
 {
 	this->type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
 	this->position.Init();
@@ -43,7 +43,7 @@ void tml::CameraDesc::Init(void)
 	this->near_clip = 0.0f;
 	this->far_clip = 0.0f;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -52,7 +52,7 @@ void tml::CameraDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Camera::Camera() :
+tml::graphic::Camera::Camera() :
 	type_(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE),
 	fov_angle_(0.0f),
 	fov_size_(0.0f, 0.0f),
@@ -66,7 +66,7 @@ tml::Camera::Camera() :
 /**
  * @brief デストラクタ
  */
-tml::Camera::~Camera()
+tml::graphic::Camera::~Camera()
 {
 	this->Release();
 
@@ -77,9 +77,9 @@ tml::Camera::~Camera()
 /**
  * @brief Release関数
  */
-void tml::Camera::Release(void)
+void tml::graphic::Camera::Release(void)
 {
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -88,7 +88,7 @@ void tml::Camera::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Camera::Init(void)
+void tml::graphic::Camera::Init(void)
 {
 	this->Release();
 
@@ -99,7 +99,7 @@ void tml::Camera::Init(void)
 	this->near_clip_ = 0.0f;
 	this->far_clip_ = 0.0f;
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -111,7 +111,7 @@ void tml::Camera::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Camera::Create(tml::CameraDesc &desc)
+INT tml::graphic::Camera::Create(tml::graphic::CameraDesc &desc)
 {
 	if (desc.type == tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE) {
 		this->Init();
@@ -121,7 +121,7 @@ INT tml::Camera::Create(tml::CameraDesc &desc)
 
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

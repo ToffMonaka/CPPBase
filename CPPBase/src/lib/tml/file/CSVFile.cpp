@@ -70,37 +70,6 @@ void tml::CSVFileReadDescData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::CSVFileReadDesc::CSVFileReadDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::CSVFileReadDesc::~CSVFileReadDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::CSVFileReadDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
 tml::CSVFileWriteDescData::CSVFileWriteDescData()
 {
 	return;
@@ -122,37 +91,6 @@ tml::CSVFileWriteDescData::~CSVFileWriteDescData()
 void tml::CSVFileWriteDescData::Init(void)
 {
 	tml::TextFileWriteDescData::Init();
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
-tml::CSVFileWriteDesc::CSVFileWriteDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::CSVFileWriteDesc::~CSVFileWriteDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::CSVFileWriteDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
 
 	return;
 }

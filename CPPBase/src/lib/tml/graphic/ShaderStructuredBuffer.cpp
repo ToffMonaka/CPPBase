@@ -5,13 +5,13 @@
 
 
 #include "ShaderStructuredBuffer.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::ShaderStructuredBufferDesc::ShaderStructuredBufferDesc() :
+tml::graphic::ShaderStructuredBufferDesc::ShaderStructuredBufferDesc() :
 	element_size(0U),
 	element_limit(0U),
 	cpu_flag(false),
@@ -24,7 +24,7 @@ tml::ShaderStructuredBufferDesc::ShaderStructuredBufferDesc() :
 /**
  * @brief デストラクタ
  */
-tml::ShaderStructuredBufferDesc::~ShaderStructuredBufferDesc()
+tml::graphic::ShaderStructuredBufferDesc::~ShaderStructuredBufferDesc()
 {
 	return;
 }
@@ -33,14 +33,14 @@ tml::ShaderStructuredBufferDesc::~ShaderStructuredBufferDesc()
 /**
  * @brief Init関数
  */
-void tml::ShaderStructuredBufferDesc::Init(void)
+void tml::graphic::ShaderStructuredBufferDesc::Init(void)
 {
 	this->element_size = 0U;
 	this->element_limit = 0U;
 	this->cpu_flag = false;
 	this->uasr_flag = false;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -49,7 +49,7 @@ void tml::ShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ShaderStructuredBuffer::ShaderStructuredBuffer() :
+tml::graphic::ShaderStructuredBuffer::ShaderStructuredBuffer() :
 	buf_(nullptr),
 	sr_(nullptr),
 	uasr_(nullptr),
@@ -66,7 +66,7 @@ tml::ShaderStructuredBuffer::ShaderStructuredBuffer() :
 /**
  * @brief デストラクタ
  */
-tml::ShaderStructuredBuffer::~ShaderStructuredBuffer()
+tml::graphic::ShaderStructuredBuffer::~ShaderStructuredBuffer()
 {
 	return;
 }
@@ -75,7 +75,7 @@ tml::ShaderStructuredBuffer::~ShaderStructuredBuffer()
 /**
  * @brief Release関数
  */
-void tml::ShaderStructuredBuffer::Release(void)
+void tml::graphic::ShaderStructuredBuffer::Release(void)
 {
 	if (this->uasr_ != nullptr) {
 		this->uasr_->Release();
@@ -95,7 +95,7 @@ void tml::ShaderStructuredBuffer::Release(void)
 		this->buf_ = nullptr;
 	}
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -104,7 +104,7 @@ void tml::ShaderStructuredBuffer::Release(void)
 /**
  * @brief Init関数
  */
-void tml::ShaderStructuredBuffer::Init(void)
+void tml::graphic::ShaderStructuredBuffer::Init(void)
 {
 	this->element_size_ = 0U;
 	this->element_limit_ = 0U;
@@ -112,7 +112,7 @@ void tml::ShaderStructuredBuffer::Init(void)
 	this->cpu_flg_ = false;
 	this->uasr_flg_ = false;
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -124,14 +124,14 @@ void tml::ShaderStructuredBuffer::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::ShaderStructuredBuffer::Create(tml::ShaderStructuredBufferDesc &desc)
+INT tml::graphic::ShaderStructuredBuffer::Create(tml::graphic::ShaderStructuredBufferDesc &desc)
 {
 	if (((this->element_size_ * this->element_limit_) <= 0U)
 	|| ((desc.element_size % 16) > 0)) {
 		return (-1);
 	}
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		return (-1);
 	}
 
@@ -190,7 +190,7 @@ INT tml::ShaderStructuredBuffer::Create(tml::ShaderStructuredBufferDesc &desc)
  * @brief UpdateBuffer関数
  * @param element_ary (element_array)
  */
-void tml::ShaderStructuredBuffer::UpdateBuffer(void *element_ary)
+void tml::graphic::ShaderStructuredBuffer::UpdateBuffer(void *element_ary)
 {
 	if (this->element_cnt_ <= 0U) {
 		return;

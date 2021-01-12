@@ -5,13 +5,13 @@
 
 
 #include "Fog.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::FogDesc::FogDesc() :
+tml::graphic::FogDesc::FogDesc() :
 	type(tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE),
 	color(0.0f),
 	mul_value(0.0f),
@@ -25,7 +25,7 @@ tml::FogDesc::FogDesc() :
 /**
  * @brief デストラクタ
  */
-tml::FogDesc::~FogDesc()
+tml::graphic::FogDesc::~FogDesc()
 {
 	return;
 }
@@ -34,7 +34,7 @@ tml::FogDesc::~FogDesc()
 /**
  * @brief Init関数
  */
-void tml::FogDesc::Init(void)
+void tml::graphic::FogDesc::Init(void)
 {
 	this->type = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
 	this->position.Init();
@@ -43,7 +43,7 @@ void tml::FogDesc::Init(void)
 	this->near_range = 0.0f;
 	this->far_range = 0.0f;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -52,7 +52,7 @@ void tml::FogDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Fog::Fog() :
+tml::graphic::Fog::Fog() :
 	type_(tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE),
 	col_(0.0f),
 	mul_val_(0.0f),
@@ -68,7 +68,7 @@ tml::Fog::Fog() :
 /**
  * @brief デストラクタ
  */
-tml::Fog::~Fog()
+tml::graphic::Fog::~Fog()
 {
 	this->Release();
 
@@ -79,9 +79,9 @@ tml::Fog::~Fog()
 /**
  * @brief Release関数
  */
-void tml::Fog::Release(void)
+void tml::graphic::Fog::Release(void)
 {
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -90,7 +90,7 @@ void tml::Fog::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Fog::Init(void)
+void tml::graphic::Fog::Init(void)
 {
 	this->Release();
 
@@ -103,7 +103,7 @@ void tml::Fog::Init(void)
 	this->rng_val1_ = 0.0f;
 	this->rng_val2_ = 0.0f;
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -115,11 +115,11 @@ void tml::Fog::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Fog::Create(tml::FogDesc &desc)
+INT tml::graphic::Fog::Create(tml::graphic::FogDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
@@ -140,7 +140,7 @@ INT tml::Fog::Create(tml::FogDesc &desc)
  * @brief SetNearRange関数
  * @param near_rng (near_range)
  */
-void tml::Fog::SetNearRange(const FLOAT near_rng)
+void tml::graphic::Fog::SetNearRange(const FLOAT near_rng)
 {
 	this->near_rng_ = near_rng;
 
@@ -172,7 +172,7 @@ void tml::Fog::SetNearRange(const FLOAT near_rng)
  * @brief SetFarRange関数
  * @param far_rng (far_range)
  */
-void tml::Fog::SetFarRange(const FLOAT far_rng)
+void tml::graphic::Fog::SetFarRange(const FLOAT far_rng)
 {
 	this->far_rng_ = far_rng;
 

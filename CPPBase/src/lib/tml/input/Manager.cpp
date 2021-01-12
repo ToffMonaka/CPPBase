@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief SoundManagerコードファイル
+ * @brief Managerコードファイル
  */
 
 
-#include "SoundManager.h"
+#include "Manager.h"
 #include "../memory/MemoryUtil.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::SoundManagerDesc::SoundManagerDesc()
+tml::input::ManagerDesc::ManagerDesc()
 {
 	return;
 }
@@ -20,7 +20,7 @@ tml::SoundManagerDesc::SoundManagerDesc()
 /**
  * @brief デストラクタ
  */
-tml::SoundManagerDesc::~SoundManagerDesc()
+tml::input::ManagerDesc::~ManagerDesc()
 {
 	return;
 }
@@ -29,7 +29,7 @@ tml::SoundManagerDesc::~SoundManagerDesc()
 /**
  * @brief Init関数
  */
-void tml::SoundManagerDesc::Init(void)
+void tml::input::ManagerDesc::Init(void)
 {
 	return;
 }
@@ -38,7 +38,7 @@ void tml::SoundManagerDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::SoundManager::SoundManager()
+tml::input::Manager::Manager()
 {
 	return;
 }
@@ -47,7 +47,7 @@ tml::SoundManager::SoundManager()
 /**
  * @brief デストラクタ
  */
-tml::SoundManager::~SoundManager()
+tml::input::Manager::~Manager()
 {
 	this->Release();
 
@@ -58,7 +58,7 @@ tml::SoundManager::~SoundManager()
 /**
  * @brief Release関数
  */
-void tml::SoundManager::Release(void)
+void tml::input::Manager::Release(void)
 {
 	return;
 }
@@ -67,7 +67,7 @@ void tml::SoundManager::Release(void)
 /**
  * @brief Init関数
  */
-void tml::SoundManager::Init(void)
+void tml::input::Manager::Init(void)
 {
 	this->Release();
 
@@ -81,7 +81,7 @@ void tml::SoundManager::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::SoundManager::Create(tml::SoundManagerDesc &desc)
+INT tml::input::Manager::Create(tml::input::ManagerDesc &desc)
 {
 	this->Init();
 

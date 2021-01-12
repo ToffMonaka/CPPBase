@@ -5,13 +5,13 @@
 
 
 #include "Sampler.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::SamplerDesc::SamplerDesc() :
+tml::graphic::SamplerDesc::SamplerDesc() :
 	sampler_desc(CD3D11_DEFAULT())
 {
 	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
@@ -23,7 +23,7 @@ tml::SamplerDesc::SamplerDesc() :
 /**
  * @brief デストラクタ
  */
-tml::SamplerDesc::~SamplerDesc()
+tml::graphic::SamplerDesc::~SamplerDesc()
 {
 	return;
 }
@@ -32,12 +32,12 @@ tml::SamplerDesc::~SamplerDesc()
 /**
  * @brief Init関数
  */
-void tml::SamplerDesc::Init(void)
+void tml::graphic::SamplerDesc::Init(void)
 {
 	this->sampler_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
 	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -46,7 +46,7 @@ void tml::SamplerDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Sampler::Sampler() :
+tml::graphic::Sampler::Sampler() :
 	samp_(nullptr)
 {
 	return;
@@ -56,7 +56,7 @@ tml::Sampler::Sampler() :
 /**
  * @brief デストラクタ
  */
-tml::Sampler::~Sampler()
+tml::graphic::Sampler::~Sampler()
 {
 	this->Release();
 
@@ -67,7 +67,7 @@ tml::Sampler::~Sampler()
 /**
  * @brief Release関数
  */
-void tml::Sampler::Release(void)
+void tml::graphic::Sampler::Release(void)
 {
 	if (this->samp_ != nullptr) {
 		this->samp_->Release();
@@ -75,7 +75,7 @@ void tml::Sampler::Release(void)
 		this->samp_ = nullptr;
 	}
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -84,11 +84,11 @@ void tml::Sampler::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Sampler::Init(void)
+void tml::graphic::Sampler::Init(void)
 {
 	this->Release();
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -100,11 +100,11 @@ void tml::Sampler::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Sampler::Create(tml::SamplerDesc &desc)
+INT tml::graphic::Sampler::Create(tml::graphic::SamplerDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

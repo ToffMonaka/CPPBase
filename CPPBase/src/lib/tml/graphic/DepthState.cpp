@@ -5,13 +5,13 @@
 
 
 #include "DepthState.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::DepthStateDesc::DepthStateDesc() :
+tml::graphic::DepthStateDesc::DepthStateDesc() :
 	depth_state_desc(CD3D11_DEFAULT())
 {
 	return;
@@ -21,7 +21,7 @@ tml::DepthStateDesc::DepthStateDesc() :
 /**
  * @brief デストラクタ
  */
-tml::DepthStateDesc::~DepthStateDesc()
+tml::graphic::DepthStateDesc::~DepthStateDesc()
 {
 	return;
 }
@@ -30,11 +30,11 @@ tml::DepthStateDesc::~DepthStateDesc()
 /**
  * @brief Init関数
  */
-void tml::DepthStateDesc::Init(void)
+void tml::graphic::DepthStateDesc::Init(void)
 {
 	this->depth_state_desc = CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT());
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -43,7 +43,7 @@ void tml::DepthStateDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::DepthState::DepthState() :
+tml::graphic::DepthState::DepthState() :
 	ds_(nullptr)
 {
 	return;
@@ -53,7 +53,7 @@ tml::DepthState::DepthState() :
 /**
  * @brief デストラクタ
  */
-tml::DepthState::~DepthState()
+tml::graphic::DepthState::~DepthState()
 {
 	this->Release();
 
@@ -64,7 +64,7 @@ tml::DepthState::~DepthState()
 /**
  * @brief Release関数
  */
-void tml::DepthState::Release(void)
+void tml::graphic::DepthState::Release(void)
 {
 	if (this->ds_ != nullptr) {
 		this->ds_->Release();
@@ -72,7 +72,7 @@ void tml::DepthState::Release(void)
 		this->ds_ = nullptr;
 	}
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -81,11 +81,11 @@ void tml::DepthState::Release(void)
 /**
  * @brief Init関数
  */
-void tml::DepthState::Init(void)
+void tml::graphic::DepthState::Init(void)
 {
 	this->Release();
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -97,11 +97,11 @@ void tml::DepthState::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::DepthState::Create(tml::DepthStateDesc &desc)
+INT tml::graphic::DepthState::Create(tml::graphic::DepthStateDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

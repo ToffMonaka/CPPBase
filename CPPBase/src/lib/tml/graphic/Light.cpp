@@ -5,13 +5,13 @@
 
 
 #include "Light.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::LightDesc::LightDesc() :
+tml::graphic::LightDesc::LightDesc() :
 	type(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE),
 	color(0.0f),
 	mul_value(0.0f),
@@ -31,7 +31,7 @@ tml::LightDesc::LightDesc() :
 /**
  * @brief デストラクタ
  */
-tml::LightDesc::~LightDesc()
+tml::graphic::LightDesc::~LightDesc()
 {
 	return;
 }
@@ -40,7 +40,7 @@ tml::LightDesc::~LightDesc()
 /**
  * @brief Init関数
  */
-void tml::LightDesc::Init(void)
+void tml::graphic::LightDesc::Init(void)
 {
 	this->type = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
 	this->position.Init();
@@ -55,7 +55,7 @@ void tml::LightDesc::Init(void)
 	this->soft_angle = 0.0f;
 	this->shadow_flag = false;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -64,7 +64,7 @@ void tml::LightDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Light::Light() :
+tml::graphic::Light::Light() :
 	type_(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE),
 	col_(0.0f),
 	mul_val_(0.0f),
@@ -86,7 +86,7 @@ tml::Light::Light() :
 /**
  * @brief デストラクタ
  */
-tml::Light::~Light()
+tml::graphic::Light::~Light()
 {
 	this->Release();
 
@@ -97,9 +97,9 @@ tml::Light::~Light()
 /**
  * @brief Release関数
  */
-void tml::Light::Release(void)
+void tml::graphic::Light::Release(void)
 {
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -108,7 +108,7 @@ void tml::Light::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Light::Init(void)
+void tml::graphic::Light::Init(void)
 {
 	this->Release();
 
@@ -127,7 +127,7 @@ void tml::Light::Init(void)
 	this->soft_val_ = 0.0f;
 	this->shadow_flg_ = false;
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -139,11 +139,11 @@ void tml::Light::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Light::Create(tml::LightDesc &desc)
+INT tml::graphic::Light::Create(tml::graphic::LightDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
@@ -170,7 +170,7 @@ INT tml::Light::Create(tml::LightDesc &desc)
  * @brief SetCutAngle関数
  * @param cut_angle (cut_angle)
  */
-void tml::Light::SetCutAngle(const FLOAT cut_angle)
+void tml::graphic::Light::SetCutAngle(const FLOAT cut_angle)
 {
 	this->cut_angle_ = cut_angle;
 
@@ -197,7 +197,7 @@ void tml::Light::SetCutAngle(const FLOAT cut_angle)
  * @brief SetSoftAngle関数
  * @param soft_angle (soft_angle)
  */
-void tml::Light::SetSoftAngle(const FLOAT soft_angle)
+void tml::graphic::Light::SetSoftAngle(const FLOAT soft_angle)
 {
 	this->soft_angle_ = soft_angle;
 

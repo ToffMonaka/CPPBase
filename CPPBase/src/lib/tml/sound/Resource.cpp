@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief GraphicResourceコードファイル
+ * @brief Resourceコードファイル
  */
 
 
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::GraphicResourceDesc::GraphicResourceDesc() :
+tml::sound::ResourceDesc::ResourceDesc() :
 	manager(nullptr)
 {
 	return;
@@ -20,7 +20,7 @@ tml::GraphicResourceDesc::GraphicResourceDesc() :
 /**
  * @brief デストラクタ
  */
-tml::GraphicResourceDesc::~GraphicResourceDesc()
+tml::sound::ResourceDesc::~ResourceDesc()
 {
 	return;
 }
@@ -29,7 +29,7 @@ tml::GraphicResourceDesc::~GraphicResourceDesc()
 /**
  * @brief Init関数
  */
-void tml::GraphicResourceDesc::Init(void)
+void tml::sound::ResourceDesc::Init(void)
 {
 	this->manager = nullptr;
 
@@ -40,7 +40,7 @@ void tml::GraphicResourceDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::GraphicResource::GraphicResource() :
+tml::sound::Resource::Resource() :
 	mgr_(nullptr)
 {
 	return;
@@ -50,7 +50,7 @@ tml::GraphicResource::GraphicResource() :
 /**
  * @brief デストラクタ
  */
-tml::GraphicResource::~GraphicResource()
+tml::sound::Resource::~Resource()
 {
 	return;
 }
@@ -59,7 +59,7 @@ tml::GraphicResource::~GraphicResource()
 /**
  * @brief Release関数
  */
-void tml::GraphicResource::Release(void)
+void tml::sound::Resource::Release(void)
 {
 	return;
 }
@@ -68,7 +68,7 @@ void tml::GraphicResource::Release(void)
 /**
  * @brief Init関数
  */
-void tml::GraphicResource::Init(void)
+void tml::sound::Resource::Init(void)
 {
 	this->mgr_ = nullptr;
 
@@ -82,7 +82,7 @@ void tml::GraphicResource::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::GraphicResource::Create(tml::GraphicResourceDesc &desc)
+INT tml::sound::Resource::Create(tml::sound::ResourceDesc &desc)
 {
 	if (desc.manager == nullptr) {
 		return (-1);

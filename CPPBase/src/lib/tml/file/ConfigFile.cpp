@@ -70,37 +70,6 @@ void tml::ConfigFileReadDescData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ConfigFileReadDesc::ConfigFileReadDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::ConfigFileReadDesc::~ConfigFileReadDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::ConfigFileReadDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
 tml::ConfigFileWriteDescData::ConfigFileWriteDescData()
 {
 	return;
@@ -122,37 +91,6 @@ tml::ConfigFileWriteDescData::~ConfigFileWriteDescData()
 void tml::ConfigFileWriteDescData::Init(void)
 {
 	tml::TextFileWriteDescData::Init();
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
-tml::ConfigFileWriteDesc::ConfigFileWriteDesc() :
-	parent_data(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::ConfigFileWriteDesc::~ConfigFileWriteDesc()
-{
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::ConfigFileWriteDesc::Init(void)
-{
-	this->data.Init();
-	this->parent_data = nullptr;
 
 	return;
 }

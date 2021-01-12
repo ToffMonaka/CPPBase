@@ -5,13 +5,13 @@
 
 
 #include "BlendState.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::BlendStateDesc::BlendStateDesc() :
+tml::graphic::BlendStateDesc::BlendStateDesc() :
 	blend_state_desc(CD3D11_DEFAULT()),
 	factor_array{}
 {
@@ -22,7 +22,7 @@ tml::BlendStateDesc::BlendStateDesc() :
 /**
  * @brief デストラクタ
  */
-tml::BlendStateDesc::~BlendStateDesc()
+tml::graphic::BlendStateDesc::~BlendStateDesc()
 {
 	return;
 }
@@ -31,12 +31,12 @@ tml::BlendStateDesc::~BlendStateDesc()
 /**
  * @brief Init関数
  */
-void tml::BlendStateDesc::Init(void)
+void tml::graphic::BlendStateDesc::Init(void)
 {
 	this->blend_state_desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
 	this->factor_array.fill(0.0f);
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -45,7 +45,7 @@ void tml::BlendStateDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::BlendState::BlendState() :
+tml::graphic::BlendState::BlendState() :
 	bs_(nullptr),
 	factor_ary_{}
 {
@@ -56,7 +56,7 @@ tml::BlendState::BlendState() :
 /**
  * @brief デストラクタ
  */
-tml::BlendState::~BlendState()
+tml::graphic::BlendState::~BlendState()
 {
 	this->Release();
 
@@ -67,7 +67,7 @@ tml::BlendState::~BlendState()
 /**
  * @brief Release関数
  */
-void tml::BlendState::Release(void)
+void tml::graphic::BlendState::Release(void)
 {
 	if (this->bs_ != nullptr) {
 		this->bs_->Release();
@@ -75,7 +75,7 @@ void tml::BlendState::Release(void)
 		this->bs_ = nullptr;
 	}
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -84,13 +84,13 @@ void tml::BlendState::Release(void)
 /**
  * @brief Init関数
  */
-void tml::BlendState::Init(void)
+void tml::graphic::BlendState::Init(void)
 {
 	this->Release();
 
 	this->factor_ary_.fill(0.0f);
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -102,11 +102,11 @@ void tml::BlendState::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::BlendState::Create(tml::BlendStateDesc &desc)
+INT tml::graphic::BlendState::Create(tml::graphic::BlendStateDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

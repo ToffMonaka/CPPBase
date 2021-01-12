@@ -5,13 +5,13 @@
 
 
 #include "ShaderConstantBuffer.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::ShaderConstantBufferDesc::ShaderConstantBufferDesc() :
+tml::graphic::ShaderConstantBufferDesc::ShaderConstantBufferDesc() :
 	element_size(0U),
 	cpu_flag(false)
 {
@@ -22,7 +22,7 @@ tml::ShaderConstantBufferDesc::ShaderConstantBufferDesc() :
 /**
  * @brief デストラクタ
  */
-tml::ShaderConstantBufferDesc::~ShaderConstantBufferDesc()
+tml::graphic::ShaderConstantBufferDesc::~ShaderConstantBufferDesc()
 {
 	return;
 }
@@ -31,12 +31,12 @@ tml::ShaderConstantBufferDesc::~ShaderConstantBufferDesc()
 /**
  * @brief Init関数
  */
-void tml::ShaderConstantBufferDesc::Init(void)
+void tml::graphic::ShaderConstantBufferDesc::Init(void)
 {
 	this->element_size = 0U;
 	this->cpu_flag = false;
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -45,7 +45,7 @@ void tml::ShaderConstantBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ShaderConstantBuffer::ShaderConstantBuffer() :
+tml::graphic::ShaderConstantBuffer::ShaderConstantBuffer() :
 	buf_(nullptr),
 	element_size_(0U),
 	cpu_flg_(false)
@@ -57,7 +57,7 @@ tml::ShaderConstantBuffer::ShaderConstantBuffer() :
 /**
  * @brief デストラクタ
  */
-tml::ShaderConstantBuffer::~ShaderConstantBuffer()
+tml::graphic::ShaderConstantBuffer::~ShaderConstantBuffer()
 {
 	return;
 }
@@ -66,7 +66,7 @@ tml::ShaderConstantBuffer::~ShaderConstantBuffer()
 /**
  * @brief Release関数
  */
-void tml::ShaderConstantBuffer::Release(void)
+void tml::graphic::ShaderConstantBuffer::Release(void)
 {
 	if (this->buf_ != nullptr) {
 		this->buf_->Release();
@@ -74,7 +74,7 @@ void tml::ShaderConstantBuffer::Release(void)
 		this->buf_ = nullptr;
 	}
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -83,12 +83,12 @@ void tml::ShaderConstantBuffer::Release(void)
 /**
  * @brief Init関数
  */
-void tml::ShaderConstantBuffer::Init(void)
+void tml::graphic::ShaderConstantBuffer::Init(void)
 {
 	this->element_size_ = 0U;
 	this->cpu_flg_ = false;
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -100,14 +100,14 @@ void tml::ShaderConstantBuffer::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::ShaderConstantBuffer::Create(tml::ShaderConstantBufferDesc &desc)
+INT tml::graphic::ShaderConstantBuffer::Create(tml::graphic::ShaderConstantBufferDesc &desc)
 {
 	if ((desc.element_size <= 0U)
 	|| ((desc.element_size % 16) > 0)) {
 		return (-1);
 	}
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		return (-1);
 	}
 
@@ -134,7 +134,7 @@ INT tml::ShaderConstantBuffer::Create(tml::ShaderConstantBufferDesc &desc)
  * @brief UpdateBuffer関数
  * @param element (element)
  */
-void tml::ShaderConstantBuffer::UpdateBuffer(void *element)
+void tml::graphic::ShaderConstantBuffer::UpdateBuffer(void *element)
 {
 	if (this->cpu_flg_) {
 		D3D11_MAPPED_SUBRESOURCE msr;

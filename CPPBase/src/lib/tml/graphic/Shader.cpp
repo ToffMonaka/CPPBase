@@ -6,13 +6,13 @@
 
 #include "Shader.h"
 #include "../string/StringUtil.h"
-#include "GraphicManager.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::ShaderInclude::ShaderInclude()
+tml::graphic::ShaderInclude::ShaderInclude()
 {
 	return;
 }
@@ -21,7 +21,7 @@ tml::ShaderInclude::ShaderInclude()
 /**
  * @brief デストラクタ
  */
-tml::ShaderInclude::~ShaderInclude()
+tml::graphic::ShaderInclude::~ShaderInclude()
 {
 	return;
 }
@@ -30,7 +30,7 @@ tml::ShaderInclude::~ShaderInclude()
 /**
  * @brief Init関数
  */
-void tml::ShaderInclude::Init(void)
+void tml::graphic::ShaderInclude::Init(void)
 {
 	this->dir_path_.clear();
 
@@ -44,7 +44,7 @@ void tml::ShaderInclude::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::ShaderInclude::Create(const WCHAR *dir_path)
+INT tml::graphic::ShaderInclude::Create(const WCHAR *dir_path)
 {
 	this->Init();
 
@@ -64,7 +64,7 @@ INT tml::ShaderInclude::Create(const WCHAR *dir_path)
  * @return res (result)<br>
  * 0未満=失敗
  */
-HRESULT __stdcall tml::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, LPCSTR file_name, LPCVOID parent_dat, LPCVOID *dst_dat, UINT *dst_dat_len)
+HRESULT __stdcall tml::graphic::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, LPCSTR file_name, LPCVOID parent_dat, LPCVOID *dst_dat, UINT *dst_dat_len)
 {
 	tml::BinaryFile bin_file;
 	std::wstring bin_file_name;
@@ -92,7 +92,7 @@ HRESULT __stdcall tml::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, LPCSTR fil
  * @return res (result)<br>
  * 0未満=失敗
  */
-HRESULT __stdcall tml::ShaderInclude::Close(LPCVOID dat)
+HRESULT __stdcall tml::graphic::ShaderInclude::Close(LPCVOID dat)
 {
 	auto file_buf = reinterpret_cast<BYTE *>(const_cast<LPVOID>(dat));
 
@@ -105,7 +105,7 @@ HRESULT __stdcall tml::ShaderInclude::Close(LPCVOID dat)
 /**
  * @brief コンストラクタ
  */
-tml::ShaderDesc::ShaderDesc() :
+tml::graphic::ShaderDesc::ShaderDesc() :
 	vertex_shader_input_element_desc_count(0U),
 	vertex_shader_input_element_desc_array(nullptr)
 {
@@ -116,7 +116,7 @@ tml::ShaderDesc::ShaderDesc() :
 /**
  * @brief デストラクタ
  */
-tml::ShaderDesc::~ShaderDesc()
+tml::graphic::ShaderDesc::~ShaderDesc()
 {
 	return;
 }
@@ -125,7 +125,7 @@ tml::ShaderDesc::~ShaderDesc()
 /**
  * @brief Init関数
  */
-void tml::ShaderDesc::Init(void)
+void tml::graphic::ShaderDesc::Init(void)
 {
 	this->file_read_desc.Init();
 	this->include_directory_path.clear();
@@ -145,7 +145,7 @@ void tml::ShaderDesc::Init(void)
 	this->compute_shader_model_name.clear();
 	this->macro_container.clear();
 
-	tml::GraphicResourceDesc::Init();
+	tml::graphic::ResourceDesc::Init();
 
 	return;
 }
@@ -154,7 +154,7 @@ void tml::ShaderDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::Shader::Shader() :
+tml::graphic::Shader::Shader() :
 	vsh_(nullptr),
 	vsh_input_layout_(nullptr),
 	hsh_(nullptr),
@@ -170,7 +170,7 @@ tml::Shader::Shader() :
 /**
  * @brief デストラクタ
  */
-tml::Shader::~Shader()
+tml::graphic::Shader::~Shader()
 {
 	this->Release();
 
@@ -181,7 +181,7 @@ tml::Shader::~Shader()
 /**
  * @brief Release関数
  */
-void tml::Shader::Release(void)
+void tml::graphic::Shader::Release(void)
 {
 	if (this->csh_ != nullptr) {
 		this->csh_->Release();
@@ -225,7 +225,7 @@ void tml::Shader::Release(void)
 		this->vsh_ = nullptr;
 	}
 
-	tml::GraphicResource::Release();
+	tml::graphic::Resource::Release();
 
 	return;
 }
@@ -234,11 +234,11 @@ void tml::Shader::Release(void)
 /**
  * @brief Init関数
  */
-void tml::Shader::Init(void)
+void tml::graphic::Shader::Init(void)
 {
 	this->Release();
 
-	tml::GraphicResource::Init();
+	tml::graphic::Resource::Init();
 
 	return;
 }
@@ -250,11 +250,11 @@ void tml::Shader::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::Shader::Create(tml::ShaderDesc &desc)
+INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 {
 	this->Init();
 
-	if (tml::GraphicResource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
@@ -446,9 +446,9 @@ INT tml::Shader::Create(tml::ShaderDesc &desc)
  * @return blob (blob)<br>
  * nullptr=失敗
  */
-ID3DBlob *tml::Shader::GetBlob(tml::DynamicBuffer &file_buf, const WCHAR *inc_dir_path, const WCHAR *func_name, const WCHAR *model_name, const D3D10_SHADER_MACRO *macro_ary)
+ID3DBlob *tml::graphic::Shader::GetBlob(tml::DynamicBuffer &file_buf, const WCHAR *inc_dir_path, const WCHAR *func_name, const WCHAR *model_name, const D3D10_SHADER_MACRO *macro_ary)
 {
-	tml::ShaderInclude inc;
+	tml::graphic::ShaderInclude inc;
 
 	if (inc.Create(inc_dir_path) < 0) {
 		return (nullptr);
@@ -487,7 +487,7 @@ ID3DBlob *tml::Shader::GetBlob(tml::DynamicBuffer &file_buf, const WCHAR *inc_di
  * @brief ReleaseBlob関数
  * @param blob (blob)
  */
-void tml::Shader::ReleaseBlob(ID3DBlob **blob)
+void tml::graphic::Shader::ReleaseBlob(ID3DBlob **blob)
 {
 	if ((*blob) == nullptr) {
 		return;

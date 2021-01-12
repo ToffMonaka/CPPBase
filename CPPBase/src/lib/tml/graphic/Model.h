@@ -6,14 +6,15 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief ModelDescクラス
  */
-class ModelDesc : public tml::GraphicResourceDesc
+class ModelDesc : public tml::graphic::ResourceDesc
 {
 public:
 
@@ -24,25 +25,27 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief Modelクラス
  *
  * インターフェースパターン
  */
-class Model : public tml::GraphicResource
+class Model : public tml::graphic::Resource
 {
-public: Model(const tml::Model &) = delete;
-public: tml::Model &operator =(const tml::Model &) = delete;
+public: Model(const tml::graphic::Model &) = delete;
+public: tml::graphic::Model &operator =(const tml::graphic::Model &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 
 protected:
 	void Release(void);
-	INT Create(tml::ModelDesc &);
+	INT Create(tml::graphic::ModelDesc &);
 
 public:
 	Model();
@@ -50,4 +53,5 @@ public:
 
 	virtual void Init(void);
 };
+}
 }

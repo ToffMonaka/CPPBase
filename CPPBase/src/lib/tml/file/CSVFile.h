@@ -81,42 +81,15 @@ namespace tml {
 class CSVFileReadDescData : public tml::TextFileReadDescData
 {
 public:
+
+public:
 	CSVFileReadDescData();
 	virtual ~CSVFileReadDescData();
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief CSVFileReadDescクラス
- */
-class CSVFileReadDesc
-{
-public:
-	tml::CSVFileReadDescData data;
-	tml::CSVFileReadDescData *parent_data;
-
-public:
-	CSVFileReadDesc();
-	virtual ~CSVFileReadDesc();
-
-	virtual void Init(void);
-
-	tml::CSVFileReadDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::CSVFileReadDescData *tml::CSVFileReadDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using CSVFileReadDesc = tml::FileReadDesc<tml::CSVFileReadDescData>;
 }
 
 
@@ -127,42 +100,15 @@ namespace tml {
 class CSVFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
+
+public:
 	CSVFileWriteDescData();
 	virtual ~CSVFileWriteDescData();
 
 	virtual void Init(void);
 };
-}
 
-
-namespace tml {
-/**
- * @brief CSVFileWriteDescクラス
- */
-class CSVFileWriteDesc
-{
-public:
-	tml::CSVFileWriteDescData data;
-	tml::CSVFileWriteDescData *parent_data;
-
-public:
-	CSVFileWriteDesc();
-	virtual ~CSVFileWriteDesc();
-
-	virtual void Init(void);
-
-	tml::CSVFileWriteDescData *GetDataByParent(void);
-};
-}
-
-
-/**
- * @brief GetDataByParent関数
- * @return dat (data)
- */
-inline tml::CSVFileWriteDescData *tml::CSVFileWriteDesc::GetDataByParent(void)
-{
-	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
+using CSVFileWriteDesc = tml::FileWriteDesc<tml::CSVFileWriteDescData>;
 }
 
 

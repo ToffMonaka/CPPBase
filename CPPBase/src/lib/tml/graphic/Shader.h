@@ -8,17 +8,18 @@
 #include "../constant/ConstantUtil.h"
 #include <list>
 #include "../file/BinaryFile.h"
-#include "GraphicResource.h"
+#include "Resource.h"
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief ShaderIncludeクラス
  */
 class ShaderInclude : public ID3DInclude
 {
-public: ShaderInclude(const tml::ShaderInclude &) = delete;
-public: tml::ShaderInclude &operator =(const tml::ShaderInclude &) = delete;
+public: ShaderInclude(const tml::graphic::ShaderInclude &) = delete;
+public: tml::graphic::ShaderInclude &operator =(const tml::graphic::ShaderInclude &) = delete;
 
 private:
 	std::wstring dir_path_;
@@ -34,13 +35,15 @@ public:
 	HRESULT __stdcall Close(LPCVOID);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief ShaderDescクラス
  */
-class ShaderDesc : public tml::GraphicResourceDesc
+class ShaderDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::BinaryFileReadDesc file_read_desc;
@@ -68,16 +71,18 @@ public:
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief Shaderクラス
  */
-class Shader : public tml::GraphicResource
+class Shader : public tml::graphic::Resource
 {
-public: Shader(const tml::Shader &) = delete;
-public: tml::Shader &operator =(const tml::Shader &) = delete;
+public: Shader(const tml::graphic::Shader &) = delete;
+public: tml::graphic::Shader &operator =(const tml::graphic::Shader &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -100,7 +105,7 @@ public:
 	virtual ~Shader();
 
 	virtual void Init(void);
-	INT Create(tml::ShaderDesc &);
+	INT Create(tml::graphic::ShaderDesc &);
 
 	ID3D11VertexShader *GetVertexShader(void) const;
 	ID3D11InputLayout *GetVertexShaderInputLayout(void) const;
@@ -111,13 +116,14 @@ public:
 	ID3D11ComputeShader *GetComputeShader(void) const;
 };
 }
+}
 
 
 /**
  * @brief GetVertexShader関数
  * @return vsh (vertex_shader)
  */
-inline ID3D11VertexShader *tml::Shader::GetVertexShader(void) const
+inline ID3D11VertexShader *tml::graphic::Shader::GetVertexShader(void) const
 {
 	return (this->vsh_);
 }
@@ -127,7 +133,7 @@ inline ID3D11VertexShader *tml::Shader::GetVertexShader(void) const
  * @brief GetVertexShaderInputLayout関数
  * @return vsh_input_layout (vertex_shader_input_layout)
  */
-inline ID3D11InputLayout *tml::Shader::GetVertexShaderInputLayout(void) const
+inline ID3D11InputLayout *tml::graphic::Shader::GetVertexShaderInputLayout(void) const
 {
 	return (this->vsh_input_layout_);
 }
@@ -137,7 +143,7 @@ inline ID3D11InputLayout *tml::Shader::GetVertexShaderInputLayout(void) const
  * @brief GetHullShader関数
  * @return hsh (hull_shader)
  */
-inline ID3D11HullShader *tml::Shader::GetHullShader(void) const
+inline ID3D11HullShader *tml::graphic::Shader::GetHullShader(void) const
 {
 	return (this->hsh_);
 }
@@ -147,7 +153,7 @@ inline ID3D11HullShader *tml::Shader::GetHullShader(void) const
  * @brief GetDomainShader関数
  * @return dsh (domain_shader)
  */
-inline ID3D11DomainShader *tml::Shader::GetDomainShader(void) const
+inline ID3D11DomainShader *tml::graphic::Shader::GetDomainShader(void) const
 {
 	return (this->dsh_);
 }
@@ -157,7 +163,7 @@ inline ID3D11DomainShader *tml::Shader::GetDomainShader(void) const
  * @brief GetGeometryShader関数
  * @return gsh (geometry_shader)
  */
-inline ID3D11GeometryShader *tml::Shader::GetGeometryShader(void) const
+inline ID3D11GeometryShader *tml::graphic::Shader::GetGeometryShader(void) const
 {
 	return (this->gsh_);
 }
@@ -167,7 +173,7 @@ inline ID3D11GeometryShader *tml::Shader::GetGeometryShader(void) const
  * @brief GetPixelShader関数
  * @return psh (pixel_shader)
  */
-inline ID3D11PixelShader *tml::Shader::GetPixelShader(void) const
+inline ID3D11PixelShader *tml::graphic::Shader::GetPixelShader(void) const
 {
 	return (this->psh_);
 }
@@ -177,7 +183,7 @@ inline ID3D11PixelShader *tml::Shader::GetPixelShader(void) const
  * @brief GetComputeShader関数
  * @return csh (compute_shader)
  */
-inline ID3D11ComputeShader *tml::Shader::GetComputeShader(void) const
+inline ID3D11ComputeShader *tml::graphic::Shader::GetComputeShader(void) const
 {
 	return (this->csh_);
 }

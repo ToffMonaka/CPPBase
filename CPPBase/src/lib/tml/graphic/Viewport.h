@@ -15,13 +15,14 @@
 
 
 namespace tml {
+namespace graphic {
 /**
  * @brief ViewportƒNƒ‰ƒX
  */
 class Viewport
 {
-public: Viewport(const tml::Viewport &) = delete;
-public: tml::Viewport &operator =(const tml::Viewport &) = delete;
+public: Viewport(const tml::graphic::Viewport &) = delete;
+public: tml::graphic::Viewport &operator =(const tml::graphic::Viewport &) = delete;
 
 private:
 	CD3D11_VIEWPORT vp_;
@@ -45,6 +46,7 @@ public:
 	const CD3D11_VIEWPORT &GetViewport(void) const;
 };
 }
+}
 
 
 /**
@@ -52,7 +54,7 @@ public:
  * @param pos (position)
  * @param size (size)
  */
-inline void tml::Viewport::Set(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size)
+inline void tml::graphic::Viewport::Set(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size)
 {
 	this->vp_ = CD3D11_VIEWPORT(pos.x, pos.y, size.x, size.y, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH);
 
@@ -64,7 +66,7 @@ inline void tml::Viewport::Set(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX
  * @brief GetXŠÖ”
  * @return x (x)
  */
-inline FLOAT tml::Viewport::GetX(void) const
+inline FLOAT tml::graphic::Viewport::GetX(void) const
 {
 	return (this->vp_.TopLeftX);
 }
@@ -74,7 +76,7 @@ inline FLOAT tml::Viewport::GetX(void) const
  * @brief SetXŠÖ”
  * @param x (x)
  */
-inline void tml::Viewport::SetX(const FLOAT x)
+inline void tml::graphic::Viewport::SetX(const FLOAT x)
 {
 	this->vp_.TopLeftX = x;
 	
@@ -86,7 +88,7 @@ inline void tml::Viewport::SetX(const FLOAT x)
  * @brief GetYŠÖ”
  * @return y (y)
  */
-inline FLOAT tml::Viewport::GetY(void) const
+inline FLOAT tml::graphic::Viewport::GetY(void) const
 {
 	return (this->vp_.TopLeftY);
 }
@@ -96,7 +98,7 @@ inline FLOAT tml::Viewport::GetY(void) const
  * @brief SetYŠÖ”
  * @param y (y)
  */
-inline void tml::Viewport::SetY(const FLOAT y)
+inline void tml::graphic::Viewport::SetY(const FLOAT y)
 {
 	this->vp_.TopLeftY = y;
 	
@@ -108,7 +110,7 @@ inline void tml::Viewport::SetY(const FLOAT y)
  * @brief GetWidthŠÖ”
  * @return w (width)
  */
-inline FLOAT tml::Viewport::GetWidth(void) const
+inline FLOAT tml::graphic::Viewport::GetWidth(void) const
 {
 	return (this->vp_.Width);
 }
@@ -118,7 +120,7 @@ inline FLOAT tml::Viewport::GetWidth(void) const
  * @brief SetWidthŠÖ”
  * @param w (width)
  */
-inline void tml::Viewport::SetWidth(const FLOAT w)
+inline void tml::graphic::Viewport::SetWidth(const FLOAT w)
 {
 	this->vp_.Width = w;
 	
@@ -130,7 +132,7 @@ inline void tml::Viewport::SetWidth(const FLOAT w)
  * @brief GetHeightŠÖ”
  * @return h (height)
  */
-inline FLOAT tml::Viewport::GetHeight(void) const
+inline FLOAT tml::graphic::Viewport::GetHeight(void) const
 {
 	return (this->vp_.Height);
 }
@@ -140,7 +142,7 @@ inline FLOAT tml::Viewport::GetHeight(void) const
  * @brief SetHeightŠÖ”
  * @param h (height)
  */
-inline void tml::Viewport::SetHeight(const FLOAT h)
+inline void tml::graphic::Viewport::SetHeight(const FLOAT h)
 {
 	this->vp_.Height = h;
 	
@@ -152,7 +154,7 @@ inline void tml::Viewport::SetHeight(const FLOAT h)
  * @brief GetViewportŠÖ”
  * @return vp (viewport)
  */
-inline const CD3D11_VIEWPORT &tml::Viewport::GetViewport(void) const
+inline const CD3D11_VIEWPORT &tml::graphic::Viewport::GetViewport(void) const
 {
 	return (this->vp_);
 }

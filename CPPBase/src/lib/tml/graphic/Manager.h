@@ -1,20 +1,23 @@
 /**
  * @file
- * @brief GraphicManagerヘッダーファイル
+ * @brief Managerヘッダーファイル
  */
 #pragma once
 
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_GRAPHIC.h"
+#include <vector>
+#include "../memory/DynamicBuffer.h"
 #include "Viewport.h"
 
 
 namespace tml {
+namespace graphic {
 /**
- * @brief GraphicManagerDescクラス
+ * @brief ManagerDescクラス
  */
-class GraphicManagerDesc
+class ManagerDesc
 {
 public:
 	HWND window_handle;
@@ -22,22 +25,24 @@ public:
 	UINT window_height;
 
 public:
-	GraphicManagerDesc();
-	virtual ~GraphicManagerDesc();
+	ManagerDesc();
+	virtual ~ManagerDesc();
 
 	virtual void Init(void);
 };
 }
+}
 
 
 namespace tml {
+namespace graphic {
 /**
- * @brief GraphicManagerクラス
+ * @brief Managerクラス
  */
-class GraphicManager
+class Manager
 {
-public: GraphicManager(const tml::GraphicManager &) = delete;
-public: tml::GraphicManager &operator =(const tml::GraphicManager &) = delete;
+public: Manager(const tml::graphic::Manager &) = delete;
+public: tml::graphic::Manager &operator =(const tml::graphic::Manager &) = delete;
 
 private:
 	IDXGIFactory1 *factory_;
@@ -71,7 +76,7 @@ private:
 	UINT shadow_interval_cnt_;
 	UINT shadow_blur_weight_cnt_;
 	FLOAT shadow_blur_dispersion_val_;
-	tml::Viewport shadow_vp_;
+	tml::graphic::Viewport shadow_vp_;
 	tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE ao_quality_type_;
 	FLOAT ao_per_;
 	FLOAT ao_rng_;
@@ -92,11 +97,11 @@ private:
 	void Release(void);
 
 public:
-	GraphicManager();
-	virtual ~GraphicManager();
+	Manager();
+	virtual ~Manager();
 
 	virtual void Init(void);
-	INT Create(tml::GraphicManagerDesc &);
+	INT Create(tml::graphic::ManagerDesc &);
 
 	void Draw(void);
 	IDXGIFactory1 *GetFactory(void) const;
@@ -107,7 +112,11 @@ public:
 	ID3D11Device *GetDevice(void) const;
 	ID3D11DeviceContext *GetDeviceContext(void) const;
 	D3D_FEATURE_LEVEL GetDeviceFeatureLevel(void) const;
+	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_res = nullptr);
+	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Texture2D *, INT *dst_res = nullptr);
+	std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
 };
+}
 }
 
 
@@ -115,7 +124,7 @@ public:
  * @brief GetFactory関数
  * @return factory (factory)
  */
-inline IDXGIFactory1 *tml::GraphicManager::GetFactory(void) const
+inline IDXGIFactory1 *tml::graphic::Manager::GetFactory(void) const
 {
 	return (this->factory_);
 }
@@ -125,7 +134,7 @@ inline IDXGIFactory1 *tml::GraphicManager::GetFactory(void) const
  * @brief GetAdapter関数
  * @return adapter (adapter)
  */
-inline IDXGIAdapter1 *tml::GraphicManager::GetAdapter(void) const
+inline IDXGIAdapter1 *tml::graphic::Manager::GetAdapter(void) const
 {
 	return (this->adapter_);
 }
@@ -135,7 +144,7 @@ inline IDXGIAdapter1 *tml::GraphicManager::GetAdapter(void) const
  * @brief GetAdapterDesc関数
  * @return adapter_desc (adapter_desc)
  */
-inline const DXGI_ADAPTER_DESC1 &tml::GraphicManager::GetAdapterDesc(void) const
+inline const DXGI_ADAPTER_DESC1 &tml::graphic::Manager::GetAdapterDesc(void) const
 {
 	return (this->adapter_desc_);
 }
@@ -145,7 +154,7 @@ inline const DXGI_ADAPTER_DESC1 &tml::GraphicManager::GetAdapterDesc(void) const
  * @brief GetSwapChain関数
  * @return swap_chain (swap_chain)
  */
-inline IDXGISwapChain *tml::GraphicManager::GetSwapChain(void) const
+inline IDXGISwapChain *tml::graphic::Manager::GetSwapChain(void) const
 {
 	return (this->swap_chain_);
 }
@@ -155,7 +164,7 @@ inline IDXGISwapChain *tml::GraphicManager::GetSwapChain(void) const
  * @brief GetSwapChainDesc関数
  * @return swap_chain_desc (swap_chain_desc)
  */
-inline const DXGI_SWAP_CHAIN_DESC &tml::GraphicManager::GetSwapChainDesc(void) const
+inline const DXGI_SWAP_CHAIN_DESC &tml::graphic::Manager::GetSwapChainDesc(void) const
 {
 	return (this->swap_chain_desc_);
 }
@@ -165,7 +174,7 @@ inline const DXGI_SWAP_CHAIN_DESC &tml::GraphicManager::GetSwapChainDesc(void) c
  * @brief GetDevice関数
  * @return device (device)
  */
-inline ID3D11Device *tml::GraphicManager::GetDevice(void) const
+inline ID3D11Device *tml::graphic::Manager::GetDevice(void) const
 {
 	return (this->device_);
 }
@@ -175,7 +184,7 @@ inline ID3D11Device *tml::GraphicManager::GetDevice(void) const
  * @brief GetDeviceContext関数
  * @return device_context (device_context)
  */
-inline ID3D11DeviceContext *tml::GraphicManager::GetDeviceContext(void) const
+inline ID3D11DeviceContext *tml::graphic::Manager::GetDeviceContext(void) const
 {
 	return (this->device_context_);
 }
@@ -185,7 +194,7 @@ inline ID3D11DeviceContext *tml::GraphicManager::GetDeviceContext(void) const
  * @brief GetDeviceFeatureLevel関数
  * @return device_future_lv (device_future_level)
  */
-inline D3D_FEATURE_LEVEL tml::GraphicManager::GetDeviceFeatureLevel(void) const
+inline D3D_FEATURE_LEVEL tml::graphic::Manager::GetDeviceFeatureLevel(void) const
 {
 	return (this->device_future_lv_);
 }
