@@ -41,6 +41,7 @@ void tml::sound::ResourceDesc::Init(void)
  * @brief コンストラクタ
  */
 tml::sound::Resource::Resource() :
+	res_type_(tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE),
 	mgr_(nullptr)
 {
 	return;
@@ -70,6 +71,7 @@ void tml::sound::Resource::Release(void)
  */
 void tml::sound::Resource::Init(void)
 {
+	this->res_type_ = tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE;
 	this->mgr_ = nullptr;
 
 	return;
@@ -78,16 +80,19 @@ void tml::sound::Resource::Init(void)
 
 /**
  * @brief Create関数
+ * @param res_type (resource_type)
  * @param desc (desc)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::sound::Resource::Create(tml::sound::ResourceDesc &desc)
+INT tml::sound::Resource::Create(const tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type, tml::sound::ResourceDesc &desc)
 {
-	if (desc.manager == nullptr) {
+	if ((res_type == tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE)
+	|| (desc.manager == nullptr)) {
 		return (-1);
 	}
 
+	this->res_type_ = res_type;
 	this->mgr_ = desc.manager;
 
 	return (0);

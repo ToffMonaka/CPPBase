@@ -107,7 +107,7 @@ INT tml::graphic::ShaderConstantBuffer::Create(tml::graphic::ShaderConstantBuffe
 		return (-1);
 	}
 
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER, desc) < 0) {
 		return (-1);
 	}
 

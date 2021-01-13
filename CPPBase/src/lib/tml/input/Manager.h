@@ -6,7 +6,10 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_INPUT.h"
+#include <vector>
+#include <list>
+#include "../memory/DynamicBuffer.h"
+#include "Resource.h"
 
 
 namespace tml {
@@ -39,6 +42,7 @@ public: Manager(const tml::input::Manager &) = delete;
 public: tml::input::Manager &operator =(const tml::input::Manager &) = delete;
 
 private:
+	std::array<std::list<tml::shared_ptr<tml::input::Resource>>, tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT> res_cont_ary_;
 
 private:
 	void Release(void);
@@ -49,6 +53,68 @@ public:
 
 	virtual void Init(void);
 	INT Create(tml::input::ManagerDesc &);
+
+	template <typename T, typename D>
+	tml::shared_ptr<T> GetResource(D &);
+	template <typename T>
+	void ReleaseResource(tml::shared_ptr<T> &);
 };
 }
+}
+
+
+/**
+ * @brief GetResourceä÷êî
+ * @param desc (desc)
+ * @return res (resource)
+ */
+template <typename T, typename D>
+inline tml::shared_ptr<T> tml::input::Manager::GetResource(D &desc)
+{
+	auto res = tml::make_shared<T>(1U);
+
+	if (res->Create(desc) < 0) {
+		res.reset();
+
+		return (res);
+	}
+
+	UINT res_type = static_cast<UINT>(res->GetResourceType());
+
+	if (res_type >= tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT) {
+		res.reset();
+
+		return (res);
+	}
+
+	this->res_cont_ary_[res_type].push_back(res);
+
+	return (res);
+}
+
+
+/**
+ * @brief ReleaseResourceä÷êî
+ * @param res (resource)
+ */
+template <typename T>
+inline void tml::input::Manager::ReleaseResource(tml::shared_ptr<T> &res)
+{
+	if (res == nullptr) {
+		return;
+	}
+
+	UINT res_type = static_cast<UINT>(res->GetResourceType());
+
+	if (res_type >= tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT) {
+		return;
+	}
+
+	if (res.use_count() <= 2L) {
+		this->res_cont_ary_[res_type].remove(res);
+	}
+
+	res.reset();
+
+	return;
 }

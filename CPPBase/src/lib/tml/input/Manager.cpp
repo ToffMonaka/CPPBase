@@ -5,7 +5,6 @@
 
 
 #include "Manager.h"
-#include "../memory/MemoryUtil.h"
 
 
 /**
@@ -60,6 +59,14 @@ tml::input::Manager::~Manager()
  */
 void tml::input::Manager::Release(void)
 {
+	for (auto &res_cont : this->res_cont_ary_) {
+		for (auto &res : res_cont) {
+			res->Init();
+		}
+
+		res_cont.clear();
+	}
+
 	return;
 }
 

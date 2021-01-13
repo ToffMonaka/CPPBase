@@ -104,7 +104,7 @@ INT tml::graphic::RasterizerState::Create(tml::graphic::RasterizerStateDesc &des
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE, desc) < 0) {
 		this->Init();
 
 		return (-1);

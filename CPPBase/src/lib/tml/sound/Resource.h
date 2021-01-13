@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../constant/ConstantUtil_SOUND.h"
 
 
 namespace tml {
@@ -49,11 +50,12 @@ public: tml::sound::Resource &operator =(const tml::sound::Resource &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type_;
 	tml::sound::Manager *mgr_;
 
 protected:
 	void Release(void);
-	INT Create(tml::sound::ResourceDesc &);
+	INT Create(const tml::ConstantUtil::SOUND::RESOURCE_TYPE, tml::sound::ResourceDesc &);
 
 public:
 	Resource();
@@ -61,9 +63,20 @@ public:
 
 	virtual void Init(void);
 
+	tml::ConstantUtil::SOUND::RESOURCE_TYPE GetResourceType(void) const;
 	tml::sound::Manager *GetManager(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetResourceTypeŠÖ”
+ * @return res_type (resource_type)
+ */
+inline tml::ConstantUtil::SOUND::RESOURCE_TYPE tml::sound::Resource::GetResourceType(void) const
+{
+	return (this->res_type_);
 }
 
 

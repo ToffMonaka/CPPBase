@@ -143,7 +143,7 @@ INT tml::graphic::Light::Create(tml::graphic::LightDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT, desc) < 0) {
 		this->Init();
 
 		return (-1);

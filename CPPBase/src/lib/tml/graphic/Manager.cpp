@@ -5,7 +5,6 @@
 
 
 #include "Manager.h"
-#include "../memory/MemoryUtil.h"
 
 
 /**
@@ -114,6 +113,14 @@ tml::graphic::Manager::~Manager()
  */
 void tml::graphic::Manager::Release(void)
 {
+	for (auto &res_cont : this->res_cont_ary_) {
+		for (auto &res : res_cont) {
+			res->Init();
+		}
+
+		res_cont.clear();
+	}
+
 	if (this->clear_samp_sr_ != nullptr) {
 		this->clear_samp_sr_->Release();
 

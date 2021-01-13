@@ -119,7 +119,7 @@ INT tml::graphic::Fog::Create(tml::graphic::FogDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG, desc) < 0) {
 		this->Init();
 
 		return (-1);

@@ -142,7 +142,7 @@ INT tml::graphic::Mesh::Create(tml::graphic::MeshDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH, desc) < 0) {
 		this->Init();
 
 		return (-1);

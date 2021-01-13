@@ -121,7 +121,7 @@ INT tml::graphic::Camera::Create(tml::graphic::CameraDesc &desc)
 
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA, desc) < 0) {
 		this->Init();
 
 		return (-1);

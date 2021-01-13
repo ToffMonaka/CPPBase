@@ -6,9 +6,10 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_GRAPHIC.h"
 #include <vector>
+#include <list>
 #include "../memory/DynamicBuffer.h"
+#include "Resource.h"
 #include "Viewport.h"
 
 
@@ -45,6 +46,7 @@ public: Manager(const tml::graphic::Manager &) = delete;
 public: tml::graphic::Manager &operator =(const tml::graphic::Manager &) = delete;
 
 private:
+	std::array<std::list<tml::shared_ptr<tml::graphic::Resource>>, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT> res_cont_ary_;
 	IDXGIFactory1 *factory_;
 	IDXGIAdapter1 *adapter_;
 	DXGI_ADAPTER_DESC1 adapter_desc_;
@@ -103,6 +105,10 @@ public:
 	virtual void Init(void);
 	INT Create(tml::graphic::ManagerDesc &);
 
+	template <typename T, typename D>
+	tml::shared_ptr<T> GetResource(D &);
+	template <typename T>
+	void ReleaseResource(tml::shared_ptr<T> &);
 	void Draw(void);
 	IDXGIFactory1 *GetFactory(void) const;
 	IDXGIAdapter1 *GetAdapter(void) const;
@@ -117,6 +123,63 @@ public:
 	std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
 };
 }
+}
+
+
+/**
+ * @brief GetResourceä÷êî
+ * @param desc (desc)
+ * @return res (resource)
+ */
+template <typename T, typename D>
+inline tml::shared_ptr<T> tml::graphic::Manager::GetResource(D &desc)
+{
+	auto res = tml::make_shared<T>(1U);
+
+	if (res->Create(desc) < 0) {
+		res.reset();
+
+		return (res);
+	}
+
+	UINT res_type = static_cast<UINT>(res->GetResourceType());
+
+	if (res_type >= tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT) {
+		res.reset();
+
+		return (res);
+	}
+
+	this->res_cont_ary_[res_type].push_back(res);
+
+	return (res);
+}
+
+
+/**
+ * @brief ReleaseResourceä÷êî
+ * @param res (resource)
+ */
+template <typename T>
+inline void tml::graphic::Manager::ReleaseResource(tml::shared_ptr<T> &res)
+{
+	if (res == nullptr) {
+		return;
+	}
+
+	UINT res_type = static_cast<UINT>(res->GetResourceType());
+
+	if (res_type >= tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT) {
+		return;
+	}
+
+	if (res.use_count() <= 2L) {
+		this->res_cont_ary_[res_type].remove(res);
+	}
+
+	res.reset();
+
+	return;
 }
 
 

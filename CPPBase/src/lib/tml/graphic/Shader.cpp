@@ -254,7 +254,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER, desc) < 0) {
 		this->Init();
 
 		return (-1);

@@ -104,7 +104,7 @@ INT tml::graphic::Sampler::Create(tml::graphic::SamplerDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER, desc) < 0) {
 		this->Init();
 
 		return (-1);

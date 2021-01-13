@@ -50,11 +50,12 @@ public: tml::graphic::Resource &operator =(const tml::graphic::Resource &) = del
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type_;
 	tml::graphic::Manager *mgr_;
 
 protected:
 	void Release(void);
-	INT Create(tml::graphic::ResourceDesc &);
+	INT Create(const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE, tml::graphic::ResourceDesc &);
 
 public:
 	Resource();
@@ -62,9 +63,20 @@ public:
 
 	virtual void Init(void);
 
+	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE GetResourceType(void) const;
 	tml::graphic::Manager *GetManager(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetResourceTypeŠÖ”
+ * @return res_type (resource_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE tml::graphic::Resource::GetResourceType(void) const
+{
+	return (this->res_type_);
 }
 
 

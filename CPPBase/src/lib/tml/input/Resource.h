@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../constant/ConstantUtil_INPUT.h"
 
 
 namespace tml {
@@ -49,11 +50,12 @@ public: tml::input::Resource &operator =(const tml::input::Resource &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type_;
 	tml::input::Manager *mgr_;
 
 protected:
 	void Release(void);
-	INT Create(tml::input::ResourceDesc &);
+	INT Create(const tml::ConstantUtil::INPUT::RESOURCE_TYPE, tml::input::ResourceDesc &);
 
 public:
 	Resource();
@@ -61,9 +63,20 @@ public:
 
 	virtual void Init(void);
 
+	tml::ConstantUtil::INPUT::RESOURCE_TYPE GetResourceType(void) const;
 	tml::input::Manager *GetManager(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetResourceTypeŠÖ”
+ * @return res_type (resource_type)
+ */
+inline tml::ConstantUtil::INPUT::RESOURCE_TYPE tml::input::Resource::GetResourceType(void) const
+{
+	return (this->res_type_);
 }
 
 

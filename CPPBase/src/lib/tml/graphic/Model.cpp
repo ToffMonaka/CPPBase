@@ -85,7 +85,7 @@ void tml::graphic::Model::Init(void)
  */
 INT tml::graphic::Model::Create(tml::graphic::ModelDesc &desc)
 {
-	if (tml::graphic::Resource::Create(desc) < 0) {
+	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL, desc) < 0) {
 		return (-1);
 	}
 
