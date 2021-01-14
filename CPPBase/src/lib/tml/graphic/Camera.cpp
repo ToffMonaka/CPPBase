@@ -37,7 +37,7 @@ tml::graphic::CameraDesc::~CameraDesc()
 void tml::graphic::CameraDesc::Init(void)
 {
 	this->type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
-	this->position.Init();
+	this->position.reset();
 	this->fov_angle = 0.0f;
 	this->fov_size = 0.0f;
 	this->near_clip = 0.0f;
@@ -93,7 +93,7 @@ void tml::graphic::Camera::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
-	this->position.Init();
+	this->position.reset();
 	this->fov_angle_ = 0.0f;
 	this->fov_size_ = 0.0f;
 	this->near_clip_ = 0.0f;
@@ -128,7 +128,13 @@ INT tml::graphic::Camera::Create(tml::graphic::CameraDesc &desc)
 	}
 
 	this->type_ = desc.type;
-	this->position = desc.position;
+
+	if (desc.position == nullptr) {
+		this->position = tml::make_shared<tml::XMPosition>(1U);
+	} else {
+		this->position = desc.position;
+	}
+
 	this->fov_angle_ = desc.fov_angle;
 	this->fov_size_ = desc.fov_size;
 	this->near_clip_ = desc.near_clip;

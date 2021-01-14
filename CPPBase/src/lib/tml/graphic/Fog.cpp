@@ -37,7 +37,7 @@ tml::graphic::FogDesc::~FogDesc()
 void tml::graphic::FogDesc::Init(void)
 {
 	this->type = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
-	this->position.Init();
+	this->position.reset();
 	this->color = 0.0f;
 	this->mul_value = 0.0f;
 	this->near_range = 0.0f;
@@ -95,7 +95,7 @@ void tml::graphic::Fog::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
-	this->position.Init();
+	this->position.reset();
 	this->col_ = 0.0f;
 	this->mul_val_ = 0.0f;
 	this->near_rng_ = 0.0f;
@@ -117,6 +117,12 @@ void tml::graphic::Fog::Init(void)
  */
 INT tml::graphic::Fog::Create(tml::graphic::FogDesc &desc)
 {
+	if (desc.type == tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE) {
+		this->Init();
+
+		return (-1);
+	}
+
 	this->Init();
 
 	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG, desc) < 0) {
@@ -126,9 +132,15 @@ INT tml::graphic::Fog::Create(tml::graphic::FogDesc &desc)
 	}
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
-	this->position.Init();
-	this->col_ = 0.0f;
-	this->mul_val_ = 0.0f;
+
+	if (desc.position == nullptr) {
+		this->position = tml::make_shared<tml::XMPosition>(1U);
+	} else {
+		this->position = desc.position;
+	}
+
+	this->col_ = desc.color;
+	this->mul_val_ = desc.mul_value;
 	this->SetNearRange(desc.near_range);
 	this->SetFarRange(desc.far_range);
 

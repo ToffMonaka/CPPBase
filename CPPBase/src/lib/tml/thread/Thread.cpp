@@ -45,12 +45,8 @@ void tml::Thread::Release(void)
  */
 void tml::Thread::Init(void)
 {
-	switch (this->type_) {
-	case tml::ConstantUtil::THREAD::TYPE::MAIN: {
+	if (this->type_ == tml::ConstantUtil::THREAD::TYPE::MAIN) {
 		this->id_ = std::thread::id();
-
-		break;
-	}
 	}
 
 	this->type_ = tml::ConstantUtil::THREAD::TYPE::NONE;
@@ -68,12 +64,12 @@ void tml::Thread::Init(void)
  */
 INT tml::Thread::Create(const tml::ConstantUtil::THREAD::TYPE type)
 {
-	switch (type) {
-	case tml::ConstantUtil::THREAD::TYPE::MAIN: {
-		this->id_ = std::this_thread::get_id();
-
-		break;
+	if (type == tml::ConstantUtil::THREAD::TYPE::NONE) {
+		return (-1);
 	}
+
+	if (type == tml::ConstantUtil::THREAD::TYPE::MAIN) {
+		this->id_ = std::this_thread::get_id();
 	}
 
 	this->type_ = type;

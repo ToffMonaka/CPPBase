@@ -31,6 +31,8 @@ tml::graphic::ModelDesc::~ModelDesc()
  */
 void tml::graphic::ModelDesc::Init(void)
 {
+	this->position.reset();
+
 	tml::graphic::ResourceDesc::Init();
 
 	return;
@@ -40,7 +42,8 @@ void tml::graphic::ModelDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Model::Model()
+tml::graphic::Model::Model() :
+	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE)
 {
 	return;
 }
@@ -71,6 +74,9 @@ void tml::graphic::Model::Release(void)
  */
 void tml::graphic::Model::Init(void)
 {
+	this->type_ = tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE;
+	this->position.reset();
+
 	tml::graphic::Resource::Init();
 
 	return;
@@ -79,14 +85,27 @@ void tml::graphic::Model::Init(void)
 
 /**
  * @brief Create関数
+ * @param type (type)
  * @param desc (desc)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Model::Create(tml::graphic::ModelDesc &desc)
+INT tml::graphic::Model::Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type, tml::graphic::ModelDesc &desc)
 {
+	if (type == tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE) {
+		return (-1);
+	}
+
 	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL, desc) < 0) {
 		return (-1);
+	}
+
+	this->type_ = type;
+
+	if (desc.position == nullptr) {
+		this->position = tml::make_shared<tml::XMPosition>(1U);
+	} else {
+		this->position = desc.position;
 	}
 
 	return (0);

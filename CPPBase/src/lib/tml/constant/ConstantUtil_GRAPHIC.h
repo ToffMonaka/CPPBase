@@ -92,6 +92,11 @@ namespace GRAPHIC {
 		WIDTH,
 		HEIGHT
 	};
+	enum class MODEL_TYPE : UINT {
+		NONE = 0U,
+		SCREEN,
+		SPRITE
+	};
 }
 }
 }

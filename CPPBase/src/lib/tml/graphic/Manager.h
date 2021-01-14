@@ -47,6 +47,7 @@ public: tml::graphic::Manager &operator =(const tml::graphic::Manager &) = delet
 
 private:
 	std::array<std::list<tml::shared_ptr<tml::graphic::Resource>>, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT> res_cont_ary_;
+
 	IDXGIFactory1 *factory_;
 	IDXGIAdapter1 *adapter_;
 	DXGI_ADAPTER_DESC1 adapter_desc_;
@@ -108,7 +109,10 @@ public:
 	template <typename T, typename D>
 	tml::shared_ptr<T> GetResource(D &);
 	template <typename T>
+	tml::shared_ptr<T> &GetResource(tml::shared_ptr<T> &);
+	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
+
 	void Draw(void);
 	IDXGIFactory1 *GetFactory(void) const;
 	IDXGIAdapter1 *GetAdapter(void) const;
@@ -134,6 +138,8 @@ public:
 template <typename T, typename D>
 inline tml::shared_ptr<T> tml::graphic::Manager::GetResource(D &desc)
 {
+	desc.manager = this;
+
 	auto res = tml::make_shared<T>(1U);
 
 	if (res->Create(desc) < 0) {
@@ -152,6 +158,18 @@ inline tml::shared_ptr<T> tml::graphic::Manager::GetResource(D &desc)
 
 	this->res_cont_ary_[res_type].push_back(res);
 
+	return (res);
+}
+
+
+/**
+ * @brief GetResourceä÷êî
+ * @param res (resource)
+ * @return res (resource)
+ */
+template <typename T>
+inline tml::shared_ptr<T> &tml::graphic::Manager::GetResource(tml::shared_ptr<T> &res)
+{
 	return (res);
 }
 

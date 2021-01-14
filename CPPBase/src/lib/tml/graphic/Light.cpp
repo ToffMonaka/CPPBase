@@ -43,7 +43,7 @@ tml::graphic::LightDesc::~LightDesc()
 void tml::graphic::LightDesc::Init(void)
 {
 	this->type = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
-	this->position.Init();
+	this->position.reset();
 	this->color = 0.0f;
 	this->mul_value = 0.0f;
 	this->add_value = 0.0f;
@@ -113,7 +113,7 @@ void tml::graphic::Light::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
-	this->position.Init();
+	this->position.reset();
 	this->col_ = 0.0f;
 	this->mul_val_ = 0.0f;
 	this->add_val_ = 0.0f;
@@ -141,6 +141,12 @@ void tml::graphic::Light::Init(void)
  */
 INT tml::graphic::Light::Create(tml::graphic::LightDesc &desc)
 {
+	if (desc.type == tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE) {
+		this->Init();
+
+		return (-1);
+	}
+
 	this->Init();
 
 	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT, desc) < 0) {
@@ -150,7 +156,13 @@ INT tml::graphic::Light::Create(tml::graphic::LightDesc &desc)
 	}
 
 	this->type_ = desc.type;
-	this->position = desc.position;
+
+	if (desc.position == nullptr) {
+		this->position = tml::make_shared<tml::XMPosition>(1U);
+	} else {
+		this->position = desc.position;
+	}
+
 	this->col_ = desc.color;
 	this->mul_val_ = desc.mul_value;
 	this->add_val_ = desc.add_value;

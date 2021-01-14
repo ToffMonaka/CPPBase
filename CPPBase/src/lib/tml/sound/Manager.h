@@ -57,6 +57,8 @@ public:
 	template <typename T, typename D>
 	tml::shared_ptr<T> GetResource(D &);
 	template <typename T>
+	tml::shared_ptr<T> &GetResource(tml::shared_ptr<T> &);
+	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
 };
 }
@@ -71,6 +73,8 @@ public:
 template <typename T, typename D>
 inline tml::shared_ptr<T> tml::sound::Manager::GetResource(D &desc)
 {
+	desc.manager = this;
+
 	auto res = tml::make_shared<T>(1U);
 
 	if (res->Create(desc) < 0) {
@@ -89,6 +93,18 @@ inline tml::shared_ptr<T> tml::sound::Manager::GetResource(D &desc)
 
 	this->res_cont_ary_[res_type].push_back(res);
 
+	return (res);
+}
+
+
+/**
+ * @brief GetResourceŠÖ”
+ * @param res (resource)
+ * @return res (resource)
+ */
+template <typename T>
+inline tml::shared_ptr<T> &tml::sound::Manager::GetResource(tml::shared_ptr<T> &res)
+{
 	return (res);
 }
 

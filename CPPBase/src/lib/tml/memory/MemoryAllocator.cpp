@@ -54,6 +54,10 @@ void tml::MemoryAllocator::Init(void)
  */
 INT tml::MemoryAllocator::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE type)
 {
+	if (type == tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE) {
+		return (-1);
+	}
+
 	this->type_ = type;
 
 	return (0);

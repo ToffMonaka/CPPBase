@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../memory/MemoryUtil.h"
 #include "../math/XNAMath.h"
 #include "Resource.h"
 
@@ -19,7 +20,7 @@ class CameraDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type;
-	tml::XMPosition position;
+	tml::shared_ptr<tml::XMPosition> position;
 	FLOAT fov_angle;
 	tml::XMFLOAT2EX fov_size;
 	FLOAT near_clip;
@@ -54,7 +55,7 @@ private:
 	FLOAT far_clip_;
 
 public:
-	tml::XMPosition position;
+	tml::shared_ptr<tml::XMPosition> position;
 
 private:
 	void Release(void);

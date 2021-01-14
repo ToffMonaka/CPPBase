@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../memory/MemoryUtil.h"
 #include "../math/XNAMath.h"
 #include "Resource.h"
 
@@ -19,7 +20,7 @@ class FogDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE type;
-	tml::XMPosition position;
+	tml::shared_ptr<tml::XMPosition> position;
 	tml::XMFLOAT3EX color;
 	FLOAT mul_value;
 	FLOAT near_range;
@@ -56,7 +57,7 @@ private:
 	FLOAT rng_val2_;
 
 public:
-	tml::XMPosition position;
+	tml::shared_ptr<tml::XMPosition> position;
 
 private:
 	void Release(void);
