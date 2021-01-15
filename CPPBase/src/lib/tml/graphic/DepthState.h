@@ -24,6 +24,8 @@ public:
 	virtual ~DepthStateDesc();
 
 	virtual void Init(void);
+
+	void SetDepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
 };
 }
 }

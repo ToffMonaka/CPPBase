@@ -6,10 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include <vector>
 #include <list>
-#include "../memory/DynamicBuffer.h"
-#include "Resource.h"
+#include "ManagerCommon.h"
 
 
 namespace tml {
@@ -43,6 +41,9 @@ public: tml::input::Manager &operator =(const tml::input::Manager &) = delete;
 
 private:
 	std::array<std::list<tml::shared_ptr<tml::input::Resource>>, tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT> res_cont_ary_;
+
+public:
+	tml::input::ManagerCommon common;
 
 private:
 	void Release(void);

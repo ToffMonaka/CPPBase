@@ -78,6 +78,8 @@ void tml::sound::Manager::Init(void)
 {
 	this->Release();
 
+	this->common.Init();
+
 	return;
 }
 
@@ -91,6 +93,12 @@ void tml::sound::Manager::Init(void)
 INT tml::sound::Manager::Create(tml::sound::ManagerDesc &desc)
 {
 	this->Init();
+
+	if (this->common.Create(this) < 0) {
+		this->Init();
+
+		return (-1);
+	}
 
 	return (0);
 }

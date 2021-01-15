@@ -24,6 +24,8 @@ public:
 	virtual ~RasterizerStateDesc();
 
 	virtual void Init(void);
+
+	void SetRasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
 };
 }
 }

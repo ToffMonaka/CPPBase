@@ -41,6 +41,32 @@ void tml::graphic::DepthStateDesc::Init(void)
 
 
 /**
+ * @brief SetDepthStateDesc関数
+ * @param type (type)
+ */
+void tml::graphic::DepthStateDesc::SetDepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE type)
+{
+	auto &desc = this->depth_state_desc;
+
+	desc = CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT());
+
+	if (type == tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT) {
+		return;
+	}
+
+	switch (type) {
+	case tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::REFERENCE: {
+		desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+
+		break;
+	}
+	}
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::DepthState::DepthState() :

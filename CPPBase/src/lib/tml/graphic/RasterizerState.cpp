@@ -44,6 +44,43 @@ void tml::graphic::RasterizerStateDesc::Init(void)
 
 
 /**
+ * @brief SetRasterizerStateDesc関数
+ * @param type (type)
+ */
+void tml::graphic::RasterizerStateDesc::SetRasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE type)
+{
+	auto &desc = this->rasterizer_state_desc;
+
+	desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
+	desc.CullMode = D3D11_CULL_NONE;
+
+	if (type == tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT) {
+		return;
+	}
+
+	switch (type) {
+	case tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::WIREFRAME: {
+		desc.FillMode = D3D11_FILL_WIREFRAME;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::FRONT_CULLING: {
+		desc.CullMode = D3D11_CULL_FRONT;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::BACK_CULLING: {
+		desc.CullMode = D3D11_CULL_BACK;
+
+		break;
+	}
+	}
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::RasterizerState::RasterizerState() :

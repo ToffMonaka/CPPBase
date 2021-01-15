@@ -43,6 +43,167 @@ void tml::graphic::BlendStateDesc::Init(void)
 
 
 /**
+ * @brief SetBlendStateDesc関数
+ * @param type (type)
+ * @param a_type (alpha_type)
+ * @param rt_cnt (render_target_count)
+ */
+void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE a_type, const UINT rt_cnt)
+{
+	auto &desc = this->blend_state_desc;
+
+	desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
+
+	if (type == tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT) {
+		return;
+	}
+
+	UINT tmp_rt_cnt = 0U;
+
+	if ((rt_cnt <= 0U)
+	|| (rt_cnt >= tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT)) {
+		tmp_rt_cnt = 1U;
+
+		desc.IndependentBlendEnable = false;
+	} else {
+		tmp_rt_cnt = rt_cnt;
+
+		desc.IndependentBlendEnable = true;
+	}
+
+	switch (type) {
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ALIGNMENT: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.BlendEnable = true;
+			rt_desc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			rt_desc.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			rt_desc.BlendOp = D3D11_BLEND_OP_ADD;
+			rt_desc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		}
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ADD: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.BlendEnable = true;
+			rt_desc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			rt_desc.DestBlend = D3D11_BLEND_ONE;
+			rt_desc.BlendOp = D3D11_BLEND_OP_ADD;
+			rt_desc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		}
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::SUB: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.BlendEnable = true;
+			rt_desc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			rt_desc.DestBlend = D3D11_BLEND_ONE;
+			rt_desc.BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
+			rt_desc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		}
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::MUL: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.BlendEnable = true;
+			rt_desc.SrcBlend = D3D11_BLEND_ZERO;
+			rt_desc.DestBlend = D3D11_BLEND_SRC_COLOR;
+			rt_desc.BlendOp = D3D11_BLEND_OP_ADD;
+			rt_desc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		}
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::REVERSE: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.BlendEnable = true;
+			rt_desc.SrcBlend = D3D11_BLEND_INV_DEST_COLOR;
+			rt_desc.DestBlend = D3D11_BLEND_ZERO;
+			rt_desc.BlendOp = D3D11_BLEND_OP_ADD;
+			rt_desc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		}
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::TOTAL: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.BlendEnable = true;
+			rt_desc.SrcBlend = D3D11_BLEND_ONE;
+			rt_desc.DestBlend = D3D11_BLEND_ONE;
+			rt_desc.BlendOp = D3D11_BLEND_OP_ADD;
+			rt_desc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		}
+
+		break;
+	}
+	}
+
+	switch (a_type) {
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DEFAULT: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.SrcBlendAlpha = D3D11_BLEND_ONE;
+			rt_desc.DestBlendAlpha = D3D11_BLEND_ZERO;
+			rt_desc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		}
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::SRC: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.SrcBlendAlpha = D3D11_BLEND_ONE;
+			rt_desc.DestBlendAlpha = D3D11_BLEND_ZERO;
+			rt_desc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		}
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.SrcBlendAlpha = D3D11_BLEND_ZERO;
+			rt_desc.DestBlendAlpha = D3D11_BLEND_ONE;
+			rt_desc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		}
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::TOTAL: {
+		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
+			auto &rt_desc = desc.RenderTarget[rt_i];
+
+			rt_desc.SrcBlendAlpha = D3D11_BLEND_ONE;
+			rt_desc.DestBlendAlpha = D3D11_BLEND_ONE;
+			rt_desc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		}
+
+		break;
+	}
+	}
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::BlendState::BlendState() :

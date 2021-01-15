@@ -74,7 +74,36 @@ namespace GRAPHIC {
 		NONE = 0U,
 		FXAA
 	};
+	enum class RASTERIZER_STATE_DESC_TYPE : UINT {
+		NONE = 0U,
+		DEFAULT,
+		WIREFRAME,
+		FRONT_CULLING,
+		BACK_CULLING
+	};
+	enum class BLEND_STATE_DESC_TYPE : UINT {
+		NONE = 0U,
+		DEFAULT,
+		ALIGNMENT,
+		ADD,
+		SUB,
+		MUL,
+		REVERSE,
+		TOTAL
+	};
+	enum class BLEND_STATE_DESC_ALPHA_TYPE : UINT {
+		NONE = 0U,
+		DEFAULT,
+		SRC,
+		DST,
+		TOTAL
+	};
 	const UINT BLEND_STATE_FACTOR_COUNT = 4U;
+	enum class DEPTH_STATE_DESC_TYPE : UINT {
+		NONE = 0U,
+		DEFAULT,
+		REFERENCE
+	};
 	enum class CAMERA_TYPE : UINT {
 		NONE = 0U,
 		PERSPECTIVE,

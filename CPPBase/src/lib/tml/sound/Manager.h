@@ -6,10 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include <vector>
 #include <list>
-#include "../memory/DynamicBuffer.h"
-#include "Resource.h"
+#include "ManagerCommon.h"
 
 
 namespace tml {
@@ -43,6 +41,9 @@ public: tml::sound::Manager &operator =(const tml::sound::Manager &) = delete;
 
 private:
 	std::array<std::list<tml::shared_ptr<tml::sound::Resource>>, tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT> res_cont_ary_;
+
+public:
+	tml::sound::ManagerCommon common;
 
 private:
 	void Release(void);

@@ -197,6 +197,8 @@ void tml::graphic::Manager::Init(void)
 {
 	this->Release();
 
+	this->common.Init();
+
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
@@ -464,18 +466,13 @@ INT tml::graphic::Manager::Create(tml::graphic::ManagerDesc &desc)
 
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::FXAA;
 
+	if (this->common.Create(this) < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
 	return (0);
-}
-
-
-/**
- * @brief DrawŠÖ”
- */
-void tml::graphic::Manager::Draw(void)
-{
-	this->swap_chain_->Present(this->vsync_flg_, 0U);
-
-	return;
 }
 
 
@@ -670,4 +667,15 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 	tml::SetResult(dst_res, 0);
 
 	return (dst_buf_cont);
+}
+
+
+/**
+ * @brief DrawŠÖ”
+ */
+void tml::graphic::Manager::Draw(void)
+{
+	this->swap_chain_->Present(this->vsync_flg_, 0U);
+
+	return;
 }

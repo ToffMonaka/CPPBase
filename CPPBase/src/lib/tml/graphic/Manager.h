@@ -9,7 +9,7 @@
 #include <vector>
 #include <list>
 #include "../memory/DynamicBuffer.h"
-#include "Resource.h"
+#include "ManagerCommon.h"
 #include "Viewport.h"
 
 
@@ -96,6 +96,9 @@ private:
 	FLOAT bloom_blur_dispersion_val_;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
 
+public:
+	tml::graphic::ManagerCommon common;
+
 private:
 	void Release(void);
 
@@ -113,7 +116,6 @@ public:
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
 
-	void Draw(void);
 	IDXGIFactory1 *GetFactory(void) const;
 	IDXGIAdapter1 *GetAdapter(void) const;
 	const DXGI_ADAPTER_DESC1 &GetAdapterDesc(void) const;
@@ -125,6 +127,8 @@ public:
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_res = nullptr);
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Texture2D *, INT *dst_res = nullptr);
 	std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
+
+	void Draw(void);
 };
 }
 }

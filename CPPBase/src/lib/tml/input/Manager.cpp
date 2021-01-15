@@ -78,6 +78,8 @@ void tml::input::Manager::Init(void)
 {
 	this->Release();
 
+	this->common.Init();
+
 	return;
 }
 
@@ -91,6 +93,12 @@ void tml::input::Manager::Init(void)
 INT tml::input::Manager::Create(tml::input::ManagerDesc &desc)
 {
 	this->Init();
+
+	if (this->common.Create(this) < 0) {
+		this->Init();
+
+		return (-1);
+	}
 
 	return (0);
 }
