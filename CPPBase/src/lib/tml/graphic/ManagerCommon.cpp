@@ -38,9 +38,9 @@ void tml::graphic::ManagerCommon::Init(void)
 	this->wireframe_rasterizer_state.reset();
 	this->front_culling_rasterizer_state.reset();
 	this->back_culling_rasterizer_state.reset();
-	this->default_blend_state.reset();
 
-	for (UINT rt_i = 0U; rt_i < tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT; ++rt_i) {
+	for (UINT rt_i = 0U; rt_i < 2U; ++rt_i) {
+		this->default_blend_state_array[rt_i].reset();
 		this->alignment_blend_state_array[rt_i].reset();
 		this->add_blend_state_array[rt_i].reset();
 		this->sub_blend_state_array[rt_i].reset();
@@ -122,21 +122,21 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// DefaultBlendState Create
-		tml::graphic::BlendStateDesc desc;
+	for (UINT rt_i = 0U; rt_i < 2U; ++rt_i) {
+		{// DefaultBlendState Create
+			tml::graphic::BlendStateDesc desc;
 
-		desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::NONE, 0U);
+			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DEFAULT, rt_i);
 
-		this->default_blend_state = mgr->GetResource<tml::graphic::BlendState>(desc);
+			this->default_blend_state_array[rt_i] = mgr->GetResource<tml::graphic::BlendState>(desc);
 
-		if (this->default_blend_state == nullptr) {
-			this->Init();
+			if (this->default_blend_state_array[rt_i] == nullptr) {
+				this->Init();
 
-			return (-1);
+				return (-1);
+			}
 		}
-	}
 
-	for (UINT rt_i = 0U; rt_i < tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT; ++rt_i) {
 		{// AlignmentBlendState Create
 			tml::graphic::BlendStateDesc desc;
 

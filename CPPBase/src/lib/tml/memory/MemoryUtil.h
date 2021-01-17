@@ -32,8 +32,8 @@ public:
 	static INT Create(std::unique_ptr<tml::MemoryUtilEngine> &);
 
 	static bool CheckThreadFix(void);
-	template <typename T>
-	static T *Get(const size_t);
+	template <typename T, typename... ARGS>
+	static T *Get(const size_t, ARGS&&...);
 	template <typename T>
 	static void Release(T **);
 	static tml::MemoryAllocator::INFO GetAllocatorInfo(void);
@@ -109,17 +109,18 @@ inline bool tml::MemoryUtil::CheckThreadFix(void)
 /**
  * @brief Getä÷êî
  * @param cnt (count)
+ * @param args (arguments)
  * @return p (pointer)<br>
  * nullptr=é∏îs
  */
-template <typename T>
-inline T *tml::MemoryUtil::Get(const size_t cnt)
+template <typename T, typename... ARGS>
+inline T *tml::MemoryUtil::Get(const size_t cnt, ARGS&&... args)
 {
 	if (tml::MemoryUtil::engine_ == nullptr) {
 		return (nullptr);
 	}
 
-	return (tml::MemoryUtil::engine_->Get<T>(cnt));
+	return (tml::MemoryUtil::engine_->Get<T>(cnt, std::forward<ARGS>(args)...));
 }
 
 
@@ -263,16 +264,44 @@ struct default_delete<_Ty[]>
 template <typename T>
 using unique_ptr = std::unique_ptr<T, tml::default_delete<T>>;
 
-template <typename T>
-_NODISCARD tml::unique_ptr<T> make_unique(const size_t size) {
-	return (tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(size)));
+template <typename T, typename... ARGS>
+_NODISCARD tml::unique_ptr<T> make_unique(const size_t size, ARGS&&... args) {
+	return (tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...)));
 };
+
+template <typename T, typename... ARGS>
+tml::unique_ptr<T> &get_unique(tml::unique_ptr<T> &dst_p, const size_t size, ARGS&&... args) {
+	dst_p = tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...));
+
+	return (dst_p);
+};
+
+template <typename T, typename... ARGS>
+tml::unique_ptr<T> &get_unique(tml::unique_ptr<T> &, tml::unique_ptr<T> &, const size_t, ARGS&&...) = delete;
 
 template <typename T>
 using shared_ptr = std::shared_ptr<T>;
 
-template <typename T>
-_NODISCARD tml::shared_ptr<T> make_shared(const size_t size) {
-	return (tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size), tml::default_delete<T>()));
+template <typename T, typename... ARGS>
+_NODISCARD tml::shared_ptr<T> make_shared(const size_t size, ARGS&&... args) {
+	return (tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...), tml::default_delete<T>()));
+};
+
+template <typename T, typename... ARGS>
+tml::shared_ptr<T> &get_shared(tml::shared_ptr<T> &dst_p, const size_t size, ARGS&&... args) {
+	dst_p = tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...), tml::default_delete<T>());
+
+	return (dst_p);
+};
+
+template <typename T, typename... ARGS>
+tml::shared_ptr<T> &get_shared(tml::shared_ptr<T> &dst_p, tml::shared_ptr<T> &p, const size_t size, ARGS&&... args) {
+	if (p == nullptr) {
+		dst_p = tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...), tml::default_delete<T>());
+	} else {
+		dst_p = p;
+	}
+
+	return (dst_p);
 };
 }

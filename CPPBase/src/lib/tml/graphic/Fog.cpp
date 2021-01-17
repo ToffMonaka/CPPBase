@@ -132,13 +132,7 @@ INT tml::graphic::Fog::Create(tml::graphic::FogDesc &desc)
 	}
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
-
-	if (desc.position == nullptr) {
-		this->position = tml::make_shared<tml::XMPosition>(1U);
-	} else {
-		this->position = desc.position;
-	}
-
+	tml::get_shared(this->position, desc.position, 1U);
 	this->col_ = desc.color;
 	this->mul_val_ = desc.mul_value;
 	this->SetNearRange(desc.near_range);

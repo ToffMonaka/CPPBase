@@ -11,7 +11,7 @@
  * @brief コンストラクタ
  */
 tml::graphic::Viewport::Viewport() :
-	vp_(0.0f, 0.0f, 0.0f, 0.0f, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH)
+	CD3D11_VIEWPORT(0.0f, 0.0f, 0.0f, 0.0f, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH)
 {
 	return;
 }
@@ -23,9 +23,48 @@ tml::graphic::Viewport::Viewport() :
  * @param size (size)
  */
 tml::graphic::Viewport::Viewport(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size) :
-	vp_(pos.x, pos.y, size.x, size.y, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH)
+	CD3D11_VIEWPORT(pos.x, pos.y, size.x, size.y, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH)
 {
 	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+tml::graphic::Viewport::Viewport(const CD3D11_VIEWPORT &src)
+{
+    this->TopLeftX = src.TopLeftX;
+    this->TopLeftY = src.TopLeftY;
+    this->Width = src.Width;
+    this->Height = src.Height;
+    this->MinDepth = src.MinDepth;
+    this->MaxDepth = src.MaxDepth;
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+tml::graphic::Viewport &tml::graphic::Viewport::operator =(const CD3D11_VIEWPORT &src)
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+    this->TopLeftX = src.TopLeftX;
+    this->TopLeftY = src.TopLeftY;
+    this->Width = src.Width;
+    this->Height = src.Height;
+    this->MinDepth = src.MinDepth;
+    this->MaxDepth = src.MaxDepth;
+
+	return ((*this));
 }
 
 
@@ -43,7 +82,12 @@ tml::graphic::Viewport::~Viewport()
  */
 void tml::graphic::Viewport::Init(void)
 {
-	this->vp_ = CD3D11_VIEWPORT(0.0f, 0.0f, 0.0f, 0.0f, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH);
+    this->TopLeftX = 0.0f;
+    this->TopLeftY = 0.0f;
+    this->Width = 0.0f;
+    this->Height = 0.0f;
+    this->MinDepth = D3D11_MIN_DEPTH;
+    this->MaxDepth = D3D11_MAX_DEPTH;
 
 	return;
 }

@@ -39,8 +39,8 @@ public:
 
 	virtual void Init(void);
 
-	template <typename T>
-	T *Get(const size_t);
+	template <typename T, typename... ARGS>
+	T *Get(const size_t, ARGS&&...);
 	template <typename T>
 	void Release(T **);
 	tml::MemoryAllocator::INFO GetAllocatorInfo(void);
@@ -51,11 +51,12 @@ public:
 /**
  * @brief Getä÷êî
  * @param cnt (count)
+ * @param args (arguments)
  * @return p (pointer)<br>
  * nullptr=é∏îs
  */
-template <typename T>
-inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
+template <typename T, typename... ARGS>
+inline T *tml::MemoryUtilEngine::Get(const size_t cnt, ARGS&&... args)
 {
 	T *p = nullptr;
 
@@ -67,7 +68,7 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 			ms_p = this->new_allocator_->GetMemorySpacePart<T>(cnt);
 		}
 
-		p = this->new_allocator_->GetConstructorPart<T>(ms_p, cnt);
+		p = this->new_allocator_->GetConstructorPart<T>(ms_p, cnt, std::forward<ARGS>(args)...);
 
 		break;
 	}
@@ -78,7 +79,7 @@ inline T *tml::MemoryUtilEngine::Get(const size_t cnt)
 			ms_p = this->dlmalloc_allocator_->GetMemorySpacePart<T>(cnt);
 		}
 
-		p = this->dlmalloc_allocator_->GetConstructorPart<T>(ms_p, cnt);
+		p = this->dlmalloc_allocator_->GetConstructorPart<T>(ms_p, cnt, std::forward<ARGS>(args)...);
 
 		break;
 	}

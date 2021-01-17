@@ -40,8 +40,8 @@ public:
 	T *Get(const size_t);
 	template <typename T>
 	BYTE *GetMemorySpacePart(const size_t);
-	template <typename T>
-	T *GetConstructorPart(BYTE *, const size_t);
+	template <typename T, typename... ARGS>
+	T *GetConstructorPart(BYTE *, const size_t, ARGS&&...);
 	template <typename T>
 	void Release(T **);
 	template <typename T>
@@ -99,11 +99,12 @@ inline BYTE *tml::DlmallocMemoryAllocator::GetMemorySpacePart(const size_t cnt)
  * @brief GetConstructorPartä÷êî
  * @param ms_p (memory_space_pointer)
  * @param cnt (count)
+ * @param args (arguments)
  * @return p (pointer)<br>
  * nullptr=é∏îs
  */
-template <typename T>
-inline T *tml::DlmallocMemoryAllocator::GetConstructorPart(BYTE *ms_p, const size_t cnt)
+template <typename T, typename... ARGS>
+inline T *tml::DlmallocMemoryAllocator::GetConstructorPart(BYTE *ms_p, const size_t cnt, ARGS&&... args)
 {
 	if (ms_p == nullptr) {
 		return (nullptr);
@@ -117,7 +118,7 @@ inline T *tml::DlmallocMemoryAllocator::GetConstructorPart(BYTE *ms_p, const siz
 		p = reinterpret_cast<T *>(ms_p + this->ms_cnt_head_size_);
 
 		for (size_t p_i = 0U; p_i < cnt; ++p_i) {
-			new(p + p_i) T();
+			new(p + p_i) T(args...);
 		}
 	} else {
 		(*(reinterpret_cast<size_t *>(ms_p))) = 0U;

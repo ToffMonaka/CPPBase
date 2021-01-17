@@ -34,13 +34,13 @@ public:
 	tml::shared_ptr<tml::graphic::RasterizerState> wireframe_rasterizer_state;
 	tml::shared_ptr<tml::graphic::RasterizerState> front_culling_rasterizer_state;
 	tml::shared_ptr<tml::graphic::RasterizerState> back_culling_rasterizer_state;
-	tml::shared_ptr<tml::graphic::BlendState> default_blend_state;
-	std::array<tml::shared_ptr<tml::graphic::BlendState>, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> alignment_blend_state_array;
-	std::array<tml::shared_ptr<tml::graphic::BlendState>, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> add_blend_state_array;
-	std::array<tml::shared_ptr<tml::graphic::BlendState>, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> sub_blend_state_array;
-	std::array<tml::shared_ptr<tml::graphic::BlendState>, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> mul_blend_state_array;
-	std::array<tml::shared_ptr<tml::graphic::BlendState>, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> reverse_blend_state_array;
-	std::array<tml::shared_ptr<tml::graphic::BlendState>, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> total_blend_state_array;
+	std::array<tml::shared_ptr<tml::graphic::BlendState>, 2U> default_blend_state_array;
+	std::array<tml::shared_ptr<tml::graphic::BlendState>, 2U> alignment_blend_state_array;
+	std::array<tml::shared_ptr<tml::graphic::BlendState>, 2U> add_blend_state_array;
+	std::array<tml::shared_ptr<tml::graphic::BlendState>, 2U> sub_blend_state_array;
+	std::array<tml::shared_ptr<tml::graphic::BlendState>, 2U> mul_blend_state_array;
+	std::array<tml::shared_ptr<tml::graphic::BlendState>, 2U> reverse_blend_state_array;
+	std::array<tml::shared_ptr<tml::graphic::BlendState>, 2U> total_blend_state_array;
 	tml::shared_ptr<tml::graphic::DepthState> default_depth_state;
 	tml::shared_ptr<tml::graphic::DepthState> reference_depth_state;
 

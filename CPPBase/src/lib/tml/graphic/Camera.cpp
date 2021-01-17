@@ -128,13 +128,7 @@ INT tml::graphic::Camera::Create(tml::graphic::CameraDesc &desc)
 	}
 
 	this->type_ = desc.type;
-
-	if (desc.position == nullptr) {
-		this->position = tml::make_shared<tml::XMPosition>(1U);
-	} else {
-		this->position = desc.position;
-	}
-
+	tml::get_shared(this->position, desc.position, 1U);
 	this->fov_angle_ = desc.fov_angle;
 	this->fov_size_ = desc.fov_size;
 	this->near_clip_ = desc.near_clip;

@@ -156,13 +156,7 @@ INT tml::graphic::Light::Create(tml::graphic::LightDesc &desc)
 	}
 
 	this->type_ = desc.type;
-
-	if (desc.position == nullptr) {
-		this->position = tml::make_shared<tml::XMPosition>(1U);
-	} else {
-		this->position = desc.position;
-	}
-
+	tml::get_shared(this->position, desc.position, 1U);
 	this->col_ = desc.color;
 	this->mul_val_ = desc.mul_value;
 	this->add_val_ = desc.add_value;

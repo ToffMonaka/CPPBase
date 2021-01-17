@@ -101,12 +101,7 @@ INT tml::graphic::Model::Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE typ
 	}
 
 	this->type_ = type;
-
-	if (desc.position == nullptr) {
-		this->position = tml::make_shared<tml::XMPosition>(1U);
-	} else {
-		this->position = desc.position;
-	}
+	tml::get_shared(this->position, desc.position, 1U);
 
 	return (0);
 }
