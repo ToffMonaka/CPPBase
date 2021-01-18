@@ -65,6 +65,43 @@ void tml::graphic::TextureDesc::Init(void)
 
 
 /**
+ * @brief SetTextureDesc関数
+ * @param type_flg (type_flag)
+ * @param format (format)
+ * @param size (size)
+ * @param mm_cnt (mipmap_count)
+ * @param ms_desc (multisample_desc)
+ */
+void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG type_flg, const DXGI_FORMAT format, const XMFLOAT2EX &size, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc)
+{
+	auto &desc = this->texture_desc;
+
+	desc = CD3D11_TEXTURE2D_DESC(format, static_cast<UINT>(size.x), static_cast<UINT>(size.y), 1U, mm_cnt);
+	desc.BindFlags = 0U;
+
+	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET)) {
+		desc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+	}
+
+	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET)) {
+		desc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
+	}
+
+	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR)) {
+		desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+	}
+
+	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR)) {
+		desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+	}
+
+	desc.SampleDesc = ms_desc;
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::Texture::Texture() :
@@ -357,6 +394,7 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 	CD3D11_TEXTURE2D_DESC tex_desc;
 
 	this->tex_->GetDesc(&tex_desc);
+
 	this->size_ = tml::XMFLOAT2EX(static_cast<FLOAT>(tex_desc.Width), static_cast<FLOAT>(tex_desc.Height));
 
 	if (tex_desc.BindFlags & D3D11_BIND_RENDER_TARGET) {

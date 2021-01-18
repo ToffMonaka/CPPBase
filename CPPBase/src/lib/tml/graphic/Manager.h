@@ -109,6 +109,7 @@ public:
 	virtual void Init(void);
 	INT Create(tml::graphic::ManagerDesc &);
 
+	void Update(void);
 	template <typename T, typename D>
 	tml::shared_ptr<T> GetResource(D &);
 	template <typename T>
@@ -124,11 +125,15 @@ public:
 	ID3D11Device *GetDevice(void) const;
 	ID3D11DeviceContext *GetDeviceContext(void) const;
 	D3D_FEATURE_LEVEL GetDeviceFeatureLevel(void) const;
+	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE GetSamplerQualityType(void) const;
+	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE GetMotionQualityType(void) const;
+	tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE GetShadowQualityType(void) const;
+	tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE GetAOQualityType(void) const;
+	tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE GetBloomQualityType(void) const;
+	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE GetAAQualityType(void) const;
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_res = nullptr);
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Texture2D *, INT *dst_res = nullptr);
 	std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
-
-	void Draw(void);
 };
 }
 }
@@ -282,4 +287,64 @@ inline ID3D11DeviceContext *tml::graphic::Manager::GetDeviceContext(void) const
 inline D3D_FEATURE_LEVEL tml::graphic::Manager::GetDeviceFeatureLevel(void) const
 {
 	return (this->device_future_lv_);
+}
+
+
+/**
+ * @brief GetSamplerQualityTypeŠÖ”
+ * @return samp_quality_type (sampler_quality_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE tml::graphic::Manager::GetSamplerQualityType(void) const
+{
+	return (this->samp_quality_type_);
+}
+
+
+/**
+ * @brief GetMotionQualityTypeŠÖ”
+ * @return motion_quality_type (motion_quality_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE tml::graphic::Manager::GetMotionQualityType(void) const
+{
+	return (this->motion_quality_type_);
+}
+
+
+/**
+ * @brief GetShadowQualityTypeŠÖ”
+ * @return shadow_quality_type (shadow_quality_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE tml::graphic::Manager::GetShadowQualityType(void) const
+{
+	return (this->shadow_quality_type_);
+}
+
+
+/**
+ * @brief GetAOQualityTypeŠÖ”
+ * @return ao_quality_type (ao_quality_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE tml::graphic::Manager::GetAOQualityType(void) const
+{
+	return (this->ao_quality_type_);
+}
+
+
+/**
+ * @brief GetBloomQualityTypeŠÖ”
+ * @return bloom_quality_type (bloom_quality_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE tml::graphic::Manager::GetBloomQualityType(void) const
+{
+	return (this->bloom_quality_type_);
+}
+
+
+/**
+ * @brief GetAAQualityTypeŠÖ”
+ * @return aa_quality_type (aa_quality_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE tml::graphic::Manager::GetAAQualityType(void) const
+{
+	return (this->aa_quality_type_);
 }

@@ -38,6 +38,8 @@ public:
 	virtual ~TextureDesc();
 
 	virtual void Init(void);
+
+	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, const DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, const XMFLOAT2EX &size = XMFLOAT2EX(0.0f), const UINT mm_cnt = 1U, const DXGI_SAMPLE_DESC &ms_desc = {1U, 0U});
 };
 }
 }

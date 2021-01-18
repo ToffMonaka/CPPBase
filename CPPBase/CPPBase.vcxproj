@@ -193,9 +193,11 @@
     <ClCompile Include="src\lib\tml\graphic\Model.cpp" />
     <ClCompile Include="src\lib\tml\graphic\RasterizerState.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Sampler.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\ScreenModel.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Shader.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ShaderConstantBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ShaderStructuredBuffer.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\SpriteModel.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Texture.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Viewport.cpp" />
     <ClCompile Include="src\lib\tml\input\Manager.cpp" />
@@ -286,9 +288,11 @@
     <ClInclude Include="src\lib\tml\graphic\Model.h" />
     <ClInclude Include="src\lib\tml\graphic\RasterizerState.h" />
     <ClInclude Include="src\lib\tml\graphic\Sampler.h" />
+    <ClInclude Include="src\lib\tml\graphic\ScreenModel.h" />
     <ClInclude Include="src\lib\tml\graphic\Shader.h" />
     <ClInclude Include="src\lib\tml\graphic\ShaderConstantBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\ShaderStructuredBuffer.h" />
+    <ClInclude Include="src\lib\tml\graphic\SpriteModel.h" />
     <ClInclude Include="src\lib\tml\graphic\Texture.h" />
     <ClInclude Include="src\lib\tml\graphic\Viewport.h" />
     <ClInclude Include="src\lib\tml\input\Manager.h" />

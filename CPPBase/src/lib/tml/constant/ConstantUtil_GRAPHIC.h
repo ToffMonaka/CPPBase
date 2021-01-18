@@ -121,6 +121,29 @@ namespace GRAPHIC {
 		WIDTH,
 		HEIGHT
 	};
+	enum class TEXTURE_DESC_TYPE_FLAG : UINT {
+		NONE = 0U,
+		RENDER_TARGET = 1U << 0,
+		DEPTH_TARGET = 1U << 1,
+		SR = 1U << 2,
+		UASR = 1U << 3
+	};
+	enum class SAMPLER_DESC_TYPE : UINT {
+		NONE = 0U,
+		BILINEAR,
+		TRILINEAR,
+		ANISOTROPIC2,
+		ANISOTROPIC4,
+		ANISOTROPIC8,
+		ANISOTROPIC16
+	};
+	enum class SAMPLER_DESC_WRAP_TYPE : UINT {
+		NONE = 0U,
+		CC,
+		CW,
+		WC,
+		WW
+	};
 	enum class MODEL_TYPE : UINT {
 		NONE = 0U,
 		SCREEN,
@@ -129,3 +152,6 @@ namespace GRAPHIC {
 }
 }
 }
+
+
+ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, UINT)

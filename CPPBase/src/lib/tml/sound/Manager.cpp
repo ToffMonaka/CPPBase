@@ -102,3 +102,12 @@ INT tml::sound::Manager::Create(tml::sound::ManagerDesc &desc)
 
 	return (0);
 }
+
+
+/**
+ * @brief UpdateŠÖ”
+ */
+void tml::sound::Manager::Update(void)
+{
+	return;
+}

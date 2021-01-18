@@ -201,7 +201,9 @@ void cpp_base::MainThread::End(void)
  */
 void cpp_base::MainThread::Update(void)
 {
-	this->graphic_mgr_.Draw();
+	this->input_mgr_.Update();
+	this->graphic_mgr_.Update();
+	this->sound_mgr_.Update();
 
 	this->frame_rate_.Update();
 

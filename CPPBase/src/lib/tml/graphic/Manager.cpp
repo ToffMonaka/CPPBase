@@ -477,6 +477,17 @@ INT tml::graphic::Manager::Create(tml::graphic::ManagerDesc &desc)
 
 
 /**
+ * @brief UpdateŠÖ”
+ */
+void tml::graphic::Manager::Update(void)
+{
+	this->swap_chain_->Present(this->vsync_flg_, 0U);
+
+	return;
+}
+
+
+/**
  * @brief GetBufferŠÖ”
  * @param dst_buf (dst_buffer)
  * @param dst_msr (dst_mapped_subresource)
@@ -667,15 +678,4 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 	tml::SetResult(dst_res, 0);
 
 	return (dst_buf_cont);
-}
-
-
-/**
- * @brief DrawŠÖ”
- */
-void tml::graphic::Manager::Draw(void)
-{
-	this->swap_chain_->Present(this->vsync_flg_, 0U);
-
-	return;
 }

@@ -55,6 +55,7 @@ public:
 	virtual void Init(void);
 	INT Create(tml::sound::ManagerDesc &);
 
+	void Update(void);
 	template <typename T, typename D>
 	tml::shared_ptr<T> GetResource(D &);
 	template <typename T>

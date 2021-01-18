@@ -102,3 +102,12 @@ INT tml::input::Manager::Create(tml::input::ManagerDesc &desc)
 
 	return (0);
 }
+
+
+/**
+ * @brief UpdateŠÖ”
+ */
+void tml::input::Manager::Update(void)
+{
+	return;
+}

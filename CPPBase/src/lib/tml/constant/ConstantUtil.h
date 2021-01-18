@@ -16,6 +16,16 @@
 #include <array>
 
 
+#define ENUM_CLASS_FLAG_OPERATOR(e, t) \
+inline e operator &(const e &f1, const e &f2) {return (static_cast<e>(static_cast<t>(f1) & static_cast<t>(f2)));} \
+inline e &operator &=(e &f1, const e &f2) {f1 = static_cast<e>(static_cast<t>(f1) & static_cast<t>(f2)); return (f1);} \
+inline e operator |(const e &f1, const e &f2) {return (static_cast<e>(static_cast<t>(f1) | static_cast<t>(f2)));} \
+inline e &operator |=(e &f1, const e &f2) {f1 = static_cast<e>(static_cast<t>(f1) | static_cast<t>(f2)); return (f1);} \
+inline e operator ^(const e &f1, const e &f2) {return (static_cast<e>(static_cast<t>(f1) ^ static_cast<t>(f2)));} \
+inline e &operator ^=(e &f1, const e &f2) {f1 = static_cast<e>(static_cast<t>(f1) ^ static_cast<t>(f2)); return (f1);} \
+inline e operator ~(const e &f) {return (static_cast<e>(~static_cast<t>(f)));}
+
+
 using DOUBLE = double;
 
 

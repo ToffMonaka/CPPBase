@@ -9,6 +9,8 @@
 #include "RasterizerState.h"
 #include "BlendState.h"
 #include "DepthState.h"
+#include "Texture.h"
+#include "Sampler.h"
 
 
 /**
@@ -51,6 +53,10 @@ void tml::graphic::ManagerCommon::Init(void)
 
 	this->default_depth_state.reset();
 	this->reference_depth_state.reset();
+	this->model_cc_sampler.reset();
+	this->model_cw_sampler.reset();
+	this->model_wc_sampler.reset();
+	this->model_ww_sampler.reset();
 
 	return;
 }
@@ -244,6 +250,97 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		this->reference_depth_state = mgr->GetResource<tml::graphic::DepthState>(desc);
 
 		if (this->reference_depth_state == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE samp_desc_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::NONE;
+
+	switch (mgr->GetSamplerQualityType()) {
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::BILINEAR: {
+		samp_desc_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::BILINEAR;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::TRILINEAR: {
+		samp_desc_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::TRILINEAR;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC2: {
+		samp_desc_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC2;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC4: {
+		samp_desc_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC4;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC8: {
+		samp_desc_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC8;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC16: {
+		samp_desc_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC16;
+
+		break;
+	}
+	}
+
+	{// ModelCCSampler Create
+		tml::graphic::SamplerDesc desc;
+
+		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
+
+		this->model_cc_sampler = mgr->GetResource<tml::graphic::Sampler>(desc);
+
+		if (this->model_cc_sampler == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// ModelCWSampler Create
+		tml::graphic::SamplerDesc desc;
+
+		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
+
+		this->model_cw_sampler = mgr->GetResource<tml::graphic::Sampler>(desc);
+
+		if (this->model_cw_sampler == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// ModelWCSampler Create
+		tml::graphic::SamplerDesc desc;
+
+		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
+
+		this->model_wc_sampler = mgr->GetResource<tml::graphic::Sampler>(desc);
+
+		if (this->model_wc_sampler == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// ModelWWSampler Create
+		tml::graphic::SamplerDesc desc;
+
+		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
+
+		this->model_ww_sampler = mgr->GetResource<tml::graphic::Sampler>(desc);
+
+		if (this->model_ww_sampler == nullptr) {
 			this->Init();
 
 			return (-1);
