@@ -21,11 +21,12 @@ public:
 
 public:
 	DepthStateDesc();
+	DepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
 	virtual ~DepthStateDesc();
 
 	virtual void Init(void);
 
-	void SetDepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
+	void Set(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
 };
 }
 }

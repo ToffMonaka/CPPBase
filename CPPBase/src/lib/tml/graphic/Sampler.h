@@ -21,11 +21,12 @@ public:
 
 public:
 	SamplerDesc();
+	SamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
 	virtual ~SamplerDesc();
 
 	virtual void Init(void);
 
-	void SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
+	void Set(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
 };
 }
 }

@@ -21,6 +21,19 @@ tml::graphic::SamplerDesc::SamplerDesc() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param samp_desc_type (sampler_desc_type)
+ * @param samp_desc_wrap_type (sampler_desc_wrap_type)
+ */
+tml::graphic::SamplerDesc::SamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE samp_desc_type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE samp_desc_wrap_type)
+{
+	this->Set(samp_desc_type, samp_desc_wrap_type);
+
+	return;
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::graphic::SamplerDesc::~SamplerDesc()
@@ -44,76 +57,73 @@ void tml::graphic::SamplerDesc::Init(void)
 
 
 /**
- * @brief SetSamplerDesc関数
- * @param type (type)
- * @param wrap_type (wrap_type)
+ * @brief Set関数
+ * @param samp_desc_type (sampler_desc_type)
+ * @param samp_desc_wrap_type (sampler_desc_wrap_type)
  */
-void tml::graphic::SamplerDesc::SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE wrap_type)
+void tml::graphic::SamplerDesc::Set(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE samp_desc_type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE samp_desc_wrap_type)
 {
-	auto &desc = this->sampler_desc;
+	this->Init();
 
-	desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
-	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-
-	switch (type) {
+	switch (samp_desc_type) {
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::BILINEAR: {
-		desc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+		this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::TRILINEAR: {
-		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC2: {
-		desc.Filter = D3D11_FILTER_ANISOTROPIC;
-		desc.MaxAnisotropy = 2U;
+		this->sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
+		this->sampler_desc.MaxAnisotropy = 2U;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC4: {
-		desc.Filter = D3D11_FILTER_ANISOTROPIC;
-		desc.MaxAnisotropy = 4U;
+		this->sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
+		this->sampler_desc.MaxAnisotropy = 4U;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC8: {
-		desc.Filter = D3D11_FILTER_ANISOTROPIC;
-		desc.MaxAnisotropy = 8U;
+		this->sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
+		this->sampler_desc.MaxAnisotropy = 8U;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC16: {
-		desc.Filter = D3D11_FILTER_ANISOTROPIC;
-		desc.MaxAnisotropy = 16U;
+		this->sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
+		this->sampler_desc.MaxAnisotropy = 16U;
 
 		break;
 	}
 	}
 
-	switch (wrap_type) {
+	switch (samp_desc_wrap_type) {
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC: {
-		desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-		desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		this->sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		this->sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW: {
-		desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-		desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		this->sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		this->sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC: {
-		desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		this->sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		this->sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW: {
-		desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		this->sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		this->sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 
 		break;
 	}

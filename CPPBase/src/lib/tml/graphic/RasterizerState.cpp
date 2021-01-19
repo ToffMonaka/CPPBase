@@ -21,6 +21,18 @@ tml::graphic::RasterizerStateDesc::RasterizerStateDesc() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param rs_desc_type (rasterizer_state_desc_type)
+ */
+tml::graphic::RasterizerStateDesc::RasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE rs_desc_type)
+{
+	this->Set(rs_desc_type);
+
+	return;
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::graphic::RasterizerStateDesc::~RasterizerStateDesc()
@@ -44,33 +56,30 @@ void tml::graphic::RasterizerStateDesc::Init(void)
 
 
 /**
- * @brief SetRasterizerStateDesc関数
- * @param type (type)
+ * @brief Set関数
+ * @param rs_desc_type (rasterizer_state_desc_type)
  */
-void tml::graphic::RasterizerStateDesc::SetRasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE type)
+void tml::graphic::RasterizerStateDesc::Set(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE rs_desc_type)
 {
-	auto &desc = this->rasterizer_state_desc;
+	this->Init();
 
-	desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
-	desc.CullMode = D3D11_CULL_NONE;
-
-	if (type == tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT) {
+	if (rs_desc_type == tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT) {
 		return;
 	}
 
-	switch (type) {
+	switch (rs_desc_type) {
 	case tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::WIREFRAME: {
-		desc.FillMode = D3D11_FILL_WIREFRAME;
+		this->rasterizer_state_desc.FillMode = D3D11_FILL_WIREFRAME;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::FRONT_CULLING: {
-		desc.CullMode = D3D11_CULL_FRONT;
+		this->rasterizer_state_desc.CullMode = D3D11_CULL_FRONT;
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::BACK_CULLING: {
-		desc.CullMode = D3D11_CULL_BACK;
+		this->rasterizer_state_desc.CullMode = D3D11_CULL_BACK;
 
 		break;
 	}

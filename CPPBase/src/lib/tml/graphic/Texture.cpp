@@ -12,6 +12,7 @@
  * @brief コンストラクタ
  */
 tml::graphic::TextureDesc::TextureDesc() :
+	swap_chain(nullptr),
 	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U),
 	render_target_format(DXGI_FORMAT_UNKNOWN),
 	render_target_desc_null_flag(false),
@@ -20,11 +21,26 @@ tml::graphic::TextureDesc::TextureDesc() :
 	sr_format(DXGI_FORMAT_UNKNOWN),
 	sr_desc_null_flag(false),
 	uasr_format(DXGI_FORMAT_UNKNOWN),
-	uasr_desc_null_flag(false),
-	swap_chain_flag(false),
-	array_flag(false)
+	uasr_desc_null_flag(false)
 {
 	this->texture_desc.BindFlags = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param tex_desc_type_flg (texture_desc_type_flag)
+ * @param tex_desc_format (texture_desc_format)
+ * @param tex_desc_size (texture_desc_size)
+ * @param tex_desc_buf_cnt (texture_desc_buf_count)
+ * @param tex_desc_mm_cnt (texture_desc_mipmap_count)
+ * @param tex_desc_ms_desc (texture_desc_multisample_desc)
+ */
+tml::graphic::TextureDesc::TextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG tex_desc_type_flg, const DXGI_FORMAT tex_desc_format, const XMUINT2EX &tex_desc_size, const UINT tex_desc_buf_cnt, const UINT tex_desc_mm_cnt, const DXGI_SAMPLE_DESC &tex_desc_ms_desc)
+{
+	this->Set(tex_desc_type_flg, tex_desc_format, tex_desc_size, tex_desc_buf_cnt, tex_desc_mm_cnt, tex_desc_ms_desc);
 
 	return;
 }
@@ -45,6 +61,7 @@ tml::graphic::TextureDesc::~TextureDesc()
 void tml::graphic::TextureDesc::Init(void)
 {
 	this->file_read_desc_container.clear();
+	this->swap_chain = nullptr;
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
 	this->texture_desc.BindFlags = 0U;
 	this->render_target_format = DXGI_FORMAT_UNKNOWN;
@@ -55,8 +72,6 @@ void tml::graphic::TextureDesc::Init(void)
 	this->sr_desc_null_flag = false;
 	this->uasr_format = DXGI_FORMAT_UNKNOWN;
 	this->uasr_desc_null_flag = false;
-	this->swap_chain_flag = false;
-	this->array_flag = false;
 
 	tml::graphic::ResourceDesc::Init();
 
@@ -65,37 +80,42 @@ void tml::graphic::TextureDesc::Init(void)
 
 
 /**
- * @brief SetTextureDesc関数
- * @param type_flg (type_flag)
- * @param format (format)
- * @param size (size)
- * @param mm_cnt (mipmap_count)
- * @param ms_desc (multisample_desc)
+ * @brief Set関数
+ * @param tex_desc_type_flg (texture_desc_type_flag)
+ * @param tex_desc_format (texture_desc_format)
+ * @param tex_desc_size (texture_desc_size)
+ * @param tex_desc_buf_cnt (texture_desc_buf_count)
+ * @param tex_desc_mm_cnt (texture_desc_mipmap_count)
+ * @param tex_desc_ms_desc (texture_desc_multisample_desc)
  */
-void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG type_flg, const DXGI_FORMAT format, const XMFLOAT2EX &size, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc)
+void tml::graphic::TextureDesc::Set(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG tex_desc_type_flg, const DXGI_FORMAT tex_desc_format, const XMUINT2EX &tex_desc_size, const UINT tex_desc_buf_cnt, const UINT tex_desc_mm_cnt, const DXGI_SAMPLE_DESC &tex_desc_ms_desc)
 {
-	auto &desc = this->texture_desc;
+	this->Init();
 
-	desc = CD3D11_TEXTURE2D_DESC(format, static_cast<UINT>(size.x), static_cast<UINT>(size.y), 1U, mm_cnt);
-	desc.BindFlags = 0U;
-
-	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET)) {
-		desc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+	for (UINT buf_i = 0U; buf_i < tex_desc_buf_cnt; ++buf_i) {
+		this->file_read_desc_container.emplace_back();
 	}
 
-	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET)) {
-		desc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
+	this->texture_desc = CD3D11_TEXTURE2D_DESC(tex_desc_format, tex_desc_size.x, tex_desc_size.y, tex_desc_buf_cnt, tex_desc_mm_cnt);
+	this->texture_desc.BindFlags = 0U;
+
+	if (static_cast<bool>(tex_desc_type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET)) {
+		this->texture_desc.BindFlags |= D3D11_BIND_RENDER_TARGET;
 	}
 
-	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR)) {
-		desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+	if (static_cast<bool>(tex_desc_type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET)) {
+		this->texture_desc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
 	}
 
-	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR)) {
-		desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+	if (static_cast<bool>(tex_desc_type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR)) {
+		this->texture_desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
 	}
 
-	desc.SampleDesc = ms_desc;
+	if (static_cast<bool>(tex_desc_type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR)) {
+		this->texture_desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+	}
+
+	this->texture_desc.SampleDesc = tex_desc_ms_desc;
 
 	return;
 }
@@ -106,13 +126,11 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
  */
 tml::graphic::Texture::Texture() :
 	tex_(nullptr),
-	size_(0.0f, 0.0f),
+	size_(0U),
 	rt_(nullptr),
 	dt_(nullptr),
 	sr_(nullptr),
-	uasr_(nullptr),
-	swap_chain_flg_(false),
-	ary_flg_(false)
+	uasr_(nullptr)
 {
 	return;
 }
@@ -177,9 +195,7 @@ void tml::graphic::Texture::Init(void)
 {
 	this->Release();
 
-	this->size_ = 0.0f;
-	this->swap_chain_flg_ = false;
-	this->ary_flg_ = false;
+	this->size_ = 0U;
 
 	tml::graphic::Resource::Init();
 
@@ -203,24 +219,13 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 		return (-1);
 	}
 
-	this->swap_chain_flg_ = desc.swap_chain_flag;
-	this->ary_flg_ = desc.array_flag;
-
-	if (this->swap_chain_flg_) {
-		if (FAILED(this->GetManager()->GetSwapChain()->GetBuffer(0U, IID_PPV_ARGS(&this->tex_)))) {
+	if (desc.swap_chain != nullptr) {
+		if (FAILED(desc.swap_chain->GetBuffer(0U, IID_PPV_ARGS(&this->tex_)))) {
 			this->Init();
 
 			return (-1);
 		}
-	} else if (this->ary_flg_) {
-		if (desc.file_read_desc_container.empty()) {
-			this->Init();
-
-			return (-1);
-		}
-
-		desc.texture_desc.ArraySize = desc.file_read_desc_container.size();
-
+	} else if (desc.file_read_desc_container.size() > 1U) {
 		std::list<D3D11_SUBRESOURCE_DATA> srd_cont;
 		std::list<tml::DynamicBuffer> srd_buf_cont;
 		ID3D11Texture2D *tex = nullptr;
@@ -338,15 +343,7 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 
 			return (-1);
 		}
-	} else {
-		if (desc.file_read_desc_container.empty()) {
-			this->Init();
-
-			return (-1);
-		}
-
-		desc.texture_desc.ArraySize = 1U;
-
+	} else if (desc.file_read_desc_container.size() == 1U) {
 		auto file_read_desc_dat = desc.file_read_desc_container.front().GetDataByParent();
 
 		if (!file_read_desc_dat->file_path.empty() || file_read_desc_dat->file_buffer.GetLength() > 0U) {
@@ -389,13 +386,17 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 				return (-1);
 			}
 		}
+	} else {
+		this->Init();
+
+		return (-1);
 	}
 
 	CD3D11_TEXTURE2D_DESC tex_desc;
 
 	this->tex_->GetDesc(&tex_desc);
 
-	this->size_ = tml::XMFLOAT2EX(static_cast<FLOAT>(tex_desc.Width), static_cast<FLOAT>(tex_desc.Height));
+	this->size_ = tml::XMUINT2EX(tex_desc.Width, tex_desc.Height);
 
 	if (tex_desc.BindFlags & D3D11_BIND_RENDER_TARGET) {
 		if (desc.render_target_desc_null_flag) {
@@ -408,16 +409,16 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 			D3D11_RTV_DIMENSION dimension;
 
 			if (tex_desc.SampleDesc.Count > 1U) {
-				dimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
-
-				if (this->ary_flg_) {
+				if (tex_desc.ArraySize > 1U) {
 					dimension = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
+				} else {
+					dimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
 				}
 			} else {
-				dimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-
-				if (this->ary_flg_) {
+				if (tex_desc.ArraySize > 1U) {
 					dimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+				} else {
+					dimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 				}
 			}
 
@@ -448,13 +449,13 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 			D3D11_DSV_DIMENSION dimension;
 
 			if (tex_desc.SampleDesc.Count > 1U) {
-				if (this->ary_flg_) {
+				if (tex_desc.ArraySize > 1U) {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY;
 				} else {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 				}
 			} else {
-				if (this->ary_flg_) {
+				if (tex_desc.ArraySize > 1U) {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -488,13 +489,13 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 			D3D11_SRV_DIMENSION dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 
 			if (tex_desc.SampleDesc.Count > 1U) {
-				if (this->ary_flg_) {
+				if (tex_desc.ArraySize > 1U) {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
 				} else {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 				}
 			} else {
-				if (this->ary_flg_) {
+				if (tex_desc.ArraySize > 1U) {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -532,7 +533,7 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 
 				return (-1);
 			} else {
-				if (this->ary_flg_) {
+				if (tex_desc.ArraySize > 1U) {
 					dimension = D3D11_UAV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_UAV_DIMENSION_TEXTURE2D;

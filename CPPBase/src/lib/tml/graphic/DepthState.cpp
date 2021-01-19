@@ -19,6 +19,18 @@ tml::graphic::DepthStateDesc::DepthStateDesc() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param ds_desc_type (depth_state_desc_type)
+ */
+tml::graphic::DepthStateDesc::DepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE ds_desc_type)
+{
+	this->Set(ds_desc_type);
+
+	return;
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::graphic::DepthStateDesc::~DepthStateDesc()
@@ -41,22 +53,20 @@ void tml::graphic::DepthStateDesc::Init(void)
 
 
 /**
- * @brief SetDepthStateDesc関数
- * @param type (type)
+ * @brief Set関数
+ * @param ds_desc_type (depth_state_desc_type)
  */
-void tml::graphic::DepthStateDesc::SetDepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE type)
+void tml::graphic::DepthStateDesc::Set(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE ds_desc_type)
 {
-	auto &desc = this->depth_state_desc;
+	this->Init();
 
-	desc = CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT());
-
-	if (type == tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT) {
+	if (ds_desc_type == tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT) {
 		return;
 	}
 
-	switch (type) {
+	switch (ds_desc_type) {
 	case tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::REFERENCE: {
-		desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+		this->depth_state_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 
 		break;
 	}

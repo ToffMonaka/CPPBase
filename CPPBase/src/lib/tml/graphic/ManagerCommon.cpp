@@ -53,6 +53,8 @@ void tml::graphic::ManagerCommon::Init(void)
 
 	this->default_depth_state.reset();
 	this->reference_depth_state.reset();
+	this->main_render_target_texture.reset();
+	this->main_depth_target_texture.reset();
 	this->model_cc_sampler.reset();
 	this->model_cw_sampler.reset();
 	this->model_wc_sampler.reset();
@@ -73,9 +75,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	this->Init();
 
 	{// DefaultRasterizerState Create
-		tml::graphic::RasterizerStateDesc desc;
-
-		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT);
+		tml::graphic::RasterizerStateDesc desc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT);
 
 		this->default_rasterizer_state = mgr->GetResource<tml::graphic::RasterizerState>(desc);
 
@@ -87,9 +87,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// WireframeRasterizerState Create
-		tml::graphic::RasterizerStateDesc desc;
-
-		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::WIREFRAME);
+		tml::graphic::RasterizerStateDesc desc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::WIREFRAME);
 
 		this->wireframe_rasterizer_state = mgr->GetResource<tml::graphic::RasterizerState>(desc);
 
@@ -101,9 +99,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// FrontCullingRasterizerState Create
-		tml::graphic::RasterizerStateDesc desc;
-
-		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::FRONT_CULLING);
+		tml::graphic::RasterizerStateDesc desc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::FRONT_CULLING);
 
 		this->front_culling_rasterizer_state = mgr->GetResource<tml::graphic::RasterizerState>(desc);
 
@@ -115,9 +111,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// BackCullingRasterizerState Create
-		tml::graphic::RasterizerStateDesc desc;
-
-		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::BACK_CULLING);
+		tml::graphic::RasterizerStateDesc desc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::BACK_CULLING);
 
 		this->back_culling_rasterizer_state = mgr->GetResource<tml::graphic::RasterizerState>(desc);
 
@@ -130,9 +124,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 
 	for (UINT rt_i = 0U; rt_i < 2U; ++rt_i) {
 		{// DefaultBlendState Create
-			tml::graphic::BlendStateDesc desc;
-
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DEFAULT, rt_i);
+			tml::graphic::BlendStateDesc desc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::NONE, rt_i);
 
 			this->default_blend_state_array[rt_i] = mgr->GetResource<tml::graphic::BlendState>(desc);
 
@@ -144,9 +136,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// AlignmentBlendState Create
-			tml::graphic::BlendStateDesc desc;
-
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ALIGNMENT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			tml::graphic::BlendStateDesc desc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ALIGNMENT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->alignment_blend_state_array[rt_i] = mgr->GetResource<tml::graphic::BlendState>(desc);
 
@@ -158,9 +148,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// AddBlendState Create
-			tml::graphic::BlendStateDesc desc;
-
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ADD, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			tml::graphic::BlendStateDesc desc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ADD, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->add_blend_state_array[rt_i] = mgr->GetResource<tml::graphic::BlendState>(desc);
 
@@ -172,9 +160,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// SubBlendState Create
-			tml::graphic::BlendStateDesc desc;
-
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::SUB, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			tml::graphic::BlendStateDesc desc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::SUB, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->sub_blend_state_array[rt_i] = mgr->GetResource<tml::graphic::BlendState>(desc);
 
@@ -186,9 +172,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// MulBlendState Create
-			tml::graphic::BlendStateDesc desc;
-
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::MUL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			tml::graphic::BlendStateDesc desc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::MUL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->mul_blend_state_array[rt_i] = mgr->GetResource<tml::graphic::BlendState>(desc);
 
@@ -200,9 +184,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// ReverseBlendState Create
-			tml::graphic::BlendStateDesc desc;
-
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::REVERSE, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			tml::graphic::BlendStateDesc desc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::REVERSE, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->reverse_blend_state_array[rt_i] = mgr->GetResource<tml::graphic::BlendState>(desc);
 
@@ -214,9 +196,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// TotalBlendState Create
-			tml::graphic::BlendStateDesc desc;
-
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::TOTAL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::TOTAL, rt_i);
+			tml::graphic::BlendStateDesc desc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::TOTAL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::TOTAL, rt_i);
 
 			this->total_blend_state_array[rt_i] = mgr->GetResource<tml::graphic::BlendState>(desc);
 
@@ -229,9 +209,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// DefaultDepthState Create
-		tml::graphic::DepthStateDesc desc;
-
-		desc.SetDepthStateDesc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT);
+		tml::graphic::DepthStateDesc desc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT);
 
 		this->default_depth_state = mgr->GetResource<tml::graphic::DepthState>(desc);
 
@@ -243,9 +221,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// ReferenceDepthState Create
-		tml::graphic::DepthStateDesc desc;
-
-		desc.SetDepthStateDesc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::REFERENCE);
+		tml::graphic::DepthStateDesc desc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::REFERENCE);
 
 		this->reference_depth_state = mgr->GetResource<tml::graphic::DepthState>(desc);
 
@@ -291,10 +267,39 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 	}
 
-	{// ModelCCSampler Create
-		tml::graphic::SamplerDesc desc;
+	{// MainRenderTargetTexture Create
+		tml::graphic::TextureDesc desc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR);
 
-		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
+		desc.swap_chain = mgr->GetSwapChain();
+		desc.render_target_desc_null_flag = true;
+		desc.sr_desc_null_flag = true;
+		desc.uasr_desc_null_flag = true;
+
+		this->main_render_target_texture = mgr->GetResource<tml::graphic::Texture>(desc);
+
+		if (this->main_render_target_texture == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// MainDepthTargetTexture Create
+		tml::graphic::TextureDesc desc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET, DXGI_FORMAT_R24G8_TYPELESS, tml::XMUINT2EX(mgr->GetSwapChainDesc().BufferDesc.Width, mgr->GetSwapChainDesc().BufferDesc.Height), 1U, 1U, mgr->GetSwapChainDesc().SampleDesc);
+
+		desc.depth_target_format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+		this->main_depth_target_texture = mgr->GetResource<tml::graphic::Texture>(desc);
+
+		if (this->main_depth_target_texture == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// ModelCCSampler Create
+		tml::graphic::SamplerDesc desc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
 
 		this->model_cc_sampler = mgr->GetResource<tml::graphic::Sampler>(desc);
 
@@ -306,9 +311,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// ModelCWSampler Create
-		tml::graphic::SamplerDesc desc;
-
-		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
+		tml::graphic::SamplerDesc desc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
 
 		this->model_cw_sampler = mgr->GetResource<tml::graphic::Sampler>(desc);
 
@@ -320,9 +323,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// ModelWCSampler Create
-		tml::graphic::SamplerDesc desc;
-
-		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
+		tml::graphic::SamplerDesc desc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
 
 		this->model_wc_sampler = mgr->GetResource<tml::graphic::Sampler>(desc);
 
@@ -334,9 +335,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// ModelWWSampler Create
-		tml::graphic::SamplerDesc desc;
-
-		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
+		tml::graphic::SamplerDesc desc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
 
 		this->model_ww_sampler = mgr->GetResource<tml::graphic::Sampler>(desc);
 

@@ -21,11 +21,12 @@ public:
 
 public:
 	RasterizerStateDesc();
+	RasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
 	virtual ~RasterizerStateDesc();
 
 	virtual void Init(void);
 
-	void SetRasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
+	void Set(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
 };
 }
 }

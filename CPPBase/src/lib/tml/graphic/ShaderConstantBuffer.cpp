@@ -13,7 +13,7 @@
  */
 tml::graphic::ShaderConstantBufferDesc::ShaderConstantBufferDesc() :
 	element_size(0U),
-	cpu_flag(false)
+	cpu_read_flag(false)
 {
 	return;
 }
@@ -34,7 +34,7 @@ tml::graphic::ShaderConstantBufferDesc::~ShaderConstantBufferDesc()
 void tml::graphic::ShaderConstantBufferDesc::Init(void)
 {
 	this->element_size = 0U;
-	this->cpu_flag = false;
+	this->cpu_read_flag = false;
 
 	tml::graphic::ResourceDesc::Init();
 
@@ -48,7 +48,7 @@ void tml::graphic::ShaderConstantBufferDesc::Init(void)
 tml::graphic::ShaderConstantBuffer::ShaderConstantBuffer() :
 	buf_(nullptr),
 	element_size_(0U),
-	cpu_flg_(false)
+	cpu_read_flg_(false)
 {
 	return;
 }
@@ -86,7 +86,7 @@ void tml::graphic::ShaderConstantBuffer::Release(void)
 void tml::graphic::ShaderConstantBuffer::Init(void)
 {
 	this->element_size_ = 0U;
-	this->cpu_flg_ = false;
+	this->cpu_read_flg_ = false;
 
 	tml::graphic::Resource::Init();
 
@@ -111,13 +111,13 @@ INT tml::graphic::ShaderConstantBuffer::Create(tml::graphic::ShaderConstantBuffe
 		return (-1);
 	}
 
-	this->cpu_flg_ = desc.cpu_flag;
+	this->cpu_read_flg_ = desc.cpu_read_flag;
 
 	this->element_size_ = desc.element_size;
 
 	CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_, D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0U);
 
-	if (this->cpu_flg_) {
+	if (this->cpu_read_flg_) {
 		buf_desc.Usage = D3D11_USAGE_DYNAMIC;
 		buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	}
@@ -136,7 +136,7 @@ INT tml::graphic::ShaderConstantBuffer::Create(tml::graphic::ShaderConstantBuffe
  */
 void tml::graphic::ShaderConstantBuffer::UpdateBuffer(void *element)
 {
-	if (this->cpu_flg_) {
+	if (this->cpu_read_flg_) {
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->buf_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {

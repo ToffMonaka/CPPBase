@@ -82,15 +82,6 @@ tml::graphic::Viewport &tml::graphic::Viewport::operator =(const CD3D11_VIEWPORT
 
 
 /**
- * @brief デストラクタ
- */
-tml::graphic::Viewport::~Viewport()
-{
-	return;
-}
-
-
-/**
  * @brief 初期化関数
  */
 void tml::graphic::Viewport::Init(void)

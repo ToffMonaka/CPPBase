@@ -18,7 +18,7 @@ class ShaderConstantBufferDesc : public tml::graphic::ResourceDesc
 {
 public:
 	UINT element_size;
-	bool cpu_flag;
+	bool cpu_read_flag;
 
 public:
 	ShaderConstantBufferDesc();
@@ -46,7 +46,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	ID3D11Buffer *buf_;
 	UINT element_size_;
-	bool cpu_flg_;
+	bool cpu_read_flg_;
 
 protected:
 	void Release(void);
@@ -64,6 +64,7 @@ public:
 
 	ID3D11Buffer *GetBuffer(void) const;
 	UINT GetElementSize(void) const;
+	bool GetCPUReadFlag(void) const;
 };
 }
 }
@@ -99,4 +100,14 @@ template <typename T>
 inline T *tml::graphic::ShaderConstantBuffer::GetElement(T *element)
 {
 	return (element);
+}
+
+
+/**
+ * @brief GetCPUReadFlagŠÖ”
+ * @return cpu_read_flg (cpu_read_flag)
+ */
+inline bool tml::graphic::ShaderConstantBuffer::GetCPUReadFlag(void) const
+{
+	return (this->cpu_read_flg_);
 }

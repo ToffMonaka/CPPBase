@@ -20,6 +20,20 @@ tml::graphic::BlendStateDesc::BlendStateDesc() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param bs_desc_type (blend_state_desc_type)
+ * @param bs_desc_a_type (blend_state_desc_alpha_type)
+ * @param rt_cnt (blend_state_desc_render_target_count)
+ */
+tml::graphic::BlendStateDesc::BlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE bs_desc_type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE bs_desc_a_type, const UINT rt_cnt)
+{
+	this->Set(bs_desc_type, bs_desc_a_type, rt_cnt);
+
+	return;
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::graphic::BlendStateDesc::~BlendStateDesc()
@@ -43,18 +57,16 @@ void tml::graphic::BlendStateDesc::Init(void)
 
 
 /**
- * @brief SetBlendStateDesc関数
- * @param type (type)
- * @param a_type (alpha_type)
+ * @brief Set関数
+ * @param bs_desc_type (blend_state_desc_type)
+ * @param bs_desc_a_type (blend_state_desc_alpha_type)
  * @param rt_cnt (render_target_count)
  */
-void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE a_type, const UINT rt_cnt)
+void tml::graphic::BlendStateDesc::Set(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE bs_desc_type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE bs_desc_a_type, const UINT rt_cnt)
 {
-	auto &desc = this->blend_state_desc;
+	this->Init();
 
-	desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
-
-	if (type == tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT) {
+	if (bs_desc_type == tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT) {
 		return;
 	}
 
@@ -64,17 +76,17 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	|| (rt_cnt >= tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT)) {
 		tmp_rt_cnt = 1U;
 
-		desc.IndependentBlendEnable = false;
+		this->blend_state_desc.IndependentBlendEnable = false;
 	} else {
 		tmp_rt_cnt = rt_cnt;
 
-		desc.IndependentBlendEnable = true;
+		this->blend_state_desc.IndependentBlendEnable = true;
 	}
 
-	switch (type) {
+	switch (bs_desc_type) {
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ALIGNMENT: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.BlendEnable = true;
 			rt_desc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -87,7 +99,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ADD: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.BlendEnable = true;
 			rt_desc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -100,7 +112,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::SUB: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.BlendEnable = true;
 			rt_desc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -113,7 +125,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::MUL: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.BlendEnable = true;
 			rt_desc.SrcBlend = D3D11_BLEND_ZERO;
@@ -126,7 +138,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::REVERSE: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.BlendEnable = true;
 			rt_desc.SrcBlend = D3D11_BLEND_INV_DEST_COLOR;
@@ -139,7 +151,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::TOTAL: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.BlendEnable = true;
 			rt_desc.SrcBlend = D3D11_BLEND_ONE;
@@ -152,21 +164,10 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	}
 
-	switch (a_type) {
-	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DEFAULT: {
-		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
-
-			rt_desc.SrcBlendAlpha = D3D11_BLEND_ONE;
-			rt_desc.DestBlendAlpha = D3D11_BLEND_ZERO;
-			rt_desc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		}
-
-		break;
-	}
+	switch (bs_desc_a_type) {
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::SRC: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.SrcBlendAlpha = D3D11_BLEND_ONE;
 			rt_desc.DestBlendAlpha = D3D11_BLEND_ZERO;
@@ -177,7 +178,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.SrcBlendAlpha = D3D11_BLEND_ZERO;
 			rt_desc.DestBlendAlpha = D3D11_BLEND_ONE;
@@ -188,7 +189,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::TOTAL: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
-			auto &rt_desc = desc.RenderTarget[rt_i];
+			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
 
 			rt_desc.SrcBlendAlpha = D3D11_BLEND_ONE;
 			rt_desc.DestBlendAlpha = D3D11_BLEND_ONE;

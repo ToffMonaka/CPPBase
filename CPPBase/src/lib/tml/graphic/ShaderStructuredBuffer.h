@@ -19,8 +19,8 @@ class ShaderStructuredBufferDesc : public tml::graphic::ResourceDesc
 public:
 	UINT element_size;
 	UINT element_limit;
-	bool cpu_flag;
-	bool uasr_flag;
+	bool cpu_read_flag;
+	bool cpu_write_flag;
 
 public:
 	ShaderStructuredBufferDesc();
@@ -52,8 +52,8 @@ private:
 	UINT element_size_;
 	UINT element_limit_;
 	UINT element_cnt_;
-	bool cpu_flg_;
-	bool uasr_flg_;
+	bool cpu_read_flg_;
+	bool cpu_write_flg_;
 
 protected:
 	void Release(void);
@@ -76,6 +76,8 @@ public:
 	UINT GetElementLimit(void) const;
 	UINT GetElementCount(void) const;
 	void SetElementCount(const UINT);
+	bool GetCPUReadFlag(void) const;
+	bool GetCPUWriteFlag(void) const;
 };
 }
 }
@@ -172,4 +174,24 @@ inline T *tml::graphic::ShaderStructuredBuffer::GetElement(T *element_ary, const
 	}
 
 	return (&element_ary[index]);
+}
+
+
+/**
+ * @brief GetCPUReadFlagŠÖ”
+ * @return cpu_read_flg (cpu_read_flag)
+ */
+inline bool tml::graphic::ShaderStructuredBuffer::GetCPUReadFlag(void) const
+{
+	return (this->cpu_read_flg_);
+}
+
+
+/**
+ * @brief GetCPUWriteFlagŠÖ”
+ * @return cpu_write_flg (cpu_write_flag)
+ */
+inline bool tml::graphic::ShaderStructuredBuffer::GetCPUWriteFlag(void) const
+{
+	return (this->cpu_write_flg_);
 }

@@ -14,8 +14,8 @@
 tml::graphic::ShaderStructuredBufferDesc::ShaderStructuredBufferDesc() :
 	element_size(0U),
 	element_limit(0U),
-	cpu_flag(false),
-	uasr_flag(false)
+	cpu_read_flag(false),
+	cpu_write_flag(false)
 {
 	return;
 }
@@ -37,8 +37,8 @@ void tml::graphic::ShaderStructuredBufferDesc::Init(void)
 {
 	this->element_size = 0U;
 	this->element_limit = 0U;
-	this->cpu_flag = false;
-	this->uasr_flag = false;
+	this->cpu_read_flag = false;
+	this->cpu_write_flag = false;
 
 	tml::graphic::ResourceDesc::Init();
 
@@ -56,8 +56,8 @@ tml::graphic::ShaderStructuredBuffer::ShaderStructuredBuffer() :
 	element_size_(0U),
 	element_limit_(0U),
 	element_cnt_(0U),
-	cpu_flg_(false),
-	uasr_flg_(false)
+	cpu_read_flg_(false),
+	cpu_write_flg_(false)
 {
 	return;
 }
@@ -109,8 +109,8 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 	this->element_size_ = 0U;
 	this->element_limit_ = 0U;
 	this->element_cnt_ = 0U;
-	this->cpu_flg_ = false;
-	this->uasr_flg_ = false;
+	this->cpu_read_flg_ = false;
+	this->cpu_write_flg_ = false;
 
 	tml::graphic::Resource::Init();
 
@@ -135,16 +135,16 @@ INT tml::graphic::ShaderStructuredBuffer::Create(tml::graphic::ShaderStructuredB
 		return (-1);
 	}
 
-	this->cpu_flg_ = desc.cpu_flag;
-	this->uasr_flg_ = desc.uasr_flag;
+	this->cpu_read_flg_ = desc.cpu_read_flag;
+	this->cpu_write_flg_ = desc.cpu_write_flag;
 
 	this->element_size_ = desc.element_size;
 	this->element_limit_ = desc.element_limit;
 
-	if (!this->uasr_flg_) {
+	if (!this->cpu_write_flg_) {
 		CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_ * this->element_limit_, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DEFAULT, 0U, D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, this->element_size_);
 
-		if (this->cpu_flg_) {
+		if (this->cpu_read_flg_) {
 			buf_desc.Usage = D3D11_USAGE_DYNAMIC;
 			buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		}
@@ -196,8 +196,8 @@ void tml::graphic::ShaderStructuredBuffer::UpdateBuffer(void *element_ary)
 		return;
 	}
 
-	if (!this->uasr_flg_) {
-		if (this->cpu_flg_) {
+	if (!this->cpu_write_flg_) {
+		if (this->cpu_read_flg_) {
 			D3D11_MAPPED_SUBRESOURCE msr;
 
 			if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->buf_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {

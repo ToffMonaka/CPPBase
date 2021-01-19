@@ -21,6 +21,7 @@ class TextureDesc : public tml::graphic::ResourceDesc
 {
 public:
 	std::list<tml::BinaryFileReadDesc> file_read_desc_container;
+	IDXGISwapChain *swap_chain;
 	CD3D11_TEXTURE2D_DESC texture_desc;
 	DXGI_FORMAT render_target_format;
 	bool render_target_desc_null_flag;
@@ -30,16 +31,15 @@ public:
 	bool sr_desc_null_flag;
 	DXGI_FORMAT uasr_format;
 	bool uasr_desc_null_flag;
-	bool swap_chain_flag;
-	bool array_flag;
 
 public:
 	TextureDesc();
+	TextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, const DXGI_FORMAT tex_desc_format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &tex_desc_size = XMUINT2EX(0U), const UINT tex_desc_buf_cnt = 1U, const UINT tex_desc_mm_cnt = 1U, const DXGI_SAMPLE_DESC &tex_desc_ms_desc = {1U, 0U});
 	virtual ~TextureDesc();
 
 	virtual void Init(void);
 
-	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, const DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, const XMFLOAT2EX &size = XMFLOAT2EX(0.0f), const UINT mm_cnt = 1U, const DXGI_SAMPLE_DESC &ms_desc = {1U, 0U});
+	void Set(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, const DXGI_FORMAT tex_desc_format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &tex_desc_size = XMUINT2EX(0U), const UINT tex_desc_buf_cnt = 1U, const UINT tex_desc_mm_cnt = 1U, const DXGI_SAMPLE_DESC &tex_desc_ms_desc = {1U, 0U});
 };
 }
 }
@@ -58,13 +58,11 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	ID3D11Texture2D *tex_;
-	tml::XMFLOAT2EX size_;
+	tml::XMUINT2EX size_;
 	ID3D11RenderTargetView *rt_;
 	ID3D11DepthStencilView *dt_;
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
-	bool swap_chain_flg_;
-	bool ary_flg_;
 
 private:
 	void Release(void);
@@ -77,7 +75,7 @@ public:
 	INT Create(tml::graphic::TextureDesc &);
 
 	ID3D11Texture2D *GetTexture(void) const;
-	const tml::XMFLOAT2EX &GetSize(void) const;
+	const tml::XMUINT2EX &GetSize(void) const;
 	ID3D11RenderTargetView *GetRenderTarget(void) const;
 	void ClearRenderTarget(const tml::XMFLOAT4EX &);
 	ID3D11DepthStencilView *GetDepthTarget(void) const;
@@ -103,7 +101,7 @@ inline ID3D11Texture2D *tml::graphic::Texture::GetTexture(void) const
  * @brief GetSizeŠÖ”
  * @return size (size)
  */
-inline const tml::XMFLOAT2EX &tml::graphic::Texture::GetSize(void) const
+inline const tml::XMUINT2EX &tml::graphic::Texture::GetSize(void) const
 {
 	return (this->size_);
 }

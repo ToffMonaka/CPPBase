@@ -27,9 +27,8 @@ public:
 	Viewport(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
 	Viewport(const CD3D11_VIEWPORT &);
 	tml::graphic::Viewport &operator =(const CD3D11_VIEWPORT &);
-	virtual ~Viewport();
 
-	virtual void Init(void);
+	void Init(void);
 
 	void Set(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
 	void Set(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
