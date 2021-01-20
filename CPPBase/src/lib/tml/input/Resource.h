@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_INPUT.h"
+#include "../file/INIFile.h"
 
 
 namespace tml {
@@ -25,12 +26,18 @@ class ResourceDesc
 {
 public:
 	tml::input::Manager *manager;
+	std::wstring name;
+
+protected:
+	virtual INT ReadValue(tml::INIFile &);
 
 public:
 	ResourceDesc();
 	virtual ~ResourceDesc();
 
 	virtual void Init(void);
+
+	INT Read(tml::INIFileReadDesc &);
 };
 }
 }
@@ -52,6 +59,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type_;
 	tml::input::Manager *mgr_;
+	std::wstring name_;
 
 protected:
 	void Release(void);
@@ -65,6 +73,7 @@ public:
 
 	tml::ConstantUtil::INPUT::RESOURCE_TYPE GetResourceType(void) const;
 	tml::input::Manager *GetManager(void) const;
+	const std::wstring &GetName(void) const;
 };
 }
 }
@@ -87,4 +96,14 @@ inline tml::ConstantUtil::INPUT::RESOURCE_TYPE tml::input::Resource::GetResource
 inline tml::input::Manager *tml::input::Resource::GetManager(void) const
 {
 	return (this->mgr_);
+}
+
+
+/**
+ * @brief GetNameŠÖ”
+ * @return name (name)
+ */
+inline const std::wstring &tml::input::Resource::GetName(void) const
+{
+	return (this->name_);
 }

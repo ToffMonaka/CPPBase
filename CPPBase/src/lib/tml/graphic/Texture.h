@@ -6,9 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include <list>
 #include "../math/XNAMath.h"
-#include "../file/BinaryFile.h"
 #include "Resource.h"
 
 

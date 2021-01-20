@@ -5,6 +5,7 @@
 
 
 #include "Resource.h"
+#include "../string/StringUtil.h"
 
 
 /**
@@ -32,8 +33,62 @@ tml::graphic::ResourceDesc::~ResourceDesc()
 void tml::graphic::ResourceDesc::Init(void)
 {
 	this->manager = nullptr;
+	this->name.clear();
 
 	return;
+}
+
+
+/**
+ * @brief Readä÷êî
+ * @param read_desc (read_desc)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::ResourceDesc::Read(tml::INIFileReadDesc &read_desc)
+{
+	auto read_desc_dat = read_desc.GetDataByParent();
+
+	tml::INIFile ini_file;
+
+	ini_file.read_desc.parent_data = read_desc_dat;
+
+	if (ini_file.Read()) {
+		return (-1);
+	}
+
+	if (ini_file.data.value_container.empty()) {
+		return (0);
+	}
+
+	return (this->ReadValue(ini_file));
+}
+
+
+/**
+ * @brief ReadValueä÷êî
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::ResourceDesc::ReadValue(tml::INIFile &ini_file)
+{
+	std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	std::wstring *val = nullptr;
+
+	{// RESOURCE Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"RESOURCE");
+
+		if (val_name_cont != nullptr) {
+			val = ini_file.data.GetValue((*val_name_cont), L"NAME");
+
+			if (val != nullptr) {
+				this->name = (*val);
+			}
+		}
+	}
+
+	return (0);
 }
 
 
@@ -73,6 +128,7 @@ void tml::graphic::Resource::Init(void)
 {
 	this->res_type_ = tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::NONE;
 	this->mgr_ = nullptr;
+	this->name_.clear();
 
 	return;
 }
@@ -94,6 +150,7 @@ INT tml::graphic::Resource::Create(const tml::ConstantUtil::GRAPHIC::RESOURCE_TY
 
 	this->res_type_ = res_type;
 	this->mgr_ = desc.manager;
+	this->name_ = desc.name;
 
 	return (0);
 }

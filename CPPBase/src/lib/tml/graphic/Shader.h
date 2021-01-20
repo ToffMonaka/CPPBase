@@ -6,8 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include <list>
-#include "../file/BinaryFile.h"
 #include "Resource.h"
 
 
@@ -64,6 +62,9 @@ public:
 	std::wstring compute_shader_model_name;
 	std::list<std::pair<std::wstring, std::wstring>> macro_container;
 
+protected:
+	virtual INT ReadValue(tml::INIFile &);
+
 public:
 	ShaderDesc();
 	virtual ~ShaderDesc();
@@ -86,13 +87,13 @@ public: tml::graphic::Shader &operator =(const tml::graphic::Shader &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	ID3D11VertexShader *vsh_;
-	ID3D11InputLayout *vsh_input_layout_;
-	ID3D11HullShader *hsh_;
-	ID3D11DomainShader *dsh_;
-	ID3D11GeometryShader *gsh_;
-	ID3D11PixelShader *psh_;
-	ID3D11ComputeShader *csh_;
+	ID3D11VertexShader *vs_;
+	ID3D11InputLayout *vs_input_layout_;
+	ID3D11HullShader *hs_;
+	ID3D11DomainShader *ds_;
+	ID3D11GeometryShader *gs_;
+	ID3D11PixelShader *ps_;
+	ID3D11ComputeShader *cs_;
 
 private:
 	void Release(void);
@@ -121,69 +122,69 @@ public:
 
 /**
  * @brief GetVertexShaderŠÖ”
- * @return vsh (vertex_shader)
+ * @return vs (vertex_shader)
  */
 inline ID3D11VertexShader *tml::graphic::Shader::GetVertexShader(void) const
 {
-	return (this->vsh_);
+	return (this->vs_);
 }
 
 
 /**
  * @brief GetVertexShaderInputLayoutŠÖ”
- * @return vsh_input_layout (vertex_shader_input_layout)
+ * @return vs_input_layout (vertex_shader_input_layout)
  */
 inline ID3D11InputLayout *tml::graphic::Shader::GetVertexShaderInputLayout(void) const
 {
-	return (this->vsh_input_layout_);
+	return (this->vs_input_layout_);
 }
 
 
 /**
  * @brief GetHullShaderŠÖ”
- * @return hsh (hull_shader)
+ * @return hs (hull_shader)
  */
 inline ID3D11HullShader *tml::graphic::Shader::GetHullShader(void) const
 {
-	return (this->hsh_);
+	return (this->hs_);
 }
 
 
 /**
  * @brief GetDomainShaderŠÖ”
- * @return dsh (domain_shader)
+ * @return ds (domain_shader)
  */
 inline ID3D11DomainShader *tml::graphic::Shader::GetDomainShader(void) const
 {
-	return (this->dsh_);
+	return (this->ds_);
 }
 
 
 /**
  * @brief GetGeometryShaderŠÖ”
- * @return gsh (geometry_shader)
+ * @return gs (geometry_shader)
  */
 inline ID3D11GeometryShader *tml::graphic::Shader::GetGeometryShader(void) const
 {
-	return (this->gsh_);
+	return (this->gs_);
 }
 
 
 /**
  * @brief GetPixelShaderŠÖ”
- * @return psh (pixel_shader)
+ * @return ps (pixel_shader)
  */
 inline ID3D11PixelShader *tml::graphic::Shader::GetPixelShader(void) const
 {
-	return (this->psh_);
+	return (this->ps_);
 }
 
 
 /**
  * @brief GetComputeShaderŠÖ”
- * @return csh (compute_shader)
+ * @return cs (compute_shader)
  */
 inline ID3D11ComputeShader *tml::graphic::Shader::GetComputeShader(void) const
 {
-	return (this->csh_);
+	return (this->cs_);
 }

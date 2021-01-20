@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include <list>
 #include "ManagerCommon.h"
 
 

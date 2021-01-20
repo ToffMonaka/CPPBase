@@ -152,16 +152,125 @@ void tml::graphic::ShaderDesc::Init(void)
 
 
 /**
+ * @brief ReadValue関数
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ShaderDesc::ReadValue(tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	std::wstring *val = nullptr;
+
+	{// SHADER Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"SHADER");
+
+		if (val_name_cont != nullptr) {
+			val = ini_file.data.GetValue((*val_name_cont), L"FILE_PATH");
+
+			if (val != nullptr) {
+				this->file_read_desc.data.file_path = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"INC_DIR_PATH");
+
+			if (val != nullptr) {
+				this->include_directory_path = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"VS_FUNC_NAME");
+
+			if (val != nullptr) {
+				this->vertex_shader_function_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"VS_MODEL_NAME");
+
+			if (val != nullptr) {
+				this->vertex_shader_model_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"HS_FUNC_NAME");
+
+			if (val != nullptr) {
+				this->hull_shader_function_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"HS_MODEL_NAME");
+
+			if (val != nullptr) {
+				this->hull_shader_model_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"DS_FUNC_NAME");
+
+			if (val != nullptr) {
+				this->domain_shader_function_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"DS_MODEL_NAME");
+
+			if (val != nullptr) {
+				this->domain_shader_model_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"GS_FUNC_NAME");
+
+			if (val != nullptr) {
+				this->geometry_shader_function_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"GS_MODEL_NAME");
+
+			if (val != nullptr) {
+				this->geometry_shader_model_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"PS_FUNC_NAME");
+
+			if (val != nullptr) {
+				this->pixel_shader_function_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"PS_MODEL_NAME");
+
+			if (val != nullptr) {
+				this->pixel_shader_model_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"CS_FUNC_NAME");
+
+			if (val != nullptr) {
+				this->compute_shader_function_name = (*val);
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"CS_MODEL_NAME");
+
+			if (val != nullptr) {
+				this->compute_shader_model_name = (*val);
+			}
+		}
+	}
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::Shader::Shader() :
-	vsh_(nullptr),
-	vsh_input_layout_(nullptr),
-	hsh_(nullptr),
-	dsh_(nullptr),
-	gsh_(nullptr),
-	psh_(nullptr),
-	csh_(nullptr)
+	vs_(nullptr),
+	vs_input_layout_(nullptr),
+	hs_(nullptr),
+	ds_(nullptr),
+	gs_(nullptr),
+	ps_(nullptr),
+	cs_(nullptr)
 {
 	return;
 }
@@ -183,46 +292,46 @@ tml::graphic::Shader::~Shader()
  */
 void tml::graphic::Shader::Release(void)
 {
-	if (this->csh_ != nullptr) {
-		this->csh_->Release();
+	if (this->cs_ != nullptr) {
+		this->cs_->Release();
 
-		this->csh_ = nullptr;
+		this->cs_ = nullptr;
 	}
 
-	if (this->psh_ != nullptr) {
-		this->psh_->Release();
+	if (this->ps_ != nullptr) {
+		this->ps_->Release();
 
-		this->psh_ = nullptr;
+		this->ps_ = nullptr;
 	}
 
-	if (this->gsh_ != nullptr) {
-		this->gsh_->Release();
+	if (this->gs_ != nullptr) {
+		this->gs_->Release();
 
-		this->gsh_ = nullptr;
+		this->gs_ = nullptr;
 	}
 
-	if (this->dsh_ != nullptr) {
-		this->dsh_->Release();
+	if (this->ds_ != nullptr) {
+		this->ds_->Release();
 
-		this->dsh_ = nullptr;
+		this->ds_ = nullptr;
 	}
 
-	if (this->hsh_ != nullptr) {
-		this->hsh_->Release();
+	if (this->hs_ != nullptr) {
+		this->hs_->Release();
 
-		this->hsh_ = nullptr;
+		this->hs_ = nullptr;
 	}
 
-	if (this->vsh_input_layout_ != nullptr) {
-		this->vsh_input_layout_->Release();
+	if (this->vs_input_layout_ != nullptr) {
+		this->vs_input_layout_->Release();
 
-		this->vsh_input_layout_ = nullptr;
+		this->vs_input_layout_ = nullptr;
 	}
 
-	if (this->vsh_ != nullptr) {
-		this->vsh_->Release();
+	if (this->vs_ != nullptr) {
+		this->vs_->Release();
 
-		this->vsh_ = nullptr;
+		this->vs_ = nullptr;
 	}
 
 	tml::graphic::Resource::Release();
@@ -312,7 +421,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->vsh_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->vs_))) {
 			this->ReleaseBlob(&blob);
 
 			this->Init();
@@ -320,7 +429,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateInputLayout(desc.vertex_shader_input_element_desc_array, desc.vertex_shader_input_element_desc_count, blob->GetBufferPointer(), blob->GetBufferSize(), &this->vsh_input_layout_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateInputLayout(desc.vertex_shader_input_element_desc_array, desc.vertex_shader_input_element_desc_count, blob->GetBufferPointer(), blob->GetBufferSize(), &this->vs_input_layout_))) {
 			this->ReleaseBlob(&blob);
 
 			this->Init();
@@ -340,7 +449,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateHullShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->hsh_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateHullShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->hs_))) {
 			this->ReleaseBlob(&blob);
 
 			this->Init();
@@ -360,7 +469,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateDomainShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->dsh_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateDomainShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->ds_))) {
 			this->ReleaseBlob(&blob);
 
 			this->Init();
@@ -380,7 +489,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateGeometryShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->gsh_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateGeometryShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->gs_))) {
 			this->ReleaseBlob(&blob);
 
 			this->Init();
@@ -400,7 +509,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->psh_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->ps_))) {
 			this->ReleaseBlob(&blob);
 
 			this->Init();
@@ -420,7 +529,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateComputeShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->csh_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateComputeShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->cs_))) {
 			this->ReleaseBlob(&blob);
 
 			this->Init();

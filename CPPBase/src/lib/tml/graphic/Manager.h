@@ -7,8 +7,6 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
-#include <list>
-#include "../memory/DynamicBuffer.h"
 #include "ManagerCommon.h"
 #include "Viewport.h"
 
