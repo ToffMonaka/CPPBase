@@ -9,6 +9,7 @@
 #include "RasterizerState.h"
 #include "BlendState.h"
 #include "DepthState.h"
+#include "Shader.h"
 #include "Texture.h"
 #include "Sampler.h"
 
@@ -296,6 +297,44 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 
 			return (-1);
 		}
+	}
+
+	{// ScreenModelShader Create
+		tml::graphic::ShaderDesc desc;
+		auto read_desc = tml::INIFileReadDesc(L"res/screen_model_shader.ini");
+
+		desc.Read(read_desc);
+		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_COUNT;
+		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_ARRAY;
+
+		/*
+		this->screen_model_shader = mgr->GetResource<tml::graphic::Shader>(desc);
+
+		if (this->screen_model_shader == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+		*/
+	}
+
+	{// SpriteModelShader Create
+		tml::graphic::ShaderDesc desc;
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model_shader.ini");
+
+		desc.Read(read_desc);
+		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::SPRITE_MODEL_INPUT_ELEMENT_DESC_COUNT;
+		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::SPRITE_MODEL_INPUT_ELEMENT_DESC_ARRAY;
+
+		/*
+		this->sprite_model_shader = mgr->GetResource<tml::graphic::Shader>(desc);
+
+		if (this->sprite_model_shader == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+		*/
 	}
 
 	{// ModelCCSampler Create

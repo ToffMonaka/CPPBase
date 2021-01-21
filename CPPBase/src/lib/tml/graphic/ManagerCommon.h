@@ -14,6 +14,7 @@ namespace graphic {
 class RasterizerState;
 class BlendState;
 class DepthState;
+class Shader;
 class Texture;
 class Sampler;
 }
@@ -44,6 +45,8 @@ public:
 	std::array<tml::shared_ptr<tml::graphic::BlendState>, 2U> total_blend_state_array;
 	tml::shared_ptr<tml::graphic::DepthState> default_depth_state;
 	tml::shared_ptr<tml::graphic::DepthState> reference_depth_state;
+	tml::shared_ptr<tml::graphic::Shader> screen_model_shader;
+	tml::shared_ptr<tml::graphic::Shader> sprite_model_shader;
 	tml::shared_ptr<tml::graphic::Texture> main_render_target_texture;
 	tml::shared_ptr<tml::graphic::Texture> main_depth_target_texture;
 	tml::shared_ptr<tml::graphic::Sampler> model_cc_sampler;

@@ -121,7 +121,7 @@ INT cpp_base::SystemConfigFile::Read(void)
 	std::wstring *val = nullptr;
 
 	{// APPLICATION Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"APPLICATION");
+		val_name_cont = ini_file.data.GetValueNameContainer(L"APP");
 
 		if (val_name_cont != nullptr) {
 			val = ini_file.data.GetValue((*val_name_cont), L"MEM_ALLOCATOR_SIZE");
@@ -139,7 +139,7 @@ INT cpp_base::SystemConfigFile::Read(void)
 	}
 
 	{// WINDOW Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"WINDOW");
+		val_name_cont = ini_file.data.GetValueNameContainer(L"WND");
 
 		if (val_name_cont != nullptr) {
 			val = ini_file.data.GetValue((*val_name_cont), L"X");

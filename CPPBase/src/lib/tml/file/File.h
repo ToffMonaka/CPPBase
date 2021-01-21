@@ -45,10 +45,18 @@ public:
 
 public:
 	FileReadDesc();
+	FileReadDesc(const WCHAR *);
+	FileReadDesc(const tml::DynamicBuffer &);
+	FileReadDesc(tml::DynamicBuffer &&);
+	FileReadDesc(T *);
 	virtual ~FileReadDesc();
 
 	virtual void Init(void);
 
+	void Set(const WCHAR *);
+	void Set(const tml::DynamicBuffer &);
+	void Set(tml::DynamicBuffer &&);
+	void Set(T *);
 	T *GetDataByParent(void);
 };
 }
@@ -60,6 +68,60 @@ public:
 template <typename T>
 tml::FileReadDesc<T>::FileReadDesc() :
 	parent_data(nullptr)
+{
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param file_path (file_path)
+ */
+template <typename T>
+tml::FileReadDesc<T>::FileReadDesc(const WCHAR *file_path) :
+	parent_data(nullptr)
+{
+	this->data.file_path = file_path;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param file_buf (file_buffer)
+ */
+template <typename T>
+tml::FileReadDesc<T>::FileReadDesc(const tml::DynamicBuffer &file_buf) :
+	parent_data(nullptr)
+{
+	this->data.file_buffer = file_buf;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param file_buf (file_buf)
+ */
+template <typename T>
+tml::FileReadDesc<T>::FileReadDesc(tml::DynamicBuffer &&file_buf) :
+	parent_data(nullptr)
+{
+	this->data.file_buffer = std::move(file_buf);
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param parent_dat (parent_data)
+ */
+template <typename T>
+tml::FileReadDesc<T>::FileReadDesc(T *parent_dat) :
+	parent_data(parent_dat)
 {
 	return;
 }
@@ -83,6 +145,62 @@ void tml::FileReadDesc<T>::Init(void)
 {
 	this->data.Init();
 	this->parent_data = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief Set関数
+ * @param file_path (file_path)
+ */
+template <typename T>
+void tml::FileReadDesc<T>::Set(const WCHAR *file_path)
+{
+	this->data.Init();
+	this->data.file_path = file_path;
+
+	return;
+}
+
+
+/**
+ * @brief Set関数
+ * @param file_buf (file_buffer)
+ */
+template <typename T>
+void tml::FileReadDesc<T>::Set(const tml::DynamicBuffer &file_buf)
+{
+	this->data.Init();
+	this->data.file_buffer = file_buf;
+
+	return;
+}
+
+
+/**
+ * @brief Set関数
+ * @param file_buf (file_buf)
+ */
+template <typename T>
+void tml::FileReadDesc<T>::Set(tml::DynamicBuffer &&file_buf)
+{
+	this->data.Init();
+	this->data.file_buffer = std::move(file_buf);
+
+	return;
+}
+
+
+/**
+ * @brief Set関数
+ * @param parent_dat (parent_data)
+ */
+template <typename T>
+void tml::FileReadDesc<T>::Set(T *parent_dat)
+{
+	this->data.Init();
+	this->parent_data = parent_dat;
 
 	return;
 }
@@ -134,10 +252,14 @@ public:
 
 public:
 	FileWriteDesc();
+	FileWriteDesc(const WCHAR *);
+	FileWriteDesc(T *);
 	virtual ~FileWriteDesc();
 
 	virtual void Init(void);
 
+	void Set(const WCHAR *);
+	void Set(T *);
 	T *GetDataByParent(void);
 };
 }
@@ -149,6 +271,32 @@ public:
 template <typename T>
 tml::FileWriteDesc<T>::FileWriteDesc() :
 	parent_data(nullptr)
+{
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param file_path (file_path)
+ */
+template <typename T>
+tml::FileWriteDesc<T>::FileWriteDesc(const WCHAR *file_path) :
+	parent_data(nullptr)
+{
+	this->data.file_path = file_path;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param parent_dat (parent_data)
+ */
+template <typename T>
+tml::FileWriteDesc<T>::FileWriteDesc(T *parent_dat) :
+	parent_data(parent_dat)
 {
 	return;
 }
@@ -172,6 +320,34 @@ void tml::FileWriteDesc<T>::Init(void)
 {
 	this->data.Init();
 	this->parent_data = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief Set関数
+ * @param file_path (file_path)
+ */
+template <typename T>
+void tml::FileWriteDesc<T>::Set(const WCHAR *file_path)
+{
+	this->data.Init();
+	this->data.file_path = file_path;
+
+	return;
+}
+
+
+/**
+ * @brief Set関数
+ * @param parent_dat (parent_data)
+ */
+template <typename T>
+void tml::FileWriteDesc<T>::Set(T *parent_dat)
+{
+	this->data.Init();
+	this->parent_data = parent_dat;
 
 	return;
 }
