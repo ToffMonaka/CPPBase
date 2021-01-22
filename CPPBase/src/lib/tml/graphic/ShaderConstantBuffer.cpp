@@ -43,6 +43,34 @@ void tml::graphic::ShaderConstantBufferDesc::Init(void)
 
 
 /**
+ * @brief ReadValue関数
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ShaderConstantBufferDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// ShaderConstantBuffer Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"SCB");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::ShaderConstantBuffer::ShaderConstantBuffer() :
@@ -100,7 +128,7 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::ShaderConstantBuffer::Create(tml::graphic::ShaderConstantBufferDesc &desc)
+INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstantBufferDesc &desc)
 {
 	if ((desc.element_size <= 0U)
 	|| ((desc.element_size % 16) > 0)) {

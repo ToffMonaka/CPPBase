@@ -29,7 +29,7 @@ public:
 	std::wstring name;
 
 protected:
-	virtual INT ReadValue(tml::INIFile &);
+	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	ResourceDesc();
@@ -37,7 +37,7 @@ public:
 
 	virtual void Init(void);
 
-	INT Read(tml::INIFileReadDesc &);
+	INT Read(const tml::INIFileReadDesc &);
 };
 }
 }
@@ -63,7 +63,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::INPUT::RESOURCE_TYPE, tml::input::ResourceDesc &);
+	INT Create(const tml::ConstantUtil::INPUT::RESOURCE_TYPE, const tml::input::ResourceDesc &);
 
 public:
 	Resource();
@@ -72,7 +72,7 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::INPUT::RESOURCE_TYPE GetResourceType(void) const;
-	tml::input::Manager *GetManager(void) const;
+	tml::input::Manager *GetManager(void);
 	const std::wstring &GetName(void) const;
 };
 }
@@ -93,7 +93,7 @@ inline tml::ConstantUtil::INPUT::RESOURCE_TYPE tml::input::Resource::GetResource
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::input::Manager *tml::input::Resource::GetManager(void) const
+inline tml::input::Manager *tml::input::Resource::GetManager(void)
 {
 	return (this->mgr_);
 }

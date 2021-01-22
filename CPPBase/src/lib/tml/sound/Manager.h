@@ -52,7 +52,7 @@ public:
 	virtual ~Manager();
 
 	virtual void Init(void);
-	INT Create(tml::sound::ManagerDesc &);
+	INT Create(const tml::sound::ManagerDesc &);
 
 	void Update(void);
 	template <typename T, typename D>

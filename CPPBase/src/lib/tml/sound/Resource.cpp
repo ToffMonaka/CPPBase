@@ -45,7 +45,7 @@ void tml::sound::ResourceDesc::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::sound::ResourceDesc::Read(tml::INIFileReadDesc &read_desc)
+INT tml::sound::ResourceDesc::Read(const tml::INIFileReadDesc &read_desc)
 {
 	auto read_desc_dat = read_desc.GetDataByParent();
 
@@ -71,13 +71,13 @@ INT tml::sound::ResourceDesc::Read(tml::INIFileReadDesc &read_desc)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::sound::ResourceDesc::ReadValue(tml::INIFile &ini_file)
+INT tml::sound::ResourceDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
-	std::wstring *val = nullptr;
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
 
-	{// RESOURCE Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"RESOURCE");
+	{// Resource Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"RES");
 
 		if (val_name_cont != nullptr) {
 			val = ini_file.data.GetValue((*val_name_cont), L"NAME");
@@ -141,7 +141,7 @@ void tml::sound::Resource::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::sound::Resource::Create(const tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type, tml::sound::ResourceDesc &desc)
+INT tml::sound::Resource::Create(const tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type, const tml::sound::ResourceDesc &desc)
 {
 	if ((res_type == tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE)
 	|| (desc.manager == nullptr)) {

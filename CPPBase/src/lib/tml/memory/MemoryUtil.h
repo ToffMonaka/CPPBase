@@ -265,12 +265,14 @@ template <typename T>
 using unique_ptr = std::unique_ptr<T, tml::default_delete<T>>;
 
 template <typename T, typename... ARGS>
-_NODISCARD tml::unique_ptr<T> make_unique(const size_t size, ARGS&&... args) {
+_NODISCARD tml::unique_ptr<T> make_unique(const size_t size, ARGS&&... args)
+{
 	return (tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...)));
 };
 
 template <typename T, typename... ARGS>
-tml::unique_ptr<T> &get_unique(tml::unique_ptr<T> &dst_p, const size_t size, ARGS&&... args) {
+tml::unique_ptr<T> &get_unique(tml::unique_ptr<T> &dst_p, const size_t size, ARGS&&... args)
+{
 	dst_p = tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...));
 
 	return (dst_p);
@@ -283,19 +285,22 @@ template <typename T>
 using shared_ptr = std::shared_ptr<T>;
 
 template <typename T, typename... ARGS>
-_NODISCARD tml::shared_ptr<T> make_shared(const size_t size, ARGS&&... args) {
+_NODISCARD tml::shared_ptr<T> make_shared(const size_t size, ARGS&&... args)
+{
 	return (tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...), tml::default_delete<T>()));
 };
 
 template <typename T, typename... ARGS>
-tml::shared_ptr<T> &get_shared(tml::shared_ptr<T> &dst_p, const size_t size, ARGS&&... args) {
+tml::shared_ptr<T> &get_shared(tml::shared_ptr<T> &dst_p, const size_t size, ARGS&&... args)
+{
 	dst_p = tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...), tml::default_delete<T>());
 
 	return (dst_p);
 };
 
 template <typename T, typename... ARGS>
-tml::shared_ptr<T> &get_shared(tml::shared_ptr<T> &dst_p, tml::shared_ptr<T> &p, const size_t size, ARGS&&... args) {
+tml::shared_ptr<T> &get_shared(tml::shared_ptr<T> &dst_p, tml::shared_ptr<T> &p, const size_t size, ARGS&&... args)
+{
 	if (p == nullptr) {
 		dst_p = tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...), tml::default_delete<T>());
 	} else {

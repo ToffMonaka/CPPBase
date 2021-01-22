@@ -49,7 +49,7 @@ public:
 	virtual ~ScreenModel();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::ScreenModelDesc &);
+	INT Create(const tml::graphic::ScreenModelDesc &, tml::shared_ptr<tml::XMPosition> &);
 };
 }
 }

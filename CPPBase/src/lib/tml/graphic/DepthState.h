@@ -19,6 +19,9 @@ class DepthStateDesc : public tml::graphic::ResourceDesc
 public:
 	CD3D11_DEPTH_STENCIL_DESC depth_state_desc;
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	DepthStateDesc();
 	DepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
@@ -54,9 +57,9 @@ public:
 	virtual ~DepthState();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::DepthStateDesc &);
+	INT Create(const tml::graphic::DepthStateDesc &);
 
-	ID3D11DepthStencilState *GetDepthState(void) const;
+	ID3D11DepthStencilState *GetDepthState(void);
 };
 }
 }
@@ -66,7 +69,7 @@ public:
  * @brief GetDepthStateŠÖ”
  * @return ds (depth_state)
  */
-inline ID3D11DepthStencilState *tml::graphic::DepthState::GetDepthState(void) const
+inline ID3D11DepthStencilState *tml::graphic::DepthState::GetDepthState(void)
 {
 	return (this->ds_);
 }

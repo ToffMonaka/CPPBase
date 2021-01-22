@@ -26,6 +26,9 @@ public:
 	bool cpu_data_flag;
 	bool gpu_data_flag;
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	MeshDesc();
 	virtual ~MeshDesc();
@@ -67,16 +70,16 @@ public:
 	virtual ~Mesh();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::MeshDesc &);
+	INT Create(const tml::graphic::MeshDesc &);
 
-	ID3D11Buffer *GetVertexBuffer(void) const;
+	ID3D11Buffer *GetVertexBuffer(void);
 	UINT GetVertexBufferElementSize(void) const;
 	UINT GetVertexBufferElementCount(void) const;
-	BYTE *GetVertexBufferElementArray(void) const;
-	ID3D11Buffer *GetIndexBuffer(void) const;
+	BYTE *GetVertexBufferElementArray(void);
+	ID3D11Buffer *GetIndexBuffer(void);
 	UINT GetIndexBufferElementSize(void) const;
 	UINT GetIndexBufferElementCount(void) const;
-	UINT *GetIndexBufferElementArray(void) const;
+	UINT *GetIndexBufferElementArray(void);
 	DXGI_FORMAT GetIndexBufferFormat(void) const;
 	D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology(void) const;
 };
@@ -88,7 +91,7 @@ public:
  * @brief GetVertexBufferŠÖ”
  * @return vb (vertex_buffer)
  */
-inline ID3D11Buffer *tml::graphic::Mesh::GetVertexBuffer(void) const
+inline ID3D11Buffer *tml::graphic::Mesh::GetVertexBuffer(void)
 {
 	return (this->vb_);
 }
@@ -118,7 +121,7 @@ inline UINT tml::graphic::Mesh::GetVertexBufferElementCount(void) const
  * @brief GetVertexBufferElementArrayŠÖ”
  * @return vb_element_ary (vertex_buffer_element_array)
  */
-inline BYTE *tml::graphic::Mesh::GetVertexBufferElementArray(void) const
+inline BYTE *tml::graphic::Mesh::GetVertexBufferElementArray(void)
 {
 	return (this->vb_element_ary_);
 }
@@ -128,7 +131,7 @@ inline BYTE *tml::graphic::Mesh::GetVertexBufferElementArray(void) const
  * @brief GetIndexBufferŠÖ”
  * @return ib (index_buffer)
  */
-inline ID3D11Buffer *tml::graphic::Mesh::GetIndexBuffer(void) const
+inline ID3D11Buffer *tml::graphic::Mesh::GetIndexBuffer(void)
 {
 	return (this->ib_);
 }
@@ -158,7 +161,7 @@ inline UINT tml::graphic::Mesh::GetIndexBufferElementCount(void) const
  * @brief GetIndexBufferElementArrayŠÖ”
  * @return ib_element_ary (index_buffer_element_array)
  */
-inline UINT *tml::graphic::Mesh::GetIndexBufferElementArray(void) const
+inline UINT *tml::graphic::Mesh::GetIndexBufferElementArray(void)
 {
 	return (this->ib_element_ary_);
 }

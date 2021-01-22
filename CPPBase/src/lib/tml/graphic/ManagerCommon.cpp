@@ -307,7 +307,6 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_COUNT;
 		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_ARRAY;
 
-		/*
 		this->screen_model_shader = mgr->GetResource<tml::graphic::Shader>(desc);
 
 		if (this->screen_model_shader == nullptr) {
@@ -315,7 +314,6 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 
 			return (-1);
 		}
-		*/
 	}
 
 	{// SpriteModelShader Create
@@ -326,7 +324,6 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::SPRITE_MODEL_INPUT_ELEMENT_DESC_COUNT;
 		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::SPRITE_MODEL_INPUT_ELEMENT_DESC_ARRAY;
 
-		/*
 		this->sprite_model_shader = mgr->GetResource<tml::graphic::Shader>(desc);
 
 		if (this->sprite_model_shader == nullptr) {
@@ -334,7 +331,6 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 
 			return (-1);
 		}
-		*/
 	}
 
 	{// ModelCCSampler Create

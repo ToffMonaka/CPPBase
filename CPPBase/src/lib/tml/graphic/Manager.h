@@ -105,7 +105,7 @@ public:
 	virtual ~Manager();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::ManagerDesc &);
+	INT Create(const tml::graphic::ManagerDesc &);
 
 	void Update(void);
 	template <typename T, typename D>
@@ -115,13 +115,13 @@ public:
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
 
-	IDXGIFactory1 *GetFactory(void) const;
-	IDXGIAdapter1 *GetAdapter(void) const;
+	IDXGIFactory1 *GetFactory(void);
+	IDXGIAdapter1 *GetAdapter(void);
 	const DXGI_ADAPTER_DESC1 &GetAdapterDesc(void) const;
-	IDXGISwapChain *GetSwapChain(void) const;
+	IDXGISwapChain *GetSwapChain(void);
 	const DXGI_SWAP_CHAIN_DESC &GetSwapChainDesc(void) const;
-	ID3D11Device *GetDevice(void) const;
-	ID3D11DeviceContext *GetDeviceContext(void) const;
+	ID3D11Device *GetDevice(void);
+	ID3D11DeviceContext *GetDeviceContext(void);
 	D3D_FEATURE_LEVEL GetDeviceFeatureLevel(void) const;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE GetSamplerQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE GetMotionQualityType(void) const;
@@ -212,7 +212,7 @@ inline void tml::graphic::Manager::ReleaseResource(tml::shared_ptr<T> &res)
  * @brief GetFactoryŠÖ”
  * @return factory (factory)
  */
-inline IDXGIFactory1 *tml::graphic::Manager::GetFactory(void) const
+inline IDXGIFactory1 *tml::graphic::Manager::GetFactory(void)
 {
 	return (this->factory_);
 }
@@ -222,7 +222,7 @@ inline IDXGIFactory1 *tml::graphic::Manager::GetFactory(void) const
  * @brief GetAdapterŠÖ”
  * @return adapter (adapter)
  */
-inline IDXGIAdapter1 *tml::graphic::Manager::GetAdapter(void) const
+inline IDXGIAdapter1 *tml::graphic::Manager::GetAdapter(void)
 {
 	return (this->adapter_);
 }
@@ -242,7 +242,7 @@ inline const DXGI_ADAPTER_DESC1 &tml::graphic::Manager::GetAdapterDesc(void) con
  * @brief GetSwapChainŠÖ”
  * @return swap_chain (swap_chain)
  */
-inline IDXGISwapChain *tml::graphic::Manager::GetSwapChain(void) const
+inline IDXGISwapChain *tml::graphic::Manager::GetSwapChain(void)
 {
 	return (this->swap_chain_);
 }
@@ -262,7 +262,7 @@ inline const DXGI_SWAP_CHAIN_DESC &tml::graphic::Manager::GetSwapChainDesc(void)
  * @brief GetDeviceŠÖ”
  * @return device (device)
  */
-inline ID3D11Device *tml::graphic::Manager::GetDevice(void) const
+inline ID3D11Device *tml::graphic::Manager::GetDevice(void)
 {
 	return (this->device_);
 }
@@ -272,7 +272,7 @@ inline ID3D11Device *tml::graphic::Manager::GetDevice(void) const
  * @brief GetDeviceContextŠÖ”
  * @return device_context (device_context)
  */
-inline ID3D11DeviceContext *tml::graphic::Manager::GetDeviceContext(void) const
+inline ID3D11DeviceContext *tml::graphic::Manager::GetDeviceContext(void)
 {
 	return (this->device_context_);
 }

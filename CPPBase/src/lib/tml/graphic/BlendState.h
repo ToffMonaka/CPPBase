@@ -20,6 +20,9 @@ public:
 	CD3D11_BLEND_DESC blend_state_desc;
 	std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> factor_array;
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	BlendStateDesc();
 	BlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE, const UINT);
@@ -56,9 +59,9 @@ public:
 	virtual ~BlendState();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::BlendStateDesc &);
+	INT Create(const tml::graphic::BlendStateDesc &);
 
-	ID3D11BlendState *GetBlendState(void) const;
+	ID3D11BlendState *GetBlendState(void);
 	const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &GetFactorArray(void) const;
 };
 }
@@ -69,7 +72,7 @@ public:
  * @brief GetBlendStateŠÖ”
  * @return bs (blend_state)
  */
-inline ID3D11BlendState *tml::graphic::BlendState::GetBlendState(void) const
+inline ID3D11BlendState *tml::graphic::BlendState::GetBlendState(void)
 {
 	return (this->bs_);
 }

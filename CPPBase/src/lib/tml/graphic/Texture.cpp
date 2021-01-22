@@ -80,6 +80,34 @@ void tml::graphic::TextureDesc::Init(void)
 
 
 /**
+ * @brief ReadValueä÷êî
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Texture Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"TEX");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief Setä÷êî
  * @param tex_desc_type_flg (texture_desc_type_flag)
  * @param tex_desc_format (texture_desc_format)
@@ -209,7 +237,7 @@ void tml::graphic::Texture::Init(void)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
+INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 {
 	this->Init();
 
@@ -226,11 +254,12 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 			return (-1);
 		}
 	} else if (desc.file_read_desc_container.size() > 1U) {
+		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
+		bool tmp_tex_desc_fixed_flg = false;
 		std::list<D3D11_SUBRESOURCE_DATA> srd_cont;
 		std::list<tml::DynamicBuffer> srd_buf_cont;
 		ID3D11Texture2D *tex = nullptr;
 		CD3D11_TEXTURE2D_DESC tex_desc;
-		bool tex_desc_fixed_flg = false;
 
 		for (auto &file_read_desc : desc.file_read_desc_container) {
 			auto file_read_desc_dat = file_read_desc.GetDataByParent();
@@ -254,14 +283,14 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 
 				D3DX11_IMAGE_LOAD_INFO img_load_info;
 
-				img_load_info.Width = (desc.texture_desc.Width <= 0U) ? D3DX11_DEFAULT : desc.texture_desc.Width;
-				img_load_info.Height = (desc.texture_desc.Height <= 0U) ? D3DX11_DEFAULT : desc.texture_desc.Height;
+				img_load_info.Width = (tmp_tex_desc.Width <= 0U) ? D3DX11_DEFAULT : tmp_tex_desc.Width;
+				img_load_info.Height = (tmp_tex_desc.Height <= 0U) ? D3DX11_DEFAULT : tmp_tex_desc.Height;
 				img_load_info.FirstMipLevel = 0U;
-				img_load_info.MipLevels = desc.texture_desc.MipLevels;
+				img_load_info.MipLevels = tmp_tex_desc.MipLevels;
 				img_load_info.Usage = static_cast<D3D11_USAGE>(D3DX11_DEFAULT);
 				img_load_info.BindFlags = D3DX11_DEFAULT;
 				img_load_info.CpuAccessFlags = D3DX11_DEFAULT;
-				img_load_info.Format = (desc.texture_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : desc.texture_desc.Format;
+				img_load_info.Format = (tmp_tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : tmp_tex_desc.Format;
 
 				if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(bin_file.data.file_buffer.Get()), bin_file.data.file_buffer.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) {
 					this->Init();
@@ -269,7 +298,7 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 					return (-1);
 				}
 			} else {
-				tex_desc = desc.texture_desc;
+				tex_desc = tmp_tex_desc;
 				tex_desc.ArraySize = 1U;
 
 				if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tex_desc, nullptr, &tex))) {
@@ -281,11 +310,11 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 
 			tex->GetDesc(&tex_desc);
 
-			if (tex_desc_fixed_flg) {
-				if ((desc.texture_desc.Width != tex_desc.Width)
-				|| (desc.texture_desc.Height != tex_desc.Height)
-				|| (desc.texture_desc.MipLevels != tex_desc.MipLevels)
-				|| (desc.texture_desc.Format != tex_desc.Format)) {
+			if (tmp_tex_desc_fixed_flg) {
+				if ((tmp_tex_desc.Width != tex_desc.Width)
+				|| (tmp_tex_desc.Height != tex_desc.Height)
+				|| (tmp_tex_desc.MipLevels != tex_desc.MipLevels)
+				|| (tmp_tex_desc.Format != tex_desc.Format)) {
 					tex->Release();
 
 					tex = nullptr;
@@ -295,12 +324,12 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 					return (-1);
 				}
 			} else {
-				desc.texture_desc.Width = tex_desc.Width;
-				desc.texture_desc.Height = tex_desc.Height;
-				desc.texture_desc.MipLevels = tex_desc.MipLevels;
-				desc.texture_desc.Format = tex_desc.Format;
+				tmp_tex_desc.Width = tex_desc.Width;
+				tmp_tex_desc.Height = tex_desc.Height;
+				tmp_tex_desc.MipLevels = tex_desc.MipLevels;
+				tmp_tex_desc.Format = tex_desc.Format;
 
-				tex_desc_fixed_flg = true;
+				tmp_tex_desc_fixed_flg = true;
 			}
 
 			std::vector<tml::DynamicBuffer> buf_cont;
@@ -338,12 +367,14 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 
 		std::vector<D3D11_SUBRESOURCE_DATA> tmp_srd_cont(srd_cont.begin(), srd_cont.end());
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&desc.texture_desc, tmp_srd_cont.data(), &this->tex_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tmp_tex_desc, tmp_srd_cont.data(), &this->tex_))) {
 			this->Init();
 
 			return (-1);
 		}
 	} else if (desc.file_read_desc_container.size() == 1U) {
+		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
+
 		auto file_read_desc_dat = desc.file_read_desc_container.front().GetDataByParent();
 
 		if (!file_read_desc_dat->file_path.empty() || file_read_desc_dat->file_buffer.GetLength() > 0U) {
@@ -365,14 +396,14 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 
 			D3DX11_IMAGE_LOAD_INFO img_load_info;
 
-			img_load_info.Width = (desc.texture_desc.Width <= 0U) ? D3DX11_DEFAULT : desc.texture_desc.Width;
-			img_load_info.Height = (desc.texture_desc.Height <= 0U) ? D3DX11_DEFAULT : desc.texture_desc.Height;
+			img_load_info.Width = (tmp_tex_desc.Width <= 0U) ? D3DX11_DEFAULT : tmp_tex_desc.Width;
+			img_load_info.Height = (tmp_tex_desc.Height <= 0U) ? D3DX11_DEFAULT : tmp_tex_desc.Height;
 			img_load_info.FirstMipLevel = 0U;
-			img_load_info.MipLevels = desc.texture_desc.MipLevels;
-			img_load_info.Usage = desc.texture_desc.Usage;
-			img_load_info.BindFlags = desc.texture_desc.BindFlags;
-			img_load_info.CpuAccessFlags = desc.texture_desc.CPUAccessFlags;
-			img_load_info.Format = (desc.texture_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : desc.texture_desc.Format;
+			img_load_info.MipLevels = tmp_tex_desc.MipLevels;
+			img_load_info.Usage = tmp_tex_desc.Usage;
+			img_load_info.BindFlags = tmp_tex_desc.BindFlags;
+			img_load_info.CpuAccessFlags = tmp_tex_desc.CPUAccessFlags;
+			img_load_info.Format = (tmp_tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : tmp_tex_desc.Format;
 
 			if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(bin_file.data.file_buffer.Get()), bin_file.data.file_buffer.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&this->tex_), nullptr))) {
 				this->Init();
@@ -380,7 +411,7 @@ INT tml::graphic::Texture::Create(tml::graphic::TextureDesc &desc)
 				return (-1);
 			}
 		} else {
-			if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&desc.texture_desc, nullptr, &this->tex_))) {
+			if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tmp_tex_desc, nullptr, &this->tex_))) {
 				this->Init();
 
 				return (-1);

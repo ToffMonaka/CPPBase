@@ -157,16 +157,16 @@ void tml::graphic::ShaderDesc::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::graphic::ShaderDesc::ReadValue(tml::INIFile &ini_file)
+INT tml::graphic::ShaderDesc::ReadValue(const tml::INIFile &ini_file)
 {
 	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
-	std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
-	std::wstring *val = nullptr;
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
 
-	{// SHADER Section Read
+	{// Shader Section Read
 		val_name_cont = ini_file.data.GetValueNameContainer(L"SHADER");
 
 		if (val_name_cont != nullptr) {
@@ -359,7 +359,7 @@ void tml::graphic::Shader::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
+INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 {
 	this->Init();
 
@@ -555,7 +555,7 @@ INT tml::graphic::Shader::Create(tml::graphic::ShaderDesc &desc)
  * @return blob (blob)<br>
  * nullptr=Ž¸”s
  */
-ID3DBlob *tml::graphic::Shader::GetBlob(tml::DynamicBuffer &file_buf, const WCHAR *inc_dir_path, const WCHAR *func_name, const WCHAR *model_name, const D3D10_SHADER_MACRO *macro_ary)
+ID3DBlob *tml::graphic::Shader::GetBlob(const tml::DynamicBuffer &file_buf, const WCHAR *inc_dir_path, const WCHAR *func_name, const WCHAR *model_name, const D3D10_SHADER_MACRO *macro_ary)
 {
 	tml::graphic::ShaderInclude inc;
 
@@ -581,9 +581,19 @@ ID3DBlob *tml::graphic::Shader::GetBlob(tml::DynamicBuffer &file_buf, const WCHA
 	ID3DBlob *err_blob = nullptr;
 
 	if (FAILED(D3DX11CompileFromMemory(reinterpret_cast<LPCSTR>(file_buf.Get()), file_buf.GetLength(), nullptr, macro_ary, &inc, tmp_func_name.c_str(), tmp_model_name.c_str(), compile_flg, 0U, nullptr, &blob, &err_blob, nullptr))) {
+		if ((tml::ConstantUtil::LIBRARY::DEBUG_FLAG)
+		&& (err_blob != nullptr)) {
+			OutputDebugStringA(static_cast<char *>(err_blob->GetBufferPointer()));
+		}
+
 		this->ReleaseBlob(&err_blob);
 
 		return (nullptr);
+	}
+
+	if ((tml::ConstantUtil::LIBRARY::DEBUG_FLAG)
+	&& (err_blob != nullptr)) {
+		OutputDebugStringA(static_cast<char *>(err_blob->GetBufferPointer()));
 	}
 
 	this->ReleaseBlob(&err_blob);

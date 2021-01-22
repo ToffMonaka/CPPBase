@@ -19,6 +19,9 @@ class SamplerDesc : public tml::graphic::ResourceDesc
 public:
 	CD3D11_SAMPLER_DESC sampler_desc;
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	SamplerDesc();
 	SamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
@@ -54,9 +57,9 @@ public:
 	virtual ~Sampler();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::SamplerDesc &);
+	INT Create(const tml::graphic::SamplerDesc &);
 
-	ID3D11SamplerState *GetSampler(void) const;
+	ID3D11SamplerState *GetSampler(void);
 };
 }
 }
@@ -66,7 +69,7 @@ public:
  * @brief GetSamplerŠÖ”
  * @return samp (sampler)
  */
-inline ID3D11SamplerState *tml::graphic::Sampler::GetSampler(void) const
+inline ID3D11SamplerState *tml::graphic::Sampler::GetSampler(void)
 {
 	return (this->samp_);
 }

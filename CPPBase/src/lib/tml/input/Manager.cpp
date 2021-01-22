@@ -90,7 +90,7 @@ void tml::input::Manager::Init(void)
  * @return res (result)<br>
  * 0–¢–=¸”s
  */
-INT tml::input::Manager::Create(tml::input::ManagerDesc &desc)
+INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 {
 	this->Init();
 

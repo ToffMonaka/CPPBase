@@ -25,9 +25,9 @@ public:
 
 	virtual void Init(void);
 
-	std::map<std::wstring, std::wstring> *GetValueNameContainer(const WCHAR *);
-	std::wstring *GetValue(const WCHAR *, const WCHAR *);
-	std::wstring *GetValue(std::map<std::wstring, std::wstring> &, const WCHAR *);
+	const std::map<std::wstring, std::wstring> *GetValueNameContainer(const WCHAR *) const;
+	const std::wstring *GetValue(const WCHAR *, const WCHAR *) const;
+	const std::wstring *GetValue(const std::map<std::wstring, std::wstring> &, const WCHAR *) const;
 };
 }
 
@@ -38,7 +38,7 @@ public:
  * @return val_name_cont (valalue_name_container)<br>
  * nullptr=Ž¸”s
  */
-inline std::map<std::wstring, std::wstring> *tml::INIFileData::GetValueNameContainer(const WCHAR *section_name)
+inline const std::map<std::wstring, std::wstring> *tml::INIFileData::GetValueNameContainer(const WCHAR *section_name) const
 {
 	auto val_name_itr = this->value_container.find(section_name);
 
@@ -57,7 +57,7 @@ inline std::map<std::wstring, std::wstring> *tml::INIFileData::GetValueNameConta
  * @return val (value)<br>
  * nullptr=Ž¸”s
  */
-inline std::wstring *tml::INIFileData::GetValue(const WCHAR *section_name, const WCHAR *val_name)
+inline const std::wstring *tml::INIFileData::GetValue(const WCHAR *section_name, const WCHAR *val_name) const
 {
 	auto val_name_itr = this->value_container.find(section_name);
 
@@ -82,7 +82,7 @@ inline std::wstring *tml::INIFileData::GetValue(const WCHAR *section_name, const
  * @return val (value)<br>
  * nullptr=Ž¸”s
  */
-inline std::wstring *tml::INIFileData::GetValue(std::map<std::wstring, std::wstring> &val_name_cont, const WCHAR *val_name)
+inline const std::wstring *tml::INIFileData::GetValue(const std::map<std::wstring, std::wstring> &val_name_cont, const WCHAR *val_name) const
 {
 	auto val_itr = val_name_cont.find(val_name);
 

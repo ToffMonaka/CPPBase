@@ -22,6 +22,9 @@ public:
 	bool cpu_read_flag;
 	bool cpu_write_flag;
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	ShaderStructuredBufferDesc();
 	virtual ~ShaderStructuredBufferDesc();
@@ -57,7 +60,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(tml::graphic::ShaderStructuredBufferDesc &);
+	INT Create(const tml::graphic::ShaderStructuredBufferDesc &);
 
 	void UpdateBuffer(void *);
 	template <typename T>
@@ -69,9 +72,9 @@ public:
 
 	virtual void Init(void);
 
-	ID3D11Buffer *GetBuffer(void) const;
-	ID3D11ShaderResourceView *GetSR(void) const;
-	ID3D11UnorderedAccessView *GetUASR(void) const;
+	ID3D11Buffer *GetBuffer(void);
+	ID3D11ShaderResourceView *GetSR(void);
+	ID3D11UnorderedAccessView *GetUASR(void);
 	UINT GetElementSize(void) const;
 	UINT GetElementLimit(void) const;
 	UINT GetElementCount(void) const;
@@ -87,7 +90,7 @@ public:
  * @brief GetBufferŠÖ”
  * @return buf (buffer)
  */
-inline ID3D11Buffer *tml::graphic::ShaderStructuredBuffer::GetBuffer(void) const
+inline ID3D11Buffer *tml::graphic::ShaderStructuredBuffer::GetBuffer(void)
 {
 	return (this->buf_);
 }
@@ -97,7 +100,7 @@ inline ID3D11Buffer *tml::graphic::ShaderStructuredBuffer::GetBuffer(void) const
  * @brief GetSRŠÖ”
  * @return sr (sr)
  */
-inline ID3D11ShaderResourceView *tml::graphic::ShaderStructuredBuffer::GetSR(void) const
+inline ID3D11ShaderResourceView *tml::graphic::ShaderStructuredBuffer::GetSR(void)
 {
 	return (this->sr_);
 }
@@ -107,7 +110,7 @@ inline ID3D11ShaderResourceView *tml::graphic::ShaderStructuredBuffer::GetSR(voi
  * @brief GetUASRŠÖ”
  * @return uasr (uasr)
  */
-inline ID3D11UnorderedAccessView *tml::graphic::ShaderStructuredBuffer::GetUASR(void) const
+inline ID3D11UnorderedAccessView *tml::graphic::ShaderStructuredBuffer::GetUASR(void)
 {
 	return (this->uasr_);
 }

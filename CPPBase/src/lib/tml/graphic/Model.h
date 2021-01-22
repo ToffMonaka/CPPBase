@@ -18,7 +18,11 @@ namespace graphic {
 class ModelDesc : public tml::graphic::ResourceDesc
 {
 public:
-	tml::shared_ptr<tml::XMPosition> position;
+	tml::XMPosition position;
+	bool position_set_flag;
+
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	ModelDesc();
@@ -51,7 +55,7 @@ public:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE, tml::graphic::ModelDesc &);
+	INT Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE, const tml::graphic::ModelDesc &, tml::shared_ptr<tml::XMPosition> &);
 
 public:
 	Model();

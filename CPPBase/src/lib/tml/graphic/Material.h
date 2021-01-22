@@ -31,6 +31,9 @@ public:
 	bool light_flag;
 	bool fog_flag;
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	MaterialDesc();
 	virtual ~MaterialDesc();
@@ -74,7 +77,7 @@ public:
 	virtual ~Material();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::MaterialDesc &);
+	INT Create(const tml::graphic::MaterialDesc &);
 
 	const tml::XMFLOAT3EX &GetDiffuseColor(void) const;
 	void SetDiffuseColor(const tml::XMFLOAT3EX &);

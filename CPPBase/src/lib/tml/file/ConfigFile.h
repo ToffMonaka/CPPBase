@@ -25,7 +25,7 @@ public:
 
 	virtual void Init(void);
 
-	std::wstring *GetValue(const WCHAR *);
+	const std::wstring *GetValue(const WCHAR *) const;
 };
 }
 
@@ -36,7 +36,7 @@ public:
  * @return val (value)<br>
  * nullptr=Ž¸”s
  */
-inline std::wstring *tml::ConfigFileData::GetValue(const WCHAR *val_name)
+inline const std::wstring *tml::ConfigFileData::GetValue(const WCHAR *val_name) const
 {
 	auto val_itr = this->value_container.find(val_name);
 

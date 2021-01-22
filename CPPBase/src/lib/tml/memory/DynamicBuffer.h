@@ -40,6 +40,7 @@ public:
 	virtual void Init(void);
 
 	BYTE *Get(void);
+	const BYTE *Get(void) const;
 	void Set(const size_t, const bool keep_flg = false);
 	void Set(const BYTE *, const size_t);
 	void Clear(void);
@@ -111,6 +112,16 @@ public:
  * @return ary (array)
  */
 inline BYTE *tml::DynamicBuffer::Get(void)
+{
+	return (this->ary_);
+}
+
+
+/**
+ * @brief GetŠÖ”
+ * @return ary (array)
+ */
+inline const BYTE *tml::DynamicBuffer::Get(void) const
 {
 	return (this->ary_);
 }

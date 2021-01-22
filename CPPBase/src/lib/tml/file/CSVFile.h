@@ -27,7 +27,7 @@ public:
 
 	size_t GetRowCount(void) const;
 	size_t GetColumnCount(void) const;
-	std::wstring *GetValue(const size_t, const size_t);
+	const std::wstring *GetValue(const size_t, const size_t) const;
 };
 }
 
@@ -63,7 +63,7 @@ inline size_t tml::CSVFileData::GetColumnCount(void) const
  * @return val (value)<br>
  * nullptr=Ž¸”s
  */
-inline std::wstring *tml::CSVFileData::GetValue(const size_t row_index, const size_t column_index)
+inline const std::wstring *tml::CSVFileData::GetValue(const size_t row_index, const size_t column_index) const
 {
 	if ((row_index >= this->value_container.size())
 	|| (column_index >= this->value_container[row_index].size())) {

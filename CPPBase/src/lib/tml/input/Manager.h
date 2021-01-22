@@ -52,7 +52,7 @@ public:
 	virtual ~Manager();
 
 	virtual void Init(void);
-	INT Create(tml::input::ManagerDesc &);
+	INT Create(const tml::input::ManagerDesc &);
 
 	void Update(void);
 	template <typename T, typename D>

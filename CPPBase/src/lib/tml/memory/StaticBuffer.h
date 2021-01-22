@@ -41,6 +41,7 @@ public:
 	virtual void Init(void);
 
 	BYTE *Get(void);
+	const BYTE *Get(void) const;
 	void Set(const size_t, const bool keep_flg = false);
 	void Set(const BYTE *, const size_t);
 	void Clear(void);
@@ -303,6 +304,17 @@ inline void tml::StaticBuffer<N>::Init(void)
  */
 template <size_t N>
 inline BYTE *tml::StaticBuffer<N>::Get(void)
+{
+	return (this->ary_);
+}
+
+
+/**
+ * @brief Getä÷êî
+ * @return ary (array)
+ */
+template <size_t N>
+inline const BYTE *tml::StaticBuffer<N>::Get(void) const
 {
 	return (this->ary_);
 }

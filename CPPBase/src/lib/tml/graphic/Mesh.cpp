@@ -56,6 +56,34 @@ void tml::graphic::MeshDesc::Init(void)
 
 
 /**
+ * @brief ReadValue関数
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::MeshDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Mesh Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"MESH");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::Mesh::Mesh() :
@@ -138,7 +166,7 @@ void tml::graphic::Mesh::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Mesh::Create(tml::graphic::MeshDesc &desc)
+INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
 {
 	this->Init();
 

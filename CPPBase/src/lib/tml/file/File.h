@@ -41,14 +41,14 @@ class FileReadDesc
 {
 public:
 	T data;
-	T *parent_data;
+	const T *parent_data;
 
 public:
 	FileReadDesc();
 	FileReadDesc(const WCHAR *);
 	FileReadDesc(const tml::DynamicBuffer &);
 	FileReadDesc(tml::DynamicBuffer &&);
-	FileReadDesc(T *);
+	FileReadDesc(const T *);
 	virtual ~FileReadDesc();
 
 	virtual void Init(void);
@@ -56,8 +56,8 @@ public:
 	void Set(const WCHAR *);
 	void Set(const tml::DynamicBuffer &);
 	void Set(tml::DynamicBuffer &&);
-	void Set(T *);
-	T *GetDataByParent(void);
+	void Set(const T *);
+	const T *GetDataByParent(void) const;
 };
 }
 
@@ -120,7 +120,7 @@ tml::FileReadDesc<T>::FileReadDesc(tml::DynamicBuffer &&file_buf) :
  * @param parent_dat (parent_data)
  */
 template <typename T>
-tml::FileReadDesc<T>::FileReadDesc(T *parent_dat) :
+tml::FileReadDesc<T>::FileReadDesc(const T *parent_dat) :
 	parent_data(parent_dat)
 {
 	return;
@@ -197,7 +197,7 @@ void tml::FileReadDesc<T>::Set(tml::DynamicBuffer &&file_buf)
  * @param parent_dat (parent_data)
  */
 template <typename T>
-void tml::FileReadDesc<T>::Set(T *parent_dat)
+void tml::FileReadDesc<T>::Set(const T *parent_dat)
 {
 	this->data.Init();
 	this->parent_data = parent_dat;
@@ -211,7 +211,7 @@ void tml::FileReadDesc<T>::Set(T *parent_dat)
  * @return dat (data)
  */
 template <typename T>
-inline T *tml::FileReadDesc<T>::GetDataByParent(void)
+inline const T *tml::FileReadDesc<T>::GetDataByParent(void) const
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }
@@ -248,19 +248,19 @@ class FileWriteDesc
 {
 public:
 	T data;
-	T *parent_data;
+	const T *parent_data;
 
 public:
 	FileWriteDesc();
 	FileWriteDesc(const WCHAR *);
-	FileWriteDesc(T *);
+	FileWriteDesc(const T *);
 	virtual ~FileWriteDesc();
 
 	virtual void Init(void);
 
 	void Set(const WCHAR *);
-	void Set(T *);
-	T *GetDataByParent(void);
+	void Set(const T *);
+	const T *GetDataByParent(void) const;
 };
 }
 
@@ -295,7 +295,7 @@ tml::FileWriteDesc<T>::FileWriteDesc(const WCHAR *file_path) :
  * @param parent_dat (parent_data)
  */
 template <typename T>
-tml::FileWriteDesc<T>::FileWriteDesc(T *parent_dat) :
+tml::FileWriteDesc<T>::FileWriteDesc(const T *parent_dat) :
 	parent_data(parent_dat)
 {
 	return;
@@ -344,7 +344,7 @@ void tml::FileWriteDesc<T>::Set(const WCHAR *file_path)
  * @param parent_dat (parent_data)
  */
 template <typename T>
-void tml::FileWriteDesc<T>::Set(T *parent_dat)
+void tml::FileWriteDesc<T>::Set(const T *parent_dat)
 {
 	this->data.Init();
 	this->parent_data = parent_dat;
@@ -358,7 +358,7 @@ void tml::FileWriteDesc<T>::Set(T *parent_dat)
  * @return dat (data)
  */
 template <typename T>
-inline T *tml::FileWriteDesc<T>::GetDataByParent(void)
+inline const T *tml::FileWriteDesc<T>::GetDataByParent(void) const
 {
 	return ((this->parent_data != nullptr) ? this->parent_data : &this->data);
 }

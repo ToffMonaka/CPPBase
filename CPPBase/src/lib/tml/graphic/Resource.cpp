@@ -45,7 +45,7 @@ void tml::graphic::ResourceDesc::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::graphic::ResourceDesc::Read(tml::INIFileReadDesc &read_desc)
+INT tml::graphic::ResourceDesc::Read(const tml::INIFileReadDesc &read_desc)
 {
 	auto read_desc_dat = read_desc.GetDataByParent();
 
@@ -71,13 +71,13 @@ INT tml::graphic::ResourceDesc::Read(tml::INIFileReadDesc &read_desc)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::graphic::ResourceDesc::ReadValue(tml::INIFile &ini_file)
+INT tml::graphic::ResourceDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
-	std::wstring *val = nullptr;
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
 
-	{// RESOURCE Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"RESOURCE");
+	{// Resource Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"RES");
 
 		if (val_name_cont != nullptr) {
 			val = ini_file.data.GetValue((*val_name_cont), L"NAME");
@@ -141,7 +141,7 @@ void tml::graphic::Resource::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::graphic::Resource::Create(const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type, tml::graphic::ResourceDesc &desc)
+INT tml::graphic::Resource::Create(const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type, const tml::graphic::ResourceDesc &desc)
 {
 	if ((res_type == tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::NONE)
 	|| (desc.manager == nullptr)) {

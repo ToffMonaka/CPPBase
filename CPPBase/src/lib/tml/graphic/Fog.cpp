@@ -13,6 +13,7 @@
  */
 tml::graphic::FogDesc::FogDesc() :
 	type(tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE),
+	position_set_flag(true),
 	color(0.0f),
 	mul_value(0.0f),
 	near_range(0.0f),
@@ -37,7 +38,8 @@ tml::graphic::FogDesc::~FogDesc()
 void tml::graphic::FogDesc::Init(void)
 {
 	this->type = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
-	this->position.reset();
+	this->position.Init();
+	this->position_set_flag = true;
 	this->color = 0.0f;
 	this->mul_value = 0.0f;
 	this->near_range = 0.0f;
@@ -46,6 +48,34 @@ void tml::graphic::FogDesc::Init(void)
 	tml::graphic::ResourceDesc::Init();
 
 	return;
+}
+
+
+/**
+ * @brief ReadValueä÷êî
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::FogDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Fog Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"FOG");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
 }
 
 
@@ -112,10 +142,11 @@ void tml::graphic::Fog::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
+ * @param pos (position)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Fog::Create(tml::graphic::FogDesc &desc)
+INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc, tml::shared_ptr<tml::XMPosition> &pos)
 {
 	if (desc.type == tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE) {
 		this->Init();
@@ -132,7 +163,12 @@ INT tml::graphic::Fog::Create(tml::graphic::FogDesc &desc)
 	}
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
-	tml::get_shared(this->position, desc.position, 1U);
+	tml::get_shared(this->position, pos, 1U);
+
+	if (desc.position_set_flag) {
+		(*this->position) = desc.position;
+	}
+
 	this->col_ = desc.color;
 	this->mul_val_ = desc.mul_value;
 	this->SetNearRange(desc.near_range);

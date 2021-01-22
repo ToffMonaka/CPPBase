@@ -53,6 +53,34 @@ void tml::graphic::DepthStateDesc::Init(void)
 
 
 /**
+ * @brief ReadValueä÷êî
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::DepthStateDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// DepthState Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"DS");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief Setä÷êî
  * @param ds_desc_type (depth_state_desc_type)
  */
@@ -133,7 +161,7 @@ void tml::graphic::DepthState::Init(void)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::DepthState::Create(tml::graphic::DepthStateDesc &desc)
+INT tml::graphic::DepthState::Create(const tml::graphic::DepthStateDesc &desc)
 {
 	this->Init();
 

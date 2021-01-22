@@ -11,7 +11,8 @@
 /**
  * @brief コンストラクタ
  */
-tml::graphic::ModelDesc::ModelDesc()
+tml::graphic::ModelDesc::ModelDesc() :
+	position_set_flag(true)
 {
 	return;
 }
@@ -31,11 +32,40 @@ tml::graphic::ModelDesc::~ModelDesc()
  */
 void tml::graphic::ModelDesc::Init(void)
 {
-	this->position.reset();
+	this->position.Init();
+	this->position_set_flag = true;
 
 	tml::graphic::ResourceDesc::Init();
 
 	return;
+}
+
+
+/**
+ * @brief ReadValue関数
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Model Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"MODEL");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
 }
 
 
@@ -87,10 +117,11 @@ void tml::graphic::Model::Init(void)
  * @brief Create関数
  * @param type (type)
  * @param desc (desc)
+ * @param pos (position)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Model::Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type, tml::graphic::ModelDesc &desc)
+INT tml::graphic::Model::Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type, const tml::graphic::ModelDesc &desc, tml::shared_ptr<tml::XMPosition> &pos)
 {
 	if (type == tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE) {
 		return (-1);
@@ -101,7 +132,11 @@ INT tml::graphic::Model::Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE typ
 	}
 
 	this->type_ = type;
-	tml::get_shared(this->position, desc.position, 1U);
+	tml::get_shared(this->position, pos, 1U);
+
+	if (desc.position_set_flag) {
+		(*this->position) = desc.position;
+	}
 
 	return (0);
 }

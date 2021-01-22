@@ -63,6 +63,34 @@ void tml::graphic::MaterialDesc::Init(void)
 
 
 /**
+ * @brief ReadValue関数
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::MaterialDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Material Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"MATERIAL");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::Material::Material() :
@@ -137,7 +165,7 @@ void tml::graphic::Material::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Material::Create(tml::graphic::MaterialDesc &desc)
+INT tml::graphic::Material::Create(const tml::graphic::MaterialDesc &desc)
 {
 	this->Init();
 

@@ -19,11 +19,15 @@ class CameraDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type;
-	tml::shared_ptr<tml::XMPosition> position;
+	tml::XMPosition position;
+	bool position_set_flag;
 	FLOAT fov_angle;
 	tml::XMFLOAT2EX fov_size;
 	FLOAT near_clip;
 	FLOAT far_clip;
+
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	CameraDesc();
@@ -64,7 +68,7 @@ public:
 	virtual ~Camera();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::CameraDesc &);
+	INT Create(const tml::graphic::CameraDesc &, tml::shared_ptr<tml::XMPosition> &);
 
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE GetType(void) const;
 	FLOAT GetFOVAngle(void) const;

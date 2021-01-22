@@ -57,6 +57,34 @@ void tml::graphic::SamplerDesc::Init(void)
 
 
 /**
+ * @brief ReadValueä÷êî
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::SamplerDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Sampler Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"SAMP");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief Setä÷êî
  * @param samp_desc_type (sampler_desc_type)
  * @param samp_desc_wrap_type (sampler_desc_wrap_type)
@@ -190,7 +218,7 @@ void tml::graphic::Sampler::Init(void)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Sampler::Create(tml::graphic::SamplerDesc &desc)
+INT tml::graphic::Sampler::Create(const tml::graphic::SamplerDesc &desc)
 {
 	this->Init();
 

@@ -63,7 +63,7 @@ public:
 	std::list<std::pair<std::wstring, std::wstring>> macro_container;
 
 protected:
-	virtual INT ReadValue(tml::INIFile &);
+	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	ShaderDesc();
@@ -98,7 +98,7 @@ private:
 private:
 	void Release(void);
 
-	ID3DBlob *GetBlob(tml::DynamicBuffer &, const WCHAR *, const WCHAR *, const WCHAR *, const D3D10_SHADER_MACRO *);
+	ID3DBlob *GetBlob(const tml::DynamicBuffer &, const WCHAR *, const WCHAR *, const WCHAR *, const D3D10_SHADER_MACRO *);
 	void ReleaseBlob(ID3DBlob **);
 
 public:
@@ -106,15 +106,15 @@ public:
 	virtual ~Shader();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::ShaderDesc &);
+	INT Create(const tml::graphic::ShaderDesc &);
 
-	ID3D11VertexShader *GetVertexShader(void) const;
-	ID3D11InputLayout *GetVertexShaderInputLayout(void) const;
-	ID3D11HullShader *GetHullShader(void) const;
-	ID3D11DomainShader *GetDomainShader(void) const;
-	ID3D11GeometryShader *GetGeometryShader(void) const;
-	ID3D11PixelShader *GetPixelShader(void) const;
-	ID3D11ComputeShader *GetComputeShader(void) const;
+	ID3D11VertexShader *GetVertexShader(void);
+	ID3D11InputLayout *GetVertexShaderInputLayout(void);
+	ID3D11HullShader *GetHullShader(void);
+	ID3D11DomainShader *GetDomainShader(void);
+	ID3D11GeometryShader *GetGeometryShader(void);
+	ID3D11PixelShader *GetPixelShader(void);
+	ID3D11ComputeShader *GetComputeShader(void);
 };
 }
 }
@@ -124,7 +124,7 @@ public:
  * @brief GetVertexShaderŠÖ”
  * @return vs (vertex_shader)
  */
-inline ID3D11VertexShader *tml::graphic::Shader::GetVertexShader(void) const
+inline ID3D11VertexShader *tml::graphic::Shader::GetVertexShader(void)
 {
 	return (this->vs_);
 }
@@ -134,7 +134,7 @@ inline ID3D11VertexShader *tml::graphic::Shader::GetVertexShader(void) const
  * @brief GetVertexShaderInputLayoutŠÖ”
  * @return vs_input_layout (vertex_shader_input_layout)
  */
-inline ID3D11InputLayout *tml::graphic::Shader::GetVertexShaderInputLayout(void) const
+inline ID3D11InputLayout *tml::graphic::Shader::GetVertexShaderInputLayout(void)
 {
 	return (this->vs_input_layout_);
 }
@@ -144,7 +144,7 @@ inline ID3D11InputLayout *tml::graphic::Shader::GetVertexShaderInputLayout(void)
  * @brief GetHullShaderŠÖ”
  * @return hs (hull_shader)
  */
-inline ID3D11HullShader *tml::graphic::Shader::GetHullShader(void) const
+inline ID3D11HullShader *tml::graphic::Shader::GetHullShader(void)
 {
 	return (this->hs_);
 }
@@ -154,7 +154,7 @@ inline ID3D11HullShader *tml::graphic::Shader::GetHullShader(void) const
  * @brief GetDomainShaderŠÖ”
  * @return ds (domain_shader)
  */
-inline ID3D11DomainShader *tml::graphic::Shader::GetDomainShader(void) const
+inline ID3D11DomainShader *tml::graphic::Shader::GetDomainShader(void)
 {
 	return (this->ds_);
 }
@@ -164,7 +164,7 @@ inline ID3D11DomainShader *tml::graphic::Shader::GetDomainShader(void) const
  * @brief GetGeometryShaderŠÖ”
  * @return gs (geometry_shader)
  */
-inline ID3D11GeometryShader *tml::graphic::Shader::GetGeometryShader(void) const
+inline ID3D11GeometryShader *tml::graphic::Shader::GetGeometryShader(void)
 {
 	return (this->gs_);
 }
@@ -174,7 +174,7 @@ inline ID3D11GeometryShader *tml::graphic::Shader::GetGeometryShader(void) const
  * @brief GetPixelShaderŠÖ”
  * @return ps (pixel_shader)
  */
-inline ID3D11PixelShader *tml::graphic::Shader::GetPixelShader(void) const
+inline ID3D11PixelShader *tml::graphic::Shader::GetPixelShader(void)
 {
 	return (this->ps_);
 }
@@ -184,7 +184,7 @@ inline ID3D11PixelShader *tml::graphic::Shader::GetPixelShader(void) const
  * @brief GetComputeShaderŠÖ”
  * @return cs (compute_shader)
  */
-inline ID3D11ComputeShader *tml::graphic::Shader::GetComputeShader(void) const
+inline ID3D11ComputeShader *tml::graphic::Shader::GetComputeShader(void)
 {
 	return (this->cs_);
 }

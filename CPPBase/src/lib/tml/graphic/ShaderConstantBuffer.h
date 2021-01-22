@@ -20,6 +20,9 @@ public:
 	UINT element_size;
 	bool cpu_read_flag;
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	ShaderConstantBufferDesc();
 	virtual ~ShaderConstantBufferDesc();
@@ -50,7 +53,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(tml::graphic::ShaderConstantBufferDesc &);
+	INT Create(const tml::graphic::ShaderConstantBufferDesc &);
 
 	void UpdateBuffer(void *);
 	template <typename T>
@@ -62,7 +65,7 @@ public:
 
 	virtual void Init(void);
 
-	ID3D11Buffer *GetBuffer(void) const;
+	ID3D11Buffer *GetBuffer(void);
 	UINT GetElementSize(void) const;
 	bool GetCPUReadFlag(void) const;
 };
@@ -74,7 +77,7 @@ public:
  * @brief GetBufferŠÖ”
  * @return buf (buffer)
  */
-inline ID3D11Buffer *tml::graphic::ShaderConstantBuffer::GetBuffer(void) const
+inline ID3D11Buffer *tml::graphic::ShaderConstantBuffer::GetBuffer(void)
 {
 	return (this->buf_);
 }

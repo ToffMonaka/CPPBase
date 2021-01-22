@@ -19,6 +19,9 @@ class RasterizerStateDesc : public tml::graphic::ResourceDesc
 public:
 	CD3D11_RASTERIZER_DESC rasterizer_state_desc;
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	RasterizerStateDesc();
 	RasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
@@ -54,9 +57,9 @@ public:
 	virtual ~RasterizerState();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::RasterizerStateDesc &);
+	INT Create(const tml::graphic::RasterizerStateDesc &);
 
-	ID3D11RasterizerState *GetRasterizerState(void) const;
+	ID3D11RasterizerState *GetRasterizerState(void);
 };
 }
 }
@@ -66,7 +69,7 @@ public:
  * @brief GetRasterizerStateŠÖ”
  * @return rs (rasterizer_state)
  */
-inline ID3D11RasterizerState *tml::graphic::RasterizerState::GetRasterizerState(void) const
+inline ID3D11RasterizerState *tml::graphic::RasterizerState::GetRasterizerState(void)
 {
 	return (this->rs_);
 }

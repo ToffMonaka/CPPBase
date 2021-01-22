@@ -241,7 +241,7 @@ void tml::graphic::Manager::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::graphic::Manager::Create(tml::graphic::ManagerDesc &desc)
+INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 {
 	this->Init();
 

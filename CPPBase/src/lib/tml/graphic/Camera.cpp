@@ -13,6 +13,7 @@
  */
 tml::graphic::CameraDesc::CameraDesc() :
 	type(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE),
+	position_set_flag(true),
 	fov_angle(0.0f),
 	fov_size(0.0f),
 	near_clip(0.0f),
@@ -37,7 +38,8 @@ tml::graphic::CameraDesc::~CameraDesc()
 void tml::graphic::CameraDesc::Init(void)
 {
 	this->type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
-	this->position.reset();
+	this->position.Init();
+	this->position_set_flag = true;
 	this->fov_angle = 0.0f;
 	this->fov_size = 0.0f;
 	this->near_clip = 0.0f;
@@ -46,6 +48,34 @@ void tml::graphic::CameraDesc::Init(void)
 	tml::graphic::ResourceDesc::Init();
 
 	return;
+}
+
+
+/**
+ * @brief ReadValueä÷êî
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::CameraDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Camera Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"CAMERA");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
 }
 
 
@@ -108,10 +138,11 @@ void tml::graphic::Camera::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
+ * @param pos (position)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Camera::Create(tml::graphic::CameraDesc &desc)
+INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc, tml::shared_ptr<tml::XMPosition> &pos)
 {
 	if (desc.type == tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE) {
 		this->Init();
@@ -128,7 +159,12 @@ INT tml::graphic::Camera::Create(tml::graphic::CameraDesc &desc)
 	}
 
 	this->type_ = desc.type;
-	tml::get_shared(this->position, desc.position, 1U);
+	tml::get_shared(this->position, pos, 1U);
+
+	if (desc.position_set_flag) {
+		(*this->position) = desc.position;
+	}
+
 	this->fov_angle_ = desc.fov_angle;
 	this->fov_size_ = desc.fov_size;
 	this->near_clip_ = desc.near_clip;

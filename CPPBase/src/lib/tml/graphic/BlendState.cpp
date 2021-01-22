@@ -57,6 +57,34 @@ void tml::graphic::BlendStateDesc::Init(void)
 
 
 /**
+ * @brief ReadValueä÷êî
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::BlendStateDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// BlendState Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"BS");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief Setä÷êî
  * @param bs_desc_type (blend_state_desc_type)
  * @param bs_desc_a_type (blend_state_desc_alpha_type)
@@ -264,7 +292,7 @@ void tml::graphic::BlendState::Init(void)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::BlendState::Create(tml::graphic::BlendStateDesc &desc)
+INT tml::graphic::BlendState::Create(const tml::graphic::BlendStateDesc &desc)
 {
 	this->Init();
 

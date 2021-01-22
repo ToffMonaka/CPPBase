@@ -49,7 +49,7 @@ public:
 	virtual ~SpriteModel();
 
 	virtual void Init(void);
-	INT Create(tml::graphic::SpriteModelDesc &);
+	INT Create(const tml::graphic::SpriteModelDesc &, tml::shared_ptr<tml::XMPosition> &);
 };
 }
 }

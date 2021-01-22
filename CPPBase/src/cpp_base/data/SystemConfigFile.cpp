@@ -117,10 +117,10 @@ INT cpp_base::SystemConfigFile::Read(void)
 		return (0);
 	}
 
-	std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
-	std::wstring *val = nullptr;
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
 
-	{// APPLICATION Section Read
+	{// Application Section Read
 		val_name_cont = ini_file.data.GetValueNameContainer(L"APP");
 
 		if (val_name_cont != nullptr) {
@@ -138,7 +138,7 @@ INT cpp_base::SystemConfigFile::Read(void)
 		}
 	}
 
-	{// WINDOW Section Read
+	{// Window Section Read
 		val_name_cont = ini_file.data.GetValueNameContainer(L"WND");
 
 		if (val_name_cont != nullptr) {

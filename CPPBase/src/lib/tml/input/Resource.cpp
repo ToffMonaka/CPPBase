@@ -45,7 +45,7 @@ void tml::input::ResourceDesc::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::input::ResourceDesc::Read(tml::INIFileReadDesc &read_desc)
+INT tml::input::ResourceDesc::Read(const tml::INIFileReadDesc &read_desc)
 {
 	auto read_desc_dat = read_desc.GetDataByParent();
 
@@ -71,13 +71,13 @@ INT tml::input::ResourceDesc::Read(tml::INIFileReadDesc &read_desc)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::input::ResourceDesc::ReadValue(tml::INIFile &ini_file)
+INT tml::input::ResourceDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
-	std::wstring *val = nullptr;
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
 
-	{// RESOURCE Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"RESOURCE");
+	{// Resource Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"RES");
 
 		if (val_name_cont != nullptr) {
 			val = ini_file.data.GetValue((*val_name_cont), L"NAME");
@@ -141,7 +141,7 @@ void tml::input::Resource::Init(void)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::input::Resource::Create(const tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type, tml::input::ResourceDesc &desc)
+INT tml::input::Resource::Create(const tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type, const tml::input::ResourceDesc &desc)
 {
 	if ((res_type == tml::ConstantUtil::INPUT::RESOURCE_TYPE::NONE)
 	|| (desc.manager == nullptr)) {
