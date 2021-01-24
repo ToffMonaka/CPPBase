@@ -115,24 +115,30 @@ void tml::graphic::Model::Init(void)
 
 /**
  * @brief Createä÷êî
- * @param type (type)
  * @param desc (desc)
- * @param pos (position)
+ * @param type (type)
+ * @param pos (position)<br>
+ * nullptr=éwíËñ≥Çµ
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Model::Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type, const tml::graphic::ModelDesc &desc, tml::shared_ptr<tml::XMPosition> &pos)
+INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type, tml::shared_ptr<tml::XMPosition> *pos)
 {
 	if (type == tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE) {
 		return (-1);
 	}
 
-	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL, desc) < 0) {
+	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL) < 0) {
 		return (-1);
 	}
 
 	this->type_ = type;
-	tml::get_shared(this->position, pos, 1U);
+
+	if (pos != nullptr) {
+		tml::get_shared(this->position, (*pos), 1U);
+	} else {
+		tml::get_shared(this->position, 1U);
+	}
 
 	if (desc.position_set_flag) {
 		(*this->position) = desc.position;

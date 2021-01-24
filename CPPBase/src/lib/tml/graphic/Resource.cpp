@@ -136,12 +136,12 @@ void tml::graphic::Resource::Init(void)
 
 /**
  * @brief Createä÷êî
- * @param res_type (resource_type)
  * @param desc (desc)
+ * @param res_type (resource_type)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Resource::Create(const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type, const tml::graphic::ResourceDesc &desc)
+INT tml::graphic::Resource::Create(const tml::graphic::ResourceDesc &desc, const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type)
 {
 	if ((res_type == tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::NONE)
 	|| (desc.manager == nullptr)) {

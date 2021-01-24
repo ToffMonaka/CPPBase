@@ -241,7 +241,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE, desc) < 0) {
+	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE) < 0) {
 		this->Init();
 
 		return (-1);

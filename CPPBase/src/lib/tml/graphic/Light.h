@@ -82,7 +82,7 @@ public:
 	virtual ~Light();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::LightDesc &, tml::shared_ptr<tml::XMPosition> &);
+	INT Create(const tml::graphic::LightDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
 
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE GetType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;

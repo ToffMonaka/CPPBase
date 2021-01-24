@@ -17,7 +17,6 @@ namespace graphic {
 class ShaderConstantBufferDesc : public tml::graphic::ResourceDesc
 {
 public:
-	UINT element_size;
 	bool cpu_read_flag;
 
 protected:
@@ -53,7 +52,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::ShaderConstantBufferDesc &);
+	INT Create(const tml::graphic::ShaderConstantBufferDesc &, const UINT);
 
 	void UpdateBuffer(void *);
 	template <typename T>

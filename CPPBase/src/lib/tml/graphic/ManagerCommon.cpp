@@ -10,6 +10,19 @@
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
+#include "LightShaderConstantBuffer.h"
+#include "FogShaderConstantBuffer.h"
+#include "ShadowShaderConstantBuffer.h"
+#include "AOShaderConstantBuffer.h"
+#include "ModelShaderConstantBuffer.h"
+#include "CameraShaderStructuredBuffer.h"
+#include "LightShaderStructuredBuffer.h"
+#include "FogShaderStructuredBuffer.h"
+#include "ShadowShaderStructuredBuffer.h"
+#include "ShadowCameraShaderStructuredBuffer.h"
+#include "ModelLayerShaderStructuredBuffer.h"
+#include "ModelMatrixShaderStructuredBuffer.h"
+#include "ModelMaterialShaderStructuredBuffer.h"
 #include "Texture.h"
 #include "Sampler.h"
 
@@ -54,6 +67,21 @@ void tml::graphic::ManagerCommon::Init(void)
 
 	this->default_depth_state.reset();
 	this->reference_depth_state.reset();
+	this->screen_model_shader.reset();
+	this->sprite_model_shader.reset();
+	this->light_shader_constant_buffer.reset();
+	this->fog_shader_constant_buffer.reset();
+	this->shadow_shader_constant_buffer.reset();
+	this->ao_shader_constant_buffer.reset();
+	this->model_shader_constant_buffer.reset();
+	this->camera_shader_structured_buffer.reset();
+	this->light_shader_structured_buffer.reset();
+	this->fog_shader_structured_buffer.reset();
+	this->shadow_shader_structured_buffer.reset();
+	this->shadow_camera_shader_structured_buffer.reset();
+	this->model_layer_shader_structured_buffer.reset();
+	this->model_matrix_shader_structured_buffer.reset();
+	this->model_material_shader_structured_buffer.reset();
 	this->main_render_target_texture.reset();
 	this->main_depth_target_texture.reset();
 	this->model_cc_sampler.reset();

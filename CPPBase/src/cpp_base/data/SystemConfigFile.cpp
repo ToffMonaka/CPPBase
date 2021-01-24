@@ -14,10 +14,8 @@
 cpp_base::SystemConfigFileData::SystemConfigFileData() :
 	application_memory_allocator_size(1048576U),
 	application_locale_name("Japanese"),
-	window_x(0U),
-	window_y(0U),
-	window_width(1280U),
-	window_height(800U)
+	window_position(0U),
+	window_size(1280U, 800U)
 {
 	return;
 }
@@ -39,10 +37,8 @@ void cpp_base::SystemConfigFileData::Init(void)
 {
 	this->application_memory_allocator_size = 1048576U;
 	this->application_locale_name = "Japanese";
-	this->window_x = 0U;
-	this->window_y = 0U;
-	this->window_width = 1280U;
-	this->window_height = 800U;
+	this->window_position = 0U;
+	this->window_size = tml::XMUINT2EX(1280U, 800U);
 
 	return;
 }
@@ -145,25 +141,25 @@ INT cpp_base::SystemConfigFile::Read(void)
 			val = ini_file.data.GetValue((*val_name_cont), L"X");
 
 			if (val != nullptr) {
-				tml::StringUtil::GetValue(this->data.window_x, val->c_str());
+				tml::StringUtil::GetValue(this->data.window_position.x, val->c_str());
 			}
 
 			val = ini_file.data.GetValue((*val_name_cont), L"Y");
 
 			if (val != nullptr) {
-				tml::StringUtil::GetValue(this->data.window_y, val->c_str());
+				tml::StringUtil::GetValue(this->data.window_position.y, val->c_str());
 			}
 
 			val = ini_file.data.GetValue((*val_name_cont), L"W");
 
 			if (val != nullptr) {
-				tml::StringUtil::GetValue(this->data.window_width, val->c_str());
+				tml::StringUtil::GetValue(this->data.window_size.x, val->c_str());
 			}
 
 			val = ini_file.data.GetValue((*val_name_cont), L"H");
 
 			if (val != nullptr) {
-				tml::StringUtil::GetValue(this->data.window_height, val->c_str());
+				tml::StringUtil::GetValue(this->data.window_size.y, val->c_str());
 			}
 		}
 	}
@@ -202,10 +198,10 @@ INT cpp_base::SystemConfigFile::Write(void)
 
 	{// WINDOW Section Write
 		txt_file.data.string_container.push_back(section_start_str + L"WINDOW" + section_end_str);
-		txt_file.data.string_container.push_back(L"X" + equal_str + tml::StringUtil::GetString(val, this->data.window_x));
-		txt_file.data.string_container.push_back(L"Y" + equal_str + tml::StringUtil::GetString(val, this->data.window_y));
-		txt_file.data.string_container.push_back(L"W" + equal_str + tml::StringUtil::GetString(val, this->data.window_width));
-		txt_file.data.string_container.push_back(L"H" + equal_str + tml::StringUtil::GetString(val, this->data.window_height));
+		txt_file.data.string_container.push_back(L"X" + equal_str + tml::StringUtil::GetString(val, this->data.window_position.x));
+		txt_file.data.string_container.push_back(L"Y" + equal_str + tml::StringUtil::GetString(val, this->data.window_position.y));
+		txt_file.data.string_container.push_back(L"W" + equal_str + tml::StringUtil::GetString(val, this->data.window_size.x));
+		txt_file.data.string_container.push_back(L"H" + equal_str + tml::StringUtil::GetString(val, this->data.window_size.y));
 		txt_file.data.string_container.push_back(empty_str);
 	}
 

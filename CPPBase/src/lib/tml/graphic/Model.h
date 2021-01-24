@@ -55,7 +55,7 @@ public:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::GRAPHIC::MODEL_TYPE, const tml::graphic::ModelDesc &, tml::shared_ptr<tml::XMPosition> &);
+	INT Create(const tml::graphic::ModelDesc &, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
 
 public:
 	Model();

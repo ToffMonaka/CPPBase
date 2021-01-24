@@ -136,12 +136,12 @@ void tml::sound::Resource::Init(void)
 
 /**
  * @brief Createä÷êî
- * @param res_type (resource_type)
  * @param desc (desc)
+ * @param res_type (resource_type)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::sound::Resource::Create(const tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type, const tml::sound::ResourceDesc &desc)
+INT tml::sound::Resource::Create(const tml::sound::ResourceDesc &desc, const tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type)
 {
 	if ((res_type == tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE)
 	|| (desc.manager == nullptr)) {

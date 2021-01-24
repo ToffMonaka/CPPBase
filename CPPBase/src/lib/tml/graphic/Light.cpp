@@ -166,11 +166,12 @@ void tml::graphic::Light::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param pos (position)
+ * @param pos (position)<br>
+ * nullptr=éwíËñ≥Çµ
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc, tml::shared_ptr<tml::XMPosition> &pos)
+INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc, tml::shared_ptr<tml::XMPosition> *pos)
 {
 	if (desc.type == tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE) {
 		this->Init();
@@ -180,14 +181,19 @@ INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc, tml::shared
 
 	this->Init();
 
-	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT, desc) < 0) {
+	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
 	this->type_ = desc.type;
-	tml::get_shared(this->position, pos, 1U);
+
+	if (pos != nullptr) {
+		tml::get_shared(this->position, (*pos), 1U);
+	} else {
+		tml::get_shared(this->position, 1U);
+	}
 
 	if (desc.position_set_flag) {
 		(*this->position) = desc.position;

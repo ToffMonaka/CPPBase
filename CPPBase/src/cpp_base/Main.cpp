@@ -108,7 +108,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 		auto mem_allocator_info = tml::MemoryUtil::GetAllocatorInfo();
 
-		if (mem_allocator_info.use_cnt > 0U) {
+		if (mem_allocator_info.use_count > 0U) {
 			cpp_base::InitMain();
 
 			return (-1);

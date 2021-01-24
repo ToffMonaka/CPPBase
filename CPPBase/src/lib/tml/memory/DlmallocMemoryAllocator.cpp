@@ -113,7 +113,7 @@ tml::MemoryAllocator::INFO tml::DlmallocMemoryAllocator::GetInfo(void)
 
 	info.size = ms_info.usmblks;
 	info.use_size = ms_info.uordblks;
-	info.use_cnt = this->ms_use_cnt_;
+	info.use_count = this->ms_use_cnt_;
 
 	return (info);
 }

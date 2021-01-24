@@ -63,7 +63,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::INPUT::RESOURCE_TYPE, const tml::input::ResourceDesc &);
+	INT Create(const tml::input::ResourceDesc &, const tml::ConstantUtil::INPUT::RESOURCE_TYPE);
 
 public:
 	Resource();

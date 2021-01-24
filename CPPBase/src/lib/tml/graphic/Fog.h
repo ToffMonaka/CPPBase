@@ -70,7 +70,7 @@ public:
 	virtual ~Fog();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::FogDesc &, tml::shared_ptr<tml::XMPosition> &);
+	INT Create(const tml::graphic::FogDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
 
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE GetType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;

@@ -12,7 +12,6 @@
  * @brief コンストラクタ
  */
 tml::graphic::ShaderConstantBufferDesc::ShaderConstantBufferDesc() :
-	element_size(0U),
 	cpu_read_flag(false)
 {
 	return;
@@ -33,7 +32,6 @@ tml::graphic::ShaderConstantBufferDesc::~ShaderConstantBufferDesc()
  */
 void tml::graphic::ShaderConstantBufferDesc::Init(void)
 {
-	this->element_size = 0U;
 	this->cpu_read_flag = false;
 
 	tml::graphic::ResourceDesc::Init();
@@ -125,23 +123,23 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
 /**
  * @brief Create関数
  * @param desc (desc)
+ * @param element_size (element_size)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstantBufferDesc &desc)
+INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstantBufferDesc &desc, const UINT element_size)
 {
-	if ((desc.element_size <= 0U)
-	|| ((desc.element_size % 16) > 0)) {
+	if ((element_size <= 0U)
+	|| ((element_size % 16) > 0)) {
 		return (-1);
 	}
 
-	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER, desc) < 0) {
+	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER) < 0) {
 		return (-1);
 	}
 
+	this->element_size_ = element_size;
 	this->cpu_read_flg_ = desc.cpu_read_flag;
-
-	this->element_size_ = desc.element_size;
 
 	CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_, D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0U);
 

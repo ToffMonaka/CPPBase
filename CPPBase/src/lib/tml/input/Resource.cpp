@@ -136,12 +136,12 @@ void tml::input::Resource::Init(void)
 
 /**
  * @brief Createä÷êî
- * @param res_type (resource_type)
  * @param desc (desc)
+ * @param res_type (resource_type)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::input::Resource::Create(const tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type, const tml::input::ResourceDesc &desc)
+INT tml::input::Resource::Create(const tml::input::ResourceDesc &desc, const tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type)
 {
 	if ((res_type == tml::ConstantUtil::INPUT::RESOURCE_TYPE::NONE)
 	|| (desc.manager == nullptr)) {

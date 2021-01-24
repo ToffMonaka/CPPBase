@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../../lib/tml/math/XNAMath.h"
 #include "../../lib/tml/file/INIFile.h"
 
 
@@ -18,10 +19,8 @@ class SystemConfigFileData
 public:
 	size_t application_memory_allocator_size;
 	std::string application_locale_name;
-	UINT window_x;
-	UINT window_y;
-	UINT window_width;
-	UINT window_height;
+	tml::XMUINT2EX window_position;
+	tml::XMUINT2EX window_size;
 
 public:
 	SystemConfigFileData();

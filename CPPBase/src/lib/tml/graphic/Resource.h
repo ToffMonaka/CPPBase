@@ -63,7 +63,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE, const tml::graphic::ResourceDesc &);
+	INT Create(const tml::graphic::ResourceDesc &, const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE);
 
 public:
 	Resource();

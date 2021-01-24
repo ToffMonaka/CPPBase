@@ -63,7 +63,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::SOUND::RESOURCE_TYPE, const tml::sound::ResourceDesc &);
+	INT Create(const tml::sound::ResourceDesc &, const tml::ConstantUtil::SOUND::RESOURCE_TYPE);
 
 public:
 	Resource();

@@ -68,7 +68,7 @@ public:
 	virtual ~Camera();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::CameraDesc &, tml::shared_ptr<tml::XMPosition> &);
+	INT Create(const tml::graphic::CameraDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
 
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE GetType(void) const;
 	FLOAT GetFOVAngle(void) const;

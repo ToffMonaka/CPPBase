@@ -20,8 +20,7 @@ class ManagerDesc
 {
 public:
 	HWND window_handle;
-	UINT window_width;
-	UINT window_height;
+	tml::XMUINT2EX window_size;
 
 public:
 	ManagerDesc();

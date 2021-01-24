@@ -12,7 +12,6 @@
  * @brief コンストラクタ
  */
 tml::graphic::ShaderStructuredBufferDesc::ShaderStructuredBufferDesc() :
-	element_size(0U),
 	element_limit(0U),
 	cpu_read_flag(false),
 	cpu_write_flag(false)
@@ -35,7 +34,6 @@ tml::graphic::ShaderStructuredBufferDesc::~ShaderStructuredBufferDesc()
  */
 void tml::graphic::ShaderStructuredBufferDesc::Init(void)
 {
-	this->element_size = 0U;
 	this->element_limit = 0U;
 	this->cpu_read_flag = false;
 	this->cpu_write_flag = false;
@@ -149,25 +147,25 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 /**
  * @brief Create関数
  * @param desc (desc)
+ * @param element_size (element_size)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStructuredBufferDesc &desc)
+INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStructuredBufferDesc &desc, const UINT element_size)
 {
-	if (((this->element_size_ * this->element_limit_) <= 0U)
-	|| ((desc.element_size % 16) > 0)) {
+	if (((element_size * desc.element_limit) <= 0U)
+	|| ((element_size % 16) > 0)) {
 		return (-1);
 	}
 
-	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER, desc) < 0) {
+	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER) < 0) {
 		return (-1);
 	}
 
+	this->element_size_ = element_size;
+	this->element_limit_ = desc.element_limit;
 	this->cpu_read_flg_ = desc.cpu_read_flag;
 	this->cpu_write_flg_ = desc.cpu_write_flag;
-
-	this->element_size_ = desc.element_size;
-	this->element_limit_ = desc.element_limit;
 
 	if (!this->cpu_write_flg_) {
 		CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_ * this->element_limit_, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DEFAULT, 0U, D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, this->element_size_);

@@ -12,8 +12,7 @@
  */
 tml::graphic::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
-	window_width(0U),
-	window_height(0U)
+	window_size(0U)
 {
 	return;
 }
@@ -34,8 +33,7 @@ tml::graphic::ManagerDesc::~ManagerDesc()
 void tml::graphic::ManagerDesc::Init(void)
 {
 	this->window_handle = nullptr;
-	this->window_width = 0U;
-	this->window_height = 0U;
+	this->window_size = 0U;
 
 	return;
 }
@@ -300,8 +298,8 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	{// SwapChain Create
 		DXGI_MODE_DESC mode_desc = {};
 
-		mode_desc.Width = desc.window_width;
-		mode_desc.Height = desc.window_height;
+		mode_desc.Width = desc.window_size.x;
+		mode_desc.Height = desc.window_size.y;
 		mode_desc.RefreshRate.Numerator = 60U;
 		mode_desc.RefreshRate.Denominator = 1U;
 		mode_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;

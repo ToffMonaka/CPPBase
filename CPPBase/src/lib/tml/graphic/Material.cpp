@@ -169,7 +169,7 @@ INT tml::graphic::Material::Create(const tml::graphic::MaterialDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MATERIAL, desc) < 0) {
+	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MATERIAL) < 0) {
 		this->Init();
 
 		return (-1);

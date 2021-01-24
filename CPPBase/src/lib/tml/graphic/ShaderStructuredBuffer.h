@@ -17,7 +17,6 @@ namespace graphic {
 class ShaderStructuredBufferDesc : public tml::graphic::ResourceDesc
 {
 public:
-	UINT element_size;
 	UINT element_limit;
 	bool cpu_read_flag;
 	bool cpu_write_flag;
@@ -60,7 +59,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::ShaderStructuredBufferDesc &);
+	INT Create(const tml::graphic::ShaderStructuredBufferDesc &, const UINT);
 
 	void UpdateBuffer(void *);
 	template <typename T>

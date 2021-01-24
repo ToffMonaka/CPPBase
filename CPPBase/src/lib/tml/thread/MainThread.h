@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMath.h"
 #include "Thread.h"
 
 
@@ -33,7 +34,7 @@ protected:
 	void Release(void);
 	INT Create(const HINSTANCE, const WCHAR *, const INT);
 
-	INT CreateWindow_(const WNDCLASSEX &, const UINT, const UINT, const UINT, const UINT);
+	INT CreateWindow_(const WNDCLASSEX &, const tml::XMUINT2EX &, const tml::XMUINT2EX &);
 	void DeleteWindow_(void);
 
 public:

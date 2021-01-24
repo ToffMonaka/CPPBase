@@ -296,7 +296,7 @@ INT tml::graphic::BlendState::Create(const tml::graphic::BlendStateDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE, desc) < 0) {
+	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE) < 0) {
 		this->Init();
 
 		return (-1);

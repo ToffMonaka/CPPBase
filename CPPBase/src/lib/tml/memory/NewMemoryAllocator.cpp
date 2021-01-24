@@ -109,7 +109,7 @@ tml::MemoryAllocator::INFO tml::NewMemoryAllocator::GetInfo(void)
 
 	info.size = this->ms_size_;
 	info.use_size = this->ms_use_size_;
-	info.use_cnt = this->ms_use_size_;
+	info.use_count = this->ms_use_size_;
 
 	return (info);
 }

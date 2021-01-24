@@ -30,7 +30,7 @@ public:
 		tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE type;
 		size_t size;
 		size_t use_size;
-		size_t use_cnt;
+		size_t use_count;
 
 		/**
 		 * @brief コンストラクタ
@@ -39,7 +39,7 @@ public:
 			type(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE),
 			size(0U),
 			use_size(0U),
-			use_cnt(0U)
+			use_count(0U)
 		{
 			return;
 		}

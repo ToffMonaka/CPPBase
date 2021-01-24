@@ -123,10 +123,7 @@ INT cpp_base::MainThread::Start(void)
 		wnd_class.lpszClassName = cpp_base::ConstantUtil::WINDOW::CLASS_NAME;
 		wnd_class.hIconSm = nullptr;
 
-		if (this->CreateWindow_(
-			wnd_class,
-			this->sys_conf_file_.data.window_x, this->sys_conf_file_.data.window_y, this->sys_conf_file_.data.window_width, this->sys_conf_file_.data.window_height
-		) < 0) {
+		if (this->CreateWindow_(wnd_class, this->sys_conf_file_.data.window_position, this->sys_conf_file_.data.window_size) < 0) {
 			return (-1);
 		}
 	}
@@ -145,8 +142,7 @@ INT cpp_base::MainThread::Start(void)
 		tml::graphic::ManagerDesc desc;
 
 		desc.window_handle = this->GetWindowHandle();
-		desc.window_width = this->sys_conf_file_.data.window_width;
-		desc.window_height = this->sys_conf_file_.data.window_height;
+		desc.window_size = this->sys_conf_file_.data.window_size;
 
 		if (this->graphic_mgr_.Create(desc) < 0) {
 			this->Init();

@@ -84,15 +84,16 @@ void tml::graphic::SpriteModel::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param pos (position)
+ * @param pos (position)<br>
+ * nullptr=éwíËñ≥Çµ
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc, tml::shared_ptr<tml::XMPosition> &pos)
+INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc, tml::shared_ptr<tml::XMPosition> *pos)
 {
 	this->Init();
 
-	if (tml::graphic::Model::Create(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::SPRITE, desc, pos) < 0) {
+	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::MODEL_TYPE::SPRITE, pos) < 0) {
 		this->Init();
 
 		return (-1);
