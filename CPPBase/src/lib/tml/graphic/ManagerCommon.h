@@ -15,11 +15,14 @@ class RasterizerState;
 class BlendState;
 class DepthState;
 class Shader;
+class ShaderConstantBuffer;
+class CommonShaderConstantBuffer;
 class LightShaderConstantBuffer;
 class FogShaderConstantBuffer;
 class ShadowShaderConstantBuffer;
 class AOShaderConstantBuffer;
 class ModelShaderConstantBuffer;
+class ShaderStructuredBuffer;
 class CameraShaderStructuredBuffer;
 class LightShaderStructuredBuffer;
 class FogShaderStructuredBuffer;
@@ -44,6 +47,9 @@ class ManagerCommon
 public: ManagerCommon(const tml::graphic::ManagerCommon &) = delete;
 public: tml::graphic::ManagerCommon &operator =(const tml::graphic::ManagerCommon &) = delete;
 
+private:
+	tml::graphic::Manager *mgr_;
+
 public:
 	tml::shared_ptr<tml::graphic::RasterizerState> default_rasterizer_state;
 	tml::shared_ptr<tml::graphic::RasterizerState> wireframe_rasterizer_state;
@@ -60,6 +66,7 @@ public:
 	tml::shared_ptr<tml::graphic::DepthState> reference_depth_state;
 	tml::shared_ptr<tml::graphic::Shader> screen_model_shader;
 	tml::shared_ptr<tml::graphic::Shader> sprite_model_shader;
+	tml::shared_ptr<tml::graphic::CommonShaderConstantBuffer> common_shader_constant_buffer;
 	tml::shared_ptr<tml::graphic::LightShaderConstantBuffer> light_shader_constant_buffer;
 	tml::shared_ptr<tml::graphic::FogShaderConstantBuffer> fog_shader_constant_buffer;
 	tml::shared_ptr<tml::graphic::ShadowShaderConstantBuffer> shadow_shader_constant_buffer;
@@ -79,6 +86,9 @@ public:
 	tml::shared_ptr<tml::graphic::Sampler> model_cw_sampler;
 	tml::shared_ptr<tml::graphic::Sampler> model_wc_sampler;
 	tml::shared_ptr<tml::graphic::Sampler> model_ww_sampler;
+
+private:
+	void Release(void);
 
 public:
 	ManagerCommon();

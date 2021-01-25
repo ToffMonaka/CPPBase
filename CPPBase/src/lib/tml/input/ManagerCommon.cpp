@@ -11,7 +11,8 @@
 /**
  * @brief コンストラクタ
  */
-tml::input::ManagerCommon::ManagerCommon()
+tml::input::ManagerCommon::ManagerCommon() :
+	mgr_(nullptr)
 {
 	return;
 }
@@ -22,6 +23,20 @@ tml::input::ManagerCommon::ManagerCommon()
  */
 tml::input::ManagerCommon::~ManagerCommon()
 {
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::input::ManagerCommon::Release(void)
+{
+	if (this->mgr_ != nullptr) {
+	}
+
 	return;
 }
 
@@ -31,6 +46,10 @@ tml::input::ManagerCommon::~ManagerCommon()
  */
 void tml::input::ManagerCommon::Init(void)
 {
+	this->Release();
+
+	this->mgr_ = nullptr;
+
 	return;
 }
 
@@ -44,6 +63,8 @@ void tml::input::ManagerCommon::Init(void)
 INT tml::input::ManagerCommon::Create(tml::input::Manager *mgr)
 {
 	this->Init();
+
+	this->mgr_ = mgr;
 
 	return (0);
 }

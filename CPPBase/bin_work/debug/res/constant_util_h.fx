@@ -3,20 +3,20 @@
 
 
 // SHADER_CONSTANT_BUFFER_SR_LIMIT 14
-#define LIGHT_SCB_SR register(b0)
-#define FOG_SCB_SR register(b1)
-#define SHADOW_SCB_SR register(b2)
-#define MODEL_SCB_SR register(b3)
-#define USER1_SCB_SR register(b4)
-#define USER2_SCB_SR register(b5)
-#define USER3_SCB_SR register(b6)
-#define USER4_SCB_SR register(b7)
-#define USER5_SCB_SR register(b8)
-#define USER6_SCB_SR register(b9)
-#define USER7_SCB_SR register(b10)
-#define USER8_SCB_SR register(b11)
-#define USER9_SCB_SR register(b12)
-#define USER10_SCB_SR register(b13)
+#define COMMON_SCB_SR register(b0)
+#define LIGHT_SCB_SR register(b1)
+#define FOG_SCB_SR register(b2)
+#define SHADOW_SCB_SR register(b3)
+#define AO_SCB_SR register(b4)
+#define MODEL_SCB_SR register(b5)
+#define USER1_SCB_SR register(b6)
+#define USER2_SCB_SR register(b7)
+#define USER3_SCB_SR register(b8)
+#define USER4_SCB_SR register(b9)
+#define USER5_SCB_SR register(b10)
+#define USER6_SCB_SR register(b11)
+#define USER7_SCB_SR register(b12)
+#define USER8_SCB_SR register(b13)
 
 // SHADER_CONSTANT_BUFFER_UASR_LIMIT 0
 

@@ -11,7 +11,8 @@
 /**
  * @brief コンストラクタ
  */
-tml::sound::ManagerCommon::ManagerCommon()
+tml::sound::ManagerCommon::ManagerCommon() :
+	mgr_(nullptr)
 {
 	return;
 }
@@ -22,6 +23,20 @@ tml::sound::ManagerCommon::ManagerCommon()
  */
 tml::sound::ManagerCommon::~ManagerCommon()
 {
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::sound::ManagerCommon::Release(void)
+{
+	if (this->mgr_ != nullptr) {
+	}
+
 	return;
 }
 
@@ -31,6 +46,10 @@ tml::sound::ManagerCommon::~ManagerCommon()
  */
 void tml::sound::ManagerCommon::Init(void)
 {
+	this->Release();
+
+	this->mgr_ = nullptr;
+
 	return;
 }
 
@@ -44,6 +63,8 @@ void tml::sound::ManagerCommon::Init(void)
 INT tml::sound::ManagerCommon::Create(tml::sound::Manager *mgr)
 {
 	this->Init();
+
+	this->mgr_ = mgr;
 
 	return (0);
 }

@@ -25,7 +25,13 @@ class ManagerCommon
 public: ManagerCommon(const tml::sound::ManagerCommon &) = delete;
 public: tml::sound::ManagerCommon &operator =(const tml::sound::ManagerCommon &) = delete;
 
+private:
+	tml::sound::Manager *mgr_;
+
 public:
+
+private:
+	void Release(void);
 
 public:
 	ManagerCommon();

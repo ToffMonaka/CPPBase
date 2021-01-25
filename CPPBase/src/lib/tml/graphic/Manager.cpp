@@ -5,6 +5,21 @@
 
 
 #include "Manager.h"
+#include "Shader.h"
+#include "CommonShaderConstantBuffer.h"
+#include "LightShaderConstantBuffer.h"
+#include "FogShaderConstantBuffer.h"
+#include "ShadowShaderConstantBuffer.h"
+#include "AOShaderConstantBuffer.h"
+#include "ModelShaderConstantBuffer.h"
+#include "CameraShaderStructuredBuffer.h"
+#include "LightShaderStructuredBuffer.h"
+#include "FogShaderStructuredBuffer.h"
+#include "ShadowShaderStructuredBuffer.h"
+#include "ShadowCameraShaderStructuredBuffer.h"
+#include "ModelLayerShaderStructuredBuffer.h"
+#include "ModelMatrixShaderStructuredBuffer.h"
+#include "ModelMaterialShaderStructuredBuffer.h"
 
 
 /**
@@ -84,7 +99,14 @@ tml::graphic::Manager::Manager() :
 	bloom_per_(0.0f),
 	bloom_blur_weight_cnt_(0U),
 	bloom_blur_dispersion_val_(0.0f),
-	aa_quality_type_(tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE)
+	aa_quality_type_(tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE),
+	draw_vs_(nullptr),
+	draw_vs_input_layout_(nullptr),
+	draw_hs_(nullptr),
+	draw_ds_(nullptr),
+	draw_gs_(nullptr),
+	draw_ps_(nullptr),
+	cmp_cs_(nullptr)
 {
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
@@ -228,6 +250,13 @@ void tml::graphic::Manager::Init(void)
 	this->bloom_blur_weight_cnt_ = 0U;
 	this->bloom_blur_dispersion_val_ = 0.0f;
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE;
+	this->draw_vs_ = nullptr;
+	this->draw_vs_input_layout_ = nullptr;
+	this->draw_hs_ = nullptr;
+	this->draw_ds_ = nullptr;
+	this->draw_gs_ = nullptr;
+	this->draw_ps_ = nullptr;
+	this->cmp_cs_ = nullptr;
 
 	return;
 }
@@ -470,6 +499,13 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 		return (-1);
 	}
 
+	this->SetDrawShaderConstantBuffer(this->common.common_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::COMMON);
+	this->SetDrawShaderConstantBuffer(this->common.light_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::LIGHT);
+	this->SetDrawShaderConstantBuffer(this->common.fog_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::FOG);
+	this->SetDrawShaderConstantBuffer(this->common.shadow_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::GEOMETRY_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SHADOW);
+	this->SetDrawShaderConstantBuffer(this->common.ao_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::AO);
+	this->SetDrawShaderConstantBuffer(this->common.model_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::MODEL);
+
 	return (0);
 }
 
@@ -676,4 +712,196 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 	tml::SetResult(dst_res, 0);
 
 	return (dst_buf_cont);
+}
+
+
+/**
+ * @brief SetDrawShaderŠÖ”
+ * @param shader (shader)
+ */
+void tml::graphic::Manager::SetDrawShader(tml::graphic::Shader *shader)
+{
+	if (shader->GetVertexShader() != this->draw_vs_) {
+		this->draw_vs_ = shader->GetVertexShader();
+		this->draw_vs_input_layout_ = shader->GetVertexShaderInputLayout();
+
+		this->device_context_->VSSetShader(this->draw_vs_, nullptr, 0U);
+		this->device_context_->IASetInputLayout(this->draw_vs_input_layout_);
+	}
+
+	if (shader->GetHullShader() != this->draw_hs_) {
+		this->draw_hs_ = shader->GetHullShader();
+
+		this->device_context_->HSSetShader(this->draw_hs_, nullptr, 0U);
+	}
+
+	if (shader->GetDomainShader() != this->draw_ds_) {
+		this->draw_ds_ = shader->GetDomainShader();
+
+		this->device_context_->DSSetShader(this->draw_ds_, nullptr, 0U);
+	}
+
+	if (shader->GetGeometryShader() != this->draw_gs_) {
+		this->draw_gs_ = shader->GetGeometryShader();
+
+		this->device_context_->GSSetShader(this->draw_gs_, nullptr, 0U);
+	}
+
+	if (shader->GetPixelShader() != this->draw_ps_) {
+		this->draw_ps_ = shader->GetPixelShader();
+
+		this->device_context_->PSSetShader(this->draw_ps_, nullptr, 0U);
+	}
+
+	if (this->cmp_cs_ != nullptr) {
+		this->cmp_cs_ = nullptr;
+
+		this->device_context_->CSSetShader(this->cmp_cs_, nullptr, 0U);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawShaderConstantBufferŠÖ”
+ * @param scb (shader_constant_buffer)
+ * @param shader_type_flg (shader_type_flag)
+ * @param sr_index (sr_index)
+ */
+void tml::graphic::Manager::SetDrawShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *scb, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG shader_type_flg, const UINT sr_index)
+{
+	ID3D11Buffer *buf_ary[1] = {scb->GetBuffer()};
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_)) {
+		this->device_context_->VSSetConstantBuffers(sr_index, 1U, buf_ary);
+	}
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::HULL_)) {
+		this->device_context_->HSSetConstantBuffers(sr_index, 1U, buf_ary);
+	}
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::DOMAIN_)) {
+		this->device_context_->DSSetConstantBuffers(sr_index, 1U, buf_ary);
+	}
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::GEOMETRY_)) {
+		this->device_context_->GSSetConstantBuffers(sr_index, 1U, buf_ary);
+	}
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_)) {
+		this->device_context_->PSSetConstantBuffers(sr_index, 1U, buf_ary);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawShaderStructuredBufferŠÖ”
+ * @param ssb (shader_structured_buffer)
+ * @param shader_type_flg (shader_type_flag)
+ * @param sr_index (sr_index)
+ */
+void tml::graphic::Manager::SetDrawShaderStructuredBuffer(tml::graphic::ShaderStructuredBuffer *ssb, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG shader_type_flg, const UINT sr_index)
+{
+	ID3D11ShaderResourceView *sr_ary[1] = {ssb->GetSR()};
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_)) {
+		this->device_context_->VSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+	}
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::HULL_)) {
+		this->device_context_->HSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+	}
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::DOMAIN_)) {
+		this->device_context_->DSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+	}
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::GEOMETRY_)) {
+		this->device_context_->GSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+	}
+
+	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_)) {
+		this->device_context_->PSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetComputeShaderŠÖ”
+ * @param shader (shader)
+ */
+void tml::graphic::Manager::SetComputeShader(tml::graphic::Shader *shader)
+{
+	if (this->draw_vs_ != nullptr) {
+		this->draw_vs_ = nullptr;
+
+		this->device_context_->VSSetShader(this->draw_vs_, nullptr, 0U);
+	}
+
+	if (this->draw_hs_ != nullptr) {
+		this->draw_hs_ = nullptr;
+
+		this->device_context_->HSSetShader(this->draw_hs_, nullptr, 0U);
+	}
+
+	if (this->draw_ds_ != nullptr) {
+		this->draw_ds_ = nullptr;
+
+		this->device_context_->DSSetShader(this->draw_ds_, nullptr, 0U);
+	}
+
+	if (this->draw_gs_ != nullptr) {
+		this->draw_gs_ = nullptr;
+
+		this->device_context_->GSSetShader(this->draw_gs_, nullptr, 0U);
+	}
+
+	if (this->draw_ps_ != nullptr) {
+		this->draw_ps_ = nullptr;
+
+		this->device_context_->PSSetShader(this->draw_ps_, nullptr, 0U);
+	}
+
+	if (shader->GetComputeShader() != this->cmp_cs_) {
+		this->cmp_cs_ = shader->GetComputeShader();
+
+		this->device_context_->CSSetShader(this->cmp_cs_, nullptr, 0U);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetComputeShaderConstantBufferŠÖ”
+ * @param scb (shader_constant_buffer)
+ * @param sr_index (sr_index)
+ */
+void tml::graphic::Manager::SetComputeShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *scb, const UINT sr_index)
+{
+	ID3D11Buffer *buf_ary[1] = {scb->GetBuffer()};
+
+	this->device_context_->CSSetConstantBuffers(sr_index, 1U, buf_ary);
+
+	return;
+}
+
+
+/**
+ * @brief SetComputeShaderStructuredBufferŠÖ”
+ * @param ssb (shader_structured_buffer)
+ * @param sr_index (sr_index)
+ */
+void tml::graphic::Manager::SetComputeShaderStructuredBuffer(tml::graphic::ShaderStructuredBuffer *ssb, const UINT sr_index)
+{
+	ID3D11ShaderResourceView *sr_ary[1] = {ssb->GetSR()};
+
+	this->device_context_->CSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+
+	return;
 }

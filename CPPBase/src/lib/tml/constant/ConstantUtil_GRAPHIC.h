@@ -103,6 +103,49 @@ namespace GRAPHIC {
 		DEFAULT,
 		REFERENCE
 	};
+	enum class SHADER_TYPE : UINT {
+		NONE = 0U,
+		VERTEX_,
+		HULL_,
+		DOMAIN_,
+		GEOMETRY_,
+		PIXEL_,
+		COMPUTE_
+	};
+	enum class SHADER_TYPE_FLAG : UINT {
+		NONE = 0U,
+		VERTEX_ = 1U << 0,
+		HULL_ = 1U << 1,
+		DOMAIN_ = 1U << 2,
+		GEOMETRY_ = 1U << 3,
+		PIXEL_ = 1U << 4,
+		COMPUTE_ = 1U << 5
+	};
+	namespace SHADER_CONSTANT_BUFFER_SR_INDEX {
+	enum : UINT {
+		COMMON = 0U,
+		LIGHT,
+		FOG,
+		SHADOW,
+		AO,
+		MODEL,
+		USER
+	};
+	}
+	namespace SHADER_STRUCTURED_BUFFER_INDEX {
+	enum : UINT {
+		CAMERA = 0U,
+		LIGHT,
+		FOG,
+		SHADOW,
+		SHADOW_CAMERA,
+		MODEL_LAYER,
+		MODEL_MATRIX,
+		MODEL_MATERIAL,
+		BONE,
+		USER
+	};
+	}
 	enum class CAMERA_TYPE : UINT {
 		NONE = 0U,
 		PERSPECTIVE,
@@ -165,4 +208,5 @@ namespace GRAPHIC {
 }
 
 
+TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, UINT)
 TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, UINT)

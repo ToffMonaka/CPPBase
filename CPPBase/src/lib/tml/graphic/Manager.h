@@ -93,6 +93,15 @@ private:
 	FLOAT bloom_blur_dispersion_val_;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
 
+	ID3D11VertexShader *draw_vs_;
+	ID3D11InputLayout *draw_vs_input_layout_;
+	ID3D11HullShader *draw_hs_;
+	ID3D11DomainShader *draw_ds_;
+	ID3D11GeometryShader *draw_gs_;
+	ID3D11PixelShader *draw_ps_;
+
+	ID3D11ComputeShader *cmp_cs_;
+
 public:
 	tml::graphic::ManagerCommon common;
 
@@ -131,6 +140,14 @@ public:
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_res = nullptr);
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Texture2D *, INT *dst_res = nullptr);
 	std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
+
+	void SetDrawShader(tml::graphic::Shader *);
+	void SetDrawShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT);
+	void SetDrawShaderStructuredBuffer(tml::graphic::ShaderStructuredBuffer *, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT);
+
+	void SetComputeShader(tml::graphic::Shader *);
+	void SetComputeShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *, const UINT);
+	void SetComputeShaderStructuredBuffer(tml::graphic::ShaderStructuredBuffer *, const UINT);
 };
 }
 }

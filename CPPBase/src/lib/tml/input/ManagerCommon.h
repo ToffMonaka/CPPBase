@@ -25,7 +25,13 @@ class ManagerCommon
 public: ManagerCommon(const tml::input::ManagerCommon &) = delete;
 public: tml::input::ManagerCommon &operator =(const tml::input::ManagerCommon &) = delete;
 
+private:
+	tml::input::Manager *mgr_;
+
 public:
+
+private:
+	void Release(void);
 
 public:
 	ManagerCommon();
