@@ -18,6 +18,9 @@ class ScreenModelDesc : public tml::graphic::ModelDesc
 {
 public:
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	ScreenModelDesc();
 	virtual ~ScreenModelDesc();

@@ -101,7 +101,7 @@ void tml::graphic::BlendStateDesc::Set(const tml::ConstantUtil::GRAPHIC::BLEND_S
 	UINT tmp_rt_cnt = 0U;
 
 	if ((rt_cnt <= 0U)
-	|| (rt_cnt >= tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT)) {
+	|| (rt_cnt >= D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT)) {
 		tmp_rt_cnt = 1U;
 
 		this->blend_state_desc.IndependentBlendEnable = false;

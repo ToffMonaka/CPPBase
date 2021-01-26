@@ -18,6 +18,9 @@ class SpriteModelDesc : public tml::graphic::ModelDesc
 {
 public:
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	SpriteModelDesc();
 	virtual ~SpriteModelDesc();

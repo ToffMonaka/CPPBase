@@ -6,20 +6,12 @@
 
 #include "Manager.h"
 #include "Shader.h"
-#include "CommonShaderConstantBuffer.h"
-#include "LightShaderConstantBuffer.h"
-#include "FogShaderConstantBuffer.h"
-#include "ShadowShaderConstantBuffer.h"
-#include "AOShaderConstantBuffer.h"
+#include "SystemShaderConstantBuffer.h"
 #include "ModelShaderConstantBuffer.h"
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
-#include "ShadowShaderStructuredBuffer.h"
-#include "ShadowCameraShaderStructuredBuffer.h"
 #include "ModelLayerShaderStructuredBuffer.h"
-#include "ModelMatrixShaderStructuredBuffer.h"
-#include "ModelMaterialShaderStructuredBuffer.h"
 
 
 /**
@@ -60,9 +52,12 @@ void tml::graphic::ManagerDesc::Init(void)
 tml::graphic::Manager::Manager() :
 	factory_(nullptr),
 	adapter_(nullptr),
+	adapter_desc_{},
 	swap_chain_(nullptr),
+	swap_chain_desc_{},
 	device_(nullptr),
 	device_context_(nullptr),
+	device_future_lv_(static_cast<D3D_FEATURE_LEVEL>(0)),
 	clear_rt_(nullptr),
 	clear_rt_ary_{},
 	clear_dt_(nullptr),
@@ -106,11 +101,12 @@ tml::graphic::Manager::Manager() :
 	draw_ds_(nullptr),
 	draw_gs_(nullptr),
 	draw_ps_(nullptr),
+	draw_camera_(nullptr),
+	draw_light_cnt_(0U),
+	draw_fog_cnt_(0U),
+	draw_model_cnt_(0U),
 	cmp_cs_(nullptr)
 {
-	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
-	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
-	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
 	this->clear_tex_uasr_init_cnt_ary_.fill(static_cast<UINT>(-1));
 
 	return;
@@ -256,6 +252,13 @@ void tml::graphic::Manager::Init(void)
 	this->draw_ds_ = nullptr;
 	this->draw_gs_ = nullptr;
 	this->draw_ps_ = nullptr;
+	this->draw_camera_ = nullptr;
+	this->draw_model_cnt_ = 0U;
+	this->draw_model_cont_.clear();
+	this->draw_light_cnt_ = 0U;
+	this->draw_light_cont_.clear();
+	this->draw_fog_cnt_ = 0U;
+	this->draw_fog_cont_.clear();
 	this->cmp_cs_ = nullptr;
 
 	return;
@@ -499,12 +502,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 		return (-1);
 	}
 
-	this->SetDrawShaderConstantBuffer(this->common.common_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::COMMON);
-	this->SetDrawShaderConstantBuffer(this->common.light_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::LIGHT);
-	this->SetDrawShaderConstantBuffer(this->common.fog_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::FOG);
-	this->SetDrawShaderConstantBuffer(this->common.shadow_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::GEOMETRY_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SHADOW);
-	this->SetDrawShaderConstantBuffer(this->common.ao_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::AO);
-	this->SetDrawShaderConstantBuffer(this->common.model_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::MODEL);
+	this->SetDrawShaderConstantBuffer(this->common.system_shader_constant_buffer.get(), tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_ | tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM);
 
 	return (0);
 }
@@ -516,6 +514,69 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 void tml::graphic::Manager::Update(void)
 {
 	this->swap_chain_->Present(this->vsync_flg_, 0U);
+
+	this->draw_camera_ = nullptr;
+	this->draw_light_cnt_ = 0U;
+	this->draw_fog_cnt_ = 0U;
+	this->draw_model_cnt_ = 0U;
+
+	/*
+	mpc_p::graphic::DrawStage draw_stage;
+
+	this->SetDrawStage(&draw_stage);
+
+	while (this->StartDraw()) {
+		if (this->IsDrawStage(mpc_p::graphic::_DrawStage::_NUMBER::_INIT)) { //‰Šú‰»‚ÌŽž
+			this->SetDrawFinishTarget(this->item_storage.main_rt_tex);
+			this->SetDrawCamera(this->item_storage.wait_camera);
+
+			this->item_storage.light_scb->SetElement(this->item_storage.light_ssb->GetElementCount());
+			this->item_storage.light_scb->UpdateBuffer();
+
+			this->item_storage.fog_scb->SetElement(this->item_storage.fog_ssb->GetElementCount());
+			this->item_storage.fog_scb->UpdateBuffer();
+
+			this->item_storage.light_ssb->UpdateBuffer();
+			this->item_storage.fog_ssb->UpdateBuffer();
+			this->item_storage.shadow_ssb->UpdateBuffer();
+			this->item_storage.model_material_ssb->UpdateBuffer();
+
+			this->draw_finish_rt_tex->ClearRenderTarget(XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
+
+			this->SetDrawStageNumber(mpc_p::graphic::_DrawStage::_NUMBER::_FORWARD_2D);
+		}
+
+		if (this->item_storage.sprite_model->IsDrawable()) { //•`‰æ‰Â‚ÌŽž
+			auto &sprite_model = this->item_storage.sprite_model;
+			auto sprite_model_layer = sprite_model->GetLayerContainer().GetElementFast(0U);
+			std::array<mpc_p::graphic::Texture *, mpc_p::graphic::_SpriteModel::_TEXTURE_INDEX::_COUNT> sprite_model_tex_ary = {
+				this->item_storage.wait_tex
+			};
+			auto &sprite_model_tex_size = sprite_model_tex_ary[0]->GetSize();
+
+			sprite_model->SetDrawTexture(sprite_model_tex_ary.size(), sprite_model_tex_ary.data());
+
+			this->GetWorldMatrix2D(&this->GetDrawStage().GetWorldMatrix(), (this->GetProcess()->GetSize() * 0.5f) - (sprite_model_tex_size * 0.5f), 0.0f, sprite_model_tex_size);
+			sprite_model->SetDrawTransparentPercent(0.8f);
+			sprite_model->Draw(this->GetDrawStage().GetWorldMatrix());
+
+			if (time_per > 0.0f) { //ŽžŠÔ—¦—L‚è‚ÌŽž
+				this->GetWorldMatrix2D(&this->GetDrawStage().GetWorldMatrix(), (this->GetProcess()->GetSize() * 0.5f) - (sprite_model_tex_size * 0.5f), 0.0f, XMFLOAT2EX(sprite_model_tex_size.x * time_per, sprite_model_tex_size.y));
+				sprite_model_layer->SetDrawTextureScale(XMFLOAT2EX(time_per, 1.0f));
+				sprite_model->SetDrawTransparentPercent(0.0f);
+				sprite_model->Draw(this->GetDrawStage().GetWorldMatrix());
+
+				sprite_model_layer->ResetDrawTextureScale();
+			}
+
+			sprite_model->ResetDrawTransparentPercent();
+			sprite_model->ResetDrawTexture();
+		}
+	}
+
+	this->EndDraw();
+	this->SwapDraw();
+	*/
 
 	return;
 }
@@ -808,23 +869,23 @@ void tml::graphic::Manager::SetDrawShaderStructuredBuffer(tml::graphic::ShaderSt
 	ID3D11ShaderResourceView *sr_ary[1] = {ssb->GetSR()};
 
 	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::VERTEX_)) {
-		this->device_context_->VSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+		this->device_context_->VSSetShaderResources(tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
 	}
 
 	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::HULL_)) {
-		this->device_context_->HSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+		this->device_context_->HSSetShaderResources(tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
 	}
 
 	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::DOMAIN_)) {
-		this->device_context_->DSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+		this->device_context_->DSSetShaderResources(tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
 	}
 
 	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::GEOMETRY_)) {
-		this->device_context_->GSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+		this->device_context_->GSSetShaderResources(tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
 	}
 
 	if (static_cast<bool>(shader_type_flg & tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG::PIXEL_)) {
-		this->device_context_->PSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+		this->device_context_->PSSetShaderResources(tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
 	}
 
 	return;
@@ -901,7 +962,7 @@ void tml::graphic::Manager::SetComputeShaderStructuredBuffer(tml::graphic::Shade
 {
 	ID3D11ShaderResourceView *sr_ary[1] = {ssb->GetSR()};
 
-	this->device_context_->CSSetShaderResources(tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
+	this->device_context_->CSSetShaderResources(tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT + sr_index, 1U, sr_ary);
 
 	return;
 }

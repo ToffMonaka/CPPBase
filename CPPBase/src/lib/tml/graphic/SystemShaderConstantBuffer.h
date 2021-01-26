@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief AOShaderConstantBufferヘッダーファイル
+ * @brief SystemShaderConstantBufferヘッダーファイル
  */
 #pragma once
 
@@ -12,15 +12,15 @@
 namespace tml {
 namespace graphic {
 /**
- * @brief AOShaderConstantBufferDescクラス
+ * @brief SystemShaderConstantBufferDescクラス
  */
-class AOShaderConstantBufferDesc : public tml::graphic::ShaderConstantBufferDesc
+class SystemShaderConstantBufferDesc : public tml::graphic::ShaderConstantBufferDesc
 {
 public:
 
 public:
-	AOShaderConstantBufferDesc();
-	virtual ~AOShaderConstantBufferDesc();
+	SystemShaderConstantBufferDesc();
+	virtual ~SystemShaderConstantBufferDesc();
 
 	virtual void Init(void);
 };
@@ -31,12 +31,12 @@ public:
 namespace tml {
 namespace graphic {
 /**
- * @brief AOShaderConstantBufferクラス
+ * @brief SystemShaderConstantBufferクラス
  */
-class AOShaderConstantBuffer : public tml::graphic::ShaderConstantBuffer
+class SystemShaderConstantBuffer : public tml::graphic::ShaderConstantBuffer
 {
-public: AOShaderConstantBuffer(const tml::graphic::AOShaderConstantBuffer &) = delete;
-public: tml::graphic::AOShaderConstantBuffer &operator =(const tml::graphic::AOShaderConstantBuffer &) = delete;
+public: SystemShaderConstantBuffer(const tml::graphic::SystemShaderConstantBuffer &) = delete;
+public: tml::graphic::SystemShaderConstantBuffer &operator =(const tml::graphic::SystemShaderConstantBuffer &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
@@ -64,20 +64,20 @@ public:
 	} ELEMENT;
 
 private:
-	tml::graphic::AOShaderConstantBuffer::ELEMENT *element_;
+	tml::graphic::SystemShaderConstantBuffer::ELEMENT *element_;
 
 private:
 	void Release(void);
 
 public:
-	AOShaderConstantBuffer();
-	virtual ~AOShaderConstantBuffer();
+	SystemShaderConstantBuffer();
+	virtual ~SystemShaderConstantBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::AOShaderConstantBufferDesc &);
+	INT Create(const tml::graphic::SystemShaderConstantBufferDesc &);
 
 	void UpdateBuffer(void);
-	tml::graphic::AOShaderConstantBuffer::ELEMENT *GetElement(void);
+	tml::graphic::SystemShaderConstantBuffer::ELEMENT *GetElement(void);
 	//void SetElement(const UINT);
 };
 }
@@ -87,7 +87,7 @@ public:
 /**
  * @brief UpdateBuffer関数
  */
-inline void tml::graphic::AOShaderConstantBuffer::UpdateBuffer(void)
+inline void tml::graphic::SystemShaderConstantBuffer::UpdateBuffer(void)
 {
 	tml::graphic::ShaderConstantBuffer::UpdateBuffer(this->element_);
 
@@ -100,7 +100,7 @@ inline void tml::graphic::AOShaderConstantBuffer::UpdateBuffer(void)
  * @return element (element)<br>
  * nullptr=失敗
  */
-inline tml::graphic::AOShaderConstantBuffer::ELEMENT *tml::graphic::AOShaderConstantBuffer::GetElement(void)
+inline tml::graphic::SystemShaderConstantBuffer::ELEMENT *tml::graphic::SystemShaderConstantBuffer::GetElement(void)
 {
 	return (tml::graphic::ShaderConstantBuffer::GetElement(this->element_));
 }

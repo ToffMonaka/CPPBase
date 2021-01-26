@@ -14,11 +14,10 @@
 tml::MainThread::MainThread() :
 	instance_handle_(nullptr),
 	wnd_handle_(nullptr),
-	wnd_show_type_(0)
+	wnd_show_type_(0),
+	wnd_class_{},
+	wnd_class_atom_(0)
 {
-	tml::MemoryUtil::Clear(&this->wnd_class_, 1U);
-	this->wnd_class_atom_ = 0;
-
 	return;
 }
 

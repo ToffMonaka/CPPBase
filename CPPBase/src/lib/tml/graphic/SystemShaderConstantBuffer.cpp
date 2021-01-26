@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief CommonShaderConstantBufferコードファイル
+ * @brief SystemShaderConstantBufferコードファイル
  */
 
 
-#include "CommonShaderConstantBuffer.h"
+#include "SystemShaderConstantBuffer.h"
 #include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::CommonShaderConstantBufferDesc::CommonShaderConstantBufferDesc()
+tml::graphic::SystemShaderConstantBufferDesc::SystemShaderConstantBufferDesc()
 {
 	return;
 }
@@ -20,7 +20,7 @@ tml::graphic::CommonShaderConstantBufferDesc::CommonShaderConstantBufferDesc()
 /**
  * @brief デストラクタ
  */
-tml::graphic::CommonShaderConstantBufferDesc::~CommonShaderConstantBufferDesc()
+tml::graphic::SystemShaderConstantBufferDesc::~SystemShaderConstantBufferDesc()
 {
 	return;
 }
@@ -29,7 +29,7 @@ tml::graphic::CommonShaderConstantBufferDesc::~CommonShaderConstantBufferDesc()
 /**
  * @brief 初期化関数
  */
-void tml::graphic::CommonShaderConstantBufferDesc::Init(void)
+void tml::graphic::SystemShaderConstantBufferDesc::Init(void)
 {
 	tml::graphic::ShaderConstantBufferDesc::Init();
 
@@ -40,7 +40,7 @@ void tml::graphic::CommonShaderConstantBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::CommonShaderConstantBuffer::CommonShaderConstantBuffer() :
+tml::graphic::SystemShaderConstantBuffer::SystemShaderConstantBuffer() :
 	element_(nullptr)
 {
 	return;
@@ -50,7 +50,7 @@ tml::graphic::CommonShaderConstantBuffer::CommonShaderConstantBuffer() :
 /**
  * @brief デストラクタ
  */
-tml::graphic::CommonShaderConstantBuffer::~CommonShaderConstantBuffer()
+tml::graphic::SystemShaderConstantBuffer::~SystemShaderConstantBuffer()
 {
 	this->Release();
 
@@ -61,7 +61,7 @@ tml::graphic::CommonShaderConstantBuffer::~CommonShaderConstantBuffer()
 /**
  * @brief Release関数
  */
-void tml::graphic::CommonShaderConstantBuffer::Release(void)
+void tml::graphic::SystemShaderConstantBuffer::Release(void)
 {
 	tml::MemoryUtil::Release(&this->element_);
 
@@ -74,7 +74,7 @@ void tml::graphic::CommonShaderConstantBuffer::Release(void)
 /**
  * @brief 初期化関数
  */
-void tml::graphic::CommonShaderConstantBuffer::Init(void)
+void tml::graphic::SystemShaderConstantBuffer::Init(void)
 {
 	this->Release();
 
@@ -90,17 +90,17 @@ void tml::graphic::CommonShaderConstantBuffer::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::CommonShaderConstantBuffer::Create(const tml::graphic::CommonShaderConstantBufferDesc &desc)
+INT tml::graphic::SystemShaderConstantBuffer::Create(const tml::graphic::SystemShaderConstantBufferDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::ShaderConstantBuffer::Create(desc, sizeof(tml::graphic::CommonShaderConstantBuffer::ELEMENT)) < 0) {
+	if (tml::graphic::ShaderConstantBuffer::Create(desc, sizeof(tml::graphic::SystemShaderConstantBuffer::ELEMENT)) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
-	this->element_ = tml::MemoryUtil::Get<tml::graphic::CommonShaderConstantBuffer::ELEMENT>(1U);
+	this->element_ = tml::MemoryUtil::Get<tml::graphic::SystemShaderConstantBuffer::ELEMENT>(1U);
 
 	return (0);
 }
@@ -111,7 +111,7 @@ INT tml::graphic::CommonShaderConstantBuffer::Create(const tml::graphic::CommonS
  * @param common_ssb_cnt …ライトシェーダー構造化バッファ数
  */
 /*
-void tml::graphic::CommonShaderConstantBuffer::SetElement(const UINT common_ssb_cnt)
+void tml::graphic::SystemShaderConstantBuffer::SetElement(const UINT common_ssb_cnt)
 {
 	auto element = this->GetElement();
 

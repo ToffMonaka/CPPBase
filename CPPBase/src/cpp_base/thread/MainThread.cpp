@@ -17,6 +17,9 @@
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 
+#include "../../lib/tml/graphic/Camera.h"
+#include "../../lib/tml/graphic/SpriteModel.h"
+
 
 /**
  * @brief コンストラクタ
@@ -43,6 +46,9 @@ cpp_base::MainThread::~MainThread()
  */
 void cpp_base::MainThread::Release(void)
 {
+	this->graphic_mgr_.ReleaseResource(this->test_camera_);
+	this->graphic_mgr_.ReleaseResource(this->test_sprite_model_);
+
 	tml::MainThread::Release();
 
 	return;
@@ -174,6 +180,39 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
+		{// SpriteModel Create
+			tml::graphic::CameraDesc desc;
+
+			desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
+			desc.fov_angle = XMConvertToRadians(55.0f);
+			desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Width), static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Height));
+			desc.near_clip = 0.1f;
+			desc.far_clip = 1000.0f;
+
+			this->test_camera_ = this->graphic_mgr_.GetResource<tml::graphic::Camera>(desc);
+
+			if (this->test_camera_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+		}
+
+		{// SpriteModel Create
+			tml::graphic::SpriteModelDesc desc;
+			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
+
+			desc.Read(read_desc);
+
+			this->test_sprite_model_ = this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(desc);
+
+			if (this->test_sprite_model_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+		}
+
 		int a = 0;
 	}
 
@@ -198,7 +237,12 @@ void cpp_base::MainThread::End(void)
 void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
+
+	this->graphic_mgr_.SetDrawCamera(this->test_camera_.get());
+	this->graphic_mgr_.SetDrawModel(this->test_sprite_model_.get());
+
 	this->graphic_mgr_.Update();
+
 	this->sound_mgr_.Update();
 
 	this->frame_rate_.Update();

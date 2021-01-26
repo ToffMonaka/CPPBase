@@ -54,16 +54,16 @@ private:
 	ID3D11DeviceContext *device_context_;
 	D3D_FEATURE_LEVEL device_future_lv_;
 	ID3D11RenderTargetView *clear_rt_;
-	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> clear_rt_ary_;
+	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> clear_rt_ary_;
 	ID3D11DepthStencilView *clear_dt_;
-	std::array<ID3D11DepthStencilView *, tml::ConstantUtil::GRAPHIC::DEPTH_TARGET_LIMIT> clear_dt_ary_;
+	std::array<ID3D11DepthStencilView *, tml::ConstantUtil::GRAPHIC::DRAW_DEPTH_TARGET_LIMIT> clear_dt_ary_;
 	ID3D11ShaderResourceView *clear_tex_sr_;
-	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT> clear_tex_sr_ary_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> clear_tex_sr_ary_;
 	ID3D11UnorderedAccessView *clear_tex_uasr_;
-	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::TEXTURE_UASR_LIMIT> clear_tex_uasr_ary_;
-	std::array<UINT, tml::ConstantUtil::GRAPHIC::TEXTURE_UASR_LIMIT> clear_tex_uasr_init_cnt_ary_;
+	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> clear_tex_uasr_ary_;
+	std::array<UINT, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> clear_tex_uasr_init_cnt_ary_;
 	ID3D11SamplerState *clear_samp_sr_;
-	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> clear_samp_sr_ary_;
+	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> clear_samp_sr_ary_;
 	bool vsync_flg_;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE samp_quality_type_;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE motion_quality_type_;
@@ -99,6 +99,13 @@ private:
 	ID3D11DomainShader *draw_ds_;
 	ID3D11GeometryShader *draw_gs_;
 	ID3D11PixelShader *draw_ps_;
+	tml::graphic::Camera *draw_camera_;
+	UINT draw_light_cnt_;
+	std::vector<tml::graphic::Light *> draw_light_cont_;
+	UINT draw_fog_cnt_;
+	std::vector<tml::graphic::Fog *> draw_fog_cont_;
+	UINT draw_model_cnt_;
+	std::vector<tml::graphic::Model *> draw_model_cont_;
 
 	ID3D11ComputeShader *cmp_cs_;
 
@@ -144,6 +151,10 @@ public:
 	void SetDrawShader(tml::graphic::Shader *);
 	void SetDrawShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT);
 	void SetDrawShaderStructuredBuffer(tml::graphic::ShaderStructuredBuffer *, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT);
+	void SetDrawCamera(tml::graphic::Camera *);
+	void SetDrawLight(tml::graphic::Light *);
+	void SetDrawFog(tml::graphic::Fog *);
+	void SetDrawModel(tml::graphic::Model *);
 
 	void SetComputeShader(tml::graphic::Shader *);
 	void SetComputeShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *, const UINT);
@@ -361,4 +372,64 @@ inline tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE tml::graphic::Manager::Get
 inline tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE tml::graphic::Manager::GetAAQualityType(void) const
 {
 	return (this->aa_quality_type_);
+}
+
+
+/**
+ * @brief SetDrawCameraŠÖ”
+ * @param camera (camera)
+ */
+inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera *camera)
+{
+	this->draw_camera_ = camera;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawLightŠÖ”
+ * @param light (light)
+ */
+inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
+{
+	if (this->draw_light_cnt_ >= this->draw_light_cont_.size()) {
+		this->draw_light_cont_.resize(this->draw_light_cnt_ + 256U);
+	}
+
+	this->draw_light_cont_[this->draw_light_cnt_++] = light;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawFogŠÖ”
+ * @param fog (fog)
+ */
+inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
+{
+	if (this->draw_fog_cnt_ >= this->draw_fog_cont_.size()) {
+		this->draw_fog_cont_.resize(this->draw_fog_cnt_ + 256U);
+	}
+
+	this->draw_fog_cont_[this->draw_fog_cnt_++] = fog;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawModelŠÖ”
+ * @param model (model)
+ */
+inline void tml::graphic::Manager::SetDrawModel(tml::graphic::Model *model)
+{
+	if (this->draw_model_cnt_ >= this->draw_model_cont_.size()) {
+		this->draw_model_cont_.resize(this->draw_model_cnt_ + 256U);
+	}
+
+	this->draw_model_cont_[this->draw_model_cnt_++] = model;
+
+	return;
 }

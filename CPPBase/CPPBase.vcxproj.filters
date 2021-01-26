@@ -258,22 +258,7 @@
     <ClCompile Include="src\lib\tml\graphic\SpriteModel.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\AOShaderConstantBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\FogShaderConstantBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\LightShaderConstantBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\lib\tml\graphic\ModelShaderConstantBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\ShadowShaderConstantBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\BoneShaderStructuredBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.cpp">
@@ -285,22 +270,10 @@
     <ClCompile Include="src\lib\tml\graphic\ModelLayerShaderStructuredBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\ModelMaterialShaderStructuredBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\ModelMatrixShaderStructuredBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\ShadowCameraShaderStructuredBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\ShadowShaderStructuredBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\lib\tml\graphic\FogShaderStructuredBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\CommonShaderConstantBuffer.cpp">
+    <ClCompile Include="src\lib\tml\graphic\SystemShaderConstantBuffer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -587,22 +560,7 @@
     <ClInclude Include="src\lib\tml\graphic\SpriteModel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\AOShaderConstantBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\FogShaderConstantBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\LightShaderConstantBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\lib\tml\graphic\ModelShaderConstantBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\ShadowShaderConstantBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\BoneShaderStructuredBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.h">
@@ -614,22 +572,10 @@
     <ClInclude Include="src\lib\tml\graphic\ModelLayerShaderStructuredBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\ModelMaterialShaderStructuredBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\ModelMatrixShaderStructuredBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\ShadowCameraShaderStructuredBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\ShadowShaderStructuredBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\lib\tml\graphic\FogShaderStructuredBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\CommonShaderConstantBuffer.h">
+    <ClInclude Include="src\lib\tml\graphic\SystemShaderConstantBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

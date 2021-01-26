@@ -10,22 +10,21 @@
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
-#include "CommonShaderConstantBuffer.h"
-#include "LightShaderConstantBuffer.h"
-#include "FogShaderConstantBuffer.h"
-#include "ShadowShaderConstantBuffer.h"
-#include "AOShaderConstantBuffer.h"
+#include "SystemShaderConstantBuffer.h"
 #include "ModelShaderConstantBuffer.h"
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
-#include "ShadowShaderStructuredBuffer.h"
-#include "ShadowCameraShaderStructuredBuffer.h"
 #include "ModelLayerShaderStructuredBuffer.h"
-#include "ModelMatrixShaderStructuredBuffer.h"
-#include "ModelMaterialShaderStructuredBuffer.h"
+#include "Camera.h"
+#include "Light.h"
+#include "Fog.h"
+#include "Mesh.h"
+#include "Material.h"
 #include "Texture.h"
 #include "Sampler.h"
+#include "ScreenModel.h"
+#include "SpriteModel.h"
 
 
 /**
@@ -74,20 +73,10 @@ void tml::graphic::ManagerCommon::Release(void)
 		this->mgr_->ReleaseResource(this->reference_depth_state);
 		this->mgr_->ReleaseResource(this->screen_model_shader);
 		this->mgr_->ReleaseResource(this->sprite_model_shader);
-		this->mgr_->ReleaseResource(this->common_shader_constant_buffer);
-		this->mgr_->ReleaseResource(this->light_shader_constant_buffer);
-		this->mgr_->ReleaseResource(this->fog_shader_constant_buffer);
-		this->mgr_->ReleaseResource(this->shadow_shader_constant_buffer);
-		this->mgr_->ReleaseResource(this->ao_shader_constant_buffer);
-		this->mgr_->ReleaseResource(this->model_shader_constant_buffer);
+		this->mgr_->ReleaseResource(this->system_shader_constant_buffer);
 		this->mgr_->ReleaseResource(this->camera_shader_structured_buffer);
 		this->mgr_->ReleaseResource(this->light_shader_structured_buffer);
 		this->mgr_->ReleaseResource(this->fog_shader_structured_buffer);
-		this->mgr_->ReleaseResource(this->shadow_shader_structured_buffer);
-		this->mgr_->ReleaseResource(this->shadow_camera_shader_structured_buffer);
-		this->mgr_->ReleaseResource(this->model_layer_shader_structured_buffer);
-		this->mgr_->ReleaseResource(this->model_matrix_shader_structured_buffer);
-		this->mgr_->ReleaseResource(this->model_material_shader_structured_buffer);
 		this->mgr_->ReleaseResource(this->main_render_target_texture);
 		this->mgr_->ReleaseResource(this->main_depth_target_texture);
 		this->mgr_->ReleaseResource(this->model_cc_sampler);
@@ -348,84 +337,59 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// CommonShaderConstantBuffer Create
-		tml::graphic::CommonShaderConstantBufferDesc desc;
+	{// SystemShaderConstantBuffer Create
+		tml::graphic::SystemShaderConstantBufferDesc desc;
 
 		desc.cpu_read_flag = true;
 
-		this->common_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::CommonShaderConstantBuffer>(desc);
+		this->system_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::SystemShaderConstantBuffer>(desc);
 
-		if (this->common_shader_constant_buffer == nullptr) {
+		if (this->system_shader_constant_buffer == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// LightShaderConstantBuffer Create
-		tml::graphic::LightShaderConstantBufferDesc desc;
+	{// CameraShaderStructuredBuffer Create
+		tml::graphic::CameraShaderStructuredBufferDesc desc;
 
+		desc.element_limit = tml::ConstantUtil::GRAPHIC::DRAW_CAMERA_LIMIT;
 		desc.cpu_read_flag = true;
 
-		this->light_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::LightShaderConstantBuffer>(desc);
+		this->camera_shader_structured_buffer = this->mgr_->GetResource<tml::graphic::CameraShaderStructuredBuffer>(desc);
 
-		if (this->light_shader_constant_buffer == nullptr) {
+		if (this->camera_shader_structured_buffer == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// FogShaderConstantBuffer Create
-		tml::graphic::FogShaderConstantBufferDesc desc;
+	{// LightShaderStructuredBuffer Create
+		tml::graphic::LightShaderStructuredBufferDesc desc;
 
+		desc.element_limit = tml::ConstantUtil::GRAPHIC::DRAW_LIGHT_LIMIT;
 		desc.cpu_read_flag = true;
 
-		this->fog_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::FogShaderConstantBuffer>(desc);
+		this->light_shader_structured_buffer = this->mgr_->GetResource<tml::graphic::LightShaderStructuredBuffer>(desc);
 
-		if (this->fog_shader_constant_buffer == nullptr) {
+		if (this->light_shader_structured_buffer == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// ShadowShaderConstantBuffer Create
-		tml::graphic::ShadowShaderConstantBufferDesc desc;
+	{// FogShaderStructuredBuffer Create
+		tml::graphic::FogShaderStructuredBufferDesc desc;
 
+		desc.element_limit = tml::ConstantUtil::GRAPHIC::DRAW_FOG_LIMIT;
 		desc.cpu_read_flag = true;
 
-		this->shadow_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::ShadowShaderConstantBuffer>(desc);
+		this->fog_shader_structured_buffer = this->mgr_->GetResource<tml::graphic::FogShaderStructuredBuffer>(desc);
 
-		if (this->shadow_shader_constant_buffer == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
-	{// AOShaderConstantBuffer Create
-		tml::graphic::AOShaderConstantBufferDesc desc;
-
-		desc.cpu_read_flag = true;
-
-		this->ao_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::AOShaderConstantBuffer>(desc);
-
-		if (this->ao_shader_constant_buffer == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
-	{// ModelShaderConstantBuffer Create
-		tml::graphic::ModelShaderConstantBufferDesc desc;
-
-		desc.cpu_read_flag = true;
-
-		this->model_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::ModelShaderConstantBuffer>(desc);
-
-		if (this->model_shader_constant_buffer == nullptr) {
+		if (this->fog_shader_structured_buffer == nullptr) {
 			this->Init();
 
 			return (-1);
