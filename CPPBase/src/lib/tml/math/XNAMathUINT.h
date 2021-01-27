@@ -24,14 +24,14 @@ typedef struct XMUINT2_
 	XMUINT2_()
 	{
 		return;
-	}
+	};
 
 	XMUINT2_(const UINT x, const UINT y) :
 		x(x),
 		y(y)
 	{
 		return;
-	}
+	};
 } XMUINT2;
 
 
@@ -47,7 +47,7 @@ typedef struct XMUINT3_
 	XMUINT3_()
 	{
 		return;
-	}
+	};
 
 	XMUINT3_(const UINT x, const UINT y, const UINT z) :
 		x(x),
@@ -55,7 +55,7 @@ typedef struct XMUINT3_
 		z(z)
 	{
 		return;
-	}
+	};
 } XMUINT3;
 
 
@@ -72,7 +72,7 @@ typedef struct XMUINT4_
 	XMUINT4_()
 	{
 		return;
-	}
+	};
 
 	XMUINT4_(const UINT x, const UINT y, const UINT z, const UINT w) :
 		x(x),
@@ -81,7 +81,7 @@ typedef struct XMUINT4_
 		w(w)
 	{
 		return;
-	}
+	};
 } XMUINT4;
 
 
@@ -95,37 +95,37 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		XMUINT2(0U, 0U)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT2EX_(const UINT x, const UINT y) :
 		XMUINT2(x, y)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT2EX_(const UINT val) :
 		XMUINT2(val, val)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT2EX_(const XMUINT2 &val) :
 		XMUINT2(val.x, val.y)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT2EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
 		XMUINT2(1U, 0U)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT2EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
 		XMUINT2(0U, 1U)
 	{
 		return;
-	}
+	};
 
 	tml::XMUINT2EX_ &operator =(const UINT val)
 	{
@@ -133,7 +133,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator =(const XMUINT2 &val)
 	{
@@ -141,7 +141,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y = val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator =(const tml::ConstantUtil::XNAMATH::X_VECTOR type)
 	{
@@ -149,7 +149,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y = 0U;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator =(const tml::ConstantUtil::XNAMATH::Y_VECTOR type)
 	{
@@ -157,37 +157,37 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y = 1U;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const UINT val) const
 	{
 		return ((this->x == val) && (this->y == val));
-	}
+	};
 
 	bool operator ==(const XMUINT2 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y));
-	}
+	};
 
 	bool operator !=(const UINT val) const
 	{
 		return ((this->x != val) || (this->y != val));
-	}
+	};
 
 	bool operator !=(const XMUINT2 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y));
-	}
+	};
 
 	tml::XMUINT2EX_ operator +(const UINT val) const
 	{
 		return (tml::XMUINT2EX_(this->x + val, this->y + val));
-	}
+	};
 
 	tml::XMUINT2EX_ operator +(const XMUINT2 &val) const
 	{
 		return (tml::XMUINT2EX_(this->x + val.x, this->y + val.y));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator +=(const UINT val)
 	{
@@ -195,7 +195,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator +=(const XMUINT2 &val)
 	{
@@ -203,17 +203,17 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y += val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ operator -(const UINT val) const
 	{
 		return (tml::XMUINT2EX_(this->x - val, this->y - val));
-	}
+	};
 
 	tml::XMUINT2EX_ operator -(const XMUINT2 &val) const
 	{
 		return (tml::XMUINT2EX_(this->x - val.x, this->y - val.y));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator -=(const UINT val)
 	{
@@ -221,7 +221,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator -=(const XMUINT2 &val)
 	{
@@ -229,17 +229,17 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y -= val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ operator *(const UINT val) const
 	{
 		return (tml::XMUINT2EX_(this->x * val, this->y * val));
-	}
+	};
 
 	tml::XMUINT2EX_ operator *(const XMUINT2 &val) const
 	{
 		return (tml::XMUINT2EX_(this->x * val.x, this->y * val.y));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator *=(const UINT val)
 	{
@@ -247,7 +247,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator *=(const XMUINT2 &val)
 	{
@@ -255,17 +255,17 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y *= val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ operator /(const UINT val) const
 	{
 		return (tml::XMUINT2EX_(this->x / val, this->y / val));
-	}
+	};
 
 	tml::XMUINT2EX_ operator /(const XMUINT2 &val) const
 	{
 		return (tml::XMUINT2EX_(this->x / val.x, this->y / val.y));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator /=(const UINT val)
 	{
@@ -273,7 +273,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y /= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT2EX_ &operator /=(const XMUINT2 &val)
 	{
@@ -281,7 +281,7 @@ typedef struct XMUINT2EX_ : public XMUINT2
 		this->y /= val.y;
 
 		return ((*this));
-	}
+	};
 } XMUINT2EX;
 
 
@@ -294,43 +294,43 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		XMUINT3(0U, 0U, 0U)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT3EX_(const UINT x, const UINT y, const UINT z) :
 		XMUINT3(x, y, z)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT3EX_(const UINT val) :
 		XMUINT3(val, val, val)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT3EX_(const XMUINT3 &val) :
 		XMUINT3(val.x, val.y, val.z)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT3EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
 		XMUINT3(1U, 0U, 0U)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT3EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
 		XMUINT3(0U, 1U, 0U)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT3EX_(const tml::ConstantUtil::XNAMATH::Z_VECTOR type) :
 		XMUINT3(0U, 0U, 1U)
 	{
 		return;
-	}
+	};
 
 	tml::XMUINT3EX_ &operator =(const UINT val)
 	{
@@ -339,7 +339,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator =(const XMUINT3 &val)
 	{
@@ -348,7 +348,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z = val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::X_VECTOR type)
 	{
@@ -357,7 +357,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z = 0U;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::Y_VECTOR type)
 	{
@@ -366,7 +366,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z = 0U;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::Z_VECTOR type)
 	{
@@ -375,37 +375,37 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z = 1U;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const UINT val) const
 	{
 		return ((this->x == val) && (this->y == val) && (this->z == val));
-	}
+	};
 
 	bool operator ==(const XMUINT3 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y) && (this->z == val.z));
-	}
+	};
 
 	bool operator !=(const UINT val) const
 	{
 		return ((this->x != val) || (this->y != val) || (this->z != val));
-	}
+	};
 
 	bool operator !=(const XMUINT3 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y) || (this->z != val.z));
-	}
+	};
 
 	tml::XMUINT3EX_ operator +(const UINT val) const
 	{
 		return (tml::XMUINT3EX_(this->x + val, this->y + val, this->z + val));
-	}
+	};
 
 	tml::XMUINT3EX_ operator +(const XMUINT3 &val) const
 	{
 		return (tml::XMUINT3EX_(this->x + val.x, this->y + val.y, this->z + val.z));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator +=(const UINT val)
 	{
@@ -414,7 +414,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator +=(const XMUINT3 &val)
 	{
@@ -423,17 +423,17 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z += val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ operator -(const UINT val) const
 	{
 		return (tml::XMUINT3EX_(this->x - val, this->y - val, this->z - val));
-	}
+	};
 
 	tml::XMUINT3EX_ operator -(const XMUINT3 &val) const
 	{
 		return (tml::XMUINT3EX_(this->x - val.x, this->y - val.y, this->z - val.z));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator -=(const UINT val)
 	{
@@ -442,7 +442,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator -=(const XMUINT3 &val)
 	{
@@ -451,17 +451,17 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z -= val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ operator *(const UINT val) const
 	{
 		return (tml::XMUINT3EX_(this->x * val, this->y * val, this->z * val));
-	}
+	};
 
 	tml::XMUINT3EX_ operator *(const XMUINT3 &val) const
 	{
 		return (tml::XMUINT3EX_(this->x * val.x, this->y * val.y, this->z * val.z));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator *=(const UINT val)
 	{
@@ -470,7 +470,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator *=(const XMUINT3 &val)
 	{
@@ -479,17 +479,17 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z *= val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ operator /(const UINT val) const
 	{
 		return (tml::XMUINT3EX_(this->x / val, this->y / val, this->z / val));
-	}
+	};
 
 	tml::XMUINT3EX_ operator /(const XMUINT3 &val) const
 	{
 		return (tml::XMUINT3EX_(this->x / val.x, this->y / val.y, this->z / val.z));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator /=(const UINT val)
 	{
@@ -498,7 +498,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z /= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT3EX_ &operator /=(const XMUINT3 &val)
 	{
@@ -507,7 +507,7 @@ typedef struct XMUINT3EX_ : public XMUINT3
 		this->z /= val.z;
 
 		return ((*this));
-	}
+	};
 } XMUINT3EX;
 
 
@@ -520,31 +520,31 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		XMUINT4(0U, 0U, 0U, 0U)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT4EX_(const UINT x, const UINT y, const UINT z, const UINT w) :
 		XMUINT4(x, y, z, w)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT4EX_(const UINT val) :
 		XMUINT4(val, val, val, val)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT4EX_(const XMUINT4 &val) :
 		XMUINT4(val.x, val.y, val.z, val.w)
 	{
 		return;
-	}
+	};
 
 	explicit XMUINT4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type) :
 		XMUINT4(0U, 0U, 0U, 1U)
 	{
 		return;
-	}
+	};
 
 	tml::XMUINT4EX_ &operator =(const UINT val)
 	{
@@ -554,7 +554,7 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator =(const XMUINT4 &val)
 	{
@@ -564,7 +564,7 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w = val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type)
 	{
@@ -574,37 +574,37 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w = 1U;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const UINT val) const
 	{
 		return ((this->x == val) && (this->y == val) && (this->z == val) && (this->w == val));
-	}
+	};
 
 	bool operator ==(const XMUINT4 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y) && (this->z == val.z) && (this->w == val.w));
-	}
+	};
 
 	bool operator !=(const UINT val) const
 	{
 		return ((this->x != val) || (this->y != val) || (this->z != val) || (this->w != val));
-	}
+	};
 
 	bool operator !=(const XMUINT4 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y) || (this->z != val.z) || (this->w != val.w));
-	}
+	};
 
 	tml::XMUINT4EX_ operator +(const UINT val) const
 	{
 		return (tml::XMUINT4EX_(this->x + val, this->y + val, this->z + val, this->w + val));
-	}
+	};
 
 	tml::XMUINT4EX_ operator +(const XMUINT4 &val) const
 	{
 		return (tml::XMUINT4EX_(this->x + val.x, this->y + val.y, this->z + val.z, this->w + val.w));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator +=(const UINT val)
 	{
@@ -613,7 +613,7 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->z += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator +=(const XMUINT4 &val)
 	{
@@ -623,17 +623,17 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w += val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ operator -(const UINT val) const
 	{
 		return (tml::XMUINT4EX_(this->x - val, this->y - val, this->z - val, this->w - val));
-	}
+	};
 
 	tml::XMUINT4EX_ operator -(const XMUINT4 &val) const
 	{
 		return (tml::XMUINT4EX_(this->x - val.x, this->y - val.y, this->z - val.z, this->w - val.w));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator -=(const UINT val)
 	{
@@ -643,7 +643,7 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator -=(const XMUINT4 &val)
 	{
@@ -653,17 +653,17 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w -= val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ operator *(const UINT val) const
 	{
 		return (tml::XMUINT4EX_(this->x * val, this->y * val, this->z * val, this->w * val));
-	}
+	};
 
 	tml::XMUINT4EX_ operator *(const XMUINT4 &val) const
 	{
 		return (tml::XMUINT4EX_(this->x * val.x, this->y * val.y, this->z * val.z, this->w * val.w));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator *=(const UINT val)
 	{
@@ -673,7 +673,7 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator *=(const XMUINT4 &val)
 	{
@@ -683,17 +683,17 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w *= val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ operator /(const UINT val) const
 	{
 		return (tml::XMUINT4EX_(this->x / val, this->y / val, this->z / val, this->w / val));
-	}
+	};
 
 	tml::XMUINT4EX_ operator /(const XMUINT4 &val) const
 	{
 		return (tml::XMUINT4EX_(this->x / val.x, this->y / val.y, this->z / val.z, this->w / val.w));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator /=(const UINT val)
 	{
@@ -703,7 +703,7 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w /= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMUINT4EX_ &operator /=(const XMUINT4 &val)
 	{
@@ -713,6 +713,6 @@ typedef struct XMUINT4EX_ : public XMUINT4
 		this->w /= val.w;
 
 		return ((*this));
-	}
+	};
 } XMUINT4EX;
 }

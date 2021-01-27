@@ -5,6 +5,9 @@
 
 
 #include "Manager.h"
+#include "RasterizerState.h"
+#include "BlendState.h"
+#include "DepthState.h"
 #include "Shader.h"
 #include "SystemShaderConstantBuffer.h"
 #include "ModelShaderConstantBuffer.h"
@@ -12,6 +15,15 @@
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
 #include "ModelLayerShaderStructuredBuffer.h"
+#include "Camera.h"
+#include "Light.h"
+#include "Fog.h"
+#include "Mesh.h"
+#include "Material.h"
+#include "Texture.h"
+#include "Sampler.h"
+#include "ScreenModel.h"
+#include "SpriteModel.h"
 
 
 /**
@@ -19,7 +31,8 @@
  */
 tml::graphic::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
-	window_size(0U)
+	window_size(0U),
+	vsync_flag(true)
 {
 	return;
 }
@@ -41,6 +54,7 @@ void tml::graphic::ManagerDesc::Init(void)
 {
 	this->window_handle = nullptr;
 	this->window_size = 0U;
+	this->vsync_flag = true;
 
 	return;
 }
@@ -58,16 +72,6 @@ tml::graphic::Manager::Manager() :
 	device_(nullptr),
 	device_context_(nullptr),
 	device_future_lv_(static_cast<D3D_FEATURE_LEVEL>(0)),
-	clear_rt_(nullptr),
-	clear_rt_ary_{},
-	clear_dt_(nullptr),
-	clear_dt_ary_{},
-	clear_tex_sr_(nullptr),
-	clear_tex_sr_ary_{},
-	clear_tex_uasr_(nullptr),
-	clear_tex_uasr_ary_{},
-	clear_samp_sr_(nullptr),
-	clear_samp_sr_ary_{},
 	vsync_flg_(true),
 	samp_quality_type_(tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE),
 	motion_quality_type_(tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE),
@@ -95,6 +99,22 @@ tml::graphic::Manager::Manager() :
 	bloom_blur_weight_cnt_(0U),
 	bloom_blur_dispersion_val_(0.0f),
 	aa_quality_type_(tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE),
+	clear_rt_(nullptr),
+	clear_rt_ary_{},
+	clear_dt_(nullptr),
+	clear_dt_ary_{},
+	clear_tex_sr_(nullptr),
+	clear_tex_sr_ary_{},
+	clear_tex_uasr_(nullptr),
+	clear_tex_uasr_ary_{},
+	clear_samp_sr_(nullptr),
+	clear_samp_sr_ary_{},
+	draw_stage_type_(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE),
+	draw_stage_dat_(nullptr),
+	draw_rt_cnt_(0U),
+	draw_rt_ary_{},
+	draw_dt_cnt_(0U),
+	draw_dt_ary_{},
 	draw_vs_(nullptr),
 	draw_vs_input_layout_(nullptr),
 	draw_hs_(nullptr),
@@ -219,6 +239,7 @@ void tml::graphic::Manager::Init(void)
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
 	this->vsync_flg_ = true;
+	this->vp_.Init();
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE;
 	this->motion_quality_type_ = tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE;
 	this->motion_frame_rate_limit_ = 0U;
@@ -246,6 +267,12 @@ void tml::graphic::Manager::Init(void)
 	this->bloom_blur_weight_cnt_ = 0U;
 	this->bloom_blur_dispersion_val_ = 0.0f;
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE;
+	this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE;
+	this->draw_stage_dat_ = nullptr;
+	this->draw_rt_cnt_ = 0U;
+	this->draw_rt_ary_.fill(nullptr);
+	this->draw_dt_cnt_ = 0U;
+	this->draw_dt_ary_.fill(nullptr);
 	this->draw_vs_ = nullptr;
 	this->draw_vs_input_layout_ = nullptr;
 	this->draw_hs_ = nullptr;
@@ -375,52 +402,8 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 		}
 	}
 
-	{// ClearRT Create
-		this->clear_rt_ = nullptr;
-		this->clear_rt_ary_.fill(this->clear_rt_);
-	}
-
-	{// ClearDT Create
-		this->clear_dt_ = nullptr;
-		this->clear_dt_ary_.fill(this->clear_dt_);
-	}
-
-	{// ClearTextureSR Create
-		this->clear_tex_sr_ = nullptr;
-		this->clear_tex_sr_ary_.fill(this->clear_tex_sr_);
-	}
-
-	{// ClearTextureUASR Create
-		this->clear_tex_uasr_ = nullptr;
-		this->clear_tex_uasr_ary_.fill(this->clear_tex_uasr_);
-	}
-
-	{// ClearSamplerSR Create
-		CD3D11_SAMPLER_DESC clear_samp_sr_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
-
-		clear_samp_sr_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-
-		if (FAILED(this->device_->CreateSamplerState(&clear_samp_sr_desc, &this->clear_samp_sr_))) {
-			this->Init();
-
-			return (-1);
-		}
-
-		this->clear_samp_sr_ary_.fill(this->clear_samp_sr_);
-	}
-
-	this->device_context_->OMSetRenderTargets(this->clear_rt_ary_.size(), this->clear_rt_ary_.data(), this->clear_dt_ary_[0]);
-	this->device_context_->VSSetShader(nullptr, nullptr, 0U);
-	this->device_context_->HSSetShader(nullptr, nullptr, 0U);
-	this->device_context_->DSSetShader(nullptr, nullptr, 0U);
-	this->device_context_->GSSetShader(nullptr, nullptr, 0U);
-	this->device_context_->PSSetShader(nullptr, nullptr, 0U);
-	this->device_context_->PSSetShaderResources(0U, this->clear_tex_sr_ary_.size(), this->clear_tex_sr_ary_.data());
-	this->device_context_->PSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
-	this->device_context_->CSSetShader(nullptr, nullptr, 0U);
-	this->device_context_->CSSetShaderResources(0U, this->clear_tex_sr_ary_.size(), this->clear_tex_sr_ary_.data());
-	this->device_context_->CSSetUnorderedAccessViews(0U, this->clear_tex_uasr_ary_.size(), this->clear_tex_uasr_ary_.data(), this->clear_tex_uasr_init_cnt_ary_.data());
-	this->device_context_->CSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
+	this->vp_.Set(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(static_cast<FLOAT>(desc.window_size.x), static_cast<FLOAT>(desc.window_size.y)));
+	this->vsync_flg_ = desc.vsync_flag;
 
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC2;
 
@@ -496,6 +479,53 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::FXAA;
 
+	{// ClearRT Create
+		this->clear_rt_ = nullptr;
+		this->clear_rt_ary_.fill(this->clear_rt_);
+	}
+
+	{// ClearDT Create
+		this->clear_dt_ = nullptr;
+		this->clear_dt_ary_.fill(this->clear_dt_);
+	}
+
+	{// ClearTextureSR Create
+		this->clear_tex_sr_ = nullptr;
+		this->clear_tex_sr_ary_.fill(this->clear_tex_sr_);
+	}
+
+	{// ClearTextureUASR Create
+		this->clear_tex_uasr_ = nullptr;
+		this->clear_tex_uasr_ary_.fill(this->clear_tex_uasr_);
+	}
+
+	{// ClearSamplerSR Create
+		CD3D11_SAMPLER_DESC clear_samp_sr_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
+
+		clear_samp_sr_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+
+		if (FAILED(this->device_->CreateSamplerState(&clear_samp_sr_desc, &this->clear_samp_sr_))) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->clear_samp_sr_ary_.fill(this->clear_samp_sr_);
+	}
+
+	this->device_context_->OMSetRenderTargets(this->clear_rt_ary_.size(), this->clear_rt_ary_.data(), this->clear_dt_ary_[0]);
+	this->device_context_->VSSetShader(nullptr, nullptr, 0U);
+	this->device_context_->HSSetShader(nullptr, nullptr, 0U);
+	this->device_context_->DSSetShader(nullptr, nullptr, 0U);
+	this->device_context_->GSSetShader(nullptr, nullptr, 0U);
+	this->device_context_->PSSetShader(nullptr, nullptr, 0U);
+	this->device_context_->PSSetShaderResources(0U, this->clear_tex_sr_ary_.size(), this->clear_tex_sr_ary_.data());
+	this->device_context_->PSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
+	this->device_context_->CSSetShader(nullptr, nullptr, 0U);
+	this->device_context_->CSSetShaderResources(0U, this->clear_tex_sr_ary_.size(), this->clear_tex_sr_ary_.data());
+	this->device_context_->CSSetUnorderedAccessViews(0U, this->clear_tex_uasr_ary_.size(), this->clear_tex_uasr_ary_.data(), this->clear_tex_uasr_init_cnt_ary_.data());
+	this->device_context_->CSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
+
 	if (this->common.Create(this) < 0) {
 		this->Init();
 
@@ -513,6 +543,103 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
  */
 void tml::graphic::Manager::Update(void)
 {
+	XMVECTOR determinant;
+
+	XMMATRIX w_mat;
+	XMMATRIX v_mat_3d;
+	XMMATRIX inv_v_mat_3d;
+	XMMATRIX p_mat_3d;
+	XMMATRIX v_mat_2d;
+	XMMATRIX inv_vi_mat_2d;
+	XMMATRIX p_mat_2d;
+
+	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(w_mat, v_mat_3d, inv_v_mat_3d, p_mat_3d, v_mat_2d, inv_vi_mat_2d, p_mat_2d);
+
+	this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT;
+	this->draw_stage_dat_ = &draw_stage_dat;
+
+	while (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
+		switch (this->draw_stage_type_) {
+		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT: {
+			this->GetViewMatrix3D(this->draw_stage_dat_->view_matrix_3d, this->draw_camera_);
+			this->draw_stage_dat_->inverse_view_matrix_3d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_3d);
+			this->GetProjectionMatrix3D(this->draw_stage_dat_->projection_matrix_3d, this->draw_camera_);
+
+			this->GetViewMatrix2D(this->draw_stage_dat_->view_matrix_2d, this->draw_camera_);
+			this->draw_stage_dat_->inverse_view_matrix_2d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
+			this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
+
+			this->common.main_render_target_texture->ClearRenderTarget(XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
+			this->common.main_depth_target_texture->ClearDepthTarget();
+
+			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d);
+			this->common.camera_shader_structured_buffer->SetElement(1U, this->draw_camera_,this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d);
+			this->common.camera_shader_structured_buffer->UpdateBuffer();
+
+			/*
+			this->item_storage.light_scb->SetElement(this->item_storage.light_ssb->GetElementCount());
+			this->item_storage.light_scb->UpdateBuffer();
+
+			this->item_storage.fog_scb->SetElement(this->item_storage.fog_ssb->GetElementCount());
+			this->item_storage.fog_scb->UpdateBuffer();
+			*/
+
+			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
+				this->draw_model_cont_[draw_model_i]->DrawStageInit();
+			}
+
+			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_3D;
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_3D: {
+			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
+				this->draw_model_cont_[draw_model_i]->DrawStageDeferred3D();
+			}
+
+			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_SHADOW_3D;
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_SHADOW_3D: {
+			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
+				this->draw_model_cont_[draw_model_i]->DrawStageDeferredShadow3D();
+			}
+
+			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_3D;
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_3D: {
+			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
+				this->draw_model_cont_[draw_model_i]->DrawStageForward3D();
+			}
+
+			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D;
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
+			this->draw_stage_dat_->view_matrix = &this->draw_stage_dat_->view_matrix_2d;
+			this->draw_stage_dat_->projection_matrixt = &this->draw_stage_dat_->projection_matrix_2d;
+
+			this->SetDrawViewport(&this->vp_);
+			this->SetDrawTarget(this->common.main_render_target_texture.get());
+
+			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
+				this->draw_model_cont_[draw_model_i]->DrawStageForward2D();
+			}
+
+			this->SetDrawTarget(nullptr);
+
+			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE;
+			this->draw_stage_dat_ = nullptr;
+
+			break;
+		}
+		}
+	}
+
 	this->swap_chain_->Present(this->vsync_flg_, 0U);
 
 	this->draw_camera_ = nullptr;
@@ -520,65 +647,143 @@ void tml::graphic::Manager::Update(void)
 	this->draw_fog_cnt_ = 0U;
 	this->draw_model_cnt_ = 0U;
 
-	/*
-	mpc_p::graphic::DrawStage draw_stage;
+	return;
+}
 
-	this->SetDrawStage(&draw_stage);
 
-	while (this->StartDraw()) {
-		if (this->IsDrawStage(mpc_p::graphic::_DrawStage::_NUMBER::_INIT)) { //‰Šú‰»‚ÌŽž
-			this->SetDrawFinishTarget(this->item_storage.main_rt_tex);
-			this->SetDrawCamera(this->item_storage.wait_camera);
+/**
+ * @brief GetWorldMatrix3DŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @param pos (position)
+ * @param angle (angle)
+ * @param scale (scale)
+ * @return dst_mat (dst_matrix)
+ */
+XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle, const tml::XMFLOAT3EX &scale)
+{
+	dst_mat = XMMatrixTransformation(g_XMZero, g_XMIdentityR3, XMLoadFloat3(&scale), g_XMZero, XMQuaternionRotationRollPitchYaw(angle.x, angle.y, angle.z), XMLoadFloat3(&pos));
 
-			this->item_storage.light_scb->SetElement(this->item_storage.light_ssb->GetElementCount());
-			this->item_storage.light_scb->UpdateBuffer();
+	return (dst_mat);
+}
 
-			this->item_storage.fog_scb->SetElement(this->item_storage.fog_ssb->GetElementCount());
-			this->item_storage.fog_scb->UpdateBuffer();
 
-			this->item_storage.light_ssb->UpdateBuffer();
-			this->item_storage.fog_ssb->UpdateBuffer();
-			this->item_storage.shadow_ssb->UpdateBuffer();
-			this->item_storage.model_material_ssb->UpdateBuffer();
+/**
+ * @brief GetWorldMatrix3DŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @param pos (position)
+ * @param quat (quaternion)
+ * @param scale (scale)
+ * @return dst_mat (dst_matrix)
+ */
+XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat, const tml::XMFLOAT3EX &scale)
+{
+	dst_mat = XMMatrixTransformation(g_XMZero, g_XMIdentityR3, XMLoadFloat3(&scale), g_XMZero, XMLoadFloat4(&quat), XMLoadFloat3(&pos));
 
-			this->draw_finish_rt_tex->ClearRenderTarget(XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
+	return (dst_mat);
+}
 
-			this->SetDrawStageNumber(mpc_p::graphic::_DrawStage::_NUMBER::_FORWARD_2D);
-		}
 
-		if (this->item_storage.sprite_model->IsDrawable()) { //•`‰æ‰Â‚ÌŽž
-			auto &sprite_model = this->item_storage.sprite_model;
-			auto sprite_model_layer = sprite_model->GetLayerContainer().GetElementFast(0U);
-			std::array<mpc_p::graphic::Texture *, mpc_p::graphic::_SpriteModel::_TEXTURE_INDEX::_COUNT> sprite_model_tex_ary = {
-				this->item_storage.wait_tex
-			};
-			auto &sprite_model_tex_size = sprite_model_tex_ary[0]->GetSize();
+/**
+ * @brief GetWorldMatrix2DŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @param pos (position)
+ * @param angle (angle)
+ * @param scale (scale)
+ * @return dst_mat (dst_matrix)
+ */
+XMMATRIX &tml::graphic::Manager::GetWorldMatrix2D(XMMATRIX &dst_mat, const tml::XMFLOAT2EX &pos, const FLOAT angle, const tml::XMFLOAT2EX &scale)
+{
+	dst_mat = XMMatrixTransformation2D(g_XMZero, 0.0f, XMVectorSet(scale.x, scale.y, 1.0f, 0.0f), XMVectorSet(scale.x * 0.5f, -scale.y * 0.5f, 0.0f, 0.0f), angle, XMVectorSet(pos.x, -pos.y, 0.0f, 0.0f));
 
-			sprite_model->SetDrawTexture(sprite_model_tex_ary.size(), sprite_model_tex_ary.data());
+	return (dst_mat);
+}
 
-			this->GetWorldMatrix2D(&this->GetDrawStage().GetWorldMatrix(), (this->GetProcess()->GetSize() * 0.5f) - (sprite_model_tex_size * 0.5f), 0.0f, sprite_model_tex_size);
-			sprite_model->SetDrawTransparentPercent(0.8f);
-			sprite_model->Draw(this->GetDrawStage().GetWorldMatrix());
 
-			if (time_per > 0.0f) { //ŽžŠÔ—¦—L‚è‚ÌŽž
-				this->GetWorldMatrix2D(&this->GetDrawStage().GetWorldMatrix(), (this->GetProcess()->GetSize() * 0.5f) - (sprite_model_tex_size * 0.5f), 0.0f, XMFLOAT2EX(sprite_model_tex_size.x * time_per, sprite_model_tex_size.y));
-				sprite_model_layer->SetDrawTextureScale(XMFLOAT2EX(time_per, 1.0f));
-				sprite_model->SetDrawTransparentPercent(0.0f);
-				sprite_model->Draw(this->GetDrawStage().GetWorldMatrix());
+/**
+ * @brief GetViewMatrix3DŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @param camera (camera)
+ * @return dst_mat (dst_matrix)
+ */
+XMMATRIX &tml::graphic::Manager::GetViewMatrix3D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+{
+	dst_mat = XMMatrixLookToLH(XMLoadFloat3(&camera->position->Get()), XMLoadFloat3(&camera->position->GetZAxisVector()), XMLoadFloat3(&camera->position->GetYAxisVector()));
 
-				sprite_model_layer->ResetDrawTextureScale();
-			}
+	return (dst_mat);
+}
 
-			sprite_model->ResetDrawTransparentPercent();
-			sprite_model->ResetDrawTexture();
-		}
+
+/**
+ * @brief GetViewMatrix2DŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @param camera (camera)
+ * @return dst_mat (dst_matrix)
+ */
+XMMATRIX &tml::graphic::Manager::GetViewMatrix2D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+{
+	dst_mat = XMMatrixIdentity();
+
+	return (dst_mat);
+}
+
+
+/**
+ * @brief GetProjectionMatrix3DŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @param camera (camera)
+ * @return dst_mat (dst_matrix)
+ */
+XMMATRIX &tml::graphic::Manager::GetProjectionMatrix3D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+{
+	switch (camera->GetType()) {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE: {
+		dst_mat = XMMatrixPerspectiveFovLH(camera->GetFOVAngle(), camera->GetFOVSize().x / camera->GetFOVSize().y, camera->GetNearClip(), camera->GetFarClip());
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::ORTHOGRAPHIC: {
+		dst_mat = XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, camera->GetNearClip(), camera->GetFarClip());
+
+		break;
+	}
+	default: {
+		dst_mat = XMMatrixIdentity();
+
+		break;
+	}
 	}
 
-	this->EndDraw();
-	this->SwapDraw();
-	*/
+	return (dst_mat);
+}
 
-	return;
+
+/**
+ * @brief GetProjectionMatrix2DŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @param camera (camera)
+ * @return dst_mat (dst_matrix)
+ */
+XMMATRIX &tml::graphic::Manager::GetProjectionMatrix2D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+{
+	switch (camera->GetType()) {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE: {
+		dst_mat = XMMatrixOrthographicOffCenterLH(0.0f, camera->GetFOVSize().x, -camera->GetFOVSize().y, 0.0f, 0.0f, 1.0f);
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::ORTHOGRAPHIC: {
+		dst_mat = XMMatrixOrthographicOffCenterLH(0.0f, camera->GetFOVSize().x, -camera->GetFOVSize().y, 0.0f, 0.0f, 1.0f);
+
+		break;
+	}
+	default: {
+		dst_mat = XMMatrixIdentity();
+
+		break;
+	}
+	}
+
+	return (dst_mat);
 }
 
 
@@ -773,6 +978,176 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 	tml::SetResult(dst_res, 0);
 
 	return (dst_buf_cont);
+}
+
+
+/**
+ * @brief SetDrawViewportŠÖ”
+ * @param vp (viewport)
+ */
+void tml::graphic::Manager::SetDrawViewport(tml::graphic::Viewport *vp)
+{
+	this->device_context_->RSSetViewports(1U, vp);
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawTargetŠÖ”
+ * @param rt_tex (render_target_texture)
+ */
+void tml::graphic::Manager::SetDrawTarget(tml::graphic::Texture *rt_tex)
+{
+	if (rt_tex != nullptr) {
+		this->draw_rt_cnt_ = 1U;
+		this->draw_rt_ary_[0] = rt_tex->GetRenderTarget();
+
+		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->draw_rt_ary_.data(), this->clear_dt_);
+
+		this->draw_dt_cnt_ = 0U;
+	} else {
+		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->clear_rt_ary_.data(), this->clear_dt_);
+
+		this->draw_rt_cnt_ = 0U;
+		this->draw_dt_cnt_ = 0U;
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawTargetŠÖ”
+ * @param rt_tex (render_target_texture)
+ * @param dt_tex (depth_target_texture)
+ */
+void tml::graphic::Manager::SetDrawTarget(tml::graphic::Texture *rt_tex, tml::graphic::Texture *dt_tex)
+{
+	if (rt_tex != nullptr) {
+		if (dt_tex != nullptr) {
+			this->draw_rt_cnt_ = 1U;
+			this->draw_rt_ary_[0] = rt_tex->GetRenderTarget();
+			this->draw_dt_cnt_ = 1U;
+			this->draw_dt_ary_[0] = dt_tex->GetDepthTarget();
+
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->draw_rt_ary_.data(), this->draw_dt_ary_[0]);
+		} else {
+			this->draw_rt_cnt_ = 1U;
+			this->draw_rt_ary_[0] = rt_tex->GetRenderTarget();
+
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->draw_rt_ary_.data(), this->clear_dt_);
+
+			this->draw_dt_cnt_ = 0U;
+		}
+	} else {
+		if (dt_tex != nullptr) {
+			this->draw_dt_cnt_ = 1U;
+			this->draw_dt_ary_[0] = dt_tex->GetDepthTarget();
+
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->clear_rt_ary_.data(), this->draw_dt_ary_[0]);
+
+			this->draw_rt_cnt_ = 0U;
+		} else {
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->clear_rt_ary_.data(), this->clear_dt_);
+
+			this->draw_rt_cnt_ = 0U;
+			this->draw_dt_cnt_ = 0U;
+		}
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawTargetŠÖ”
+ * @param rt_tex_cnt (render_target_texture_count)
+ * @param rt_tex_ary (render_target_texture_array)
+ */
+void tml::graphic::Manager::SetDrawTarget(const UINT rt_tex_cnt, tml::graphic::Texture **rt_tex_ary)
+{
+	if (rt_tex_cnt > 0U) {
+		this->draw_rt_cnt_ = rt_tex_cnt;
+
+		for (UINT rt_tex_i = 0U; rt_tex_i < rt_tex_cnt; ++rt_tex_i) {
+			if (rt_tex_ary[rt_tex_i] != nullptr) {
+				this->draw_rt_ary_[rt_tex_i] = rt_tex_ary[rt_tex_i]->GetRenderTarget();
+			} else {
+				this->draw_rt_ary_[rt_tex_i] = this->clear_rt_;
+			}
+		}
+
+		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->draw_rt_ary_.data(), this->clear_dt_);
+
+		this->draw_dt_cnt_ = 0U;
+	} else {
+		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->clear_rt_ary_.data(), this->clear_dt_);
+
+		this->draw_rt_cnt_ = 0U;
+		this->draw_dt_cnt_ = 0U;
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawTargetŠÖ”
+ * @param rt_tex_cnt (render_target_texture_count)
+ * @param rt_tex_ary (render_target_texture_array)
+ * @param dt_tex (depth_target_texture)
+ */
+void tml::graphic::Manager::SetDrawTarget(const UINT rt_tex_cnt, tml::graphic::Texture **rt_tex_ary, tml::graphic::Texture *dt_tex)
+{
+	if (rt_tex_cnt > 0U) {
+		if (dt_tex != nullptr) {
+			this->draw_rt_cnt_ = rt_tex_cnt;
+
+			for (UINT rt_tex_i = 0U; rt_tex_i < rt_tex_cnt; ++rt_tex_i) {
+				if (rt_tex_ary[rt_tex_i] != nullptr) {
+					this->draw_rt_ary_[rt_tex_i] = rt_tex_ary[rt_tex_i]->GetRenderTarget();
+				} else {
+					this->draw_rt_ary_[rt_tex_i] = this->clear_rt_;
+				}
+			}
+
+			this->draw_dt_cnt_ = 1U;
+			this->draw_dt_ary_[0] = dt_tex->GetDepthTarget();
+
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->draw_rt_ary_.data(), this->draw_dt_ary_[0]);
+		} else {
+			this->draw_rt_cnt_ = rt_tex_cnt;
+
+			for (UINT rt_tex_i = 0U; rt_tex_i < rt_tex_cnt; ++rt_tex_i) {
+				if (rt_tex_ary[rt_tex_i] != nullptr) {
+					this->draw_rt_ary_[rt_tex_i] = rt_tex_ary[rt_tex_i]->GetRenderTarget();
+				} else {
+					this->draw_rt_ary_[rt_tex_i] = this->clear_rt_;
+				}
+			}
+
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->draw_rt_ary_.data(), this->clear_dt_);
+
+			this->draw_dt_cnt_ = 0U;
+		}
+	} else {
+		if (dt_tex != nullptr) {
+			this->draw_dt_cnt_ = 1U;
+			this->draw_dt_ary_[0] = dt_tex->GetDepthTarget();
+
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->clear_rt_ary_.data(), this->draw_dt_ary_[0]);
+
+			this->draw_rt_cnt_ = 0U;
+		} else {
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->clear_rt_ary_.data(), this->clear_dt_);
+
+			this->draw_rt_cnt_ = 0U;
+			this->draw_dt_cnt_ = 0U;
+		}
+	}
+
+	return;
 }
 
 

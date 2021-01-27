@@ -107,37 +107,22 @@ INT tml::graphic::CameraShaderStructuredBuffer::Create(const tml::graphic::Camer
 
 
 /**
- * @brief 要素セット関数
- * @param index …インデックス
- * @param light …ライト
- * @param draw_shadow_flg …描画シャドウフラグ(false=描画シャドウ無し,true=描画シャドウ有り)
- * @param v_mat …ビュー行列
+ * @brief SetElement関数
+ * @param index (index)
+ * @param camera (camera)
+ * @param v_mat (view_matrix)
+ * @param inv_v_mat (inverse_view_matrix)
  */
-/*
-void tml::graphic::CameraShaderStructuredBuffer::SetElement(const UINT index, tml::graphic::Camera *light, const bool draw_shadow_flg, const XMMATRIX &v_mat)
+void tml::graphic::CameraShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Camera *camera, const XMMATRIX &v_mat, const XMMATRIX &inv_v_mat)
 {
 	auto element = this->GetElement(index);
 
-	if (element == NULLP) { //要素無しの時
+	if (element == nullptr) {
 		return;
 	}
 
-	element->type = static_cast<UINT>(light->GetType());
-	element->flg = light->GetFlag();
-	XMStoreFloat3(&element->v_pos, XMVector3Transform(XMLoadFloat3(&light->GetPosition().Get().GetPosition()), v_mat));
-	XMStoreFloat3(&element->v_dir_vec, XMVector3TransformNormal(XMLoadFloat3(&light->GetPosition().Get().GetZAxisVector()), v_mat));
-	element->col = light->GetColor();
-	element->mul_val = light->GetMulValue();
-	element->add_val = light->GetAddValue();
-	element->exponent = light->GetExponent();
-	element->cut_val = light->GetCutValue();
-	element->soft_val = light->GetSoftValue();
-	element->atten_val = light->GetAttenuateValue();
-	element->rng = light->GetRange();
-	element->inv_rng = (light->GetRange() > 0.0f) ? 1.0f / light->GetRange() : 0.0f;
-	element->rng_exponent = light->GetRangeExponent();
-	element->draw_shadow_flg = draw_shadow_flg;
+	XMStoreFloat4x4(&element->view_matrix, XMMatrixTranspose(v_mat));
+	XMStoreFloat4x4(&element->inverse_view_matrix, XMMatrixTranspose(inv_v_mat));
 
 	return;
 }
-*/

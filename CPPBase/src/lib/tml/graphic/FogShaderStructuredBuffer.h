@@ -60,7 +60,7 @@ public:
 			dummy4(0U)
 		{
 			return;
-		}
+		};
 	} ELEMENT;
 
 private:

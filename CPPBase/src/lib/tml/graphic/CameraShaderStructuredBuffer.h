@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "ShaderStructuredBuffer.h"
+#include "Camera.h"
 
 
 namespace tml {
@@ -45,22 +46,18 @@ public:
 	 */
 	typedef struct ELEMENT_
 	{
-		UINT dummy1;
-		UINT dummy2;
-		UINT dummy3;
-		UINT dummy4;
+		XMFLOAT4X4EX view_matrix;
+		XMFLOAT4X4EX inverse_view_matrix;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
-			dummy1(0U),
-			dummy2(0U),
-			dummy3(0U),
-			dummy4(0U)
+			view_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
+			inverse_view_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE)
 		{
 			return;
-		}
+		};
 	} ELEMENT;
 
 private:
@@ -78,7 +75,7 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	//void SetElement(const UINT, tml::graphic::Camera *, const bool, const XMMATRIX &);
+	void SetElement(const UINT, const tml::graphic::Camera *, const XMMATRIX &, const XMMATRIX &);
 };
 }
 }

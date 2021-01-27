@@ -146,3 +146,48 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 
 	return (0);
 }
+
+
+/**
+ * @brief DrawStageInitä÷êî
+ */
+void tml::graphic::Model::DrawStageInit(void)
+{
+	return;
+}
+
+
+/**
+ * @brief DrawStageDeferred3Dä÷êî
+ */
+void tml::graphic::Model::DrawStageDeferred3D(void)
+{
+	return;
+}
+
+
+/**
+ * @brief DrawStageDeferredShadow3Dä÷êî
+ */
+void tml::graphic::Model::DrawStageDeferredShadow3D(void)
+{
+	return;
+}
+
+
+/**
+ * @brief DrawStageForward3Dä÷êî
+ */
+void tml::graphic::Model::DrawStageForward3D(void)
+{
+	return;
+}
+
+
+/**
+ * @brief DrawStageForward2Dä÷êî
+ */
+void tml::graphic::Model::DrawStageForward2D(void)
+{
+	return;
+}

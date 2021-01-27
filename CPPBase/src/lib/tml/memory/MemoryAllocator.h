@@ -42,7 +42,7 @@ public:
 			use_count(0U)
 		{
 			return;
-		}
+		};
 	} INFO;
 
 private:

@@ -64,6 +64,12 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
+
+	virtual void DrawStageInit(void);
+	virtual void DrawStageDeferred3D(void);
+	virtual void DrawStageDeferredShadow3D(void);
+	virtual void DrawStageForward3D(void);
+	virtual void DrawStageForward2D(void);
 };
 }
 }

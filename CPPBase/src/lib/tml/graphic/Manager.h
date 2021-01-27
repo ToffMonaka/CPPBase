@@ -14,6 +14,51 @@
 namespace tml {
 namespace graphic {
 /**
+ * @brief DRAW_STAGE_DATA構造体
+ */
+typedef struct DRAW_STAGE_DATA_
+{
+	XMMATRIX &world_matrix;
+	XMMATRIX *view_matrix;
+	XMMATRIX *projection_matrixt;
+	XMMATRIX &view_matrix_3d;
+	XMMATRIX &inverse_view_matrix_3d;
+	XMMATRIX &projection_matrix_3d;
+	XMMATRIX &view_matrix_2d;
+	XMMATRIX &inverse_view_matrix_2d;
+	XMMATRIX &projection_matrix_2d;
+
+	/**
+	 * @brief コンストラクタ
+	 * @param w_mat (world_matrix)
+	 * @param v_mat_3d (view_matrix_3d)
+	 * @param inv_v_mat_3d (inverse_view_matrix_3d)
+	 * @param p_mat_3d (projection_matrix_3d)
+	 * @param v_mat_2d (view_matrix_2d)
+	 * @param inv_v_mat_2d (inverse_view_matrix_2d)
+	 * @param p_mat_2d (projection_matrix_2d)
+	 */
+	DRAW_STAGE_DATA_(XMMATRIX &w_mat, XMMATRIX &v_mat_3d, XMMATRIX &inv_v_mat_3d, XMMATRIX &p_mat_3d, XMMATRIX &v_mat_2d, XMMATRIX &inv_vi_mat_2d, XMMATRIX &p_mat_2d) :
+		world_matrix(w_mat),
+		view_matrix(nullptr),
+		projection_matrixt(nullptr),
+		view_matrix_3d(v_mat_3d),
+		inverse_view_matrix_3d(inv_v_mat_3d),
+		projection_matrix_3d(p_mat_3d),
+		view_matrix_2d(v_mat_2d),
+		inverse_view_matrix_2d(inv_vi_mat_2d),
+		projection_matrix_2d(p_mat_2d)
+	{
+		return;
+	};
+} DRAW_STAGE_DATA;
+}
+}
+
+
+namespace tml {
+namespace graphic {
+/**
  * @brief ManagerDescクラス
  */
 class ManagerDesc
@@ -21,6 +66,7 @@ class ManagerDesc
 public:
 	HWND window_handle;
 	tml::XMUINT2EX window_size;
+	bool vsync_flag;
 
 public:
 	ManagerDesc();
@@ -53,18 +99,8 @@ private:
 	ID3D11Device *device_;
 	ID3D11DeviceContext *device_context_;
 	D3D_FEATURE_LEVEL device_future_lv_;
-	ID3D11RenderTargetView *clear_rt_;
-	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> clear_rt_ary_;
-	ID3D11DepthStencilView *clear_dt_;
-	std::array<ID3D11DepthStencilView *, tml::ConstantUtil::GRAPHIC::DRAW_DEPTH_TARGET_LIMIT> clear_dt_ary_;
-	ID3D11ShaderResourceView *clear_tex_sr_;
-	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> clear_tex_sr_ary_;
-	ID3D11UnorderedAccessView *clear_tex_uasr_;
-	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> clear_tex_uasr_ary_;
-	std::array<UINT, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> clear_tex_uasr_init_cnt_ary_;
-	ID3D11SamplerState *clear_samp_sr_;
-	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> clear_samp_sr_ary_;
 	bool vsync_flg_;
+	tml::graphic::Viewport vp_;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE samp_quality_type_;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE motion_quality_type_;
 	UINT motion_frame_rate_limit_;
@@ -92,7 +128,24 @@ private:
 	UINT bloom_blur_weight_cnt_;
 	FLOAT bloom_blur_dispersion_val_;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
+	ID3D11RenderTargetView *clear_rt_;
+	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> clear_rt_ary_;
+	ID3D11DepthStencilView *clear_dt_;
+	std::array<ID3D11DepthStencilView *, tml::ConstantUtil::GRAPHIC::DRAW_DEPTH_TARGET_LIMIT> clear_dt_ary_;
+	ID3D11ShaderResourceView *clear_tex_sr_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> clear_tex_sr_ary_;
+	ID3D11UnorderedAccessView *clear_tex_uasr_;
+	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> clear_tex_uasr_ary_;
+	std::array<UINT, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> clear_tex_uasr_init_cnt_ary_;
+	ID3D11SamplerState *clear_samp_sr_;
+	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> clear_samp_sr_ary_;
 
+	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE draw_stage_type_;
+	tml::graphic::DRAW_STAGE_DATA *draw_stage_dat_;
+	UINT draw_rt_cnt_;
+	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> draw_rt_ary_;
+	UINT draw_dt_cnt_;
+	std::array<ID3D11DepthStencilView *, tml::ConstantUtil::GRAPHIC::DRAW_DEPTH_TARGET_LIMIT> draw_dt_ary_;
 	ID3D11VertexShader *draw_vs_;
 	ID3D11InputLayout *draw_vs_input_layout_;
 	ID3D11HullShader *draw_hs_;
@@ -144,10 +197,24 @@ public:
 	tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE GetAOQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE GetBloomQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE GetAAQualityType(void) const;
+	XMMATRIX &GetWorldMatrix3D(XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
+	XMMATRIX &GetWorldMatrix3D(XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &, const tml::XMFLOAT3EX &);
+	XMMATRIX &GetWorldMatrix2D(XMMATRIX &, const tml::XMFLOAT2EX &, const FLOAT, const tml::XMFLOAT2EX &);
+	XMMATRIX &GetViewMatrix3D(XMMATRIX &, const tml::graphic::Camera *);
+	XMMATRIX &GetViewMatrix2D(XMMATRIX &, const tml::graphic::Camera *);
+	XMMATRIX &GetProjectionMatrix3D(XMMATRIX &, const tml::graphic::Camera *);
+	XMMATRIX &GetProjectionMatrix2D(XMMATRIX &, const tml::graphic::Camera *);
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_res = nullptr);
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Texture2D *, INT *dst_res = nullptr);
 	std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
 
+	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE GetDrawStageType(void) const;
+	tml::graphic::DRAW_STAGE_DATA *GetDrawStageData(void);
+	void SetDrawViewport(tml::graphic::Viewport *);
+	void SetDrawTarget(tml::graphic::Texture *);
+	void SetDrawTarget(tml::graphic::Texture *, tml::graphic::Texture *);
+	void SetDrawTarget(const UINT, tml::graphic::Texture **);
+	void SetDrawTarget(const UINT, tml::graphic::Texture **, tml::graphic::Texture *);
 	void SetDrawShader(tml::graphic::Shader *);
 	void SetDrawShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT);
 	void SetDrawShaderStructuredBuffer(tml::graphic::ShaderStructuredBuffer *, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT);
@@ -376,11 +443,35 @@ inline tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE tml::graphic::Manager::GetAAQ
 
 
 /**
+ * @brief GetDrawStageType関数
+ * @return draw_stage_type (draw_stage_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE tml::graphic::Manager::GetDrawStageType(void) const
+{
+	return (this->draw_stage_type_);
+}
+
+
+/**
+ * @brief GetDrawStageData関数
+ * @return draw_stage_dat (draw_stage_data)
+ */
+inline tml::graphic::DRAW_STAGE_DATA *tml::graphic::Manager::GetDrawStageData(void)
+{
+	return (this->draw_stage_dat_);
+}
+
+
+/**
  * @brief SetDrawCamera関数
  * @param camera (camera)
  */
 inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera *camera)
 {
+	if (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
+		return;
+	}
+
 	this->draw_camera_ = camera;
 
 	return;
@@ -393,6 +484,10 @@ inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera *camera)
  */
 inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
 {
+	if (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
+		return;
+	}
+
 	if (this->draw_light_cnt_ >= this->draw_light_cont_.size()) {
 		this->draw_light_cont_.resize(this->draw_light_cnt_ + 256U);
 	}
@@ -409,6 +504,10 @@ inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
  */
 inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
 {
+	if (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
+		return;
+	}
+
 	if (this->draw_fog_cnt_ >= this->draw_fog_cont_.size()) {
 		this->draw_fog_cont_.resize(this->draw_fog_cnt_ + 256U);
 	}
@@ -425,6 +524,10 @@ inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
  */
 inline void tml::graphic::Manager::SetDrawModel(tml::graphic::Model *model)
 {
+	if (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
+		return;
+	}
+
 	if (this->draw_model_cnt_ >= this->draw_model_cont_.size()) {
 		this->draw_model_cont_.resize(this->draw_model_cnt_ + 256U);
 	}

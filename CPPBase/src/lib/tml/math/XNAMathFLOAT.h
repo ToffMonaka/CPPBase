@@ -23,37 +23,37 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		XMFLOAT2(0.0f, 0.0f)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT2EX_(const FLOAT x, const FLOAT y) :
 		XMFLOAT2(x, y)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT2EX_(const FLOAT val) :
 		XMFLOAT2(val, val)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT2EX_(const XMFLOAT2 &val) :
 		XMFLOAT2(val.x, val.y)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT2EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
 		XMFLOAT2(1.0f, 0.0f)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT2EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
 		XMFLOAT2(0.0f, 1.0f)
 	{
 		return;
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator =(const FLOAT val)
 	{
@@ -61,7 +61,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator =(const XMFLOAT2 &val)
 	{
@@ -69,7 +69,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y = val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator =(const tml::ConstantUtil::XNAMATH::X_VECTOR type)
 	{
@@ -77,7 +77,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y = 0.0f;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator =(const tml::ConstantUtil::XNAMATH::Y_VECTOR type)
 	{
@@ -85,37 +85,37 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y = 1.0f;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const FLOAT val) const
 	{
 		return ((this->x == val) && (this->y == val));
-	}
+	};
 
 	bool operator ==(const XMFLOAT2 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y));
-	}
+	};
 
 	bool operator !=(const FLOAT val) const
 	{
 		return ((this->x != val) || (this->y != val));
-	}
+	};
 
 	bool operator !=(const XMFLOAT2 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator +(const FLOAT val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x + val, this->y + val));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator +(const XMFLOAT2 &val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x + val.x, this->y + val.y));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator +=(const FLOAT val)
 	{
@@ -123,7 +123,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator +=(const XMFLOAT2 &val)
 	{
@@ -131,17 +131,17 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y += val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator -(const FLOAT val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x - val, this->y - val));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator -(const XMFLOAT2 &val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x - val.x, this->y - val.y));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator -=(const FLOAT val)
 	{
@@ -149,7 +149,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator -=(const XMFLOAT2 &val)
 	{
@@ -157,17 +157,17 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y -= val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator *(const FLOAT val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x * val, this->y * val));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator *(const XMFLOAT2 &val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x * val.x, this->y * val.y));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator *=(const FLOAT val)
 	{
@@ -175,7 +175,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator *=(const XMFLOAT2 &val)
 	{
@@ -183,19 +183,19 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y *= val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator /(const FLOAT val) const
 	{
 		auto tmp_val = 1.0f / val;
 
 		return (tml::XMFLOAT2EX_(this->x * tmp_val, this->y * tmp_val));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator /(const XMFLOAT2 &val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x / val.x, this->y / val.y));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator /=(const FLOAT val)
 	{
@@ -205,7 +205,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y *= tmp_val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ &operator /=(const XMFLOAT2 &val)
 	{
@@ -213,12 +213,12 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y /= val.y;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT2EX_ operator -(void)
 	{
 		return (tml::XMFLOAT2EX_(-this->x, -this->y));
-	}
+	};
 } XMFLOAT2EX;
 
 
@@ -231,43 +231,43 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		XMFLOAT3(0.0f, 0.0f, 0.0f)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3EX_(const FLOAT x, const FLOAT y, const FLOAT z) :
 		XMFLOAT3(x, y, z)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3EX_(const FLOAT val) :
 		XMFLOAT3(val, val, val)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3EX_(const XMFLOAT3 &val) :
 		XMFLOAT3(val.x, val.y, val.z)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
 		XMFLOAT3(1.0f, 0.0f, 0.0f)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
 		XMFLOAT3(0.0f, 1.0f, 0.0f)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::Z_VECTOR type) :
 		XMFLOAT3(0.0f, 0.0f, 1.0f)
 	{
 		return;
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator =(const FLOAT val)
 	{
@@ -276,7 +276,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator =(const XMFLOAT3 &val)
 	{
@@ -285,7 +285,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z = val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::X_VECTOR type)
 	{
@@ -294,7 +294,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z = 0.0f;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::Y_VECTOR type)
 	{
@@ -303,7 +303,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z = 0.0f;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::Z_VECTOR type)
 	{
@@ -312,37 +312,37 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z = 1.0f;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const FLOAT val) const
 	{
 		return ((this->x == val) && (this->y == val) && (this->z == val));
-	}
+	};
 
 	bool operator ==(const XMFLOAT3 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y) && (this->z == val.z));
-	}
+	};
 
 	bool operator !=(const FLOAT val) const
 	{
 		return ((this->x != val) || (this->y != val) || (this->z != val));
-	}
+	};
 
 	bool operator !=(const XMFLOAT3 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y) || (this->z != val.z));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator +(const FLOAT val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x + val, this->y + val, this->z + val));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator +(const XMFLOAT3 &val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x + val.x, this->y + val.y, this->z + val.z));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator +=(const FLOAT val)
 	{
@@ -351,7 +351,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator +=(const XMFLOAT3 &val)
 	{
@@ -360,17 +360,17 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z += val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator -(const FLOAT val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x - val, this->y - val, this->z - val));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator -(const XMFLOAT3 &val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x - val.x, this->y - val.y, this->z - val.z));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator -=(const FLOAT val)
 	{
@@ -379,7 +379,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator -=(const XMFLOAT3 &val)
 	{
@@ -388,17 +388,17 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z -= val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator *(const FLOAT val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x * val, this->y * val, this->z * val));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator *(const XMFLOAT3 &val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x * val.x, this->y * val.y, this->z * val.z));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator *=(const FLOAT val)
 	{
@@ -407,7 +407,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator *=(const XMFLOAT3 &val)
 	{
@@ -416,19 +416,19 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z *= val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator /(const FLOAT val) const
 	{
 		auto tmp_val = 1.0f / val;
 
 		return (tml::XMFLOAT3EX_(this->x * tmp_val, this->y * tmp_val, this->z * tmp_val));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator /(const XMFLOAT3 &val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x / val.x, this->y / val.y, this->z / val.z));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator /=(const FLOAT val)
 	{
@@ -439,7 +439,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z *= tmp_val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ &operator /=(const XMFLOAT3 &val)
 	{
@@ -448,12 +448,12 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z /= val.z;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3EX_ operator -(void)
 	{
 		return (tml::XMFLOAT3EX_(-this->x, -this->y, -this->z));
-	}
+	};
 } XMFLOAT3EX;
 
 
@@ -466,31 +466,31 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4EX_(const FLOAT x, const FLOAT y, const FLOAT z, const FLOAT w) :
 		XMFLOAT4(x, y, z, w)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4EX_(const FLOAT val) :
 		XMFLOAT4(val, val, val, val)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4EX_(const XMFLOAT4 &val) :
 		XMFLOAT4(val.x, val.y, val.z, val.w)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type) :
 		XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)
 	{
 		return;
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator =(const FLOAT val)
 	{
@@ -500,7 +500,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator =(const XMFLOAT4 &val)
 	{
@@ -510,7 +510,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w = val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type)
 	{
@@ -520,37 +520,37 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w = 1.0f;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const FLOAT val) const
 	{
 		return ((this->x == val) && (this->y == val) && (this->z == val) && (this->w == val));
-	}
+	};
 
 	bool operator ==(const XMFLOAT4 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y) && (this->z == val.z) && (this->w == val.w));
-	}
+	};
 
 	bool operator !=(const FLOAT val) const
 	{
 		return ((this->x != val) || (this->y != val) || (this->z != val) || (this->w != val));
-	}
+	};
 
 	bool operator !=(const XMFLOAT4 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y) || (this->z != val.z) || (this->w != val.w));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator +(const FLOAT val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x + val, this->y + val, this->z + val, this->w + val));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator +(const XMFLOAT4 &val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x + val.x, this->y + val.y, this->z + val.z, this->w + val.w));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator +=(const FLOAT val)
 	{
@@ -559,7 +559,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->z += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator +=(const XMFLOAT4 &val)
 	{
@@ -569,17 +569,17 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w += val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator -(const FLOAT val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x - val, this->y - val, this->z - val, this->w - val));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator -(const XMFLOAT4 &val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x - val.x, this->y - val.y, this->z - val.z, this->w - val.w));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator -=(const FLOAT val)
 	{
@@ -589,7 +589,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator -=(const XMFLOAT4 &val)
 	{
@@ -599,17 +599,17 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w -= val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator *(const FLOAT val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x * val, this->y * val, this->z * val, this->w * val));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator *(const XMFLOAT4 &val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x * val.x, this->y * val.y, this->z * val.z, this->w * val.w));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator *=(const FLOAT val)
 	{
@@ -619,7 +619,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator *=(const XMFLOAT4 &val)
 	{
@@ -629,19 +629,19 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w *= val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator /(const FLOAT val) const
 	{
 		auto tmp_val = 1.0f / val;
 
 		return (tml::XMFLOAT4EX_(this->x * tmp_val, this->y * tmp_val, this->z * tmp_val, this->w * tmp_val));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator /(const XMFLOAT4 &val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x / val.x, this->y / val.y, this->z / val.z, this->w / val.w));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator /=(const FLOAT val)
 	{
@@ -653,7 +653,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w *= tmp_val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ &operator /=(const XMFLOAT4 &val)
 	{
@@ -663,12 +663,12 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w /= val.w;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4EX_ operator -(void)
 	{
 		return (tml::XMFLOAT4EX_(-this->x, -this->y, -this->z, -this->w));
-	}
+	};
 } XMFLOAT4EX;
 
 
@@ -685,7 +685,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3X3EX_(
 		const FLOAT _11, const FLOAT _12, const FLOAT _13,
@@ -699,7 +699,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3X3EX_(const FLOAT val) :
 		XMFLOAT3X3(
@@ -709,7 +709,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3X3EX_(const XMFLOAT3X3 &val) :
 		XMFLOAT3X3(
@@ -719,7 +719,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT3X3EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
 		XMFLOAT3X3(
@@ -729,7 +729,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		)
 	{
 		return;
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator =(const FLOAT val)
 	{
@@ -738,7 +738,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 = val; this->_32 = val; this->_33 = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator =(const XMFLOAT3X3 &val)
 	{
@@ -747,7 +747,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 = val._31; this->_32 = val._32; this->_33 = val._33;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type)
 	{
@@ -756,7 +756,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 = 0.0f; this->_32 = 0.0f; this->_33 = 1.0f;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const FLOAT val) const
 	{
@@ -765,7 +765,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			(this->_21 == val) && (this->_22 == val) && (this->_23 == val) &&
 			(this->_31 == val) && (this->_32 == val) && (this->_33 == val)
 		);
-	}
+	};
 
 	bool operator ==(const XMFLOAT3X3 &val) const
 	{
@@ -774,7 +774,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			(this->_21 == val._21) && (this->_22 == val._22) && (this->_23 == val._23) &&
 			(this->_31 == val._31) && (this->_32 == val._32) && (this->_33 == val._33)
 		);
-	}
+	};
 
 	bool operator !=(const FLOAT val) const
 	{
@@ -783,7 +783,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			(this->_21 != val) || (this->_22 != val) || (this->_23 != val) ||
 			(this->_31 != val) || (this->_32 != val) || (this->_33 != val) 
 		);
-	}
+	};
 
 	bool operator !=(const XMFLOAT3X3 &val) const
 	{
@@ -792,7 +792,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			(this->_21 != val._21) || (this->_22 != val._22) || (this->_23 != val._23) ||
 			(this->_31 != val._31) || (this->_32 != val._32) || (this->_33 != val._33)
 		);
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator +(const FLOAT val) const
 	{
@@ -801,7 +801,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			this->_21 + val, this->_22 + val, this->_23 + val,
 			this->_31 + val, this->_32 + val, this->_33 + val
 		));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator +(const XMFLOAT3X3 &val) const
 	{
@@ -810,7 +810,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			this->_21 + val._21, this->_22 + val._22, this->_23 + val._23,
 			this->_31 + val._31, this->_32 + val._32, this->_33 + val._33
 		));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator +=(const FLOAT val)
 	{
@@ -819,7 +819,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 += val; this->_32 += val; this->_33 += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator +=(const XMFLOAT3X3 &val)
 	{
@@ -828,7 +828,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 += val._31; this->_32 += val._32; this->_33 += val._33;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator -(const FLOAT val) const
 	{
@@ -837,7 +837,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			this->_21 - val, this->_22 - val, this->_23 - val,
 			this->_31 - val, this->_32 - val, this->_33 - val
 		));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator -(const XMFLOAT3X3 &val) const
 	{
@@ -846,7 +846,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			this->_21 - val._21, this->_22 - val._22, this->_23 - val._23,
 			this->_31 - val._31, this->_32 - val._32, this->_33 - val._33
 		));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator -=(const FLOAT val)
 	{
@@ -855,7 +855,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 -= val; this->_32 -= val; this->_33 -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator -=(const XMFLOAT3X3 &val)
 	{
@@ -864,7 +864,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 -= val._31; this->_32 -= val._32; this->_33 -= val._33;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator *(const FLOAT val) const
 	{
@@ -873,7 +873,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			this->_21 * val, this->_22 * val, this->_23 * val,
 			this->_31 * val, this->_32 * val, this->_33 * val
 		));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator *(const XMFLOAT3X3 &val) const
 	{
@@ -882,7 +882,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			this->_21 * val._21, this->_22 * val._22, this->_23 * val._23,
 			this->_31 * val._31, this->_32 * val._32, this->_33 * val._33
 		));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator *=(const FLOAT val)
 	{
@@ -891,7 +891,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 *= val; this->_32 *= val; this->_33 *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator *=(const XMFLOAT3X3 &val)
 	{
@@ -900,7 +900,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 *= val._31; this->_32 *= val._32; this->_33 *= val._33;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator /(const FLOAT val) const
 	{
@@ -911,7 +911,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			this->_21 * tmp_val, this->_22 * tmp_val, this->_23 * tmp_val,
 			this->_31 * tmp_val, this->_32 * tmp_val, this->_33 * tmp_val
 		));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator /(const XMFLOAT3X3 &val) const
 	{
@@ -920,7 +920,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			this->_21 / val._21, this->_22 / val._22, this->_23 / val._23,
 			this->_31 / val._31, this->_32 / val._32, this->_33 / val._33
 		));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator /=(const FLOAT val)
 	{
@@ -931,7 +931,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 *= tmp_val; this->_32 *= tmp_val; this->_33 *= tmp_val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ &operator /=(const XMFLOAT3X3 &val)
 	{
@@ -940,7 +940,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		this->_31 /= val._31; this->_32 /= val._32; this->_33 /= val._33;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT3X3EX_ operator -(void)
 	{
@@ -949,7 +949,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 			-this->_21, -this->_22, -this->_23,
 			-this->_31, -this->_32, -this->_33
 		));
-	}
+	};
 } XMFLOAT3X3EX;
 
 
@@ -967,7 +967,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4X3EX_(
 		const FLOAT _11, const FLOAT _12, const FLOAT _13,
@@ -983,7 +983,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4X3EX_(const FLOAT val) :
 		XMFLOAT4X3(
@@ -994,7 +994,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4X3EX_(const XMFLOAT4X3 &val) :
 		XMFLOAT4X3(
@@ -1005,7 +1005,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4X3EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
 		XMFLOAT4X3(
@@ -1016,7 +1016,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		)
 	{
 		return;
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator =(const FLOAT val)
 	{
@@ -1026,7 +1026,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 = val; this->_42 = val; this->_43 = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator =(const XMFLOAT4X3 &val)
 	{
@@ -1036,7 +1036,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 = val._41; this->_42 = val._42; this->_43 = val._43;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type)
 	{
@@ -1046,7 +1046,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 = 0.0f; this->_42 = 0.0f; this->_43 = 0.0f;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const FLOAT val) const
 	{
@@ -1056,7 +1056,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			(this->_31 == val) && (this->_32 == val) && (this->_33 == val) &&
 			(this->_41 == val) && (this->_42 == val) && (this->_43 == val)
 		);
-	}
+	};
 
 	bool operator ==(const XMFLOAT4X3 &val) const
 	{
@@ -1066,7 +1066,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			(this->_31 == val._31) && (this->_32 == val._32) && (this->_33 == val._33) &&
 			(this->_41 == val._41) && (this->_42 == val._42) && (this->_43 == val._43)
 		);
-	}
+	};
 
 	bool operator !=(const FLOAT val) const
 	{
@@ -1076,7 +1076,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			(this->_31 != val) || (this->_32 != val) || (this->_33 != val) ||
 			(this->_41 != val) || (this->_42 != val) || (this->_43 != val) 
 		);
-	}
+	};
 
 	bool operator !=(const XMFLOAT4X3 &val) const
 	{
@@ -1086,7 +1086,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			(this->_31 != val._31) || (this->_32 != val._32) || (this->_33 != val._33) ||
 			(this->_41 != val._41) || (this->_42 != val._42) || (this->_43 != val._43)
 		);
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator +(const FLOAT val) const
 	{
@@ -1096,7 +1096,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			this->_31 + val, this->_32 + val, this->_33 + val,
 			this->_41 + val, this->_42 + val, this->_43 + val
 		));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator +(const XMFLOAT4X3 &val) const
 	{
@@ -1106,7 +1106,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			this->_31 + val._31, this->_32 + val._32, this->_33 + val._33,
 			this->_41 + val._41, this->_42 + val._42, this->_43 + val._43
 		));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator +=(const FLOAT val)
 	{
@@ -1116,7 +1116,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 += val; this->_42 += val; this->_43 += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator +=(const XMFLOAT4X3 &val)
 	{
@@ -1126,7 +1126,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 += val._41; this->_42 += val._42; this->_43 += val._43;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator -(const FLOAT val) const
 	{
@@ -1136,7 +1136,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			this->_31 - val, this->_32 - val, this->_33 - val,
 			this->_41 - val, this->_42 - val, this->_43 - val
 		));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator -(const XMFLOAT4X3 &val) const
 	{
@@ -1146,7 +1146,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			this->_31 - val._31, this->_32 - val._32, this->_33 - val._33,
 			this->_41 - val._41, this->_42 - val._42, this->_43 - val._43
 		));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator -=(const FLOAT val)
 	{
@@ -1156,7 +1156,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 -= val; this->_42 -= val; this->_43 -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator -=(const XMFLOAT4X3 &val)
 	{
@@ -1166,7 +1166,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 -= val._41; this->_42 -= val._42; this->_43 -= val._43;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator *(const FLOAT val) const
 	{
@@ -1176,7 +1176,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			this->_31 * val, this->_32 * val, this->_33 * val,
 			this->_41 * val, this->_42 * val, this->_43 * val
 		));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator *(const XMFLOAT4X3 &val) const
 	{
@@ -1186,7 +1186,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			this->_31 * val._31, this->_32 * val._32, this->_33 * val._33,
 			this->_41 * val._41, this->_42 * val._42, this->_43 * val._43
 		));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator *=(const FLOAT val)
 	{
@@ -1196,7 +1196,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 *= val; this->_42 *= val; this->_43 *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator *=(const XMFLOAT4X3 &val)
 	{
@@ -1206,7 +1206,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 *= val._41; this->_42 *= val._42; this->_43 *= val._43;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator /(const FLOAT val) const
 	{
@@ -1218,7 +1218,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			this->_31 * tmp_val, this->_32 * tmp_val, this->_33 * tmp_val,
 			this->_41 * tmp_val, this->_42 * tmp_val, this->_43 * tmp_val
 		));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator /(const XMFLOAT4X3 &val) const
 	{
@@ -1228,7 +1228,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			this->_31 / val._31, this->_32 / val._32, this->_33 / val._33,
 			this->_41 / val._41, this->_42 / val._42, this->_43 / val._43
 		));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator /=(const FLOAT val)
 	{
@@ -1240,7 +1240,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 *= tmp_val; this->_42 *= tmp_val; this->_43 *= tmp_val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ &operator /=(const XMFLOAT4X3 &val)
 	{
@@ -1250,7 +1250,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 /= val._41; this->_42 /= val._42; this->_43 /= val._43;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X3EX_ operator -(void)
 	{
@@ -1260,7 +1260,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 			-this->_31, -this->_32, -this->_33,
 			-this->_41, -this->_42, -this->_43
 		));
-	}
+	};
 } XMFLOAT4X3EX;
 
 
@@ -1278,7 +1278,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4X4EX_(
 		const FLOAT _11, const FLOAT _12, const FLOAT _13, const FLOAT _14,
@@ -1294,7 +1294,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4X4EX_(const FLOAT val) :
 		XMFLOAT4X4(
@@ -1305,7 +1305,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4X4EX_(const XMFLOAT4X4 &val) :
 		XMFLOAT4X4(
@@ -1316,7 +1316,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		)
 	{
 		return;
-	}
+	};
 
 	explicit XMFLOAT4X4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
 		XMFLOAT4X4(
@@ -1327,7 +1327,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		)
 	{
 		return;
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator =(const FLOAT val)
 	{
@@ -1337,7 +1337,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 = val; this->_42 = val; this->_43 = val; this->_44 = val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator =(const XMFLOAT4X4 &val)
 	{
@@ -1347,7 +1347,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 = val._41; this->_42 = val._42; this->_43 = val._43; this->_44 = val._44;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type)
 	{
@@ -1357,7 +1357,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 = 0.0f; this->_42 = 0.0f; this->_43 = 0.0f; this->_44 = 1.0f;
 
 		return ((*this));
-	}
+	};
 
 	bool operator ==(const FLOAT val) const
 	{
@@ -1367,7 +1367,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			(this->_31 == val) && (this->_32 == val) && (this->_33 == val) && (this->_34 == val) &&
 			(this->_41 == val) && (this->_42 == val) && (this->_43 == val) && (this->_44 == val)
 		);
-	}
+	};
 
 	bool operator ==(const XMFLOAT4X4 &val) const
 	{
@@ -1377,7 +1377,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			(this->_31 == val._31) && (this->_32 == val._32) && (this->_33 == val._33) && (this->_34 == val._34) &&
 			(this->_41 == val._41) && (this->_42 == val._42) && (this->_43 == val._43) && (this->_44 == val._44)
 		);
-	}
+	};
 
 	bool operator !=(const FLOAT val) const
 	{
@@ -1387,7 +1387,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			(this->_31 != val) || (this->_32 != val) || (this->_33 != val) || (this->_34 != val) ||
 			(this->_41 != val) || (this->_42 != val) || (this->_43 != val) || (this->_44 != val)
 		);
-	}
+	};
 
 	bool operator !=(const XMFLOAT4X4 &val) const
 	{
@@ -1397,7 +1397,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			(this->_31 != val._31) || (this->_32 != val._32) || (this->_33 != val._33) || (this->_34 != val._34) ||
 			(this->_41 != val._41) || (this->_42 != val._42) || (this->_43 != val._43) || (this->_44 != val._44)
 		);
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator +(const FLOAT val) const
 	{
@@ -1407,7 +1407,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			this->_31 + val, this->_32 + val, this->_33 + val, this->_34 + val,
 			this->_41 + val, this->_42 + val, this->_43 + val, this->_44 + val
 		));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator +(const XMFLOAT4X4 &val) const
 	{
@@ -1417,7 +1417,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			this->_31 + val._31, this->_32 + val._32, this->_33 + val._33, this->_34 + val._34,
 			this->_41 + val._41, this->_42 + val._42, this->_43 + val._43, this->_44 + val._44
 		));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator +=(const FLOAT val)
 	{
@@ -1427,7 +1427,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 += val; this->_42 += val; this->_43 += val; this->_44 += val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator +=(const XMFLOAT4X4 &val)
 	{
@@ -1437,7 +1437,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 += val._41; this->_42 += val._42; this->_43 += val._43; this->_44 += val._44;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator -(const FLOAT val) const
 	{
@@ -1447,7 +1447,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			this->_31 - val, this->_32 - val, this->_33 - val, this->_34 - val,
 			this->_41 - val, this->_42 - val, this->_43 - val, this->_44 - val
 		));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator -(const XMFLOAT4X4 &val) const
 	{
@@ -1457,7 +1457,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			this->_31 - val._31, this->_32 - val._32, this->_33 - val._33, this->_34 - val._34,
 			this->_41 - val._41, this->_42 - val._42, this->_43 - val._43, this->_44 - val._44
 		));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator -=(const FLOAT val)
 	{
@@ -1467,7 +1467,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 -= val; this->_42 -= val; this->_43 -= val; this->_44 -= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator -=(const XMFLOAT4X4 &val)
 	{
@@ -1477,7 +1477,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 -= val._41; this->_42 -= val._42; this->_43 -= val._43; this->_44 -= val._44;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator *(const FLOAT val) const
 	{
@@ -1487,7 +1487,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			this->_31 * val, this->_32 * val, this->_33 * val, this->_34 * val,
 			this->_41 * val, this->_42 * val, this->_43 * val, this->_44 * val
 		));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator *(const XMFLOAT4X4 &val) const
 	{
@@ -1497,7 +1497,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			this->_31 * val._31, this->_32 * val._32, this->_33 * val._33, this->_34 * val._34,
 			this->_41 * val._41, this->_42 * val._42, this->_43 * val._43, this->_44 * val._44
 		));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator *=(const FLOAT val)
 	{
@@ -1507,7 +1507,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 *= val; this->_42 *= val; this->_43 *= val; this->_44 *= val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator *=(const XMFLOAT4X4 &val)
 	{
@@ -1517,7 +1517,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 *= val._41; this->_42 *= val._42; this->_43 *= val._43; this->_44 *= val._44;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator /(const FLOAT val) const
 	{
@@ -1529,7 +1529,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			this->_31 * tmp_val, this->_32 * tmp_val, this->_33 * tmp_val, this->_34 * tmp_val,
 			this->_41 * tmp_val, this->_42 * tmp_val, this->_43 * tmp_val, this->_44 * tmp_val
 		));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator /(const XMFLOAT4X4 &val) const
 	{
@@ -1539,7 +1539,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			this->_31 / val._31, this->_32 / val._32, this->_33 / val._33, this->_34 / val._34,
 			this->_41 / val._41, this->_42 / val._42, this->_43 / val._43, this->_44 / val._44
 		));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator /=(const FLOAT val)
 	{
@@ -1551,7 +1551,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 *= tmp_val; this->_42 *= tmp_val; this->_43 *= tmp_val; this->_44 *= tmp_val;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ &operator /=(const XMFLOAT4X4 &val)
 	{
@@ -1561,7 +1561,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 /= val._41; this->_42 /= val._42; this->_43 /= val._43; this->_44 /= val._44;
 
 		return ((*this));
-	}
+	};
 
 	tml::XMFLOAT4X4EX_ operator -(void)
 	{
@@ -1571,6 +1571,6 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 			-this->_31, -this->_32, -this->_33, -this->_34,
 			-this->_41, -this->_42, -this->_43, -this->_44
 		));
-	}
+	};
 } XMFLOAT4X4EX;
 }

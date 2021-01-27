@@ -43,7 +43,7 @@ public:
 			exit_code(0)
 		{
 			return;
-		}
+		};
 	} STATE;
 
 private:
