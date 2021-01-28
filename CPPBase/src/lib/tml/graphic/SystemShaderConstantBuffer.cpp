@@ -107,16 +107,16 @@ INT tml::graphic::SystemShaderConstantBuffer::Create(const tml::graphic::SystemS
 
 
 /**
- * @brief 要素セット関数
- * @param common_ssb_cnt …ライトシェーダー構造化バッファ数
+ * @brief SetElement関数
+ * @param light_cnt (light_count)
+ * @param fog_cnt (fog_count)
  */
-/*
-void tml::graphic::SystemShaderConstantBuffer::SetElement(const UINT common_ssb_cnt)
+void tml::graphic::SystemShaderConstantBuffer::SetElement(const UINT light_cnt, const UINT fog_cnt)
 {
 	auto element = this->GetElement();
 
-	element->common_ssb_cnt = common_ssb_cnt;
+	element->light_count = light_cnt;
+	element->fog_count = fog_cnt;
 
 	return;
 }
-*/

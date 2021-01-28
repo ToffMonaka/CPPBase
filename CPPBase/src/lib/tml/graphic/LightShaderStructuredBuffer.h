@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "ShaderStructuredBuffer.h"
+#include "Light.h"
 
 
 namespace tml {
@@ -78,7 +79,7 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::LightShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	//void SetElement(const UINT, tml::graphic::Light *, const bool, const XMMATRIX &);
+	void SetElement(const UINT, const tml::graphic::Light *);
 };
 }
 }

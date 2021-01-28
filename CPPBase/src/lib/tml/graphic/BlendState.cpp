@@ -13,7 +13,7 @@
  */
 tml::graphic::BlendStateDesc::BlendStateDesc() :
 	blend_state_desc(CD3D11_DEFAULT()),
-	factor_array{}
+	factor_array{D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO}
 {
 	return;
 }
@@ -48,7 +48,7 @@ tml::graphic::BlendStateDesc::~BlendStateDesc()
 void tml::graphic::BlendStateDesc::Init(void)
 {
 	this->blend_state_desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
-	this->factor_array.fill(0.0f);
+	this->factor_array.fill(D3D11_BLEND_ZERO);
 
 	tml::graphic::ResourceDesc::Init();
 

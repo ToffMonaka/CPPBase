@@ -128,10 +128,11 @@ private:
 	UINT bloom_blur_weight_cnt_;
 	FLOAT bloom_blur_dispersion_val_;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
+	CD3D11_VIEWPORT clear_vp_;
+	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::DRAW_VIEWPORT_LIMIT> clear_vp_ary_;
 	ID3D11RenderTargetView *clear_rt_;
 	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> clear_rt_ary_;
 	ID3D11DepthStencilView *clear_dt_;
-	std::array<ID3D11DepthStencilView *, tml::ConstantUtil::GRAPHIC::DRAW_DEPTH_TARGET_LIMIT> clear_dt_ary_;
 	ID3D11ShaderResourceView *clear_tex_sr_;
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> clear_tex_sr_ary_;
 	ID3D11UnorderedAccessView *clear_tex_uasr_;
@@ -142,16 +143,20 @@ private:
 
 	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE draw_stage_type_;
 	tml::graphic::DRAW_STAGE_DATA *draw_stage_dat_;
+	UINT draw_vp_cnt_;
+	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::DRAW_VIEWPORT_LIMIT> draw_vp_ary_;
 	UINT draw_rt_cnt_;
 	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> draw_rt_ary_;
-	UINT draw_dt_cnt_;
-	std::array<ID3D11DepthStencilView *, tml::ConstantUtil::GRAPHIC::DRAW_DEPTH_TARGET_LIMIT> draw_dt_ary_;
-	ID3D11VertexShader *draw_vs_;
-	ID3D11InputLayout *draw_vs_input_layout_;
-	ID3D11HullShader *draw_hs_;
-	ID3D11DomainShader *draw_ds_;
-	ID3D11GeometryShader *draw_gs_;
-	ID3D11PixelShader *draw_ps_;
+	ID3D11DepthStencilView *draw_dt_;
+	ID3D11RasterizerState *draw_rs_;
+	ID3D11BlendState *draw_bs_;
+	ID3D11DepthStencilState *draw_ds_;
+	ID3D11VertexShader *draw_shader_vs_;
+	ID3D11InputLayout *draw_shader_vs_input_layout_;
+	ID3D11HullShader *draw_shader_hs_;
+	ID3D11DomainShader *draw_shader_ds_;
+	ID3D11GeometryShader *draw_shader_gs_;
+	ID3D11PixelShader *draw_shader_ps_;
 	tml::graphic::Camera *draw_camera_;
 	UINT draw_light_cnt_;
 	std::vector<tml::graphic::Light *> draw_light_cont_;
@@ -160,7 +165,7 @@ private:
 	UINT draw_model_cnt_;
 	std::vector<tml::graphic::Model *> draw_model_cont_;
 
-	ID3D11ComputeShader *cmp_cs_;
+	ID3D11ComputeShader *cmp_shader_cs_;
 
 public:
 	tml::graphic::ManagerCommon common;
@@ -210,22 +215,36 @@ public:
 
 	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE GetDrawStageType(void) const;
 	tml::graphic::DRAW_STAGE_DATA *GetDrawStageData(void);
-	void SetDrawViewport(tml::graphic::Viewport *);
-	void SetDrawTarget(tml::graphic::Texture *);
-	void SetDrawTarget(tml::graphic::Texture *, tml::graphic::Texture *);
-	void SetDrawTarget(const UINT, tml::graphic::Texture **);
-	void SetDrawTarget(const UINT, tml::graphic::Texture **, tml::graphic::Texture *);
+	void PushDrawViewport(const UINT, tml::graphic::Viewport *);
+	void SetDrawViewport(void);
+	void ClearDrawViewport(void);
+	void PushDrawRenderTarget(const UINT, tml::graphic::Texture *);
+	void PushDrawDepthTarget(tml::graphic::Texture *);
+	void SetDrawTarget(void);
+	void ClearDrawTarget(void);
+	void SetDrawRasterizerState(tml::graphic::RasterizerState *);
+	void ClearDrawRasterizerState(void);
+	void SetDrawBlendState(tml::graphic::BlendState *);
+	void ClearDrawBlendState(void);
+	void SetDrawDepthState(tml::graphic::DepthState *);
+	void ClearDrawDepthState(void);
 	void SetDrawShader(tml::graphic::Shader *);
-	void SetDrawShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT);
-	void SetDrawShaderStructuredBuffer(tml::graphic::ShaderStructuredBuffer *, const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT);
+	void ClearDrawShader(void);
+	void SetDrawShaderConstantBuffer(const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT, tml::graphic::ShaderConstantBuffer *);
+	void SetDrawShaderStructuredBuffer(const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT, tml::graphic::ShaderStructuredBuffer *);
 	void SetDrawCamera(tml::graphic::Camera *);
+	void ClearDrawCamera(void);
 	void SetDrawLight(tml::graphic::Light *);
+	void ClearDrawLight(void);
 	void SetDrawFog(tml::graphic::Fog *);
+	void ClearDrawFog(void);
 	void SetDrawModel(tml::graphic::Model *);
+	void ClearDrawModel(void);
 
 	void SetComputeShader(tml::graphic::Shader *);
-	void SetComputeShaderConstantBuffer(tml::graphic::ShaderConstantBuffer *, const UINT);
-	void SetComputeShaderStructuredBuffer(tml::graphic::ShaderStructuredBuffer *, const UINT);
+	void ClearComputeShader(void);
+	void SetComputeShaderConstantBuffer(const UINT, tml::graphic::ShaderConstantBuffer *);
+	void SetComputeShaderStructuredBuffer(const UINT, tml::graphic::ShaderStructuredBuffer *);
 };
 }
 }
@@ -468,11 +487,18 @@ inline tml::graphic::DRAW_STAGE_DATA *tml::graphic::Manager::GetDrawStageData(vo
  */
 inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera *camera)
 {
-	if (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
-		return;
-	}
-
 	this->draw_camera_ = camera;
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawCameraŠÖ”
+ */
+inline void tml::graphic::Manager::ClearDrawCamera(void)
+{
+	this->draw_camera_ = nullptr;
 
 	return;
 }
@@ -484,7 +510,7 @@ inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera *camera)
  */
 inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
 {
-	if (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
+	if (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_LIGHT_LIMIT) {
 		return;
 	}
 
@@ -499,12 +525,23 @@ inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
 
 
 /**
+ * @brief ClearDrawLightŠÖ”
+ */
+inline void tml::graphic::Manager::ClearDrawLight(void)
+{
+	this->draw_light_cnt_ = 0U;
+
+	return;
+}
+
+
+/**
  * @brief SetDrawFogŠÖ”
  * @param fog (fog)
  */
 inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
 {
-	if (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
+	if (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_FOG_LIMIT) {
 		return;
 	}
 
@@ -519,12 +556,23 @@ inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
 
 
 /**
+ * @brief ClearDrawFogŠÖ”
+ */
+inline void tml::graphic::Manager::ClearDrawFog(void)
+{
+	this->draw_fog_cnt_ = 0U;
+
+	return;
+}
+
+
+/**
  * @brief SetDrawModelŠÖ”
  * @param model (model)
  */
 inline void tml::graphic::Manager::SetDrawModel(tml::graphic::Model *model)
 {
-	if (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
+	if (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_MODEL_LIMIT) {
 		return;
 	}
 
@@ -533,6 +581,17 @@ inline void tml::graphic::Manager::SetDrawModel(tml::graphic::Model *model)
 	}
 
 	this->draw_model_cont_[this->draw_model_cnt_++] = model;
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawModelŠÖ”
+ */
+inline void tml::graphic::Manager::ClearDrawModel(void)
+{
+	this->draw_model_cnt_ = 0U;
 
 	return;
 }

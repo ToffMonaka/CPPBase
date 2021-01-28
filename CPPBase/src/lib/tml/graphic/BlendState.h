@@ -63,6 +63,9 @@ public:
 
 	ID3D11BlendState *GetBlendState(void);
 	const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &GetFactorArray(void) const;
+	void SetFactorArray(const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &);
+	FLOAT GetFactor(const UINT) const;
+	void SetFactor(const UINT, FLOAT);
 };
 }
 }
@@ -85,4 +88,40 @@ inline ID3D11BlendState *tml::graphic::BlendState::GetBlendState(void)
 inline const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &tml::graphic::BlendState::GetFactorArray(void) const
 {
 	return (this->factor_ary_);
+}
+
+
+/**
+ * @brief SetFactorArrayä÷êî
+ * @param factor_ary (factor_array)
+ */
+inline void tml::graphic::BlendState::SetFactorArray(const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &factor_ary)
+{
+	this->factor_ary_ = factor_ary;
+
+	return;
+}
+
+
+/**
+ * @brief GetFactorä÷êî
+ * @param index (index)
+ * @return factor (factor)
+ */
+inline FLOAT tml::graphic::BlendState::GetFactor(const UINT index) const
+{
+	return (this->factor_ary_[index]);
+}
+
+
+/**
+ * @brief SetFactorä÷êî
+ * @param index (index)
+ * @param factor (factor)
+ */
+inline void tml::graphic::BlendState::SetFactor(const UINT index, const FLOAT factor)
+{
+	this->factor_ary_[index] = factor;
+
+	return;
 }
