@@ -510,7 +510,8 @@ inline void tml::graphic::Manager::ClearDrawCamera(void)
  */
 inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
 {
-	if (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_LIGHT_LIMIT) {
+	if ((light == nullptr)
+	|| (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_LIGHT_LIMIT)) {
 		return;
 	}
 
@@ -541,7 +542,8 @@ inline void tml::graphic::Manager::ClearDrawLight(void)
  */
 inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
 {
-	if (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_FOG_LIMIT) {
+	if ((fog == nullptr)
+	|| (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_FOG_LIMIT)) {
 		return;
 	}
 
@@ -572,7 +574,8 @@ inline void tml::graphic::Manager::ClearDrawFog(void)
  */
 inline void tml::graphic::Manager::SetDrawModel(tml::graphic::Model *model)
 {
-	if (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_MODEL_LIMIT) {
+	if ((model == nullptr)
+	|| (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_MODEL_LIMIT)) {
 		return;
 	}
 

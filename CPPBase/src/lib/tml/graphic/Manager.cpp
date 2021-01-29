@@ -659,19 +659,23 @@ void tml::graphic::Manager::Update(void)
 				this->draw_model_cont_[draw_model_i]->DrawStageForward2D();
 			}
 
-			this->ClearDrawViewport();
-			this->ClearDrawTarget();
-
 			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE;
 			this->draw_stage_dat_ = nullptr;
 
 			break;
 		}
 		}
+
+		this->ClearDrawViewport();
+		this->ClearDrawTarget();
 	}
 
 	this->swap_chain_->Present(this->vsync_flg_, 0U);
 
+	this->ClearDrawRasterizerState();
+	this->ClearDrawBlendState();
+	this->ClearDrawDepthState();
+	this->ClearDrawShader();
 	this->ClearDrawCamera();
 	this->ClearDrawLight();
 	this->ClearDrawFog();
@@ -1022,13 +1026,15 @@ void tml::graphic::Manager::PushDrawViewport(const UINT index, tml::graphic::Vie
 		this->draw_vp_ary_[index] = this->clear_vp_;
 	}
 
-	if (vp != nullptr) {
-		this->draw_vp_cnt_ = index + 1U;
-		this->draw_vp_ary_[index] = (*vp);
-	} else {
+	if (vp == nullptr) {
 		this->draw_vp_cnt_ = index + 1U;
 		this->draw_vp_ary_[index] = this->clear_vp_;
+
+		return;
 	}
+
+	this->draw_vp_cnt_ = index + 1U;
+	this->draw_vp_ary_[index] = (*vp);
 
 	return;
 }
@@ -1041,8 +1047,6 @@ void tml::graphic::Manager::SetDrawViewport(void)
 {
 	if (this->draw_vp_cnt_ > 0U) {
 		this->device_context_->RSSetViewports(this->draw_vp_cnt_, this->draw_vp_ary_.data());
-	} else {
-		this->device_context_->RSSetViewports(0U, nullptr);
 	}
 
 	return;
@@ -1075,13 +1079,15 @@ void tml::graphic::Manager::PushDrawRenderTarget(const UINT index, tml::graphic:
 		this->draw_rt_ary_[index] = this->clear_rt_;
 	}
 
-	if (rt_tex != nullptr) {
-		this->draw_rt_cnt_ = index + 1U;
-		this->draw_rt_ary_[index] = rt_tex->GetRenderTarget();
-	} else {
+	if (rt_tex == nullptr) {
 		this->draw_rt_cnt_ = index + 1U;
 		this->draw_rt_ary_[index] = this->clear_rt_;
+
+		return;
 	}
+
+	this->draw_rt_cnt_ = index + 1U;
+	this->draw_rt_ary_[index] = rt_tex->GetRenderTarget();
 
 	return;
 }
@@ -1093,11 +1099,13 @@ void tml::graphic::Manager::PushDrawRenderTarget(const UINT index, tml::graphic:
  */
 void tml::graphic::Manager::PushDrawDepthTarget(tml::graphic::Texture *dt_tex)
 {
-	if (dt_tex != nullptr) {
-		this->draw_dt_ = dt_tex->GetDepthTarget();
-	} else {
+	if (dt_tex == nullptr) {
 		this->draw_dt_ = this->clear_dt_;
+
+		return;
 	}
+
+	this->draw_dt_ = dt_tex->GetDepthTarget();
 
 	return;
 }
@@ -1111,7 +1119,9 @@ void tml::graphic::Manager::SetDrawTarget(void)
 	if (this->draw_rt_cnt_ > 0U) {
 		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->draw_rt_ary_.data(), this->draw_dt_);
 	} else {
-		this->device_context_->OMSetRenderTargets(0U, nullptr, this->draw_dt_);
+		if (this->draw_dt_ != nullptr) {
+			this->device_context_->OMSetRenderTargets(0U, nullptr, this->draw_dt_);
+		}
 	}
 
 	return;
@@ -1127,11 +1137,15 @@ void tml::graphic::Manager::ClearDrawTarget(void)
 		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->clear_rt_ary_.data(), this->clear_dt_);
 
 		this->draw_rt_cnt_ = 0U;
+		this->draw_dt_ = this->clear_dt_;
 	} else {
-		this->device_context_->OMSetRenderTargets(0U, nullptr, this->clear_dt_);
-	}
+		if (this->draw_dt_ != nullptr) {
+			this->device_context_->OMSetRenderTargets(0U, nullptr, this->clear_dt_);
 
-	this->draw_dt_ = this->clear_dt_;
+			this->draw_rt_cnt_ = 0U;
+			this->draw_dt_ = this->clear_dt_;
+		}
+	}
 
 	return;
 }
@@ -1143,6 +1157,12 @@ void tml::graphic::Manager::ClearDrawTarget(void)
  */
 void tml::graphic::Manager::SetDrawRasterizerState(tml::graphic::RasterizerState *rs)
 {
+	if (rs == nullptr) {
+		this->ClearDrawRasterizerState();
+
+		return;
+	}
+
 	if (this->draw_rs_ != rs->GetRasterizerState()) {
 		this->draw_rs_ = rs->GetRasterizerState();
 
@@ -1174,10 +1194,16 @@ void tml::graphic::Manager::ClearDrawRasterizerState(void)
  */
 void tml::graphic::Manager::SetDrawBlendState(tml::graphic::BlendState *bs)
 {
+	if (bs == nullptr) {
+		this->ClearDrawBlendState();
+
+		return;
+	}
+
 	if (this->draw_bs_ != bs->GetBlendState()) {
 		this->draw_bs_ = bs->GetBlendState();
 
-		this->device_context_->OMSetBlendState(this->draw_bs_, bs->GetFactorArray().data(), 0xFFFFFFFFU);
+		this->device_context_->OMSetBlendState(this->draw_bs_, (this->draw_bs_ != nullptr) ? bs->GetFactorArray().data() : nullptr, 0xFFFFFFFFU);
 	}
 
 	return;
@@ -1205,6 +1231,12 @@ void tml::graphic::Manager::ClearDrawBlendState(void)
  */
 void tml::graphic::Manager::SetDrawDepthState(tml::graphic::DepthState *ds)
 {
+	if (ds == nullptr) {
+		this->ClearDrawDepthState();
+
+		return;
+	}
+
 	if (this->draw_ds_ != ds->GetDepthState()) {
 		this->draw_ds_ = ds->GetDepthState();
 
@@ -1236,6 +1268,12 @@ void tml::graphic::Manager::ClearDrawDepthState(void)
  */
 void tml::graphic::Manager::SetDrawShader(tml::graphic::Shader *shader)
 {
+	if (shader == nullptr) {
+		this->ClearDrawShader();
+
+		return;
+	}
+
 	if (this->draw_shader_vs_ != shader->GetVertexShader()) {
 		this->draw_shader_vs_ = shader->GetVertexShader();
 
@@ -1407,6 +1445,12 @@ void tml::graphic::Manager::SetDrawShaderStructuredBuffer(const tml::ConstantUti
  */
 void tml::graphic::Manager::SetComputeShader(tml::graphic::Shader *shader)
 {
+	if (shader == nullptr) {
+		this->ClearComputeShader();
+
+		return;
+	}
+
 	if (this->draw_shader_vs_ != nullptr) {
 		this->device_context_->VSSetShader(nullptr, nullptr, 0U);
 
