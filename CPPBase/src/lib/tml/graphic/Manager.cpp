@@ -99,16 +99,6 @@ tml::graphic::Manager::Manager() :
 	bloom_blur_weight_cnt_(0U),
 	bloom_blur_dispersion_val_(0.0f),
 	aa_quality_type_(tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE),
-	clear_rt_(nullptr),
-	clear_rt_ary_{},
-	clear_dt_(nullptr),
-	clear_tex_sr_(nullptr),
-	clear_tex_sr_ary_{},
-	clear_tex_uasr_(nullptr),
-	clear_tex_uasr_ary_{},
-	clear_tex_uasr_init_cnt_ary_{},
-	clear_samp_sr_(nullptr),
-	clear_samp_sr_ary_{},
 	draw_stage_type_(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE),
 	draw_stage_dat_(nullptr),
 	draw_vp_cnt_(0U),
@@ -128,11 +118,22 @@ tml::graphic::Manager::Manager() :
 	draw_camera_(nullptr),
 	draw_light_cnt_(0U),
 	draw_fog_cnt_(0U),
+	draw_mesh_vb_(nullptr),
+	draw_mesh_vb_element_size_(0U),
+	draw_mesh_ib_(nullptr),
+	draw_mesh_ib_element_size_(0U),
+	draw_mesh_ib_format_(DXGI_FORMAT_UNKNOWN),
+	draw_mesh_pt_(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED),
 	draw_model_cnt_(0U),
 	cmp_shader_cs_(nullptr)
 {
-	this->clear_vp_ = CD3D11_VIEWPORT(0.0f, 0.0f, 0.0f, 0.0f, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH);
-	this->clear_vp_ary_.fill(this->clear_vp_);
+	this->null_vp_ = CD3D11_VIEWPORT(0.0f, 0.0f, 0.0f, 0.0f, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH);
+	this->null_vp_ary_.fill(this->null_vp_);
+	this->null_rt_ary_.fill(nullptr);
+	this->null_tex_sr_ary_.fill(nullptr);
+	this->null_tex_uasr_ary_.fill(nullptr);
+	this->null_tex_uasr_init_cnt_ary_.fill(static_cast<UINT>(-1));
+	this->null_samp_sr_ary_.fill(nullptr);
 
 	return;
 }
@@ -160,41 +161,6 @@ void tml::graphic::Manager::Release(void)
 		}
 
 		res_cont.clear();
-	}
-
-	if (this->clear_samp_sr_ != nullptr) {
-		this->clear_samp_sr_->Release();
-
-		this->clear_samp_sr_ = nullptr;
-		this->clear_samp_sr_ary_.fill(nullptr);
-	}
-
-	if (this->clear_tex_uasr_ != nullptr) {
-		this->clear_tex_uasr_->Release();
-
-		this->clear_tex_uasr_ = nullptr;
-		this->clear_tex_uasr_ary_.fill(nullptr);
-		this->clear_tex_uasr_init_cnt_ary_.fill(0U);
-	}
-
-	if (this->clear_tex_sr_ != nullptr) {
-		this->clear_tex_sr_->Release();
-
-		this->clear_tex_sr_ = nullptr;
-		this->clear_tex_sr_ary_.fill(nullptr);
-	}
-
-	if (this->clear_dt_ != nullptr) {
-		this->clear_dt_->Release();
-
-		this->clear_dt_ = nullptr;
-	}
-
-	if (this->clear_rt_ != nullptr) {
-		this->clear_rt_->Release();
-
-		this->clear_rt_ = nullptr;
-		this->clear_rt_ary_.fill(nullptr);
 	}
 
 	if (this->swap_chain_ != nullptr) {
@@ -287,12 +253,18 @@ void tml::graphic::Manager::Init(void)
 	this->draw_shader_gs_ = nullptr;
 	this->draw_shader_ps_ = nullptr;
 	this->draw_camera_ = nullptr;
-	this->draw_model_cnt_ = 0U;
-	this->draw_model_cont_.clear();
 	this->draw_light_cnt_ = 0U;
 	this->draw_light_cont_.clear();
 	this->draw_fog_cnt_ = 0U;
 	this->draw_fog_cont_.clear();
+	this->draw_mesh_vb_ = nullptr;
+	this->draw_mesh_vb_element_size_ = 0U;
+	this->draw_mesh_ib_ = nullptr;
+	this->draw_mesh_ib_element_size_ = 0U;
+	this->draw_mesh_ib_format_ = DXGI_FORMAT_UNKNOWN;
+	this->draw_mesh_pt_ = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
+	this->draw_model_cnt_ = 0U;
+	this->draw_model_cont_.clear();
 	this->cmp_shader_cs_ = nullptr;
 
 	return;
@@ -486,52 +458,19 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::FXAA;
 
-	{// ClearRT Create
-		this->clear_rt_ = nullptr;
-		this->clear_rt_ary_.fill(this->clear_rt_);
-	}
-
-	{// ClearDT Create
-		this->clear_dt_ = nullptr;
-	}
-
-	{// ClearTextureSR Create
-		this->clear_tex_sr_ = nullptr;
-		this->clear_tex_sr_ary_.fill(this->clear_tex_sr_);
-	}
-
-	{// ClearTextureUASR Create
-		this->clear_tex_uasr_ = nullptr;
-		this->clear_tex_uasr_ary_.fill(this->clear_tex_uasr_);
-		this->clear_tex_uasr_init_cnt_ary_.fill(static_cast<UINT>(-1));
-	}
-
-	{// ClearSamplerSR Create
-		CD3D11_SAMPLER_DESC clear_samp_sr_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
-
-		clear_samp_sr_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-
-		if (FAILED(this->device_->CreateSamplerState(&clear_samp_sr_desc, &this->clear_samp_sr_))) {
-			this->Init();
-
-			return (-1);
-		}
-
-		this->clear_samp_sr_ary_.fill(this->clear_samp_sr_);
-	}
-
-	this->device_context_->OMSetRenderTargets(this->clear_rt_ary_.size(), this->clear_rt_ary_.data(), this->clear_dt_);
+	this->device_context_->RSSetViewports(0U, nullptr);
+	this->device_context_->OMSetRenderTargets(this->null_rt_ary_.size(), this->null_rt_ary_.data(), nullptr);
 	this->device_context_->VSSetShader(nullptr, nullptr, 0U);
 	this->device_context_->HSSetShader(nullptr, nullptr, 0U);
 	this->device_context_->DSSetShader(nullptr, nullptr, 0U);
 	this->device_context_->GSSetShader(nullptr, nullptr, 0U);
 	this->device_context_->PSSetShader(nullptr, nullptr, 0U);
-	this->device_context_->PSSetShaderResources(0U, this->clear_tex_sr_ary_.size(), this->clear_tex_sr_ary_.data());
-	this->device_context_->PSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
+	this->device_context_->PSSetShaderResources(0U, this->null_tex_sr_ary_.size(), this->null_tex_sr_ary_.data());
+	this->device_context_->PSSetSamplers(0U, this->null_samp_sr_ary_.size(), this->null_samp_sr_ary_.data());
 	this->device_context_->CSSetShader(nullptr, nullptr, 0U);
-	this->device_context_->CSSetShaderResources(0U, this->clear_tex_sr_ary_.size(), this->clear_tex_sr_ary_.data());
-	this->device_context_->CSSetUnorderedAccessViews(0U, this->clear_tex_uasr_ary_.size(), this->clear_tex_uasr_ary_.data(), this->clear_tex_uasr_init_cnt_ary_.data());
-	this->device_context_->CSSetSamplers(0U, this->clear_samp_sr_ary_.size(), this->clear_samp_sr_ary_.data());
+	this->device_context_->CSSetShaderResources(0U, this->null_tex_sr_ary_.size(), this->null_tex_sr_ary_.data());
+	this->device_context_->CSSetUnorderedAccessViews(0U, this->null_tex_uasr_ary_.size(), this->null_tex_uasr_ary_.data(), this->null_tex_uasr_init_cnt_ary_.data());
+	this->device_context_->CSSetSamplers(0U, this->null_samp_sr_ary_.size(), this->null_samp_sr_ary_.data());
 
 	if (this->common.Create(this) < 0) {
 		this->Init();
@@ -679,6 +618,9 @@ void tml::graphic::Manager::Update(void)
 	this->ClearDrawCamera();
 	this->ClearDrawLight();
 	this->ClearDrawFog();
+	this->ClearDrawMesh();
+	this->ClearDrawTexture();
+	this->ClearDrawSampler();
 	this->ClearDrawModel();
 
 	return;
@@ -1023,18 +965,11 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 void tml::graphic::Manager::PushDrawViewport(const UINT index, tml::graphic::Viewport *vp)
 {
 	for (UINT index_i = this->draw_vp_cnt_; index_i < index; ++index_i) {
-		this->draw_vp_ary_[index] = this->clear_vp_;
-	}
-
-	if (vp == nullptr) {
-		this->draw_vp_cnt_ = index + 1U;
-		this->draw_vp_ary_[index] = this->clear_vp_;
-
-		return;
+		this->draw_vp_ary_[index] = this->null_vp_;
 	}
 
 	this->draw_vp_cnt_ = index + 1U;
-	this->draw_vp_ary_[index] = (*vp);
+	this->draw_vp_ary_[index] = (vp != nullptr) ? (*vp) : this->null_vp_;
 
 	return;
 }
@@ -1076,18 +1011,11 @@ void tml::graphic::Manager::ClearDrawViewport(void)
 void tml::graphic::Manager::PushDrawRenderTarget(const UINT index, tml::graphic::Texture *rt_tex)
 {
 	for (UINT index_i = this->draw_rt_cnt_; index_i < index; ++index_i) {
-		this->draw_rt_ary_[index] = this->clear_rt_;
-	}
-
-	if (rt_tex == nullptr) {
-		this->draw_rt_cnt_ = index + 1U;
-		this->draw_rt_ary_[index] = this->clear_rt_;
-
-		return;
+		this->draw_rt_ary_[index] = nullptr;
 	}
 
 	this->draw_rt_cnt_ = index + 1U;
-	this->draw_rt_ary_[index] = rt_tex->GetRenderTarget();
+	this->draw_rt_ary_[index] = (rt_tex != nullptr) ? rt_tex->GetRenderTarget() : nullptr;
 
 	return;
 }
@@ -1099,13 +1027,7 @@ void tml::graphic::Manager::PushDrawRenderTarget(const UINT index, tml::graphic:
  */
 void tml::graphic::Manager::PushDrawDepthTarget(tml::graphic::Texture *dt_tex)
 {
-	if (dt_tex == nullptr) {
-		this->draw_dt_ = this->clear_dt_;
-
-		return;
-	}
-
-	this->draw_dt_ = dt_tex->GetDepthTarget();
+	this->draw_dt_ = (dt_tex != nullptr) ? dt_tex->GetDepthTarget() : nullptr;
 
 	return;
 }
@@ -1134,16 +1056,18 @@ void tml::graphic::Manager::SetDrawTarget(void)
 void tml::graphic::Manager::ClearDrawTarget(void)
 {
 	if (this->draw_rt_cnt_ > 0U) {
-		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->clear_rt_ary_.data(), this->clear_dt_);
+		this->draw_dt_ = nullptr;
+
+		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, this->null_rt_ary_.data(), this->draw_dt_);
 
 		this->draw_rt_cnt_ = 0U;
-		this->draw_dt_ = this->clear_dt_;
 	} else {
 		if (this->draw_dt_ != nullptr) {
-			this->device_context_->OMSetRenderTargets(0U, nullptr, this->clear_dt_);
+			this->draw_dt_ = nullptr;
+
+			this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, nullptr, this->draw_dt_);
 
 			this->draw_rt_cnt_ = 0U;
-			this->draw_dt_ = this->clear_dt_;
 		}
 	}
 
@@ -1179,9 +1103,9 @@ void tml::graphic::Manager::SetDrawRasterizerState(tml::graphic::RasterizerState
 void tml::graphic::Manager::ClearDrawRasterizerState(void)
 {
 	if (this->draw_rs_ != nullptr) {
-		this->device_context_->RSSetState(nullptr);
-
 		this->draw_rs_ = nullptr;
+
+		this->device_context_->RSSetState(this->draw_rs_);
 	}
 
 	return;
@@ -1216,9 +1140,9 @@ void tml::graphic::Manager::SetDrawBlendState(tml::graphic::BlendState *bs)
 void tml::graphic::Manager::ClearDrawBlendState(void)
 {
 	if (this->draw_bs_ != nullptr) {
-		this->device_context_->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFU);
-
 		this->draw_bs_ = nullptr;
+
+		this->device_context_->OMSetBlendState(this->draw_bs_, nullptr, 0xFFFFFFFFU);
 	}
 
 	return;
@@ -1253,9 +1177,9 @@ void tml::graphic::Manager::SetDrawDepthState(tml::graphic::DepthState *ds)
 void tml::graphic::Manager::ClearDrawDepthState(void)
 {
 	if (this->draw_ds_ != nullptr) {
-		this->device_context_->OMSetDepthStencilState(nullptr, 0U);
-
 		this->draw_ds_ = nullptr;
+
+		this->device_context_->OMSetDepthStencilState(this->draw_ds_, 0U);
 	}
 
 	return;
@@ -1310,12 +1234,6 @@ void tml::graphic::Manager::SetDrawShader(tml::graphic::Shader *shader)
 		this->device_context_->PSSetShader(this->draw_shader_ps_, nullptr, 0U);
 	}
 
-	if (this->cmp_shader_cs_ != nullptr) {
-		this->device_context_->CSSetShader(nullptr, nullptr, 0U);
-
-		this->cmp_shader_cs_ = nullptr;
-	}
-
 	return;
 }
 
@@ -1326,45 +1244,39 @@ void tml::graphic::Manager::SetDrawShader(tml::graphic::Shader *shader)
 void tml::graphic::Manager::ClearDrawShader(void)
 {
 	if (this->draw_shader_vs_ != nullptr) {
-		this->device_context_->VSSetShader(nullptr, nullptr, 0U);
-
 		this->draw_shader_vs_ = nullptr;
+
+		this->device_context_->VSSetShader(this->draw_shader_vs_, nullptr, 0U);
 	}
 
 	if (this->draw_shader_vs_input_layout_ != nullptr) {
-		this->device_context_->IASetInputLayout(nullptr);
-
 		this->draw_shader_vs_input_layout_ = nullptr;
+
+		this->device_context_->IASetInputLayout(this->draw_shader_vs_input_layout_);
 	}
 
 	if (this->draw_shader_hs_ != nullptr) {
-		this->device_context_->HSSetShader(nullptr, nullptr, 0U);
-
 		this->draw_shader_hs_ = nullptr;
+
+		this->device_context_->HSSetShader(this->draw_shader_hs_, nullptr, 0U);
 	}
 
 	if (this->draw_shader_ds_ != nullptr) {
-		this->device_context_->DSSetShader(nullptr, nullptr, 0U);
-
 		this->draw_shader_ds_ = nullptr;
+
+		this->device_context_->DSSetShader(this->draw_shader_ds_, nullptr, 0U);
 	}
 
 	if (this->draw_shader_gs_ != nullptr) {
-		this->device_context_->GSSetShader(nullptr, nullptr, 0U);
-
 		this->draw_shader_gs_ = nullptr;
+
+		this->device_context_->GSSetShader(this->draw_shader_gs_, nullptr, 0U);
 	}
 
 	if (this->draw_shader_ps_ != nullptr) {
-		this->device_context_->PSSetShader(nullptr, nullptr, 0U);
-
 		this->draw_shader_ps_ = nullptr;
-	}
 
-	if (this->draw_ds_ != nullptr) {
-		this->device_context_->OMSetDepthStencilState(nullptr, 0U);
-
-		this->draw_ds_ = nullptr;
+		this->device_context_->PSSetShader(this->draw_shader_ps_, nullptr, 0U);
 	}
 
 	return;
@@ -1440,6 +1352,231 @@ void tml::graphic::Manager::SetDrawShaderStructuredBuffer(const tml::ConstantUti
 
 
 /**
+ * @brief SetDrawMeshä÷êî
+ * @param mesh (mesh)
+ */
+void tml::graphic::Manager::SetDrawMesh(tml::graphic::Mesh *mesh)
+{
+	if (mesh == nullptr) {
+		this->ClearDrawMesh();
+
+		return;
+	}
+
+	if (this->draw_mesh_vb_ != mesh->GetVertexBuffer()) {
+		this->draw_mesh_vb_ = mesh->GetVertexBuffer();
+		this->draw_mesh_vb_element_size_ = mesh->GetVertexBufferElementSize();
+
+		UINT offset = 0U;
+
+		this->device_context_->IASetVertexBuffers(0U, 1U, &this->draw_mesh_vb_, &this->draw_mesh_vb_element_size_, &offset);
+	}
+
+	if (this->draw_mesh_ib_ != mesh->GetIndexBuffer()) {
+		this->draw_mesh_ib_ = mesh->GetIndexBuffer();
+		this->draw_mesh_ib_element_size_ = mesh->GetIndexBufferElementSize();
+		this->draw_mesh_ib_format_ = mesh->GetIndexBufferFormat();
+
+		this->device_context_->IASetIndexBuffer(this->draw_mesh_ib_, this->draw_mesh_ib_format_, 0U);
+	}
+
+	if (this->draw_mesh_pt_ != mesh->GetPrimitiveTopology()) {
+		this->draw_mesh_pt_ = mesh->GetPrimitiveTopology();
+
+		this->device_context_->IASetPrimitiveTopology(this->draw_mesh_pt_);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawMeshä÷êî
+ */
+void tml::graphic::Manager::ClearDrawMesh(void)
+{
+	if (this->draw_mesh_vb_ != nullptr) {
+		this->draw_mesh_vb_ = nullptr;
+		this->draw_mesh_vb_element_size_ = 0U;
+
+		UINT offset = 0U;
+
+		this->device_context_->IASetVertexBuffers(0U, 1U, &this->draw_mesh_vb_, &this->draw_mesh_vb_element_size_, &offset);
+	}
+
+	if (this->draw_mesh_ib_ != nullptr) {
+		this->draw_mesh_ib_ = nullptr;
+		this->draw_mesh_ib_element_size_ = 0U;
+		this->draw_mesh_ib_format_ = DXGI_FORMAT_UNKNOWN;
+
+		this->device_context_->IASetIndexBuffer(this->draw_mesh_ib_, this->draw_mesh_ib_format_, 0U);
+	}
+
+	if (this->draw_mesh_pt_ != D3D_PRIMITIVE_TOPOLOGY_UNDEFINED) {
+		this->draw_mesh_pt_ = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
+
+		this->device_context_->IASetPrimitiveTopology(this->draw_mesh_pt_);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief PushDrawTextureä÷êî
+ * @param index (index)
+ * @param tex (texture)
+ */
+void tml::graphic::Manager::PushDrawTexture(const UINT index, tml::graphic::Texture *tex)
+{
+	this->draw_tex_sr_ary_[index] = (tex != nullptr) ? tex->GetSR() : nullptr;
+
+	auto &draw_tex_dat = this->draw_tex_dat_ary_[this->draw_tex_dat_cnt_];
+
+	draw_tex_dat.first = index;
+	draw_tex_dat.second = 1U;
+
+	++this->draw_tex_dat_cnt_;
+
+	return;
+}
+
+
+/**
+ * @brief PushDrawTextureä÷êî
+ * @param index (index)
+ * @param tex_cnt (texture_count)
+ * @param tex_ary (texture_array)
+ */
+void tml::graphic::Manager::PushDrawTexture(const UINT index, const UINT tex_cnt, tml::graphic::Texture **tex_ary)
+{
+	for (UINT tex_i = 0U; tex_i < tex_cnt; ++tex_i) {
+		auto tex = tex_ary[tex_i];
+
+		this->draw_tex_sr_ary_[index + tex_i] = (tex != nullptr) ? tex->GetSR() : nullptr;
+	}
+
+	auto &draw_tex_dat = this->draw_tex_dat_ary_[this->draw_tex_dat_cnt_];
+
+	draw_tex_dat.first = index;
+	draw_tex_dat.second = tex_cnt;
+
+	++this->draw_tex_dat_cnt_;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawTextureä÷êî
+ */
+void tml::graphic::Manager::SetDrawTexture(void)
+{
+	for (UINT draw_tex_dat_i = 0U; draw_tex_dat_i < this->draw_tex_dat_cnt_; ++draw_tex_dat_i) {
+		auto &draw_tex_dat = this->draw_tex_dat_ary_[draw_tex_dat_i];
+
+		this->device_context_->PSSetShaderResources(draw_tex_dat.first, draw_tex_dat.second, &this->draw_tex_sr_ary_[draw_tex_dat.first]);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawTextureä÷êî
+ */
+void tml::graphic::Manager::ClearDrawTexture(void)
+{
+	for (UINT draw_tex_dat_i = 0U; draw_tex_dat_i < this->draw_tex_dat_cnt_; ++draw_tex_dat_i) {
+		auto &draw_tex_dat = this->draw_tex_dat_ary_[draw_tex_dat_i];
+
+		this->device_context_->PSSetShaderResources(draw_tex_dat.first, draw_tex_dat.second, &this->null_tex_sr_ary_[draw_tex_dat.first]);
+	}
+
+	this->draw_tex_dat_cnt_ = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief PushDrawSamplerä÷êî
+ * @param index (index)
+ * @param samp (sampler)
+ */
+void tml::graphic::Manager::PushDrawSampler(const UINT index, tml::graphic::Sampler *samp)
+{
+	this->draw_samp_sr_ary_[index] = (samp != nullptr) ? samp->GetSampler() : nullptr;
+
+	auto &draw_samp_dat = this->draw_samp_dat_ary_[this->draw_samp_dat_cnt_];
+
+	draw_samp_dat.first = index;
+	draw_samp_dat.second = 1U;
+
+	++this->draw_samp_dat_cnt_;
+
+	return;
+}
+
+
+/**
+ * @brief PushDrawSamplerä÷êî
+ * @param index (index)
+ * @param samp_cnt (sampler_count)
+ * @param samp_ary (sampler_array)
+ */
+void tml::graphic::Manager::PushDrawSampler(const UINT index, const UINT samp_cnt, tml::graphic::Sampler **samp_ary)
+{
+	for (UINT samp_i = 0U; samp_i < samp_cnt; ++samp_i) {
+		auto samp = samp_ary[samp_i];
+
+		this->draw_samp_sr_ary_[index + samp_i] = (samp != nullptr) ? samp->GetSampler() : nullptr;
+	}
+
+	auto &draw_samp_dat = this->draw_samp_dat_ary_[this->draw_samp_dat_cnt_];
+
+	draw_samp_dat.first = index;
+	draw_samp_dat.second = samp_cnt;
+
+	++this->draw_samp_dat_cnt_;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawSamplerä÷êî
+ */
+void tml::graphic::Manager::SetDrawSampler(void)
+{
+	for (UINT draw_samp_dat_i = 0U; draw_samp_dat_i < this->draw_samp_dat_cnt_; ++draw_samp_dat_i) {
+		auto &draw_samp_dat = this->draw_samp_dat_ary_[draw_samp_dat_i];
+
+		this->device_context_->PSSetSamplers(draw_samp_dat.first, draw_samp_dat.second, &this->draw_samp_sr_ary_[draw_samp_dat.first]);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawSamplerä÷êî
+ */
+void tml::graphic::Manager::ClearDrawSampler(void)
+{
+	for (UINT draw_samp_dat_i = 0U; draw_samp_dat_i < this->draw_samp_dat_cnt_; ++draw_samp_dat_i) {
+		auto &draw_samp_dat = this->draw_samp_dat_ary_[draw_samp_dat_i];
+
+		this->device_context_->PSSetSamplers(draw_samp_dat.first, draw_samp_dat.second, &this->null_samp_sr_ary_[draw_samp_dat.first]);
+	}
+
+	this->draw_samp_dat_cnt_ = 0U;
+
+	return;
+}
+
+
+/**
  * @brief SetComputeShaderä÷êî
  * @param shader (shader)
  */
@@ -1449,42 +1586,6 @@ void tml::graphic::Manager::SetComputeShader(tml::graphic::Shader *shader)
 		this->ClearComputeShader();
 
 		return;
-	}
-
-	if (this->draw_shader_vs_ != nullptr) {
-		this->device_context_->VSSetShader(nullptr, nullptr, 0U);
-
-		this->draw_shader_vs_ = nullptr;
-	}
-
-	if (this->draw_shader_vs_input_layout_ != nullptr) {
-		this->device_context_->IASetInputLayout(nullptr);
-
-		this->draw_shader_vs_input_layout_ = nullptr;
-	}
-
-	if (this->draw_shader_hs_ != nullptr) {
-		this->device_context_->HSSetShader(nullptr, nullptr, 0U);
-
-		this->draw_shader_hs_ = nullptr;
-	}
-
-	if (this->draw_shader_ds_ != nullptr) {
-		this->device_context_->DSSetShader(nullptr, nullptr, 0U);
-
-		this->draw_shader_ds_ = nullptr;
-	}
-
-	if (this->draw_shader_gs_ != nullptr) {
-		this->device_context_->GSSetShader(nullptr, nullptr, 0U);
-
-		this->draw_shader_gs_ = nullptr;
-	}
-
-	if (this->draw_shader_ps_ != nullptr) {
-		this->device_context_->PSSetShader(nullptr, nullptr, 0U);
-
-		this->draw_shader_ps_ = nullptr;
 	}
 
 	if (this->cmp_shader_cs_ != shader->GetComputeShader()) {
@@ -1503,9 +1604,9 @@ void tml::graphic::Manager::SetComputeShader(tml::graphic::Shader *shader)
 void tml::graphic::Manager::ClearComputeShader(void)
 {
 	if (this->cmp_shader_cs_ != nullptr) {
-		this->device_context_->CSSetShader(nullptr, nullptr, 0U);
-
 		this->cmp_shader_cs_ = nullptr;
+
+		this->device_context_->CSSetShader(this->cmp_shader_cs_, nullptr, 0U);
 	}
 
 	return;

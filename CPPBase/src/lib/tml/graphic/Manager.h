@@ -128,18 +128,13 @@ private:
 	UINT bloom_blur_weight_cnt_;
 	FLOAT bloom_blur_dispersion_val_;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
-	CD3D11_VIEWPORT clear_vp_;
-	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::DRAW_VIEWPORT_LIMIT> clear_vp_ary_;
-	ID3D11RenderTargetView *clear_rt_;
-	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> clear_rt_ary_;
-	ID3D11DepthStencilView *clear_dt_;
-	ID3D11ShaderResourceView *clear_tex_sr_;
-	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> clear_tex_sr_ary_;
-	ID3D11UnorderedAccessView *clear_tex_uasr_;
-	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> clear_tex_uasr_ary_;
-	std::array<UINT, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> clear_tex_uasr_init_cnt_ary_;
-	ID3D11SamplerState *clear_samp_sr_;
-	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> clear_samp_sr_ary_;
+	CD3D11_VIEWPORT null_vp_;
+	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::DRAW_VIEWPORT_LIMIT> null_vp_ary_;
+	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> null_rt_ary_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> null_tex_sr_ary_;
+	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> null_tex_uasr_ary_;
+	std::array<UINT, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> null_tex_uasr_init_cnt_ary_;
+	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> null_samp_sr_ary_;
 
 	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE draw_stage_type_;
 	tml::graphic::DRAW_STAGE_DATA *draw_stage_dat_;
@@ -162,6 +157,18 @@ private:
 	std::vector<tml::graphic::Light *> draw_light_cont_;
 	UINT draw_fog_cnt_;
 	std::vector<tml::graphic::Fog *> draw_fog_cont_;
+	ID3D11Buffer *draw_mesh_vb_;
+	UINT draw_mesh_vb_element_size_;
+	ID3D11Buffer *draw_mesh_ib_;
+	UINT draw_mesh_ib_element_size_;
+	DXGI_FORMAT draw_mesh_ib_format_;
+	D3D11_PRIMITIVE_TOPOLOGY draw_mesh_pt_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> draw_tex_sr_ary_;
+	UINT draw_tex_dat_cnt_;
+	std::array<std::pair<UINT, UINT>, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> draw_tex_dat_ary_;
+	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> draw_samp_sr_ary_;
+	UINT draw_samp_dat_cnt_;
+	std::array<std::pair<UINT, UINT>, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> draw_samp_dat_ary_;
 	UINT draw_model_cnt_;
 	std::vector<tml::graphic::Model *> draw_model_cont_;
 
@@ -238,6 +245,16 @@ public:
 	void ClearDrawLight(void);
 	void SetDrawFog(tml::graphic::Fog *);
 	void ClearDrawFog(void);
+	void SetDrawMesh(tml::graphic::Mesh *);
+	void ClearDrawMesh(void);
+	void PushDrawTexture(const UINT, tml::graphic::Texture *);
+	void PushDrawTexture(const UINT, const UINT, tml::graphic::Texture **);
+	void SetDrawTexture(void);
+	void ClearDrawTexture(void);
+	void PushDrawSampler(const UINT, tml::graphic::Sampler *);
+	void PushDrawSampler(const UINT, const UINT, tml::graphic::Sampler **);
+	void SetDrawSampler(void);
+	void ClearDrawSampler(void);
 	void SetDrawModel(tml::graphic::Model *);
 	void ClearDrawModel(void);
 
