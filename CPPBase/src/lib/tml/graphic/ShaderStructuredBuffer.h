@@ -49,11 +49,11 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	ID3D11Buffer *buf_;
-	ID3D11ShaderResourceView *sr_;
-	ID3D11UnorderedAccessView *uasr_;
 	UINT element_size_;
 	UINT element_limit_;
 	UINT element_cnt_;
+	ID3D11ShaderResourceView *sr_;
+	ID3D11UnorderedAccessView *uasr_;
 	bool cpu_read_flg_;
 	bool cpu_write_flg_;
 
@@ -72,12 +72,12 @@ public:
 	virtual void Init(void);
 
 	ID3D11Buffer *GetBuffer(void);
-	ID3D11ShaderResourceView *GetSR(void);
-	ID3D11UnorderedAccessView *GetUASR(void);
 	UINT GetElementSize(void) const;
 	UINT GetElementLimit(void) const;
 	UINT GetElementCount(void) const;
 	void SetElementCount(const UINT);
+	ID3D11ShaderResourceView *GetSR(void);
+	ID3D11UnorderedAccessView *GetUASR(void);
 	bool GetCPUReadFlag(void) const;
 	bool GetCPUWriteFlag(void) const;
 };
@@ -92,26 +92,6 @@ public:
 inline ID3D11Buffer *tml::graphic::ShaderStructuredBuffer::GetBuffer(void)
 {
 	return (this->buf_);
-}
-
-
-/**
- * @brief GetSRŠÖ”
- * @return sr (sr)
- */
-inline ID3D11ShaderResourceView *tml::graphic::ShaderStructuredBuffer::GetSR(void)
-{
-	return (this->sr_);
-}
-
-
-/**
- * @brief GetUASRŠÖ”
- * @return uasr (uasr)
- */
-inline ID3D11UnorderedAccessView *tml::graphic::ShaderStructuredBuffer::GetUASR(void)
-{
-	return (this->uasr_);
 }
 
 
@@ -176,6 +156,26 @@ inline T *tml::graphic::ShaderStructuredBuffer::GetElement(T *element_ary, const
 	}
 
 	return (&element_ary[index]);
+}
+
+
+/**
+ * @brief GetSRŠÖ”
+ * @return sr (sr)
+ */
+inline ID3D11ShaderResourceView *tml::graphic::ShaderStructuredBuffer::GetSR(void)
+{
+	return (this->sr_);
+}
+
+
+/**
+ * @brief GetUASRŠÖ”
+ * @return uasr (uasr)
+ */
+inline ID3D11UnorderedAccessView *tml::graphic::ShaderStructuredBuffer::GetUASR(void)
+{
+	return (this->uasr_);
 }
 
 

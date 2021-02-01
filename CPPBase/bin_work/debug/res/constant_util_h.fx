@@ -18,8 +18,6 @@
 #define USER11_SCB_SR register(b12)
 #define USER12_SCB_SR register(b13)
 
-// SHADER_CONSTANT_BUFFER_UASR_LIMIT 0
-
 // SHADER_STRUCTURED_BUFFER_SR_LIMIT 16
 #define CAMERA_SSB_SR register(t112)
 #define LIGHT_SSB_SR register(t113)

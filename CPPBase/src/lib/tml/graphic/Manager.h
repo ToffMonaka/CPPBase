@@ -129,19 +129,22 @@ private:
 	FLOAT bloom_blur_dispersion_val_;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
 	CD3D11_VIEWPORT null_vp_;
-	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::DRAW_VIEWPORT_LIMIT> null_vp_ary_;
-	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> null_rt_ary_;
-	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> null_tex_sr_ary_;
-	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> null_tex_uasr_ary_;
-	std::array<UINT, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_UASR_LIMIT> null_tex_uasr_init_cnt_ary_;
-	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> null_samp_sr_ary_;
+	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> null_vp_ary_;
+	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> null_rt_ary_;
+	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> null_scb_sr_ary_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_SR_LIMIT> null_ssb_sr_ary_;
+	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_UASR_LIMIT> null_ssb_uasr_ary_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT> null_tex_sr_ary_;
+	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::TEXTURE_UASR_LIMIT> null_tex_uasr_ary_;
+	std::array<UINT, tml::ConstantUtil::GRAPHIC::TEXTURE_UASR_LIMIT> null_tex_uasr_init_cnt_ary_;
+	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> null_samp_sr_ary_;
 
 	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE draw_stage_type_;
 	tml::graphic::DRAW_STAGE_DATA *draw_stage_dat_;
 	UINT draw_vp_cnt_;
-	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::DRAW_VIEWPORT_LIMIT> draw_vp_ary_;
+	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> draw_vp_ary_;
 	UINT draw_rt_cnt_;
-	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::DRAW_RENDER_TARGET_LIMIT> draw_rt_ary_;
+	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> draw_rt_ary_;
 	ID3D11DepthStencilView *draw_dt_;
 	ID3D11RasterizerState *draw_rs_;
 	ID3D11BlendState *draw_bs_;
@@ -152,6 +155,8 @@ private:
 	ID3D11DomainShader *draw_shader_ds_;
 	ID3D11GeometryShader *draw_shader_gs_;
 	ID3D11PixelShader *draw_shader_ps_;
+	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> draw_scb_sr_ary_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_SR_LIMIT> draw_ssb_sr_ary_;
 	tml::graphic::Camera *draw_camera_;
 	UINT draw_light_cnt_;
 	std::vector<tml::graphic::Light *> draw_light_cont_;
@@ -163,16 +168,14 @@ private:
 	UINT draw_mesh_ib_element_size_;
 	DXGI_FORMAT draw_mesh_ib_format_;
 	D3D11_PRIMITIVE_TOPOLOGY draw_mesh_pt_;
-	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> draw_tex_sr_ary_;
-	UINT draw_tex_dat_cnt_;
-	std::array<std::pair<UINT, UINT>, tml::ConstantUtil::GRAPHIC::DRAW_TEXTURE_SR_LIMIT> draw_tex_dat_ary_;
-	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> draw_samp_sr_ary_;
-	UINT draw_samp_dat_cnt_;
-	std::array<std::pair<UINT, UINT>, tml::ConstantUtil::GRAPHIC::DRAW_SAMPLER_SR_LIMIT> draw_samp_dat_ary_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> draw_tex_sr_ary_;
+	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_SR_LIMIT> draw_samp_sr_ary_;
 	UINT draw_model_cnt_;
 	std::vector<tml::graphic::Model *> draw_model_cont_;
 
 	ID3D11ComputeShader *cmp_shader_cs_;
+	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> cmp_scb_sr_ary_;
+	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_SR_LIMIT> cmp_ssb_sr_ary_;
 
 public:
 	tml::graphic::ManagerCommon common;
@@ -237,8 +240,10 @@ public:
 	void ClearDrawDepthState(void);
 	void SetDrawShader(tml::graphic::Shader *);
 	void ClearDrawShader(void);
-	void SetDrawShaderConstantBuffer(const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT, tml::graphic::ShaderConstantBuffer *);
-	void SetDrawShaderStructuredBuffer(const tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, const UINT, tml::graphic::ShaderStructuredBuffer *);
+	void SetDrawShaderConstantBufferSR(const UINT, tml::graphic::ShaderConstantBuffer *);
+	void ClearDrawShaderConstantBufferSR(const UINT);
+	void SetDrawShaderStructuredBufferSR(const UINT, tml::graphic::ShaderStructuredBuffer *);
+	void ClearDrawShaderStructuredBufferSR(const UINT);
 	void SetDrawCamera(tml::graphic::Camera *);
 	void ClearDrawCamera(void);
 	void SetDrawLight(tml::graphic::Light *);
@@ -247,21 +252,19 @@ public:
 	void ClearDrawFog(void);
 	void SetDrawMesh(tml::graphic::Mesh *);
 	void ClearDrawMesh(void);
-	void PushDrawTexture(const UINT, tml::graphic::Texture *);
-	void PushDrawTexture(const UINT, const UINT, tml::graphic::Texture **);
-	void SetDrawTexture(void);
-	void ClearDrawTexture(void);
-	void PushDrawSampler(const UINT, tml::graphic::Sampler *);
-	void PushDrawSampler(const UINT, const UINT, tml::graphic::Sampler **);
-	void SetDrawSampler(void);
-	void ClearDrawSampler(void);
+	void SetDrawTextureSR(const UINT, tml::graphic::Texture *);
+	void ClearDrawTextureSR(const UINT);
+	void SetDrawSamplerSR(const UINT, tml::graphic::Sampler *);
+	void ClearDrawSamplerSR(const UINT);
 	void SetDrawModel(tml::graphic::Model *);
 	void ClearDrawModel(void);
 
 	void SetComputeShader(tml::graphic::Shader *);
 	void ClearComputeShader(void);
-	void SetComputeShaderConstantBuffer(const UINT, tml::graphic::ShaderConstantBuffer *);
-	void SetComputeShaderStructuredBuffer(const UINT, tml::graphic::ShaderStructuredBuffer *);
+	void SetComputeShaderConstantBufferSR(const UINT, tml::graphic::ShaderConstantBuffer *);
+	void ClearComputeShaderConstantBufferSR(const UINT);
+	void SetComputeShaderStructuredBufferSR(const UINT, tml::graphic::ShaderStructuredBuffer *);
+	void ClearComputeShaderStructuredBufferSR(const UINT);
 };
 }
 }
@@ -528,7 +531,7 @@ inline void tml::graphic::Manager::ClearDrawCamera(void)
 inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
 {
 	if ((light == nullptr)
-	|| (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_LIGHT_LIMIT)) {
+	|| (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT)) {
 		return;
 	}
 
@@ -560,7 +563,7 @@ inline void tml::graphic::Manager::ClearDrawLight(void)
 inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
 {
 	if ((fog == nullptr)
-	|| (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_FOG_LIMIT)) {
+	|| (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::FOG_LIMIT)) {
 		return;
 	}
 
@@ -592,7 +595,7 @@ inline void tml::graphic::Manager::ClearDrawFog(void)
 inline void tml::graphic::Manager::SetDrawModel(tml::graphic::Model *model)
 {
 	if ((model == nullptr)
-	|| (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::DRAW_MODEL_LIMIT)) {
+	|| (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::MODEL_LIMIT)) {
 		return;
 	}
 

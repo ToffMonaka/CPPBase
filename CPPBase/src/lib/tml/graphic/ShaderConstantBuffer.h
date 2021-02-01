@@ -67,6 +67,7 @@ public:
 	ID3D11Buffer *GetBuffer(void);
 	UINT GetElementSize(void) const;
 	bool GetCPUReadFlag(void) const;
+	ID3D11Buffer *GetSR(void);
 };
 }
 }
@@ -102,6 +103,16 @@ template <typename T>
 inline T *tml::graphic::ShaderConstantBuffer::GetElement(T *element)
 {
 	return (element);
+}
+
+
+/**
+ * @brief GetSRŠÖ”
+ * @return sr (sr)
+ */
+inline ID3D11Buffer *tml::graphic::ShaderConstantBuffer::GetSR(void)
+{
+	return (this->buf_);
 }
 
 

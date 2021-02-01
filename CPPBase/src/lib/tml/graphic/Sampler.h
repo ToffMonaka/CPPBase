@@ -60,6 +60,7 @@ public:
 	INT Create(const tml::graphic::SamplerDesc &);
 
 	ID3D11SamplerState *GetSampler(void);
+	ID3D11SamplerState *GetSR(void);
 };
 }
 }
@@ -70,6 +71,16 @@ public:
  * @return samp (sampler)
  */
 inline ID3D11SamplerState *tml::graphic::Sampler::GetSampler(void)
+{
+	return (this->samp_);
+}
+
+
+/**
+ * @brief GetSRŠÖ”
+ * @return sr (sr)
+ */
+inline ID3D11SamplerState *tml::graphic::Sampler::GetSR(void)
 {
 	return (this->samp_);
 }

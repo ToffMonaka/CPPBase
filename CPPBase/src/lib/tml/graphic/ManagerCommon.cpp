@@ -354,7 +354,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// CameraShaderStructuredBuffer Create
 		tml::graphic::CameraShaderStructuredBufferDesc desc;
 
-		desc.element_limit = tml::ConstantUtil::GRAPHIC::DRAW_CAMERA_LIMIT;
+		desc.element_limit = tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT;
 		desc.cpu_read_flag = true;
 
 		this->camera_shader_structured_buffer = this->mgr_->GetResource<tml::graphic::CameraShaderStructuredBuffer>(desc);
@@ -369,7 +369,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// LightShaderStructuredBuffer Create
 		tml::graphic::LightShaderStructuredBufferDesc desc;
 
-		desc.element_limit = tml::ConstantUtil::GRAPHIC::DRAW_LIGHT_LIMIT;
+		desc.element_limit = tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT;
 		desc.cpu_read_flag = true;
 
 		this->light_shader_structured_buffer = this->mgr_->GetResource<tml::graphic::LightShaderStructuredBuffer>(desc);
@@ -384,7 +384,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// FogShaderStructuredBuffer Create
 		tml::graphic::FogShaderStructuredBufferDesc desc;
 
-		desc.element_limit = tml::ConstantUtil::GRAPHIC::DRAW_FOG_LIMIT;
+		desc.element_limit = tml::ConstantUtil::GRAPHIC::FOG_LIMIT;
 		desc.cpu_read_flag = true;
 
 		this->fog_shader_structured_buffer = this->mgr_->GetResource<tml::graphic::FogShaderStructuredBuffer>(desc);

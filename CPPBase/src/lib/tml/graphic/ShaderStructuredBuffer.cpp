@@ -77,11 +77,11 @@ INT tml::graphic::ShaderStructuredBufferDesc::ReadValue(const tml::INIFile &ini_
  */
 tml::graphic::ShaderStructuredBuffer::ShaderStructuredBuffer() :
 	buf_(nullptr),
-	sr_(nullptr),
-	uasr_(nullptr),
 	element_size_(0U),
 	element_limit_(0U),
 	element_cnt_(0U),
+	sr_(nullptr),
+	uasr_(nullptr),
 	cpu_read_flg_(false),
 	cpu_write_flg_(false)
 {
