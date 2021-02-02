@@ -18,7 +18,7 @@ tml::graphic::MeshDesc::MeshDesc() :
 	vertex_buffer_element_array(nullptr),
 	index_buffer_element_count(0U),
 	index_buffer_element_array(nullptr),
-	primitive_topology(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED),
+	primitive_topology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST),
 	cpu_data_flag(false),
 	gpu_data_flag(false)
 {
@@ -45,7 +45,7 @@ void tml::graphic::MeshDesc::Init(void)
 	this->vertex_buffer_element_array = nullptr;
 	this->index_buffer_element_count = 0U;
 	this->index_buffer_element_array = nullptr;
-	this->primitive_topology = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
+	this->primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	this->cpu_data_flag = false;
 	this->gpu_data_flag = false;
 
@@ -96,7 +96,7 @@ tml::graphic::Mesh::Mesh() :
 	ib_element_cnt_(0U),
 	ib_element_ary_(nullptr),
 	ib_format_(DXGI_FORMAT_UNKNOWN),
-	pt_(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED)
+	pt_(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 {
 	return;
 }
@@ -152,7 +152,7 @@ void tml::graphic::Mesh::Init(void)
 	this->ib_element_size_ = 0U;
 	this->ib_element_cnt_ = 0U;
 	this->ib_format_ = DXGI_FORMAT_UNKNOWN;
-	this->pt_ = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
+	this->pt_ = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	tml::graphic::Resource::Init();
 
