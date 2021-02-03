@@ -10,7 +10,7 @@
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
-#include "SystemShaderConstantBuffer.h"
+#include "ConfigShaderConstantBuffer.h"
 #include "ModelShaderConstantBuffer.h"
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
@@ -73,7 +73,7 @@ void tml::graphic::ManagerCommon::Release(void)
 		this->mgr_->ReleaseResource(this->reference_depth_state);
 		this->mgr_->ReleaseResource(this->screen_model_shader);
 		this->mgr_->ReleaseResource(this->sprite_model_shader);
-		this->mgr_->ReleaseResource(this->system_shader_constant_buffer);
+		this->mgr_->ReleaseResource(this->config_shader_constant_buffer);
 		this->mgr_->ReleaseResource(this->camera_shader_structured_buffer);
 		this->mgr_->ReleaseResource(this->light_shader_structured_buffer);
 		this->mgr_->ReleaseResource(this->fog_shader_structured_buffer);
@@ -337,14 +337,14 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// SystemShaderConstantBuffer Create
-		tml::graphic::SystemShaderConstantBufferDesc desc;
+	{// ConfigShaderConstantBuffer Create
+		tml::graphic::ConfigShaderConstantBufferDesc desc;
 
 		desc.cpu_read_flag = true;
 
-		this->system_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::SystemShaderConstantBuffer>(desc);
+		this->config_shader_constant_buffer = this->mgr_->GetResource<tml::graphic::ConfigShaderConstantBuffer>(desc);
 
-		if (this->system_shader_constant_buffer == nullptr) {
+		if (this->config_shader_constant_buffer == nullptr) {
 			this->Init();
 
 			return (-1);

@@ -245,9 +245,13 @@ public:
 	void SetDrawShader(tml::graphic::Shader *);
 	void ClearDrawShader(void);
 	void SetDrawShaderConstantBufferSR(const UINT, tml::graphic::ShaderConstantBuffer *);
+	void SetDrawShaderConstantBufferSR(const UINT, const UINT, tml::graphic::ShaderConstantBuffer **);
 	void ClearDrawShaderConstantBufferSR(const UINT);
+	void ClearDrawShaderConstantBufferSR(const UINT, const UINT);
 	void SetDrawShaderStructuredBufferSR(const UINT, tml::graphic::ShaderStructuredBuffer *);
+	void SetDrawShaderStructuredBufferSR(const UINT, const UINT, tml::graphic::ShaderStructuredBuffer **);
 	void ClearDrawShaderStructuredBufferSR(const UINT);
+	void ClearDrawShaderStructuredBufferSR(const UINT, const UINT);
 	void SetDrawCamera(tml::graphic::Camera *);
 	void ClearDrawCamera(void);
 	void SetDrawLight(tml::graphic::Light *);
@@ -257,26 +261,42 @@ public:
 	void SetDrawMesh(tml::graphic::Mesh *);
 	void ClearDrawMesh(void);
 	void SetDrawTextureSR(const UINT, tml::graphic::Texture *);
+	void SetDrawTextureSR(const UINT, const UINT, tml::graphic::Texture **);
 	void ClearDrawTextureSR(const UINT);
+	void ClearDrawTextureSR(const UINT, const UINT);
 	void SetDrawSamplerSR(const UINT, tml::graphic::Sampler *);
+	void SetDrawSamplerSR(const UINT, const UINT, tml::graphic::Sampler **);
 	void ClearDrawSamplerSR(const UINT);
+	void ClearDrawSamplerSR(const UINT, const UINT);
 	void SetDrawModel(tml::graphic::Model *);
 	void ClearDrawModel(void);
 
 	void SetComputeShader(tml::graphic::Shader *);
 	void ClearComputeShader(void);
 	void SetComputeShaderConstantBufferSR(const UINT, tml::graphic::ShaderConstantBuffer *);
+	void SetComputeShaderConstantBufferSR(const UINT, const UINT, tml::graphic::ShaderConstantBuffer **);
 	void ClearComputeShaderConstantBufferSR(const UINT);
+	void ClearComputeShaderConstantBufferSR(const UINT, const UINT);
 	void SetComputeShaderStructuredBufferSR(const UINT, tml::graphic::ShaderStructuredBuffer *);
+	void SetComputeShaderStructuredBufferSR(const UINT, const UINT, tml::graphic::ShaderStructuredBuffer **);
 	void ClearComputeShaderStructuredBufferSR(const UINT);
+	void ClearComputeShaderStructuredBufferSR(const UINT, const UINT);
 	void SetComputeShaderStructuredBufferUASR(const UINT, tml::graphic::ShaderStructuredBuffer *);
+	void SetComputeShaderStructuredBufferUASR(const UINT, const UINT, tml::graphic::ShaderStructuredBuffer **);
 	void ClearComputeShaderStructuredBufferUASR(const UINT);
+	void ClearComputeShaderStructuredBufferUASR(const UINT, const UINT);
 	void SetComputeTextureSR(const UINT, tml::graphic::Texture *);
+	void SetComputeTextureSR(const UINT, const UINT, tml::graphic::Texture **);
 	void ClearComputeTextureSR(const UINT);
+	void ClearComputeTextureSR(const UINT, const UINT);
 	void SetComputeTextureUASR(const UINT, tml::graphic::Texture *);
+	void SetComputeTextureUASR(const UINT, const UINT, tml::graphic::Texture **);
 	void ClearComputeTextureUASR(const UINT);
+	void ClearComputeTextureUASR(const UINT, const UINT);
 	void SetComputeSamplerSR(const UINT, tml::graphic::Sampler *);
+	void SetComputeSamplerSR(const UINT, const UINT, tml::graphic::Sampler **);
 	void ClearComputeSamplerSR(const UINT);
+	void ClearComputeSamplerSR(const UINT, const UINT);
 };
 }
 }

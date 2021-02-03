@@ -3,7 +3,7 @@
 
 
 // SHADER_CONSTANT_BUFFER_SR_LIMIT 14
-#define SYS_SCB_SR register(b0)
+#define CONF_SCB_SR register(b0)
 #define MODEL_SCB_SR register(b1)
 #define USER1_SCB_SR register(b2)
 #define USER2_SCB_SR register(b3)

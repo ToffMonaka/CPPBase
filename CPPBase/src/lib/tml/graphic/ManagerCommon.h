@@ -16,7 +16,7 @@ class BlendState;
 class DepthState;
 class Shader;
 class ShaderConstantBuffer;
-class SystemShaderConstantBuffer;
+class ConfigShaderConstantBuffer;
 class ModelShaderConstantBuffer;
 class ShaderStructuredBuffer;
 class CameraShaderStructuredBuffer;
@@ -66,7 +66,7 @@ public:
 	tml::shared_ptr<tml::graphic::DepthState> reference_depth_state;
 	tml::shared_ptr<tml::graphic::Shader> screen_model_shader;
 	tml::shared_ptr<tml::graphic::Shader> sprite_model_shader;
-	tml::shared_ptr<tml::graphic::SystemShaderConstantBuffer> system_shader_constant_buffer;
+	tml::shared_ptr<tml::graphic::ConfigShaderConstantBuffer> config_shader_constant_buffer;
 	tml::shared_ptr<tml::graphic::CameraShaderStructuredBuffer> camera_shader_structured_buffer;
 	tml::shared_ptr<tml::graphic::LightShaderStructuredBuffer> light_shader_structured_buffer;
 	tml::shared_ptr<tml::graphic::FogShaderStructuredBuffer> fog_shader_structured_buffer;

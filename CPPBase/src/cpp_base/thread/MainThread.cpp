@@ -180,7 +180,7 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
-		{// SpriteModel Create
+		{// Camera Create
 			tml::graphic::CameraDesc desc;
 
 			desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
