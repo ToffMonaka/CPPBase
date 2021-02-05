@@ -80,6 +80,7 @@ public:
 	void UpdateBuffer(void);
 	tml::graphic::FogShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	void SetElement(const UINT, const tml::graphic::Fog *);
+	void SetElement(const UINT, const UINT, const tml::graphic::Fog *const *);
 };
 }
 }

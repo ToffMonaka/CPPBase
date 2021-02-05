@@ -161,10 +161,11 @@ INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc, tml::shar
 
 	this->type_ = desc.type;
 
-	if (pos != nullptr) {
-		tml::get_shared(this->position, (*pos), 1U);
+	if ((pos != nullptr)
+	&& ((*pos) != nullptr)) {
+		this->position = (*pos);
 	} else {
-		tml::get_shared(this->position, 1U);
+		this->position = tml::make_shared<tml::XMPosition>(1U);
 	}
 
 	if (desc.position_set_flag) {

@@ -119,7 +119,9 @@ tml::graphic::Manager::Manager() :
 	draw_ssb_sr_ary_{},
 	draw_camera_(nullptr),
 	draw_light_cnt_(0U),
+	draw_light_ary_{},
 	draw_fog_cnt_(0U),
+	draw_fog_ary_{},
 	draw_mesh_vb_(nullptr),
 	draw_mesh_vb_element_size_(0U),
 	draw_mesh_ib_(nullptr),
@@ -129,6 +131,7 @@ tml::graphic::Manager::Manager() :
 	draw_tex_sr_ary_{},
 	draw_samp_sr_ary_{},
 	draw_model_cnt_(0U),
+	draw_model_ary_{},
 	cmp_shader_cs_(nullptr),
 	cmp_scb_sr_ary_{},
 	cmp_ssb_sr_ary_{},
@@ -270,9 +273,7 @@ void tml::graphic::Manager::Init(void)
 	this->draw_ssb_sr_ary_.fill(nullptr);
 	this->draw_camera_ = nullptr;
 	this->draw_light_cnt_ = 0U;
-	this->draw_light_cont_.clear();
 	this->draw_fog_cnt_ = 0U;
-	this->draw_fog_cont_.clear();
 	this->draw_mesh_vb_ = nullptr;
 	this->draw_mesh_vb_element_size_ = 0U;
 	this->draw_mesh_ib_ = nullptr;
@@ -282,7 +283,6 @@ void tml::graphic::Manager::Init(void)
 	this->draw_tex_sr_ary_.fill(nullptr);
 	this->draw_samp_sr_ary_.fill(nullptr);
 	this->draw_model_cnt_ = 0U;
-	this->draw_model_cont_.clear();
 	this->cmp_shader_cs_ = nullptr;
 	this->cmp_scb_sr_ary_.fill(nullptr);
 	this->cmp_ssb_sr_ary_.fill(nullptr);
@@ -576,23 +576,15 @@ void tml::graphic::Manager::Update(void)
 			this->common.camera_shader_structured_buffer->UpdateBuffer();
 
 			this->common.light_shader_structured_buffer->SetElementCount(0U);
-
-			for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
-				this->common.light_shader_structured_buffer->SetElement(draw_light_i, this->draw_light_cont_[draw_light_i]);
-			}
-
+			this->common.light_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
 			this->common.light_shader_structured_buffer->UpdateBuffer();
 
 			this->common.fog_shader_structured_buffer->SetElementCount(0U);
-
-			for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
-				this->common.fog_shader_structured_buffer->SetElement(draw_fog_i, this->draw_fog_cont_[draw_fog_i]);
-			}
-
+			this->common.fog_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
 			this->common.fog_shader_structured_buffer->UpdateBuffer();
 
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_cont_[draw_model_i]->DrawStageInit();
+				this->draw_model_ary_[draw_model_i]->DrawStageInit();
 			}
 
 			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_3D;
@@ -601,7 +593,7 @@ void tml::graphic::Manager::Update(void)
 		}
 		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_3D: {
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_cont_[draw_model_i]->DrawStageDeferred3D();
+				this->draw_model_ary_[draw_model_i]->DrawStageDeferred3D();
 			}
 
 			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_SHADOW_3D;
@@ -610,7 +602,7 @@ void tml::graphic::Manager::Update(void)
 		}
 		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_SHADOW_3D: {
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_cont_[draw_model_i]->DrawStageDeferredShadow3D();
+				this->draw_model_ary_[draw_model_i]->DrawStageDeferredShadow3D();
 			}
 
 			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_3D;
@@ -619,7 +611,7 @@ void tml::graphic::Manager::Update(void)
 		}
 		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_3D: {
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_cont_[draw_model_i]->DrawStageForward3D();
+				this->draw_model_ary_[draw_model_i]->DrawStageForward3D();
 			}
 
 			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D;
@@ -634,7 +626,7 @@ void tml::graphic::Manager::Update(void)
 			this->SetDrawTarget(this->common.main_render_target_texture.get(), nullptr);
 
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_cont_[draw_model_i]->DrawStageForward2D();
+				this->draw_model_ary_[draw_model_i]->DrawStageForward2D();
 			}
 
 			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE;

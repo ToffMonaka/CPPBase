@@ -11,34 +11,6 @@
 
 namespace tml {
 namespace graphic {
-class RasterizerState;
-class BlendState;
-class DepthState;
-class Shader;
-class ShaderConstantBuffer;
-class ConfigShaderConstantBuffer;
-class ModelShaderConstantBuffer;
-class ShaderStructuredBuffer;
-class CameraShaderStructuredBuffer;
-class LightShaderStructuredBuffer;
-class FogShaderStructuredBuffer;
-class ModelLayerShaderStructuredBuffer;
-class Camera;
-class Light;
-class Fog;
-class Mesh;
-class Material;
-class Texture;
-class Sampler;
-class Model;
-class ScreenModel;
-class SpriteModel;
-}
-}
-
-
-namespace tml {
-namespace graphic {
 /**
  * @brief ManagerCommonƒNƒ‰ƒX
  */

@@ -160,9 +160,9 @@ private:
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_SR_LIMIT> draw_ssb_sr_ary_;
 	tml::graphic::Camera *draw_camera_;
 	UINT draw_light_cnt_;
-	std::vector<tml::graphic::Light *> draw_light_cont_;
+	std::array<tml::graphic::Light *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
 	UINT draw_fog_cnt_;
-	std::vector<tml::graphic::Fog *> draw_fog_cont_;
+	std::array<tml::graphic::Fog *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
 	ID3D11Buffer *draw_mesh_vb_;
 	UINT draw_mesh_vb_element_size_;
 	ID3D11Buffer *draw_mesh_ib_;
@@ -172,7 +172,7 @@ private:
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT> draw_tex_sr_ary_;
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> draw_samp_sr_ary_;
 	UINT draw_model_cnt_;
-	std::vector<tml::graphic::Model *> draw_model_cont_;
+	std::array<tml::graphic::Model *, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_ary_;
 
 	ID3D11ComputeShader *cmp_shader_cs_;
 	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> cmp_scb_sr_ary_;
@@ -199,7 +199,7 @@ public:
 	template <typename T, typename D>
 	tml::shared_ptr<T> GetResource(D &);
 	template <typename T>
-	tml::shared_ptr<T> &GetResource(tml::shared_ptr<T> &);
+	tml::shared_ptr<T> &GetResource(tml::shared_ptr<T> &, tml::shared_ptr<T> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
 
@@ -337,12 +337,21 @@ inline tml::shared_ptr<T> tml::graphic::Manager::GetResource(D &desc)
 /**
  * @brief GetResourceä÷êî
  * @param res (resource)
- * @return res (resource)
+ * @param dst_res (dst_resource)
+ * @return dst_res (dst_resource)
  */
 template <typename T>
-inline tml::shared_ptr<T> &tml::graphic::Manager::GetResource(tml::shared_ptr<T> &res)
+inline tml::shared_ptr<T> &tml::graphic::Manager::GetResource(tml::shared_ptr<T> &dst_res, tml::shared_ptr<T> &res)
 {
-	return (res);
+	if (dst_res == res) {
+		return (dst_res);
+	}
+
+	this->ReleaseResource(dst_res);
+
+	dst_res = res;
+
+	return (dst_res);
 }
 
 
@@ -567,11 +576,7 @@ inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
 		return;
 	}
 
-	if (this->draw_light_cnt_ >= this->draw_light_cont_.size()) {
-		this->draw_light_cont_.resize(this->draw_light_cnt_ + 256U);
-	}
-
-	this->draw_light_cont_[this->draw_light_cnt_++] = light;
+	this->draw_light_ary_[this->draw_light_cnt_++] = light;
 
 	return;
 }
@@ -599,11 +604,7 @@ inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
 		return;
 	}
 
-	if (this->draw_fog_cnt_ >= this->draw_fog_cont_.size()) {
-		this->draw_fog_cont_.resize(this->draw_fog_cnt_ + 256U);
-	}
-
-	this->draw_fog_cont_[this->draw_fog_cnt_++] = fog;
+	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 
 	return;
 }
@@ -631,11 +632,7 @@ inline void tml::graphic::Manager::SetDrawModel(tml::graphic::Model *model)
 		return;
 	}
 
-	if (this->draw_model_cnt_ >= this->draw_model_cont_.size()) {
-		this->draw_model_cont_.resize(this->draw_model_cnt_ + 256U);
-	}
-
-	this->draw_model_cont_[this->draw_model_cnt_++] = model;
+	this->draw_model_ary_[this->draw_model_cnt_++] = model;
 
 	return;
 }

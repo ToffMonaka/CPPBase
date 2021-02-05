@@ -121,3 +121,23 @@ void tml::graphic::LightShaderStructuredBuffer::SetElement(const UINT index, con
 
 	return;
 }
+
+
+/**
+ * @brief SetElementä÷êî
+ * @param index (index)
+ * @param light_cnt (light_count)
+ * @param light_ary (light_array)
+ */
+void tml::graphic::LightShaderStructuredBuffer::SetElement(const UINT index, const UINT light_cnt, const tml::graphic::Light *const *light_ary)
+{
+	for (UINT light_i = 0U; light_i < light_cnt; ++light_i) {
+		auto element = this->GetElement(index + light_i);
+
+		if (element == nullptr) {
+			break;
+		}
+	}
+
+	return;
+}

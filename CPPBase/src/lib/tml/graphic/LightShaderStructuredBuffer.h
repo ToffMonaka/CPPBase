@@ -80,6 +80,7 @@ public:
 	void UpdateBuffer(void);
 	tml::graphic::LightShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	void SetElement(const UINT, const tml::graphic::Light *);
+	void SetElement(const UINT, const UINT, const tml::graphic::Light *const *);
 };
 }
 }

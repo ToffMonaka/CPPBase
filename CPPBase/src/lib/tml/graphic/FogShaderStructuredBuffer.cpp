@@ -121,3 +121,23 @@ void tml::graphic::FogShaderStructuredBuffer::SetElement(const UINT index, const
 
 	return;
 }
+
+
+/**
+ * @brief SetElementä÷êî
+ * @param index (index)
+ * @param fog_cnt (fog_count)
+ * @param fog_ary (fog_array)
+ */
+void tml::graphic::FogShaderStructuredBuffer::SetElement(const UINT index, const UINT fog_cnt, const tml::graphic::Fog *const *fog_ary)
+{
+	for (UINT fog_i = 0U; fog_i < fog_cnt; ++fog_i) {
+		auto element = this->GetElement(index + fog_i);
+
+		if (element == nullptr) {
+			break;
+		}
+	}
+
+	return;
+}

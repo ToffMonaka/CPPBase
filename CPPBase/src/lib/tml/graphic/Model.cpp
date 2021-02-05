@@ -6,6 +6,14 @@
 
 #include "Model.h"
 #include "Manager.h"
+#include "RasterizerState.h"
+#include "BlendState.h"
+#include "DepthState.h"
+#include "Shader.h"
+#include "Mesh.h"
+#include "Material.h"
+#include "Texture.h"
+#include "Sampler.h"
 
 
 /**
@@ -93,6 +101,56 @@ tml::graphic::Model::~Model()
  */
 void tml::graphic::Model::Release(void)
 {
+	if (this->GetManager() != nullptr) {
+		for (auto &rs : this->rs_cont_) {
+			this->GetManager()->ReleaseResource(rs);
+		}
+
+		this->rs_cont_.clear();
+
+		for (auto &bs : this->bs_cont_) {
+			this->GetManager()->ReleaseResource(bs);
+		}
+
+		this->bs_cont_.clear();
+
+		for (auto &ds : this->ds_cont_) {
+			this->GetManager()->ReleaseResource(ds);
+		}
+
+		this->ds_cont_.clear();
+
+		for (auto &shader : this->shader_cont_) {
+			this->GetManager()->ReleaseResource(shader);
+		}
+
+		this->shader_cont_.clear();
+
+		for (auto &mesh : this->mesh_cont_) {
+			this->GetManager()->ReleaseResource(mesh);
+		}
+
+		this->mesh_cont_.clear();
+
+		for (auto &material : this->material_cont_) {
+			this->GetManager()->ReleaseResource(material);
+		}
+
+		this->material_cont_.clear();
+
+		for (auto &tex : this->tex_cont_) {
+			this->GetManager()->ReleaseResource(tex);
+		}
+
+		this->tex_cont_.clear();
+
+		for (auto &samp : this->samp_cont_) {
+			this->GetManager()->ReleaseResource(samp);
+		}
+
+		this->samp_cont_.clear();
+	}
+
 	tml::graphic::Resource::Release();
 
 	return;
@@ -134,10 +192,11 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 
 	this->type_ = type;
 
-	if (pos != nullptr) {
-		tml::get_shared(this->position, (*pos), 1U);
+	if ((pos != nullptr)
+	&& ((*pos) != nullptr)) {
+		this->position = (*pos);
 	} else {
-		tml::get_shared(this->position, 1U);
+		this->position = tml::make_shared<tml::XMPosition>(1U);
 	}
 
 	if (desc.position_set_flag) {
@@ -145,6 +204,142 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief SetRasterizerStateä÷êî
+ * @param index (index)
+ * @param rs (rasterizer_state)
+ */
+void tml::graphic::Model::SetRasterizerState(const UINT index, tml::shared_ptr<tml::graphic::RasterizerState> &rs)
+{
+	while (index >= this->rs_cont_.size()) {
+		this->rs_cont_.push_back(tml::make_shared<tml::graphic::RasterizerState>());
+	}
+
+	this->GetManager()->GetResource(this->rs_cont_[index], rs);
+
+	return;
+}
+
+
+/**
+ * @brief SetBlendStateä÷êî
+ * @param index (index)
+ * @param bs (blend_state)
+ */
+void tml::graphic::Model::SetBlendState(const UINT index, tml::shared_ptr<tml::graphic::BlendState> &bs)
+{
+	while (index >= this->bs_cont_.size()) {
+		this->bs_cont_.push_back(tml::make_shared<tml::graphic::BlendState>());
+	}
+
+	this->GetManager()->GetResource(this->bs_cont_[index], bs);
+
+	return;
+}
+
+
+/**
+ * @brief SetDepthStateä÷êî
+ * @param index (index)
+ * @param ds (depth_state)
+ */
+void tml::graphic::Model::SetDepthState(const UINT index, tml::shared_ptr<tml::graphic::DepthState> &ds)
+{
+	while (index >= this->ds_cont_.size()) {
+		this->ds_cont_.push_back(tml::make_shared<tml::graphic::DepthState>());
+	}
+
+	this->GetManager()->GetResource(this->ds_cont_[index], ds);
+
+	return;
+}
+
+
+/**
+ * @brief SetShaderä÷êî
+ * @param index (index)
+ * @param shader (shader)
+ */
+void tml::graphic::Model::SetShader(const UINT index, tml::shared_ptr<tml::graphic::Shader> &shader)
+{
+	while (index >= this->shader_cont_.size()) {
+		this->shader_cont_.push_back(tml::make_shared<tml::graphic::Shader>());
+	}
+
+	this->GetManager()->GetResource(this->shader_cont_[index], shader);
+
+	return;
+}
+
+
+/**
+ * @brief SetMeshä÷êî
+ * @param index (index)
+ * @param mesh (mesh)
+ */
+void tml::graphic::Model::SetMesh(const UINT index, tml::shared_ptr<tml::graphic::Mesh> &mesh)
+{
+	while (index >= this->mesh_cont_.size()) {
+		this->mesh_cont_.push_back(tml::make_shared<tml::graphic::Mesh>());
+	}
+
+	this->GetManager()->GetResource(this->mesh_cont_[index], mesh);
+
+	return;
+}
+
+
+/**
+ * @brief SetMaterialä÷êî
+ * @param index (index)
+ * @param material (material)
+ */
+void tml::graphic::Model::SetMaterial(const UINT index, tml::shared_ptr<tml::graphic::Material> &material)
+{
+	while (index >= this->material_cont_.size()) {
+		this->material_cont_.push_back(tml::make_shared<tml::graphic::Material>());
+	}
+
+	this->GetManager()->GetResource(this->material_cont_[index], material);
+
+	return;
+}
+
+
+/**
+ * @brief SetTextureä÷êî
+ * @param index (index)
+ * @param tex (texture)
+ */
+void tml::graphic::Model::SetTexture(const UINT index, tml::shared_ptr<tml::graphic::Texture> &tex)
+{
+	while (index >= this->tex_cont_.size()) {
+		this->tex_cont_.push_back(tml::make_shared<tml::graphic::Texture>());
+	}
+
+	this->GetManager()->GetResource(this->tex_cont_[index], tex);
+
+	return;
+}
+
+
+/**
+ * @brief SetSamplerä÷êî
+ * @param index (index)
+ * @param samp (sampler)
+ */
+void tml::graphic::Model::SetSampler(const UINT index, tml::shared_ptr<tml::graphic::Sampler> &samp)
+{
+	while (index >= this->samp_cont_.size()) {
+		this->samp_cont_.push_back(tml::make_shared<tml::graphic::Sampler>());
+	}
+
+	this->GetManager()->GetResource(this->samp_cont_[index], samp);
+
+	return;
 }
 
 

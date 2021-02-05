@@ -58,7 +58,7 @@ public:
 	template <typename T, typename D>
 	tml::shared_ptr<T> GetResource(D &);
 	template <typename T>
-	tml::shared_ptr<T> &GetResource(tml::shared_ptr<T> &);
+	tml::shared_ptr<T> &GetResource(tml::shared_ptr<T> &, tml::shared_ptr<T> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
 };
@@ -101,12 +101,21 @@ inline tml::shared_ptr<T> tml::sound::Manager::GetResource(D &desc)
 /**
  * @brief GetResourceä÷êî
  * @param res (resource)
- * @return res (resource)
+ * @param dst_res (dst_resource)
+ * @return dst_res (dst_resource)
  */
 template <typename T>
-inline tml::shared_ptr<T> &tml::sound::Manager::GetResource(tml::shared_ptr<T> &res)
+inline tml::shared_ptr<T> &tml::sound::Manager::GetResource(tml::shared_ptr<T> &dst_res, tml::shared_ptr<T> &res)
 {
-	return (res);
+	if (dst_res == res) {
+		return (dst_res);
+	}
+
+	this->ReleaseResource(dst_res);
+
+	dst_res = res;
+
+	return (dst_res);
 }
 
 
