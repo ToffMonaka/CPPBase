@@ -24,12 +24,13 @@ protected:
 
 public:
 	SamplerDesc();
-	SamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
+	SamplerDesc(tml::graphic::Manager *);
+	SamplerDesc(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
 	virtual ~SamplerDesc();
 
 	virtual void Init(void);
 
-	void Set(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
+	void Set(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
 };
 }
 }

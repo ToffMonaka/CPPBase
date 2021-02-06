@@ -11,6 +11,134 @@
 /**
  * @brief コンストラクタ
  */
+tml::graphic::SpriteModelLayer::SpriteModelLayer()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::SpriteModelLayer::~SpriteModelLayer()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::graphic::SpriteModelLayer::Release(void)
+{
+	tml::graphic::ModelLayer::Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::SpriteModelLayer::Init(void)
+{
+	this->Release();
+
+	tml::graphic::ModelLayer::Init();
+
+	return;
+}
+
+
+/**
+ * @brief Create関数
+ * @param mgr (manager)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::SpriteModelLayer::Create(tml::graphic::Manager *mgr)
+{
+	this->Init();
+
+	if (tml::graphic::ModelLayer::Create(mgr) < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::graphic::SpriteModelStage::SpriteModelStage()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::SpriteModelStage::~SpriteModelStage()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::graphic::SpriteModelStage::Release(void)
+{
+	tml::graphic::ModelStage::Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::SpriteModelStage::Init(void)
+{
+	this->Release();
+
+	tml::graphic::ModelStage::Init();
+
+	return;
+}
+
+
+/**
+ * @brief Create関数
+ * @param mgr (manager)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::SpriteModelStage::Create(tml::graphic::Manager *mgr)
+{
+	this->Init();
+
+	if (tml::graphic::ModelStage::Create(mgr) < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::graphic::SpriteModelDesc::SpriteModelDesc()
 {
 	return;

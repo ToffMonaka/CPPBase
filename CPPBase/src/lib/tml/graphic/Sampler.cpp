@@ -22,12 +22,27 @@ tml::graphic::SamplerDesc::SamplerDesc() :
 
 /**
  * @brief コンストラクタ
+ * @param mgr (manager)
+ */
+tml::graphic::SamplerDesc::SamplerDesc(tml::graphic::Manager *mgr) :
+	tml::graphic::ResourceDesc(mgr),
+	sampler_desc(CD3D11_DEFAULT())
+{
+	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param mgr (manager)
  * @param samp_desc_type (sampler_desc_type)
  * @param samp_desc_wrap_type (sampler_desc_wrap_type)
  */
-tml::graphic::SamplerDesc::SamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE samp_desc_type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE samp_desc_wrap_type)
+tml::graphic::SamplerDesc::SamplerDesc(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE samp_desc_type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE samp_desc_wrap_type)
 {
-	this->Set(samp_desc_type, samp_desc_wrap_type);
+	this->Set(mgr, samp_desc_type, samp_desc_wrap_type);
 
 	return;
 }
@@ -86,12 +101,15 @@ INT tml::graphic::SamplerDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief Set関数
+ * @param mgr (manager)
  * @param samp_desc_type (sampler_desc_type)
  * @param samp_desc_wrap_type (sampler_desc_wrap_type)
  */
-void tml::graphic::SamplerDesc::Set(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE samp_desc_type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE samp_desc_wrap_type)
+void tml::graphic::SamplerDesc::Set(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE samp_desc_type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE samp_desc_wrap_type)
 {
 	this->Init();
+
+	this->manager = mgr;
 
 	switch (samp_desc_type) {
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::BILINEAR: {

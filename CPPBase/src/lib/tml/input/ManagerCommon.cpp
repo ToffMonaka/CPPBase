@@ -62,6 +62,12 @@ void tml::input::ManagerCommon::Init(void)
  */
 INT tml::input::ManagerCommon::Create(tml::input::Manager *mgr)
 {
+	if (mgr == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
 	this->Init();
 
 	this->mgr_ = mgr;

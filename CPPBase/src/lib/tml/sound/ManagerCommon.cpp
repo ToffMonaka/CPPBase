@@ -62,6 +62,12 @@ void tml::sound::ManagerCommon::Init(void)
  */
 INT tml::sound::ManagerCommon::Create(tml::sound::Manager *mgr)
 {
+	if (mgr == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
 	this->Init();
 
 	this->mgr_ = mgr;

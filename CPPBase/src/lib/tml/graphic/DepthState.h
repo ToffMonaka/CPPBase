@@ -24,12 +24,13 @@ protected:
 
 public:
 	DepthStateDesc();
-	DepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
+	DepthStateDesc(tml::graphic::Manager *);
+	DepthStateDesc(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
 	virtual ~DepthStateDesc();
 
 	virtual void Init(void);
 
-	void Set(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
+	void Set(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE);
 };
 }
 }

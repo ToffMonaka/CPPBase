@@ -196,10 +196,10 @@ public:
 	INT Create(const tml::graphic::ManagerDesc &);
 
 	void Update(void);
-	template <typename T, typename D>
-	tml::shared_ptr<T> GetResource(D &);
-	template <typename T>
-	tml::shared_ptr<T> &GetResource(tml::shared_ptr<T> &, tml::shared_ptr<T> &);
+	template <typename T1, typename T2, typename D>
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
+	template <typename T1, typename T2>
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, tml::shared_ptr<T1> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
 
@@ -304,44 +304,47 @@ public:
 
 /**
  * @brief GetResourceä÷êî
+ * @param dst_res (dst_resource)
  * @param desc (desc)
- * @return res (resource)
+ * @return dst_res (dst_resource)
  */
-template <typename T, typename D>
-inline tml::shared_ptr<T> tml::graphic::Manager::GetResource(D &desc)
+template <typename T1, typename T2, typename D>
+inline tml::shared_ptr<T2> &tml::graphic::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const D &desc)
 {
-	desc.manager = this;
+	this->ReleaseResource(dst_res);
 
-	auto res = tml::make_shared<T>(1U);
+	if (desc.manager != this) {
+		return (dst_res);
+	}
+
+	auto res = tml::make_shared<T1>(1U);
 
 	if (res->Create(desc) < 0) {
-		res.reset();
-
-		return (res);
+		return (dst_res);
 	}
 
 	UINT res_type = static_cast<UINT>(res->GetResourceType());
 
 	if (res_type >= tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT) {
-		res.reset();
-
-		return (res);
+		return (dst_res);
 	}
 
 	this->res_cont_ary_[res_type].push_back(res);
 
-	return (res);
+	dst_res = res;
+
+	return (dst_res);
 }
 
 
 /**
  * @brief GetResourceä÷êî
- * @param res (resource)
  * @param dst_res (dst_resource)
+ * @param res (resource)
  * @return dst_res (dst_resource)
  */
-template <typename T>
-inline tml::shared_ptr<T> &tml::graphic::Manager::GetResource(tml::shared_ptr<T> &dst_res, tml::shared_ptr<T> &res)
+template <typename T1, typename T2>
+inline tml::shared_ptr<T2> &tml::graphic::Manager::GetResource(tml::shared_ptr<T2> &dst_res, tml::shared_ptr<T1> &res)
 {
 	if (dst_res == res) {
 		return (dst_res);

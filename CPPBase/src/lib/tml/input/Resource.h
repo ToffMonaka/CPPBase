@@ -33,6 +33,7 @@ protected:
 
 public:
 	ResourceDesc();
+	ResourceDesc(tml::input::Manager *);
 	virtual ~ResourceDesc();
 
 	virtual void Init(void);

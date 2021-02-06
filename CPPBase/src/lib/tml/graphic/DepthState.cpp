@@ -20,11 +20,24 @@ tml::graphic::DepthStateDesc::DepthStateDesc() :
 
 /**
  * @brief コンストラクタ
+ * @param mgr (manager)
+ */
+tml::graphic::DepthStateDesc::DepthStateDesc(tml::graphic::Manager *mgr) :
+	tml::graphic::ResourceDesc(mgr),
+	depth_state_desc(CD3D11_DEFAULT())
+{
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param mgr (manager)
  * @param ds_desc_type (depth_state_desc_type)
  */
-tml::graphic::DepthStateDesc::DepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE ds_desc_type)
+tml::graphic::DepthStateDesc::DepthStateDesc(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE ds_desc_type)
 {
-	this->Set(ds_desc_type);
+	this->Set(mgr, ds_desc_type);
 
 	return;
 }
@@ -82,11 +95,14 @@ INT tml::graphic::DepthStateDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief Set関数
+ * @param mgr (manager)
  * @param ds_desc_type (depth_state_desc_type)
  */
-void tml::graphic::DepthStateDesc::Set(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE ds_desc_type)
+void tml::graphic::DepthStateDesc::Set(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE ds_desc_type)
 {
 	this->Init();
+
+	this->manager = mgr;
 
 	if (ds_desc_type == tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT) {
 		return;

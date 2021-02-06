@@ -67,6 +67,7 @@ protected:
 
 public:
 	ShaderDesc();
+	ShaderDesc(tml::graphic::Manager *);
 	virtual ~ShaderDesc();
 
 	virtual void Init(void);

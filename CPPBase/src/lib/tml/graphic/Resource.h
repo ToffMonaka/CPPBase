@@ -55,6 +55,7 @@ protected:
 
 public:
 	ResourceDesc();
+	ResourceDesc(tml::graphic::Manager *);
 	virtual ~ResourceDesc();
 
 	virtual void Init(void);

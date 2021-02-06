@@ -19,6 +19,17 @@ tml::sound::ResourceDesc::ResourceDesc() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param mgr (manager)
+ */
+tml::sound::ResourceDesc::ResourceDesc(tml::sound::Manager *mgr) :
+	manager(mgr)
+{
+	return;
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::sound::ResourceDesc::~ResourceDesc()

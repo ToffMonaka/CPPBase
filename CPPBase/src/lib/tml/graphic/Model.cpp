@@ -19,6 +19,143 @@
 /**
  * @brief コンストラクタ
  */
+tml::graphic::ModelLayer::ModelLayer() :
+	mgr_(nullptr)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::ModelLayer::~ModelLayer()
+{
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::graphic::ModelLayer::Release(void)
+{
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::ModelLayer::Init(void)
+{
+	this->mgr_ = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief Create関数
+ * @param mgr (manager)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ModelLayer::Create(tml::graphic::Manager *mgr)
+{
+	if (mgr == nullptr) {
+		return (-1);
+	}
+
+	this->mgr_ = mgr;
+
+	return (0);
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::graphic::ModelStage::ModelStage() :
+	mgr_(nullptr)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::ModelStage::~ModelStage()
+{
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::graphic::ModelStage::Release(void)
+{
+	for (auto &layer : this->layer_cont_) {
+		layer.reset();
+	}
+
+	this->layer_cont_.clear();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::ModelStage::Init(void)
+{
+	this->mgr_ = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief Create関数
+ * @param mgr (manager)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ModelStage::Create(tml::graphic::Manager *mgr)
+{
+	if (mgr == nullptr) {
+		return (-1);
+	}
+
+	this->mgr_ = mgr;
+
+	return (0);
+}
+
+
+/**
+ * @brief SetLayer関数
+ * @param index (index)
+ * @param layer (layer)
+ */
+void tml::graphic::ModelStage::SetLayer(const UINT index, tml::unique_ptr<tml::graphic::ModelLayer> &layer)
+{
+	while (index >= this->layer_cont_.size()) {
+		this->layer_cont_.push_back(tml::make_unique<tml::graphic::ModelLayer>());
+	}
+
+	this->layer_cont_[index] = std::move(layer);
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::graphic::ModelDesc::ModelDesc() :
 	position_set_flag(true)
 {
@@ -101,6 +238,12 @@ tml::graphic::Model::~Model()
  */
 void tml::graphic::Model::Release(void)
 {
+	for (auto &stage : this->stage_cont_) {
+		stage.reset();
+	}
+
+	this->stage_cont_.clear();
+
 	if (this->GetManager() != nullptr) {
 		for (auto &rs : this->rs_cont_) {
 			this->GetManager()->ReleaseResource(rs);
@@ -204,6 +347,23 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief SetStage関数
+ * @param index (index)
+ * @param stage (stage)
+ */
+void tml::graphic::Model::SetStage(const UINT index, tml::unique_ptr<tml::graphic::ModelStage> &stage)
+{
+	while (index >= this->stage_cont_.size()) {
+		this->stage_cont_.push_back(tml::make_unique<tml::graphic::ModelStage>());
+	}
+
+	this->stage_cont_[index] = std::move(stage);
+
+	return;
 }
 
 

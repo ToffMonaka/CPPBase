@@ -24,12 +24,13 @@ protected:
 
 public:
 	RasterizerStateDesc();
-	RasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
+	RasterizerStateDesc(tml::graphic::Manager *);
+	RasterizerStateDesc(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
 	virtual ~RasterizerStateDesc();
 
 	virtual void Init(void);
 
-	void Set(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
+	void Set(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
 };
 }
 }

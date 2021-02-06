@@ -114,6 +114,19 @@ tml::graphic::ShaderDesc::ShaderDesc() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param mgr (manager)
+ */
+tml::graphic::ShaderDesc::ShaderDesc(tml::graphic::Manager *mgr) :
+	tml::graphic::ResourceDesc(mgr),
+	vertex_shader_input_element_desc_count(0U),
+	vertex_shader_input_element_desc_array(nullptr)
+{
+	return;
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::graphic::ShaderDesc::~ShaderDesc()

@@ -58,6 +58,18 @@ public:
 
 	virtual void Init(void);
 	INT Create(tml::graphic::Manager *);
+
+	tml::graphic::Manager *GetManager(void);
 };
 }
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::graphic::Manager *tml::graphic::ManagerCommon::GetManager(void)
+{
+	return (this->mgr_);
 }

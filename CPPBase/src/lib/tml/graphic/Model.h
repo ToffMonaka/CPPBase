@@ -14,6 +14,110 @@
 namespace tml {
 namespace graphic {
 /**
+ * @brief ModelLayerクラス
+ *
+ * インターフェースパターン
+ */
+class ModelLayer
+{
+public: ModelLayer(const tml::graphic::ModelLayer &) = delete;
+public: tml::graphic::ModelLayer &operator =(const tml::graphic::ModelLayer &) = delete;
+protected: virtual void InterfaceDummy(void) = 0;
+
+private:
+	tml::graphic::Manager *mgr_;
+
+protected:
+	void Release(void);
+	INT Create(tml::graphic::Manager *);
+
+public:
+	ModelLayer();
+	virtual ~ModelLayer();
+
+	virtual void Init(void);
+
+	tml::graphic::Manager *GetManager(void);
+};
+}
+}
+
+
+/**
+ * @brief GetManager関数
+ * @return mgr (manager)
+ */
+inline tml::graphic::Manager *tml::graphic::ModelLayer::GetManager(void)
+{
+	return (this->mgr_);
+}
+
+
+namespace tml {
+namespace graphic {
+/**
+ * @brief ModelStageクラス
+ *
+ * インターフェースパターン
+ */
+class ModelStage
+{
+public: ModelStage(const tml::graphic::ModelStage &) = delete;
+public: tml::graphic::ModelStage &operator =(const tml::graphic::ModelStage &) = delete;
+protected: virtual void InterfaceDummy(void) = 0;
+
+private:
+	tml::graphic::Manager *mgr_;
+	std::vector<tml::unique_ptr<tml::graphic::ModelLayer>> layer_cont_;
+
+protected:
+	void Release(void);
+	INT Create(tml::graphic::Manager *);
+
+public:
+	ModelStage();
+	virtual ~ModelStage();
+
+	virtual void Init(void);
+
+	tml::graphic::Manager *GetManager(void);
+
+	tml::graphic::ModelLayer *GetLayer(const UINT);
+	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::ModelLayer> &);
+};
+}
+}
+
+
+/**
+ * @brief GetLayer関数
+ * @param index (index)
+ * @return layer (layer)<br>
+ * nullptr=失敗
+ */
+inline tml::graphic::ModelLayer *tml::graphic::ModelStage::GetLayer(const UINT index)
+{
+	if (index >= this->layer_cont_.size()) {
+		return (nullptr);
+	}
+
+	return (this->layer_cont_[index].get());
+}
+
+
+/**
+ * @brief GetManager関数
+ * @return mgr (manager)
+ */
+inline tml::graphic::Manager *tml::graphic::ModelStage::GetManager(void)
+{
+	return (this->mgr_);
+}
+
+
+namespace tml {
+namespace graphic {
+/**
  * @brief ModelDescクラス
  */
 class ModelDesc : public tml::graphic::ResourceDesc
@@ -50,6 +154,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE type_;
+	std::vector<tml::unique_ptr<tml::graphic::ModelStage>> stage_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::RasterizerState>> rs_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::BlendState>> bs_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::DepthState>> ds_cont_;
@@ -73,6 +178,8 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
+	tml::graphic::ModelStage *GetStage(const UINT);
+	void SetStage(const UINT, tml::unique_ptr<tml::graphic::ModelStage> &);
 	tml::graphic::RasterizerState *GetRasterizerState(const UINT);
 	void SetRasterizerState(const UINT, tml::shared_ptr<tml::graphic::RasterizerState> &);
 	tml::graphic::BlendState *GetBlendState(const UINT);
@@ -107,6 +214,22 @@ public:
 inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetStage関数
+ * @param index (index)
+ * @return stage (stage)<br>
+ * nullptr=失敗
+ */
+inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const UINT index)
+{
+	if (index >= this->stage_cont_.size()) {
+		return (nullptr);
+	}
+
+	return (this->stage_cont_[index].get());
 }
 
 

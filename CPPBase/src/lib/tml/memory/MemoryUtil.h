@@ -264,7 +264,7 @@ struct default_delete<_Ty[]>
 template <typename T>
 using unique_ptr = std::unique_ptr<T, tml::default_delete<T>>;
 
-template <typename T, typename... ARGS>
+template <typename T>
 _NODISCARD tml::unique_ptr<T> make_unique(void)
 {
 	return (tml::unique_ptr<T>(nullptr));

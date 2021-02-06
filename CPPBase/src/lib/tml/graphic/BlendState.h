@@ -25,12 +25,13 @@ protected:
 
 public:
 	BlendStateDesc();
-	BlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE, const UINT);
+	BlendStateDesc(tml::graphic::Manager *);
+	BlendStateDesc(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE, const UINT);
 	virtual ~BlendStateDesc();
 
 	virtual void Init(void);
 
-	void Set(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE, const UINT);
+	void Set(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE, const UINT);
 };
 }
 }

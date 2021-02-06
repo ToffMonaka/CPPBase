@@ -19,6 +19,17 @@ tml::input::ResourceDesc::ResourceDesc() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param mgr (manager)
+ */
+tml::input::ResourceDesc::ResourceDesc(tml::input::Manager *mgr) :
+	manager(mgr)
+{
+	return;
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::input::ResourceDesc::~ResourceDesc()

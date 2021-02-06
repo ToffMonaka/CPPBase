@@ -33,6 +33,7 @@ protected:
 
 public:
 	ResourceDesc();
+	ResourceDesc(tml::sound::Manager *);
 	virtual ~ResourceDesc();
 
 	virtual void Init(void);

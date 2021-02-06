@@ -31,6 +31,30 @@ tml::graphic::TextureDesc::TextureDesc() :
 
 /**
  * @brief コンストラクタ
+ * @param mgr (manager)
+ */
+tml::graphic::TextureDesc::TextureDesc(tml::graphic::Manager *mgr) :
+	tml::graphic::ResourceDesc(mgr),
+	swap_chain(nullptr),
+	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U),
+	render_target_format(DXGI_FORMAT_UNKNOWN),
+	render_target_desc_null_flag(false),
+	depth_target_format(DXGI_FORMAT_UNKNOWN),
+	depth_target_desc_null_flag(false),
+	sr_format(DXGI_FORMAT_UNKNOWN),
+	sr_desc_null_flag(false),
+	uasr_format(DXGI_FORMAT_UNKNOWN),
+	uasr_desc_null_flag(false)
+{
+	this->texture_desc.BindFlags = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param mgr (manager)
  * @param tex_desc_type_flg (texture_desc_type_flag)
  * @param tex_desc_format (texture_desc_format)
  * @param tex_desc_size (texture_desc_size)
@@ -38,9 +62,9 @@ tml::graphic::TextureDesc::TextureDesc() :
  * @param tex_desc_mm_cnt (texture_desc_mipmap_count)
  * @param tex_desc_ms_desc (texture_desc_multisample_desc)
  */
-tml::graphic::TextureDesc::TextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG tex_desc_type_flg, const DXGI_FORMAT tex_desc_format, const XMUINT2EX &tex_desc_size, const UINT tex_desc_buf_cnt, const UINT tex_desc_mm_cnt, const DXGI_SAMPLE_DESC &tex_desc_ms_desc)
+tml::graphic::TextureDesc::TextureDesc(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG tex_desc_type_flg, const DXGI_FORMAT tex_desc_format, const XMUINT2EX &tex_desc_size, const UINT tex_desc_buf_cnt, const UINT tex_desc_mm_cnt, const DXGI_SAMPLE_DESC &tex_desc_ms_desc)
 {
-	this->Set(tex_desc_type_flg, tex_desc_format, tex_desc_size, tex_desc_buf_cnt, tex_desc_mm_cnt, tex_desc_ms_desc);
+	this->Set(mgr, tex_desc_type_flg, tex_desc_format, tex_desc_size, tex_desc_buf_cnt, tex_desc_mm_cnt, tex_desc_ms_desc);
 
 	return;
 }
@@ -109,6 +133,7 @@ INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief Set関数
+ * @param mgr (manager)
  * @param tex_desc_type_flg (texture_desc_type_flag)
  * @param tex_desc_format (texture_desc_format)
  * @param tex_desc_size (texture_desc_size)
@@ -116,9 +141,11 @@ INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
  * @param tex_desc_mm_cnt (texture_desc_mipmap_count)
  * @param tex_desc_ms_desc (texture_desc_multisample_desc)
  */
-void tml::graphic::TextureDesc::Set(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG tex_desc_type_flg, const DXGI_FORMAT tex_desc_format, const XMUINT2EX &tex_desc_size, const UINT tex_desc_buf_cnt, const UINT tex_desc_mm_cnt, const DXGI_SAMPLE_DESC &tex_desc_ms_desc)
+void tml::graphic::TextureDesc::Set(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG tex_desc_type_flg, const DXGI_FORMAT tex_desc_format, const XMUINT2EX &tex_desc_size, const UINT tex_desc_buf_cnt, const UINT tex_desc_mm_cnt, const DXGI_SAMPLE_DESC &tex_desc_ms_desc)
 {
 	this->Init();
+
+	this->manager = mgr;
 
 	for (UINT buf_i = 0U; buf_i < tex_desc_buf_cnt; ++buf_i) {
 		this->file_read_desc_container.emplace_back();

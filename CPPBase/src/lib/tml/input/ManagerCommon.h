@@ -39,6 +39,18 @@ public:
 
 	virtual void Init(void);
 	INT Create(tml::input::Manager *);
+
+	tml::input::Manager *GetManager(void);
 };
 }
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::input::Manager *tml::input::ManagerCommon::GetManager(void)
+{
+	return (this->mgr_);
 }

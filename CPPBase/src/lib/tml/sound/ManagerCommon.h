@@ -39,6 +39,18 @@ public:
 
 	virtual void Init(void);
 	INT Create(tml::sound::Manager *);
+
+	tml::sound::Manager *GetManager(void);
 };
 }
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::sound::Manager *tml::sound::ManagerCommon::GetManager(void)
+{
+	return (this->mgr_);
 }
