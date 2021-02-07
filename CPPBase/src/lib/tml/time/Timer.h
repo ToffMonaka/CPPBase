@@ -22,6 +22,9 @@ private:
 	tml::TIME_REAL elapsed_time_;
 	bool started_flg_;
 
+protected:
+	void Release(void);
+
 public:
 	Timer();
 	virtual ~Timer();
@@ -32,6 +35,15 @@ public:
 	void Stop(void);
 	tml::TIME_REAL GetElapsedTime(void) const;
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::Timer::Release(void)
+{
+	return;
 }
 
 

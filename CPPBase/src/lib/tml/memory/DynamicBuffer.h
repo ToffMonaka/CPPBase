@@ -38,13 +38,15 @@ public:
 	virtual ~DynamicBuffer();
 
 	virtual void Init(void);
+	virtual void Init(const size_t);
+	virtual void Init(const BYTE *, const size_t);
 
 	BYTE *Get(void);
 	const BYTE *Get(void) const;
-	void Set(const size_t, const bool keep_flg = false);
 	void Set(const BYTE *, const size_t);
 	void Clear(void);
 	size_t GetSize(void) const;
+	void SetSize(const size_t);
 	size_t GetLength(void) const;
 	void SetLength(const size_t);
 	size_t GetReadIndex(void) const;
@@ -128,12 +130,62 @@ inline const BYTE *tml::DynamicBuffer::Get(void) const
 
 
 /**
+ * @brief SetŠÖ”
+ * @param ary (array)
+ * @param size (size)
+ */
+inline void tml::DynamicBuffer::Set(const BYTE *ary, const size_t size)
+{
+	if (size > this->size_) {
+		auto ary = tml::MemoryUtil::Get<BYTE>(size);
+
+		tml::MemoryUtil::Release(&this->ary_);
+
+		this->ary_ = ary;
+	}
+
+	this->size_ = size;
+	tml::MemoryUtil::Copy(this->ary_, ary, this->size_);
+	this->len_ = this->size_;
+	this->read_index_ = 0U;
+	this->write_index_ = this->size_;
+
+	return;
+}
+
+
+/**
  * @brief GetSizeŠÖ”
  * @return size (size)
  */
 inline size_t tml::DynamicBuffer::GetSize(void) const
 {
 	return (this->size_);
+}
+
+
+/**
+ * @brief SetSizeŠÖ”
+ * @param size (size)
+ */
+inline void tml::DynamicBuffer::SetSize(const size_t size)
+{
+	if (size > this->size_) {
+		auto ary = tml::MemoryUtil::Get<BYTE>(size);
+
+		tml::MemoryUtil::Copy(ary, this->ary_, this->size_);
+
+		tml::MemoryUtil::Release(&this->ary_);
+
+		this->ary_ = ary;
+	}
+
+	this->size_ = size;
+	this->len_ = std::min(this->len_, this->size_);
+	this->read_index_ = std::min(this->read_index_, this->len_);
+	this->write_index_ = std::min(this->write_index_, this->len_);
+
+	return;
 }
 
 

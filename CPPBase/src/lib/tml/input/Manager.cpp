@@ -21,6 +21,8 @@ tml::input::ManagerDesc::ManagerDesc()
  */
 tml::input::ManagerDesc::~ManagerDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -30,6 +32,8 @@ tml::input::ManagerDesc::~ManagerDesc()
  */
 void tml::input::ManagerDesc::Init(void)
 {
+	this->Release();
+
 	return;
 }
 

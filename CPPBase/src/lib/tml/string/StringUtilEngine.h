@@ -39,6 +39,15 @@ public:
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+inline void tml::StringUtilEngine::Release(void)
+{
+	return;
+}
+
+
+/**
  * @brief GetLocaleNameä÷êî
  * @return locale_name (locale_name)
  */

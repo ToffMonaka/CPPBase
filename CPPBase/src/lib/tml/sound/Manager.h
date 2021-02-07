@@ -18,6 +18,9 @@ class ManagerDesc
 {
 public:
 
+protected:
+	void Release(void);
+
 public:
 	ManagerDesc();
 	virtual ~ManagerDesc();
@@ -25,6 +28,15 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::sound::ManagerDesc::Release(void)
+{
+	return;
 }
 
 
@@ -44,7 +56,7 @@ private:
 public:
 	tml::sound::ManagerCommon common;
 
-private:
+protected:
 	void Release(void);
 
 public:

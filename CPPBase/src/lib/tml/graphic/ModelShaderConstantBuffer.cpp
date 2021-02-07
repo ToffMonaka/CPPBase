@@ -27,7 +27,7 @@ tml::graphic::ModelShaderConstantBufferDesc::~ModelShaderConstantBufferDesc()
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::ModelShaderConstantBufferDesc::Init(void)
 {
@@ -72,7 +72,7 @@ void tml::graphic::ModelShaderConstantBuffer::Release(void)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::ModelShaderConstantBuffer::Init(void)
 {

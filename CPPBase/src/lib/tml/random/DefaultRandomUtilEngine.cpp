@@ -28,17 +28,6 @@ tml::DefaultRandomUtilEngine::~DefaultRandomUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::DefaultRandomUtilEngine::Release(void)
-{
-	tml::RandomUtilEngine::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::DefaultRandomUtilEngine::Init(void)

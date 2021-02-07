@@ -34,6 +34,8 @@ tml::input::ResourceDesc::ResourceDesc(tml::input::Manager *mgr) :
  */
 tml::input::ResourceDesc::~ResourceDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -43,7 +45,24 @@ tml::input::ResourceDesc::~ResourceDesc()
  */
 void tml::input::ResourceDesc::Init(void)
 {
+	this->Release();
+
 	this->manager = nullptr;
+	this->name.clear();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ * @param mgr (manager)
+ */
+void tml::input::ResourceDesc::Init(tml::input::Manager *mgr)
+{
+	this->Release();
+
+	this->manager = mgr;
 	this->name.clear();
 
 	return;
@@ -118,15 +137,6 @@ tml::input::Resource::Resource() :
  * @brief デストラクタ
  */
 tml::input::Resource::~Resource()
-{
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::input::Resource::Release(void)
 {
 	return;
 }

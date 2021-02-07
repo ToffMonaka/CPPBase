@@ -34,6 +34,8 @@ tml::graphic::ResourceDesc::ResourceDesc(tml::graphic::Manager *mgr) :
  */
 tml::graphic::ResourceDesc::~ResourceDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -43,7 +45,24 @@ tml::graphic::ResourceDesc::~ResourceDesc()
  */
 void tml::graphic::ResourceDesc::Init(void)
 {
+	this->Release();
+
 	this->manager = nullptr;
+	this->name.clear();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ * @param mgr (manager)
+ */
+void tml::graphic::ResourceDesc::Init(tml::graphic::Manager *mgr)
+{
+	this->Release();
+
+	this->manager = mgr;
 	this->name.clear();
 
 	return;
@@ -118,15 +137,6 @@ tml::graphic::Resource::Resource() :
  * @brief デストラクタ
  */
 tml::graphic::Resource::~Resource()
-{
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::graphic::Resource::Release(void)
 {
 	return;
 }

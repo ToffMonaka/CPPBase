@@ -276,9 +276,6 @@ _NODISCARD tml::unique_ptr<T> make_unique(const size_t size, ARGS&&... args)
 	return (tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...)));
 };
 
-template <typename T, typename... ARGS>
-tml::unique_ptr<T> &get_unique(tml::unique_ptr<T> &, tml::unique_ptr<T> &, const size_t, ARGS&&...) = delete;
-
 template <typename T>
 using shared_ptr = std::shared_ptr<T>;
 

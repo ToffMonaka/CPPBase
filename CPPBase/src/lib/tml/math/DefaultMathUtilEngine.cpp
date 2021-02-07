@@ -28,17 +28,6 @@ tml::DefaultMathUtilEngine::~DefaultMathUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::DefaultMathUtilEngine::Release(void)
-{
-	tml::MathUtilEngine::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::DefaultMathUtilEngine::Init(void)

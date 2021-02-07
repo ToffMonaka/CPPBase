@@ -23,6 +23,8 @@ tml::ConfigFileData::ConfigFileData()
  */
 tml::ConfigFileData::~ConfigFileData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -32,6 +34,8 @@ tml::ConfigFileData::~ConfigFileData()
  */
 void tml::ConfigFileData::Init(void)
 {
+	this->Release();
+
 	this->value_container.clear();
 
 	return;
@@ -52,6 +56,8 @@ tml::ConfigFileReadDescData::ConfigFileReadDescData()
  */
 tml::ConfigFileReadDescData::~ConfigFileReadDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -61,6 +67,8 @@ tml::ConfigFileReadDescData::~ConfigFileReadDescData()
  */
 void tml::ConfigFileReadDescData::Init(void)
 {
+	this->Release();
+
 	tml::TextFileReadDescData::Init();
 
 	return;
@@ -81,6 +89,8 @@ tml::ConfigFileWriteDescData::ConfigFileWriteDescData()
  */
 tml::ConfigFileWriteDescData::~ConfigFileWriteDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -90,6 +100,8 @@ tml::ConfigFileWriteDescData::~ConfigFileWriteDescData()
  */
 void tml::ConfigFileWriteDescData::Init(void)
 {
+	this->Release();
+
 	tml::TextFileWriteDescData::Init();
 
 	return;
@@ -117,17 +129,6 @@ tml::ConfigFile::~ConfigFile()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void tml::ConfigFile::Release(void)
-{
-	tml::File::Release();
-
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void tml::ConfigFile::Init(void)
@@ -137,6 +138,8 @@ void tml::ConfigFile::Init(void)
 	this->data.Init();
 	this->read_desc.Init();
 	this->write_desc.Init();
+
+	tml::File::Init();
 
 	return;
 }

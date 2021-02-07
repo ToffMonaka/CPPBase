@@ -42,7 +42,7 @@ void tml::input::ManagerCommon::Release(void)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::input::ManagerCommon::Init(void)
 {

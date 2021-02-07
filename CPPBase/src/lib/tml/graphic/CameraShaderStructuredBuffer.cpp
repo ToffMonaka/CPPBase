@@ -27,7 +27,7 @@ tml::graphic::CameraShaderStructuredBufferDesc::~CameraShaderStructuredBufferDes
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::CameraShaderStructuredBufferDesc::Init(void)
 {
@@ -72,7 +72,7 @@ void tml::graphic::CameraShaderStructuredBuffer::Release(void)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::CameraShaderStructuredBuffer::Init(void)
 {

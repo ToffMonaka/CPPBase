@@ -26,6 +26,8 @@ cpp_base::SystemConfigFileData::SystemConfigFileData() :
  */
 cpp_base::SystemConfigFileData::~SystemConfigFileData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -35,6 +37,8 @@ cpp_base::SystemConfigFileData::~SystemConfigFileData()
  */
 void cpp_base::SystemConfigFileData::Init(void)
 {
+	this->Release();
+
 	this->application_memory_allocator_size = 1048576U;
 	this->application_locale_name = "Japanese";
 	this->window_position = 0U;
@@ -65,17 +69,6 @@ cpp_base::SystemConfigFile::~SystemConfigFile()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void cpp_base::SystemConfigFile::Release(void)
-{
-	tml::File::Release();
-
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void cpp_base::SystemConfigFile::Init(void)
@@ -85,6 +78,8 @@ void cpp_base::SystemConfigFile::Init(void)
 	this->data.Init();
 	this->read_desc.Init();
 	this->write_desc.Init();
+
+	tml::File::Init();
 
 	return;
 }

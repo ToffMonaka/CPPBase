@@ -36,6 +36,9 @@ private:
 	WCHAR *GetStringSetStringPart(WCHAR *, const size_t) const;
 	void SetStringSetTimePart(void);
 
+protected:
+	void Release(void);
+
 public:
 	Date();
 	virtual ~Date();
@@ -59,6 +62,15 @@ public:
 	void SetString(const CHAR *);
 	void SetString(const WCHAR *);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::Date::Release(void)
+{
+	return;
 }
 
 

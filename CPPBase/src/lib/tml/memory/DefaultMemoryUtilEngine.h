@@ -19,7 +19,7 @@ public: DefaultMemoryUtilEngine(const tml::DefaultMemoryUtilEngine &) = delete;
 public: tml::DefaultMemoryUtilEngine &operator =(const tml::DefaultMemoryUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -34,6 +34,17 @@ public:
 	template <typename T>
 	void Release(T **);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::DefaultMemoryUtilEngine::Release(void)
+{
+	tml::MemoryUtilEngine::Release();
+
+	return;
 }
 
 

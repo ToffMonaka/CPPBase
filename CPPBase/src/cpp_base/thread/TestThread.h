@@ -23,7 +23,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	tml::FrameRate frame_rate_;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -37,4 +37,15 @@ public:
 	virtual void End(void);
 	virtual void Update(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void cpp_base::TestThread::Release(void)
+{
+	tml::SubThread::Release();
+
+	return;
 }

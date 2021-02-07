@@ -68,6 +68,9 @@ public:
 	tml::XMUINT2EX window_size;
 	bool vsync_flag;
 
+protected:
+	void Release(void);
+
 public:
 	ManagerDesc();
 	virtual ~ManagerDesc();
@@ -75,6 +78,15 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ManagerDesc::Release(void)
+{
+	return;
 }
 
 
@@ -185,7 +197,7 @@ private:
 public:
 	tml::graphic::ManagerCommon common;
 
-private:
+protected:
 	void Release(void);
 
 public:

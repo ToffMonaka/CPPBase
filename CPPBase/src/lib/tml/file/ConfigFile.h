@@ -19,6 +19,9 @@ class ConfigFileData
 public:
 	std::map<std::wstring, std::wstring> value_container;
 
+protected:
+	void Release(void);
+
 public:
 	ConfigFileData();
 	virtual ~ConfigFileData();
@@ -27,6 +30,15 @@ public:
 
 	const std::wstring *GetValue(const WCHAR *) const;
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::ConfigFileData::Release(void)
+{
+	return;
 }
 
 
@@ -56,6 +68,9 @@ class ConfigFileReadDescData : public tml::TextFileReadDescData
 {
 public:
 
+protected:
+	void Release(void);
+
 public:
 	ConfigFileReadDescData();
 	virtual ~ConfigFileReadDescData();
@@ -67,6 +82,17 @@ using ConfigFileReadDesc = tml::FileReadDesc<tml::ConfigFileReadDescData>;
 }
 
 
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::ConfigFileReadDescData::Release(void)
+{
+	tml::TextFileReadDescData::Release();
+
+	return;
+}
+
+
 namespace tml {
 /**
  * @brief ConfigFileWriteDescDataÉNÉâÉX
@@ -74,6 +100,9 @@ namespace tml {
 class ConfigFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
+
+protected:
+	void Release(void);
 
 public:
 	ConfigFileWriteDescData();
@@ -83,6 +112,17 @@ public:
 };
 
 using ConfigFileWriteDesc = tml::FileWriteDesc<tml::ConfigFileWriteDescData>;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::ConfigFileWriteDescData::Release(void)
+{
+	tml::TextFileWriteDescData::Release();
+
+	return;
 }
 
 
@@ -101,7 +141,7 @@ public:
 	tml::ConfigFileReadDesc read_desc;
 	tml::ConfigFileWriteDesc write_desc;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -113,4 +153,15 @@ public:
 	virtual INT Read(void);
 	virtual INT Write(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::ConfigFile::Release(void)
+{
+	tml::File::Release();
+
+	return;
 }

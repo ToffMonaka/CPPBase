@@ -22,12 +22,24 @@ public:
 	tml::XMUINT2EX window_position;
 	tml::XMUINT2EX window_size;
 
+protected:
+	void Release(void);
+
 public:
 	SystemConfigFileData();
 	virtual ~SystemConfigFileData();
 
 	virtual void Init(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void cpp_base::SystemConfigFileData::Release(void)
+{
+	return;
 }
 
 
@@ -46,7 +58,7 @@ public:
 	tml::INIFileReadDesc read_desc;
 	tml::INIFileWriteDesc write_desc;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -58,4 +70,15 @@ public:
 	virtual INT Read(void);
 	virtual INT Write(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void cpp_base::SystemConfigFile::Release(void)
+{
+	tml::File::Release();
+
+	return;
 }

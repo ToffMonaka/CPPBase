@@ -21,6 +21,8 @@ tml::FileReadDescData::FileReadDescData()
  */
 tml::FileReadDescData::~FileReadDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -30,6 +32,8 @@ tml::FileReadDescData::~FileReadDescData()
  */
 void tml::FileReadDescData::Init(void)
 {
+	this->Release();
+
 	this->file_path.clear();
 	this->file_buffer.Init();
 
@@ -51,6 +55,8 @@ tml::FileWriteDescData::FileWriteDescData()
  */
 tml::FileWriteDescData::~FileWriteDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -60,6 +66,8 @@ tml::FileWriteDescData::~FileWriteDescData()
  */
 void tml::FileWriteDescData::Init(void)
 {
+	this->Release();
+
 	this->file_path.clear();
 
 	return;
@@ -79,15 +87,6 @@ tml::File::File()
  * @brief デストラクタ
  */
 tml::File::~File()
-{
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::File::Release(void)
 {
 	return;
 }

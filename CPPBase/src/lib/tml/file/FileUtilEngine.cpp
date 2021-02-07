@@ -26,15 +26,6 @@ tml::FileUtilEngine::~FileUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::FileUtilEngine::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::FileUtilEngine::Init(void)

@@ -28,17 +28,6 @@ tml::DefaultStringUtilEngine::~DefaultStringUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::DefaultStringUtilEngine::Release(void)
-{
-	tml::StringUtilEngine::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::DefaultStringUtilEngine::Init(void)

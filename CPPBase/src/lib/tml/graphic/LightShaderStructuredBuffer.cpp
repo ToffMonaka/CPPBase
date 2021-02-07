@@ -27,7 +27,7 @@ tml::graphic::LightShaderStructuredBufferDesc::~LightShaderStructuredBufferDesc(
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::LightShaderStructuredBufferDesc::Init(void)
 {
@@ -72,7 +72,7 @@ void tml::graphic::LightShaderStructuredBuffer::Release(void)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::LightShaderStructuredBuffer::Init(void)
 {

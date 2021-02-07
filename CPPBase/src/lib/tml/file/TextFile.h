@@ -20,12 +20,24 @@ class TextFileData
 public:
 	std::list<std::wstring> string_container;
 
+protected:
+	void Release(void);
+
 public:
 	TextFileData();
 	virtual ~TextFileData();
 
 	virtual void Init(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::TextFileData::Release(void)
+{
+	return;
 }
 
 
@@ -38,6 +50,9 @@ class TextFileReadDescData : public tml::BinaryFileReadDescData
 public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
+protected:
+	void Release(void);
+
 public:
 	TextFileReadDescData();
 	virtual ~TextFileReadDescData();
@@ -46,6 +61,17 @@ public:
 };
 
 using TextFileReadDesc = tml::FileReadDesc<tml::TextFileReadDescData>;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::TextFileReadDescData::Release(void)
+{
+	tml::BinaryFileReadDescData::Release();
+
+	return;
 }
 
 
@@ -59,6 +85,9 @@ public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 	size_t add_newline_code_count;
 
+protected:
+	void Release(void);
+
 public:
 	TextFileWriteDescData();
 	virtual ~TextFileWriteDescData();
@@ -67,6 +96,17 @@ public:
 };
 
 using TextFileWriteDesc = tml::FileWriteDesc<tml::TextFileWriteDescData>;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::TextFileWriteDescData::Release(void)
+{
+	tml::BinaryFileWriteDescData::Release();
+
+	return;
 }
 
 
@@ -85,7 +125,7 @@ public:
 	tml::TextFileReadDesc read_desc;
 	tml::TextFileWriteDesc write_desc;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -97,4 +137,15 @@ public:
 	virtual INT Read(void);
 	virtual INT Write(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::TextFile::Release(void)
+{
+	tml::File::Release();
+
+	return;
 }

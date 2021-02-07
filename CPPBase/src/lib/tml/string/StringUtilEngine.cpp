@@ -26,15 +26,6 @@ tml::StringUtilEngine::~StringUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::StringUtilEngine::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::StringUtilEngine::Init(void)

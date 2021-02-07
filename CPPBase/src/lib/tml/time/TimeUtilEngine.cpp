@@ -26,15 +26,6 @@ tml::TimeUtilEngine::~TimeUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::TimeUtilEngine::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::TimeUtilEngine::Init(void)

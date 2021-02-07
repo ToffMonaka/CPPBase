@@ -30,7 +30,7 @@ private:
 
 public:
 
-private:
+protected:
 	void Release(void);
 
 public:

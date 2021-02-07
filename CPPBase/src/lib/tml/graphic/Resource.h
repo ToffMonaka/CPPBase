@@ -51,6 +51,8 @@ public:
 	std::wstring name;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -59,10 +61,20 @@ public:
 	virtual ~ResourceDesc();
 
 	virtual void Init(void);
+	virtual void Init(tml::graphic::Manager *);
 
 	INT Read(const tml::INIFileReadDesc &);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ResourceDesc::Release(void)
+{
+	return;
 }
 
 
@@ -99,6 +111,15 @@ public:
 	const std::wstring &GetName(void) const;
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::Resource::Release(void)
+{
+	return;
 }
 
 

@@ -28,6 +28,9 @@ private:
 	void UpdateAngleFromQuaternion(void);
 	void UpdateXYZAxisVectorFromQuaternion(void);
 
+protected:
+	void Release(void);
+
 public:
 	XMPosition();
 	XMPosition(const tml::XMFLOAT3EX &);
@@ -44,11 +47,12 @@ public:
 	tml::XMPosition &operator -=(const tml::XMPosition &);
 
 	virtual void Init(void);
+	virtual void Init(const tml::XMFLOAT3EX &);
+	virtual void Init(const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &);
+	virtual void Init(const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
 
 	const tml::XMFLOAT3EX &Get(void) const;
 	void Set(const tml::XMFLOAT3EX &);
-	void Set(const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &);
-	void Set(const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
 	void Move(const tml::XMFLOAT3EX &);
 	void Move(const tml::XMFLOAT3EX &, const FLOAT);
 	void Rotation(const tml::XMFLOAT3EX &);
@@ -70,6 +74,15 @@ public:
 
 
 /**
+ * @brief ReleaseŠÖ”
+ */
+inline void tml::XMPosition::Release(void)
+{
+	return;
+}
+
+
+/**
  * @brief GetŠÖ”
  * @return pos (position)
  */
@@ -86,40 +99,6 @@ inline const tml::XMFLOAT3EX &tml::XMPosition::Get(void) const
 inline void tml::XMPosition::Set(const tml::XMFLOAT3EX &pos)
 {
 	this->pos_ = pos;
-
-	return;
-}
-
-
-/**
- * @brief SetŠÖ”
- * @param pos (position)
- * @param quat (quaternion)
- */
-inline void tml::XMPosition::Set(const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat)
-{
-	this->pos_ = pos;
-	this->quat_ = quat;
-
-	this->UpdateAngleFromQuaternion();
-	this->UpdateXYZAxisVectorFromQuaternion();
-
-	return;
-}
-
-
-/**
- * @brief SetŠÖ”
- * @param pos (position)
- * @param angle (angle)
- */
-inline void tml::XMPosition::Set(const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle)
-{
-	this->pos_ = pos;
-	this->angle_ = angle;
-
-	this->UpdateQuaternionFromAngle();
-	this->UpdateXYZAxisVectorFromQuaternion();
 
 	return;
 }

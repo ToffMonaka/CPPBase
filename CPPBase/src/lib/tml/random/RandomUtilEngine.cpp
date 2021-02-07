@@ -26,15 +26,6 @@ tml::RandomUtilEngine::~RandomUtilEngine()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void tml::RandomUtilEngine::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void tml::RandomUtilEngine::Init(void)

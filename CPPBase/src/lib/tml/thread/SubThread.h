@@ -36,3 +36,14 @@ public:
 	virtual void Update(void) = 0;
 };
 }
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::SubThread::Release(void)
+{
+	tml::Thread::Release();
+
+	return;
+}

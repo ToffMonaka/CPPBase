@@ -23,6 +23,8 @@ tml::BinaryFileData::BinaryFileData()
  */
 tml::BinaryFileData::~BinaryFileData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -32,6 +34,8 @@ tml::BinaryFileData::~BinaryFileData()
  */
 void tml::BinaryFileData::Init(void)
 {
+	this->Release();
+
 	this->file_buffer.Init();
 
 	return;
@@ -53,6 +57,8 @@ tml::BinaryFileReadDescData::BinaryFileReadDescData() :
  */
 tml::BinaryFileReadDescData::~BinaryFileReadDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -62,6 +68,8 @@ tml::BinaryFileReadDescData::~BinaryFileReadDescData()
  */
 void tml::BinaryFileReadDescData::Init(void)
 {
+	this->Release();
+
 	this->one_buffer_size = 1024U;
 
 	tml::FileReadDescData::Init();
@@ -86,6 +94,8 @@ tml::BinaryFileWriteDescData::BinaryFileWriteDescData() :
  */
 tml::BinaryFileWriteDescData::~BinaryFileWriteDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -95,6 +105,8 @@ tml::BinaryFileWriteDescData::~BinaryFileWriteDescData()
  */
 void tml::BinaryFileWriteDescData::Init(void)
 {
+	this->Release();
+
 	this->one_buffer_size = 1024U;
 	this->add_flag = false;
 
@@ -119,17 +131,6 @@ tml::BinaryFile::BinaryFile()
 tml::BinaryFile::~BinaryFile()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-void tml::BinaryFile::Release(void)
-{
-	tml::File::Release();
 
 	return;
 }
@@ -188,7 +189,7 @@ INT tml::BinaryFile::Read(void)
 				read_size = static_cast<size_t>(ifs.gcount());
 
 				if (read_size > 0U) {
-					file_buf.Set(file_buf.GetSize() + read_size, true);
+					file_buf.SetSize(file_buf.GetSize() + read_size);
 					file_buf.WriteArray(reinterpret_cast<BYTE *>(read_buf), read_size, read_size);
 				}
 

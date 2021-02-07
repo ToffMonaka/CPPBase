@@ -28,17 +28,6 @@ tml::DefaultMemoryUtilEngine::~DefaultMemoryUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::DefaultMemoryUtilEngine::Release(void)
-{
-	tml::MemoryUtilEngine::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::DefaultMemoryUtilEngine::Init(void)

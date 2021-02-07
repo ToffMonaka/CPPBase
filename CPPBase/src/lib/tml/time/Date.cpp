@@ -30,6 +30,8 @@ tml::Date::Date() :
  */
 tml::Date::~Date()
 {
+	this->Release();
+
 	return;
 }
 
@@ -39,6 +41,8 @@ tml::Date::~Date()
  */
 void tml::Date::Init(void)
 {
+	this->Release();
+
 	this->time_ = tml::TIME_SECONDS(0LL);
 	this->year_ = 0;
 	this->mon_ = 0;

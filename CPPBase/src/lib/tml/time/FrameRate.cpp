@@ -34,6 +34,8 @@ tml::FrameRate::FrameRate() :
  */
 tml::FrameRate::~FrameRate()
 {
+	this->Release();
+
 	return;
 }
 
@@ -43,6 +45,8 @@ tml::FrameRate::~FrameRate()
  */
 void tml::FrameRate::Init(void)
 {
+	this->Release();
+
 	this->limit_ = 0U;
 	this->cnt_ = 0U;
 	this->fps_ = 0.0;

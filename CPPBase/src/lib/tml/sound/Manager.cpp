@@ -21,6 +21,8 @@ tml::sound::ManagerDesc::ManagerDesc()
  */
 tml::sound::ManagerDesc::~ManagerDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -30,6 +32,8 @@ tml::sound::ManagerDesc::~ManagerDesc()
  */
 void tml::sound::ManagerDesc::Init(void)
 {
+	this->Release();
+
 	return;
 }
 

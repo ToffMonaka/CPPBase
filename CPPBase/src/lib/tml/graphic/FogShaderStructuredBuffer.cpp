@@ -27,7 +27,7 @@ tml::graphic::FogShaderStructuredBufferDesc::~FogShaderStructuredBufferDesc()
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::FogShaderStructuredBufferDesc::Init(void)
 {
@@ -72,7 +72,7 @@ void tml::graphic::FogShaderStructuredBuffer::Release(void)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::FogShaderStructuredBuffer::Init(void)
 {

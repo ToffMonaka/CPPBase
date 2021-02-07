@@ -26,15 +26,6 @@ tml::MathUtilEngine::~MathUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::MathUtilEngine::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::MathUtilEngine::Init(void)

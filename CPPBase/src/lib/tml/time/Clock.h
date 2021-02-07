@@ -23,6 +23,9 @@ private:
 public:
 	static tml::TIME_MILLI GetNowTime(void);
 
+protected:
+	void Release(void);
+
 public:
 	Clock();
 	virtual ~Clock();
@@ -33,6 +36,15 @@ public:
 	tml::TIME_MILLI GetTime(void) const;
 	void SetTime(const tml::TIME_MILLI &);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::Clock::Release(void)
+{
+	return;
 }
 
 

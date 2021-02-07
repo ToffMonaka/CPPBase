@@ -29,6 +29,8 @@ public:
 	std::wstring name;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -37,10 +39,20 @@ public:
 	virtual ~ResourceDesc();
 
 	virtual void Init(void);
+	virtual void Init(tml::sound::Manager *);
 
 	INT Read(const tml::INIFileReadDesc &);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::sound::ResourceDesc::Release(void)
+{
+	return;
 }
 
 
@@ -77,6 +89,15 @@ public:
 	const std::wstring &GetName(void) const;
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::sound::Resource::Release(void)
+{
+	return;
 }
 
 

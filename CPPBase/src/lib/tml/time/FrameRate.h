@@ -33,6 +33,9 @@ private:
 	tml::TIME_REAL over_time_;
 	bool started_flg_;
 
+protected:
+	void Release(void);
+
 public:
 	FrameRate();
 	virtual ~FrameRate();
@@ -46,6 +49,15 @@ public:
 	UINT GetCount(void) const;
 	DOUBLE GetFPS(void) const;
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::FrameRate::Release(void)
+{
+	return;
 }
 
 

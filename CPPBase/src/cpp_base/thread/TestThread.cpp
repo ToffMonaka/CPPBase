@@ -28,17 +28,6 @@ cpp_base::TestThread::~TestThread()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void cpp_base::TestThread::Release(void)
-{
-	tml::SubThread::Release();
-
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void cpp_base::TestThread::Init(void)

@@ -26,17 +26,6 @@ tml::SubThread::~SubThread()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::SubThread::Release(void)
-{
-	tml::Thread::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::SubThread::Init(void)

@@ -28,17 +28,6 @@ tml::DefaultFileUtilEngine::~DefaultFileUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::DefaultFileUtilEngine::Release(void)
-{
-	tml::FileUtilEngine::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::DefaultFileUtilEngine::Init(void)

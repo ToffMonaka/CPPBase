@@ -19,6 +19,9 @@ class INIFileData
 public:
 	std::map<std::wstring, std::map<std::wstring, std::wstring>> value_container;
 
+protected:
+	void Release(void);
+
 public:
 	INIFileData();
 	virtual ~INIFileData();
@@ -29,6 +32,15 @@ public:
 	const std::wstring *GetValue(const WCHAR *, const WCHAR *) const;
 	const std::wstring *GetValue(const std::map<std::wstring, std::wstring> &, const WCHAR *) const;
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::INIFileData::Release(void)
+{
+	return;
 }
 
 
@@ -102,6 +114,9 @@ class INIFileReadDescData : public tml::TextFileReadDescData
 {
 public:
 
+protected:
+	void Release(void);
+
 public:
 	INIFileReadDescData();
 	virtual ~INIFileReadDescData();
@@ -113,6 +128,17 @@ using INIFileReadDesc = tml::FileReadDesc<tml::INIFileReadDescData>;
 }
 
 
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::INIFileReadDescData::Release(void)
+{
+	tml::TextFileReadDescData::Release();
+
+	return;
+}
+
+
 namespace tml {
 /**
  * @brief INIFileWriteDescDataÉNÉâÉX
@@ -120,6 +146,9 @@ namespace tml {
 class INIFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
+
+protected:
+	void Release(void);
 
 public:
 	INIFileWriteDescData();
@@ -129,6 +158,17 @@ public:
 };
 
 using INIFileWriteDesc = tml::FileWriteDesc<tml::INIFileWriteDescData>;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::INIFileWriteDescData::Release(void)
+{
+	tml::TextFileWriteDescData::Release();
+
+	return;
 }
 
 
@@ -147,7 +187,7 @@ public:
 	tml::INIFileReadDesc read_desc;
 	tml::INIFileWriteDesc write_desc;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -159,4 +199,15 @@ public:
 	virtual INT Read(void);
 	virtual INT Write(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::INIFile::Release(void)
+{
+	tml::File::Release();
+
+	return;
 }

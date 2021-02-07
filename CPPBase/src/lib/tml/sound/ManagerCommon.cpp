@@ -42,7 +42,7 @@ void tml::sound::ManagerCommon::Release(void)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::sound::ManagerCommon::Init(void)
 {

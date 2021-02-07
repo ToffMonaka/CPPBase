@@ -90,7 +90,7 @@ void tml::graphic::ManagerCommon::Release(void)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::ManagerCommon::Init(void)
 {

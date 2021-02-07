@@ -158,6 +158,8 @@ tml::XMPosition &tml::XMPosition::operator =(tml::XMPosition &&src) noexcept
  */
 tml::XMPosition::~XMPosition()
 {
+	this->Release();
+
 	return;
 }
 
@@ -231,16 +233,75 @@ tml::XMPosition &tml::XMPosition::operator -=(const tml::XMPosition &pos)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::XMPosition::Init(void)
 {
+	this->Release();
+
 	this->pos_ = 0.0f;
 	this->quat_ = tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR::TYPE;
 	this->angle_ = 0.0f;
 	this->x_axis_vec_ = tml::ConstantUtil::XNAMATH::X_VECTOR::TYPE;
 	this->y_axis_vec_ = tml::ConstantUtil::XNAMATH::Y_VECTOR::TYPE;
 	this->z_axis_vec_ = tml::ConstantUtil::XNAMATH::Z_VECTOR::TYPE;
+
+	return;
+}
+
+
+/**
+ * @brief InitŠÖ”
+ * @param pos (position)
+ */
+void tml::XMPosition::Init(const tml::XMFLOAT3EX &pos)
+{
+	this->Release();
+
+	this->pos_ = pos;
+	this->quat_ = tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR::TYPE;
+	this->angle_ = 0.0f;
+	this->x_axis_vec_ = tml::ConstantUtil::XNAMATH::X_VECTOR::TYPE;
+	this->y_axis_vec_ = tml::ConstantUtil::XNAMATH::Y_VECTOR::TYPE;
+	this->z_axis_vec_ = tml::ConstantUtil::XNAMATH::Z_VECTOR::TYPE;
+
+	return;
+}
+
+
+/**
+ * @brief InitŠÖ”
+ * @param pos (position)
+ * @param quat (quaternion)
+ */
+void tml::XMPosition::Init(const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat)
+{
+	this->Release();
+
+	this->pos_ = pos;
+	this->quat_ = quat;
+
+	this->UpdateAngleFromQuaternion();
+	this->UpdateXYZAxisVectorFromQuaternion();
+
+	return;
+}
+
+
+/**
+ * @brief InitŠÖ”
+ * @param pos (position)
+ * @param angle (angle)
+ */
+void tml::XMPosition::Init(const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle)
+{
+	this->Release();
+
+	this->pos_ = pos;
+	this->angle_ = angle;
+
+	this->UpdateQuaternionFromAngle();
+	this->UpdateXYZAxisVectorFromQuaternion();
 
 	return;
 }

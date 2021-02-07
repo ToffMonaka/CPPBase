@@ -70,6 +70,8 @@ tml::graphic::Viewport &tml::graphic::Viewport::operator =(const CD3D11_VIEWPORT
 		return ((*this));
 	}
 
+	this->Release();
+
 	this->TopLeftX = src.TopLeftX;
 	this->TopLeftY = src.TopLeftY;
 	this->Width = src.Width;
@@ -82,16 +84,70 @@ tml::graphic::Viewport &tml::graphic::Viewport::operator =(const CD3D11_VIEWPORT
 
 
 /**
- * @brief 初期化関数
+ * @brief デストラクタ
+ */
+tml::graphic::Viewport::~Viewport()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
  */
 void tml::graphic::Viewport::Init(void)
 {
+	this->Release();
+
 	this->TopLeftX = 0.0f;
 	this->TopLeftY = 0.0f;
 	this->Width = 0.0f;
 	this->Height = 0.0f;
 	this->MinDepth = D3D11_MIN_DEPTH;
 	this->MaxDepth = D3D11_MAX_DEPTH;
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ * @param pos (position)
+ * @param size (size)
+ */
+inline void tml::graphic::Viewport::Init(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size)
+{
+	this->Release();
+
+	this->TopLeftX = pos.x;
+	this->TopLeftY = pos.y;
+	this->Width = size.x;
+	this->Height = size.y;
+	this->MinDepth = D3D11_MIN_DEPTH;
+	this->MaxDepth = D3D11_MAX_DEPTH;
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ * @param pos (position)
+ * @param size (size)
+ * @param depth (depth)
+ */
+inline void tml::graphic::Viewport::Init(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size, const tml::XMFLOAT2EX &depth)
+{
+	this->Release();
+
+	this->TopLeftX = pos.x;
+	this->TopLeftY = pos.y;
+	this->Width = size.x;
+	this->Height = size.y;
+	this->MinDepth = depth.x;
+	this->MaxDepth = depth.y;
 
 	return;
 }

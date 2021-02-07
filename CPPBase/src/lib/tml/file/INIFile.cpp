@@ -23,6 +23,8 @@ tml::INIFileData::INIFileData()
  */
 tml::INIFileData::~INIFileData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -32,6 +34,8 @@ tml::INIFileData::~INIFileData()
  */
 void tml::INIFileData::Init(void)
 {
+	this->Release();
+
 	this->value_container.clear();
 
 	return;
@@ -52,6 +56,8 @@ tml::INIFileReadDescData::INIFileReadDescData()
  */
 tml::INIFileReadDescData::~INIFileReadDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -61,6 +67,8 @@ tml::INIFileReadDescData::~INIFileReadDescData()
  */
 void tml::INIFileReadDescData::Init(void)
 {
+	this->Release();
+
 	tml::TextFileReadDescData::Init();
 
 	return;
@@ -81,6 +89,8 @@ tml::INIFileWriteDescData::INIFileWriteDescData()
  */
 tml::INIFileWriteDescData::~INIFileWriteDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -90,6 +100,8 @@ tml::INIFileWriteDescData::~INIFileWriteDescData()
  */
 void tml::INIFileWriteDescData::Init(void)
 {
+	this->Release();
+
 	tml::TextFileWriteDescData::Init();
 
 	return;
@@ -117,17 +129,6 @@ tml::INIFile::~INIFile()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void tml::INIFile::Release(void)
-{
-	tml::File::Release();
-
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void tml::INIFile::Init(void)
@@ -137,6 +138,8 @@ void tml::INIFile::Init(void)
 	this->data.Init();
 	this->read_desc.Init();
 	this->write_desc.Init();
+
+	tml::File::Init();
 
 	return;
 }

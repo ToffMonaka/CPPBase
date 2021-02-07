@@ -19,6 +19,9 @@ class CSVFileData
 public:
 	std::vector<std::vector<std::wstring>> value_container;
 
+protected:
+	void Release(void);
+
 public:
 	CSVFileData();
 	virtual ~CSVFileData();
@@ -29,6 +32,15 @@ public:
 	size_t GetColumnCount(void) const;
 	const std::wstring *GetValue(const size_t, const size_t) const;
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::CSVFileData::Release(void)
+{
+	return;
 }
 
 
@@ -82,6 +94,9 @@ class CSVFileReadDescData : public tml::TextFileReadDescData
 {
 public:
 
+protected:
+	void Release(void);
+
 public:
 	CSVFileReadDescData();
 	virtual ~CSVFileReadDescData();
@@ -93,6 +108,17 @@ using CSVFileReadDesc = tml::FileReadDesc<tml::CSVFileReadDescData>;
 }
 
 
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::CSVFileReadDescData::Release(void)
+{
+	tml::TextFileReadDescData::Release();
+
+	return;
+}
+
+
 namespace tml {
 /**
  * @brief CSVFileWriteDescDataÉNÉâÉX
@@ -100,6 +126,9 @@ namespace tml {
 class CSVFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
+
+protected:
+	void Release(void);
 
 public:
 	CSVFileWriteDescData();
@@ -109,6 +138,17 @@ public:
 };
 
 using CSVFileWriteDesc = tml::FileWriteDesc<tml::CSVFileWriteDescData>;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::CSVFileWriteDescData::Release(void)
+{
+	tml::TextFileWriteDescData::Release();
+
+	return;
 }
 
 
@@ -127,7 +167,7 @@ public:
 	tml::CSVFileReadDesc read_desc;
 	tml::CSVFileWriteDesc write_desc;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -139,4 +179,15 @@ public:
 	virtual INT Read(void);
 	virtual INT Write(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::CSVFile::Release(void)
+{
+	tml::File::Release();
+
+	return;
 }

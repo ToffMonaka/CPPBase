@@ -22,6 +22,8 @@ tml::TextFileData::TextFileData()
  */
 tml::TextFileData::~TextFileData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +33,8 @@ tml::TextFileData::~TextFileData()
  */
 void tml::TextFileData::Init(void)
 {
+	this->Release();
+
 	this->string_container.clear();
 
 	return;
@@ -52,6 +56,8 @@ tml::TextFileReadDescData::TextFileReadDescData() :
  */
 tml::TextFileReadDescData::~TextFileReadDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -61,6 +67,8 @@ tml::TextFileReadDescData::~TextFileReadDescData()
  */
 void tml::TextFileReadDescData::Init(void)
 {
+	this->Release();
+
 	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
 
 	tml::BinaryFileReadDescData::Init();
@@ -85,6 +93,8 @@ tml::TextFileWriteDescData::TextFileWriteDescData() :
  */
 tml::TextFileWriteDescData::~TextFileWriteDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -94,6 +104,8 @@ tml::TextFileWriteDescData::~TextFileWriteDescData()
  */
 void tml::TextFileWriteDescData::Init(void)
 {
+	this->Release();
+
 	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
 	this->add_newline_code_count = 1U;
 
@@ -124,17 +136,6 @@ tml::TextFile::~TextFile()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void tml::TextFile::Release(void)
-{
-	tml::File::Release();
-
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void tml::TextFile::Init(void)
@@ -144,6 +145,8 @@ void tml::TextFile::Init(void)
 	this->data.Init();
 	this->read_desc.Init();
 	this->write_desc.Init();
+
+	tml::File::Init();
 
 	return;
 }
@@ -172,7 +175,7 @@ INT tml::TextFile::Read(void)
 		return (0);
 	}
 
-	bin_file.data.file_buffer.Set(bin_file.data.file_buffer.GetSize() + sizeof(CHAR), true);
+	bin_file.data.file_buffer.SetSize(bin_file.data.file_buffer.GetSize() + sizeof(CHAR));
 	bin_file.data.file_buffer.WriteCHAR(0);
 
 	std::wstring buf_str;
@@ -221,7 +224,7 @@ INT tml::TextFile::Write(void)
 
 	tml::BinaryFile bin_file;
 
-	bin_file.data.file_buffer.Set(tmp_buf_str.length());
+	bin_file.data.file_buffer.SetSize(tmp_buf_str.length());
 	bin_file.data.file_buffer.WriteArray(reinterpret_cast<const BYTE *>(tmp_buf_str.c_str()), tmp_buf_str.length(), tmp_buf_str.length());
 
 	bin_file.write_desc.parent_data = write_desc_dat;

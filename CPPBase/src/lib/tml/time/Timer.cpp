@@ -23,6 +23,8 @@ tml::Timer::Timer() :
  */
 tml::Timer::~Timer()
 {
+	this->Release();
+
 	return;
 }
 
@@ -32,6 +34,8 @@ tml::Timer::~Timer()
  */
 void tml::Timer::Init(void)
 {
+	this->Release();
+
 	this->start_time_ = std::chrono::steady_clock::time_point();
 	this->elapsed_time_ = tml::TIME_REAL(0.0);
 	this->started_flg_ = false;

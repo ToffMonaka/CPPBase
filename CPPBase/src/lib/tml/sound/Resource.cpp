@@ -34,6 +34,8 @@ tml::sound::ResourceDesc::ResourceDesc(tml::sound::Manager *mgr) :
  */
 tml::sound::ResourceDesc::~ResourceDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -43,7 +45,24 @@ tml::sound::ResourceDesc::~ResourceDesc()
  */
 void tml::sound::ResourceDesc::Init(void)
 {
+	this->Release();
+
 	this->manager = nullptr;
+	this->name.clear();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ * @param mgr (manager)
+ */
+void tml::sound::ResourceDesc::Init(tml::sound::Manager *mgr)
+{
+	this->Release();
+
+	this->manager = mgr;
 	this->name.clear();
 
 	return;
@@ -118,15 +137,6 @@ tml::sound::Resource::Resource() :
  * @brief デストラクタ
  */
 tml::sound::Resource::~Resource()
-{
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::sound::Resource::Release(void)
 {
 	return;
 }

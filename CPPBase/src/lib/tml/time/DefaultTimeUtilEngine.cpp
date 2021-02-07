@@ -28,17 +28,6 @@ tml::DefaultTimeUtilEngine::~DefaultTimeUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::DefaultTimeUtilEngine::Release(void)
-{
-	tml::TimeUtilEngine::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::DefaultTimeUtilEngine::Init(void)

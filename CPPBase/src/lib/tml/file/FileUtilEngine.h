@@ -31,3 +31,12 @@ public:
 	virtual void Init(void);
 };
 }
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::FileUtilEngine::Release(void)
+{
+	return;
+}

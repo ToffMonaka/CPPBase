@@ -23,6 +23,8 @@ tml::CSVFileData::CSVFileData()
  */
 tml::CSVFileData::~CSVFileData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -32,6 +34,8 @@ tml::CSVFileData::~CSVFileData()
  */
 void tml::CSVFileData::Init(void)
 {
+	this->Release();
+
 	this->value_container.clear();
 
 	return;
@@ -52,6 +56,8 @@ tml::CSVFileReadDescData::CSVFileReadDescData()
  */
 tml::CSVFileReadDescData::~CSVFileReadDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -61,6 +67,8 @@ tml::CSVFileReadDescData::~CSVFileReadDescData()
  */
 void tml::CSVFileReadDescData::Init(void)
 {
+	this->Release();
+
 	tml::TextFileReadDescData::Init();
 
 	return;
@@ -81,6 +89,8 @@ tml::CSVFileWriteDescData::CSVFileWriteDescData()
  */
 tml::CSVFileWriteDescData::~CSVFileWriteDescData()
 {
+	this->Release();
+
 	return;
 }
 
@@ -90,6 +100,8 @@ tml::CSVFileWriteDescData::~CSVFileWriteDescData()
  */
 void tml::CSVFileWriteDescData::Init(void)
 {
+	this->Release();
+
 	tml::TextFileWriteDescData::Init();
 
 	return;
@@ -117,17 +129,6 @@ tml::CSVFile::~CSVFile()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void tml::CSVFile::Release(void)
-{
-	tml::File::Release();
-
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void tml::CSVFile::Init(void)
@@ -137,6 +138,8 @@ void tml::CSVFile::Init(void)
 	this->data.Init();
 	this->read_desc.Init();
 	this->write_desc.Init();
+
+	tml::File::Init();
 
 	return;
 }

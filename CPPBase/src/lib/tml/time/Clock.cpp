@@ -22,6 +22,8 @@ tml::Clock::Clock() :
  */
 tml::Clock::~Clock()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +33,8 @@ tml::Clock::~Clock()
  */
 void tml::Clock::Init(void)
 {
+	this->Release();
+
 	this->time_ = tml::TIME_MILLI(0LL);
 
 	return;

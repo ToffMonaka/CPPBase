@@ -43,6 +43,8 @@ tml::graphic::ManagerDesc::ManagerDesc() :
  */
 tml::graphic::ManagerDesc::~ManagerDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -52,6 +54,8 @@ tml::graphic::ManagerDesc::~ManagerDesc()
  */
 void tml::graphic::ManagerDesc::Init(void)
 {
+	this->Release();
+
 	this->window_handle = nullptr;
 	this->window_size = 0U;
 	this->vsync_flag = true;
@@ -405,7 +409,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 		}
 	}
 
-	this->vp_.Set(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(static_cast<FLOAT>(desc.window_size.x), static_cast<FLOAT>(desc.window_size.y)));
+	this->vp_.Init(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(static_cast<FLOAT>(desc.window_size.x), static_cast<FLOAT>(desc.window_size.y)));
 	this->vsync_flg_ = desc.vsync_flag;
 
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC2;
@@ -447,7 +451,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	}
 
 	if (this->shadow_per_ > 0.0f) {
-		this->shadow_vp_.Set(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(this->shadow_size_));
+		this->shadow_vp_.Init(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(this->shadow_size_));
 	}
 
 	this->ao_quality_type_ = tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE::MEDIUM;

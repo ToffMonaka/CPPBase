@@ -31,3 +31,12 @@ public:
 	virtual void Init(void);
 };
 }
+
+
+/**
+ * @brief ReleaseŠÖ”
+ */
+inline void tml::RandomUtilEngine::Release(void)
+{
+	return;
+}

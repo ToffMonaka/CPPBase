@@ -27,7 +27,7 @@ tml::graphic::ModelLayerShaderStructuredBufferDesc::~ModelLayerShaderStructuredB
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::ModelLayerShaderStructuredBufferDesc::Init(void)
 {
@@ -72,7 +72,7 @@ void tml::graphic::ModelLayerShaderStructuredBuffer::Release(void)
 
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief InitŠÖ”
  */
 void tml::graphic::ModelLayerShaderStructuredBuffer::Init(void)
 {

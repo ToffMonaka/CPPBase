@@ -18,12 +18,24 @@ class BinaryFileData
 public:
 	tml::DynamicBuffer file_buffer;
 
+protected:
+	void Release(void);
+
 public:
 	BinaryFileData();
 	virtual ~BinaryFileData();
 
 	virtual void Init(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::BinaryFileData::Release(void)
+{
+	return;
 }
 
 
@@ -38,6 +50,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	size_t one_buffer_size;
 
+protected:
+	void Release(void);
+
 public:
 	BinaryFileReadDescData();
 	virtual ~BinaryFileReadDescData();
@@ -46,6 +61,17 @@ public:
 };
 
 using BinaryFileReadDesc = tml::FileReadDesc<tml::BinaryFileReadDescData>;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::BinaryFileReadDescData::Release(void)
+{
+	tml::FileReadDescData::Release();
+
+	return;
 }
 
 
@@ -61,6 +87,9 @@ public:
 	size_t one_buffer_size;
 	bool add_flag;
 
+protected:
+	void Release(void);
+
 public:
 	BinaryFileWriteDescData();
 	virtual ~BinaryFileWriteDescData();
@@ -69,6 +98,17 @@ public:
 };
 
 using BinaryFileWriteDesc = tml::FileWriteDesc<tml::BinaryFileWriteDescData>;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::BinaryFileWriteDescData::Release(void)
+{
+	tml::FileWriteDescData::Release();
+
+	return;
 }
 
 
@@ -87,7 +127,7 @@ public:
 	tml::BinaryFileReadDesc read_desc;
 	tml::BinaryFileWriteDesc write_desc;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -99,4 +139,15 @@ public:
 	virtual INT Read(void);
 	virtual INT Write(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::BinaryFile::Release(void)
+{
+	tml::File::Release();
+
+	return;
 }

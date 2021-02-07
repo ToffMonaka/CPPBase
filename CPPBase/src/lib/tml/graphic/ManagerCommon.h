@@ -49,7 +49,7 @@ public:
 	tml::shared_ptr<tml::graphic::Sampler> model_wc_sampler;
 	tml::shared_ptr<tml::graphic::Sampler> model_ww_sampler;
 
-private:
+protected:
 	void Release(void);
 
 public:

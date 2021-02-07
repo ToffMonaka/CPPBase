@@ -28,17 +28,6 @@ tml::DefaultThreadUtilEngine::~DefaultThreadUtilEngine()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::DefaultThreadUtilEngine::Release(void)
-{
-	tml::ThreadUtilEngine::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::DefaultThreadUtilEngine::Init(void)
