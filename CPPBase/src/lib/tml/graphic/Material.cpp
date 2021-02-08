@@ -34,6 +34,8 @@ tml::graphic::MaterialDesc::MaterialDesc() :
  */
 tml::graphic::MaterialDesc::~MaterialDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -43,6 +45,8 @@ tml::graphic::MaterialDesc::~MaterialDesc()
  */
 void tml::graphic::MaterialDesc::Init(void)
 {
+	this->Release();
+
 	this->diffuse_color = 0.0f;
 	this->diffuse_mul_value = 0.0f;
 	this->transparent_mul_value = 0.0f;
@@ -117,17 +121,6 @@ tml::graphic::Material::Material() :
 tml::graphic::Material::~Material()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-void tml::graphic::Material::Release(void)
-{
-	tml::graphic::Resource::Release();
 
 	return;
 }

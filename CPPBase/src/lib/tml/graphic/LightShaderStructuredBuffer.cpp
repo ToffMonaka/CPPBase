@@ -22,6 +22,8 @@ tml::graphic::LightShaderStructuredBufferDesc::LightShaderStructuredBufferDesc()
  */
 tml::graphic::LightShaderStructuredBufferDesc::~LightShaderStructuredBufferDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +33,8 @@ tml::graphic::LightShaderStructuredBufferDesc::~LightShaderStructuredBufferDesc(
  */
 void tml::graphic::LightShaderStructuredBufferDesc::Init(void)
 {
+	this->Release();
+
 	tml::graphic::ShaderStructuredBufferDesc::Init();
 
 	return;

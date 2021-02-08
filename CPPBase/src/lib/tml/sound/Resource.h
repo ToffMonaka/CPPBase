@@ -35,11 +35,9 @@ protected:
 
 public:
 	ResourceDesc();
-	ResourceDesc(tml::sound::Manager *);
 	virtual ~ResourceDesc();
 
 	virtual void Init(void);
-	virtual void Init(tml::sound::Manager *);
 
 	INT Read(const tml::INIFileReadDesc &);
 };

@@ -19,6 +19,9 @@ class LightShaderStructuredBufferDesc : public tml::graphic::ShaderStructuredBuf
 {
 public:
 
+protected:
+	void Release(void);
+
 public:
 	LightShaderStructuredBufferDesc();
 	virtual ~LightShaderStructuredBufferDesc();
@@ -26,6 +29,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::LightShaderStructuredBufferDesc::Release(void)
+{
+	tml::graphic::ShaderStructuredBufferDesc::Release();
+
+	return;
 }
 
 
@@ -67,7 +81,7 @@ public:
 private:
 	tml::graphic::LightShaderStructuredBuffer::ELEMENT *element_ary_;
 
-private:
+protected:
 	void Release(void);
 
 public:

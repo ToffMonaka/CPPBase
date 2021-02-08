@@ -27,6 +27,8 @@ public:
 	FLOAT far_range;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -36,6 +38,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::FogDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -62,7 +75,7 @@ private:
 public:
 	tml::shared_ptr<tml::XMPosition> position;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -85,6 +98,17 @@ public:
 	FLOAT GetRangeValue2(void) const;
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::Fog::Release(void)
+{
+	tml::graphic::Resource::Release();
+
+	return;
 }
 
 

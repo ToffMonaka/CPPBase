@@ -21,19 +21,30 @@ public:
 	std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> factor_array;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	BlendStateDesc();
-	BlendStateDesc(tml::graphic::Manager *);
-	BlendStateDesc(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE, const UINT);
 	virtual ~BlendStateDesc();
 
 	virtual void Init(void);
 
-	void Set(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE, const UINT);
+	void SetBlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE, const UINT);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::BlendStateDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -52,7 +63,7 @@ private:
 	ID3D11BlendState *bs_;
 	std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> factor_ary_;
 
-private:
+protected:
 	void Release(void);
 
 public:

@@ -23,6 +23,8 @@ tml::graphic::ShaderInclude::ShaderInclude()
  */
 tml::graphic::ShaderInclude::~ShaderInclude()
 {
+	this->Release();
+
 	return;
 }
 
@@ -32,6 +34,8 @@ tml::graphic::ShaderInclude::~ShaderInclude()
  */
 void tml::graphic::ShaderInclude::Init(void)
 {
+	this->Release();
+
 	this->dir_path_.clear();
 
 	return;
@@ -114,23 +118,12 @@ tml::graphic::ShaderDesc::ShaderDesc() :
 
 
 /**
- * @brief コンストラクタ
- * @param mgr (manager)
- */
-tml::graphic::ShaderDesc::ShaderDesc(tml::graphic::Manager *mgr) :
-	tml::graphic::ResourceDesc(mgr),
-	vertex_shader_input_element_desc_count(0U),
-	vertex_shader_input_element_desc_array(nullptr)
-{
-	return;
-}
-
-
-/**
  * @brief デストラクタ
  */
 tml::graphic::ShaderDesc::~ShaderDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -140,6 +133,8 @@ tml::graphic::ShaderDesc::~ShaderDesc()
  */
 void tml::graphic::ShaderDesc::Init(void)
 {
+	this->Release();
+
 	this->file_read_desc.Init();
 	this->include_directory_path.clear();
 	this->vertex_shader_function_name.clear();

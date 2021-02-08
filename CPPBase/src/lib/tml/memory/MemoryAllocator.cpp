@@ -27,15 +27,6 @@ tml::MemoryAllocator::~MemoryAllocator()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::MemoryAllocator::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::MemoryAllocator::Init(void)

@@ -32,6 +32,8 @@ public:
 	bool fog_flag;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -41,6 +43,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::MaterialDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -69,7 +82,7 @@ private:
 	bool light_flg_;
 	bool fog_flg_;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -101,6 +114,17 @@ public:
 	void SetRimExpValue(const FLOAT);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::Material::Release(void)
+{
+	tml::graphic::Resource::Release();
+
+	return;
 }
 
 

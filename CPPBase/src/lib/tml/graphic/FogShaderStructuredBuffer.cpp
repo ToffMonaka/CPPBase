@@ -22,6 +22,8 @@ tml::graphic::FogShaderStructuredBufferDesc::FogShaderStructuredBufferDesc()
  */
 tml::graphic::FogShaderStructuredBufferDesc::~FogShaderStructuredBufferDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +33,8 @@ tml::graphic::FogShaderStructuredBufferDesc::~FogShaderStructuredBufferDesc()
  */
 void tml::graphic::FogShaderStructuredBufferDesc::Init(void)
 {
+	this->Release();
+
 	tml::graphic::ShaderStructuredBufferDesc::Init();
 
 	return;

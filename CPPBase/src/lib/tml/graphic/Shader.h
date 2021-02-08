@@ -22,6 +22,9 @@ public: tml::graphic::ShaderInclude &operator =(const tml::graphic::ShaderInclud
 private:
 	std::wstring dir_path_;
 
+protected:
+	void Release(void);
+
 public:
 	ShaderInclude();
 	virtual ~ShaderInclude();
@@ -33,6 +36,15 @@ public:
 	HRESULT __stdcall Close(LPCVOID);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ShaderInclude::Release(void)
+{
+	return;
 }
 
 
@@ -63,16 +75,28 @@ public:
 	std::list<std::pair<std::wstring, std::wstring>> macro_container;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	ShaderDesc();
-	ShaderDesc(tml::graphic::Manager *);
 	virtual ~ShaderDesc();
 
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ShaderDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -97,10 +121,11 @@ private:
 	ID3D11ComputeShader *cs_;
 
 private:
-	void Release(void);
-
 	ID3DBlob *GetBlob(const tml::DynamicBuffer &, const WCHAR *, const WCHAR *, const WCHAR *, const D3D10_SHADER_MACRO *);
 	void ReleaseBlob(ID3DBlob **);
+
+protected:
+	void Release(void);
 
 public:
 	Shader();

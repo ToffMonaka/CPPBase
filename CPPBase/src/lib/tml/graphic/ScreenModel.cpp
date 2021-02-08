@@ -11,6 +11,112 @@
 /**
  * @brief コンストラクタ
  */
+tml::graphic::ScreenModelLayer::ScreenModelLayer()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::ScreenModelLayer::~ScreenModelLayer()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::ScreenModelLayer::Init(void)
+{
+	this->Release();
+
+	tml::graphic::ModelLayer::Init();
+
+	return;
+}
+
+
+/**
+ * @brief Create関数
+ * @param mgr (manager)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ScreenModelLayer::Create(tml::graphic::Manager *mgr)
+{
+	this->Init();
+
+	if (tml::graphic::ModelLayer::Create(mgr) < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::graphic::ScreenModelStage::ScreenModelStage()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::ScreenModelStage::~ScreenModelStage()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::ScreenModelStage::Init(void)
+{
+	this->Release();
+
+	tml::graphic::ModelStage::Init();
+
+	return;
+}
+
+
+/**
+ * @brief Create関数
+ * @param mgr (manager)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ScreenModelStage::Create(tml::graphic::Manager *mgr)
+{
+	this->Init();
+
+	if (tml::graphic::ModelStage::Create(mgr) < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::graphic::ScreenModelDesc::ScreenModelDesc()
 {
 	return;
@@ -22,6 +128,8 @@ tml::graphic::ScreenModelDesc::ScreenModelDesc()
  */
 tml::graphic::ScreenModelDesc::~ScreenModelDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +139,8 @@ tml::graphic::ScreenModelDesc::~ScreenModelDesc()
  */
 void tml::graphic::ScreenModelDesc::Init(void)
 {
+	this->Release();
+
 	tml::graphic::ModelDesc::Init();
 
 	return;
@@ -80,17 +190,6 @@ tml::graphic::ScreenModel::ScreenModel()
 tml::graphic::ScreenModel::~ScreenModel()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::graphic::ScreenModel::Release(void)
-{
-	tml::graphic::Model::Release();
 
 	return;
 }

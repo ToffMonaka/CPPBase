@@ -21,37 +21,12 @@ tml::graphic::RasterizerStateDesc::RasterizerStateDesc() :
 
 
 /**
- * @brief コンストラクタ
- * @param mgr (manager)
- */
-tml::graphic::RasterizerStateDesc::RasterizerStateDesc(tml::graphic::Manager *mgr) :
-	tml::graphic::ResourceDesc(mgr),
-	rasterizer_state_desc(CD3D11_DEFAULT())
-{
-	this->rasterizer_state_desc.CullMode = D3D11_CULL_NONE;
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- * @param mgr (manager)
- * @param rs_desc_type (rasterizer_state_desc_type)
- */
-tml::graphic::RasterizerStateDesc::RasterizerStateDesc(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE rs_desc_type)
-{
-	this->Set(mgr, rs_desc_type);
-
-	return;
-}
-
-
-/**
  * @brief デストラクタ
  */
 tml::graphic::RasterizerStateDesc::~RasterizerStateDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -61,6 +36,8 @@ tml::graphic::RasterizerStateDesc::~RasterizerStateDesc()
  */
 void tml::graphic::RasterizerStateDesc::Init(void)
 {
+	this->Release();
+
 	this->rasterizer_state_desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
 	this->rasterizer_state_desc.CullMode = D3D11_CULL_NONE;
 
@@ -99,15 +76,13 @@ INT tml::graphic::RasterizerStateDesc::ReadValue(const tml::INIFile &ini_file)
 
 
 /**
- * @brief Set関数
- * @param mgr (manager)
+ * @brief SetRasterizerStateDesc関数
  * @param rs_desc_type (rasterizer_state_desc_type)
  */
-void tml::graphic::RasterizerStateDesc::Set(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE rs_desc_type)
+void tml::graphic::RasterizerStateDesc::SetRasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE rs_desc_type)
 {
-	this->Init();
-
-	this->manager = mgr;
+	this->rasterizer_state_desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
+	this->rasterizer_state_desc.CullMode = D3D11_CULL_NONE;
 
 	if (rs_desc_type == tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT) {
 		return;

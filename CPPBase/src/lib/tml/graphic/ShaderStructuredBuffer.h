@@ -22,6 +22,8 @@ public:
 	bool cpu_write_flag;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -31,6 +33,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ShaderStructuredBufferDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 

@@ -22,7 +22,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -33,6 +33,17 @@ public:
 	INT Create(tml::graphic::Manager *);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::SpriteModelLayer::Release(void)
+{
+	tml::graphic::ModelLayer::Release();
+
+	return;
 }
 
 
@@ -49,7 +60,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -63,6 +74,17 @@ public:
 	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::SpriteModelLayer> &);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::SpriteModelStage::Release(void)
+{
+	tml::graphic::ModelStage::Release();
+
+	return;
 }
 
 
@@ -103,6 +125,8 @@ class SpriteModelDesc : public tml::graphic::ModelDesc
 public:
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -112,6 +136,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::SpriteModelDesc::Release(void)
+{
+	tml::graphic::ModelDesc::Release();
+
+	return;
 }
 
 
@@ -128,7 +163,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -142,6 +177,17 @@ public:
 	void SetStage(const UINT, tml::unique_ptr<tml::graphic::SpriteModelStage> &);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::SpriteModel::Release(void)
+{
+	tml::graphic::Model::Release();
+
+	return;
 }
 
 

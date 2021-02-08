@@ -27,6 +27,8 @@ public:
 	bool gpu_data_flag;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -36,6 +38,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::MeshDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -62,7 +75,7 @@ private:
 	DXGI_FORMAT ib_format_;
 	D3D11_PRIMITIVE_TOPOLOGY pt_;
 
-private:
+protected:
 	void Release(void);
 
 public:

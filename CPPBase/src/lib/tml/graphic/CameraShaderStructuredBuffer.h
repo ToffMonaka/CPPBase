@@ -19,6 +19,9 @@ class CameraShaderStructuredBufferDesc : public tml::graphic::ShaderStructuredBu
 {
 public:
 
+protected:
+	void Release(void);
+
 public:
 	CameraShaderStructuredBufferDesc();
 	virtual ~CameraShaderStructuredBufferDesc();
@@ -26,6 +29,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::CameraShaderStructuredBufferDesc::Release(void)
+{
+	tml::graphic::ShaderStructuredBufferDesc::Release();
+
+	return;
 }
 
 
@@ -63,7 +77,7 @@ public:
 private:
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *element_ary_;
 
-private:
+protected:
 	void Release(void);
 
 public:

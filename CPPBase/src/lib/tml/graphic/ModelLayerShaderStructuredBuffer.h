@@ -18,6 +18,9 @@ class ModelLayerShaderStructuredBufferDesc : public tml::graphic::ShaderStructur
 {
 public:
 
+protected:
+	void Release(void);
+
 public:
 	ModelLayerShaderStructuredBufferDesc();
 	virtual ~ModelLayerShaderStructuredBufferDesc();
@@ -25,6 +28,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ModelLayerShaderStructuredBufferDesc::Release(void)
+{
+	tml::graphic::ShaderStructuredBufferDesc::Release();
+
+	return;
 }
 
 
@@ -66,7 +80,7 @@ public:
 private:
 	tml::graphic::ModelLayerShaderStructuredBuffer::ELEMENT *element_ary_;
 
-private:
+protected:
 	void Release(void);
 
 public:

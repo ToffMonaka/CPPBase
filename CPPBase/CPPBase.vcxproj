@@ -184,8 +184,6 @@
     <ClCompile Include="src\lib\tml\graphic\Camera.cpp" />
     <ClCompile Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.cpp" />
-    <ClCompile Include="src\lib\tml\graphic\ModelLayer.cpp" />
-    <ClCompile Include="src\lib\tml\graphic\ModelStage.cpp" />
     <ClCompile Include="src\lib\tml\graphic\DepthState.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Fog.cpp" />
     <ClCompile Include="src\lib\tml\graphic\FogShaderStructuredBuffer.cpp" />
@@ -287,8 +285,6 @@
     <ClInclude Include="src\lib\tml\graphic\Camera.h" />
     <ClInclude Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.h" />
-    <ClInclude Include="src\lib\tml\graphic\ModelLayer.h" />
-    <ClInclude Include="src\lib\tml\graphic\ModelStage.h" />
     <ClInclude Include="src\lib\tml\graphic\DepthState.h" />
     <ClInclude Include="src\lib\tml\graphic\Fog.h" />
     <ClInclude Include="src\lib\tml\graphic\FogShaderStructuredBuffer.h" />

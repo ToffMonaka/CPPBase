@@ -18,6 +18,9 @@ class ConfigShaderConstantBufferDesc : public tml::graphic::ShaderConstantBuffer
 {
 public:
 
+protected:
+	void Release(void);
+
 public:
 	ConfigShaderConstantBufferDesc();
 	virtual ~ConfigShaderConstantBufferDesc();
@@ -25,6 +28,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ConfigShaderConstantBufferDesc::Release(void)
+{
+	tml::graphic::ShaderConstantBufferDesc::Release();
+
+	return;
 }
 
 
@@ -66,7 +80,7 @@ public:
 private:
 	tml::graphic::ConfigShaderConstantBuffer::ELEMENT *element_;
 
-private:
+protected:
 	void Release(void);
 
 public:

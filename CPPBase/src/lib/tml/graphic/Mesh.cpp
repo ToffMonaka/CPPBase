@@ -5,7 +5,6 @@
 
 
 #include "Mesh.h"
-#include "../memory/MemoryUtil.h"
 #include "Manager.h"
 
 
@@ -31,6 +30,8 @@ tml::graphic::MeshDesc::MeshDesc() :
  */
 tml::graphic::MeshDesc::~MeshDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -40,6 +41,8 @@ tml::graphic::MeshDesc::~MeshDesc()
  */
 void tml::graphic::MeshDesc::Init(void)
 {
+	this->Release();
+
 	this->vertex_buffer_element_size = 0U;
 	this->vertex_buffer_element_count = 0U;
 	this->vertex_buffer_element_array = nullptr;

@@ -44,6 +44,15 @@ public:
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ModelLayer::Release(void)
+{
+	return;
+}
+
+
+/**
  * @brief GetManagerä÷êî
  * @return mgr (manager)
  */
@@ -127,6 +136,8 @@ public:
 	bool position_set_flag;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -136,6 +147,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ModelDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 

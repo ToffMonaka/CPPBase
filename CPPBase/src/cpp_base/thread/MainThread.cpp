@@ -201,10 +201,12 @@ INT cpp_base::MainThread::Start(void)
 
 		{// TestSpriteModel Create
 			tml::graphic::SpriteModelDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+
 			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
 
 			desc.Read(read_desc);
-			desc.manager = &this->graphic_mgr_;
 
 			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test_sprite_model_, desc);
 

@@ -22,6 +22,8 @@ tml::graphic::CameraShaderStructuredBufferDesc::CameraShaderStructuredBufferDesc
  */
 tml::graphic::CameraShaderStructuredBufferDesc::~CameraShaderStructuredBufferDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +33,8 @@ tml::graphic::CameraShaderStructuredBufferDesc::~CameraShaderStructuredBufferDes
  */
 void tml::graphic::CameraShaderStructuredBufferDesc::Init(void)
 {
+	this->Release();
+
 	tml::graphic::ShaderStructuredBufferDesc::Init();
 
 	return;

@@ -19,17 +19,6 @@ tml::input::ResourceDesc::ResourceDesc() :
 
 
 /**
- * @brief コンストラクタ
- * @param mgr (manager)
- */
-tml::input::ResourceDesc::ResourceDesc(tml::input::Manager *mgr) :
-	manager(mgr)
-{
-	return;
-}
-
-
-/**
  * @brief デストラクタ
  */
 tml::input::ResourceDesc::~ResourceDesc()
@@ -48,21 +37,6 @@ void tml::input::ResourceDesc::Init(void)
 	this->Release();
 
 	this->manager = nullptr;
-	this->name.clear();
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- * @param mgr (manager)
- */
-void tml::input::ResourceDesc::Init(tml::input::Manager *mgr)
-{
-	this->Release();
-
-	this->manager = mgr;
 	this->name.clear();
 
 	return;

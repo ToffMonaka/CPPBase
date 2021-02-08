@@ -25,6 +25,8 @@ tml::graphic::ShaderStructuredBufferDesc::ShaderStructuredBufferDesc() :
  */
 tml::graphic::ShaderStructuredBufferDesc::~ShaderStructuredBufferDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -34,6 +36,8 @@ tml::graphic::ShaderStructuredBufferDesc::~ShaderStructuredBufferDesc()
  */
 void tml::graphic::ShaderStructuredBufferDesc::Init(void)
 {
+	this->Release();
+
 	this->element_limit = 0U;
 	this->cpu_read_flag = false;
 	this->cpu_write_flag = false;

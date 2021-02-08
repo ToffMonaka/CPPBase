@@ -20,38 +20,12 @@ tml::graphic::BlendStateDesc::BlendStateDesc() :
 
 
 /**
- * @brief コンストラクタ
- * @param mgr (manager)
- */
-tml::graphic::BlendStateDesc::BlendStateDesc(tml::graphic::Manager *mgr) :
-	tml::graphic::ResourceDesc(mgr),
-	blend_state_desc(CD3D11_DEFAULT()),
-	factor_array{D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO}
-{
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- * @param mgr (manager)
- * @param bs_desc_type (blend_state_desc_type)
- * @param bs_desc_a_type (blend_state_desc_alpha_type)
- * @param rt_cnt (blend_state_desc_render_target_count)
- */
-tml::graphic::BlendStateDesc::BlendStateDesc(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE bs_desc_type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE bs_desc_a_type, const UINT rt_cnt)
-{
-	this->Set(mgr, bs_desc_type, bs_desc_a_type, rt_cnt);
-
-	return;
-}
-
-
-/**
  * @brief デストラクタ
  */
 tml::graphic::BlendStateDesc::~BlendStateDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -61,6 +35,8 @@ tml::graphic::BlendStateDesc::~BlendStateDesc()
  */
 void tml::graphic::BlendStateDesc::Init(void)
 {
+	this->Release();
+
 	this->blend_state_desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
 	this->factor_array.fill(D3D11_BLEND_ZERO);
 
@@ -99,17 +75,14 @@ INT tml::graphic::BlendStateDesc::ReadValue(const tml::INIFile &ini_file)
 
 
 /**
- * @brief Set関数
- * @param mgr (manager)
+ * @brief SetBlendStateDesc関数
  * @param bs_desc_type (blend_state_desc_type)
  * @param bs_desc_a_type (blend_state_desc_alpha_type)
  * @param rt_cnt (render_target_count)
  */
-void tml::graphic::BlendStateDesc::Set(tml::graphic::Manager *mgr, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE bs_desc_type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE bs_desc_a_type, const UINT rt_cnt)
+void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE bs_desc_type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE bs_desc_a_type, const UINT rt_cnt)
 {
-	this->Init();
-
-	this->manager = mgr;
+	this->blend_state_desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
 
 	if (bs_desc_type == tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT) {
 		return;

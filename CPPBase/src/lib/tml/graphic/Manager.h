@@ -38,7 +38,7 @@ typedef struct DRAW_STAGE_DATA_
 	 * @param inv_v_mat_2d (inverse_view_matrix_2d)
 	 * @param p_mat_2d (projection_matrix_2d)
 	 */
-	DRAW_STAGE_DATA_(XMMATRIX &w_mat, XMMATRIX &v_mat_3d, XMMATRIX &inv_v_mat_3d, XMMATRIX &p_mat_3d, XMMATRIX &v_mat_2d, XMMATRIX &inv_vi_mat_2d, XMMATRIX &p_mat_2d) :
+	DRAW_STAGE_DATA_(XMMATRIX &w_mat, XMMATRIX &v_mat_3d, XMMATRIX &inv_v_mat_3d, XMMATRIX &p_mat_3d, XMMATRIX &v_mat_2d, XMMATRIX &inv_v_mat_2d, XMMATRIX &p_mat_2d) :
 		world_matrix(w_mat),
 		view_matrix(nullptr),
 		projection_matrixt(nullptr),
@@ -46,7 +46,7 @@ typedef struct DRAW_STAGE_DATA_
 		inverse_view_matrix_3d(inv_v_mat_3d),
 		projection_matrix_3d(p_mat_3d),
 		view_matrix_2d(v_mat_2d),
-		inverse_view_matrix_2d(inv_vi_mat_2d),
+		inverse_view_matrix_2d(inv_v_mat_2d),
 		projection_matrix_2d(p_mat_2d)
 	{
 		return;

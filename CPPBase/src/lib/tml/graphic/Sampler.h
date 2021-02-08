@@ -20,19 +20,30 @@ public:
 	CD3D11_SAMPLER_DESC sampler_desc;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	SamplerDesc();
-	SamplerDesc(tml::graphic::Manager *);
-	SamplerDesc(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
 	virtual ~SamplerDesc();
 
 	virtual void Init(void);
 
-	void Set(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
+	void SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::SamplerDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -50,7 +61,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	ID3D11SamplerState *samp_;
 
-private:
+protected:
 	void Release(void);
 
 public:

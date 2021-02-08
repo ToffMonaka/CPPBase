@@ -36,15 +36,6 @@ tml::graphic::ModelLayer::~ModelLayer()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void tml::graphic::ModelLayer::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void tml::graphic::ModelLayer::Init(void)
@@ -168,6 +159,8 @@ tml::graphic::ModelDesc::ModelDesc() :
  */
 tml::graphic::ModelDesc::~ModelDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -177,6 +170,8 @@ tml::graphic::ModelDesc::~ModelDesc()
  */
 void tml::graphic::ModelDesc::Init(void)
 {
+	this->Release();
+
 	this->position.Init();
 	this->position_set_flag = true;
 

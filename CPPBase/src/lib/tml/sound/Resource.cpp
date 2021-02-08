@@ -19,17 +19,6 @@ tml::sound::ResourceDesc::ResourceDesc() :
 
 
 /**
- * @brief コンストラクタ
- * @param mgr (manager)
- */
-tml::sound::ResourceDesc::ResourceDesc(tml::sound::Manager *mgr) :
-	manager(mgr)
-{
-	return;
-}
-
-
-/**
  * @brief デストラクタ
  */
 tml::sound::ResourceDesc::~ResourceDesc()
@@ -48,21 +37,6 @@ void tml::sound::ResourceDesc::Init(void)
 	this->Release();
 
 	this->manager = nullptr;
-	this->name.clear();
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- * @param mgr (manager)
- */
-void tml::sound::ResourceDesc::Init(tml::sound::Manager *mgr)
-{
-	this->Release();
-
-	this->manager = mgr;
 	this->name.clear();
 
 	return;

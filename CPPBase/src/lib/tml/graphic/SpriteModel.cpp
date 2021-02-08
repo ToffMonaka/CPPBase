@@ -29,17 +29,6 @@ tml::graphic::SpriteModelLayer::~SpriteModelLayer()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::graphic::SpriteModelLayer::Release(void)
-{
-	tml::graphic::ModelLayer::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::graphic::SpriteModelLayer::Init(void)
@@ -93,17 +82,6 @@ tml::graphic::SpriteModelStage::~SpriteModelStage()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::graphic::SpriteModelStage::Release(void)
-{
-	tml::graphic::ModelStage::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::graphic::SpriteModelStage::Init(void)
@@ -150,6 +128,8 @@ tml::graphic::SpriteModelDesc::SpriteModelDesc()
  */
 tml::graphic::SpriteModelDesc::~SpriteModelDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -159,6 +139,8 @@ tml::graphic::SpriteModelDesc::~SpriteModelDesc()
  */
 void tml::graphic::SpriteModelDesc::Init(void)
 {
+	this->Release();
+
 	tml::graphic::ModelDesc::Init();
 
 	return;
@@ -208,17 +190,6 @@ tml::graphic::SpriteModel::SpriteModel()
 tml::graphic::SpriteModel::~SpriteModel()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-void tml::graphic::SpriteModel::Release(void)
-{
-	tml::graphic::Model::Release();
 
 	return;
 }

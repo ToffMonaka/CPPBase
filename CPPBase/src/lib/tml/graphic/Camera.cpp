@@ -28,6 +28,8 @@ tml::graphic::CameraDesc::CameraDesc() :
  */
 tml::graphic::CameraDesc::~CameraDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -37,6 +39,8 @@ tml::graphic::CameraDesc::~CameraDesc()
  */
 void tml::graphic::CameraDesc::Init(void)
 {
+	this->Release();
+
 	this->type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
 	this->position.Init();
 	this->position_set_flag = true;
@@ -99,17 +103,6 @@ tml::graphic::Camera::Camera() :
 tml::graphic::Camera::~Camera()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-void tml::graphic::Camera::Release(void)
-{
-	tml::graphic::Resource::Release();
 
 	return;
 }

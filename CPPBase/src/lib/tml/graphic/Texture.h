@@ -31,19 +31,30 @@ public:
 	bool uasr_desc_null_flag;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	TextureDesc();
-	TextureDesc(tml::graphic::Manager *);
-	TextureDesc(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, const DXGI_FORMAT tex_desc_format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &tex_desc_size = XMUINT2EX(0U), const UINT tex_desc_buf_cnt = 1U, const UINT tex_desc_mm_cnt = 1U, const DXGI_SAMPLE_DESC &tex_desc_ms_desc = {1U, 0U});
 	virtual ~TextureDesc();
 
 	virtual void Init(void);
 
-	void Set(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, const DXGI_FORMAT tex_desc_format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &tex_desc_size = XMUINT2EX(0U), const UINT tex_desc_buf_cnt = 1U, const UINT tex_desc_mm_cnt = 1U, const DXGI_SAMPLE_DESC &tex_desc_ms_desc = {1U, 0U});
+	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG, const DXGI_FORMAT tex_desc_format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &tex_desc_size = XMUINT2EX(0U), const UINT tex_desc_buf_cnt = 1U, const UINT tex_desc_mm_cnt = 1U, const DXGI_SAMPLE_DESC &tex_desc_ms_desc = {1U, 0U});
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::TextureDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -66,7 +77,7 @@ private:
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
 
-private:
+protected:
 	void Release(void);
 
 public:

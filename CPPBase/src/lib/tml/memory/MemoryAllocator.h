@@ -65,6 +65,15 @@ public:
 
 
 /**
+ * @brief ReleaseŠÖ”
+ */
+inline void tml::MemoryAllocator::Release(void)
+{
+	return;
+}
+
+
+/**
  * @brief GetTypeŠÖ”
  * @return type (type)
  */

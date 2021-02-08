@@ -22,6 +22,8 @@ tml::graphic::ModelLayerShaderStructuredBufferDesc::ModelLayerShaderStructuredBu
  */
 tml::graphic::ModelLayerShaderStructuredBufferDesc::~ModelLayerShaderStructuredBufferDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +33,8 @@ tml::graphic::ModelLayerShaderStructuredBufferDesc::~ModelLayerShaderStructuredB
  */
 void tml::graphic::ModelLayerShaderStructuredBufferDesc::Init(void)
 {
+	this->Release();
+
 	tml::graphic::ShaderStructuredBufferDesc::Init();
 
 	return;

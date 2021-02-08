@@ -34,6 +34,8 @@ tml::graphic::LightDesc::LightDesc() :
  */
 tml::graphic::LightDesc::~LightDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -43,6 +45,8 @@ tml::graphic::LightDesc::~LightDesc()
  */
 void tml::graphic::LightDesc::Init(void)
 {
+	this->Release();
+
 	this->type = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
 	this->position.Init();
 	this->position_set_flag = true;
@@ -119,17 +123,6 @@ tml::graphic::Light::Light() :
 tml::graphic::Light::~Light()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-void tml::graphic::Light::Release(void)
-{
-	tml::graphic::Resource::Release();
 
 	return;
 }

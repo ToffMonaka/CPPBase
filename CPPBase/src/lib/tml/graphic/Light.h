@@ -33,6 +33,8 @@ public:
 	bool shadow_flag;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -42,6 +44,17 @@ public:
 	virtual void Init(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::LightDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -74,7 +87,7 @@ private:
 public:
 	tml::shared_ptr<tml::XMPosition> position;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -107,6 +120,17 @@ public:
 	FLOAT GetSoftValue(void) const;
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::Light::Release(void)
+{
+	tml::graphic::Resource::Release();
+
+	return;
 }
 
 

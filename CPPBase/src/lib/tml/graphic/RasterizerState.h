@@ -20,19 +20,30 @@ public:
 	CD3D11_RASTERIZER_DESC rasterizer_state_desc;
 
 protected:
+	void Release(void);
+
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
 	RasterizerStateDesc();
-	RasterizerStateDesc(tml::graphic::Manager *);
-	RasterizerStateDesc(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
 	virtual ~RasterizerStateDesc();
 
 	virtual void Init(void);
 
-	void Set(tml::graphic::Manager *, const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
+	void SetRasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::RasterizerStateDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
 }
 
 
@@ -50,7 +61,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	ID3D11RasterizerState *rs_;
 
-private:
+protected:
 	void Release(void);
 
 public:

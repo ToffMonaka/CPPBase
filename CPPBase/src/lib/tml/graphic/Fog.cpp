@@ -28,6 +28,8 @@ tml::graphic::FogDesc::FogDesc() :
  */
 tml::graphic::FogDesc::~FogDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -37,6 +39,8 @@ tml::graphic::FogDesc::~FogDesc()
  */
 void tml::graphic::FogDesc::Init(void)
 {
+	this->Release();
+
 	this->type = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
 	this->position.Init();
 	this->position_set_flag = true;
@@ -101,17 +105,6 @@ tml::graphic::Fog::Fog() :
 tml::graphic::Fog::~Fog()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-void tml::graphic::Fog::Release(void)
-{
-	tml::graphic::Resource::Release();
 
 	return;
 }

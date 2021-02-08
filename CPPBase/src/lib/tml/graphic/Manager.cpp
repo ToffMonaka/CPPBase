@@ -543,10 +543,10 @@ void tml::graphic::Manager::Update(void)
 	XMMATRIX inv_v_mat_3d;
 	XMMATRIX p_mat_3d;
 	XMMATRIX v_mat_2d;
-	XMMATRIX inv_vi_mat_2d;
+	XMMATRIX inv_v_mat_2d;
 	XMMATRIX p_mat_2d;
 
-	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(w_mat, v_mat_3d, inv_v_mat_3d, p_mat_3d, v_mat_2d, inv_vi_mat_2d, p_mat_2d);
+	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(w_mat, v_mat_3d, inv_v_mat_3d, p_mat_3d, v_mat_2d, inv_v_mat_2d, p_mat_2d);
 
 	std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->common.config_shader_constant_buffer.get(), nullptr};
 	std::array<tml::graphic::ShaderStructuredBuffer *, 4U> sys_ssb_ary = {this->common.camera_shader_structured_buffer.get(), this->common.light_shader_structured_buffer.get(), this->common.fog_shader_structured_buffer.get(), nullptr};

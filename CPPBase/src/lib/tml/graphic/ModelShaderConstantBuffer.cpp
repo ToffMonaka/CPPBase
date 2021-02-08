@@ -22,6 +22,8 @@ tml::graphic::ModelShaderConstantBufferDesc::ModelShaderConstantBufferDesc()
  */
 tml::graphic::ModelShaderConstantBufferDesc::~ModelShaderConstantBufferDesc()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +33,8 @@ tml::graphic::ModelShaderConstantBufferDesc::~ModelShaderConstantBufferDesc()
  */
 void tml::graphic::ModelShaderConstantBufferDesc::Init(void)
 {
+	this->Release();
+
 	tml::graphic::ShaderConstantBufferDesc::Init();
 
 	return;

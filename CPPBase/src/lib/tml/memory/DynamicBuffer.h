@@ -24,7 +24,7 @@ private:
 	size_t write_index_;
 	INT write_res_;
 
-private:
+protected:
 	void Release(void);
 
 public:
@@ -144,8 +144,8 @@ inline void tml::DynamicBuffer::Set(const BYTE *ary, const size_t size)
 		this->ary_ = ary;
 	}
 
+	tml::MemoryUtil::Copy(this->ary_, ary, size);
 	this->size_ = size;
-	tml::MemoryUtil::Copy(this->ary_, ary, this->size_);
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
 	this->write_index_ = this->size_;
