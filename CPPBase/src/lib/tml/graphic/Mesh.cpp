@@ -18,8 +18,8 @@ tml::graphic::MeshDesc::MeshDesc() :
 	index_buffer_element_count(0U),
 	index_buffer_element_array(nullptr),
 	primitive_topology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST),
-	cpu_data_flag(false),
-	gpu_data_flag(false)
+	cpu_data_flag(true),
+	gpu_data_flag(true)
 {
 	return;
 }
@@ -49,8 +49,8 @@ void tml::graphic::MeshDesc::Init(void)
 	this->index_buffer_element_count = 0U;
 	this->index_buffer_element_array = nullptr;
 	this->primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	this->cpu_data_flag = false;
-	this->gpu_data_flag = false;
+	this->cpu_data_flag = true;
+	this->gpu_data_flag = true;
 
 	tml::graphic::ResourceDesc::Init();
 

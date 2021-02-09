@@ -161,6 +161,40 @@ public: SpriteModel(const tml::graphic::SpriteModel &) = delete;
 public: tml::graphic::SpriteModel &operator =(const tml::graphic::SpriteModel &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	/**
+	 * @brief VERTEX_BUFFER_ELEMENT構造体
+	 */
+	typedef struct VERTEX_BUFFER_ELEMENT_
+	{
+		tml::XMFLOAT4EX position;
+		tml::XMFLOAT2EX texture_position;
+		UINT layer_index;
+
+		/**
+		 * @brief コンストラクタ
+		 */
+		VERTEX_BUFFER_ELEMENT_() :
+			layer_index(0U)
+		{
+			return;
+		};
+
+		/**
+		 * @brief コンストラクタ
+		 * @param pos (position)
+		 * @param tex_pos (texture_position)
+		 * @param layer_index (layer_index)
+		 */
+		VERTEX_BUFFER_ELEMENT_(const tml::XMFLOAT4EX &pos, const tml::XMFLOAT2EX &tex_pos, const UINT layer_index) :
+			position(pos),
+			texture_position(tex_pos),
+			layer_index(layer_index)
+		{
+			return;
+		};
+	} VERTEX_BUFFER_ELEMENT;
+
 private:
 
 protected:
@@ -173,8 +207,8 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::SpriteModelDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
 
-	tml::graphic::SpriteModelStage *GetStage(const UINT);
-	void SetStage(const UINT, tml::unique_ptr<tml::graphic::SpriteModelStage> &);
+	tml::graphic::SpriteModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::SpriteModelStage> &);
 };
 }
 }
@@ -193,26 +227,26 @@ inline void tml::graphic::SpriteModel::Release(void)
 
 /**
  * @brief GetStage関数
- * @param index (index)
+ * @param type (type)
  * @return stage (stage)<br>
  * nullptr=失敗
  */
-inline tml::graphic::SpriteModelStage *tml::graphic::SpriteModel::GetStage(const UINT index)
+inline tml::graphic::SpriteModelStage *tml::graphic::SpriteModel::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
-	return (static_cast<tml::graphic::SpriteModelStage *>(tml::graphic::Model::GetStage(index)));
+	return (static_cast<tml::graphic::SpriteModelStage *>(tml::graphic::Model::GetStage(type)));
 }
 
 
 /**
  * @brief SetStage関数
- * @param index (index)
+ * @param type (type)
  * @param stage (stage)
  */
-inline void tml::graphic::SpriteModel::SetStage(const UINT index, tml::unique_ptr<tml::graphic::SpriteModelStage> &stage)
+inline void tml::graphic::SpriteModel::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::SpriteModelStage> &stage)
 {
 	tml::unique_ptr<tml::graphic::ModelStage> tmp_stage = std::move(stage);
 
-	tml::graphic::Model::SetStage(index, tmp_stage);
+	tml::graphic::Model::SetStage(type, tmp_stage);
 
 	return;
 }

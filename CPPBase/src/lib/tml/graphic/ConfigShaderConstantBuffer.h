@@ -59,19 +59,19 @@ public:
 	 */
 	typedef struct ELEMENT_
 	{
-		UINT light_count;
-		UINT fog_count;
 		UINT dummy1;
 		UINT dummy2;
+		UINT dummy3;
+		UINT dummy4;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
-			light_count(0U),
-			fog_count(0U),
 			dummy1(0U),
-			dummy2(0U)
+			dummy2(0U),
+			dummy3(0U),
+			dummy4(0U)
 		{
 			return;
 		};
@@ -92,7 +92,6 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::ConfigShaderConstantBuffer::ELEMENT *GetElement(void);
-	void SetElement(const UINT, const UINT);
 };
 }
 }

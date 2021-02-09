@@ -10,10 +10,11 @@
 #include "DepthState.h"
 #include "Shader.h"
 #include "ConfigShaderConstantBuffer.h"
-#include "ModelShaderConstantBuffer.h"
+#include "HeaderShaderConstantBuffer.h"
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
+#include "ModelShaderStructuredBuffer.h"
 #include "ModelLayerShaderStructuredBuffer.h"
 #include "Camera.h"
 #include "Light.h"
@@ -548,31 +549,28 @@ void tml::graphic::Manager::Update(void)
 
 	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(w_mat, v_mat_3d, inv_v_mat_3d, p_mat_3d, v_mat_2d, inv_v_mat_2d, p_mat_2d);
 
-	std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->common.config_shader_constant_buffer.get(), nullptr};
-	std::array<tml::graphic::ShaderStructuredBuffer *, 4U> sys_ssb_ary = {this->common.camera_shader_structured_buffer.get(), this->common.light_shader_structured_buffer.get(), this->common.fog_shader_structured_buffer.get(), nullptr};
-
-	this->SetDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::CONFIG, sys_scb_ary.size(), sys_scb_ary.data());
-	this->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::CAMERA, sys_ssb_ary.size(), sys_ssb_ary.data());
-
 	this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT;
 	this->draw_stage_dat_ = &draw_stage_dat;
+
+	this->GetViewMatrix3D(this->draw_stage_dat_->view_matrix_3d, this->draw_camera_);
+	this->draw_stage_dat_->inverse_view_matrix_3d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_3d);
+	this->GetProjectionMatrix3D(this->draw_stage_dat_->projection_matrix_3d, this->draw_camera_);
+
+	this->GetViewMatrix2D(this->draw_stage_dat_->view_matrix_2d, this->draw_camera_);
+	this->draw_stage_dat_->inverse_view_matrix_2d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
+	this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
+
+	std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->common.config_shader_constant_buffer.get(), this->common.header_shader_constant_buffer.get()};
+	std::array<tml::graphic::ShaderStructuredBuffer *, 5U> sys_ssb_ary = {this->common.camera_shader_structured_buffer.get(), this->common.light_shader_structured_buffer.get(), this->common.fog_shader_structured_buffer.get(), nullptr, nullptr};
 
 	while (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
 		switch (this->draw_stage_type_) {
 		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT: {
-			this->GetViewMatrix3D(this->draw_stage_dat_->view_matrix_3d, this->draw_camera_);
-			this->draw_stage_dat_->inverse_view_matrix_3d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_3d);
-			this->GetProjectionMatrix3D(this->draw_stage_dat_->projection_matrix_3d, this->draw_camera_);
-
-			this->GetViewMatrix2D(this->draw_stage_dat_->view_matrix_2d, this->draw_camera_);
-			this->draw_stage_dat_->inverse_view_matrix_2d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
-			this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
-
 			this->common.main_render_target_texture->ClearRenderTarget(XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
 			this->common.main_depth_target_texture->ClearDepthTarget();
 
-			this->common.config_shader_constant_buffer->SetElement(this->draw_light_cnt_, this->draw_fog_cnt_);
-			this->common.config_shader_constant_buffer->UpdateBuffer();
+			this->common.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);
+			this->common.header_shader_constant_buffer->UpdateBuffer();
 
 			this->common.camera_shader_structured_buffer->SetElementCount(0U);
 			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d);
@@ -590,6 +588,9 @@ void tml::graphic::Manager::Update(void)
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 				this->draw_model_ary_[draw_model_i]->DrawStageInit();
 			}
+
+			this->SetDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM, sys_scb_ary.size(), sys_scb_ary.data());
+			this->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::SYSTEM, sys_ssb_ary.size(), sys_ssb_ary.data());
 
 			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_3D;
 
@@ -646,13 +647,12 @@ void tml::graphic::Manager::Update(void)
 
 	this->swap_chain_->Present(this->vsync_flg_, 0U);
 
-	this->ClearDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::CONFIG, sys_scb_ary.size());
-	this->ClearDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::CAMERA, sys_ssb_ary.size());
-
 	this->ClearDrawRasterizerState();
 	this->ClearDrawBlendState();
 	this->ClearDrawDepthState();
 	this->ClearDrawShader();
+	this->ClearDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM, sys_scb_ary.size());
+	this->ClearDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::SYSTEM, sys_ssb_ary.size());
 	this->ClearDrawCamera();
 	this->ClearDrawLight();
 	this->ClearDrawFog();

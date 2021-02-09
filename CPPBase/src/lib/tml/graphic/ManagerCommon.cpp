@@ -11,10 +11,11 @@
 #include "DepthState.h"
 #include "Shader.h"
 #include "ConfigShaderConstantBuffer.h"
-#include "ModelShaderConstantBuffer.h"
+#include "HeaderShaderConstantBuffer.h"
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
+#include "ModelShaderStructuredBuffer.h"
 #include "ModelLayerShaderStructuredBuffer.h"
 #include "Camera.h"
 #include "Light.h"
@@ -401,6 +402,21 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		this->mgr_->GetResource<tml::graphic::ConfigShaderConstantBuffer>(this->config_shader_constant_buffer, desc);
 
 		if (this->config_shader_constant_buffer == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// HeaderShaderConstantBuffer Create
+		tml::graphic::HeaderShaderConstantBufferDesc desc;
+
+		desc.manager = this->mgr_;
+		desc.cpu_read_flag = true;
+
+		this->mgr_->GetResource<tml::graphic::HeaderShaderConstantBuffer>(this->header_shader_constant_buffer, desc);
+
+		if (this->header_shader_constant_buffer == nullptr) {
 			this->Init();
 
 			return (-1);

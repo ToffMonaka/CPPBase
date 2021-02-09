@@ -335,13 +335,9 @@ inline tml::shared_ptr<T2> &tml::graphic::Manager::GetResource(tml::shared_ptr<T
 		return (dst_res);
 	}
 
-	UINT res_type = static_cast<UINT>(res->GetResourceType());
+	auto res_index = static_cast<UINT>(res->GetResourceType());
 
-	if (res_type >= tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT) {
-		return (dst_res);
-	}
-
-	this->res_cont_ary_[res_type].push_back(res);
+	this->res_cont_ary_[res_index].push_back(res);
 
 	dst_res = res;
 
@@ -381,14 +377,10 @@ inline void tml::graphic::Manager::ReleaseResource(tml::shared_ptr<T> &res)
 		return;
 	}
 
-	UINT res_type = static_cast<UINT>(res->GetResourceType());
-
-	if (res_type >= tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT) {
-		return;
-	}
+	auto res_index = static_cast<UINT>(res->GetResourceType());
 
 	if (res.use_count() <= 2L) {
-		this->res_cont_ary_[res_type].remove(res);
+		this->res_cont_ary_[res_index].remove(res);
 	}
 
 	res.reset();

@@ -20,7 +20,8 @@
  * @brief コンストラクタ
  */
 tml::graphic::ModelLayer::ModelLayer() :
-	mgr_(nullptr)
+	mgr_(nullptr),
+	mesh_index_(0U)
 {
 	return;
 }
@@ -41,6 +42,7 @@ tml::graphic::ModelLayer::~ModelLayer()
 void tml::graphic::ModelLayer::Init(void)
 {
 	this->mgr_ = nullptr;
+	this->mesh_index_ = 0U;
 
 	return;
 }
@@ -68,7 +70,11 @@ INT tml::graphic::ModelLayer::Create(tml::graphic::Manager *mgr)
  * @brief コンストラクタ
  */
 tml::graphic::ModelStage::ModelStage() :
-	mgr_(nullptr)
+	mgr_(nullptr),
+	rs_index_(0U),
+	bs_index_(0U),
+	ds_index_(0U),
+	shader_index_(0U)
 {
 	return;
 }
@@ -104,6 +110,10 @@ void tml::graphic::ModelStage::Release(void)
 void tml::graphic::ModelStage::Init(void)
 {
 	this->mgr_ = nullptr;
+	this->rs_index_ = 0U;
+	this->bs_index_ = 0U;
+	this->ds_index_ = 0U;
+	this->shader_index_ = 0U;
 
 	return;
 }
@@ -347,11 +357,13 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 
 /**
  * @brief SetStage関数
- * @param index (index)
+ * @param type (type)
  * @param stage (stage)
  */
-void tml::graphic::Model::SetStage(const UINT index, tml::unique_ptr<tml::graphic::ModelStage> &stage)
+void tml::graphic::Model::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::ModelStage> &stage)
 {
+	auto index = static_cast<UINT>(type);
+
 	while (index >= this->stage_cont_.size()) {
 		this->stage_cont_.push_back(tml::make_unique<tml::graphic::ModelStage>());
 	}

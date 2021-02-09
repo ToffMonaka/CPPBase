@@ -127,18 +127,19 @@ namespace GRAPHIC {
 	};
 	namespace SHADER_CONSTANT_BUFFER_SR_INDEX {
 	enum : UINT {
+		SYSTEM = 0U,
 		CONFIG = 0U,
-		LIGHT,
-		FOG,
-		MODEL,
+		HEADER,
 		USER
 	};
 	}
 	namespace SHADER_STRUCTURED_BUFFER_INDEX {
 	enum : UINT {
+		SYSTEM = 0U,
 		CAMERA = 0U,
 		LIGHT,
 		FOG,
+		MODEL,
 		MODEL_LAYER,
 		USER
 	};

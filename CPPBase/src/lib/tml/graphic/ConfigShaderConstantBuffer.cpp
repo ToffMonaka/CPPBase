@@ -108,19 +108,3 @@ INT tml::graphic::ConfigShaderConstantBuffer::Create(const tml::graphic::ConfigS
 
 	return (0);
 }
-
-
-/**
- * @brief SetElementŠÖ”
- * @param light_cnt (light_count)
- * @param fog_cnt (fog_count)
- */
-void tml::graphic::ConfigShaderConstantBuffer::SetElement(const UINT light_cnt, const UINT fog_cnt)
-{
-	auto element = this->GetElement();
-
-	element->light_count = light_cnt;
-	element->fog_count = fog_cnt;
-
-	return;
-}

@@ -173,8 +173,8 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::ScreenModelDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
 
-	tml::graphic::ScreenModelStage *GetStage(const UINT);
-	void SetStage(const UINT, tml::unique_ptr<tml::graphic::ScreenModelStage> &);
+	tml::graphic::ScreenModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ScreenModelStage> &);
 };
 }
 }
@@ -193,26 +193,26 @@ inline void tml::graphic::ScreenModel::Release(void)
 
 /**
  * @brief GetStageä÷êî
- * @param index (index)
+ * @param type (type)
  * @return stage (stage)<br>
  * nullptr=é∏îs
  */
-inline tml::graphic::ScreenModelStage *tml::graphic::ScreenModel::GetStage(const UINT index)
+inline tml::graphic::ScreenModelStage *tml::graphic::ScreenModel::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
-	return (static_cast<tml::graphic::ScreenModelStage *>(tml::graphic::Model::GetStage(index)));
+	return (static_cast<tml::graphic::ScreenModelStage *>(tml::graphic::Model::GetStage(type)));
 }
 
 
 /**
  * @brief SetStageä÷êî
- * @param index (index)
+ * @param type (type)
  * @param stage (stage)
  */
-inline void tml::graphic::ScreenModel::SetStage(const UINT index, tml::unique_ptr<tml::graphic::ScreenModelStage> &stage)
+inline void tml::graphic::ScreenModel::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::ScreenModelStage> &stage)
 {
 	tml::unique_ptr<tml::graphic::ModelStage> tmp_stage = std::move(stage);
 
-	tml::graphic::Model::SetStage(index, tmp_stage);
+	tml::graphic::Model::SetStage(type, tmp_stage);
 
 	return;
 }

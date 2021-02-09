@@ -92,7 +92,6 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::ModelLayerShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	//void SetElement(const UINT, tml::graphic::ModelLayer *, const bool, const XMMATRIX &);
 };
 }
 }

@@ -26,6 +26,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::graphic::Manager *mgr_;
+	UINT mesh_index_;
 
 protected:
 	void Release(void);
@@ -38,6 +39,8 @@ public:
 	virtual void Init(void);
 
 	tml::graphic::Manager *GetManager(void);
+	UINT GetMeshIndex(void) const;
+	void SetMeshIndex(const UINT);
 };
 }
 }
@@ -62,6 +65,28 @@ inline tml::graphic::Manager *tml::graphic::ModelLayer::GetManager(void)
 }
 
 
+/**
+ * @brief GetMeshIndexä÷êî
+ * @return mesh_index (mesh_index)
+ */
+inline UINT tml::graphic::ModelLayer::GetMeshIndex(void) const
+{
+	return (this->mesh_index_);
+}
+
+
+/**
+ * @brief SetMeshIndexä÷êî
+ * @param mesh_index (mesh_index)
+ */
+inline void tml::graphic::ModelLayer::SetMeshIndex(const UINT mesh_index)
+{
+	this->mesh_index_ = mesh_index;
+
+	return;
+}
+
+
 namespace tml {
 namespace graphic {
 /**
@@ -77,6 +102,10 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::graphic::Manager *mgr_;
+	UINT rs_index_;
+	UINT bs_index_;
+	UINT ds_index_;
+	UINT shader_index_;
 	std::vector<tml::unique_ptr<tml::graphic::ModelLayer>> layer_cont_;
 
 protected:
@@ -90,11 +119,116 @@ public:
 	virtual void Init(void);
 
 	tml::graphic::Manager *GetManager(void);
-
+	UINT GetRasterizerStateIndex(void) const;
+	void SetRasterizerStateIndex(const UINT);
+	UINT GetBlendStateIndex(void) const;
+	void SetBlendStateIndex(const UINT);
+	UINT GetDepthStateIndex(void) const;
+	void SetDepthStateIndex(const UINT);
+	UINT GetShaderIndex(void) const;
+	void SetShaderIndex(const UINT);
 	tml::graphic::ModelLayer *GetLayer(const UINT);
 	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::ModelLayer> &);
 };
 }
+}
+
+
+/**
+ * @brief GetManagerä÷êî
+ * @return mgr (manager)
+ */
+inline tml::graphic::Manager *tml::graphic::ModelStage::GetManager(void)
+{
+	return (this->mgr_);
+}
+
+
+/**
+ * @brief GetRasterizerStateIndexä÷êî
+ * @return rs_index (rasterizer_state_index)
+ */
+inline UINT tml::graphic::ModelStage::GetRasterizerStateIndex(void) const
+{
+	return (this->rs_index_);
+}
+
+
+/**
+ * @brief SetRasterizerStateIndexä÷êî
+ * @param rs_index (rasterizer_state_index)
+ */
+inline void tml::graphic::ModelStage::SetRasterizerStateIndex(const UINT rs_index)
+{
+	this->rs_index_ = rs_index;
+
+	return;
+}
+
+
+/**
+ * @brief GetBlendStateIndexä÷êî
+ * @return bs_index (blend_state_index)
+ */
+inline UINT tml::graphic::ModelStage::GetBlendStateIndex(void) const
+{
+	return (this->bs_index_);
+}
+
+
+/**
+ * @brief SetBlendStateIndexä÷êî
+ * @param bs_index (blend_state_index)
+ */
+inline void tml::graphic::ModelStage::SetBlendStateIndex(const UINT bs_index)
+{
+	this->bs_index_ = bs_index;
+
+	return;
+}
+
+
+/**
+ * @brief GetDepthStateIndexä÷êî
+ * @return ds_index (depth_state_index)
+ */
+inline UINT tml::graphic::ModelStage::GetDepthStateIndex(void) const
+{
+	return (this->ds_index_);
+}
+
+
+/**
+ * @brief SetDepthStateIndexä÷êî
+ * @param ds_index (depth_state_index)
+ */
+inline void tml::graphic::ModelStage::SetDepthStateIndex(const UINT ds_index)
+{
+	this->ds_index_ = ds_index;
+
+	return;
+}
+
+
+/**
+ * @brief GetShaderIndexä÷êî
+ * @return shader_index (shader_state_index)
+ */
+inline UINT tml::graphic::ModelStage::GetShaderIndex(void) const
+{
+	return (this->shader_index_);
+}
+
+
+/**
+ * @brief SetShaderIndexä÷êî
+ * @param ds_index (depth_state_index)
+ */
+inline void tml::graphic::ModelStage::SetShaderIndex(const UINT shader_index)
+{
+	this->shader_index_ = shader_index;
+
+	return;
 }
 
 
@@ -111,16 +245,6 @@ inline tml::graphic::ModelLayer *tml::graphic::ModelStage::GetLayer(const UINT i
 	}
 
 	return (this->layer_cont_[index].get());
-}
-
-
-/**
- * @brief GetManagerä÷êî
- * @return mgr (manager)
- */
-inline tml::graphic::Manager *tml::graphic::ModelStage::GetManager(void)
-{
-	return (this->mgr_);
 }
 
 
@@ -200,8 +324,8 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
-	tml::graphic::ModelStage *GetStage(const UINT);
-	void SetStage(const UINT, tml::unique_ptr<tml::graphic::ModelStage> &);
+	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
 	tml::graphic::RasterizerState *GetRasterizerState(const UINT);
 	void SetRasterizerState(const UINT, tml::shared_ptr<tml::graphic::RasterizerState> &);
 	tml::graphic::BlendState *GetBlendState(const UINT);
@@ -241,12 +365,14 @@ inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void)
 
 /**
  * @brief GetStageä÷êî
- * @param index (index)
+ * @param type (type)
  * @return stage (stage)<br>
  * nullptr=é∏îs
  */
-inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const UINT index)
+inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
+	auto index = static_cast<UINT>(type);
+
 	if (index >= this->stage_cont_.size()) {
 		return (nullptr);
 	}
