@@ -196,6 +196,8 @@ public:
 	} VERTEX_BUFFER_ELEMENT;
 
 private:
+	tml::shared_ptr<tml::graphic::ModelShaderStructuredBuffer> ssb_;
+	tml::shared_ptr<tml::graphic::ModelLayerShaderStructuredBuffer> layer_ssb_;
 
 protected:
 	void Release(void);
@@ -209,6 +211,9 @@ public:
 
 	tml::graphic::SpriteModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::SpriteModelStage> &);
+
+	virtual void DrawStageInit(void);
+	virtual void DrawStageForward2D(void);
 };
 }
 }

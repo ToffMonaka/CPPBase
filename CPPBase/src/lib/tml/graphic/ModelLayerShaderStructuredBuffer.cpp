@@ -108,3 +108,25 @@ INT tml::graphic::ModelLayerShaderStructuredBuffer::Create(const tml::graphic::M
 
 	return (0);
 }
+
+
+/**
+ * @brief SetElementŠÖ”
+ * @param index (index)
+ * @param w_mat (world_matrix)
+ */
+void tml::graphic::ModelLayerShaderStructuredBuffer::SetElement(const UINT index)
+{
+	auto element = this->GetElement(index);
+
+	if (element == nullptr) {
+		return;
+	}
+
+	element->dummy1 = 1U;
+	element->dummy2 = 2U;
+	element->dummy3 = 3U;
+	element->dummy4 = 4U;
+
+	return;
+}

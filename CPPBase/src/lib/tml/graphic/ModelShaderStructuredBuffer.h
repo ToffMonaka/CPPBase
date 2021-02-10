@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMath.h"
 #include "ShaderStructuredBuffer.h"
 
 
@@ -59,19 +60,17 @@ public:
 	 */
 	typedef struct ELEMENT_
 	{
-		UINT dummy1;
-		UINT dummy2;
-		UINT dummy3;
-		UINT dummy4;
+		tml::XMFLOAT4X4EX world_matrix;
+		tml::XMFLOAT4X4EX world_view_matrix;
+		tml::XMFLOAT4X4EX world_view_projection_matrix;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
-			dummy1(0U),
-			dummy2(0U),
-			dummy3(0U),
-			dummy4(0U)
+			world_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
+			world_view_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
+			world_view_projection_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE)
 		{
 			return;
 		};
@@ -92,6 +91,7 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::ModelShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
+	void SetElement(const UINT, const XMMATRIX &, const XMMATRIX &, const XMMATRIX &);
 };
 }
 }

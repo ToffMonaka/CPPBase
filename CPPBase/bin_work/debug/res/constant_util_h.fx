@@ -101,4 +101,71 @@
 #define USER16_SAMP_SR register(s15)
 
 
+cbuffer CONF_SCB : CONF_SCB_SR
+{
+	uint conf_scb_dummy1;
+	uint conf_scb_dummy2;
+	uint conf_scb_dummy3;
+	uint conf_scb_dummy4;
+};
+
+
+cbuffer HEAD_SCB : HEAD_SCB_SR
+{
+	uint head_scb_camera_cnt;
+	uint head_scb_light_cnt;
+	uint head_scb_fog_cnt;
+	uint head_scb_model_cnt;
+};
+
+
+struct CAMERA_SSB_ELEMENT
+{
+	matrix v_mat;
+	matrix inv_v_mat;
+};
+
+
+struct LIGHT_SSB_ELEMENT
+{
+	uint dummy1;
+	uint dummy2;
+	uint dummy3;
+	uint dummy4;
+};
+
+
+struct FOG_SSB_ELEMENT
+{
+	uint dummy1;
+	uint dummy2;
+	uint dummy3;
+	uint dummy4;
+};
+
+
+struct MODEL_SSB_ELEMENT
+{
+	matrix w_mat;
+	matrix wv_mat;
+	matrix wvp_mat;
+};
+
+
+struct MODEL_LAYER_SSB_ELEMENT
+{
+	uint dummy1;
+	uint dummy2;
+	uint dummy3;
+	uint dummy4;
+};
+
+
+StructuredBuffer<CAMERA_SSB_ELEMENT> camera_ssb : CAMERA_SSB_SR;
+StructuredBuffer<LIGHT_SSB_ELEMENT> light_ssb : LIGHT_SSB_SR;
+StructuredBuffer<FOG_SSB_ELEMENT> fog_ssb : FOG_SSB_SR;
+StructuredBuffer<MODEL_SSB_ELEMENT> model_ssb : MODEL_SSB_SR;
+StructuredBuffer<MODEL_LAYER_SSB_ELEMENT> model_layer_ssb : MODEL_LAYER_SSB_SR;
+
+
 #endif

@@ -60,8 +60,8 @@ public:
 	 */
 	typedef struct ELEMENT_
 	{
-		XMFLOAT4X4EX view_matrix;
-		XMFLOAT4X4EX inverse_view_matrix;
+		tml::XMFLOAT4X4EX view_matrix;
+		tml::XMFLOAT4X4EX inverse_view_matrix;
 
 		/**
 		 * @brief コンストラクタ

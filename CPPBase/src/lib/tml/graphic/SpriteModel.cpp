@@ -10,6 +10,8 @@
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
+#include "ModelShaderStructuredBuffer.h"
+#include "ModelLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
 
 
@@ -194,6 +196,11 @@ tml::graphic::SpriteModel::SpriteModel()
  */
 tml::graphic::SpriteModel::~SpriteModel()
 {
+	if (this->GetManager() != nullptr) {
+		this->GetManager()->ReleaseResource(this->ssb_);
+		this->GetManager()->ReleaseResource(this->layer_ssb_);
+	}
+
 	this->Release();
 
 	return;
@@ -231,10 +238,8 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 		return (-1);
 	}
 
-	auto forward_2d_stage = tml::make_unique<tml::graphic::SpriteModelStage>(1U);
-
 	{// Forward2DStage Create
-		auto &stage = forward_2d_stage;
+		auto stage = tml::make_unique<tml::graphic::SpriteModelStage>(1U);
 
 		if (stage->Create(this->GetManager()) < 0) {
 			this->Init();
@@ -247,9 +252,9 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 		stage->SetDepthStateIndex(0U);
 		stage->SetShaderIndex(0U);
 
-		tml::shared_ptr<tml::graphic::RasterizerState> rs;
-
 		{// RasterizerState Create
+			tml::shared_ptr<tml::graphic::RasterizerState> rs;
+
 			this->GetManager()->GetResource(rs, this->GetManager()->common.back_culling_rasterizer_state);
 
 			if (rs == nullptr) {
@@ -257,14 +262,14 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 
 				return (-1);
 			}
+
+			this->SetRasterizerState(stage->GetRasterizerStateIndex(), rs);
+			this->GetManager()->ReleaseResource(rs);
 		}
 
-		this->SetRasterizerState(stage->GetRasterizerStateIndex(), rs);
-		this->GetManager()->ReleaseResource(rs);
-
-		tml::shared_ptr<tml::graphic::BlendState> bs;
-
 		{// BlendState Create
+			tml::shared_ptr<tml::graphic::BlendState> bs;
+
 			this->GetManager()->GetResource(bs, this->GetManager()->common.alignment_blend_state_array[1]);
 
 			if (bs == nullptr) {
@@ -272,14 +277,14 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 
 				return (-1);
 			}
+
+			this->SetBlendState(stage->GetBlendStateIndex(), bs);
+			this->GetManager()->ReleaseResource(bs);
 		}
 
-		this->SetBlendState(stage->GetBlendStateIndex(), bs);
-		this->GetManager()->ReleaseResource(bs);
-
-		tml::shared_ptr<tml::graphic::DepthState> ds;
-
 		{// DepthState Create
+			tml::shared_ptr<tml::graphic::DepthState> ds;
+
 			this->GetManager()->GetResource(ds, this->GetManager()->common.reference_depth_state);
 
 			if (ds == nullptr) {
@@ -287,14 +292,14 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 
 				return (-1);
 			}
+
+			this->SetDepthState(stage->GetDepthStateIndex(), ds);
+			this->GetManager()->ReleaseResource(ds);
 		}
 
-		this->SetDepthState(stage->GetDepthStateIndex(), ds);
-		this->GetManager()->ReleaseResource(ds);
-
-		tml::shared_ptr<tml::graphic::Shader> shader;
-
 		{// Shader Create
+			tml::shared_ptr<tml::graphic::Shader> shader;
+
 			this->GetManager()->GetResource(shader, this->GetManager()->common.sprite_model_shader);
 
 			if (shader == nullptr) {
@@ -302,15 +307,13 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 
 				return (-1);
 			}
+
+			this->SetShader(stage->GetShaderIndex(), shader);
+			this->GetManager()->ReleaseResource(shader);
 		}
 
-		this->SetShader(stage->GetShaderIndex(), shader);
-		this->GetManager()->ReleaseResource(shader);
-
-		auto layer0 = tml::make_unique<tml::graphic::SpriteModelLayer>(1U);
-
-		{// Layer0 Create
-			auto &layer = layer0;
+		{// Layer1 Create
+			auto layer = tml::make_unique<tml::graphic::SpriteModelLayer>(1U);
 
 			if (layer->Create(this->GetManager()) < 0) {
 				this->Init();
@@ -320,9 +323,10 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 
 			layer->SetMeshIndex(0U);
 
-			tml::shared_ptr<tml::graphic::Mesh> mesh;
-
 			{// Mesh Create
+				tml::shared_ptr<tml::graphic::Mesh> mesh;
+
+				tml::graphic::MeshDesc desc;
 				std::array<tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
 					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
 					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
@@ -330,8 +334,6 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
 				};
 				std::array<UINT, 4U> ib_element_ary = {0U, 1U, 2U, 3U};
-
-				tml::graphic::MeshDesc desc;
 
 				desc.manager = this->GetManager();
 				desc.vertex_buffer_element_size = sizeof(tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT);
@@ -348,16 +350,91 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 
 					return (-1);
 				}
+
+				this->SetMesh(layer->GetMeshIndex(), mesh);
+				this->GetManager()->ReleaseResource(mesh);
 			}
 
-			this->SetMesh(layer->GetMeshIndex(), mesh);
-			this->GetManager()->ReleaseResource(mesh);
+			stage->SetLayer(0U, layer);
 		}
 
-		stage->SetLayer(0U, layer0);
+		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
 	}
 
-	this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, forward_2d_stage);
+	{// ShaderStructuredBuffer Create
+		tml::graphic::ModelShaderStructuredBufferDesc desc;
+
+		desc.manager = this->GetManager();
+		desc.element_limit = 1U;
+		desc.cpu_read_flag = true;
+
+		this->GetManager()->GetResource<tml::graphic::ModelShaderStructuredBuffer>(this->ssb_, desc);
+
+		if (this->ssb_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// LayerShaderStructuredBuffer Create
+		tml::graphic::ModelLayerShaderStructuredBufferDesc desc;
+
+		desc.manager = this->GetManager();
+		desc.element_limit = 1U;
+		desc.cpu_read_flag = true;
+
+		this->GetManager()->GetResource<tml::graphic::ModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc);
+
+		if (this->layer_ssb_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
 
 	return (0);
+}
+
+
+/**
+ * @brief DrawStageInitŠÖ”
+ */
+void tml::graphic::SpriteModel::DrawStageInit(void)
+{
+	XMMATRIX w_mat;
+
+	this->GetManager()->GetWorldMatrix2D(w_mat, tml::XMFLOAT2EX(this->position->Get().x, this->position->Get().y), 0.0f, tml::XMFLOAT2EX(1.0f * 128.0f, 1.0f * 128.0f));
+
+	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix_2d, this->GetManager()->GetDrawStageData()->projection_matrix_2d);
+	this->ssb_->UpdateBuffer();
+
+	this->layer_ssb_->SetElement(0U);
+	this->layer_ssb_->UpdateBuffer();
+
+	return;
+}
+
+
+/**
+ * @brief DrawStageForward2DŠÖ”
+ */
+void tml::graphic::SpriteModel::DrawStageForward2D(void)
+{
+	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	std::array<tml::graphic::ShaderStructuredBuffer *, 2U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get()};
+
+	this->GetManager()->SetDrawRasterizerState(this->GetRasterizerState(stage->GetRasterizerStateIndex()));
+	this->GetManager()->SetDrawBlendState(this->GetBlendState(stage->GetBlendStateIndex()));
+	this->GetManager()->SetDrawDepthState(this->GetDepthState(stage->GetDepthStateIndex()));
+	this->GetManager()->SetDrawShader(this->GetShader(stage->GetShaderIndex()));
+	this->GetManager()->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::MODEL, ssb_ary.size(), ssb_ary.data());
+
+	auto layer = stage->GetLayer(0U);
+
+	this->GetManager()->SetDrawMesh(this->GetMesh(layer->GetMeshIndex()));
+
+	this->GetManager()->Draw(1U);
+
+	return;
 }

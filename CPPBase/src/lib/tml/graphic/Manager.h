@@ -177,8 +177,10 @@ private:
 	std::array<tml::graphic::Fog *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
 	ID3D11Buffer *draw_mesh_vb_;
 	UINT draw_mesh_vb_element_size_;
+	UINT draw_mesh_vb_element_cnt_;
 	ID3D11Buffer *draw_mesh_ib_;
 	UINT draw_mesh_ib_element_size_;
+	UINT draw_mesh_ib_element_cnt_;
 	DXGI_FORMAT draw_mesh_ib_format_;
 	D3D11_PRIMITIVE_TOPOLOGY draw_mesh_pt_;
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT> draw_tex_sr_ary_;
@@ -240,6 +242,7 @@ public:
 	tml::DynamicBuffer &GetBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Texture2D *, INT *dst_res = nullptr);
 	std::vector<tml::DynamicBuffer> &GetBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
 
+	void Draw(const UINT);
 	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE GetDrawStageType(void) const;
 	tml::graphic::DRAW_STAGE_DATA *GetDrawStageData(void);
 	void SetDrawViewport(tml::graphic::Viewport *);

@@ -242,6 +242,18 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
+	auto test_sprite_model_pos = this->test_sprite_model_->position->Get();
+
+	test_sprite_model_pos.x += 2.0f;
+
+	if (test_sprite_model_pos.x >= 512.0f) {
+		test_sprite_model_pos.x = 0.0f;
+	}
+
+	test_sprite_model_pos.y = 256.0f;
+
+	this->test_sprite_model_->position->Set(test_sprite_model_pos);
+
 	this->graphic_mgr_.SetDrawCamera(this->test_camera_.get());
 	this->graphic_mgr_.SetDrawModel(this->test_sprite_model_.get());
 

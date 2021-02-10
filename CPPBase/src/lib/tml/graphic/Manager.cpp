@@ -129,8 +129,10 @@ tml::graphic::Manager::Manager() :
 	draw_fog_ary_{},
 	draw_mesh_vb_(nullptr),
 	draw_mesh_vb_element_size_(0U),
+	draw_mesh_vb_element_cnt_(0U),
 	draw_mesh_ib_(nullptr),
 	draw_mesh_ib_element_size_(0U),
+	draw_mesh_ib_element_cnt_(0U),
 	draw_mesh_ib_format_(DXGI_FORMAT_UNKNOWN),
 	draw_mesh_pt_(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST),
 	draw_tex_sr_ary_{},
@@ -281,8 +283,10 @@ void tml::graphic::Manager::Init(void)
 	this->draw_fog_cnt_ = 0U;
 	this->draw_mesh_vb_ = nullptr;
 	this->draw_mesh_vb_element_size_ = 0U;
+	this->draw_mesh_vb_element_cnt_ = 0U;
 	this->draw_mesh_ib_ = nullptr;
 	this->draw_mesh_ib_element_size_ = 0U;
+	this->draw_mesh_ib_element_cnt_ = 0U;
 	this->draw_mesh_ib_format_ = DXGI_FORMAT_UNKNOWN;
 	this->draw_mesh_pt_ = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	this->draw_tex_sr_ary_.fill(nullptr);
@@ -994,6 +998,18 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 
 
 /**
+ * @brief DrawŠÖ”
+ * @param instance_cnt (instance_count)
+ */
+void tml::graphic::Manager::Draw(const UINT instance_cnt)
+{
+	this->device_context_->DrawIndexedInstanced(this->draw_mesh_ib_element_cnt_, instance_cnt, 0U, 0U, 0U);
+
+	return;
+}
+
+
+/**
  * @brief SetDrawViewportŠÖ”
  * @param vp (viewport)
  */
@@ -1544,6 +1560,7 @@ void tml::graphic::Manager::SetDrawMesh(tml::graphic::Mesh *mesh)
 	if (this->draw_mesh_vb_ != mesh->GetVertexBuffer()) {
 		this->draw_mesh_vb_ = mesh->GetVertexBuffer();
 		this->draw_mesh_vb_element_size_ = mesh->GetVertexBufferElementSize();
+		this->draw_mesh_vb_element_cnt_ = mesh->GetVertexBufferElementCount();
 
 		UINT offset = 0U;
 
@@ -1553,6 +1570,7 @@ void tml::graphic::Manager::SetDrawMesh(tml::graphic::Mesh *mesh)
 	if (this->draw_mesh_ib_ != mesh->GetIndexBuffer()) {
 		this->draw_mesh_ib_ = mesh->GetIndexBuffer();
 		this->draw_mesh_ib_element_size_ = mesh->GetIndexBufferElementSize();
+		this->draw_mesh_ib_element_cnt_ = mesh->GetIndexBufferElementCount();
 		this->draw_mesh_ib_format_ = mesh->GetIndexBufferFormat();
 
 		this->device_context_->IASetIndexBuffer(this->draw_mesh_ib_, this->draw_mesh_ib_format_, 0U);
@@ -1576,6 +1594,7 @@ void tml::graphic::Manager::ClearDrawMesh(void)
 	if (this->draw_mesh_vb_ != nullptr) {
 		this->draw_mesh_vb_ = nullptr;
 		this->draw_mesh_vb_element_size_ = 0U;
+		this->draw_mesh_vb_element_cnt_ = 0U;
 
 		UINT offset = 0U;
 
@@ -1585,6 +1604,7 @@ void tml::graphic::Manager::ClearDrawMesh(void)
 	if (this->draw_mesh_ib_ != nullptr) {
 		this->draw_mesh_ib_ = nullptr;
 		this->draw_mesh_ib_element_size_ = 0U;
+		this->draw_mesh_ib_element_cnt_ = 0U;
 		this->draw_mesh_ib_format_ = DXGI_FORMAT_UNKNOWN;
 
 		this->device_context_->IASetIndexBuffer(this->draw_mesh_ib_, this->draw_mesh_ib_format_, 0U);
