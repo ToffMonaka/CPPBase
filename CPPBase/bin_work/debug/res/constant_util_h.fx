@@ -123,6 +123,7 @@ struct CAMERA_SSB_ELEMENT
 {
 	matrix v_mat;
 	matrix inv_v_mat;
+	matrix p_mat;
 };
 
 
@@ -147,8 +148,6 @@ struct FOG_SSB_ELEMENT
 struct MODEL_SSB_ELEMENT
 {
 	matrix w_mat;
-	matrix wv_mat;
-	matrix wvp_mat;
 };
 
 

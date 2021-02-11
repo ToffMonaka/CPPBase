@@ -61,16 +61,12 @@ public:
 	typedef struct ELEMENT_
 	{
 		tml::XMFLOAT4X4EX world_matrix;
-		tml::XMFLOAT4X4EX world_view_matrix;
-		tml::XMFLOAT4X4EX world_view_projection_matrix;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
-			world_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
-			world_view_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
-			world_view_projection_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE)
+			world_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE)
 		{
 			return;
 		};
@@ -91,7 +87,7 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::ModelShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	void SetElement(const UINT, const XMMATRIX &, const XMMATRIX &, const XMMATRIX &);
+	void SetElement(const UINT, const XMMATRIX &);
 };
 }
 }

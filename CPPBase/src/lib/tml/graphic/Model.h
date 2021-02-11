@@ -312,6 +312,8 @@ private:
 
 public:
 	tml::shared_ptr<tml::XMPosition> position;
+	tml::XMFLOAT3EX size;
+	tml::XMFLOAT3EX scale;
 
 protected:
 	void Release(void);

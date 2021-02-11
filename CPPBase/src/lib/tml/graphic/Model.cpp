@@ -223,7 +223,9 @@ INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Model::Model() :
-	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE)
+	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE),
+	size(0.0f),
+	scale(1.0f)
 {
 	return;
 }
@@ -312,6 +314,8 @@ void tml::graphic::Model::Init(void)
 {
 	this->type_ = tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE;
 	this->position.reset();
+	this->size = 0.0f;
+	this->scale = 1.0f;
 
 	tml::graphic::Resource::Init();
 

@@ -62,13 +62,15 @@ public:
 	{
 		tml::XMFLOAT4X4EX view_matrix;
 		tml::XMFLOAT4X4EX inverse_view_matrix;
+		tml::XMFLOAT4X4EX projection_matrix;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
 			view_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
-			inverse_view_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE)
+			inverse_view_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
+			projection_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE)
 		{
 			return;
 		};
@@ -89,7 +91,7 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	void SetElement(const UINT, const tml::graphic::Camera *, const XMMATRIX &, const XMMATRIX &);
+	void SetElement(const UINT, const tml::graphic::Camera *, const XMMATRIX &, const XMMATRIX &, const XMMATRIX &);
 };
 }
 }

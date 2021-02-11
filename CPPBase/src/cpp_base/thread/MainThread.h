@@ -32,7 +32,9 @@ private:
 	tml::sound::Manager sound_mgr_;
 
 	tml::shared_ptr<tml::graphic::Camera> test_camera_;
-	tml::shared_ptr<tml::graphic::SpriteModel> test_sprite_model_;
+	tml::shared_ptr<tml::graphic::SpriteModel> test1_sprite_model_;
+	tml::shared_ptr<tml::graphic::SpriteModel> test2_sprite_model_;
+	tml::shared_ptr<tml::graphic::SpriteModel> test3_sprite_model_;
 
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);

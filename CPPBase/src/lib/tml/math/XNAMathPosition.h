@@ -53,6 +53,12 @@ public:
 
 	const tml::XMFLOAT3EX &Get(void) const;
 	void Set(const tml::XMFLOAT3EX &);
+	FLOAT GetX(void) const;
+	void SetX(const FLOAT);
+	FLOAT GetY(void) const;
+	void SetY(const FLOAT);
+	FLOAT GetZ(void) const;
+	void SetZ(const FLOAT);
 	void Move(const tml::XMFLOAT3EX &);
 	void Move(const tml::XMFLOAT3EX &, const FLOAT);
 	void Rotation(const tml::XMFLOAT3EX &);
@@ -99,6 +105,72 @@ inline const tml::XMFLOAT3EX &tml::XMPosition::Get(void) const
 inline void tml::XMPosition::Set(const tml::XMFLOAT3EX &pos)
 {
 	this->pos_ = pos;
+
+	return;
+}
+
+
+/**
+ * @brief GetXŠÖ”
+ * @return x (x)
+ */
+inline FLOAT tml::XMPosition::GetX(void) const
+{
+	return (this->pos_.x);
+}
+
+
+/**
+ * @brief SetXŠÖ”
+ * @param x (x)
+ */
+inline void tml::XMPosition::SetX(const FLOAT x)
+{
+	this->pos_.x = x;
+
+	return;
+}
+
+
+/**
+ * @brief GetYŠÖ”
+ * @return y (y)
+ */
+inline FLOAT tml::XMPosition::GetY(void) const
+{
+	return (this->pos_.y);
+}
+
+
+/**
+ * @brief SetYŠÖ”
+ * @param y (y)
+ */
+inline void tml::XMPosition::SetY(const FLOAT y)
+{
+	this->pos_.y = y;
+
+	return;
+}
+
+
+/**
+ * @brief GetZŠÖ”
+ * @return z (z)
+ */
+inline FLOAT tml::XMPosition::GetZ(void) const
+{
+	return (this->pos_.z);
+}
+
+
+/**
+ * @brief SetZŠÖ”
+ * @param z (z)
+ */
+inline void tml::XMPosition::SetZ(const FLOAT z)
+{
+	this->pos_.z = z;
 
 	return;
 }

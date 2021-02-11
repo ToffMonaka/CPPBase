@@ -116,8 +116,9 @@ INT tml::graphic::CameraShaderStructuredBuffer::Create(const tml::graphic::Camer
  * @param camera (camera)
  * @param v_mat (view_matrix)
  * @param inv_v_mat (inverse_view_matrix)
+ * @param p_mat (projection_matrix)
  */
-void tml::graphic::CameraShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Camera *camera, const XMMATRIX &v_mat, const XMMATRIX &inv_v_mat)
+void tml::graphic::CameraShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Camera *camera, const XMMATRIX &v_mat, const XMMATRIX &inv_v_mat, const XMMATRIX &p_mat)
 {
 	auto element = this->GetElement(index);
 
@@ -127,6 +128,7 @@ void tml::graphic::CameraShaderStructuredBuffer::SetElement(const UINT index, co
 
 	XMStoreFloat4x4(&element->view_matrix, XMMatrixTranspose(v_mat));
 	XMStoreFloat4x4(&element->inverse_view_matrix, XMMatrixTranspose(inv_v_mat));
+	XMStoreFloat4x4(&element->projection_matrix, XMMatrixTranspose(p_mat));
 
 	return;
 }

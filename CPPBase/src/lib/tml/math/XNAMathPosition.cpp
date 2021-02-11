@@ -99,6 +99,8 @@ tml::XMPosition &tml::XMPosition::operator =(const tml::XMPosition &src)
 		return ((*this));
 	}
 
+	this->Release();
+
 	this->pos_ = src.pos_;
 	this->quat_ = src.quat_;
 	this->angle_ = src.angle_;
@@ -139,6 +141,8 @@ tml::XMPosition &tml::XMPosition::operator =(tml::XMPosition &&src) noexcept
 	if (this == &src) {
 		return ((*this));
 	}
+
+	this->Release();
 
 	this->pos_ = src.pos_;
 	this->quat_ = src.quat_;

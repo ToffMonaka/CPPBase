@@ -47,7 +47,9 @@ cpp_base::MainThread::~MainThread()
 void cpp_base::MainThread::Release(void)
 {
 	this->graphic_mgr_.ReleaseResource(this->test_camera_);
-	this->graphic_mgr_.ReleaseResource(this->test_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->test1_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->test2_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->test3_sprite_model_);
 
 	tml::MainThread::Release();
 
@@ -199,7 +201,7 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
-		{// TestSpriteModel Create
+		{// Test1SpriteModel Create
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
@@ -208,13 +210,55 @@ INT cpp_base::MainThread::Start(void)
 
 			desc.Read(read_desc);
 
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test_sprite_model_, desc);
+			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test1_sprite_model_, desc);
 
-			if (this->test_sprite_model_ == nullptr) {
+			if (this->test1_sprite_model_ == nullptr) {
 				this->Init();
 
 				return (-1);
 			}
+
+			this->test1_sprite_model_->size = 128.0f;
+		}
+
+		{// Test2SpriteModel Create
+			tml::graphic::SpriteModelDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+
+			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
+
+			desc.Read(read_desc);
+
+			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test2_sprite_model_, desc);
+
+			if (this->test2_sprite_model_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->test2_sprite_model_->size = 128.0f;
+		}
+
+		{// Test3SpriteModel Create
+			tml::graphic::SpriteModelDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+
+			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
+
+			desc.Read(read_desc);
+
+			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test3_sprite_model_, desc);
+
+			if (this->test3_sprite_model_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->test3_sprite_model_->size = 128.0f;
 		}
 
 		int a = 0;
@@ -242,20 +286,24 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
-	auto test_sprite_model_pos = this->test_sprite_model_->position->Get();
+	this->test1_sprite_model_->position->SetX(this->test1_sprite_model_->position->GetX() + 2.0f);
 
-	test_sprite_model_pos.x += 2.0f;
-
-	if (test_sprite_model_pos.x >= 512.0f) {
-		test_sprite_model_pos.x = 0.0f;
+	if (this->test1_sprite_model_->position->GetX() >= 512.0f) {
+		this->test1_sprite_model_->position->SetX(-512.0f);
 	}
 
-	test_sprite_model_pos.y = 256.0f;
+	this->test1_sprite_model_->position->SetY(0.0f);
 
-	this->test_sprite_model_->position->Set(test_sprite_model_pos);
+	this->test2_sprite_model_->position->SetX(this->test1_sprite_model_->position->GetX());
+	this->test2_sprite_model_->position->SetY(this->test1_sprite_model_->position->GetY() - 128.0f - 1);
+
+	this->test3_sprite_model_->position->SetX(this->test1_sprite_model_->position->GetX());
+	this->test3_sprite_model_->position->SetY(this->test1_sprite_model_->position->GetY() + 128.0f + 1);
 
 	this->graphic_mgr_.SetDrawCamera(this->test_camera_.get());
-	this->graphic_mgr_.SetDrawModel(this->test_sprite_model_.get());
+	this->graphic_mgr_.SetDrawModel(this->test1_sprite_model_.get());
+	this->graphic_mgr_.SetDrawModel(this->test2_sprite_model_.get());
+	this->graphic_mgr_.SetDrawModel(this->test3_sprite_model_.get());
 
 	this->graphic_mgr_.Update();
 

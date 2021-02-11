@@ -147,7 +147,12 @@ tml::graphic::Manager::Manager() :
 	cmp_tex_uasr_ary_{},
 	cmp_samp_sr_ary_{}
 {
-	this->null_vp_ = CD3D11_VIEWPORT(0.0f, 0.0f, 0.0f, 0.0f, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH);
+	this->null_vp_.TopLeftX = 0.0f;
+	this->null_vp_.TopLeftY = 0.0f;
+	this->null_vp_.Width = 0.0f;
+	this->null_vp_.Height = 0.0f;
+	this->null_vp_.MinDepth = D3D11_MIN_DEPTH;
+	this->null_vp_.MaxDepth = D3D11_MAX_DEPTH;
 	this->null_vp_ary_.fill(this->null_vp_);
 	this->null_rt_ary_.fill(nullptr);
 	this->null_scb_sr_ary_.fill(nullptr);
@@ -543,7 +548,6 @@ void tml::graphic::Manager::Update(void)
 {
 	XMVECTOR determinant;
 
-	XMMATRIX w_mat;
 	XMMATRIX v_mat_3d;
 	XMMATRIX inv_v_mat_3d;
 	XMMATRIX p_mat_3d;
@@ -551,7 +555,7 @@ void tml::graphic::Manager::Update(void)
 	XMMATRIX inv_v_mat_2d;
 	XMMATRIX p_mat_2d;
 
-	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(w_mat, v_mat_3d, inv_v_mat_3d, p_mat_3d, v_mat_2d, inv_v_mat_2d, p_mat_2d);
+	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(v_mat_3d, inv_v_mat_3d, p_mat_3d, v_mat_2d, inv_v_mat_2d, p_mat_2d);
 
 	this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT;
 	this->draw_stage_dat_ = &draw_stage_dat;
@@ -577,8 +581,8 @@ void tml::graphic::Manager::Update(void)
 			this->common.header_shader_constant_buffer->UpdateBuffer();
 
 			this->common.camera_shader_structured_buffer->SetElementCount(0U);
-			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d);
-			this->common.camera_shader_structured_buffer->SetElement(1U, this->draw_camera_,this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d);
+			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d, this->draw_stage_dat_->projection_matrix_3d);
+			this->common.camera_shader_structured_buffer->SetElement(1U, this->draw_camera_,this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d, this->draw_stage_dat_->projection_matrix_2d);
 			this->common.camera_shader_structured_buffer->UpdateBuffer();
 
 			this->common.light_shader_structured_buffer->SetElementCount(0U);
@@ -628,9 +632,6 @@ void tml::graphic::Manager::Update(void)
 			break;
 		}
 		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
-			this->draw_stage_dat_->view_matrix = &this->draw_stage_dat_->view_matrix_2d;
-			this->draw_stage_dat_->projection_matrixt = &this->draw_stage_dat_->projection_matrix_2d;
-
 			this->SetDrawViewport(&this->vp_);
 			this->SetDrawTarget(this->common.main_render_target_texture.get(), nullptr);
 
@@ -709,7 +710,7 @@ XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::
  */
 XMMATRIX &tml::graphic::Manager::GetWorldMatrix2D(XMMATRIX &dst_mat, const tml::XMFLOAT2EX &pos, const FLOAT angle, const tml::XMFLOAT2EX &scale)
 {
-	dst_mat = XMMatrixTransformation2D(g_XMZero, 0.0f, XMVectorSet(scale.x, scale.y, 1.0f, 0.0f), XMVectorSet(scale.x * 0.5f, -scale.y * 0.5f, 0.0f, 0.0f), angle, XMVectorSet(pos.x, -pos.y, 0.0f, 0.0f));
+	dst_mat = XMMatrixTransformation2D(g_XMZero, 0.0f, XMVectorSet(scale.x, scale.y, 0.0f, 0.0f), g_XMZero, angle, XMVectorSet(pos.x, pos.y, 0.0f, 0.0f));
 
 	return (dst_mat);
 }
@@ -783,12 +784,12 @@ XMMATRIX &tml::graphic::Manager::GetProjectionMatrix2D(XMMATRIX &dst_mat, const 
 {
 	switch (camera->GetType()) {
 	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE: {
-		dst_mat = XMMatrixOrthographicOffCenterLH(0.0f, camera->GetFOVSize().x, -camera->GetFOVSize().y, 0.0f, 0.0f, 1.0f);
+		dst_mat = XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, 0.0f, 1.0f);
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::ORTHOGRAPHIC: {
-		dst_mat = XMMatrixOrthographicOffCenterLH(0.0f, camera->GetFOVSize().x, -camera->GetFOVSize().y, 0.0f, 0.0f, 1.0f);
+		dst_mat = XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, 0.0f, 1.0f);
 
 		break;
 	}
@@ -1017,7 +1018,7 @@ void tml::graphic::Manager::SetDrawViewport(tml::graphic::Viewport *vp)
 {
 	this->draw_vp_cnt_ = 1U;
 
-	this->draw_vp_ary_[0] = (*vp);
+	this->draw_vp_ary_[0] = vp->Get();
 
 	this->device_context_->RSSetViewports(this->draw_vp_cnt_, this->draw_vp_ary_.data());
 
@@ -1035,7 +1036,7 @@ void tml::graphic::Manager::SetDrawViewport(const UINT vp_cnt, tml::graphic::Vie
 	this->draw_vp_cnt_ = vp_cnt;
 
 	for (UINT vp_i = 0U; vp_i < vp_cnt; ++vp_i) {
-		this->draw_vp_ary_[vp_i] = vp_ary[vp_i];
+		this->draw_vp_ary_[vp_i] = vp_ary[vp_i].Get();
 	}
 
 	this->device_context_->RSSetViewports(this->draw_vp_cnt_, (this->draw_vp_cnt_ > 0U) ? this->draw_vp_ary_.data() : nullptr);

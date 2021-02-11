@@ -328,10 +328,10 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc,
 
 				tml::graphic::MeshDesc desc;
 				std::array<tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
-					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
-					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
-					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
-					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
+					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
+					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
+					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
+					tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
 				};
 				std::array<UINT, 4U> ib_element_ary = {0U, 1U, 2U, 3U};
 
@@ -404,9 +404,9 @@ void tml::graphic::SpriteModel::DrawStageInit(void)
 {
 	XMMATRIX w_mat;
 
-	this->GetManager()->GetWorldMatrix2D(w_mat, tml::XMFLOAT2EX(this->position->Get().x, this->position->Get().y), 0.0f, tml::XMFLOAT2EX(1.0f * 128.0f, 1.0f * 128.0f));
+	this->GetManager()->GetWorldMatrix2D(w_mat, tml::XMFLOAT2EX(this->position->Get().x, this->position->Get().y), this->position->GetAngle().z, tml::XMFLOAT2EX(this->size.x * this->scale.x, this->size.y * this->scale.y));
 
-	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix_2d, this->GetManager()->GetDrawStageData()->projection_matrix_2d);
+	this->ssb_->SetElement(0U, w_mat);
 	this->ssb_->UpdateBuffer();
 
 	this->layer_ssb_->SetElement(0U);

@@ -18,9 +18,6 @@ namespace graphic {
  */
 typedef struct DRAW_STAGE_DATA_
 {
-	XMMATRIX &world_matrix;
-	XMMATRIX *view_matrix;
-	XMMATRIX *projection_matrixt;
 	XMMATRIX &view_matrix_3d;
 	XMMATRIX &inverse_view_matrix_3d;
 	XMMATRIX &projection_matrix_3d;
@@ -30,7 +27,6 @@ typedef struct DRAW_STAGE_DATA_
 
 	/**
 	 * @brief コンストラクタ
-	 * @param w_mat (world_matrix)
 	 * @param v_mat_3d (view_matrix_3d)
 	 * @param inv_v_mat_3d (inverse_view_matrix_3d)
 	 * @param p_mat_3d (projection_matrix_3d)
@@ -38,10 +34,7 @@ typedef struct DRAW_STAGE_DATA_
 	 * @param inv_v_mat_2d (inverse_view_matrix_2d)
 	 * @param p_mat_2d (projection_matrix_2d)
 	 */
-	DRAW_STAGE_DATA_(XMMATRIX &w_mat, XMMATRIX &v_mat_3d, XMMATRIX &inv_v_mat_3d, XMMATRIX &p_mat_3d, XMMATRIX &v_mat_2d, XMMATRIX &inv_v_mat_2d, XMMATRIX &p_mat_2d) :
-		world_matrix(w_mat),
-		view_matrix(nullptr),
-		projection_matrixt(nullptr),
+	DRAW_STAGE_DATA_(XMMATRIX &v_mat_3d, XMMATRIX &inv_v_mat_3d, XMMATRIX &p_mat_3d, XMMATRIX &v_mat_2d, XMMATRIX &inv_v_mat_2d, XMMATRIX &p_mat_2d) :
 		view_matrix_3d(v_mat_3d),
 		inverse_view_matrix_3d(inv_v_mat_3d),
 		projection_matrix_3d(p_mat_3d),
@@ -140,8 +133,8 @@ private:
 	UINT bloom_blur_weight_cnt_;
 	FLOAT bloom_blur_dispersion_val_;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
-	CD3D11_VIEWPORT null_vp_;
-	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> null_vp_ary_;
+	D3D11_VIEWPORT null_vp_;
+	std::array<D3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> null_vp_ary_;
 	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> null_rt_ary_;
 	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> null_scb_sr_ary_;
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_SR_LIMIT> null_ssb_sr_ary_;
@@ -155,7 +148,7 @@ private:
 	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE draw_stage_type_;
 	tml::graphic::DRAW_STAGE_DATA *draw_stage_dat_;
 	UINT draw_vp_cnt_;
-	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> draw_vp_ary_;
+	std::array<D3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> draw_vp_ary_;
 	UINT draw_rt_cnt_;
 	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> draw_rt_ary_;
 	ID3D11DepthStencilView *draw_dt_;
