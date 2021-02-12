@@ -7,7 +7,6 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
-#include "../math/XNAMath.h"
 #include "Resource.h"
 
 
@@ -256,8 +255,6 @@ namespace graphic {
 class ModelDesc : public tml::graphic::ResourceDesc
 {
 public:
-	tml::XMPosition position;
-	bool position_set_flag;
 
 protected:
 	void Release(void);
@@ -311,13 +308,10 @@ private:
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
 
 public:
-	tml::shared_ptr<tml::XMPosition> position;
-	tml::XMFLOAT3EX size;
-	tml::XMFLOAT3EX scale;
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::ModelDesc &, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
+	INT Create(const tml::graphic::ModelDesc &, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE);
 
 public:
 	Model();

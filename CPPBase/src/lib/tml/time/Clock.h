@@ -14,9 +14,6 @@ namespace tml {
  */
 class Clock
 {
-public: Clock(const tml::Clock &) = delete;
-public: tml::Clock &operator =(const tml::Clock &) = delete;
-
 private:
 	tml::TIME_MILLI time_;
 
@@ -28,6 +25,10 @@ protected:
 
 public:
 	Clock();
+	Clock(const tml::Clock &);
+	tml::Clock &operator =(const tml::Clock &);
+	Clock(tml::Clock &&) noexcept;
+	tml::Clock &operator =(tml::Clock &&) noexcept;
 	virtual ~Clock();
 
 	virtual void Init(void);

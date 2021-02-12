@@ -19,6 +19,80 @@ tml::Timer::Timer() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+tml::Timer::Timer(const tml::Timer &src)
+{
+	this->start_time_ = src.start_time_;
+	this->elapsed_time_ = src.elapsed_time_;
+	this->started_flg_ = src.started_flg_;
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+tml::Timer &tml::Timer::operator =(const tml::Timer &src)
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+	this->Release();
+
+	this->start_time_ = src.start_time_;
+	this->elapsed_time_ = src.elapsed_time_;
+	this->started_flg_ = src.started_flg_;
+
+	return ((*this));
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+tml::Timer::Timer(tml::Timer &&src) noexcept
+{
+	this->start_time_ = src.start_time_;
+	this->elapsed_time_ = src.elapsed_time_;
+	this->started_flg_ = src.started_flg_;
+
+	src.Init();
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+tml::Timer &tml::Timer::operator =(tml::Timer &&src) noexcept
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+	this->Release();
+
+	this->start_time_ = src.start_time_;
+	this->elapsed_time_ = src.elapsed_time_;
+	this->started_flg_ = src.started_flg_;
+
+	src.Init();
+
+	return ((*this));
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::Timer::~Timer()

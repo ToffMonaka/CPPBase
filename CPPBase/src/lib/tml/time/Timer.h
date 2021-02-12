@@ -14,9 +14,6 @@ namespace tml {
  */
 class Timer
 {
-public: Timer(const tml::Timer &) = delete;
-public: tml::Timer &operator =(const tml::Timer &) = delete;
-
 private:
 	std::chrono::steady_clock::time_point start_time_;
 	tml::TIME_REAL elapsed_time_;
@@ -27,6 +24,10 @@ protected:
 
 public:
 	Timer();
+	Timer(const tml::Timer &);
+	tml::Timer &operator =(const tml::Timer &);
+	Timer(tml::Timer &&) noexcept;
+	tml::Timer &operator =(tml::Timer &&) noexcept;
 	virtual ~Timer();
 
 	virtual void Init(void);

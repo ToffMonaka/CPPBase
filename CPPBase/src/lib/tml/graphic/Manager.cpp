@@ -574,7 +574,7 @@ void tml::graphic::Manager::Update(void)
 	while (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
 		switch (this->draw_stage_type_) {
 		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT: {
-			this->common.main_render_target_texture->ClearRenderTarget(XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
+			this->common.main_render_target_texture->ClearRenderTarget(tml::XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
 			this->common.main_depth_target_texture->ClearDepthTarget();
 
 			this->common.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);

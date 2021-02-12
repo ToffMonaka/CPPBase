@@ -30,6 +30,124 @@ tml::FrameRate::FrameRate() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+tml::FrameRate::FrameRate(const tml::FrameRate &src)
+{
+	this->limit_ = src.limit_;
+	this->cnt_ = src.cnt_;
+	this->fps_ = src.fps_;
+	this->one_start_time_ = src.one_start_time_;
+	this->one_elapsed_time_ = src.one_elapsed_time_;
+	this->work_one_start_time_ = src.work_one_start_time_;
+	this->work_one_elapsed_time_ = src.work_one_elapsed_time_;
+	this->total_elapsed_time_ = src.total_elapsed_time_;
+	this->one_time_ = src.one_time_;
+	this->sleep_time_ = src.sleep_time_;
+	this->average_sleep_time_ = src.average_sleep_time_;
+	this->wait_time_ = src.wait_time_;
+	this->over_time_ = src.over_time_;
+	this->started_flg_ = src.started_flg_;
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+tml::FrameRate &tml::FrameRate::operator =(const tml::FrameRate &src)
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+	this->Release();
+
+	this->limit_ = src.limit_;
+	this->cnt_ = src.cnt_;
+	this->fps_ = src.fps_;
+	this->one_start_time_ = src.one_start_time_;
+	this->one_elapsed_time_ = src.one_elapsed_time_;
+	this->work_one_start_time_ = src.work_one_start_time_;
+	this->work_one_elapsed_time_ = src.work_one_elapsed_time_;
+	this->total_elapsed_time_ = src.total_elapsed_time_;
+	this->one_time_ = src.one_time_;
+	this->sleep_time_ = src.sleep_time_;
+	this->average_sleep_time_ = src.average_sleep_time_;
+	this->wait_time_ = src.wait_time_;
+	this->over_time_ = src.over_time_;
+	this->started_flg_ = src.started_flg_;
+
+	return ((*this));
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+tml::FrameRate::FrameRate(tml::FrameRate &&src) noexcept
+{
+	this->limit_ = src.limit_;
+	this->cnt_ = src.cnt_;
+	this->fps_ = src.fps_;
+	this->one_start_time_ = src.one_start_time_;
+	this->one_elapsed_time_ = src.one_elapsed_time_;
+	this->work_one_start_time_ = src.work_one_start_time_;
+	this->work_one_elapsed_time_ = src.work_one_elapsed_time_;
+	this->total_elapsed_time_ = src.total_elapsed_time_;
+	this->one_time_ = src.one_time_;
+	this->sleep_time_ = src.sleep_time_;
+	this->average_sleep_time_ = src.average_sleep_time_;
+	this->wait_time_ = src.wait_time_;
+	this->over_time_ = src.over_time_;
+	this->started_flg_ = src.started_flg_;
+
+	src.Init();
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+tml::FrameRate &tml::FrameRate::operator =(tml::FrameRate &&src) noexcept
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+	this->Release();
+
+	this->limit_ = src.limit_;
+	this->cnt_ = src.cnt_;
+	this->fps_ = src.fps_;
+	this->one_start_time_ = src.one_start_time_;
+	this->one_elapsed_time_ = src.one_elapsed_time_;
+	this->work_one_start_time_ = src.work_one_start_time_;
+	this->work_one_elapsed_time_ = src.work_one_elapsed_time_;
+	this->total_elapsed_time_ = src.total_elapsed_time_;
+	this->one_time_ = src.one_time_;
+	this->sleep_time_ = src.sleep_time_;
+	this->average_sleep_time_ = src.average_sleep_time_;
+	this->wait_time_ = src.wait_time_;
+	this->over_time_ = src.over_time_;
+	this->started_flg_ = src.started_flg_;
+
+	src.Init();
+
+	return ((*this));
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::FrameRate::~FrameRate()

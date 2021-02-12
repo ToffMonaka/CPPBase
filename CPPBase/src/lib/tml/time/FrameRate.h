@@ -14,9 +14,6 @@ namespace tml {
  */
 class FrameRate
 {
-public: FrameRate(const tml::FrameRate &) = delete;
-public: tml::FrameRate &operator =(const tml::FrameRate &) = delete;
-
 private:
 	UINT limit_;
 	UINT cnt_;
@@ -38,6 +35,10 @@ protected:
 
 public:
 	FrameRate();
+	FrameRate(const tml::FrameRate &);
+	tml::FrameRate &operator =(const tml::FrameRate &);
+	FrameRate(tml::FrameRate &&) noexcept;
+	tml::FrameRate &operator =(tml::FrameRate &&) noexcept;
 	virtual ~FrameRate();
 
 	virtual void Init(void);

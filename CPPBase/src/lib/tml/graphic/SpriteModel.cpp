@@ -124,7 +124,9 @@ INT tml::graphic::SpriteModelStage::Create(tml::graphic::Manager *mgr)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::SpriteModelDesc::SpriteModelDesc()
+tml::graphic::SpriteModelDesc::SpriteModelDesc() :
+	size(0.0f),
+	scale(1.0f)
 {
 	return;
 }
@@ -147,6 +149,10 @@ tml::graphic::SpriteModelDesc::~SpriteModelDesc()
 void tml::graphic::SpriteModelDesc::Init(void)
 {
 	this->Release();
+
+	this->position.Init();
+	this->size = 0.0f;
+	this->scale = 1.0f;
 
 	tml::graphic::ModelDesc::Init();
 
@@ -185,7 +191,9 @@ INT tml::graphic::SpriteModelDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::SpriteModel::SpriteModel()
+tml::graphic::SpriteModel::SpriteModel() :
+	size(0.0f),
+	scale(1.0f)
 {
 	return;
 }
@@ -214,6 +222,10 @@ void tml::graphic::SpriteModel::Init(void)
 {
 	this->Release();
 
+	this->position.Init();
+	this->size = 0.0f;
+	this->scale = 1.0f;
+
 	tml::graphic::Model::Init();
 
 	return;
@@ -223,20 +235,22 @@ void tml::graphic::SpriteModel::Init(void)
 /**
  * @brief Create関数
  * @param desc (desc)
- * @param pos (position)<br>
- * nullptr=指定無し
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc, tml::shared_ptr<tml::XMPosition> *pos)
+INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::MODEL_TYPE::SPRITE, pos) < 0) {
+	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::MODEL_TYPE::SPRITE) < 0) {
 		this->Init();
 
 		return (-1);
 	}
+
+	this->position = desc.position;
+	this->size = desc.size;
+	this->scale = desc.scale;
 
 	{// Forward2DStage Create
 		auto stage = tml::make_unique<tml::graphic::SpriteModelStage>(1U);
@@ -404,7 +418,7 @@ void tml::graphic::SpriteModel::DrawStageInit(void)
 {
 	XMMATRIX w_mat;
 
-	this->GetManager()->GetWorldMatrix2D(w_mat, tml::XMFLOAT2EX(this->position->Get().x, this->position->Get().y), this->position->GetAngle().z, tml::XMFLOAT2EX(this->size.x * this->scale.x, this->size.y * this->scale.y));
+	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size * this->scale);
 
 	this->ssb_->SetElement(0U, w_mat);
 	this->ssb_->UpdateBuffer();

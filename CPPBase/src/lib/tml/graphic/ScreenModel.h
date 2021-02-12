@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMath.h"
 #include "Model.h"
 
 
@@ -171,7 +172,7 @@ public:
 	virtual ~ScreenModel();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::ScreenModelDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
+	INT Create(const tml::graphic::ScreenModelDesc &);
 
 	tml::graphic::ScreenModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ScreenModelStage> &);

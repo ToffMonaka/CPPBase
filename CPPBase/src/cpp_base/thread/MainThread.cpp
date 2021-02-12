@@ -205,6 +205,7 @@ INT cpp_base::MainThread::Start(void)
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
+			desc.size = 128.0f;
 
 			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
 
@@ -217,14 +218,13 @@ INT cpp_base::MainThread::Start(void)
 
 				return (-1);
 			}
-
-			this->test1_sprite_model_->size = 128.0f;
 		}
 
 		{// Test2SpriteModel Create
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
+			desc.size = 128.0f;
 
 			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
 
@@ -237,14 +237,13 @@ INT cpp_base::MainThread::Start(void)
 
 				return (-1);
 			}
-
-			this->test2_sprite_model_->size = 128.0f;
 		}
 
 		{// Test3SpriteModel Create
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
+			desc.size = 128.0f;
 
 			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
 
@@ -257,8 +256,6 @@ INT cpp_base::MainThread::Start(void)
 
 				return (-1);
 			}
-
-			this->test3_sprite_model_->size = 128.0f;
 		}
 
 		int a = 0;
@@ -286,19 +283,19 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
-	this->test1_sprite_model_->position->SetX(this->test1_sprite_model_->position->GetX() + 2.0f);
+	this->test1_sprite_model_->position.SetX(this->test1_sprite_model_->position.GetX() + 2.0f);
 
-	if (this->test1_sprite_model_->position->GetX() >= 512.0f) {
-		this->test1_sprite_model_->position->SetX(-512.0f);
+	if (this->test1_sprite_model_->position.GetX() >= 512.0f) {
+		this->test1_sprite_model_->position.SetX(-512.0f);
 	}
 
-	this->test1_sprite_model_->position->SetY(0.0f);
+	this->test1_sprite_model_->position.SetY(0.0f);
 
-	this->test2_sprite_model_->position->SetX(this->test1_sprite_model_->position->GetX());
-	this->test2_sprite_model_->position->SetY(this->test1_sprite_model_->position->GetY() - 128.0f - 1);
+	this->test2_sprite_model_->position.SetX(this->test1_sprite_model_->position.GetX() - 128.0f - 1.0f);
+	this->test2_sprite_model_->position.SetY(this->test1_sprite_model_->position.GetY());
 
-	this->test3_sprite_model_->position->SetX(this->test1_sprite_model_->position->GetX());
-	this->test3_sprite_model_->position->SetY(this->test1_sprite_model_->position->GetY() + 128.0f + 1);
+	this->test3_sprite_model_->position.SetX(this->test1_sprite_model_->position.GetX() + 128.0f + 1.0f);
+	this->test3_sprite_model_->position.SetY(this->test1_sprite_model_->position.GetY());
 
 	this->graphic_mgr_.SetDrawCamera(this->test_camera_.get());
 	this->graphic_mgr_.SetDrawModel(this->test1_sprite_model_.get());

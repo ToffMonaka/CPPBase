@@ -157,8 +157,7 @@ void tml::graphic::ModelStage::SetLayer(const UINT index, tml::unique_ptr<tml::g
 /**
  * @brief コンストラクタ
  */
-tml::graphic::ModelDesc::ModelDesc() :
-	position_set_flag(true)
+tml::graphic::ModelDesc::ModelDesc()
 {
 	return;
 }
@@ -181,9 +180,6 @@ tml::graphic::ModelDesc::~ModelDesc()
 void tml::graphic::ModelDesc::Init(void)
 {
 	this->Release();
-
-	this->position.Init();
-	this->position_set_flag = true;
 
 	tml::graphic::ResourceDesc::Init();
 
@@ -223,9 +219,7 @@ INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Model::Model() :
-	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE),
-	size(0.0f),
-	scale(1.0f)
+	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE)
 {
 	return;
 }
@@ -313,9 +307,6 @@ void tml::graphic::Model::Release(void)
 void tml::graphic::Model::Init(void)
 {
 	this->type_ = tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE;
-	this->position.reset();
-	this->size = 0.0f;
-	this->scale = 1.0f;
 
 	tml::graphic::Resource::Init();
 
@@ -327,12 +318,10 @@ void tml::graphic::Model::Init(void)
  * @brief Create関数
  * @param desc (desc)
  * @param type (type)
- * @param pos (position)<br>
- * nullptr=指定無し
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type, tml::shared_ptr<tml::XMPosition> *pos)
+INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type)
 {
 	if (type == tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE) {
 		return (-1);
@@ -343,17 +332,6 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 	}
 
 	this->type_ = type;
-
-	if ((pos != nullptr)
-	&& ((*pos) != nullptr)) {
-		this->position = (*pos);
-	} else {
-		this->position = tml::make_shared<tml::XMPosition>(1U);
-	}
-
-	if (desc.position_set_flag) {
-		(*this->position) = desc.position;
-	}
 
 	return (0);
 }

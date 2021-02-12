@@ -26,6 +26,100 @@ tml::Date::Date() :
 
 
 /**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+tml::Date::Date(const tml::Date &src)
+{
+	this->time_ = src.time_;
+	this->year_ = src.year_;
+	this->mon_ = src.mon_;
+	this->day_ = src.day_;
+	this->hour_ = src.hour_;
+	this->min_ = src.min_;
+	this->sec_ = src.sec_;
+	this->week_day_ = src.week_day_;
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+tml::Date &tml::Date::operator =(const tml::Date &src)
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+	this->Release();
+
+	this->time_ = src.time_;
+	this->year_ = src.year_;
+	this->mon_ = src.mon_;
+	this->day_ = src.day_;
+	this->hour_ = src.hour_;
+	this->min_ = src.min_;
+	this->sec_ = src.sec_;
+	this->week_day_ = src.week_day_;
+
+	return ((*this));
+}
+
+
+/**
+ * @brief コンストラクタ
+ * @param src (src)
+ */
+tml::Date::Date(tml::Date &&src) noexcept
+{
+	this->time_ = src.time_;
+	this->year_ = src.year_;
+	this->mon_ = src.mon_;
+	this->day_ = src.day_;
+	this->hour_ = src.hour_;
+	this->min_ = src.min_;
+	this->sec_ = src.sec_;
+	this->week_day_ = src.week_day_;
+
+	src.Init();
+
+	return;
+}
+
+
+/**
+ * @brief operator =関数
+ * @param src (src)
+ * @return this (this)
+ */
+tml::Date &tml::Date::operator =(tml::Date &&src) noexcept
+{
+	if (this == &src) {
+		return ((*this));
+	}
+
+	this->Release();
+
+	this->time_ = src.time_;
+	this->year_ = src.year_;
+	this->mon_ = src.mon_;
+	this->day_ = src.day_;
+	this->hour_ = src.hour_;
+	this->min_ = src.min_;
+	this->sec_ = src.sec_;
+	this->week_day_ = src.week_day_;
+
+	src.Init();
+
+	return ((*this));
+}
+
+
+/**
  * @brief デストラクタ
  */
 tml::Date::~Date()

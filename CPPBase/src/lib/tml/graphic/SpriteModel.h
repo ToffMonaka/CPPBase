@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMath.h"
 #include "Model.h"
 
 
@@ -123,6 +124,9 @@ namespace graphic {
 class SpriteModelDesc : public tml::graphic::ModelDesc
 {
 public:
+	tml::XMPosition2D position;
+	tml::XMFLOAT2EX size;
+	tml::XMFLOAT2EX scale;
 
 protected:
 	void Release(void);
@@ -199,6 +203,11 @@ private:
 	tml::shared_ptr<tml::graphic::ModelShaderStructuredBuffer> ssb_;
 	tml::shared_ptr<tml::graphic::ModelLayerShaderStructuredBuffer> layer_ssb_;
 
+public:
+	tml::XMPosition2D position;
+	tml::XMFLOAT2EX size;
+	tml::XMFLOAT2EX scale;
+
 protected:
 	void Release(void);
 
@@ -207,7 +216,7 @@ public:
 	virtual ~SpriteModel();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::SpriteModelDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
+	INT Create(const tml::graphic::SpriteModelDesc &);
 
 	tml::graphic::SpriteModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::SpriteModelStage> &);
