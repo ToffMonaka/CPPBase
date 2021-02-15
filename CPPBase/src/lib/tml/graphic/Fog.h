@@ -19,8 +19,7 @@ class FogDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE type;
-	tml::XMPosition position;
-	bool position_set_flag;
+	tml::XMPosition3D position;
 	tml::XMFLOAT3EX color;
 	FLOAT mul_value;
 	FLOAT near_range;
@@ -73,7 +72,7 @@ private:
 	FLOAT rng_val2_;
 
 public:
-	tml::shared_ptr<tml::XMPosition> position;
+	tml::XMPosition3D position;
 
 protected:
 	void Release(void);
@@ -83,7 +82,7 @@ public:
 	virtual ~Fog();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::FogDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
+	INT Create(const tml::graphic::FogDesc &);
 
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE GetType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;

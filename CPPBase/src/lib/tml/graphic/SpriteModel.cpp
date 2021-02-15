@@ -126,7 +126,8 @@ INT tml::graphic::SpriteModelStage::Create(tml::graphic::Manager *mgr)
  */
 tml::graphic::SpriteModelDesc::SpriteModelDesc() :
 	size(0.0f),
-	scale(1.0f)
+	scale(1.0f),
+	color(1.0f)
 {
 	return;
 }
@@ -153,6 +154,7 @@ void tml::graphic::SpriteModelDesc::Init(void)
 	this->position.Init();
 	this->size = 0.0f;
 	this->scale = 1.0f;
+	this->color = 1.0f;
 
 	tml::graphic::ModelDesc::Init();
 
@@ -192,8 +194,9 @@ INT tml::graphic::SpriteModelDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::SpriteModel::SpriteModel() :
-	size(0.0f),
-	scale(1.0f)
+	size_(0.0f),
+	scale_(1.0f),
+	col_(1.0f)
 {
 	return;
 }
@@ -223,8 +226,9 @@ void tml::graphic::SpriteModel::Init(void)
 	this->Release();
 
 	this->position.Init();
-	this->size = 0.0f;
-	this->scale = 1.0f;
+	this->size_ = 0.0f;
+	this->scale_ = 1.0f;
+	this->col_ = 1.0f;
 
 	tml::graphic::Model::Init();
 
@@ -249,8 +253,9 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 	}
 
 	this->position = desc.position;
-	this->size = desc.size;
-	this->scale = desc.scale;
+	this->size_ = desc.size;
+	this->scale_ = desc.scale;
+	this->col_ = desc.color;
 
 	{// Forward2DStage Create
 		auto stage = tml::make_unique<tml::graphic::SpriteModelStage>(1U);
@@ -326,7 +331,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 			this->GetManager()->ReleaseResource(shader);
 		}
 
-		{// Layer1 Create
+		{// Layer0 Create
 			auto layer = tml::make_unique<tml::graphic::SpriteModelLayer>(1U);
 
 			if (layer->Create(this->GetManager()) < 0) {
@@ -418,9 +423,9 @@ void tml::graphic::SpriteModel::DrawStageInit(void)
 {
 	XMMATRIX w_mat;
 
-	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size * this->scale);
+	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size_ * this->scale_);
 
-	this->ssb_->SetElement(0U, w_mat);
+	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->projection_matrix_2d, this->col_);
 	this->ssb_->UpdateBuffer();
 
 	this->layer_ssb_->SetElement(0U);

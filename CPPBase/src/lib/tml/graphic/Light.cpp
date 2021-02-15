@@ -13,8 +13,7 @@
  */
 tml::graphic::LightDesc::LightDesc() :
 	type(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE),
-	position_set_flag(true),
-	color(0.0f),
+	color(1.0f),
 	mul_value(0.0f),
 	add_value(0.0f),
 	exp_value(1.0f),
@@ -49,8 +48,7 @@ void tml::graphic::LightDesc::Init(void)
 
 	this->type = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
 	this->position.Init();
-	this->position_set_flag = true;
-	this->color = 0.0f;
+	this->color = 1.0f;
 	this->mul_value = 0.0f;
 	this->add_value = 0.0f;
 	this->exp_value = 1.0f;
@@ -100,7 +98,7 @@ INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &ini_file)
  */
 tml::graphic::Light::Light() :
 	type_(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE),
-	col_(0.0f),
+	col_(1.0f),
 	mul_val_(0.0f),
 	add_val_(0.0f),
 	exp_val_(1.0f),
@@ -136,8 +134,8 @@ void tml::graphic::Light::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
-	this->position.reset();
-	this->col_ = 0.0f;
+	this->position.Init();
+	this->col_ = 1.0f;
 	this->mul_val_ = 0.0f;
 	this->add_val_ = 0.0f;
 	this->exp_val_ = 1.0f;
@@ -159,12 +157,10 @@ void tml::graphic::Light::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param pos (position)<br>
- * nullptr=éwíËñ≥Çµ
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc, tml::shared_ptr<tml::XMPosition> *pos)
+INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc)
 {
 	if (desc.type == tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE) {
 		this->Init();
@@ -181,18 +177,7 @@ INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc, tml::shared
 	}
 
 	this->type_ = desc.type;
-
-	if ((pos != nullptr)
-	&& ((*pos) != nullptr)) {
-		this->position = (*pos);
-	} else {
-		this->position = tml::make_shared<tml::XMPosition>(1U);
-	}
-
-	if (desc.position_set_flag) {
-		(*this->position) = desc.position;
-	}
-
+	this->position = desc.position;
 	this->col_ = desc.color;
 	this->mul_val_ = desc.mul_value;
 	this->add_val_ = desc.add_value;

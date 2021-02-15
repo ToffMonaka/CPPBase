@@ -13,7 +13,6 @@
  */
 tml::graphic::CameraDesc::CameraDesc() :
 	type(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE),
-	position_set_flag(true),
 	fov_angle(0.0f),
 	fov_size(0.0f),
 	near_clip(0.0f),
@@ -43,7 +42,6 @@ void tml::graphic::CameraDesc::Init(void)
 
 	this->type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
 	this->position.Init();
-	this->position_set_flag = true;
 	this->fov_angle = 0.0f;
 	this->fov_size = 0.0f;
 	this->near_clip = 0.0f;
@@ -116,7 +114,7 @@ void tml::graphic::Camera::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
-	this->position.reset();
+	this->position.Init();
 	this->fov_angle_ = 0.0f;
 	this->fov_size_ = 0.0f;
 	this->near_clip_ = 0.0f;
@@ -131,12 +129,10 @@ void tml::graphic::Camera::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param pos (position)<br>
- * nullptr=éwíËñ≥Çµ
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc, tml::shared_ptr<tml::XMPosition> *pos)
+INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc)
 {
 	if (desc.type == tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE) {
 		this->Init();
@@ -153,18 +149,7 @@ INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc, tml::shar
 	}
 
 	this->type_ = desc.type;
-
-	if ((pos != nullptr)
-	&& ((*pos) != nullptr)) {
-		this->position = (*pos);
-	} else {
-		this->position = tml::make_shared<tml::XMPosition>(1U);
-	}
-
-	if (desc.position_set_flag) {
-		(*this->position) = desc.position;
-	}
-
+	this->position = desc.position;
 	this->fov_angle_ = desc.fov_angle;
 	this->fov_size_ = desc.fov_size;
 	this->near_clip_ = desc.near_clip;

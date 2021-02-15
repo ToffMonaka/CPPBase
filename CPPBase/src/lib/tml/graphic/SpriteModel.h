@@ -127,6 +127,7 @@ public:
 	tml::XMPosition2D position;
 	tml::XMFLOAT2EX size;
 	tml::XMFLOAT2EX scale;
+	tml::XMFLOAT4EX color;
 
 protected:
 	void Release(void);
@@ -200,13 +201,14 @@ public:
 	} VERTEX_BUFFER_ELEMENT;
 
 private:
+	tml::XMFLOAT2EX size_;
+	tml::XMFLOAT2EX scale_;
+	tml::XMFLOAT4EX col_;
 	tml::shared_ptr<tml::graphic::ModelShaderStructuredBuffer> ssb_;
 	tml::shared_ptr<tml::graphic::ModelLayerShaderStructuredBuffer> layer_ssb_;
 
 public:
 	tml::XMPosition2D position;
-	tml::XMFLOAT2EX size;
-	tml::XMFLOAT2EX scale;
 
 protected:
 	void Release(void);
@@ -218,6 +220,12 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::SpriteModelDesc &);
 
+	const tml::XMFLOAT2EX &GetSize(void) const;
+	void SetSize(const tml::XMFLOAT2EX &);
+	const tml::XMFLOAT2EX &GetScale(void) const;
+	void SetScale(const tml::XMFLOAT2EX &);
+	const tml::XMFLOAT4EX &GetColor(void) const;
+	void SetColor(const tml::XMFLOAT4EX &);
 	tml::graphic::SpriteModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::SpriteModelStage> &);
 
@@ -235,6 +243,72 @@ inline void tml::graphic::SpriteModel::Release(void)
 {
 	tml::graphic::Model::Release();
 
+	return;
+}
+
+
+/**
+ * @brief GetSizeŠÖ”
+ * @return size (size)
+ */
+inline const tml::XMFLOAT2EX &tml::graphic::SpriteModel::GetSize(void) const
+{
+	return (this->size_);
+}
+
+
+/**
+ * @brief SetSizeŠÖ”
+ * @param size (size)
+ */
+inline void tml::graphic::SpriteModel::SetSize(const tml::XMFLOAT2EX &size)
+{
+	this->size_ = size;
+	
+	return;
+}
+
+
+/**
+ * @brief GetScaleŠÖ”
+ * @return scale (scale)
+ */
+inline const tml::XMFLOAT2EX &tml::graphic::SpriteModel::GetScale(void) const
+{
+	return (this->scale_);
+}
+
+
+/**
+ * @brief SetScaleŠÖ”
+ * @param scale (scale)
+ */
+inline void tml::graphic::SpriteModel::SetScale(const tml::XMFLOAT2EX &scale)
+{
+	this->scale_ = scale;
+	
+	return;
+}
+
+
+/**
+ * @brief GetColorŠÖ”
+ * @return col (color)
+ */
+inline const tml::XMFLOAT4EX &tml::graphic::SpriteModel::GetColor(void) const
+{
+	return (this->col_);
+}
+
+
+/**
+ * @brief SetColorŠÖ”
+ * @param col (color)
+ */
+inline void tml::graphic::SpriteModel::SetColor(const tml::XMFLOAT4EX &col)
+{
+	this->col_ = col;
+	
 	return;
 }
 

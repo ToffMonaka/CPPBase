@@ -224,8 +224,8 @@ public:
 	tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE GetAOQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE GetBloomQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE GetAAQualityType(void) const;
-	XMMATRIX &GetWorldMatrix3D(XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
 	XMMATRIX &GetWorldMatrix3D(XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &, const tml::XMFLOAT3EX &);
+	XMMATRIX &GetWorldMatrix3D(XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
 	XMMATRIX &GetWorldMatrix2D(XMMATRIX &, const tml::XMFLOAT2EX &, const FLOAT, const tml::XMFLOAT2EX &);
 	XMMATRIX &GetViewMatrix3D(XMMATRIX &, const tml::graphic::Camera *);
 	XMMATRIX &GetViewMatrix2D(XMMATRIX &, const tml::graphic::Camera *);

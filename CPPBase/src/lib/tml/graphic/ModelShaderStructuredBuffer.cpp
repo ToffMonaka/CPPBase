@@ -114,8 +114,10 @@ INT tml::graphic::ModelShaderStructuredBuffer::Create(const tml::graphic::ModelS
  * @brief SetElementŠÖ”
  * @param index (index)
  * @param w_mat (world_matrix)
+ * @param p_mat (projection_matrix)
+ * @param col (color)
  */
-void tml::graphic::ModelShaderStructuredBuffer::SetElement(const UINT index, const XMMATRIX &w_mat)
+void tml::graphic::ModelShaderStructuredBuffer::SetElement(const UINT index, const XMMATRIX &w_mat, const XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
 {
 	auto element = this->GetElement(index);
 
@@ -123,7 +125,10 @@ void tml::graphic::ModelShaderStructuredBuffer::SetElement(const UINT index, con
 		return;
 	}
 
-	XMStoreFloat4x4(&element->world_matrix, XMMatrixTranspose(w_mat));
+	XMMATRIX wp_mat = w_mat * p_mat;
+
+	XMStoreFloat4x4(&element->world_projection_matrix, XMMatrixTranspose(wp_mat));
+	element->color = col;
 
 	return;
 }

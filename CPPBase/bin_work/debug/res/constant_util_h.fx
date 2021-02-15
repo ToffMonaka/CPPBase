@@ -147,7 +147,8 @@ struct FOG_SSB_ELEMENT
 
 struct MODEL_SSB_ELEMENT
 {
-	matrix w_mat;
+	matrix wp_mat;
+	float4 col;
 };
 
 

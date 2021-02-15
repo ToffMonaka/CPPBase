@@ -47,6 +47,7 @@ cpp_base::MainThread::~MainThread()
 void cpp_base::MainThread::Release(void)
 {
 	this->graphic_mgr_.ReleaseResource(this->test_camera_);
+	this->graphic_mgr_.ReleaseResource(this->bg_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->test1_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->test2_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->test3_sprite_model_);
@@ -201,11 +202,32 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
+		{// BackgroundModel Create
+			tml::graphic::SpriteModelDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+			desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Width), static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Height));
+			desc.color = tml::XMFLOAT4EX(8.0f / 255.0f, 8.0f / 255.0f, 8.0f / 255.0f, 1.0f);
+
+			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
+
+			desc.Read(read_desc);
+
+			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->bg_sprite_model_, desc);
+
+			if (this->bg_sprite_model_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+		}
+
 		{// Test1SpriteModel Create
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
 			desc.size = 128.0f;
+			desc.color = tml::XMFLOAT4EX(252.0f / 255.0f, 0.0f, 0.0f, 1.0f);
 
 			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
 
@@ -225,6 +247,7 @@ INT cpp_base::MainThread::Start(void)
 
 			desc.manager = &this->graphic_mgr_;
 			desc.size = 128.0f;
+			desc.color = tml::XMFLOAT4EX(252.0f / 255.0f, 0.0f, 0.0f, 1.0f);
 
 			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
 
@@ -244,6 +267,7 @@ INT cpp_base::MainThread::Start(void)
 
 			desc.manager = &this->graphic_mgr_;
 			desc.size = 128.0f;
+			desc.color = tml::XMFLOAT4EX(252.0f / 255.0f, 0.0f, 0.0f, 1.0f);
 
 			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
 
@@ -298,6 +322,7 @@ void cpp_base::MainThread::Update(void)
 	this->test3_sprite_model_->position.SetY(this->test1_sprite_model_->position.GetY());
 
 	this->graphic_mgr_.SetDrawCamera(this->test_camera_.get());
+	this->graphic_mgr_.SetDrawModel(this->bg_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->test1_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->test2_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->test3_sprite_model_.get());

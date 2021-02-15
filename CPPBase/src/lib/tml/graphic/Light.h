@@ -19,8 +19,7 @@ class LightDesc : public tml::graphic::ResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type;
-	tml::XMPosition position;
-	bool position_set_flag;
+	tml::XMPosition3D position;
 	tml::XMFLOAT3EX color;
 	FLOAT mul_value;
 	FLOAT add_value;
@@ -85,7 +84,7 @@ private:
 	bool shadow_flg_;
 
 public:
-	tml::shared_ptr<tml::XMPosition> position;
+	tml::XMPosition3D position;
 
 protected:
 	void Release(void);
@@ -95,7 +94,7 @@ public:
 	virtual ~Light();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::LightDesc &, tml::shared_ptr<tml::XMPosition> *pos = nullptr);
+	INT Create(const tml::graphic::LightDesc &);
 
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE GetType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;

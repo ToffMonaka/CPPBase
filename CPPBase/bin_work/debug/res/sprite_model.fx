@@ -17,7 +17,7 @@ VS_OUTPUT RunVS(VS_INPUT input)
 {
 	VS_OUTPUT output;
 
-	output.pos = mul(mul(input.pos, model_ssb[0].w_mat), camera_ssb[1].p_mat);
+	output.pos = mul(input.pos, model_ssb[0].wp_mat);
 
 	return (output);
 }
@@ -27,7 +27,7 @@ PS_OUTPUT RunPS(VS_OUTPUT input)
 {
 	PS_OUTPUT output;
 
-	output.col = float4(1.0, 0.0, 0.0, 1.0);
+	output.col = model_ssb[0].col;
 
 	return (output);
 }

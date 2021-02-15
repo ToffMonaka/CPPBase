@@ -672,13 +672,13 @@ void tml::graphic::Manager::Update(void)
  * @brief GetWorldMatrix3DŠÖ”
  * @param dst_mat (dst_matrix)
  * @param pos (position)
- * @param angle (angle)
+ * @param quat (quaternion)
  * @param scale (scale)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle, const tml::XMFLOAT3EX &scale)
+XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat, const tml::XMFLOAT3EX &scale)
 {
-	dst_mat = XMMatrixTransformation(g_XMZero, g_XMIdentityR3, XMLoadFloat3(&scale), g_XMZero, XMQuaternionRotationRollPitchYaw(angle.x, angle.y, angle.z), XMLoadFloat3(&pos));
+	dst_mat = XMMatrixTransformation(g_XMZero, g_XMIdentityR3, XMLoadFloat3(&scale), g_XMZero, XMLoadFloat4(&quat), XMLoadFloat3(&pos));
 
 	return (dst_mat);
 }
@@ -688,13 +688,13 @@ XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::
  * @brief GetWorldMatrix3DŠÖ”
  * @param dst_mat (dst_matrix)
  * @param pos (position)
- * @param quat (quaternion)
+ * @param angle (angle)
  * @param scale (scale)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat, const tml::XMFLOAT3EX &scale)
+XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle, const tml::XMFLOAT3EX &scale)
 {
-	dst_mat = XMMatrixTransformation(g_XMZero, g_XMIdentityR3, XMLoadFloat3(&scale), g_XMZero, XMLoadFloat4(&quat), XMLoadFloat3(&pos));
+	dst_mat = XMMatrixTransformation(g_XMZero, g_XMIdentityR3, XMLoadFloat3(&scale), g_XMZero, XMQuaternionRotationRollPitchYaw(angle.x, angle.y, angle.z), XMLoadFloat3(&pos));
 
 	return (dst_mat);
 }
@@ -724,7 +724,7 @@ XMMATRIX &tml::graphic::Manager::GetWorldMatrix2D(XMMATRIX &dst_mat, const tml::
  */
 XMMATRIX &tml::graphic::Manager::GetViewMatrix3D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
 {
-	dst_mat = XMMatrixLookToLH(XMLoadFloat3(&camera->position->Get()), XMLoadFloat3(&camera->position->GetZAxisVector()), XMLoadFloat3(&camera->position->GetYAxisVector()));
+	dst_mat = XMMatrixLookToLH(XMLoadFloat3(&camera->position.Get()), XMLoadFloat3(&camera->position.GetZAxisVector()), XMLoadFloat3(&camera->position.GetYAxisVector()));
 
 	return (dst_mat);
 }

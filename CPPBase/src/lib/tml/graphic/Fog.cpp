@@ -13,8 +13,7 @@
  */
 tml::graphic::FogDesc::FogDesc() :
 	type(tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE),
-	position_set_flag(true),
-	color(0.0f),
+	color(1.0f),
 	mul_value(0.0f),
 	near_range(0.0f),
 	far_range(0.0f)
@@ -43,8 +42,7 @@ void tml::graphic::FogDesc::Init(void)
 
 	this->type = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
 	this->position.Init();
-	this->position_set_flag = true;
-	this->color = 0.0f;
+	this->color = 1.0f;
 	this->mul_value = 0.0f;
 	this->near_range = 0.0f;
 	this->far_range = 0.0f;
@@ -88,7 +86,7 @@ INT tml::graphic::FogDesc::ReadValue(const tml::INIFile &ini_file)
  */
 tml::graphic::Fog::Fog() :
 	type_(tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE),
-	col_(0.0f),
+	col_(1.0f),
 	mul_val_(0.0f),
 	near_rng_(0.0f),
 	far_rng_(0.0f),
@@ -118,8 +116,8 @@ void tml::graphic::Fog::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
-	this->position.reset();
-	this->col_ = 0.0f;
+	this->position.Init();
+	this->col_ = 1.0f;
 	this->mul_val_ = 0.0f;
 	this->near_rng_ = 0.0f;
 	this->far_rng_ = 0.0f;
@@ -135,12 +133,10 @@ void tml::graphic::Fog::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param pos (position)<br>
- * nullptr=éwíËñ≥Çµ
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc, tml::shared_ptr<tml::XMPosition> *pos)
+INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc)
 {
 	if (desc.type == tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE) {
 		this->Init();
@@ -157,18 +153,7 @@ INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc, tml::shared_ptr
 	}
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
-
-	if ((pos != nullptr)
-	&& ((*pos) != nullptr)) {
-		this->position = (*pos);
-	} else {
-		this->position = tml::make_shared<tml::XMPosition>(1U);
-	}
-
-	if (desc.position_set_flag) {
-		(*this->position) = desc.position;
-	}
-
+	this->position = desc.position;
 	this->col_ = desc.color;
 	this->mul_val_ = desc.mul_value;
 	this->SetNearRange(desc.near_range);

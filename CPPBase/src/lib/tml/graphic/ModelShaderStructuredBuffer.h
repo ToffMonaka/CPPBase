@@ -60,13 +60,15 @@ public:
 	 */
 	typedef struct ELEMENT_
 	{
-		tml::XMFLOAT4X4EX world_matrix;
+		tml::XMFLOAT4X4EX world_projection_matrix;
+		tml::XMFLOAT4EX color;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
-			world_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE)
+			world_projection_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
+			color(1.0f)
 		{
 			return;
 		};
@@ -87,7 +89,7 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::ModelShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	void SetElement(const UINT, const XMMATRIX &);
+	void SetElement(const UINT, const XMMATRIX &, const XMMATRIX &, const tml::XMFLOAT4EX &);
 };
 }
 }
