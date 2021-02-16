@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <vector>
 #include "../math/XNAMath.h"
 #include "Resource.h"
 
@@ -18,7 +19,7 @@ namespace graphic {
 class TextureDesc : public tml::graphic::ResourceDesc
 {
 public:
-	std::list<tml::BinaryFileReadDesc> file_read_desc_container;
+	std::vector<tml::BinaryFileReadDesc> file_read_desc_container;
 	IDXGISwapChain *swap_chain;
 	CD3D11_TEXTURE2D_DESC texture_desc;
 	DXGI_FORMAT render_target_format;

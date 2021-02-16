@@ -109,10 +109,7 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
 	this->texture_desc.BindFlags = 0U;
 
-	for (UINT buf_i = 0U; buf_i < tex_desc_buf_cnt; ++buf_i) {
-		this->file_read_desc_container.emplace_back();
-	}
-
+	this->file_read_desc_container.resize(tex_desc_buf_cnt);
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(tex_desc_format, tex_desc_size.x, tex_desc_size.y, tex_desc_buf_cnt, tex_desc_mm_cnt);
 	this->texture_desc.BindFlags = 0U;
 
@@ -253,7 +250,8 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		for (auto &file_read_desc : desc.file_read_desc_container) {
 			auto file_read_desc_dat = file_read_desc.GetDataByParent();
 
-			if (!file_read_desc_dat->file_path.empty() || file_read_desc_dat->file_buffer.GetLength() > 0U) {
+			if (!file_read_desc_dat->file_path.empty()
+			|| (file_read_desc_dat->file_buffer.GetLength() > 0U)) {
 				tml::BinaryFile bin_file;
 
 				bin_file.read_desc.parent_data = file_read_desc_dat;
@@ -364,9 +362,10 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	} else if (desc.file_read_desc_container.size() == 1U) {
 		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
 
-		auto file_read_desc_dat = desc.file_read_desc_container.front().GetDataByParent();
+		auto file_read_desc_dat = desc.file_read_desc_container[0].GetDataByParent();
 
-		if (!file_read_desc_dat->file_path.empty() || file_read_desc_dat->file_buffer.GetLength() > 0U) {
+		if (!file_read_desc_dat->file_path.empty()
+		|| (file_read_desc_dat->file_buffer.GetLength() > 0U)) {
 			tml::BinaryFile bin_file;
 
 			bin_file.read_desc.parent_data = file_read_desc_dat;

@@ -21,7 +21,9 @@
  */
 tml::graphic::ModelLayer::ModelLayer() :
 	mgr_(nullptr),
-	mesh_index_(0U)
+	mesh_index_(0U),
+	diffuse_tex_index_(0U),
+	diffuse_samp_index_(0U)
 {
 	return;
 }
@@ -43,6 +45,8 @@ void tml::graphic::ModelLayer::Init(void)
 {
 	this->mgr_ = nullptr;
 	this->mesh_index_ = 0U;
+	this->diffuse_tex_index_ = 0U;
+	this->diffuse_samp_index_ = 0U;
 
 	return;
 }

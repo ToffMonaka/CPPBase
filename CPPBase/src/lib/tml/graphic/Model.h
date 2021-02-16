@@ -26,6 +26,8 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	tml::graphic::Manager *mgr_;
 	UINT mesh_index_;
+	UINT diffuse_tex_index_;
+	UINT diffuse_samp_index_;
 
 protected:
 	void Release(void);
@@ -40,6 +42,10 @@ public:
 	tml::graphic::Manager *GetManager(void);
 	UINT GetMeshIndex(void) const;
 	void SetMeshIndex(const UINT);
+	UINT GetDiffuseTextureIndex(void) const;
+	void SetDiffuseTextureIndex(const UINT);
+	UINT GetDiffuseSamplerIndex(void) const;
+	void SetDiffuseSamplerIndex(const UINT);
 };
 }
 }
@@ -81,6 +87,50 @@ inline UINT tml::graphic::ModelLayer::GetMeshIndex(void) const
 inline void tml::graphic::ModelLayer::SetMeshIndex(const UINT mesh_index)
 {
 	this->mesh_index_ = mesh_index;
+
+	return;
+}
+
+
+/**
+ * @brief GetDiffuseTextureIndexŠÖ”
+ * @return diffuse_tex_index (diffuse_texture_index)
+ */
+inline UINT tml::graphic::ModelLayer::GetDiffuseTextureIndex(void) const
+{
+	return (this->diffuse_tex_index_);
+}
+
+
+/**
+ * @brief SetDiffuseTextureIndexŠÖ”
+ * @param diffuse_tex_index (diffuse_texture_index)
+ */
+inline void tml::graphic::ModelLayer::SetDiffuseTextureIndex(const UINT diffuse_tex_index)
+{
+	this->diffuse_tex_index_ = diffuse_tex_index;
+
+	return;
+}
+
+
+/**
+ * @brief GetDiffuseSamplerIndexŠÖ”
+ * @return diffuse_samp_index (diffuse_sampler_index)
+ */
+inline UINT tml::graphic::ModelLayer::GetDiffuseSamplerIndex(void) const
+{
+	return (this->diffuse_samp_index_);
+}
+
+
+/**
+ * @brief SetDiffuseSamplerIndexŠÖ”
+ * @param diffuse_samp_index (diffuse_sampler_index)
+ */
+inline void tml::graphic::ModelLayer::SetDiffuseSamplerIndex(const UINT diffuse_samp_index)
+{
+	this->diffuse_samp_index_ = diffuse_samp_index;
 
 	return;
 }

@@ -13,6 +13,8 @@
 #include "ModelShaderStructuredBuffer.h"
 #include "ModelLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
+#include "Texture.h"
+#include "Sampler.h"
 
 
 /**
@@ -341,6 +343,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 			}
 
 			layer->SetMeshIndex(0U);
+			layer->SetDiffuseSamplerIndex(0U);
 
 			{// Mesh Create
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
@@ -372,6 +375,21 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 
 				this->SetMesh(layer->GetMeshIndex(), mesh);
 				this->GetManager()->ReleaseResource(mesh);
+			}
+
+			{// DiffuseSampler Create
+				tml::shared_ptr<tml::graphic::Sampler> samp;
+
+				this->GetManager()->GetResource(samp, this->GetManager()->common.model_cc_sampler);
+
+				if (samp == nullptr) {
+					this->Init();
+
+					return (-1);
+				}
+
+				this->SetSampler(layer->GetDiffuseSamplerIndex(), samp);
+				this->GetManager()->ReleaseResource(samp);
 			}
 
 			stage->SetLayer(0U, layer);
@@ -421,6 +439,9 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
  */
 void tml::graphic::SpriteModel::DrawStageInit(void)
 {
+	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	auto layer = stage->GetLayer(0U);
+
 	XMMATRIX w_mat;
 
 	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size_ * this->scale_);
@@ -428,7 +449,7 @@ void tml::graphic::SpriteModel::DrawStageInit(void)
 	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->projection_matrix_2d, this->col_);
 	this->ssb_->UpdateBuffer();
 
-	this->layer_ssb_->SetElement(0U);
+	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()));
 	this->layer_ssb_->UpdateBuffer();
 
 	return;
@@ -441,6 +462,8 @@ void tml::graphic::SpriteModel::DrawStageInit(void)
 void tml::graphic::SpriteModel::DrawStageForward2D(void)
 {
 	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	auto layer = stage->GetLayer(0U);
+
 	std::array<tml::graphic::ShaderStructuredBuffer *, 2U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get()};
 
 	this->GetManager()->SetDrawRasterizerState(this->GetRasterizerState(stage->GetRasterizerStateIndex()));
@@ -449,11 +472,14 @@ void tml::graphic::SpriteModel::DrawStageForward2D(void)
 	this->GetManager()->SetDrawShader(this->GetShader(stage->GetShaderIndex()));
 	this->GetManager()->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::MODEL, ssb_ary.size(), ssb_ary.data());
 
-	auto layer = stage->GetLayer(0U);
-
 	this->GetManager()->SetDrawMesh(this->GetMesh(layer->GetMeshIndex()));
+	this->GetManager()->SetDrawTextureSR(0U, this->GetTexture(layer->GetDiffuseTextureIndex()));
+	this->GetManager()->SetDrawSamplerSR(0U, this->GetSampler(layer->GetDiffuseSamplerIndex()));
 
 	this->GetManager()->Draw(1U);
+
+	this->GetManager()->ClearDrawTextureSR(0U);
+	this->GetManager()->ClearDrawSamplerSR(0U);
 
 	return;
 }

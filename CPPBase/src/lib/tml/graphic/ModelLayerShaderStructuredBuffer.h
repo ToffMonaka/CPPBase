@@ -60,19 +60,19 @@ public:
 	 */
 	typedef struct ELEMENT_
 	{
+		UINT diffuse_texture_flag;
 		UINT dummy1;
 		UINT dummy2;
 		UINT dummy3;
-		UINT dummy4;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
+			diffuse_texture_flag(0U),
 			dummy1(0U),
 			dummy2(0U),
-			dummy3(0U),
-			dummy4(0U)
+			dummy3(0U)
 		{
 			return;
 		};
@@ -93,7 +93,7 @@ public:
 
 	void UpdateBuffer(void);
 	tml::graphic::ModelLayerShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	void SetElement(const UINT);
+	void SetElement(const UINT, const bool);
 };
 }
 }

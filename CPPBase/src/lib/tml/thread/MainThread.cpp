@@ -108,10 +108,14 @@ INT tml::MainThread::CreateWindow_(const WNDCLASSEX &wnd_class, const tml::XMUIN
 		return (-1);
 	}
 
+	RECT wnd_rect = {0L, 0L, static_cast<LONG>(size.x), static_cast<LONG>(size.y)};
+
+	AdjustWindowRect(&wnd_rect, WS_OVERLAPPEDWINDOW, false);
+
 	this->wnd_handle_ = CreateWindow(
 		this->wnd_class_.lpszClassName, this->wnd_name_.c_str(),
 		WS_OVERLAPPEDWINDOW,
-		pos.x, pos.y, size.x, size.y,
+		pos.x, pos.y, wnd_rect.right - wnd_rect.left, wnd_rect.bottom - wnd_rect.top,
 		nullptr, nullptr, this->instance_handle_,
 		nullptr
 	);

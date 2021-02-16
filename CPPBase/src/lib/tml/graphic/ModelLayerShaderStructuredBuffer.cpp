@@ -113,9 +113,9 @@ INT tml::graphic::ModelLayerShaderStructuredBuffer::Create(const tml::graphic::M
 /**
  * @brief SetElementŠÖ”
  * @param index (index)
- * @param w_mat (world_matrix)
+ * @param diffuse_tex_flg (diffuse_texture_flag)
  */
-void tml::graphic::ModelLayerShaderStructuredBuffer::SetElement(const UINT index)
+void tml::graphic::ModelLayerShaderStructuredBuffer::SetElement(const UINT index, const bool diffuse_tex_flg)
 {
 	auto element = this->GetElement(index);
 
@@ -123,10 +123,7 @@ void tml::graphic::ModelLayerShaderStructuredBuffer::SetElement(const UINT index
 		return;
 	}
 
-	element->dummy1 = 1U;
-	element->dummy2 = 2U;
-	element->dummy3 = 3U;
-	element->dummy4 = 4U;
+	element->diffuse_texture_flag = diffuse_tex_flg;
 
 	return;
 }

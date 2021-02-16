@@ -18,6 +18,8 @@
 #include "../thread/TestThread.h"
 
 #include "../../lib/tml/graphic/Camera.h"
+#include "../../lib/tml/graphic/Texture.h"
+#include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/SpriteModel.h"
 
 
@@ -48,9 +50,7 @@ void cpp_base::MainThread::Release(void)
 {
 	this->graphic_mgr_.ReleaseResource(this->test_camera_);
 	this->graphic_mgr_.ReleaseResource(this->bg_sprite_model_);
-	this->graphic_mgr_.ReleaseResource(this->test1_sprite_model_);
-	this->graphic_mgr_.ReleaseResource(this->test2_sprite_model_);
-	this->graphic_mgr_.ReleaseResource(this->test3_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->title_logo_sprite_model_);
 
 	tml::MainThread::Release();
 
@@ -209,7 +209,7 @@ INT cpp_base::MainThread::Start(void)
 			desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Width), static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Height));
 			desc.color = tml::XMFLOAT4EX(8.0f / 255.0f, 8.0f / 255.0f, 8.0f / 255.0f, 1.0f);
 
-			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
+			auto read_desc = tml::INIFileReadDesc(L"res/bg_sprite_model.ini");
 
 			desc.Read(read_desc);
 
@@ -220,65 +220,77 @@ INT cpp_base::MainThread::Start(void)
 
 				return (-1);
 			}
+
+			auto stage = this->bg_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+			auto layer = stage->GetLayer(0U);
+
+			layer->SetDiffuseTextureIndex(0U);
+
+			{// DiffuseTexture Create
+				tml::shared_ptr<tml::graphic::Texture> tex;
+
+				tml::graphic::TextureDesc desc;
+
+				desc.manager = &this->graphic_mgr_;
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR);
+				desc.file_read_desc_container[0].data.file_path = L"res/bg_img1.png";
+
+				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
+
+				if (tex == nullptr) {
+					this->Init();
+
+					return (-1);
+				}
+
+				this->bg_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+				this->graphic_mgr_.ReleaseResource(tex);
+			}
 		}
 
-		{// Test1SpriteModel Create
+		{// TitleLogoSpriteModel Create
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
-			desc.size = 128.0f;
-			desc.color = tml::XMFLOAT4EX(252.0f / 255.0f, 0.0f, 0.0f, 1.0f);
 
-			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
+			auto read_desc = tml::INIFileReadDesc(L"res/title_logo_sprite_model.ini");
 
 			desc.Read(read_desc);
 
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test1_sprite_model_, desc);
+			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_logo_sprite_model_, desc);
 
-			if (this->test1_sprite_model_ == nullptr) {
+			if (this->title_logo_sprite_model_ == nullptr) {
 				this->Init();
 
 				return (-1);
 			}
-		}
 
-		{// Test2SpriteModel Create
-			tml::graphic::SpriteModelDesc desc;
+			auto stage = this->title_logo_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+			auto layer = stage->GetLayer(0U);
 
-			desc.manager = &this->graphic_mgr_;
-			desc.size = 128.0f;
-			desc.color = tml::XMFLOAT4EX(252.0f / 255.0f, 0.0f, 0.0f, 1.0f);
+			layer->SetDiffuseTextureIndex(0U);
 
-			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
+			{// DiffuseTexture Create
+				tml::shared_ptr<tml::graphic::Texture> tex;
 
-			desc.Read(read_desc);
+				tml::graphic::TextureDesc desc;
 
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test2_sprite_model_, desc);
+				desc.manager = &this->graphic_mgr_;
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR);
+				desc.file_read_desc_container[0].data.file_path = L"res/title_logo_img1.png";
 
-			if (this->test2_sprite_model_ == nullptr) {
-				this->Init();
+				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
 
-				return (-1);
-			}
-		}
+				if (tex == nullptr) {
+					this->Init();
 
-		{// Test3SpriteModel Create
-			tml::graphic::SpriteModelDesc desc;
+					return (-1);
+				}
 
-			desc.manager = &this->graphic_mgr_;
-			desc.size = 128.0f;
-			desc.color = tml::XMFLOAT4EX(252.0f / 255.0f, 0.0f, 0.0f, 1.0f);
+				this->title_logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y)));
 
-			auto read_desc = tml::INIFileReadDesc(L"res/test_sprite_model.ini");
-
-			desc.Read(read_desc);
-
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test3_sprite_model_, desc);
-
-			if (this->test3_sprite_model_ == nullptr) {
-				this->Init();
-
-				return (-1);
+				this->title_logo_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+				this->graphic_mgr_.ReleaseResource(tex);
 			}
 		}
 
@@ -307,25 +319,9 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
-	this->test1_sprite_model_->position.SetX(this->test1_sprite_model_->position.GetX() + 2.0f);
-
-	if (this->test1_sprite_model_->position.GetX() >= 512.0f) {
-		this->test1_sprite_model_->position.SetX(-512.0f);
-	}
-
-	this->test1_sprite_model_->position.SetY(0.0f);
-
-	this->test2_sprite_model_->position.SetX(this->test1_sprite_model_->position.GetX() - 128.0f - 1.0f);
-	this->test2_sprite_model_->position.SetY(this->test1_sprite_model_->position.GetY());
-
-	this->test3_sprite_model_->position.SetX(this->test1_sprite_model_->position.GetX() + 128.0f + 1.0f);
-	this->test3_sprite_model_->position.SetY(this->test1_sprite_model_->position.GetY());
-
 	this->graphic_mgr_.SetDrawCamera(this->test_camera_.get());
 	this->graphic_mgr_.SetDrawModel(this->bg_sprite_model_.get());
-	this->graphic_mgr_.SetDrawModel(this->test1_sprite_model_.get());
-	this->graphic_mgr_.SetDrawModel(this->test2_sprite_model_.get());
-	this->graphic_mgr_.SetDrawModel(this->test3_sprite_model_.get());
+	this->graphic_mgr_.SetDrawModel(this->title_logo_sprite_model_.get());
 
 	this->graphic_mgr_.Update();
 

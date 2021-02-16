@@ -5,6 +5,10 @@
 #include "constant_util_h.fx"
 
 
+Texture2D<float4> diffuse_tex : USER1_TEX_SR;
+SamplerState diffuse_samp : USER1_SAMP_SR;
+
+
 struct VS_INPUT
 {
 	float4 pos : POSITION0;
