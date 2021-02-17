@@ -10,8 +10,8 @@
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
-#include "ModelShaderStructuredBuffer.h"
-#include "ModelLayerShaderStructuredBuffer.h"
+#include "SpriteModelShaderStructuredBuffer.h"
+#include "SpriteModelLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
@@ -380,7 +380,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 			{// DiffuseSampler Create
 				tml::shared_ptr<tml::graphic::Sampler> samp;
 
-				this->GetManager()->GetResource(samp, this->GetManager()->common.model_cc_sampler);
+				this->GetManager()->GetResource(samp, this->GetManager()->common.cc_sampler);
 
 				if (samp == nullptr) {
 					this->Init();
@@ -399,13 +399,13 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 	}
 
 	{// ShaderStructuredBuffer Create
-		tml::graphic::ModelShaderStructuredBufferDesc desc;
+		tml::graphic::SpriteModelShaderStructuredBufferDesc desc;
 
 		desc.manager = this->GetManager();
 		desc.element_limit = 1U;
 		desc.cpu_read_flag = true;
 
-		this->GetManager()->GetResource<tml::graphic::ModelShaderStructuredBuffer>(this->ssb_, desc);
+		this->GetManager()->GetResource<tml::graphic::SpriteModelShaderStructuredBuffer>(this->ssb_, desc);
 
 		if (this->ssb_ == nullptr) {
 			this->Init();
@@ -415,13 +415,13 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 	}
 
 	{// LayerShaderStructuredBuffer Create
-		tml::graphic::ModelLayerShaderStructuredBufferDesc desc;
+		tml::graphic::SpriteModelLayerShaderStructuredBufferDesc desc;
 
 		desc.manager = this->GetManager();
 		desc.element_limit = 1U;
 		desc.cpu_read_flag = true;
 
-		this->GetManager()->GetResource<tml::graphic::ModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc);
+		this->GetManager()->GetResource<tml::graphic::SpriteModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc);
 
 		if (this->layer_ssb_ == nullptr) {
 			this->Init();

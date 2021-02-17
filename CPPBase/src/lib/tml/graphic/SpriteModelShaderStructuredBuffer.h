@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief ModelShaderStructuredBufferヘッダーファイル
+ * @brief SpriteModelShaderStructuredBufferヘッダーファイル
  */
 #pragma once
 
@@ -13,9 +13,9 @@
 namespace tml {
 namespace graphic {
 /**
- * @brief ModelShaderStructuredBufferDescクラス
+ * @brief SpriteModelShaderStructuredBufferDescクラス
  */
-class ModelShaderStructuredBufferDesc : public tml::graphic::ShaderStructuredBufferDesc
+class SpriteModelShaderStructuredBufferDesc : public tml::graphic::ShaderStructuredBufferDesc
 {
 public:
 
@@ -23,8 +23,8 @@ protected:
 	void Release(void);
 
 public:
-	ModelShaderStructuredBufferDesc();
-	virtual ~ModelShaderStructuredBufferDesc();
+	SpriteModelShaderStructuredBufferDesc();
+	virtual ~SpriteModelShaderStructuredBufferDesc();
 
 	virtual void Init(void);
 };
@@ -35,7 +35,7 @@ public:
 /**
  * @brief Release関数
  */
-inline void tml::graphic::ModelShaderStructuredBufferDesc::Release(void)
+inline void tml::graphic::SpriteModelShaderStructuredBufferDesc::Release(void)
 {
 	tml::graphic::ShaderStructuredBufferDesc::Release();
 
@@ -46,12 +46,12 @@ inline void tml::graphic::ModelShaderStructuredBufferDesc::Release(void)
 namespace tml {
 namespace graphic {
 /**
- * @brief ModelShaderStructuredBufferクラス
+ * @brief SpriteModelShaderStructuredBufferクラス
  */
-class ModelShaderStructuredBuffer : public tml::graphic::ShaderStructuredBuffer
+class SpriteModelShaderStructuredBuffer : public tml::graphic::ShaderStructuredBuffer
 {
-public: ModelShaderStructuredBuffer(const tml::graphic::ModelShaderStructuredBuffer &) = delete;
-public: tml::graphic::ModelShaderStructuredBuffer &operator =(const tml::graphic::ModelShaderStructuredBuffer &) = delete;
+public: SpriteModelShaderStructuredBuffer(const tml::graphic::SpriteModelShaderStructuredBuffer &) = delete;
+public: tml::graphic::SpriteModelShaderStructuredBuffer &operator =(const tml::graphic::SpriteModelShaderStructuredBuffer &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
@@ -75,20 +75,20 @@ public:
 	} ELEMENT;
 
 private:
-	tml::graphic::ModelShaderStructuredBuffer::ELEMENT *element_ary_;
+	tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *element_ary_;
 
 protected:
 	void Release(void);
 
 public:
-	ModelShaderStructuredBuffer();
-	virtual ~ModelShaderStructuredBuffer();
+	SpriteModelShaderStructuredBuffer();
+	virtual ~SpriteModelShaderStructuredBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::ModelShaderStructuredBufferDesc &);
+	INT Create(const tml::graphic::SpriteModelShaderStructuredBufferDesc &);
 
 	void UpdateBuffer(void);
-	tml::graphic::ModelShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
+	tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	void SetElement(const UINT, const XMMATRIX &, const XMMATRIX &, const tml::XMFLOAT4EX &);
 };
 }
@@ -98,7 +98,7 @@ public:
 /**
  * @brief UpdateBuffer関数
  */
-inline void tml::graphic::ModelShaderStructuredBuffer::UpdateBuffer(void)
+inline void tml::graphic::SpriteModelShaderStructuredBuffer::UpdateBuffer(void)
 {
 	tml::graphic::ShaderStructuredBuffer::UpdateBuffer(this->element_ary_);
 
@@ -112,7 +112,7 @@ inline void tml::graphic::ModelShaderStructuredBuffer::UpdateBuffer(void)
  * @return element (element)<br>
  * nullptr=失敗
  */
-inline tml::graphic::ModelShaderStructuredBuffer::ELEMENT *tml::graphic::ModelShaderStructuredBuffer::GetElement(const UINT index)
+inline tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *tml::graphic::SpriteModelShaderStructuredBuffer::GetElement(const UINT index)
 {
 	return (tml::graphic::ShaderStructuredBuffer::GetElement(this->element_ary_, index));
 }

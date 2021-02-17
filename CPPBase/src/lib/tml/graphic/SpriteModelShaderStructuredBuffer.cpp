@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief ModelShaderStructuredBufferコードファイル
+ * @brief SpriteModelShaderStructuredBufferコードファイル
  */
 
 
-#include "ModelShaderStructuredBuffer.h"
+#include "SpriteModelShaderStructuredBuffer.h"
 #include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::ModelShaderStructuredBufferDesc::ModelShaderStructuredBufferDesc()
+tml::graphic::SpriteModelShaderStructuredBufferDesc::SpriteModelShaderStructuredBufferDesc()
 {
 	return;
 }
@@ -20,7 +20,7 @@ tml::graphic::ModelShaderStructuredBufferDesc::ModelShaderStructuredBufferDesc()
 /**
  * @brief デストラクタ
  */
-tml::graphic::ModelShaderStructuredBufferDesc::~ModelShaderStructuredBufferDesc()
+tml::graphic::SpriteModelShaderStructuredBufferDesc::~SpriteModelShaderStructuredBufferDesc()
 {
 	this->Release();
 
@@ -31,7 +31,7 @@ tml::graphic::ModelShaderStructuredBufferDesc::~ModelShaderStructuredBufferDesc(
 /**
  * @brief Init関数
  */
-void tml::graphic::ModelShaderStructuredBufferDesc::Init(void)
+void tml::graphic::SpriteModelShaderStructuredBufferDesc::Init(void)
 {
 	this->Release();
 
@@ -44,7 +44,7 @@ void tml::graphic::ModelShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::ModelShaderStructuredBuffer::ModelShaderStructuredBuffer() :
+tml::graphic::SpriteModelShaderStructuredBuffer::SpriteModelShaderStructuredBuffer() :
 	element_ary_(nullptr)
 {
 	return;
@@ -54,7 +54,7 @@ tml::graphic::ModelShaderStructuredBuffer::ModelShaderStructuredBuffer() :
 /**
  * @brief デストラクタ
  */
-tml::graphic::ModelShaderStructuredBuffer::~ModelShaderStructuredBuffer()
+tml::graphic::SpriteModelShaderStructuredBuffer::~SpriteModelShaderStructuredBuffer()
 {
 	this->Release();
 
@@ -65,7 +65,7 @@ tml::graphic::ModelShaderStructuredBuffer::~ModelShaderStructuredBuffer()
 /**
  * @brief Release関数
  */
-void tml::graphic::ModelShaderStructuredBuffer::Release(void)
+void tml::graphic::SpriteModelShaderStructuredBuffer::Release(void)
 {
 	tml::MemoryUtil::Release(&this->element_ary_);
 
@@ -78,7 +78,7 @@ void tml::graphic::ModelShaderStructuredBuffer::Release(void)
 /**
  * @brief Init関数
  */
-void tml::graphic::ModelShaderStructuredBuffer::Init(void)
+void tml::graphic::SpriteModelShaderStructuredBuffer::Init(void)
 {
 	this->Release();
 
@@ -94,17 +94,17 @@ void tml::graphic::ModelShaderStructuredBuffer::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::ModelShaderStructuredBuffer::Create(const tml::graphic::ModelShaderStructuredBufferDesc &desc)
+INT tml::graphic::SpriteModelShaderStructuredBuffer::Create(const tml::graphic::SpriteModelShaderStructuredBufferDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::ShaderStructuredBuffer::Create(desc, sizeof(tml::graphic::ModelShaderStructuredBuffer::ELEMENT)) < 0) {
+	if (tml::graphic::ShaderStructuredBuffer::Create(desc, sizeof(tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT)) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
-	this->element_ary_ = tml::MemoryUtil::Get<tml::graphic::ModelShaderStructuredBuffer::ELEMENT>(desc.element_limit);
+	this->element_ary_ = tml::MemoryUtil::Get<tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT>(desc.element_limit);
 
 	return (0);
 }
@@ -117,7 +117,7 @@ INT tml::graphic::ModelShaderStructuredBuffer::Create(const tml::graphic::ModelS
  * @param p_mat (projection_matrix)
  * @param col (color)
  */
-void tml::graphic::ModelShaderStructuredBuffer::SetElement(const UINT index, const XMMATRIX &w_mat, const XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
+void tml::graphic::SpriteModelShaderStructuredBuffer::SetElement(const UINT index, const XMMATRIX &w_mat, const XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
 {
 	auto element = this->GetElement(index);
 

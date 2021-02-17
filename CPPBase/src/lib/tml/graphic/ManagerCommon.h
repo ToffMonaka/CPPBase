@@ -45,10 +45,10 @@ public:
 	tml::shared_ptr<tml::graphic::FogShaderStructuredBuffer> fog_shader_structured_buffer;
 	tml::shared_ptr<tml::graphic::Texture> main_render_target_texture;
 	tml::shared_ptr<tml::graphic::Texture> main_depth_target_texture;
-	tml::shared_ptr<tml::graphic::Sampler> model_cc_sampler;
-	tml::shared_ptr<tml::graphic::Sampler> model_cw_sampler;
-	tml::shared_ptr<tml::graphic::Sampler> model_wc_sampler;
-	tml::shared_ptr<tml::graphic::Sampler> model_ww_sampler;
+	tml::shared_ptr<tml::graphic::Sampler> cc_sampler;
+	tml::shared_ptr<tml::graphic::Sampler> cw_sampler;
+	tml::shared_ptr<tml::graphic::Sampler> wc_sampler;
+	tml::shared_ptr<tml::graphic::Sampler> ww_sampler;
 
 protected:
 	void Release(void);

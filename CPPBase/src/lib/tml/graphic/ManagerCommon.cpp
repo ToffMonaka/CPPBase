@@ -15,8 +15,8 @@
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
-#include "ModelShaderStructuredBuffer.h"
-#include "ModelLayerShaderStructuredBuffer.h"
+#include "SpriteModelShaderStructuredBuffer.h"
+#include "SpriteModelLayerShaderStructuredBuffer.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Fog.h"
@@ -80,10 +80,10 @@ void tml::graphic::ManagerCommon::Release(void)
 		this->mgr_->ReleaseResource(this->fog_shader_structured_buffer);
 		this->mgr_->ReleaseResource(this->main_render_target_texture);
 		this->mgr_->ReleaseResource(this->main_depth_target_texture);
-		this->mgr_->ReleaseResource(this->model_cc_sampler);
-		this->mgr_->ReleaseResource(this->model_cw_sampler);
-		this->mgr_->ReleaseResource(this->model_wc_sampler);
-		this->mgr_->ReleaseResource(this->model_ww_sampler);
+		this->mgr_->ReleaseResource(this->cc_sampler);
+		this->mgr_->ReleaseResource(this->cw_sampler);
+		this->mgr_->ReleaseResource(this->wc_sampler);
+		this->mgr_->ReleaseResource(this->ww_sampler);
 	}
 
 	return;
@@ -506,60 +506,60 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 	}
 
-	{// ModelCCSampler Create
+	{// CCSampler Create
 		tml::graphic::SamplerDesc desc;
 
 		desc.manager = this->mgr_;
 		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
 
-		this->mgr_->GetResource<tml::graphic::Sampler>(this->model_cc_sampler, desc);
+		this->mgr_->GetResource<tml::graphic::Sampler>(this->cc_sampler, desc);
 
-		if (this->model_cc_sampler == nullptr) {
+		if (this->cc_sampler == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// ModelCWSampler Create
+	{// CWSampler Create
 		tml::graphic::SamplerDesc desc;
 
 		desc.manager = this->mgr_;
 		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
 
-		this->mgr_->GetResource<tml::graphic::Sampler>(this->model_cw_sampler, desc);
+		this->mgr_->GetResource<tml::graphic::Sampler>(this->cw_sampler, desc);
 
-		if (this->model_cw_sampler == nullptr) {
+		if (this->cw_sampler == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// ModelWCSampler Create
+	{// WCSampler Create
 		tml::graphic::SamplerDesc desc;
 
 		desc.manager = this->mgr_;
 		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
 
-		this->mgr_->GetResource<tml::graphic::Sampler>(this->model_wc_sampler, desc);
+		this->mgr_->GetResource<tml::graphic::Sampler>(this->wc_sampler, desc);
 
-		if (this->model_wc_sampler == nullptr) {
+		if (this->wc_sampler == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// ModelWWSampler Create
+	{// WWSampler Create
 		tml::graphic::SamplerDesc desc;
 
 		desc.manager = this->mgr_;
 		desc.SetSamplerDesc(samp_desc_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
 
-		this->mgr_->GetResource<tml::graphic::Sampler>(this->model_ww_sampler, desc);
+		this->mgr_->GetResource<tml::graphic::Sampler>(this->ww_sampler, desc);
 
-		if (this->model_ww_sampler == nullptr) {
+		if (this->ww_sampler == nullptr) {
 			this->Init();
 
 			return (-1);

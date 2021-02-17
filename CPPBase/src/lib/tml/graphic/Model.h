@@ -176,7 +176,9 @@ public:
 	void SetDepthStateIndex(const UINT);
 	UINT GetShaderIndex(void) const;
 	void SetShaderIndex(const UINT);
+	UINT GetLayerCount(void) const;
 	tml::graphic::ModelLayer *GetLayer(const UINT);
+	tml::graphic::ModelLayer *GetLayerFast(const UINT);
 	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::ModelLayer> &);
 };
 }
@@ -282,6 +284,16 @@ inline void tml::graphic::ModelStage::SetShaderIndex(const UINT shader_index)
 
 
 /**
+ * @brief GetLayerCountä÷êî
+ * @return layer_cnt (layer_count)
+ */
+inline UINT tml::graphic::ModelStage::GetLayerCount(void) const
+{
+	return (this->layer_cont_.size());
+}
+
+
+/**
  * @brief GetLayerä÷êî
  * @param index (index)
  * @return layer (layer)<br>
@@ -293,6 +305,18 @@ inline tml::graphic::ModelLayer *tml::graphic::ModelStage::GetLayer(const UINT i
 		return (nullptr);
 	}
 
+	return (this->layer_cont_[index].get());
+}
+
+
+/**
+ * @brief GetLayerFastä÷êî
+ * @param index (index)
+ * @return layer (layer)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::ModelLayer *tml::graphic::ModelStage::GetLayerFast(const UINT index)
+{
 	return (this->layer_cont_[index].get());
 }
 
@@ -371,6 +395,7 @@ public:
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
 	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
 	tml::graphic::RasterizerState *GetRasterizerState(const UINT);
 	void SetRasterizerState(const UINT, tml::shared_ptr<tml::graphic::RasterizerState> &);
@@ -424,6 +449,18 @@ inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::Consta
 	}
 
 	return (this->stage_cont_[index].get());
+}
+
+
+/**
+ * @brief GetStageFastä÷êî
+ * @param type (type)
+ * @return stage (stage)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::ModelStage *tml::graphic::Model::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
+{
+	return (this->stage_cont_[static_cast<UINT>(type)].get());
 }
 
 

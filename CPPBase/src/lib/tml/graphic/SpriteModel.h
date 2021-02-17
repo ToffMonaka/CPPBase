@@ -204,8 +204,8 @@ private:
 	tml::XMFLOAT2EX size_;
 	tml::XMFLOAT2EX scale_;
 	tml::XMFLOAT4EX col_;
-	tml::shared_ptr<tml::graphic::ModelShaderStructuredBuffer> ssb_;
-	tml::shared_ptr<tml::graphic::ModelLayerShaderStructuredBuffer> layer_ssb_;
+	tml::shared_ptr<tml::graphic::SpriteModelShaderStructuredBuffer> ssb_;
+	tml::shared_ptr<tml::graphic::SpriteModelLayerShaderStructuredBuffer> layer_ssb_;
 
 public:
 	tml::XMPosition2D position;
