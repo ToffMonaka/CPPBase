@@ -22,6 +22,7 @@ public:
 	std::vector<tml::BinaryFileReadDesc> file_read_desc_container;
 	IDXGISwapChain *swap_chain;
 	CD3D11_TEXTURE2D_DESC texture_desc;
+	bool buffer_flag;
 	DXGI_FORMAT render_target_format;
 	bool render_target_desc_null_flag;
 	DXGI_FORMAT depth_target_format;
@@ -72,7 +73,10 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	ID3D11Texture2D *tex_;
+	CD3D11_TEXTURE2D_DESC tex_desc_;
 	tml::XMUINT2EX size_;
+	tml::DynamicBuffer buf_;
+	tml::DynamicBuffer clear_buf_;
 	ID3D11RenderTargetView *rt_;
 	ID3D11DepthStencilView *dt_;
 	ID3D11ShaderResourceView *sr_;
@@ -90,6 +94,10 @@ public:
 
 	ID3D11Texture2D *GetTexture(void);
 	const tml::XMUINT2EX &GetSize(void) const;
+	tml::DynamicBuffer &GetBuffer(void);
+	void ClearBuffer(void);
+	void UpdateBuffer(void);
+	void DrawBuffer(const WCHAR *);
 	ID3D11RenderTargetView *GetRenderTarget(void);
 	void ClearRenderTarget(const tml::XMFLOAT4EX &);
 	ID3D11DepthStencilView *GetDepthTarget(void);
@@ -118,6 +126,16 @@ inline ID3D11Texture2D *tml::graphic::Texture::GetTexture(void)
 inline const tml::XMUINT2EX &tml::graphic::Texture::GetSize(void) const
 {
 	return (this->size_);
+}
+
+
+/**
+ * @brief GetBufferŠÖ”
+ * @return buf (buffer)
+ */
+inline tml::DynamicBuffer &tml::graphic::Texture::GetBuffer(void)
+{
+	return (this->buf_);
 }
 
 

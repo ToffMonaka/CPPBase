@@ -14,6 +14,7 @@
 tml::graphic::TextureDesc::TextureDesc() :
 	swap_chain(nullptr),
 	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U),
+	buffer_flag(false),
 	render_target_format(DXGI_FORMAT_UNKNOWN),
 	render_target_desc_null_flag(false),
 	depth_target_format(DXGI_FORMAT_UNKNOWN),
@@ -51,6 +52,7 @@ void tml::graphic::TextureDesc::Init(void)
 	this->swap_chain = nullptr;
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
 	this->texture_desc.BindFlags = 0U;
+	this->buffer_flag = false;
 	this->render_target_format = DXGI_FORMAT_UNKNOWN;
 	this->render_target_desc_null_flag = false;
 	this->depth_target_format = DXGI_FORMAT_UNKNOWN;
@@ -140,12 +142,15 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
  */
 tml::graphic::Texture::Texture() :
 	tex_(nullptr),
+	tex_desc_(DXGI_FORMAT_UNKNOWN, 0U, 0U),
 	size_(0U),
 	rt_(nullptr),
 	dt_(nullptr),
 	sr_(nullptr),
 	uasr_(nullptr)
 {
+	this->tex_desc_.BindFlags = 0U;
+
 	return;
 }
 
@@ -209,7 +214,11 @@ void tml::graphic::Texture::Init(void)
 {
 	this->Release();
 
+	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
+	this->tex_desc_.BindFlags = 0U;
 	this->size_ = 0U;
+	this->buf_.Init();
+	this->clear_buf_.Init();
 
 	tml::graphic::Resource::Init();
 
@@ -285,6 +294,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 					return (-1);
 				}
 			} else {
+				if ((tmp_tex_desc.Width * tmp_tex_desc.Height) <= 0U) {
+					this->Init();
+
+					return (-1);
+				}
+
 				tex_desc = tmp_tex_desc;
 				tex_desc.ArraySize = 1U;
 
@@ -399,6 +414,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				return (-1);
 			}
 		} else {
+			if ((tmp_tex_desc.Width * tmp_tex_desc.Height) <= 0U) {
+				this->Init();
+
+				return (-1);
+			}
+
 			if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tmp_tex_desc, nullptr, &this->tex_))) {
 				this->Init();
 
@@ -411,13 +432,37 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		return (-1);
 	}
 
-	CD3D11_TEXTURE2D_DESC tex_desc;
+	this->tex_->GetDesc(&this->tex_desc_);
+	this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
 
-	this->tex_->GetDesc(&tex_desc);
+	if (desc.buffer_flag) {
+		if (this->tex_desc_.ArraySize > 1U) {
+			this->Init();
 
-	this->size_ = tml::XMUINT2EX(tex_desc.Width, tex_desc.Height);
+			return (-1);
+		}
 
-	if (tex_desc.BindFlags & D3D11_BIND_RENDER_TARGET) {
+		D3D11_MAPPED_SUBRESOURCE msr;
+		INT res = 0;
+
+		this->GetManager()->GetBuffer(this->buf_, msr, this->tex_, &res);
+
+		if (res < 0) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->clear_buf_ = this->buf_;
+
+		UINT pixel_cnt = this->size_.x * this->size_.y;
+
+		for (UINT pixel_i = 0U; pixel_i < pixel_cnt; ++pixel_i) {
+			reinterpret_cast<UINT *>(this->clear_buf_.Get())[pixel_i] = 0U;
+		}
+	}
+
+	if (this->tex_desc_.BindFlags & D3D11_BIND_RENDER_TARGET) {
 		if (desc.render_target_desc_null_flag) {
 			if (FAILED(this->GetManager()->GetDevice()->CreateRenderTargetView(this->tex_, nullptr, &this->rt_))) {
 				this->Init();
@@ -427,14 +472,14 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		} else {
 			D3D11_RTV_DIMENSION dimension;
 
-			if (tex_desc.SampleDesc.Count > 1U) {
-				if (tex_desc.ArraySize > 1U) {
+			if (this->tex_desc_.SampleDesc.Count > 1U) {
+				if (this->tex_desc_.ArraySize > 1U) {
 					dimension = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
 				} else {
 					dimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
 				}
 			} else {
-				if (tex_desc.ArraySize > 1U) {
+				if (this->tex_desc_.ArraySize > 1U) {
 					dimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_RTV_DIMENSION_TEXTURE2D;
@@ -444,7 +489,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			DXGI_FORMAT format = desc.render_target_format;
 
 			if (format == DXGI_FORMAT_UNKNOWN) {
-				format = tex_desc.Format;
+				format = this->tex_desc_.Format;
 			}
 
 			CD3D11_RENDER_TARGET_VIEW_DESC rt_desc = CD3D11_RENDER_TARGET_VIEW_DESC(this->tex_, dimension, format);
@@ -457,7 +502,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		}
 	}
 
-	if (tex_desc.BindFlags & D3D11_BIND_DEPTH_STENCIL) {
+	if (this->tex_desc_.BindFlags & D3D11_BIND_DEPTH_STENCIL) {
 		if (desc.depth_target_desc_null_flag) {
 			if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilView(this->tex_, nullptr, &this->dt_))) {
 				this->Init();
@@ -467,14 +512,14 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		} else {
 			D3D11_DSV_DIMENSION dimension;
 
-			if (tex_desc.SampleDesc.Count > 1U) {
-				if (tex_desc.ArraySize > 1U) {
+			if (this->tex_desc_.SampleDesc.Count > 1U) {
+				if (this->tex_desc_.ArraySize > 1U) {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY;
 				} else {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 				}
 			} else {
-				if (tex_desc.ArraySize > 1U) {
+				if (this->tex_desc_.ArraySize > 1U) {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -484,7 +529,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			DXGI_FORMAT format = desc.depth_target_format;
 
 			if (format == DXGI_FORMAT_UNKNOWN) {
-				format = tex_desc.Format;
+				format = this->tex_desc_.Format;
 			}
 
 			CD3D11_DEPTH_STENCIL_VIEW_DESC dt_desc = CD3D11_DEPTH_STENCIL_VIEW_DESC(this->tex_, dimension, format);
@@ -497,7 +542,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		}
 	}
 
-	if (tex_desc.BindFlags & D3D11_BIND_SHADER_RESOURCE) {
+	if (this->tex_desc_.BindFlags & D3D11_BIND_SHADER_RESOURCE) {
 		if (desc.sr_desc_null_flag) {
 			if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->tex_, nullptr, &this->sr_))) {
 				this->Init();
@@ -507,14 +552,14 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		} else {
 			D3D11_SRV_DIMENSION dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 
-			if (tex_desc.SampleDesc.Count > 1U) {
-				if (tex_desc.ArraySize > 1U) {
+			if (this->tex_desc_.SampleDesc.Count > 1U) {
+				if (this->tex_desc_.ArraySize > 1U) {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
 				} else {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 				}
 			} else {
-				if (tex_desc.ArraySize > 1U) {
+				if (this->tex_desc_.ArraySize > 1U) {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -524,7 +569,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			DXGI_FORMAT format = desc.sr_format;
 
 			if (format == DXGI_FORMAT_UNKNOWN) {
-				format = tex_desc.Format;
+				format = this->tex_desc_.Format;
 			}
 
 			CD3D11_SHADER_RESOURCE_VIEW_DESC sr_desc = CD3D11_SHADER_RESOURCE_VIEW_DESC(this->tex_, dimension, format);
@@ -537,7 +582,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		}
 	}
 
-	if (tex_desc.BindFlags & D3D11_BIND_UNORDERED_ACCESS) {
+	if (this->tex_desc_.BindFlags & D3D11_BIND_UNORDERED_ACCESS) {
 		if (desc.uasr_desc_null_flag) {
 			if (FAILED(this->GetManager()->GetDevice()->CreateUnorderedAccessView(this->tex_, nullptr, &this->uasr_))) {
 				this->Init();
@@ -547,12 +592,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		} else {
 			D3D11_UAV_DIMENSION dimension = D3D11_UAV_DIMENSION_TEXTURE2D;
 
-			if (tex_desc.SampleDesc.Count > 1U) {
+			if (this->tex_desc_.SampleDesc.Count > 1U) {
 				this->Init();
 
 				return (-1);
 			} else {
-				if (tex_desc.ArraySize > 1U) {
+				if (this->tex_desc_.ArraySize > 1U) {
 					dimension = D3D11_UAV_DIMENSION_TEXTURE2DARRAY;
 				} else {
 					dimension = D3D11_UAV_DIMENSION_TEXTURE2D;
@@ -562,7 +607,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			DXGI_FORMAT format = desc.uasr_format;
 
 			if (format == DXGI_FORMAT_UNKNOWN) {
-				format = tex_desc.Format;
+				format = this->tex_desc_.Format;
 			}
 
 			CD3D11_UNORDERED_ACCESS_VIEW_DESC uasr_desc = CD3D11_UNORDERED_ACCESS_VIEW_DESC(this->tex_, dimension, format);
@@ -580,11 +625,58 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 
 /**
+ * @brief ClearBufferŠÖ”
+ * @param col (color)
+ */
+void tml::graphic::Texture::ClearBuffer(void)
+{
+	if (this->buf_.GetSize() <= 0U) {
+		return;
+	}
+
+	tml::MemoryUtil::Copy(this->buf_.Get(), this->clear_buf_.Get(), this->clear_buf_.GetLength());
+
+	return;
+}
+
+
+/**
+ * @brief UpdateBufferŠÖ”
+ */
+void tml::graphic::Texture::UpdateBuffer(void)
+{
+	if (this->buf_.GetSize() <= 0U) {
+		return;
+	}
+
+	return;
+}
+
+
+/**
+ * @brief DrawBufferŠÖ”
+ * @param str (string)
+ */
+void tml::graphic::Texture::DrawBuffer(const WCHAR *str)
+{
+	if (this->buf_.GetSize() <= 0U) {
+		return;
+	}
+
+	return;
+}
+
+
+/**
  * @brief ClearRenderTargetŠÖ”
  * @param col (color)
  */
 void tml::graphic::Texture::ClearRenderTarget(const tml::XMFLOAT4EX &col)
 {
+	if (this->rt_ == nullptr) {
+		return;
+	}
+
 	FLOAT col_ary[4] = {
 		col.x,
 		col.y,
@@ -603,6 +695,10 @@ void tml::graphic::Texture::ClearRenderTarget(const tml::XMFLOAT4EX &col)
  */
 void tml::graphic::Texture::ClearDepthTarget(void)
 {
+	if (this->dt_ == nullptr) {
+		return;
+	}
+
 	this->GetManager()->GetDeviceContext()->ClearDepthStencilView(this->dt_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	return;

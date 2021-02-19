@@ -48,12 +48,10 @@ cpp_base::MainThread::~MainThread()
  */
 void cpp_base::MainThread::Release(void)
 {
-	this->graphic_mgr_.ReleaseResource(this->test_camera_);
-	this->graphic_mgr_.ReleaseResource(this->test1_sprite_model_);
-	this->graphic_mgr_.ReleaseResource(this->test2_sprite_model_);
-	this->graphic_mgr_.ReleaseResource(this->test3_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->camera_);
 	this->graphic_mgr_.ReleaseResource(this->title_bg_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->title_logo_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->fps_sprite_model_);
 
 	tml::MainThread::Release();
 
@@ -73,6 +71,8 @@ void cpp_base::MainThread::Init(void)
 	this->input_mgr_.Init();
 	this->graphic_mgr_.Init();
 	this->sound_mgr_.Init();
+
+	this->fps_sprite_model_tex_update_timer_.Init();
 
 	tml::MainThread::Init();
 
@@ -186,7 +186,7 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
-		{// TestCamera Create
+		{// Camera Create
 			tml::graphic::CameraDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
@@ -196,69 +196,9 @@ INT cpp_base::MainThread::Start(void)
 			desc.near_clip = 0.1f;
 			desc.far_clip = 1000.0f;
 
-			this->graphic_mgr_.GetResource<tml::graphic::Camera>(this->test_camera_, desc);
+			this->graphic_mgr_.GetResource<tml::graphic::Camera>(this->camera_, desc);
 
-			if (this->test_camera_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-		}
-
-		{// Test1SpriteModell Create
-			tml::graphic::SpriteModelDesc desc;
-
-			desc.manager = &this->graphic_mgr_;
-			desc.size = 128.0f;
-			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(255U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 1.0f);
-
-			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
-
-			desc.Read(read_desc);
-
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test1_sprite_model_, desc);
-
-			if (this->test1_sprite_model_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-		}
-
-		{// Test2SpriteModell Create
-			tml::graphic::SpriteModelDesc desc;
-
-			desc.manager = &this->graphic_mgr_;
-			desc.size = 128.0f;
-			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(255U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 1.0f);
-
-			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
-
-			desc.Read(read_desc);
-
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test2_sprite_model_, desc);
-
-			if (this->test2_sprite_model_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-		}
-
-		{// Test3SpriteModell Create
-			tml::graphic::SpriteModelDesc desc;
-
-			desc.manager = &this->graphic_mgr_;
-			desc.size = 128.0f;
-			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(255U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 1.0f);
-
-			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
-
-			desc.Read(read_desc);
-
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->test3_sprite_model_, desc);
-
-			if (this->test3_sprite_model_ == nullptr) {
+			if (this->camera_ == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -356,6 +296,55 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
+		{// FPSSpriteModel Create
+			tml::graphic::SpriteModelDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
+
+			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+			desc.Read(read_desc);
+
+			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->fps_sprite_model_, desc);
+
+			if (this->fps_sprite_model_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			auto stage = this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+			auto layer = stage->GetLayer(0U);
+
+			layer->SetDiffuseTextureIndex(0U);
+
+			{// DiffuseTexture Create
+				tml::shared_ptr<tml::graphic::Texture> tex;
+
+				tml::graphic::TextureDesc desc;
+
+				desc.manager = &this->graphic_mgr_;
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, tml::XMUINT2EX(512U, 512U));
+				desc.buffer_flag = true;
+
+				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
+
+				if (tex == nullptr) {
+					this->Init();
+
+					return (-1);
+				}
+
+				this->fps_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y)));
+
+				this->fps_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+				this->graphic_mgr_.ReleaseResource(tex);
+			}
+		}
+
+		this->fps_sprite_model_tex_update_timer_.Start();
+
 		int a = 0;
 	}
 
@@ -381,25 +370,27 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
-	auto test1_sprite_model_pos_x = this->test1_sprite_model_->position.GetX() + 2.0f;
+	if (this->fps_sprite_model_tex_update_timer_.GetElapsedTime() >= tml::TIME_REAL(1.0)) {
+		std::wstring fps_str = L"FPS=";
+		std::wstring tmp_str;
 
-	if (test1_sprite_model_pos_x >= 512.0f) {
-		test1_sprite_model_pos_x = -512.0f;
+		fps_str += tml::StringUtil::GetString(tmp_str, this->frame_rate_.GetFPS());
+		fps_str += L"/";
+		fps_str += tml::StringUtil::GetString(tmp_str, this->frame_rate_.GetLimit());
+
+		auto fps_sprite_model_tex = this->fps_sprite_model_->GetTexture(this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+
+		fps_sprite_model_tex->ClearBuffer();
+		fps_sprite_model_tex->DrawBuffer(fps_str.c_str());
+		fps_sprite_model_tex->UpdateBuffer();
+
+		this->fps_sprite_model_tex_update_timer_.Start();
 	}
 
-	this->test1_sprite_model_->position.SetX(test1_sprite_model_pos_x);
-	this->test1_sprite_model_->position.SetY(-256.0f);
-	this->test2_sprite_model_->position.SetX(this->test1_sprite_model_->position.GetX() - 128.0f - 1.0f);
-	this->test2_sprite_model_->position.SetY(this->test1_sprite_model_->position.GetY());
-	this->test3_sprite_model_->position.SetX(this->test1_sprite_model_->position.GetX() + 128.0f + 1.0f);
-	this->test3_sprite_model_->position.SetY(this->test1_sprite_model_->position.GetY());
-
-	this->graphic_mgr_.SetDrawCamera(this->test_camera_.get());
+	this->graphic_mgr_.SetDrawCamera(this->camera_.get());
 	this->graphic_mgr_.SetDrawModel(this->title_bg_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->title_logo_sprite_model_.get());
-	this->graphic_mgr_.SetDrawModel(this->test1_sprite_model_.get());
-	this->graphic_mgr_.SetDrawModel(this->test2_sprite_model_.get());
-	this->graphic_mgr_.SetDrawModel(this->test3_sprite_model_.get());
+	this->graphic_mgr_.SetDrawModel(this->fps_sprite_model_.get());
 
 	this->graphic_mgr_.Update();
 
