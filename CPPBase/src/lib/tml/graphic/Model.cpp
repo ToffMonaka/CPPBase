@@ -247,8 +247,6 @@ void tml::graphic::Model::Release(void)
 		stage.reset();
 	}
 
-	this->stage_cont_.clear();
-
 	if (this->GetManager() != nullptr) {
 		for (auto &rs : this->rs_cont_) {
 			this->GetManager()->ReleaseResource(rs);
@@ -348,13 +346,7 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
  */
 void tml::graphic::Model::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::ModelStage> &stage)
 {
-	auto index = static_cast<UINT>(type);
-
-	while (index >= this->stage_cont_.size()) {
-		this->stage_cont_.push_back(tml::make_unique<tml::graphic::ModelStage>());
-	}
-
-	this->stage_cont_[index] = std::move(stage);
+	this->stage_cont_[static_cast<UINT>(type)] = std::move(stage);
 
 	return;
 }

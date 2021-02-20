@@ -17,14 +17,18 @@ namespace graphic {
 class MeshDesc : public tml::graphic::ResourceDesc
 {
 public:
+	CD3D11_BUFFER_DESC vertex_buffer_desc;
+	D3D11_SUBRESOURCE_DATA vertex_buffer_subresource_data;
 	UINT vertex_buffer_element_size;
 	UINT vertex_buffer_element_count;
-	BYTE *vertex_buffer_element_array;
+	bool vertex_buffer_cpu_buffer_flag;
+	CD3D11_BUFFER_DESC index_buffer_desc;
+	D3D11_SUBRESOURCE_DATA index_buffer_subresource_data;
+	UINT index_buffer_element_size;
 	UINT index_buffer_element_count;
-	UINT *index_buffer_element_array;
+	DXGI_FORMAT index_buffer_format;
+	bool index_buffer_cpu_buffer_flag;
 	D3D11_PRIMITIVE_TOPOLOGY primitive_topology;
-	bool cpu_data_flag;
-	bool gpu_data_flag;
 
 protected:
 	void Release(void);
@@ -36,6 +40,9 @@ public:
 	virtual ~MeshDesc();
 
 	virtual void Init(void);
+
+	void SetVertexBufferDesc(const UINT, const UINT, const BYTE *);
+	void SetIndexBufferDesc(const UINT, const UINT, const BYTE *, const DXGI_FORMAT);
 };
 }
 }
@@ -65,14 +72,16 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	ID3D11Buffer *vb_;
+	CD3D11_BUFFER_DESC vb_desc_;
 	UINT vb_element_size_;
 	UINT vb_element_cnt_;
-	BYTE *vb_element_ary_;
+	tml::DynamicBuffer vb_cpu_buf_;
 	ID3D11Buffer *ib_;
+	CD3D11_BUFFER_DESC ib_desc_;
 	UINT ib_element_size_;
 	UINT ib_element_cnt_;
-	UINT *ib_element_ary_;
 	DXGI_FORMAT ib_format_;
+	tml::DynamicBuffer ib_cpu_buf_;
 	D3D11_PRIMITIVE_TOPOLOGY pt_;
 
 protected:
@@ -86,14 +95,20 @@ public:
 	INT Create(const tml::graphic::MeshDesc &);
 
 	ID3D11Buffer *GetVertexBuffer(void);
+	const CD3D11_BUFFER_DESC &GetVertexBufferDesc(void) const;
 	UINT GetVertexBufferElementSize(void) const;
 	UINT GetVertexBufferElementCount(void) const;
-	BYTE *GetVertexBufferElementArray(void);
+	tml::DynamicBuffer &GetVertexBufferCPUBuffer(void);
+	void UploadVertexBufferCPUBuffer(void);
+	void DownloadVertexBufferCPUBuffer(void);
 	ID3D11Buffer *GetIndexBuffer(void);
+	const CD3D11_BUFFER_DESC &GetIndexBufferDesc(void) const;
 	UINT GetIndexBufferElementSize(void) const;
 	UINT GetIndexBufferElementCount(void) const;
-	UINT *GetIndexBufferElementArray(void);
 	DXGI_FORMAT GetIndexBufferFormat(void) const;
+	tml::DynamicBuffer &GetIndexBufferCPUBuffer(void);
+	void UploadIndexBufferCPUBuffer(void);
+	void DownloadIndexBufferCPUBuffer(void);
 	D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology(void) const;
 };
 }
@@ -107,6 +122,16 @@ public:
 inline ID3D11Buffer *tml::graphic::Mesh::GetVertexBuffer(void)
 {
 	return (this->vb_);
+}
+
+
+/**
+ * @brief GetVertexBufferDescŠÖ”
+ * @return vb_desc (vertex_buffer_desc)
+ */
+inline const CD3D11_BUFFER_DESC &tml::graphic::Mesh::GetVertexBufferDesc(void) const
+{
+	return (this->vb_desc_);
 }
 
 
@@ -131,12 +156,12 @@ inline UINT tml::graphic::Mesh::GetVertexBufferElementCount(void) const
 
 
 /**
- * @brief GetVertexBufferElementArrayŠÖ”
- * @return vb_element_ary (vertex_buffer_element_array)
+ * @brief GetVertexBufferCPUBufferŠÖ”
+ * @return vb_cpu_buf (vertex_buffer_cpu_buffer)
  */
-inline BYTE *tml::graphic::Mesh::GetVertexBufferElementArray(void)
+inline tml::DynamicBuffer &tml::graphic::Mesh::GetVertexBufferCPUBuffer(void)
 {
-	return (this->vb_element_ary_);
+	return (this->vb_cpu_buf_);
 }
 
 
@@ -147,6 +172,16 @@ inline BYTE *tml::graphic::Mesh::GetVertexBufferElementArray(void)
 inline ID3D11Buffer *tml::graphic::Mesh::GetIndexBuffer(void)
 {
 	return (this->ib_);
+}
+
+
+/**
+ * @brief GetIndexBufferDescŠÖ”
+ * @return ib_desc (index_buffer_desc)
+ */
+inline const CD3D11_BUFFER_DESC &tml::graphic::Mesh::GetIndexBufferDesc(void) const
+{
+	return (this->ib_desc_);
 }
 
 
@@ -171,22 +206,22 @@ inline UINT tml::graphic::Mesh::GetIndexBufferElementCount(void) const
 
 
 /**
- * @brief GetIndexBufferElementArrayŠÖ”
- * @return ib_element_ary (index_buffer_element_array)
- */
-inline UINT *tml::graphic::Mesh::GetIndexBufferElementArray(void)
-{
-	return (this->ib_element_ary_);
-}
-
-
-/**
  * @brief GetIndexBufferFormatŠÖ”
  * @return ib_format (index_buffer_format)
  */
 inline DXGI_FORMAT tml::graphic::Mesh::GetIndexBufferFormat(void) const
 {
 	return (this->ib_format_);
+}
+
+
+/**
+ * @brief GetIndexBufferCPUBufferŠÖ”
+ * @return ib_cpu_buf (index_buffer_cpu_buffer)
+ */
+inline tml::DynamicBuffer &tml::graphic::Mesh::GetIndexBufferCPUBuffer(void)
+{
+	return (this->ib_cpu_buf_);
 }
 
 

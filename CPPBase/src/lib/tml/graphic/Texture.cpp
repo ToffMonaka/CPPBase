@@ -14,7 +14,7 @@
 tml::graphic::TextureDesc::TextureDesc() :
 	swap_chain(nullptr),
 	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U),
-	buffer_flag(false),
+	cpu_buffer_flag(false),
 	render_target_format(DXGI_FORMAT_UNKNOWN),
 	render_target_desc_null_flag(false),
 	depth_target_format(DXGI_FORMAT_UNKNOWN),
@@ -48,11 +48,11 @@ void tml::graphic::TextureDesc::Init(void)
 {
 	this->Release();
 
-	this->file_read_desc_container.clear();
 	this->swap_chain = nullptr;
+	this->file_read_desc_container.clear();
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
 	this->texture_desc.BindFlags = 0U;
-	this->buffer_flag = false;
+	this->cpu_buffer_flag = false;
 	this->render_target_format = DXGI_FORMAT_UNKNOWN;
 	this->render_target_desc_null_flag = false;
 	this->depth_target_format = DXGI_FORMAT_UNKNOWN;
@@ -217,8 +217,8 @@ void tml::graphic::Texture::Init(void)
 	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
 	this->tex_desc_.BindFlags = 0U;
 	this->size_ = 0U;
-	this->buf_.Init();
-	this->clear_buf_.Init();
+	this->cpu_buf_.Init();
+	this->clear_cpu_buf_.Init();
 
 	tml::graphic::Resource::Init();
 
@@ -435,7 +435,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	this->tex_->GetDesc(&this->tex_desc_);
 	this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
 
-	if (desc.buffer_flag) {
+	if (desc.cpu_buffer_flag) {
 		if (this->tex_desc_.ArraySize > 1U) {
 			this->Init();
 
@@ -445,7 +445,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		D3D11_MAPPED_SUBRESOURCE msr;
 		INT res = 0;
 
-		this->GetManager()->GetBuffer(this->buf_, msr, this->tex_, &res);
+		this->GetManager()->GetBuffer(this->cpu_buf_, msr, this->tex_, &res);
 
 		if (res < 0) {
 			this->Init();
@@ -453,12 +453,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			return (-1);
 		}
 
-		this->clear_buf_ = this->buf_;
+		this->clear_cpu_buf_ = this->cpu_buf_;
 
 		UINT pixel_cnt = this->size_.x * this->size_.y;
 
 		for (UINT pixel_i = 0U; pixel_i < pixel_cnt; ++pixel_i) {
-			reinterpret_cast<UINT *>(this->clear_buf_.Get())[pixel_i] = 0U;
+			reinterpret_cast<UINT *>(this->clear_cpu_buf_.Get())[pixel_i] = 0U;
 		}
 	}
 
@@ -625,27 +625,11 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 
 /**
- * @brief ClearBufferŠÖ”
- * @param col (color)
+ * @brief UploadCPUBufferŠÖ”
  */
-void tml::graphic::Texture::ClearBuffer(void)
+void tml::graphic::Texture::UploadCPUBuffer(void)
 {
-	if (this->buf_.GetSize() <= 0U) {
-		return;
-	}
-
-	tml::MemoryUtil::Copy(this->buf_.Get(), this->clear_buf_.Get(), this->clear_buf_.GetLength());
-
-	return;
-}
-
-
-/**
- * @brief UpdateBufferŠÖ”
- */
-void tml::graphic::Texture::UpdateBuffer(void)
-{
-	if (this->buf_.GetSize() <= 0U) {
+	if (this->cpu_buf_.GetSize() <= 0U) {
 		return;
 	}
 
@@ -654,12 +638,40 @@ void tml::graphic::Texture::UpdateBuffer(void)
 
 
 /**
- * @brief DrawBufferŠÖ”
+ * @brief DownloadCPUBufferŠÖ”
+ */
+void tml::graphic::Texture::DownloadCPUBuffer(void)
+{
+	if (this->cpu_buf_.GetSize() <= 0U) {
+		return;
+	}
+
+	return;
+}
+
+
+/**
+ * @brief ClearCPUBufferŠÖ”
+ */
+void tml::graphic::Texture::ClearCPUBuffer(void)
+{
+	if (this->cpu_buf_.GetSize() <= 0U) {
+		return;
+	}
+
+	tml::MemoryUtil::Copy(this->cpu_buf_.Get(), this->clear_cpu_buf_.Get(), this->clear_cpu_buf_.GetLength());
+
+	return;
+}
+
+
+/**
+ * @brief DrawCPUBufferŠÖ”
  * @param str (string)
  */
-void tml::graphic::Texture::DrawBuffer(const WCHAR *str)
+void tml::graphic::Texture::DrawCPUBuffer(const WCHAR *str)
 {
-	if (this->buf_.GetSize() <= 0U) {
+	if (this->cpu_buf_.GetSize() <= 0U) {
 		return;
 	}
 

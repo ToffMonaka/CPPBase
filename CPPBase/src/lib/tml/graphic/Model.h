@@ -273,7 +273,7 @@ inline UINT tml::graphic::ModelStage::GetShaderIndex(void) const
 
 /**
  * @brief SetShaderIndexä÷êî
- * @param ds_index (depth_state_index)
+ * @param shader_index (shader_index)
  */
 inline void tml::graphic::ModelStage::SetShaderIndex(const UINT shader_index)
 {
@@ -371,7 +371,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE type_;
-	std::vector<tml::unique_ptr<tml::graphic::ModelStage>> stage_cont_;
+	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::RasterizerState>> rs_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::BlendState>> bs_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::DepthState>> ds_cont_;
@@ -395,7 +395,6 @@ public:
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
 	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
 	tml::graphic::RasterizerState *GetRasterizerState(const UINT);
 	void SetRasterizerState(const UINT, tml::shared_ptr<tml::graphic::RasterizerState> &);
@@ -441,24 +440,6 @@ inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void)
  * nullptr=é∏îs
  */
 inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
-{
-	auto index = static_cast<UINT>(type);
-
-	if (index >= this->stage_cont_.size()) {
-		return (nullptr);
-	}
-
-	return (this->stage_cont_[index].get());
-}
-
-
-/**
- * @brief GetStageFastä÷êî
- * @param type (type)
- * @return stage (stage)<br>
- * nullptr=é∏îs
- */
-inline tml::graphic::ModelStage *tml::graphic::Model::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
 	return (this->stage_cont_[static_cast<UINT>(type)].get());
 }

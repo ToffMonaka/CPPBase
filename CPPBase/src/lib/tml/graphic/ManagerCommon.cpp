@@ -322,8 +322,8 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::TextureDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR);
 		desc.swap_chain = this->mgr_->GetSwapChain();
+		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR);
 		desc.render_target_desc_null_flag = true;
 		desc.sr_desc_null_flag = true;
 		desc.uasr_desc_null_flag = true;
@@ -341,7 +341,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::TextureDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET, DXGI_FORMAT_R24G8_TYPELESS, tml::XMUINT2EX(this->mgr_->GetSwapChainDesc().BufferDesc.Width, this->mgr_->GetSwapChainDesc().BufferDesc.Height));
+		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET, DXGI_FORMAT_R24G8_TYPELESS, this->mgr_->GetSize());
 		desc.depth_target_format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 		this->mgr_->GetResource<tml::graphic::Texture>(this->main_depth_target_texture, desc);

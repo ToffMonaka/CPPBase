@@ -19,10 +19,10 @@ namespace graphic {
 class TextureDesc : public tml::graphic::ResourceDesc
 {
 public:
-	std::vector<tml::BinaryFileReadDesc> file_read_desc_container;
 	IDXGISwapChain *swap_chain;
+	std::vector<tml::BinaryFileReadDesc> file_read_desc_container;
 	CD3D11_TEXTURE2D_DESC texture_desc;
-	bool buffer_flag;
+	bool cpu_buffer_flag;
 	DXGI_FORMAT render_target_format;
 	bool render_target_desc_null_flag;
 	DXGI_FORMAT depth_target_format;
@@ -75,8 +75,8 @@ private:
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;
 	tml::XMUINT2EX size_;
-	tml::DynamicBuffer buf_;
-	tml::DynamicBuffer clear_buf_;
+	tml::DynamicBuffer cpu_buf_;
+	tml::DynamicBuffer clear_cpu_buf_;
 	ID3D11RenderTargetView *rt_;
 	ID3D11DepthStencilView *dt_;
 	ID3D11ShaderResourceView *sr_;
@@ -93,11 +93,13 @@ public:
 	INT Create(const tml::graphic::TextureDesc &);
 
 	ID3D11Texture2D *GetTexture(void);
+	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
 	const tml::XMUINT2EX &GetSize(void) const;
-	tml::DynamicBuffer &GetBuffer(void);
-	void ClearBuffer(void);
-	void UpdateBuffer(void);
-	void DrawBuffer(const WCHAR *);
+	tml::DynamicBuffer &GetCPUBuffer(void);
+	void UploadCPUBuffer(void);
+	void DownloadCPUBuffer(void);
+	void ClearCPUBuffer(void);
+	void DrawCPUBuffer(const WCHAR *);
 	ID3D11RenderTargetView *GetRenderTarget(void);
 	void ClearRenderTarget(const tml::XMFLOAT4EX &);
 	ID3D11DepthStencilView *GetDepthTarget(void);
@@ -120,6 +122,16 @@ inline ID3D11Texture2D *tml::graphic::Texture::GetTexture(void)
 
 
 /**
+ * @brief GetTextureDescŠÖ”
+ * @return tex_desc (texture_desc)
+ */
+inline const CD3D11_TEXTURE2D_DESC &tml::graphic::Texture::GetTextureDesc(void) const
+{
+	return (this->tex_desc_);
+}
+
+
+/**
  * @brief GetSizeŠÖ”
  * @return size (size)
  */
@@ -130,12 +142,12 @@ inline const tml::XMUINT2EX &tml::graphic::Texture::GetSize(void) const
 
 
 /**
- * @brief GetBufferŠÖ”
- * @return buf (buffer)
+ * @brief GetCPUBufferŠÖ”
+ * @return cpu_buf (cpu_buffer)
  */
-inline tml::DynamicBuffer &tml::graphic::Texture::GetBuffer(void)
+inline tml::DynamicBuffer &tml::graphic::Texture::GetCPUBuffer(void)
 {
-	return (this->buf_);
+	return (this->cpu_buf_);
 }
 
 

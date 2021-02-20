@@ -192,7 +192,7 @@ INT cpp_base::MainThread::Start(void)
 			desc.manager = &this->graphic_mgr_;
 			desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
 			desc.fov_angle = XMConvertToRadians(55.0f);
-			desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Width), static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Height));
+			desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSize().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y));
 			desc.near_clip = 0.1f;
 			desc.far_clip = 1000.0f;
 
@@ -209,7 +209,7 @@ INT cpp_base::MainThread::Start(void)
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
-			desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Width), static_cast<FLOAT>(this->graphic_mgr_.GetSwapChainDesc().BufferDesc.Height));
+			desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSize().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y));
 
 			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
 
@@ -326,7 +326,7 @@ INT cpp_base::MainThread::Start(void)
 
 				desc.manager = &this->graphic_mgr_;
 				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, tml::XMUINT2EX(512U, 512U));
-				desc.buffer_flag = true;
+				desc.cpu_buffer_flag = true;
 
 				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
 
@@ -378,11 +378,11 @@ void cpp_base::MainThread::Update(void)
 		fps_str += L"/";
 		fps_str += tml::StringUtil::GetString(tmp_str, this->frame_rate_.GetLimit());
 
-		auto fps_sprite_model_tex = this->fps_sprite_model_->GetTexture(this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+		auto fps_tex = this->fps_sprite_model_->GetTexture(this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
-		fps_sprite_model_tex->ClearBuffer();
-		fps_sprite_model_tex->DrawBuffer(fps_str.c_str());
-		fps_sprite_model_tex->UpdateBuffer();
+		fps_tex->ClearCPUBuffer();
+		fps_tex->DrawCPUBuffer(fps_str.c_str());
+		fps_tex->UploadCPUBuffer();
 
 		this->fps_sprite_model_tex_update_timer_.Start();
 	}

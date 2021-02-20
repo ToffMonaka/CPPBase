@@ -104,6 +104,7 @@ private:
 	ID3D11Device *device_;
 	ID3D11DeviceContext *device_context_;
 	D3D_FEATURE_LEVEL device_future_lv_;
+	tml::XMUINT2EX size_;
 	bool vsync_flg_;
 	tml::graphic::Viewport vp_;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE samp_quality_type_;
@@ -218,6 +219,7 @@ public:
 	ID3D11Device *GetDevice(void);
 	ID3D11DeviceContext *GetDeviceContext(void);
 	D3D_FEATURE_LEVEL GetDeviceFeatureLevel(void) const;
+	const tml::XMUINT2EX &GetSize(void) const;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE GetSamplerQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE GetMotionQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE GetShadowQualityType(void) const;
@@ -462,6 +464,16 @@ inline ID3D11DeviceContext *tml::graphic::Manager::GetDeviceContext(void)
 inline D3D_FEATURE_LEVEL tml::graphic::Manager::GetDeviceFeatureLevel(void) const
 {
 	return (this->device_future_lv_);
+}
+
+
+/**
+ * @brief GetSizeŠÖ”
+ * @return size (size)
+ */
+inline const tml::XMUINT2EX &tml::graphic::Manager::GetSize(void) const
+{
+	return (this->size_);
 }
 
 

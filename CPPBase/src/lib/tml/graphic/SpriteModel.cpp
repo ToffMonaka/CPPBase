@@ -358,11 +358,8 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 				std::array<UINT, 4U> ib_element_ary = {0U, 1U, 2U, 3U};
 
 				desc.manager = this->GetManager();
-				desc.vertex_buffer_element_size = sizeof(tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT);
-				desc.vertex_buffer_element_count = vb_element_ary.size();
-				desc.vertex_buffer_element_array = reinterpret_cast<BYTE *>(vb_element_ary.data());
-				desc.index_buffer_element_count = ib_element_ary.size();
-				desc.index_buffer_element_array = ib_element_ary.data();
+				desc.SetVertexBufferDesc(sizeof(tml::graphic::SpriteModel::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
+				desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
 				desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 
 				this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, desc);
