@@ -60,6 +60,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	ID3D11SamplerState *samp_;
+	CD3D11_SAMPLER_DESC samp_desc_;
 
 protected:
 	void Release(void);
@@ -72,6 +73,7 @@ public:
 	INT Create(const tml::graphic::SamplerDesc &);
 
 	ID3D11SamplerState *GetSampler(void);
+	const CD3D11_SAMPLER_DESC &GetSamplerDesc(void) const;
 	ID3D11SamplerState *GetSR(void);
 };
 }
@@ -85,6 +87,16 @@ public:
 inline ID3D11SamplerState *tml::graphic::Sampler::GetSampler(void)
 {
 	return (this->samp_);
+}
+
+
+/**
+ * @brief GetSamplerDescŠÖ”
+ * @return samp_desc (sampler_desc)
+ */
+inline const CD3D11_SAMPLER_DESC &tml::graphic::Sampler::GetSamplerDesc(void) const
+{
+	return (this->samp_desc_);
 }
 
 

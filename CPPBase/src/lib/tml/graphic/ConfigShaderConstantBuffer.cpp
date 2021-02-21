@@ -98,7 +98,7 @@ INT tml::graphic::ConfigShaderConstantBuffer::Create(const tml::graphic::ConfigS
 {
 	this->Init();
 
-	if (tml::graphic::ShaderConstantBuffer::Create(desc, sizeof(tml::graphic::ConfigShaderConstantBuffer::ELEMENT)) < 0) {
+	if (tml::graphic::ShaderConstantBuffer::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

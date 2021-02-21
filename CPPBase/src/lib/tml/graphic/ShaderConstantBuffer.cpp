@@ -12,7 +12,8 @@
  * @brief コンストラクタ
  */
 tml::graphic::ShaderConstantBufferDesc::ShaderConstantBufferDesc() :
-	cpu_read_flag(false)
+	buffer_desc(0U, D3D11_BIND_CONSTANT_BUFFER),
+	element_size(0U)
 {
 	return;
 }
@@ -36,7 +37,8 @@ void tml::graphic::ShaderConstantBufferDesc::Init(void)
 {
 	this->Release();
 
-	this->cpu_read_flag = false;
+	this->buffer_desc = CD3D11_BUFFER_DESC(0U, D3D11_BIND_CONSTANT_BUFFER);
+	this->element_size = 0U;
 
 	tml::graphic::ResourceDesc::Init();
 
@@ -73,12 +75,32 @@ INT tml::graphic::ShaderConstantBufferDesc::ReadValue(const tml::INIFile &ini_fi
 
 
 /**
+ * @brief SetBufferDesc関数
+ * @param element_size (element_size)
+ * @param dynamic_flg (dynamic_flag)
+ */
+void tml::graphic::ShaderConstantBufferDesc::SetBufferDesc(const UINT element_size, const bool dynamic_flg)
+{
+	this->buffer_desc = CD3D11_BUFFER_DESC(element_size, D3D11_BIND_CONSTANT_BUFFER);
+
+	if (dynamic_flg) {
+		this->buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
+		this->buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	}
+
+	this->element_size = element_size;
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::ShaderConstantBuffer::ShaderConstantBuffer() :
 	buf_(nullptr),
-	element_size_(0U),
-	cpu_read_flg_(false)
+	buf_desc_(0U, D3D11_BIND_CONSTANT_BUFFER),
+	element_size_(0U)
 {
 	return;
 }
@@ -115,8 +137,8 @@ void tml::graphic::ShaderConstantBuffer::Release(void)
  */
 void tml::graphic::ShaderConstantBuffer::Init(void)
 {
+	this->buf_desc_ = CD3D11_BUFFER_DESC(0U, D3D11_BIND_CONSTANT_BUFFER);
 	this->element_size_ = 0U;
-	this->cpu_read_flg_ = false;
 
 	tml::graphic::Resource::Init();
 
@@ -127,14 +149,13 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
 /**
  * @brief Create関数
  * @param desc (desc)
- * @param element_size (element_size)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstantBufferDesc &desc, const UINT element_size)
+INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstantBufferDesc &desc)
 {
-	if ((element_size <= 0U)
-	|| ((element_size % 16) > 0)) {
+	if ((desc.element_size <= 0U)
+	|| ((desc.element_size % 16) > 0)) {
 		return (-1);
 	}
 
@@ -142,41 +163,44 @@ INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstan
 		return (-1);
 	}
 
-	this->element_size_ = element_size;
-	this->cpu_read_flg_ = desc.cpu_read_flag;
-
-	CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_, D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0U);
-
-	if (this->cpu_read_flg_) {
-		buf_desc.Usage = D3D11_USAGE_DYNAMIC;
-		buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	}
-
-	if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&buf_desc, nullptr, &this->buf_))) {
+	if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&desc.buffer_desc, nullptr, &this->buf_))) {
 		return (-1);
 	}
+
+	this->buf_->GetDesc(&this->buf_desc_);
+	this->element_size_ = desc.element_size;
 
 	return (0);
 }
 
 
 /**
- * @brief UpdateBuffer関数
- * @param element (element)
+ * @brief UploadCPUBuffer関数
+ * @param cpu_buf (cpu_buffer)
  */
-void tml::graphic::ShaderConstantBuffer::UpdateBuffer(void *element)
+void tml::graphic::ShaderConstantBuffer::UploadCPUBuffer(BYTE *cpu_buf)
 {
-	if (this->cpu_read_flg_) {
+	if (this->buf_desc_.Usage == D3D11_USAGE_DYNAMIC) {
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->buf_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-			memcpy(msr.pData, element, this->element_size_);
+			memcpy(msr.pData, cpu_buf, this->element_size_);
 
 			this->GetManager()->GetDeviceContext()->Unmap(this->buf_, 0U);
 		}
 	} else {
-		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, nullptr, element, 0U, 0U);
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, nullptr, cpu_buf, 0U, 0U);
 	}
 
+	return;
+}
+
+
+/**
+ * @brief DownloadCPUBuffer関数
+ * @param cpu_buf (cpu_buffer)
+ */
+void tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(BYTE *cpu_buf)
+{
 	return;
 }

@@ -397,7 +397,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::ConfigShaderConstantBufferDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.cpu_read_flag = true;
+		desc.SetBufferDesc(sizeof(tml::graphic::ConfigShaderConstantBuffer::ELEMENT), true);
 
 		this->mgr_->GetResource<tml::graphic::ConfigShaderConstantBuffer>(this->config_shader_constant_buffer, desc);
 
@@ -412,7 +412,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::HeaderShaderConstantBufferDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.cpu_read_flag = true;
+		desc.SetBufferDesc(sizeof(tml::graphic::HeaderShaderConstantBuffer::ELEMENT), true);
 
 		this->mgr_->GetResource<tml::graphic::HeaderShaderConstantBuffer>(this->header_shader_constant_buffer, desc);
 

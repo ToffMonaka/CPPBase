@@ -7,7 +7,6 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../../lib/tml/time/FrameRate.h"
-#include "../../lib/tml/time/Timer.h"
 #include "../../lib/tml/thread/MainThread.h"
 #include "../../lib/tml/input/Manager.h"
 #include "../../lib/tml/graphic/Manager.h"
@@ -36,7 +35,7 @@ private:
 	tml::shared_ptr<tml::graphic::SpriteModel> title_bg_sprite_model_;
 	tml::shared_ptr<tml::graphic::SpriteModel> title_logo_sprite_model_;
 	tml::shared_ptr<tml::graphic::SpriteModel> fps_sprite_model_;
-	tml::Timer fps_sprite_model_tex_update_timer_;
+	tml::TIME_REAL fps_sprite_model_tex_update_time_;
 
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);

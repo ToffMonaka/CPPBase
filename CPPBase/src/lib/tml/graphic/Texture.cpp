@@ -98,40 +98,37 @@ INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief SetTextureDescŠÖ”
- * @param tex_desc_type_flg (texture_desc_type_flag)
- * @param tex_desc_format (texture_desc_format)
- * @param tex_desc_size (texture_desc_size)
- * @param tex_desc_buf_cnt (texture_desc_buf_count)
- * @param tex_desc_mm_cnt (texture_desc_mipmap_count)
- * @param tex_desc_ms_desc (texture_desc_multisample_desc)
+ * @param type_flg (texture_desc_type_flag)
+ * @param format (texture_desc_format)
+ * @param size (texture_desc_size)
+ * @param buf_cnt (texture_desc_buf_count)
+ * @param mm_cnt (texture_desc_mipmap_count)
+ * @param ms_desc (texture_desc_multisample_desc)
  */
-void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG tex_desc_type_flg, const DXGI_FORMAT tex_desc_format, const XMUINT2EX &tex_desc_size, const UINT tex_desc_buf_cnt, const UINT tex_desc_mm_cnt, const DXGI_SAMPLE_DESC &tex_desc_ms_desc)
+void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG type_flg, const DXGI_FORMAT format, const XMUINT2EX &size, const UINT buf_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc)
 {
 	this->file_read_desc_container.clear();
-	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
+	this->file_read_desc_container.resize(buf_cnt);
+	this->texture_desc = CD3D11_TEXTURE2D_DESC(format, size.x, size.y, buf_cnt, mm_cnt);
 	this->texture_desc.BindFlags = 0U;
 
-	this->file_read_desc_container.resize(tex_desc_buf_cnt);
-	this->texture_desc = CD3D11_TEXTURE2D_DESC(tex_desc_format, tex_desc_size.x, tex_desc_size.y, tex_desc_buf_cnt, tex_desc_mm_cnt);
-	this->texture_desc.BindFlags = 0U;
-
-	if (static_cast<bool>(tex_desc_type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET)) {
+	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_RENDER_TARGET;
 	}
 
-	if (static_cast<bool>(tex_desc_type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET)) {
+	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
 	}
 
-	if (static_cast<bool>(tex_desc_type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR)) {
+	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
 	}
 
-	if (static_cast<bool>(tex_desc_type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR)) {
+	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 	}
 
-	this->texture_desc.SampleDesc = tex_desc_ms_desc;
+	this->texture_desc.SampleDesc = ms_desc;
 
 	return;
 }

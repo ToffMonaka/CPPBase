@@ -581,7 +581,7 @@ void tml::graphic::Manager::Update(void)
 			this->common.main_depth_target_texture->ClearDepthTarget();
 
 			this->common.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);
-			this->common.header_shader_constant_buffer->UpdateBuffer();
+			this->common.header_shader_constant_buffer->UploadCPUBuffer();
 
 			this->common.camera_shader_structured_buffer->SetElementCount(0U);
 			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d, this->draw_stage_dat_->projection_matrix_3d);

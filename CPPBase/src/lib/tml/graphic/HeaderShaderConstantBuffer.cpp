@@ -98,7 +98,7 @@ INT tml::graphic::HeaderShaderConstantBuffer::Create(const tml::graphic::HeaderS
 {
 	this->Init();
 
-	if (tml::graphic::ShaderConstantBuffer::Create(desc, sizeof(tml::graphic::HeaderShaderConstantBuffer::ELEMENT)) < 0) {
+	if (tml::graphic::ShaderConstantBuffer::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

@@ -17,7 +17,8 @@ namespace graphic {
 class ShaderConstantBufferDesc : public tml::graphic::ResourceDesc
 {
 public:
-	bool cpu_read_flag;
+	CD3D11_BUFFER_DESC buffer_desc;
+	UINT element_size;
 
 protected:
 	void Release(void);
@@ -29,6 +30,8 @@ public:
 	virtual ~ShaderConstantBufferDesc();
 
 	virtual void Init(void);
+
+	void SetBufferDesc(const UINT, const bool);
 };
 }
 }
@@ -60,16 +63,17 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	ID3D11Buffer *buf_;
+	CD3D11_BUFFER_DESC buf_desc_;
 	UINT element_size_;
-	bool cpu_read_flg_;
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::ShaderConstantBufferDesc &, const UINT);
+	INT Create(const tml::graphic::ShaderConstantBufferDesc &);
 
-	void UpdateBuffer(void *);
 	template <typename T>
 	T *GetElement(T *);
+	void UploadCPUBuffer(BYTE *);
+	void DownloadCPUBuffer(BYTE *);
 
 public:
 	ShaderConstantBuffer();
@@ -78,8 +82,8 @@ public:
 	virtual void Init(void);
 
 	ID3D11Buffer *GetBuffer(void);
+	const CD3D11_BUFFER_DESC &GetBufferDesc(void) const;
 	UINT GetElementSize(void) const;
-	bool GetCPUReadFlag(void) const;
 	ID3D11Buffer *GetSR(void);
 };
 }
@@ -93,6 +97,16 @@ public:
 inline ID3D11Buffer *tml::graphic::ShaderConstantBuffer::GetBuffer(void)
 {
 	return (this->buf_);
+}
+
+
+/**
+ * @brief GetBufferDescŠÖ”
+ * @return vb_desc (vertex_buffer_desc)
+ */
+inline const CD3D11_BUFFER_DESC &tml::graphic::ShaderConstantBuffer::GetBufferDesc(void) const
+{
+	return (this->buf_desc_);
 }
 
 
@@ -126,14 +140,4 @@ inline T *tml::graphic::ShaderConstantBuffer::GetElement(T *element)
 inline ID3D11Buffer *tml::graphic::ShaderConstantBuffer::GetSR(void)
 {
 	return (this->buf_);
-}
-
-
-/**
- * @brief GetCPUReadFlagŠÖ”
- * @return cpu_read_flg (cpu_read_flag)
- */
-inline bool tml::graphic::ShaderConstantBuffer::GetCPUReadFlag(void) const
-{
-	return (this->cpu_read_flg_);
 }

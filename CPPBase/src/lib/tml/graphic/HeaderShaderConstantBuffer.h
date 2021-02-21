@@ -90,22 +90,12 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::HeaderShaderConstantBufferDesc &);
 
-	void UpdateBuffer(void);
 	tml::graphic::HeaderShaderConstantBuffer::ELEMENT *GetElement(void);
 	void SetElement(const UINT, const UINT, const UINT, const UINT);
+	void UploadCPUBuffer(void);
+	void DownloadCPUBuffer(void);
 };
 }
-}
-
-
-/**
- * @brief UpdateBufferä÷êî
- */
-inline void tml::graphic::HeaderShaderConstantBuffer::UpdateBuffer(void)
-{
-	tml::graphic::ShaderConstantBuffer::UpdateBuffer(this->element_);
-
-	return;
 }
 
 
@@ -117,4 +107,26 @@ inline void tml::graphic::HeaderShaderConstantBuffer::UpdateBuffer(void)
 inline tml::graphic::HeaderShaderConstantBuffer::ELEMENT *tml::graphic::HeaderShaderConstantBuffer::GetElement(void)
 {
 	return (tml::graphic::ShaderConstantBuffer::GetElement(this->element_));
+}
+
+
+/**
+ * @brief UploadCPUBufferä÷êî
+ */
+inline void tml::graphic::HeaderShaderConstantBuffer::UploadCPUBuffer(void)
+{
+	tml::graphic::ShaderConstantBuffer::UploadCPUBuffer(reinterpret_cast<BYTE *>(this->element_));
+
+	return;
+}
+
+
+/**
+ * @brief DownloadCPUBufferä÷êî
+ */
+inline void tml::graphic::HeaderShaderConstantBuffer::DownloadCPUBuffer(void)
+{
+	tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(reinterpret_cast<BYTE *>(this->element_));
+
+	return;
 }

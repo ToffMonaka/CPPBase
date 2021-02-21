@@ -77,15 +77,15 @@ INT tml::graphic::SamplerDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief SetSamplerDesc関数
- * @param samp_desc_type (sampler_desc_type)
- * @param samp_desc_wrap_type (sampler_desc_wrap_type)
+ * @param type (type)
+ * @param wrap_type (wrap_type)
  */
-void tml::graphic::SamplerDesc::SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE samp_desc_type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE samp_desc_wrap_type)
+void tml::graphic::SamplerDesc::SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE wrap_type)
 {
 	this->sampler_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
 	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 
-	switch (samp_desc_type) {
+	switch (type) {
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::BILINEAR: {
 		this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
 
@@ -122,7 +122,7 @@ void tml::graphic::SamplerDesc::SetSamplerDesc(const tml::ConstantUtil::GRAPHIC:
 	}
 	}
 
-	switch (samp_desc_wrap_type) {
+	switch (wrap_type) {
 	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC: {
 		this->sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 		this->sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -157,8 +157,11 @@ void tml::graphic::SamplerDesc::SetSamplerDesc(const tml::ConstantUtil::GRAPHIC:
  * @brief コンストラクタ
  */
 tml::graphic::Sampler::Sampler() :
-	samp_(nullptr)
+	samp_(nullptr),
+	samp_desc_(CD3D11_DEFAULT())
 {
+	this->samp_desc_.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+
 	return;
 }
 
@@ -198,6 +201,9 @@ void tml::graphic::Sampler::Init(void)
 {
 	this->Release();
 
+	this->samp_desc_ = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
+	this->samp_desc_.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+
 	tml::graphic::Resource::Init();
 
 	return;
@@ -225,6 +231,8 @@ INT tml::graphic::Sampler::Create(const tml::graphic::SamplerDesc &desc)
 
 		return (-1);
 	}
+
+	this->samp_->GetDesc(&this->samp_desc_);
 
 	return (0);
 }

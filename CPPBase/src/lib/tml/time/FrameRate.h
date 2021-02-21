@@ -18,10 +18,10 @@ private:
 	UINT limit_;
 	UINT cnt_;
 	DOUBLE fps_;
-	std::chrono::steady_clock::time_point one_start_time_;
-	tml::TIME_REAL one_elapsed_time_;
-	std::chrono::steady_clock::time_point work_one_start_time_;
-	tml::TIME_REAL work_one_elapsed_time_;
+	std::chrono::steady_clock::time_point start_time_;
+	std::chrono::steady_clock::time_point work_start_time_;
+	tml::TIME_REAL elapsed_time_;
+	tml::TIME_REAL work_elapsed_time_;
 	tml::TIME_REAL total_elapsed_time_;
 	tml::TIME_REAL one_time_;
 	tml::TIME_REAL sleep_time_;
@@ -49,6 +49,7 @@ public:
 	UINT GetLimit(void) const;
 	UINT GetCount(void) const;
 	DOUBLE GetFPS(void) const;
+	tml::TIME_REAL GetElapsedTime(void) const;
 };
 }
 
@@ -89,4 +90,14 @@ inline UINT tml::FrameRate::GetCount(void) const
 inline DOUBLE tml::FrameRate::GetFPS(void) const
 {
 	return (this->fps_);
+}
+
+
+/**
+ * @brief GetElapsedTimeŠÖ”
+ * @return elapsed_time (elapsed_time)
+ */
+inline tml::TIME_REAL tml::FrameRate::GetElapsedTime(void) const
+{
+	return (this->elapsed_time_);
 }

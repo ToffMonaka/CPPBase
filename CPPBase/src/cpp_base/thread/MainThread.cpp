@@ -26,7 +26,8 @@
 /**
  * @brief コンストラクタ
  */
-cpp_base::MainThread::MainThread()
+cpp_base::MainThread::MainThread() :
+	fps_sprite_model_tex_update_time_(0.0)
 {
 	return;
 }
@@ -72,7 +73,7 @@ void cpp_base::MainThread::Init(void)
 	this->graphic_mgr_.Init();
 	this->sound_mgr_.Init();
 
-	this->fps_sprite_model_tex_update_timer_.Init();
+	this->fps_sprite_model_tex_update_time_ = tml::TIME_REAL(0.0);
 
 	tml::MainThread::Init();
 
@@ -343,8 +344,6 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
-		this->fps_sprite_model_tex_update_timer_.Start();
-
 		int a = 0;
 	}
 
@@ -370,7 +369,9 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
-	if (this->fps_sprite_model_tex_update_timer_.GetElapsedTime() >= tml::TIME_REAL(1.0)) {
+	this->fps_sprite_model_tex_update_time_ += this->frame_rate_.GetElapsedTime();
+
+	if (this->fps_sprite_model_tex_update_time_ >= tml::TIME_REAL(1.0)) {
 		std::wstring fps_str = L"FPS=";
 		std::wstring tmp_str;
 
@@ -384,7 +385,7 @@ void cpp_base::MainThread::Update(void)
 		fps_tex->DrawCPUBuffer(fps_str.c_str());
 		fps_tex->UploadCPUBuffer();
 
-		this->fps_sprite_model_tex_update_timer_.Start();
+		this->fps_sprite_model_tex_update_time_ = tml::TIME_REAL(0.0);
 	}
 
 	this->graphic_mgr_.SetDrawCamera(this->camera_.get());

@@ -97,21 +97,17 @@ INT tml::graphic::MeshDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief SetVertexBufferDescŠÖ”
- * @param vb_element_size (vertex_buffer_element_size)
- * @param vb_element_cnt (vertex_buffer_element_count)
- * @param vb_element_ary (vertex_buffer_element_array)
+ * @param element_size (element_size)
+ * @param element_cnt (element_count)
+ * @param element_ary (element_array)
  */
-void tml::graphic::MeshDesc::SetVertexBufferDesc(const UINT vb_element_size, const UINT vb_element_cnt, const BYTE *vb_element_ary)
+void tml::graphic::MeshDesc::SetVertexBufferDesc(const UINT element_size, const UINT element_cnt, const BYTE *element_ary)
 {
-	this->vertex_buffer_desc = CD3D11_BUFFER_DESC(0U, D3D11_BIND_VERTEX_BUFFER);
+	this->vertex_buffer_desc = CD3D11_BUFFER_DESC(element_size * element_cnt, D3D11_BIND_VERTEX_BUFFER);
 	tml::MemoryUtil::Clear(&this->vertex_buffer_subresource_data, 1U);
-	this->vertex_buffer_element_size = 0U;
-	this->vertex_buffer_element_count = 0U;
-
-	this->vertex_buffer_desc = CD3D11_BUFFER_DESC(vb_element_size * vb_element_cnt, D3D11_BIND_VERTEX_BUFFER);
-	this->vertex_buffer_subresource_data.pSysMem = vb_element_ary;
-	this->vertex_buffer_element_size = vb_element_size;
-	this->vertex_buffer_element_count = vb_element_cnt;
+	this->vertex_buffer_subresource_data.pSysMem = element_ary;
+	this->vertex_buffer_element_size = element_size;
+	this->vertex_buffer_element_count = element_cnt;
 
 	return;
 }
@@ -119,24 +115,19 @@ void tml::graphic::MeshDesc::SetVertexBufferDesc(const UINT vb_element_size, con
 
 /**
  * @brief SetIndexBufferDescŠÖ”
- * @param ib_element_size (index_buffer_element_size)
- * @param ib_element_cnt (index_buffer_element_count)
- * @param ib_element_ary (index_buffer_element_array)
- * @param ib_format (index_buffer_format)
+ * @param element_size (element_size)
+ * @param element_cnt (element_count)
+ * @param element_ary (element_array)
+ * @param format (format)
  */
-void tml::graphic::MeshDesc::SetIndexBufferDesc(const UINT ib_element_size, const UINT ib_element_cnt, const BYTE *ib_element_ary, const DXGI_FORMAT ib_format)
+void tml::graphic::MeshDesc::SetIndexBufferDesc(const UINT element_size, const UINT element_cnt, const BYTE *element_ary, const DXGI_FORMAT format)
 {
-	this->index_buffer_desc = CD3D11_BUFFER_DESC(0U, D3D11_BIND_INDEX_BUFFER);
+	this->index_buffer_desc = CD3D11_BUFFER_DESC(element_size * element_cnt, D3D11_BIND_INDEX_BUFFER);
 	tml::MemoryUtil::Clear(&this->index_buffer_subresource_data, 1U);
-	this->index_buffer_element_size = 0U;
-	this->index_buffer_element_count = 0U;
-	this->index_buffer_format = DXGI_FORMAT_UNKNOWN;
-
-	this->index_buffer_desc = CD3D11_BUFFER_DESC(ib_element_size * ib_element_cnt, D3D11_BIND_INDEX_BUFFER);
-	this->index_buffer_subresource_data.pSysMem = ib_element_ary;
-	this->index_buffer_element_size = ib_element_size;
-	this->index_buffer_element_count = ib_element_cnt;
-	this->index_buffer_format = ib_format;
+	this->index_buffer_subresource_data.pSysMem = element_ary;
+	this->index_buffer_element_size = element_size;
+	this->index_buffer_element_count = element_cnt;
+	this->index_buffer_format = format;
 
 	return;
 }

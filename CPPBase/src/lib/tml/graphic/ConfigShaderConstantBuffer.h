@@ -90,21 +90,11 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::ConfigShaderConstantBufferDesc &);
 
-	void UpdateBuffer(void);
 	tml::graphic::ConfigShaderConstantBuffer::ELEMENT *GetElement(void);
+	void UploadCPUBuffer(void);
+	void DownloadCPUBuffer(void);
 };
 }
-}
-
-
-/**
- * @brief UpdateBufferä÷êî
- */
-inline void tml::graphic::ConfigShaderConstantBuffer::UpdateBuffer(void)
-{
-	tml::graphic::ShaderConstantBuffer::UpdateBuffer(this->element_);
-
-	return;
 }
 
 
@@ -116,4 +106,26 @@ inline void tml::graphic::ConfigShaderConstantBuffer::UpdateBuffer(void)
 inline tml::graphic::ConfigShaderConstantBuffer::ELEMENT *tml::graphic::ConfigShaderConstantBuffer::GetElement(void)
 {
 	return (tml::graphic::ShaderConstantBuffer::GetElement(this->element_));
+}
+
+
+/**
+ * @brief UploadCPUBufferä÷êî
+ */
+inline void tml::graphic::ConfigShaderConstantBuffer::UploadCPUBuffer(void)
+{
+	tml::graphic::ShaderConstantBuffer::UploadCPUBuffer(reinterpret_cast<BYTE *>(this->element_));
+
+	return;
+}
+
+
+/**
+ * @brief DownloadCPUBufferä÷êî
+ */
+inline void tml::graphic::ConfigShaderConstantBuffer::DownloadCPUBuffer(void)
+{
+	tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(reinterpret_cast<BYTE *>(this->element_));
+
+	return;
 }
