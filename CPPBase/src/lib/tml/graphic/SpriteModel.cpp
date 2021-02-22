@@ -399,8 +399,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		tml::graphic::SpriteModelShaderStructuredBufferDesc desc;
 
 		desc.manager = this->GetManager();
-		desc.element_limit = 1U;
-		desc.cpu_read_flag = true;
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT), 1U, true);
 
 		this->GetManager()->GetResource<tml::graphic::SpriteModelShaderStructuredBuffer>(this->ssb_, desc);
 
@@ -415,8 +414,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		tml::graphic::SpriteModelLayerShaderStructuredBufferDesc desc;
 
 		desc.manager = this->GetManager();
-		desc.element_limit = 1U;
-		desc.cpu_read_flag = true;
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT), 1U, true);
 
 		this->GetManager()->GetResource<tml::graphic::SpriteModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc);
 
@@ -444,10 +442,10 @@ void tml::graphic::SpriteModel::DrawStageInit(void)
 	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size_ * this->scale_);
 
 	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->projection_matrix_2d, this->col_);
-	this->ssb_->UpdateBuffer();
+	this->ssb_->UploadCPUBuffer();
 
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()));
-	this->layer_ssb_->UpdateBuffer();
+	this->layer_ssb_->UploadCPUBuffer();
 
 	return;
 }

@@ -91,22 +91,12 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::SpriteModelLayerShaderStructuredBufferDesc &);
 
-	void UpdateBuffer(void);
 	tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	void SetElement(const UINT, const bool);
+	void UploadCPUBuffer(void);
+	void DownloadCPUBuffer(void);
 };
 }
-}
-
-
-/**
- * @brief UpdateBufferä÷êî
- */
-inline void tml::graphic::SpriteModelLayerShaderStructuredBuffer::UpdateBuffer(void)
-{
-	tml::graphic::ShaderStructuredBuffer::UpdateBuffer(this->element_ary_);
-
-	return;
 }
 
 
@@ -119,4 +109,26 @@ inline void tml::graphic::SpriteModelLayerShaderStructuredBuffer::UpdateBuffer(v
 inline tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT *tml::graphic::SpriteModelLayerShaderStructuredBuffer::GetElement(const UINT index)
 {
 	return (tml::graphic::ShaderStructuredBuffer::GetElement(this->element_ary_, index));
+}
+
+
+/**
+ * @brief UploadCPUBufferä÷êî
+ */
+inline void tml::graphic::SpriteModelLayerShaderStructuredBuffer::UploadCPUBuffer(void)
+{
+	tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(reinterpret_cast<BYTE *>(this->element_ary_));
+
+	return;
+}
+
+
+/**
+ * @brief DownloadCPUBufferä÷êî
+ */
+inline void tml::graphic::SpriteModelLayerShaderStructuredBuffer::DownloadCPUBuffer(void)
+{
+	tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(reinterpret_cast<BYTE *>(this->element_ary_));
+
+	return;
 }

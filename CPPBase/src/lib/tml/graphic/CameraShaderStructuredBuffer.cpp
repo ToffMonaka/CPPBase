@@ -98,7 +98,7 @@ INT tml::graphic::CameraShaderStructuredBuffer::Create(const tml::graphic::Camer
 {
 	this->Init();
 
-	if (tml::graphic::ShaderStructuredBuffer::Create(desc, sizeof(tml::graphic::CameraShaderStructuredBuffer::ELEMENT)) < 0) {
+	if (tml::graphic::ShaderStructuredBuffer::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

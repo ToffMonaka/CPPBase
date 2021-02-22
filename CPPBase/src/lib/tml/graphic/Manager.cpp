@@ -586,15 +586,15 @@ void tml::graphic::Manager::Update(void)
 			this->common.camera_shader_structured_buffer->SetElementCount(0U);
 			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d, this->draw_stage_dat_->projection_matrix_3d);
 			this->common.camera_shader_structured_buffer->SetElement(1U, this->draw_camera_,this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d, this->draw_stage_dat_->projection_matrix_2d);
-			this->common.camera_shader_structured_buffer->UpdateBuffer();
+			this->common.camera_shader_structured_buffer->UploadCPUBuffer();
 
 			this->common.light_shader_structured_buffer->SetElementCount(0U);
 			this->common.light_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
-			this->common.light_shader_structured_buffer->UpdateBuffer();
+			this->common.light_shader_structured_buffer->UploadCPUBuffer();
 
 			this->common.fog_shader_structured_buffer->SetElementCount(0U);
 			this->common.fog_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
-			this->common.fog_shader_structured_buffer->UpdateBuffer();
+			this->common.fog_shader_structured_buffer->UploadCPUBuffer();
 
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 				this->draw_model_ary_[draw_model_i]->DrawStageInit();

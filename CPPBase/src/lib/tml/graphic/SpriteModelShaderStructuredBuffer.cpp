@@ -98,7 +98,7 @@ INT tml::graphic::SpriteModelShaderStructuredBuffer::Create(const tml::graphic::
 {
 	this->Init();
 
-	if (tml::graphic::ShaderStructuredBuffer::Create(desc, sizeof(tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT)) < 0) {
+	if (tml::graphic::ShaderStructuredBuffer::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

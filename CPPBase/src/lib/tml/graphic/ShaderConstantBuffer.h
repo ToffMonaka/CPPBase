@@ -31,7 +31,7 @@ public:
 
 	virtual void Init(void);
 
-	void SetBufferDesc(const UINT, const bool);
+	void SetBufferDesc(const tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG, const UINT, const bool);
 };
 }
 }
@@ -102,7 +102,7 @@ inline ID3D11Buffer *tml::graphic::ShaderConstantBuffer::GetBuffer(void)
 
 /**
  * @brief GetBufferDescä÷êî
- * @return vb_desc (vertex_buffer_desc)
+ * @return buf_desc (buffer_desc)
  */
 inline const CD3D11_BUFFER_DESC &tml::graphic::ShaderConstantBuffer::GetBufferDesc(void) const
 {

@@ -77,18 +77,18 @@ INT tml::graphic::RasterizerStateDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief SetRasterizerStateDescŠÖ”
- * @param rs_desc_type (rasterizer_state_desc_type)
+ * @param type (type)
  */
-void tml::graphic::RasterizerStateDesc::SetRasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE rs_desc_type)
+void tml::graphic::RasterizerStateDesc::SetRasterizerStateDesc(const tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE type)
 {
 	this->rasterizer_state_desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
 	this->rasterizer_state_desc.CullMode = D3D11_CULL_NONE;
 
-	if (rs_desc_type == tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT) {
+	if (type == tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT) {
 		return;
 	}
 
-	switch (rs_desc_type) {
+	switch (type) {
 	case tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::WIREFRAME: {
 		this->rasterizer_state_desc.FillMode = D3D11_FILL_WIREFRAME;
 

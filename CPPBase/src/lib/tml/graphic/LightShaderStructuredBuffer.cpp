@@ -98,7 +98,7 @@ INT tml::graphic::LightShaderStructuredBuffer::Create(const tml::graphic::LightS
 {
 	this->Init();
 
-	if (tml::graphic::ShaderStructuredBuffer::Create(desc, sizeof(tml::graphic::LightShaderStructuredBuffer::ELEMENT)) < 0) {
+	if (tml::graphic::ShaderStructuredBuffer::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

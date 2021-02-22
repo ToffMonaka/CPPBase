@@ -98,7 +98,7 @@ INT tml::graphic::FogShaderStructuredBuffer::Create(const tml::graphic::FogShade
 {
 	this->Init();
 
-	if (tml::graphic::ShaderStructuredBuffer::Create(desc, sizeof(tml::graphic::FogShaderStructuredBuffer::ELEMENT)) < 0) {
+	if (tml::graphic::ShaderStructuredBuffer::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

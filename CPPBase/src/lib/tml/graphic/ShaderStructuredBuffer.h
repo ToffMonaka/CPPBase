@@ -17,9 +17,9 @@ namespace graphic {
 class ShaderStructuredBufferDesc : public tml::graphic::ResourceDesc
 {
 public:
+	CD3D11_BUFFER_DESC buffer_desc;
+	UINT element_size;
 	UINT element_limit;
-	bool cpu_read_flag;
-	bool cpu_write_flag;
 
 protected:
 	void Release(void);
@@ -31,6 +31,8 @@ public:
 	virtual ~ShaderStructuredBufferDesc();
 
 	virtual void Init(void);
+
+	void SetBufferDesc(const tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG, const UINT, const UINT, const bool);
 };
 }
 }
@@ -62,21 +64,21 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	ID3D11Buffer *buf_;
+	CD3D11_BUFFER_DESC buf_desc_;
 	UINT element_size_;
 	UINT element_limit_;
 	UINT element_cnt_;
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
-	bool cpu_read_flg_;
-	bool cpu_write_flg_;
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::ShaderStructuredBufferDesc &, const UINT);
+	INT Create(const tml::graphic::ShaderStructuredBufferDesc &);
 
-	void UpdateBuffer(void *);
 	template <typename T>
 	T *GetElement(T *, const UINT);
+	void UploadCPUBuffer(BYTE *);
+	void DownloadCPUBuffer(BYTE *);
 
 public:
 	ShaderStructuredBuffer();
@@ -85,14 +87,13 @@ public:
 	virtual void Init(void);
 
 	ID3D11Buffer *GetBuffer(void);
+	const CD3D11_BUFFER_DESC &GetBufferDesc(void) const;
 	UINT GetElementSize(void) const;
 	UINT GetElementLimit(void) const;
 	UINT GetElementCount(void) const;
 	void SetElementCount(const UINT);
 	ID3D11ShaderResourceView *GetSR(void);
 	ID3D11UnorderedAccessView *GetUASR(void);
-	bool GetCPUReadFlag(void) const;
-	bool GetCPUWriteFlag(void) const;
 };
 }
 }
@@ -105,6 +106,16 @@ public:
 inline ID3D11Buffer *tml::graphic::ShaderStructuredBuffer::GetBuffer(void)
 {
 	return (this->buf_);
+}
+
+
+/**
+ * @brief GetBufferDescŠÖ”
+ * @return buf_desc (buffer_desc)
+ */
+inline const CD3D11_BUFFER_DESC &tml::graphic::ShaderStructuredBuffer::GetBufferDesc(void) const
+{
+	return (this->buf_desc_);
 }
 
 
@@ -189,24 +200,4 @@ inline ID3D11ShaderResourceView *tml::graphic::ShaderStructuredBuffer::GetSR(voi
 inline ID3D11UnorderedAccessView *tml::graphic::ShaderStructuredBuffer::GetUASR(void)
 {
 	return (this->uasr_);
-}
-
-
-/**
- * @brief GetCPUReadFlagŠÖ”
- * @return cpu_read_flg (cpu_read_flag)
- */
-inline bool tml::graphic::ShaderStructuredBuffer::GetCPUReadFlag(void) const
-{
-	return (this->cpu_read_flg_);
-}
-
-
-/**
- * @brief GetCPUWriteFlagŠÖ”
- * @return cpu_write_flg (cpu_write_flag)
- */
-inline bool tml::graphic::ShaderStructuredBuffer::GetCPUWriteFlag(void) const
-{
-	return (this->cpu_write_flg_);
 }

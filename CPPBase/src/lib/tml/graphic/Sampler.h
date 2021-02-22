@@ -30,7 +30,7 @@ public:
 
 	virtual void Init(void);
 
-	void SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
+	void SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE);
 };
 }
 }

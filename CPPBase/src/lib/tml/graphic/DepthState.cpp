@@ -74,17 +74,17 @@ INT tml::graphic::DepthStateDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief SetDepthStateDescŠÖ”
- * @param ds_desc_type (depth_state_desc_type)
+ * @param type (type)
  */
-void tml::graphic::DepthStateDesc::SetDepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE ds_desc_type)
+void tml::graphic::DepthStateDesc::SetDepthStateDesc(const tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE type)
 {
 	this->depth_state_desc = CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT());
 
-	if (ds_desc_type == tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT) {
+	if (type == tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT) {
 		return;
 	}
 
-	switch (ds_desc_type) {
+	switch (type) {
 	case tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::REFERENCE: {
 		this->depth_state_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 

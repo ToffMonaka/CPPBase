@@ -91,23 +91,13 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::FogShaderStructuredBufferDesc &);
 
-	void UpdateBuffer(void);
 	tml::graphic::FogShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	void SetElement(const UINT, const tml::graphic::Fog *);
 	void SetElement(const UINT, const UINT, const tml::graphic::Fog *const *);
+	void UploadCPUBuffer(void);
+	void DownloadCPUBuffer(void);
 };
 }
-}
-
-
-/**
- * @brief UpdateBufferä÷êî
- */
-inline void tml::graphic::FogShaderStructuredBuffer::UpdateBuffer(void)
-{
-	tml::graphic::ShaderStructuredBuffer::UpdateBuffer(this->element_ary_);
-
-	return;
 }
 
 
@@ -120,4 +110,26 @@ inline void tml::graphic::FogShaderStructuredBuffer::UpdateBuffer(void)
 inline tml::graphic::FogShaderStructuredBuffer::ELEMENT *tml::graphic::FogShaderStructuredBuffer::GetElement(const UINT index)
 {
 	return (tml::graphic::ShaderStructuredBuffer::GetElement(this->element_ary_, index));
+}
+
+
+/**
+ * @brief UploadCPUBufferä÷êî
+ */
+inline void tml::graphic::FogShaderStructuredBuffer::UploadCPUBuffer(void)
+{
+	tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(reinterpret_cast<BYTE *>(this->element_ary_));
+
+	return;
+}
+
+
+/**
+ * @brief DownloadCPUBufferä÷êî
+ */
+inline void tml::graphic::FogShaderStructuredBuffer::DownloadCPUBuffer(void)
+{
+	tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(reinterpret_cast<BYTE *>(this->element_ary_));
+
+	return;
 }

@@ -77,44 +77,45 @@ INT tml::graphic::SamplerDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief SetSamplerDescŠÖ”
- * @param type (type)
+ * @param bind_flg (bind_flag)
+ * @param quality_type (quality_type)
  * @param wrap_type (wrap_type)
  */
-void tml::graphic::SamplerDesc::SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE wrap_type)
+void tml::graphic::SamplerDesc::SetSamplerDesc(const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG bind_flg, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE quality_type, const tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE wrap_type)
 {
 	this->sampler_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
 	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 
-	switch (type) {
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::BILINEAR: {
+	switch (quality_type) {
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::BILINEAR: {
 		this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
 
 		break;
 	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::TRILINEAR: {
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::TRILINEAR: {
 		this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 		break;
 	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC2: {
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::ANISOTROPIC2: {
 		this->sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
 		this->sampler_desc.MaxAnisotropy = 2U;
 
 		break;
 	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC4: {
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::ANISOTROPIC4: {
 		this->sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
 		this->sampler_desc.MaxAnisotropy = 4U;
 
 		break;
 	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC8: {
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::ANISOTROPIC8: {
 		this->sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
 		this->sampler_desc.MaxAnisotropy = 8U;
 
 		break;
 	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_TYPE::ANISOTROPIC16: {
+	case tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::ANISOTROPIC16: {
 		this->sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
 		this->sampler_desc.MaxAnisotropy = 16U;
 

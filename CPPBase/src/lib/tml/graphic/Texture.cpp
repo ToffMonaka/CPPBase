@@ -13,7 +13,7 @@
  */
 tml::graphic::TextureDesc::TextureDesc() :
 	swap_chain(nullptr),
-	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U),
+	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
 	cpu_buffer_flag(false),
 	render_target_format(DXGI_FORMAT_UNKNOWN),
 	render_target_desc_null_flag(false),
@@ -24,8 +24,6 @@ tml::graphic::TextureDesc::TextureDesc() :
 	uasr_format(DXGI_FORMAT_UNKNOWN),
 	uasr_desc_null_flag(false)
 {
-	this->texture_desc.BindFlags = 0U;
-
 	return;
 }
 
@@ -50,8 +48,7 @@ void tml::graphic::TextureDesc::Init(void)
 
 	this->swap_chain = nullptr;
 	this->file_read_desc_container.clear();
-	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
-	this->texture_desc.BindFlags = 0U;
+	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
 	this->cpu_buffer_flag = false;
 	this->render_target_format = DXGI_FORMAT_UNKNOWN;
 	this->render_target_desc_null_flag = false;
@@ -98,33 +95,32 @@ INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief SetTextureDescŠÖ”
- * @param type_flg (texture_desc_type_flag)
- * @param format (texture_desc_format)
- * @param size (texture_desc_size)
- * @param buf_cnt (texture_desc_buf_count)
- * @param mm_cnt (texture_desc_mipmap_count)
- * @param ms_desc (texture_desc_multisample_desc)
+ * @param bind_flg (bind_flag)
+ * @param format (format)
+ * @param size (size)
+ * @param buf_cnt (buffer_count)
+ * @param mm_cnt (mipmap_count)
+ * @param ms_desc (multisample_desc)
  */
-void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG type_flg, const DXGI_FORMAT format, const XMUINT2EX &size, const UINT buf_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc)
+void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG bind_flg, const DXGI_FORMAT format, const XMUINT2EX &size, const UINT buf_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc)
 {
 	this->file_read_desc_container.clear();
 	this->file_read_desc_container.resize(buf_cnt);
-	this->texture_desc = CD3D11_TEXTURE2D_DESC(format, size.x, size.y, buf_cnt, mm_cnt);
-	this->texture_desc.BindFlags = 0U;
+	this->texture_desc = CD3D11_TEXTURE2D_DESC(format, size.x, size.y, buf_cnt, mm_cnt, 0U);
 
-	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::RENDER_TARGET)) {
+	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_RENDER_TARGET;
 	}
 
-	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::DEPTH_TARGET)) {
+	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::DEPTH_TARGET)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
 	}
 
-	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR)) {
+	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
 	}
 
-	if (static_cast<bool>(type_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::UASR)) {
+	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::UASR)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 	}
 
@@ -139,15 +135,13 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
  */
 tml::graphic::Texture::Texture() :
 	tex_(nullptr),
-	tex_desc_(DXGI_FORMAT_UNKNOWN, 0U, 0U),
+	tex_desc_(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
 	size_(0U),
 	rt_(nullptr),
 	dt_(nullptr),
 	sr_(nullptr),
 	uasr_(nullptr)
 {
-	this->tex_desc_.BindFlags = 0U;
-
 	return;
 }
 
@@ -211,8 +205,7 @@ void tml::graphic::Texture::Init(void)
 {
 	this->Release();
 
-	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U);
-	this->tex_desc_.BindFlags = 0U;
+	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
 	this->size_ = 0U;
 	this->cpu_buf_.Init();
 	this->clear_cpu_buf_.Init();

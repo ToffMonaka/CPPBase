@@ -12,9 +12,9 @@
  * @brief コンストラクタ
  */
 tml::graphic::ShaderStructuredBufferDesc::ShaderStructuredBufferDesc() :
-	element_limit(0U),
-	cpu_read_flag(false),
-	cpu_write_flag(false)
+	buffer_desc(0U, 0U),
+	element_size(0U),
+	element_limit(0U)
 {
 	return;
 }
@@ -38,9 +38,9 @@ void tml::graphic::ShaderStructuredBufferDesc::Init(void)
 {
 	this->Release();
 
+	this->buffer_desc = CD3D11_BUFFER_DESC(0U, 0U);
+	this->element_size = 0U;
 	this->element_limit = 0U;
-	this->cpu_read_flag = false;
-	this->cpu_write_flag = false;
 
 	tml::graphic::ResourceDesc::Init();
 
@@ -77,17 +77,47 @@ INT tml::graphic::ShaderStructuredBufferDesc::ReadValue(const tml::INIFile &ini_
 
 
 /**
+ * @brief SetBufferDesc関数
+ * @param bind_flg (bind_flag)
+ * @param element_size (element_size)
+ * @param element_limit (element_limit)
+ * @param dynamic_flg (dynamic_flag)
+ */
+void tml::graphic::ShaderStructuredBufferDesc::SetBufferDesc(const tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG bind_flg, const UINT element_size, const UINT element_limit, const bool dynamic_flg)
+{
+	this->buffer_desc = CD3D11_BUFFER_DESC(element_size * element_limit, 0U, D3D11_USAGE_DEFAULT, 0U, D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, element_size);
+
+	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR)) {
+		this->buffer_desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+	}
+
+	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::UASR)) {
+		this->buffer_desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+	}
+
+	if (dynamic_flg) {
+		this->buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
+		this->buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	}
+
+	this->element_size = element_size;
+	this->element_limit = element_limit;
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::ShaderStructuredBuffer::ShaderStructuredBuffer() :
 	buf_(nullptr),
+	buf_desc_(0U, 0U),
 	element_size_(0U),
 	element_limit_(0U),
 	element_cnt_(0U),
 	sr_(nullptr),
-	uasr_(nullptr),
-	cpu_read_flg_(false),
-	cpu_write_flg_(false)
+	uasr_(nullptr)
 {
 	return;
 }
@@ -136,11 +166,10 @@ void tml::graphic::ShaderStructuredBuffer::Release(void)
  */
 void tml::graphic::ShaderStructuredBuffer::Init(void)
 {
+	this->buf_desc_ = CD3D11_BUFFER_DESC(0U, 0U);
 	this->element_size_ = 0U;
 	this->element_limit_ = 0U;
 	this->element_cnt_ = 0U;
-	this->cpu_read_flg_ = false;
-	this->cpu_write_flg_ = false;
 
 	tml::graphic::Resource::Init();
 
@@ -151,14 +180,13 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 /**
  * @brief Create関数
  * @param desc (desc)
- * @param element_size (element_size)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStructuredBufferDesc &desc, const UINT element_size)
+INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStructuredBufferDesc &desc)
 {
-	if (((element_size * desc.element_limit) <= 0U)
-	|| ((element_size % 16) > 0)) {
+	if (((desc.element_size * desc.element_limit) <= 0U)
+	|| ((desc.element_size % 16) > 0)) {
 		return (-1);
 	}
 
@@ -166,50 +194,28 @@ INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStruc
 		return (-1);
 	}
 
-	this->element_size_ = element_size;
+	if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&desc.buffer_desc, nullptr, &this->buf_))) {
+		return (-1);
+	}
+
+	this->buf_->GetDesc(&this->buf_desc_);
+	this->element_size_ = desc.element_size;
 	this->element_limit_ = desc.element_limit;
-	this->cpu_read_flg_ = desc.cpu_read_flag;
-	this->cpu_write_flg_ = desc.cpu_write_flag;
 
-	if (!this->cpu_write_flg_) {
-		CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_ * this->element_limit_, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DEFAULT, 0U, D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, this->element_size_);
-
-		if (this->cpu_read_flg_) {
-			buf_desc.Usage = D3D11_USAGE_DYNAMIC;
-			buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		}
-
-		if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&buf_desc, nullptr, &this->buf_))) {
-			return (-1);
-		}
-
+	if (this->buf_desc_.BindFlags & D3D11_BIND_SHADER_RESOURCE) {
 		CD3D11_SHADER_RESOURCE_VIEW_DESC sr_desc = CD3D11_SHADER_RESOURCE_VIEW_DESC(D3D11_SRV_DIMENSION_BUFFER, DXGI_FORMAT_UNKNOWN, 0U, this->element_limit_);
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->buf_, &sr_desc, &this->sr_))) {
 			return (-1);
 		}
+	}
 
-		this->element_cnt_ = 0U;
-	} else {
-		CD3D11_BUFFER_DESC buf_desc = CD3D11_BUFFER_DESC(this->element_size_ * this->element_limit_, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS, D3D11_USAGE_DEFAULT, 0U, D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, this->element_size_);
-
-		if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&buf_desc, nullptr, &this->buf_))) {
-			return (-1);
-		}
-
-		CD3D11_SHADER_RESOURCE_VIEW_DESC sr_desc = CD3D11_SHADER_RESOURCE_VIEW_DESC(D3D11_SRV_DIMENSION_BUFFER, DXGI_FORMAT_UNKNOWN, 0U, this->element_limit_);
-
-		if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->buf_, &sr_desc, &this->sr_))) {
-			return (-1);
-		}
-
+	if (this->buf_desc_.BindFlags & D3D11_BIND_UNORDERED_ACCESS) {
 		CD3D11_UNORDERED_ACCESS_VIEW_DESC uasr_desc = CD3D11_UNORDERED_ACCESS_VIEW_DESC(D3D11_UAV_DIMENSION_BUFFER, DXGI_FORMAT_UNKNOWN, 0U, this->element_limit_);
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateUnorderedAccessView(this->buf_, &uasr_desc, &this->uasr_))) {
 			return (-1);
 		}
-
-		this->element_cnt_ = this->element_limit_;
 	}
 
 	return (0);
@@ -217,56 +223,66 @@ INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStruc
 
 
 /**
- * @brief UpdateBuffer関数
- * @param element_ary (element_array)
+ * @brief UploadCPUBuffer関数
+ * @param cpu_buf (cpu_buffer)
  */
-void tml::graphic::ShaderStructuredBuffer::UpdateBuffer(void *element_ary)
+void tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(BYTE *cpu_buf)
 {
 	if (this->element_cnt_ <= 0U) {
 		return;
 	}
 
-	if (!this->cpu_write_flg_) {
-		if (this->cpu_read_flg_) {
-			D3D11_MAPPED_SUBRESOURCE msr;
+	if (this->buf_desc_.Usage == D3D11_USAGE_DYNAMIC) {
+		D3D11_MAPPED_SUBRESOURCE msr;
 
-			if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->buf_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-				memcpy(msr.pData, element_ary, this->element_size_ * this->element_cnt_);
+		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->buf_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
+			memcpy(msr.pData, cpu_buf, this->element_size_ * this->element_cnt_);
 
-				this->GetManager()->GetDeviceContext()->Unmap(this->buf_, 0U);
-			}
-		} else {
-			CD3D11_BOX box = CD3D11_BOX(0L, 0L, 0L, this->element_size_ * this->element_cnt_, 1L, 1L);
-
-			this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, &box, element_ary, 0U, 0U);
+			this->GetManager()->GetDeviceContext()->Unmap(this->buf_, 0U);
 		}
 	} else {
-		ID3D11Buffer *cpu_buf = nullptr;
-		D3D11_BUFFER_DESC cpu_buf_desc;
+		CD3D11_BOX box = CD3D11_BOX(0L, 0L, 0L, this->element_size_ * this->element_cnt_, 1L, 1L);
 
-		this->buf_->GetDesc(&cpu_buf_desc);
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, &box, cpu_buf, 0U, 0U);
+	}
 
-		cpu_buf_desc.Usage = D3D11_USAGE_STAGING;
-		cpu_buf_desc.BindFlags = 0U;
-		cpu_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-		cpu_buf_desc.MiscFlags = 0U;
+	return;
+}
 
-		if (SUCCEEDED(this->GetManager()->GetDevice()->CreateBuffer(&cpu_buf_desc, nullptr, &cpu_buf))) {
-			this->GetManager()->GetDeviceContext()->CopyResource(cpu_buf, this->buf_);
 
-			D3D11_MAPPED_SUBRESOURCE msr;
+/**
+ * @brief DownloadCPUBuffer関数
+ * @param cpu_buf (cpu_buffer)
+ */
+void tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(BYTE *cpu_buf)
+{
+	if (this->element_cnt_ <= 0U) {
+		return;
+	}
 
-			if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(cpu_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
-				if ((msr.DepthPitch >= (this->element_size_ * this->element_cnt_))
-				&& (msr.DepthPitch <= (this->element_size_ * this->element_limit_))) {
-					memcpy(static_cast<BYTE *>(element_ary), static_cast<BYTE *>(msr.pData), this->element_size_ * this->element_cnt_);
-				}
+	ID3D11Buffer *tmp_buf = nullptr;
+	CD3D11_BUFFER_DESC tmp_buf_desc = this->buf_desc_;
 
-				this->GetManager()->GetDeviceContext()->Unmap(cpu_buf, 0U);
+	tmp_buf_desc.Usage = D3D11_USAGE_STAGING;
+	tmp_buf_desc.BindFlags = 0U;
+	tmp_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	tmp_buf_desc.MiscFlags = 0U;
+
+	if (SUCCEEDED(this->GetManager()->GetDevice()->CreateBuffer(&tmp_buf_desc, nullptr, &tmp_buf))) {
+		this->GetManager()->GetDeviceContext()->CopyResource(tmp_buf, this->buf_);
+
+		D3D11_MAPPED_SUBRESOURCE msr;
+
+		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
+			if ((msr.DepthPitch >= (this->element_size_ * this->element_cnt_))
+			&& (msr.DepthPitch <= (this->element_size_ * this->element_limit_))) {
+				memcpy(cpu_buf, static_cast<BYTE *>(msr.pData), this->element_size_ * this->element_cnt_);
 			}
 
-			cpu_buf->Release();
+			this->GetManager()->GetDeviceContext()->Unmap(tmp_buf, 0U);
 		}
+
+		tmp_buf->Release();
 	}
 
 	return;

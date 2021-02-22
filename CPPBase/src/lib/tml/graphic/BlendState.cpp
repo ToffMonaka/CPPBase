@@ -76,15 +76,15 @@ INT tml::graphic::BlendStateDesc::ReadValue(const tml::INIFile &ini_file)
 
 /**
  * @brief SetBlendStateDescŠÖ”
- * @param bs_desc_type (blend_state_desc_type)
- * @param bs_desc_a_type (blend_state_desc_alpha_type)
+ * @param type (type)
+ * @param a_type (alpha_type)
  * @param rt_cnt (render_target_count)
  */
-void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE bs_desc_type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE bs_desc_a_type, const UINT rt_cnt)
+void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE type, const tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE a_type, const UINT rt_cnt)
 {
 	this->blend_state_desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
 
-	if (bs_desc_type == tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT) {
+	if (type == tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT) {
 		return;
 	}
 
@@ -101,7 +101,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 		this->blend_state_desc.IndependentBlendEnable = true;
 	}
 
-	switch (bs_desc_type) {
+	switch (type) {
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ALIGNMENT: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
 			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];
@@ -182,7 +182,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
 	}
 	}
 
-	switch (bs_desc_a_type) {
+	switch (a_type) {
 	case tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::SRC: {
 		for (UINT rt_i = 0U; rt_i < tmp_rt_cnt; ++rt_i) {
 			auto &rt_desc = this->blend_state_desc.RenderTarget[rt_i];

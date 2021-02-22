@@ -235,7 +235,7 @@ INT cpp_base::MainThread::Start(void)
 				tml::graphic::TextureDesc desc;
 
 				desc.manager = &this->graphic_mgr_;
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR);
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 				desc.file_read_desc_container[0].data.file_path = L"res/title_bg_img1.png";
 
 				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
@@ -279,7 +279,7 @@ INT cpp_base::MainThread::Start(void)
 				tml::graphic::TextureDesc desc;
 
 				desc.manager = &this->graphic_mgr_;
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR);
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 				desc.file_read_desc_container[0].data.file_path = L"res/title_logo_img1.png";
 
 				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
@@ -326,7 +326,7 @@ INT cpp_base::MainThread::Start(void)
 				tml::graphic::TextureDesc desc;
 
 				desc.manager = &this->graphic_mgr_;
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_TYPE_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, tml::XMUINT2EX(512U, 512U));
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, tml::XMUINT2EX(512U, 512U));
 				desc.cpu_buffer_flag = true;
 
 				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
