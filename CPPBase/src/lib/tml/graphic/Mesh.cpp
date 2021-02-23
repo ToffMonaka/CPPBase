@@ -100,10 +100,17 @@ INT tml::graphic::MeshDesc::ReadValue(const tml::INIFile &ini_file)
  * @param element_size (element_size)
  * @param element_cnt (element_count)
  * @param element_ary (element_array)
+ * @param dynamic_flg (dynamic_flag)
  */
-void tml::graphic::MeshDesc::SetVertexBufferDesc(const UINT element_size, const UINT element_cnt, const BYTE *element_ary)
+void tml::graphic::MeshDesc::SetVertexBufferDesc(const UINT element_size, const UINT element_cnt, const BYTE *element_ary, const bool dynamic_flg)
 {
 	this->vertex_buffer_desc = CD3D11_BUFFER_DESC(element_size * element_cnt, D3D11_BIND_VERTEX_BUFFER);
+
+	if (dynamic_flg) {
+		this->vertex_buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
+		this->vertex_buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	}
+
 	tml::MemoryUtil::Clear(&this->vertex_buffer_subresource_data, 1U);
 	this->vertex_buffer_subresource_data.pSysMem = element_ary;
 	this->vertex_buffer_element_size = element_size;
@@ -119,10 +126,17 @@ void tml::graphic::MeshDesc::SetVertexBufferDesc(const UINT element_size, const 
  * @param element_cnt (element_count)
  * @param element_ary (element_array)
  * @param format (format)
+ * @param dynamic_flg (dynamic_flag)
  */
-void tml::graphic::MeshDesc::SetIndexBufferDesc(const UINT element_size, const UINT element_cnt, const BYTE *element_ary, const DXGI_FORMAT format)
+void tml::graphic::MeshDesc::SetIndexBufferDesc(const UINT element_size, const UINT element_cnt, const BYTE *element_ary, const DXGI_FORMAT format, const bool dynamic_flg)
 {
 	this->index_buffer_desc = CD3D11_BUFFER_DESC(element_size * element_cnt, D3D11_BIND_INDEX_BUFFER);
+
+	if (dynamic_flg) {
+		this->index_buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
+		this->index_buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	}
+
 	tml::MemoryUtil::Clear(&this->index_buffer_subresource_data, 1U);
 	this->index_buffer_subresource_data.pSysMem = element_ary;
 	this->index_buffer_element_size = element_size;

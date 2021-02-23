@@ -399,7 +399,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		tml::graphic::SpriteModelShaderStructuredBufferDesc desc;
 
 		desc.manager = this->GetManager();
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT), 1U, true);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT), 1U);
 
 		this->GetManager()->GetResource<tml::graphic::SpriteModelShaderStructuredBuffer>(this->ssb_, desc);
 
@@ -414,7 +414,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		tml::graphic::SpriteModelLayerShaderStructuredBufferDesc desc;
 
 		desc.manager = this->GetManager();
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT), 1U, true);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT), 1U);
 
 		this->GetManager()->GetResource<tml::graphic::SpriteModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc);
 

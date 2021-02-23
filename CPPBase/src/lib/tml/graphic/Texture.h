@@ -43,7 +43,7 @@ public:
 
 	virtual void Init(void);
 
-	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG, const DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &size = XMUINT2EX(0U), const UINT buf_cnt = 1U, const UINT mm_cnt = 1U, const DXGI_SAMPLE_DESC &ms_desc = {1U, 0U});
+	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG, const DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &size = XMUINT2EX(0U), const UINT buf_cnt = 1U, const UINT mm_cnt = 1U, const DXGI_SAMPLE_DESC &ms_desc = {1U, 0U}, const bool dynamic_flg = false);
 };
 }
 }
@@ -99,7 +99,7 @@ public:
 	void UploadCPUBuffer(void);
 	void DownloadCPUBuffer(void);
 	void ClearCPUBuffer(void);
-	void DrawCPUBuffer(const WCHAR *);
+	void DrawCPUBuffer(const WCHAR *, tml::graphic::Font *);
 	ID3D11RenderTargetView *GetRenderTarget(void);
 	void ClearRenderTarget(const tml::XMFLOAT4EX &);
 	ID3D11DepthStencilView *GetDepthTarget(void);

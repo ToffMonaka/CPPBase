@@ -21,13 +21,14 @@
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/SpriteModel.h"
+#include "../../lib/tml/graphic/Font.h"
 
 
 /**
  * @brief コンストラクタ
  */
 cpp_base::MainThread::MainThread() :
-	fps_sprite_model_tex_update_time_(0.0)
+	fps_tex_update_time_(0.0)
 {
 	return;
 }
@@ -53,6 +54,7 @@ void cpp_base::MainThread::Release(void)
 	this->graphic_mgr_.ReleaseResource(this->title_bg_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->title_logo_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->fps_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->fps_font_);
 
 	tml::MainThread::Release();
 
@@ -73,7 +75,7 @@ void cpp_base::MainThread::Init(void)
 	this->graphic_mgr_.Init();
 	this->sound_mgr_.Init();
 
-	this->fps_sprite_model_tex_update_time_ = tml::TIME_REAL(0.0);
+	this->fps_tex_update_time_ = tml::TIME_REAL(0.0);
 
 	tml::MainThread::Init();
 
@@ -344,6 +346,20 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
+		{// FPSFont Create
+			tml::graphic::FontDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+
+			this->graphic_mgr_.GetResource<tml::graphic::Font>(this->fps_font_, desc);
+
+			if (this->fps_font_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+		}
+
 		int a = 0;
 	}
 
@@ -369,9 +385,9 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
-	this->fps_sprite_model_tex_update_time_ += this->frame_rate_.GetElapsedTime();
+	this->fps_tex_update_time_ += this->frame_rate_.GetElapsedTime();
 
-	if (this->fps_sprite_model_tex_update_time_ >= tml::TIME_REAL(1.0)) {
+	if (this->fps_tex_update_time_ >= tml::TIME_REAL(1.0)) {
 		std::wstring fps_str = L"FPS=";
 		std::wstring tmp_str;
 
@@ -382,10 +398,10 @@ void cpp_base::MainThread::Update(void)
 		auto fps_tex = this->fps_sprite_model_->GetTexture(this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		fps_tex->ClearCPUBuffer();
-		fps_tex->DrawCPUBuffer(fps_str.c_str());
+		fps_tex->DrawCPUBuffer(fps_str.c_str(), this->fps_font_.get());
 		fps_tex->UploadCPUBuffer();
 
-		this->fps_sprite_model_tex_update_time_ = tml::TIME_REAL(0.0);
+		this->fps_tex_update_time_ = tml::TIME_REAL(0.0);
 	}
 
 	this->graphic_mgr_.SetDrawCamera(this->camera_.get());

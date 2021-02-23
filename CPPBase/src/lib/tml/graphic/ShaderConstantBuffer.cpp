@@ -210,8 +210,8 @@ void tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(BYTE *cpu_buf)
 	ID3D11Buffer *tmp_buf = nullptr;
 	CD3D11_BUFFER_DESC tmp_buf_desc = this->buf_desc_;
 
-	tmp_buf_desc.Usage = D3D11_USAGE_STAGING;
 	tmp_buf_desc.BindFlags = 0U;
+	tmp_buf_desc.Usage = D3D11_USAGE_STAGING;
 	tmp_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	tmp_buf_desc.MiscFlags = 0U;
 

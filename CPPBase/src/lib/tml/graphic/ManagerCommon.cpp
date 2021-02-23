@@ -26,6 +26,7 @@
 #include "Sampler.h"
 #include "ScreenModel.h"
 #include "SpriteModel.h"
+#include "Font.h"
 
 
 /**
@@ -397,7 +398,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::ConfigShaderConstantBufferDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::ConfigShaderConstantBuffer::ELEMENT), true);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::ConfigShaderConstantBuffer::ELEMENT));
 
 		this->mgr_->GetResource<tml::graphic::ConfigShaderConstantBuffer>(this->config_shader_constant_buffer, desc);
 
@@ -412,7 +413,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::HeaderShaderConstantBufferDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::HeaderShaderConstantBuffer::ELEMENT), true);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::HeaderShaderConstantBuffer::ELEMENT));
 
 		this->mgr_->GetResource<tml::graphic::HeaderShaderConstantBuffer>(this->header_shader_constant_buffer, desc);
 
@@ -427,7 +428,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::CameraShaderStructuredBufferDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::CameraShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT, true);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::CameraShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT);
 
 		this->mgr_->GetResource<tml::graphic::CameraShaderStructuredBuffer>(this->camera_shader_structured_buffer, desc);
 
@@ -442,7 +443,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::LightShaderStructuredBufferDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::LightShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT, true);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::LightShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT);
 
 		this->mgr_->GetResource<tml::graphic::LightShaderStructuredBuffer>(this->light_shader_structured_buffer, desc);
 
@@ -457,7 +458,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::FogShaderStructuredBufferDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FogShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT, true);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FogShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT);
 
 		this->mgr_->GetResource<tml::graphic::FogShaderStructuredBuffer>(this->fog_shader_structured_buffer, desc);
 
@@ -468,46 +469,11 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE samp_desc_quality_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::NONE;
-
-	switch (this->mgr_->GetSamplerQualityType()) {
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::BILINEAR: {
-		samp_desc_quality_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::BILINEAR;
-
-		break;
-	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::TRILINEAR: {
-		samp_desc_quality_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::TRILINEAR;
-
-		break;
-	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC2: {
-		samp_desc_quality_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::ANISOTROPIC2;
-
-		break;
-	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC4: {
-		samp_desc_quality_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::ANISOTROPIC4;
-
-		break;
-	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC8: {
-		samp_desc_quality_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::ANISOTROPIC8;
-
-		break;
-	}
-	case tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC16: {
-		samp_desc_quality_type = tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_QUALITY_TYPE::ANISOTROPIC16;
-
-		break;
-	}
-	}
-
 	{// CCSampler Create
 		tml::graphic::SamplerDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, samp_desc_quality_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
+		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
 
 		this->mgr_->GetResource<tml::graphic::Sampler>(this->cc_sampler, desc);
 
@@ -522,7 +488,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::SamplerDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, samp_desc_quality_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
+		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
 
 		this->mgr_->GetResource<tml::graphic::Sampler>(this->cw_sampler, desc);
 
@@ -537,7 +503,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::SamplerDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, samp_desc_quality_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
+		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
 
 		this->mgr_->GetResource<tml::graphic::Sampler>(this->wc_sampler, desc);
 
@@ -552,7 +518,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::SamplerDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, samp_desc_quality_type, tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
+		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
 
 		this->mgr_->GetResource<tml::graphic::Sampler>(this->ww_sampler, desc);
 

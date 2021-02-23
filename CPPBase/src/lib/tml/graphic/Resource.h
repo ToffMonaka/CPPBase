@@ -36,6 +36,7 @@ class Sampler;
 class Model;
 class ScreenModel;
 class SpriteModel;
+class Font;
 }
 }
 

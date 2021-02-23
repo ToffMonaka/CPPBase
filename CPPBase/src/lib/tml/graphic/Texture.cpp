@@ -101,8 +101,9 @@ INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
  * @param buf_cnt (buffer_count)
  * @param mm_cnt (mipmap_count)
  * @param ms_desc (multisample_desc)
+ * @param dynamic_flg (dynamic_flag)
  */
-void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG bind_flg, const DXGI_FORMAT format, const XMUINT2EX &size, const UINT buf_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc)
+void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG bind_flg, const DXGI_FORMAT format, const XMUINT2EX &size, const UINT buf_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc, const bool dynamic_flg)
 {
 	this->file_read_desc_container.clear();
 	this->file_read_desc_container.resize(buf_cnt);
@@ -122,6 +123,11 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
 
 	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::UASR)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+	}
+
+	if (dynamic_flg) {
+		this->texture_desc.Usage = D3D11_USAGE_DYNAMIC;
+		this->texture_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	}
 
 	this->texture_desc.SampleDesc = ms_desc;
@@ -292,6 +298,9 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 				tex_desc = tmp_tex_desc;
 				tex_desc.ArraySize = 1U;
+				tex_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+				tex_desc.Usage = D3D11_USAGE_DEFAULT;
+				tex_desc.CPUAccessFlags = 0U;
 
 				if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tex_desc, nullptr, &tex))) {
 					this->Init();
@@ -658,8 +667,9 @@ void tml::graphic::Texture::ClearCPUBuffer(void)
 /**
  * @brief DrawCPUBufferŠÖ”
  * @param str (string)
+ * @param font (font)
  */
-void tml::graphic::Texture::DrawCPUBuffer(const WCHAR *str)
+void tml::graphic::Texture::DrawCPUBuffer(const WCHAR *str, tml::graphic::Font *font)
 {
 	if (this->cpu_buf_.GetSize() <= 0U) {
 		return;

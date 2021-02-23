@@ -25,6 +25,7 @@
 #include "Sampler.h"
 #include "ScreenModel.h"
 #include "SpriteModel.h"
+#include "Font.h"
 
 
 /**
@@ -827,28 +828,28 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 		return (dst_buf);
 	}
 
-	ID3D11Buffer *cpu_buf = nullptr;
-	D3D11_BUFFER_DESC cpu_buf_desc;
+	ID3D11Buffer *tmp_buf = nullptr;
+	D3D11_BUFFER_DESC tmp_buf_desc;
 
-	buf->GetDesc(&cpu_buf_desc);
+	buf->GetDesc(&tmp_buf_desc);
 
-	cpu_buf_desc.Usage = D3D11_USAGE_STAGING;
-	cpu_buf_desc.BindFlags = 0U;
-	cpu_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	cpu_buf_desc.MiscFlags = 0U;
+	tmp_buf_desc.BindFlags = 0U;
+	tmp_buf_desc.Usage = D3D11_USAGE_STAGING;
+	tmp_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	tmp_buf_desc.MiscFlags = 0U;
 
-	if (FAILED(this->device_->CreateBuffer(&cpu_buf_desc, nullptr, &cpu_buf))) {
+	if (FAILED(this->device_->CreateBuffer(&tmp_buf_desc, nullptr, &tmp_buf))) {
 		tml::SetResult(dst_res, -1);
 
 		return (dst_buf);
 	}
 
-	this->device_context_->CopyResource(cpu_buf, buf);
+	this->device_context_->CopyResource(tmp_buf, buf);
 
 	D3D11_MAPPED_SUBRESOURCE msr;
 
-	if (FAILED(this->device_context_->Map(cpu_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
-		cpu_buf->Release();
+	if (FAILED(this->device_context_->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
+		tmp_buf->Release();
 
 		tml::SetResult(dst_res, -1);
 
@@ -859,9 +860,9 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 	dst_msr = msr;
 	dst_msr.pData = nullptr;
 
-	this->device_context_->Unmap(cpu_buf, 0U);
+	this->device_context_->Unmap(tmp_buf, 0U);
 
-	cpu_buf->Release();
+	tmp_buf->Release();
 
 	tml::SetResult(dst_res, 0);
 
@@ -889,28 +890,28 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 		return (dst_buf);
 	}
 
-	ID3D11Texture2D *cpu_tex = nullptr;
-	CD3D11_TEXTURE2D_DESC cpu_tex_desc;
+	ID3D11Texture2D *tmp_tex = nullptr;
+	CD3D11_TEXTURE2D_DESC tmp_tex_desc;
 
-	tex->GetDesc(&cpu_tex_desc);
+	tex->GetDesc(&tmp_tex_desc);
 
-	cpu_tex_desc.Usage = D3D11_USAGE_STAGING;
-	cpu_tex_desc.BindFlags = 0U;
-	cpu_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	cpu_tex_desc.MiscFlags = 0U;
+	tmp_tex_desc.BindFlags = 0U;
+	tmp_tex_desc.Usage = D3D11_USAGE_STAGING;
+	tmp_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	tmp_tex_desc.MiscFlags = 0U;
 
-	if (FAILED(this->device_->CreateTexture2D(&cpu_tex_desc, nullptr, &cpu_tex))) {
+	if (FAILED(this->device_->CreateTexture2D(&tmp_tex_desc, nullptr, &tmp_tex))) {
 		tml::SetResult(dst_res, -1);
 
 		return (dst_buf);
 	}
 
-	this->device_context_->CopyResource(cpu_tex, tex);
+	this->device_context_->CopyResource(tmp_tex, tex);
 
 	D3D11_MAPPED_SUBRESOURCE msr;
 
-	if (FAILED(this->device_context_->Map(cpu_tex, 0U, D3D11_MAP_READ, 0U, &msr))) {
-		cpu_tex->Release();
+	if (FAILED(this->device_context_->Map(tmp_tex, 0U, D3D11_MAP_READ, 0U, &msr))) {
+		tmp_tex->Release();
 
 		tml::SetResult(dst_res, -1);
 
@@ -921,9 +922,9 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 	dst_msr = msr;
 	dst_msr.pData = nullptr;
 
-	this->device_context_->Unmap(cpu_tex, 0U);
+	this->device_context_->Unmap(tmp_tex, 0U);
 
-	cpu_tex->Release();
+	tmp_tex->Release();
 
 	tml::SetResult(dst_res, 0);
 
@@ -943,7 +944,7 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tml::DynamicBuffer> &dst_buf_cont, std::vector<D3D11_MAPPED_SUBRESOURCE> &dst_msr_cont, ID3D11Texture2D *tex, INT *dst_res)
 {
 	dst_buf_cont.clear();
-	dst_buf_cont.clear();
+	dst_msr_cont.clear();
 
 	if (tex == nullptr) {
 		tml::SetResult(dst_res, -1);
@@ -951,35 +952,35 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 		return (dst_buf_cont);
 	}
 
-	ID3D11Texture2D *cpu_tex = nullptr;
-	CD3D11_TEXTURE2D_DESC cpu_tex_desc;
+	ID3D11Texture2D *tmp_tex = nullptr;
+	CD3D11_TEXTURE2D_DESC tmp_tex_desc;
 
-	tex->GetDesc(&cpu_tex_desc);
+	tex->GetDesc(&tmp_tex_desc);
 
-	cpu_tex_desc.Usage = D3D11_USAGE_STAGING;
-	cpu_tex_desc.BindFlags = 0U;
-	cpu_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	cpu_tex_desc.MiscFlags = 0U;
+	tmp_tex_desc.BindFlags = 0U;
+	tmp_tex_desc.Usage = D3D11_USAGE_STAGING;
+	tmp_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	tmp_tex_desc.MiscFlags = 0U;
 
-	if (FAILED(this->device_->CreateTexture2D(&cpu_tex_desc, nullptr, &cpu_tex))) {
+	if (FAILED(this->device_->CreateTexture2D(&tmp_tex_desc, nullptr, &tmp_tex))) {
 		tml::SetResult(dst_res, -1);
 
 		return (dst_buf_cont);
 	}
 
-	this->device_context_->CopyResource(cpu_tex, tex);
+	this->device_context_->CopyResource(tmp_tex, tex);
 
-	dst_buf_cont.resize(cpu_tex_desc.MipLevels);
-	dst_msr_cont.resize(cpu_tex_desc.MipLevels);
+	dst_buf_cont.resize(tmp_tex_desc.MipLevels);
+	dst_msr_cont.resize(tmp_tex_desc.MipLevels);
 
-	for (UINT mm_i = 0U; mm_i < cpu_tex_desc.MipLevels; ++mm_i) {
+	for (UINT mm_i = 0U; mm_i < tmp_tex_desc.MipLevels; ++mm_i) {
 		D3D11_MAPPED_SUBRESOURCE msr;
 
-		if (FAILED(this->device_context_->Map(cpu_tex, mm_i, D3D11_MAP_READ, 0U, &msr))) {
-			cpu_tex->Release();
+		if (FAILED(this->device_context_->Map(tmp_tex, mm_i, D3D11_MAP_READ, 0U, &msr))) {
+			tmp_tex->Release();
 
 			dst_buf_cont.clear();
-			dst_buf_cont.clear();
+			dst_msr_cont.clear();
 
 			tml::SetResult(dst_res, -1);
 
@@ -990,10 +991,10 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 		dst_msr_cont[mm_i] = msr;
 		dst_msr_cont[mm_i].pData = nullptr;
 
-		this->device_context_->Unmap(cpu_tex, mm_i);
+		this->device_context_->Unmap(tmp_tex, mm_i);
 	}
 
-	cpu_tex->Release();
+	tmp_tex->Release();
 
 	tml::SetResult(dst_res, 0);
 

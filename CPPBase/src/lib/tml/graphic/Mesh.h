@@ -41,8 +41,8 @@ public:
 
 	virtual void Init(void);
 
-	void SetVertexBufferDesc(const UINT, const UINT, const BYTE *);
-	void SetIndexBufferDesc(const UINT, const UINT, const BYTE *, const DXGI_FORMAT);
+	void SetVertexBufferDesc(const UINT, const UINT, const BYTE *, const bool dynamic_flg = false);
+	void SetIndexBufferDesc(const UINT, const UINT, const BYTE *, const DXGI_FORMAT, const bool dynamic_flg = false);
 };
 }
 }

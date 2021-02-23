@@ -35,7 +35,8 @@ private:
 	tml::shared_ptr<tml::graphic::SpriteModel> title_bg_sprite_model_;
 	tml::shared_ptr<tml::graphic::SpriteModel> title_logo_sprite_model_;
 	tml::shared_ptr<tml::graphic::SpriteModel> fps_sprite_model_;
-	tml::TIME_REAL fps_sprite_model_tex_update_time_;
+	tml::shared_ptr<tml::graphic::Font> fps_font_;
+	tml::TIME_REAL fps_tex_update_time_;
 
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);

@@ -31,7 +31,7 @@ public:
 
 	virtual void Init(void);
 
-	void SetBufferDesc(const tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG, const UINT, const bool);
+	void SetBufferDesc(const tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG, const UINT, const bool dynamic_flg = true);
 };
 }
 }
