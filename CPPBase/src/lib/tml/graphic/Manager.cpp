@@ -33,7 +33,8 @@
  */
 tml::graphic::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
-	window_size(0U),
+	window_device_context_handle(nullptr),
+	size(0U),
 	vsync_flag(true)
 {
 	return;
@@ -59,7 +60,8 @@ void tml::graphic::ManagerDesc::Init(void)
 	this->Release();
 
 	this->window_handle = nullptr;
-	this->window_size = 0U;
+	this->window_device_context_handle = nullptr;
+	this->size = 0U;
 	this->vsync_flag = true;
 
 	return;
@@ -70,6 +72,8 @@ void tml::graphic::ManagerDesc::Init(void)
  * @brief コンストラクタ
  */
 tml::graphic::Manager::Manager() :
+	wnd_handle_(nullptr),
+	wnd_dc_handle_(nullptr),
 	factory_(nullptr),
 	adapter_(nullptr),
 	adapter_desc_{},
@@ -235,6 +239,8 @@ void tml::graphic::Manager::Init(void)
 {
 	this->Release();
 
+	this->wnd_handle_ = nullptr;
+	this->wnd_dc_handle_ = nullptr;
 	this->common.Init();
 
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
@@ -320,7 +326,17 @@ void tml::graphic::Manager::Init(void)
  */
 INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 {
+	if ((desc.window_handle == nullptr)
+	|| (desc.window_device_context_handle == nullptr)) {
+		this->Init();
+
+		return (-1);
+	}
+
 	this->Init();
+
+	this->wnd_handle_ = desc.window_handle;
+	this->wnd_dc_handle_ = desc.window_device_context_handle;
 
 	{// Factory Create
 		if (FAILED(CreateDXGIFactory1(IID_PPV_ARGS(&this->factory_)))) {
@@ -377,8 +393,8 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	{// SwapChain Create
 		DXGI_MODE_DESC mode_desc = {};
 
-		mode_desc.Width = desc.window_size.x;
-		mode_desc.Height = desc.window_size.y;
+		mode_desc.Width = desc.size.x;
+		mode_desc.Height = desc.size.y;
 		mode_desc.RefreshRate.Numerator = 60U;
 		mode_desc.RefreshRate.Denominator = 1U;
 		mode_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;

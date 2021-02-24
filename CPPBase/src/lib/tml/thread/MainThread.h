@@ -25,6 +25,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	HINSTANCE instance_handle_;
 	HWND wnd_handle_;
+	HDC wnd_dc_handle_;
 	std::wstring wnd_name_;
 	INT wnd_show_type_;
 	WNDCLASSEX wnd_class_;
@@ -48,6 +49,7 @@ public:
 	virtual void Update(void) = 0;
 	HINSTANCE GetInstanceHandle(void) const;
 	HWND GetWindowHandle(void) const;
+	HDC GetWindowDeviceContextHandle(void) const;
 	const std::wstring &GetWindowName(void) const;
 	INT GetWindowShowType(void) const;
 };
@@ -71,6 +73,16 @@ inline HINSTANCE tml::MainThread::GetInstanceHandle(void) const
 inline HWND tml::MainThread::GetWindowHandle(void) const
 {
 	return (this->wnd_handle_);
+}
+
+
+/**
+ * @brief GetWindowDeviceContextHandleŠÖ”
+ * @return wnd_dc_handle (window_device_context_handle)
+ */
+inline HDC tml::MainThread::GetWindowDeviceContextHandle(void) const
+{
+	return (this->wnd_dc_handle_);
 }
 
 

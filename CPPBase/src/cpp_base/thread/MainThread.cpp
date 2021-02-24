@@ -146,6 +146,9 @@ INT cpp_base::MainThread::Start(void)
 	{// InputManager Create
 		tml::input::ManagerDesc desc;
 
+		desc.window_handle = this->GetWindowHandle();
+		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+
 		if (this->input_mgr_.Create(desc) < 0) {
 			this->Init();
 
@@ -157,7 +160,9 @@ INT cpp_base::MainThread::Start(void)
 		tml::graphic::ManagerDesc desc;
 
 		desc.window_handle = this->GetWindowHandle();
-		desc.window_size = this->sys_conf_file_.data.window_size;
+		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		desc.size = this->sys_conf_file_.data.window_size;
+		desc.vsync_flag = true;
 
 		if (this->graphic_mgr_.Create(desc) < 0) {
 			this->Init();
@@ -168,6 +173,9 @@ INT cpp_base::MainThread::Start(void)
 
 	{// SoundManager Create
 		tml::sound::ManagerDesc desc;
+
+		desc.window_handle = this->GetWindowHandle();
+		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
 
 		if (this->sound_mgr_.Create(desc) < 0) {
 			this->Init();
@@ -350,6 +358,7 @@ INT cpp_base::MainThread::Start(void)
 			tml::graphic::FontDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
+			desc.SetFontDesc(tml::XMUINT2EX(0U, 64U), L"‚l‚r ƒSƒVƒbƒN");
 
 			this->graphic_mgr_.GetResource<tml::graphic::Font>(this->fps_font_, desc);
 

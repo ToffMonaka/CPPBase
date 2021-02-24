@@ -13,6 +13,8 @@
  */
 tml::graphic::FontDesc::FontDesc()
 {
+	tml::MemoryUtil::Clear(&this->font_desc, 1U);
+
 	return;
 }
 
@@ -34,6 +36,8 @@ tml::graphic::FontDesc::~FontDesc()
 void tml::graphic::FontDesc::Init(void)
 {
 	this->Release();
+
+	tml::MemoryUtil::Clear(&this->font_desc, 1U);
 
 	tml::graphic::ResourceDesc::Init();
 
@@ -70,10 +74,43 @@ INT tml::graphic::FontDesc::ReadValue(const tml::INIFile &ini_file)
 
 
 /**
+ * @brief SetFontDesc関数
+ * @param size (size)
+ * @param family (family)
+ */
+void tml::graphic::FontDesc::SetFontDesc(const XMUINT2EX &size, const WCHAR *family)
+{
+	tml::MemoryUtil::Clear(&this->font_desc, 1U);
+
+	this->font_desc.lfHeight = -MulDiv(static_cast<LONG>(size.y), GetDeviceCaps(this->manager->GetWindowDeviceContextHandle(), LOGPIXELSY), 72);
+	this->font_desc.lfWidth = static_cast<LONG>(size.x);
+	this->font_desc.lfEscapement = 0L;
+	this->font_desc.lfOrientation = 0L;
+	this->font_desc.lfWeight = FW_NORMAL;
+	this->font_desc.lfItalic = 0;
+	this->font_desc.lfUnderline = 0;
+	this->font_desc.lfStrikeOut = 0;
+	this->font_desc.lfCharSet = SHIFTJIS_CHARSET;
+	this->font_desc.lfOutPrecision = OUT_DEFAULT_PRECIS;
+	this->font_desc.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+	this->font_desc.lfQuality = PROOF_QUALITY;
+	this->font_desc.lfPitchAndFamily = DEFAULT_PITCH | FF_MODERN;
+	_snwprintf_s(this->font_desc.lfFaceName, sizeof(this->font_desc.lfFaceName) >> 1, _TRUNCATE, L"%s", family);
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
-tml::graphic::Font::Font()
+tml::graphic::Font::Font() :
+	dc_handle_(nullptr),
+	font_handle_(nullptr)
 {
+	tml::MemoryUtil::Clear(&this->font_desc_, 1U);
+	tml::MemoryUtil::Clear(&this->tm_, 1U);
+
 	return;
 }
 
@@ -90,11 +127,37 @@ tml::graphic::Font::~Font()
 
 
 /**
+ * @brief Release関数
+ */
+void tml::graphic::Font::Release(void)
+{
+	if (this->font_handle_ != nullptr) {
+		DeleteObject(this->font_handle_);
+
+		this->font_handle_ = nullptr;
+	}
+
+	if (this->dc_handle_ != nullptr) {
+		DeleteDC(this->dc_handle_);
+
+		this->dc_handle_ = nullptr;
+	}
+
+	tml::graphic::Resource::Release();
+
+	return;
+}
+
+
+/**
  * @brief Init関数
  */
 void tml::graphic::Font::Init(void)
 {
 	this->Release();
+
+	tml::MemoryUtil::Clear(&this->font_desc_, 1U);
+	tml::MemoryUtil::Clear(&this->tm_, 1U);
 
 	tml::graphic::Resource::Init();
 
@@ -117,6 +180,28 @@ INT tml::graphic::Font::Create(const tml::graphic::FontDesc &desc)
 
 		return (-1);
 	}
+
+	this->dc_handle_ = CreateCompatibleDC(this->GetManager()->GetWindowDeviceContextHandle());
+
+	if (this->dc_handle_ == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	this->font_handle_ = CreateFontIndirect(&desc.font_desc);
+
+	if (this->font_handle_ == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	tml::MemoryUtil::Copy(&this->font_desc_, &desc.font_desc, 1U);
+
+	SelectObject(this->dc_handle_, this->font_handle_);
+
+	GetTextMetrics(this->dc_handle_, &this->tm_);
 
 	return (0);
 }

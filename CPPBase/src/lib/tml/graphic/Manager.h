@@ -58,7 +58,8 @@ class ManagerDesc
 {
 public:
 	HWND window_handle;
-	tml::XMUINT2EX window_size;
+	HDC window_device_context_handle;
+	tml::XMUINT2EX size;
 	bool vsync_flag;
 
 protected:
@@ -94,6 +95,8 @@ public: Manager(const tml::graphic::Manager &) = delete;
 public: tml::graphic::Manager &operator =(const tml::graphic::Manager &) = delete;
 
 private:
+	HWND wnd_handle_;
+	HDC wnd_dc_handle_;
 	std::array<std::list<tml::shared_ptr<tml::graphic::Resource>>, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT> res_cont_ary_;
 
 	IDXGIFactory1 *factory_;
@@ -204,6 +207,8 @@ public:
 	INT Create(const tml::graphic::ManagerDesc &);
 
 	void Update(void);
+	HWND GetWindowHandle(void) const;
+	HDC GetWindowDeviceContextHandle(void) const;
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
@@ -309,6 +314,26 @@ public:
 	void ClearComputeSamplerSR(const UINT, const UINT);
 };
 }
+}
+
+
+/**
+ * @brief GetWindowHandleŠÖ”
+ * @return wnd_handle (window_handle)
+ */
+inline HWND tml::graphic::Manager::GetWindowHandle(void) const
+{
+	return (this->wnd_handle_);
+}
+
+
+/**
+ * @brief GetWindowDeviceContextHandleŠÖ”
+ * @return wnd_dc_handle (window_device_context_handle)
+ */
+inline HDC tml::graphic::Manager::GetWindowDeviceContextHandle(void) const
+{
+	return (this->wnd_dc_handle_);
 }
 
 

@@ -17,6 +17,8 @@ namespace sound {
 class ManagerDesc
 {
 public:
+	HWND window_handle;
+	HDC window_device_context_handle;
 
 protected:
 	void Release(void);
@@ -51,6 +53,8 @@ public: Manager(const tml::sound::Manager &) = delete;
 public: tml::sound::Manager &operator =(const tml::sound::Manager &) = delete;
 
 private:
+	HWND wnd_handle_;
+	HDC wnd_dc_handle_;
 	std::array<std::list<tml::shared_ptr<tml::sound::Resource>>, tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT> res_cont_ary_;
 
 public:
@@ -67,6 +71,8 @@ public:
 	INT Create(const tml::sound::ManagerDesc &);
 
 	void Update(void);
+	HWND GetWindowHandle(void) const;
+	HDC GetWindowDeviceContextHandle(void) const;
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
@@ -75,6 +81,26 @@ public:
 	void ReleaseResource(tml::shared_ptr<T> &);
 };
 }
+}
+
+
+/**
+ * @brief GetWindowHandleŠÖ”
+ * @return wnd_handle (window_handle)
+ */
+inline HWND tml::sound::Manager::GetWindowHandle(void) const
+{
+	return (this->wnd_handle_);
+}
+
+
+/**
+ * @brief GetWindowDeviceContextHandleŠÖ”
+ * @return wnd_dc_handle (window_device_context_handle)
+ */
+inline HDC tml::sound::Manager::GetWindowDeviceContextHandle(void) const
+{
+	return (this->wnd_dc_handle_);
 }
 
 

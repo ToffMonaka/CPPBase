@@ -17,6 +17,8 @@ namespace input {
 class ManagerDesc
 {
 public:
+	HWND window_handle;
+	HDC window_device_context_handle;
 
 protected:
 	void Release(void);
@@ -51,6 +53,8 @@ public: Manager(const tml::input::Manager &) = delete;
 public: tml::input::Manager &operator =(const tml::input::Manager &) = delete;
 
 private:
+	HWND wnd_handle_;
+	HDC wnd_dc_handle_;
 	std::array<std::list<tml::shared_ptr<tml::input::Resource>>, tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT> res_cont_ary_;
 
 public:
@@ -67,6 +71,8 @@ public:
 	INT Create(const tml::input::ManagerDesc &);
 
 	void Update(void);
+	HWND GetWindowHandle(void) const;
+	HDC GetWindowDeviceContextHandle(void) const;
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
@@ -75,6 +81,26 @@ public:
 	void ReleaseResource(tml::shared_ptr<T> &);
 };
 }
+}
+
+
+/**
+ * @brief GetWindowHandleŠÖ”
+ * @return wnd_handle (window_handle)
+ */
+inline HWND tml::input::Manager::GetWindowHandle(void) const
+{
+	return (this->wnd_handle_);
+}
+
+
+/**
+ * @brief GetWindowDeviceContextHandleŠÖ”
+ * @return wnd_dc_handle (window_device_context_handle)
+ */
+inline HDC tml::input::Manager::GetWindowDeviceContextHandle(void) const
+{
+	return (this->wnd_dc_handle_);
 }
 
 

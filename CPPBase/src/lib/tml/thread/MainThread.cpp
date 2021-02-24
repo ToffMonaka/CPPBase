@@ -14,6 +14,7 @@
 tml::MainThread::MainThread() :
 	instance_handle_(nullptr),
 	wnd_handle_(nullptr),
+	wnd_dc_handle_(nullptr),
 	wnd_show_type_(0),
 	wnd_class_{},
 	wnd_class_atom_(0)
@@ -126,6 +127,14 @@ INT tml::MainThread::CreateWindow_(const WNDCLASSEX &wnd_class, const tml::XMUIN
 		return (-1);
 	}
 
+	this->wnd_dc_handle_ = GetDC(this->wnd_handle_);
+
+	if (this->wnd_dc_handle_ == nullptr) {
+		this->DeleteWindow_();
+
+		return (-1);
+	}
+
 	ShowWindow(this->wnd_handle_, this->wnd_show_type_);
 	UpdateWindow(this->wnd_handle_);
 
@@ -138,6 +147,12 @@ INT tml::MainThread::CreateWindow_(const WNDCLASSEX &wnd_class, const tml::XMUIN
  */
 void tml::MainThread::DeleteWindow_(void)
 {
+	if (this->wnd_dc_handle_ != nullptr) {
+		ReleaseDC(this->wnd_handle_, this->wnd_dc_handle_);
+
+		this->wnd_dc_handle_ = nullptr;
+	}
+
 	if (this->wnd_handle_ != nullptr) {
 		DestroyWindow(this->wnd_handle_);
 
