@@ -13,6 +13,78 @@
 namespace tml {
 namespace graphic {
 /**
+ * @brief FontBitmapクラス
+ */
+class FontBitmap
+{
+public: FontBitmap(const tml::graphic::FontBitmap &) = delete;
+public: tml::graphic::FontBitmap &operator =(const tml::graphic::FontBitmap &) = delete;
+
+private:
+	WCHAR code_;
+	GLYPHMETRICS gm_;
+	tml::DynamicBuffer buf_;
+
+protected:
+	void Release(void);
+
+public:
+	FontBitmap();
+	virtual ~FontBitmap();
+
+	virtual void Init(void);
+	INT Create(const HDC, const WCHAR);
+
+	WCHAR GetCode(void) const;
+	const GLYPHMETRICS &GetGlyphMetrics(void) const;
+	const tml::DynamicBuffer &GetBuffer(void) const;
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::graphic::FontBitmap::Release(void)
+{
+	return;
+}
+
+
+/**
+ * @brief GetCode関数
+ * @return code (code)
+ */
+inline WCHAR tml::graphic::FontBitmap::GetCode(void) const
+{
+	return (this->code_);
+}
+
+
+/**
+ * @brief GetGlyphMetrics関数
+ * @return gm (glyph_metrics)
+ */
+inline const GLYPHMETRICS &tml::graphic::FontBitmap::GetGlyphMetrics(void) const
+{
+	return (this->gm_);
+}
+
+
+/**
+ * @brief GetBuffer関数
+ * @return buf (buffer)
+ */
+inline const tml::DynamicBuffer &tml::graphic::FontBitmap::GetBuffer(void) const
+{
+	return (this->buf_);
+}
+
+
+namespace tml {
+namespace graphic {
+/**
  * @brief FontDescクラス
  */
 class FontDesc : public tml::graphic::ResourceDesc
@@ -64,6 +136,7 @@ private:
 	HFONT font_handle_;
 	LOGFONT font_desc_;
 	TEXTMETRIC tm_;
+	std::map<WCHAR, tml::unique_ptr<tml::graphic::FontBitmap>> bm_cont_;
 
 protected:
 	void Release(void);
@@ -79,6 +152,7 @@ public:
 	HFONT GetFontHandle(void) const;
 	const LOGFONT &GetFontDesc(void) const;
 	const TEXTMETRIC &GetTextMetric(void) const;
+	const tml::graphic::FontBitmap *GetBitmap(const WCHAR);
 };
 }
 }

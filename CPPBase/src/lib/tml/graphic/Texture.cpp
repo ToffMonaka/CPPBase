@@ -6,6 +6,7 @@
 
 #include "Texture.h"
 #include "Manager.h"
+#include "Font.h"
 
 
 /**
@@ -628,7 +629,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
  */
 void tml::graphic::Texture::UploadCPUBuffer(void)
 {
-	if (this->cpu_buf_.GetSize() <= 0U) {
+	if (this->cpu_buf_.GetLength() <= 0U) {
 		return;
 	}
 
@@ -641,7 +642,7 @@ void tml::graphic::Texture::UploadCPUBuffer(void)
  */
 void tml::graphic::Texture::DownloadCPUBuffer(void)
 {
-	if (this->cpu_buf_.GetSize() <= 0U) {
+	if (this->cpu_buf_.GetLength() <= 0U) {
 		return;
 	}
 
@@ -654,7 +655,7 @@ void tml::graphic::Texture::DownloadCPUBuffer(void)
  */
 void tml::graphic::Texture::ClearCPUBuffer(void)
 {
-	if (this->cpu_buf_.GetSize() <= 0U) {
+	if (this->cpu_buf_.GetLength() <= 0U) {
 		return;
 	}
 
@@ -671,9 +672,99 @@ void tml::graphic::Texture::ClearCPUBuffer(void)
  */
 void tml::graphic::Texture::DrawCPUBuffer(const WCHAR *str, tml::graphic::Font *font)
 {
-	if (this->cpu_buf_.GetSize() <= 0U) {
+	if ((this->cpu_buf_.GetLength() <= 0U)
+	|| (str[0] == 0)
+	|| (font == nullptr)) {
 		return;
 	}
+
+	/*
+	UINT_M str_len = wcslen(str);
+	INT_M pos_x = static_cast<INT_M>(pos.x);
+	INT_M pos_y = static_cast<INT_M>(pos.y);
+	INT_M tmp_pos_x;
+	INT_M tmp_pos_y;
+	UINT_M tmp_col_rgb = (static_cast<UINT_M>(col.x * 255.0f) << 0) | (static_cast<UINT_M>(col.y * 255.0f) << 8) | (static_cast<UINT_M>(col.z * 255.0f) << 16);
+	UINT_M tmp_col;
+	UINT_M *buf = reinterpret_cast<UINT_M *>(this->st_buf.Get());
+	INT_M buf_x;
+	INT_M buf_y;
+	INT_M buf_w = static_cast<INT_M>(this->size.x);
+	INT_M buf_h = static_cast<INT_M>(this->size.y);
+	const TEXTMETRIC *tm = &font->GetMetrics();
+	const GLYPHMETRICS *gm;
+	GLYPHMETRICS work_gm;
+	static CONST MAT2 gm_mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
+	const BYTE *bm;
+	BYTE *work_bm = NULLP;
+	INT_M work_bm_size = 0;
+	INT_M bm_w;
+	INT_M bm_h;
+
+	for (UINT_M str_i = 0U; str_i < str_len; ++str_i) {
+		auto &code = str[str_i];
+
+		auto stock_code = font->GetStockCode(code);
+
+		if (stock_code != NULLP) { //ストック文字列有りの時
+			gm = &stock_code->GetGlyphMetrics();
+			bm = stock_code->GetBitmap();
+		} else { //ストック文字列無しの時
+			INT_M bm_size = ::GetGlyphOutline(font->GetDeviceContextHandle(), code, GGO_GRAY4_BITMAP, &work_gm, 0UL, NULLP, &gm_mat);
+
+			if (bm_size > work_bm_size) { //以前のサイズ超過の時
+				MU_RELEASE(BYTE, &work_bm);
+
+				work_bm = MU_GET(BYTE, bm_size);
+
+				work_bm_size = bm_size;
+			}
+
+			::GetGlyphOutline(font->GetDeviceContextHandle(), code, GGO_GRAY4_BITMAP, &work_gm, bm_size, work_bm, &gm_mat);
+
+			gm = &work_gm;
+			bm = work_bm;
+		}
+
+		bm_w = gm->gmBlackBoxX + ((4U - (gm->gmBlackBoxX & 3U)) & 3U);
+		bm_h = gm->gmBlackBoxY;
+
+		tmp_pos_x = pos_x + gm->gmptGlyphOrigin.x;
+		tmp_pos_y = pos_y + (tm->tmAscent - gm->gmptGlyphOrigin.y);
+
+		for (INT_M bm_y = 0; bm_y < static_cast<INT_M>(gm->gmBlackBoxY); ++bm_y) {
+			buf_y = tmp_pos_y + bm_y;
+
+			if (buf_y < 0) { //下限未満の時
+				continue;
+			} else if (buf_y >= buf_h) { //上限以上の時
+				break;
+			}
+
+			for(INT_M bm_x = 0; bm_x < static_cast<INT_M>(gm->gmBlackBoxX); ++bm_x) {
+				if (bm[bm_x + bm_y * bm_w] == 0) { //値無しの時
+					continue;
+				}
+
+				buf_x = tmp_pos_x + bm_x;
+
+				if (buf_x < 0) { //下限未満の時
+					continue;
+				} else if (buf_x >= buf_w) { //上限以上の時
+					break;
+				}
+
+				tmp_col = tmp_col_rgb | (static_cast<UINT_M>(static_cast<FLOAT>((255U * bm[bm_x + bm_y * bm_w]) >> 4) * col.w) << 24);
+
+				(*(buf + buf_x + buf_y * buf_w)) = tmp_col;
+			}
+		}
+
+		pos_x += gm->gmCellIncX;
+	}
+
+	MU_RELEASE(BYTE, &work_bm);
+	*/
 
 	return;
 }

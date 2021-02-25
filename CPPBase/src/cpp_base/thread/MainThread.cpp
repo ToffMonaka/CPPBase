@@ -397,17 +397,14 @@ void cpp_base::MainThread::Update(void)
 	this->fps_tex_update_time_ += this->frame_rate_.GetElapsedTime();
 
 	if (this->fps_tex_update_time_ >= tml::TIME_REAL(1.0)) {
-		std::wstring fps_str = L"FPS=";
-		std::wstring tmp_str;
+		WCHAR fps_str[100];
 
-		fps_str += tml::StringUtil::GetString(tmp_str, this->frame_rate_.GetFPS());
-		fps_str += L"/";
-		fps_str += tml::StringUtil::GetString(tmp_str, this->frame_rate_.GetLimit());
+		_snwprintf_s(fps_str, sizeof(fps_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u", this->frame_rate_.GetFPS(), this->frame_rate_.GetLimit());
 
 		auto fps_tex = this->fps_sprite_model_->GetTexture(this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		fps_tex->ClearCPUBuffer();
-		fps_tex->DrawCPUBuffer(fps_str.c_str(), this->fps_font_.get());
+		fps_tex->DrawCPUBuffer(fps_str, this->fps_font_.get());
 		fps_tex->UploadCPUBuffer();
 
 		this->fps_tex_update_time_ = tml::TIME_REAL(0.0);

@@ -11,6 +11,82 @@
 /**
  * @brief コンストラクタ
  */
+tml::graphic::FontBitmap::FontBitmap() :
+	code_(0)
+{
+	tml::MemoryUtil::Clear(&this->gm_, 1U);
+
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::FontBitmap::~FontBitmap()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::FontBitmap::Init(void)
+{
+	this->Release();
+
+	this->code_ = 0;
+	tml::MemoryUtil::Clear(&this->gm_, 1U);
+	this->buf_.Init();
+
+	return;
+}
+
+
+/**
+ * @brief Create関数
+ * @param dc_handle (device_context_handle)
+ * @param code (code)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::FontBitmap::Create(const HDC dc_handle, const WCHAR code)
+{
+	if ((dc_handle == nullptr)
+	|| (code == 0)) {
+		this->Init();
+
+		return (-1);
+	}
+
+	this->Init();
+
+	this->code_ = code;
+
+	const MAT2 mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
+	DWORD buf_size = GetGlyphOutline(dc_handle, this->code_, GGO_GRAY4_BITMAP, &this->gm_, 0UL, nullptr, &mat);
+
+	if (buf_size == GDI_ERROR) {
+		this->Init();
+
+		return (-1);
+	}
+
+	this->buf_.SetSize(buf_size);
+	this->buf_.AddWriteIndex(buf_size);
+
+	GetGlyphOutline(dc_handle, this->code_, GGO_GRAY4_BITMAP, &this->gm_, this->buf_.GetLength(), this->buf_.Get(), &mat);
+
+	return (0);
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::graphic::FontDesc::FontDesc()
 {
 	tml::MemoryUtil::Clear(&this->font_desc, 1U);
@@ -91,10 +167,10 @@ void tml::graphic::FontDesc::SetFontDesc(const XMUINT2EX &size, const WCHAR *fam
 	this->font_desc.lfUnderline = 0;
 	this->font_desc.lfStrikeOut = 0;
 	this->font_desc.lfCharSet = SHIFTJIS_CHARSET;
-	this->font_desc.lfOutPrecision = OUT_DEFAULT_PRECIS;
+	this->font_desc.lfOutPrecision = OUT_TT_ONLY_PRECIS;
 	this->font_desc.lfClipPrecision = CLIP_DEFAULT_PRECIS;
 	this->font_desc.lfQuality = PROOF_QUALITY;
-	this->font_desc.lfPitchAndFamily = DEFAULT_PITCH | FF_MODERN;
+	this->font_desc.lfPitchAndFamily = DEFAULT_PITCH | FF_ROMAN;
 	_snwprintf_s(this->font_desc.lfFaceName, sizeof(this->font_desc.lfFaceName) >> 1, _TRUNCATE, L"%s", family);
 
 	return;
@@ -158,6 +234,7 @@ void tml::graphic::Font::Init(void)
 
 	tml::MemoryUtil::Clear(&this->font_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->tm_, 1U);
+	this->bm_cont_.clear();
 
 	tml::graphic::Resource::Init();
 
@@ -204,4 +281,30 @@ INT tml::graphic::Font::Create(const tml::graphic::FontDesc &desc)
 	GetTextMetrics(this->dc_handle_, &this->tm_);
 
 	return (0);
+}
+
+
+/**
+ * @brief GetBitmap関数
+ * @param code (code)
+ * @return bm (bitmap)<br>
+ * nullptr=失敗
+ */
+const tml::graphic::FontBitmap *tml::graphic::Font::GetBitmap(const WCHAR code)
+{
+	auto bm_itr = this->bm_cont_.find(code);
+
+	if (bm_itr == this->bm_cont_.end()) {
+		auto bm = tml::make_unique<tml::graphic::FontBitmap>(1U);
+
+		if (bm->Create(this->dc_handle_, code) < 0) {
+			return (nullptr);
+		}
+
+		auto insert_res = this->bm_cont_.insert(std::make_pair(code, std::move(bm)));
+
+		return (insert_res.first->second.get());
+	}
+
+	return (bm_itr->second.get());
 }

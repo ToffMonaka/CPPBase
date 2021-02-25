@@ -302,7 +302,7 @@ INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
  */
 void tml::graphic::Mesh::UploadVertexBufferCPUBuffer(void)
 {
-	if (this->vb_cpu_buf_.GetSize() <= 0U) {
+	if (this->vb_cpu_buf_.GetLength() <= 0U) {
 		return;
 	}
 
@@ -315,7 +315,7 @@ void tml::graphic::Mesh::UploadVertexBufferCPUBuffer(void)
  */
 void tml::graphic::Mesh::DownloadVertexBufferCPUBuffer(void)
 {
-	if (this->vb_cpu_buf_.GetSize() <= 0U) {
+	if (this->vb_cpu_buf_.GetLength() <= 0U) {
 		return;
 	}
 
@@ -328,7 +328,7 @@ void tml::graphic::Mesh::DownloadVertexBufferCPUBuffer(void)
  */
 void tml::graphic::Mesh::UploadIndexBufferCPUBuffer(void)
 {
-	if (this->ib_cpu_buf_.GetSize() <= 0U) {
+	if (this->ib_cpu_buf_.GetLength() <= 0U) {
 		return;
 	}
 
@@ -341,7 +341,7 @@ void tml::graphic::Mesh::UploadIndexBufferCPUBuffer(void)
  */
 void tml::graphic::Mesh::DownloadIndexBufferCPUBuffer(void)
 {
-	if (this->ib_cpu_buf_.GetSize() <= 0U) {
+	if (this->ib_cpu_buf_.GetLength() <= 0U) {
 		return;
 	}
 

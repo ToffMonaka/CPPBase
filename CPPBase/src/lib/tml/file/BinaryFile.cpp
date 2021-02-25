@@ -165,7 +165,7 @@ INT tml::BinaryFile::Read(void)
 	tml::DynamicBuffer file_buf;
 
 	if (read_desc_dat->file_path.empty()) {
-		file_buf = std::move(read_desc_dat->file_buffer);
+		file_buf = read_desc_dat->file_buffer;
 	} else {
 		CHAR *read_buf = nullptr;
 		size_t read_buf_size = 0U;
