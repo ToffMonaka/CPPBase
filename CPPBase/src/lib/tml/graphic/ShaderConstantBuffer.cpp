@@ -221,7 +221,7 @@ void tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(BYTE *cpu_buf)
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
-			if (msr.DepthPitch == this->element_size_) {
+			if (msr.DepthPitch >= this->element_size_) {
 				memcpy(cpu_buf, static_cast<BYTE *>(msr.pData), this->element_size_);
 			}
 

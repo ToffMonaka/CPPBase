@@ -99,7 +99,7 @@ public:
 	void UploadCPUBuffer(void);
 	void DownloadCPUBuffer(void);
 	void ClearCPUBuffer(void);
-	void DrawCPUBuffer(const WCHAR *, tml::graphic::Font *);
+	void DrawCPUBufferString(const WCHAR *, const tml::XMUINT2EX &, tml::graphic::Font *);
 	ID3D11RenderTargetView *GetRenderTarget(void);
 	void ClearRenderTarget(const tml::XMFLOAT4EX &);
 	ID3D11DepthStencilView *GetDepthTarget(void);

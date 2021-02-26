@@ -633,6 +633,18 @@ void tml::graphic::Texture::UploadCPUBuffer(void)
 		return;
 	}
 
+	if (this->tex_desc_.Usage == D3D11_USAGE_DYNAMIC) {
+		D3D11_MAPPED_SUBRESOURCE msr;
+
+		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->tex_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
+			memcpy(msr.pData, this->cpu_buf_.Get(), this->size_.x * this->size_.y * 4U);
+
+			this->GetManager()->GetDeviceContext()->Unmap(this->tex_, 0U);
+		}
+	} else {
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->tex_, 0U, nullptr, this->cpu_buf_.Get(), this->size_.x * 4U, this->size_.x * this->size_.y * 4U);
+	}
+
 	return;
 }
 
@@ -666,11 +678,12 @@ void tml::graphic::Texture::ClearCPUBuffer(void)
 
 
 /**
- * @brief DrawCPUBuffer関数
+ * @brief DrawCPUBufferString関数
  * @param str (string)
+ * @param pos (position)
  * @param font (font)
  */
-void tml::graphic::Texture::DrawCPUBuffer(const WCHAR *str, tml::graphic::Font *font)
+void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMUINT2EX &pos, tml::graphic::Font *font)
 {
 	if ((this->cpu_buf_.GetLength() <= 0U)
 	|| (str[0] == 0)
@@ -678,93 +691,61 @@ void tml::graphic::Texture::DrawCPUBuffer(const WCHAR *str, tml::graphic::Font *
 		return;
 	}
 
-	/*
-	UINT_M str_len = wcslen(str);
-	INT_M pos_x = static_cast<INT_M>(pos.x);
-	INT_M pos_y = static_cast<INT_M>(pos.y);
-	INT_M tmp_pos_x;
-	INT_M tmp_pos_y;
-	UINT_M tmp_col_rgb = (static_cast<UINT_M>(col.x * 255.0f) << 0) | (static_cast<UINT_M>(col.y * 255.0f) << 8) | (static_cast<UINT_M>(col.z * 255.0f) << 16);
-	UINT_M tmp_col;
-	UINT_M *buf = reinterpret_cast<UINT_M *>(this->st_buf.Get());
-	INT_M buf_x;
-	INT_M buf_y;
-	INT_M buf_w = static_cast<INT_M>(this->size.x);
-	INT_M buf_h = static_cast<INT_M>(this->size.y);
-	const TEXTMETRIC *tm = &font->GetMetrics();
-	const GLYPHMETRICS *gm;
-	GLYPHMETRICS work_gm;
-	static CONST MAT2 gm_mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
-	const BYTE *bm;
-	BYTE *work_bm = NULLP;
-	INT_M work_bm_size = 0;
-	INT_M bm_w;
-	INT_M bm_h;
+	size_t str_len = wcslen(str);
+	UINT *buf = reinterpret_cast<UINT *>(this->cpu_buf_.Get());
+	UINT buf_w = this->size_.x;
+	UINT buf_h = this->size_.y;
+	UINT buf_x = 0U;
+	UINT buf_y = 0U;
+	UINT buf_offset_x = pos.x;
+	UINT buf_offset_y = pos.y;
+	UINT tmp_buf_offset_x = 0U;
+	UINT tmp_buf_offset_y = 0U;
+	WCHAR code = 0;
+	const BYTE *bm_buf = nullptr;
+	UINT bm_w = 0U;
+	UINT bm_h = 0U;
 
-	for (UINT_M str_i = 0U; str_i < str_len; ++str_i) {
-		auto &code = str[str_i];
+	auto &font_tm = font->GetTextMetric();
 
-		auto stock_code = font->GetStockCode(code);
+	for (size_t str_i = 0U; str_i < str_len; ++str_i) {
+		code = str[str_i];
 
-		if (stock_code != NULLP) { //ストック文字列有りの時
-			gm = &stock_code->GetGlyphMetrics();
-			bm = stock_code->GetBitmap();
-		} else { //ストック文字列無しの時
-			INT_M bm_size = ::GetGlyphOutline(font->GetDeviceContextHandle(), code, GGO_GRAY4_BITMAP, &work_gm, 0UL, NULLP, &gm_mat);
+		auto bm = font->GetBitmap(code);
 
-			if (bm_size > work_bm_size) { //以前のサイズ超過の時
-				MU_RELEASE(BYTE, &work_bm);
-
-				work_bm = MU_GET(BYTE, bm_size);
-
-				work_bm_size = bm_size;
-			}
-
-			::GetGlyphOutline(font->GetDeviceContextHandle(), code, GGO_GRAY4_BITMAP, &work_gm, bm_size, work_bm, &gm_mat);
-
-			gm = &work_gm;
-			bm = work_bm;
+		if (bm == nullptr) {
+			continue;
 		}
 
-		bm_w = gm->gmBlackBoxX + ((4U - (gm->gmBlackBoxX & 3U)) & 3U);
-		bm_h = gm->gmBlackBoxY;
+		auto &bm_gm = bm->GetGlyphMetrics();
 
-		tmp_pos_x = pos_x + gm->gmptGlyphOrigin.x;
-		tmp_pos_y = pos_y + (tm->tmAscent - gm->gmptGlyphOrigin.y);
+		bm_buf = bm->GetBuffer().Get();
+		bm_w = bm_gm.gmBlackBoxX + ((4U - (bm_gm.gmBlackBoxX & 3U)) & 3U);
+		bm_h = bm_gm.gmBlackBoxY;
 
-		for (INT_M bm_y = 0; bm_y < static_cast<INT_M>(gm->gmBlackBoxY); ++bm_y) {
-			buf_y = tmp_pos_y + bm_y;
+		tmp_buf_offset_x = buf_offset_x + bm_gm.gmptGlyphOrigin.x;
+		tmp_buf_offset_y = buf_offset_y + font_tm.tmAscent - bm_gm.gmptGlyphOrigin.y;
 
-			if (buf_y < 0) { //下限未満の時
-				continue;
-			} else if (buf_y >= buf_h) { //上限以上の時
+		for (UINT bm_y = 0U; bm_y < bm_h; ++bm_y) {
+			buf_y = tmp_buf_offset_y + bm_y;
+
+			if (buf_y >= buf_h) {
 				break;
 			}
 
-			for(INT_M bm_x = 0; bm_x < static_cast<INT_M>(gm->gmBlackBoxX); ++bm_x) {
-				if (bm[bm_x + bm_y * bm_w] == 0) { //値無しの時
-					continue;
-				}
+			for(UINT bm_x = 0U; bm_x < bm_w; ++bm_x) {
+				buf_x = tmp_buf_offset_x + bm_x;
 
-				buf_x = tmp_pos_x + bm_x;
-
-				if (buf_x < 0) { //下限未満の時
-					continue;
-				} else if (buf_x >= buf_w) { //上限以上の時
+				if (buf_x >= buf_w) {
 					break;
 				}
 
-				tmp_col = tmp_col_rgb | (static_cast<UINT_M>(static_cast<FLOAT>((255U * bm[bm_x + bm_y * bm_w]) >> 4) * col.w) << 24);
-
-				(*(buf + buf_x + buf_y * buf_w)) = tmp_col;
+				buf[buf_x + buf_y * buf_w] = 0x00FFFFFF | (static_cast<UINT>(bm_buf[bm_x + bm_y * bm_w]) << 24);
 			}
 		}
 
-		pos_x += gm->gmCellIncX;
+		buf_offset_x += bm_gm.gmCellIncX;
 	}
-
-	MU_RELEASE(BYTE, &work_bm);
-	*/
 
 	return;
 }

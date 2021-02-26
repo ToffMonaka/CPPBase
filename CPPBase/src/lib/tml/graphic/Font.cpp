@@ -69,7 +69,8 @@ INT tml::graphic::FontBitmap::Create(const HDC dc_handle, const WCHAR code)
 	const MAT2 mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
 	DWORD buf_size = GetGlyphOutline(dc_handle, this->code_, GGO_GRAY4_BITMAP, &this->gm_, 0UL, nullptr, &mat);
 
-	if (buf_size == GDI_ERROR) {
+	if ((buf_size <= 0U)
+	|| (buf_size == GDI_ERROR)) {
 		this->Init();
 
 		return (-1);
@@ -79,6 +80,13 @@ INT tml::graphic::FontBitmap::Create(const HDC dc_handle, const WCHAR code)
 	this->buf_.AddWriteIndex(buf_size);
 
 	GetGlyphOutline(dc_handle, this->code_, GGO_GRAY4_BITMAP, &this->gm_, this->buf_.GetLength(), this->buf_.Get(), &mat);
+
+	BYTE *buf = this->buf_.Get();
+	size_t buf_len = this->buf_.GetLength();
+
+	for (size_t buf_i = 0U; buf_i < buf_len; ++buf_i) {
+		buf[buf_i] = static_cast<BYTE>((255U * static_cast<UINT>(buf[buf_i]) >> 4) & 0xFF);
+	}
 
 	return (0);
 }

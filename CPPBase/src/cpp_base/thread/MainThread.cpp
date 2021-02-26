@@ -307,10 +307,14 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
+		tml::XMUINT2EX fps_tex_size = tml::XMUINT2EX(256U, 32U);
+		tml::XMUINT2EX fps_font_size = tml::XMUINT2EX(0U, 16U);
+
 		{// FPSSpriteModel Create
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
+			desc.position = tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + static_cast<FLOAT>(fps_tex_size.x >> 1) + 4.0f, static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - static_cast<FLOAT>(fps_tex_size.y >> 1) - 4.0f);
 			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
@@ -336,7 +340,7 @@ INT cpp_base::MainThread::Start(void)
 				tml::graphic::TextureDesc desc;
 
 				desc.manager = &this->graphic_mgr_;
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, tml::XMUINT2EX(512U, 512U));
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, fps_tex_size);
 				desc.cpu_buffer_flag = true;
 
 				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
@@ -358,7 +362,7 @@ INT cpp_base::MainThread::Start(void)
 			tml::graphic::FontDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
-			desc.SetFontDesc(tml::XMUINT2EX(0U, 64U), L"‚l‚r ƒSƒVƒbƒN");
+			desc.SetFontDesc(fps_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
 			this->graphic_mgr_.GetResource<tml::graphic::Font>(this->fps_font_, desc);
 
@@ -368,6 +372,8 @@ INT cpp_base::MainThread::Start(void)
 				return (-1);
 			}
 		}
+
+		this->fps_tex_update_time_ = tml::TIME_REAL(1.0);
 
 		int a = 0;
 	}
@@ -404,7 +410,7 @@ void cpp_base::MainThread::Update(void)
 		auto fps_tex = this->fps_sprite_model_->GetTexture(this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		fps_tex->ClearCPUBuffer();
-		fps_tex->DrawCPUBuffer(fps_str, this->fps_font_.get());
+		fps_tex->DrawCPUBufferString(fps_str, tml::XMUINT2EX(0U, 0U), this->fps_font_.get());
 		fps_tex->UploadCPUBuffer();
 
 		this->fps_tex_update_time_ = tml::TIME_REAL(0.0);
