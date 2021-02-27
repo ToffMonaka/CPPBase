@@ -178,7 +178,7 @@ void tml::graphic::FontDesc::SetFontDesc(const XMUINT2EX &size, const WCHAR *fam
 	this->font_desc.lfOutPrecision = OUT_TT_ONLY_PRECIS;
 	this->font_desc.lfClipPrecision = CLIP_DEFAULT_PRECIS;
 	this->font_desc.lfQuality = PROOF_QUALITY;
-	this->font_desc.lfPitchAndFamily = DEFAULT_PITCH | FF_ROMAN;
+	this->font_desc.lfPitchAndFamily = DEFAULT_PITCH | FF_MODERN;
 	_snwprintf_s(this->font_desc.lfFaceName, sizeof(this->font_desc.lfFaceName) >> 1, _TRUNCATE, L"%s", family);
 
 	return;

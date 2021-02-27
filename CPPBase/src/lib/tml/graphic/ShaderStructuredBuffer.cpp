@@ -241,7 +241,7 @@ void tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(BYTE *cpu_buf)
 			this->GetManager()->GetDeviceContext()->Unmap(this->buf_, 0U);
 		}
 	} else {
-		CD3D11_BOX box = CD3D11_BOX(0L, 0L, 0L, this->element_size_ * this->element_cnt_, 1L, 1L);
+		CD3D11_BOX box(0L, 0L, 0L, this->element_size_ * this->element_cnt_, 1L, 1L);
 
 		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, &box, cpu_buf, 0U, 0U);
 	}

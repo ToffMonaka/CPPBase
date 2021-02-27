@@ -410,7 +410,7 @@ void cpp_base::MainThread::Update(void)
 		auto fps_tex = this->fps_sprite_model_->GetTexture(this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		fps_tex->ClearCPUBuffer();
-		fps_tex->DrawCPUBufferString(fps_str, tml::XMUINT2EX(0U, 0U), this->fps_font_.get());
+		fps_tex->DrawCPUBufferString(fps_str, tml::XMINT2EX(0, 0), this->fps_font_.get());
 		fps_tex->UploadCPUBuffer();
 
 		this->fps_tex_update_time_ = tml::TIME_REAL(0.0);

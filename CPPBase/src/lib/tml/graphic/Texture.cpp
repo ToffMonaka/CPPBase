@@ -683,7 +683,7 @@ void tml::graphic::Texture::ClearCPUBuffer(void)
  * @param pos (position)
  * @param font (font)
  */
-void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMUINT2EX &pos, tml::graphic::Font *font)
+void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMINT2EX &pos, tml::graphic::Font *font)
 {
 	if ((this->cpu_buf_.GetLength() <= 0U)
 	|| (str[0] == 0)
@@ -693,23 +693,42 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMU
 
 	size_t str_len = wcslen(str);
 	UINT *buf = reinterpret_cast<UINT *>(this->cpu_buf_.Get());
-	UINT buf_w = this->size_.x;
-	UINT buf_h = this->size_.y;
-	UINT buf_x = 0U;
-	UINT buf_y = 0U;
-	UINT buf_offset_x = pos.x;
-	UINT buf_offset_y = pos.y;
-	UINT tmp_buf_offset_x = 0U;
-	UINT tmp_buf_offset_y = 0U;
+	LONG buf_w = static_cast<LONG>(this->size_.x);
+	LONG buf_h = static_cast<LONG>(this->size_.y);
+	LONG buf_x = 0L;
+	LONG buf_y = 0L;
+	LONG buf_offset_x = pos.x;
+	LONG buf_offset_y = pos.y;
+	LONG tmp_buf_offset_x = 0L;
+	LONG tmp_buf_offset_y = 0L;
 	WCHAR code = 0;
 	const BYTE *bm_buf = nullptr;
-	UINT bm_w = 0U;
-	UINT bm_h = 0U;
+	LONG bm_w = 0L;
+	LONG bm_h = 0L;
 
 	auto &font_tm = font->GetTextMetric();
 
 	for (size_t str_i = 0U; str_i < str_len; ++str_i) {
 		code = str[str_i];
+
+		if (code == L' ') {
+			buf_offset_x += font_tm.tmAveCharWidth;
+
+			continue;
+		} else if (code == L'@') {
+			buf_offset_x += font_tm.tmAveCharWidth << 1;
+
+			continue;
+		} else if (code == L'\n') {
+			buf_offset_x = pos.x;
+			buf_offset_y += font_tm.tmHeight;
+
+			continue;
+		} else if (code == L'\t') {
+			buf_offset_x += font_tm.tmAveCharWidth << 2;
+
+			continue;
+		}
 
 		auto bm = font->GetBitmap(code);
 
@@ -720,23 +739,27 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMU
 		auto &bm_gm = bm->GetGlyphMetrics();
 
 		bm_buf = bm->GetBuffer().Get();
-		bm_w = bm_gm.gmBlackBoxX + ((4U - (bm_gm.gmBlackBoxX & 3U)) & 3U);
-		bm_h = bm_gm.gmBlackBoxY;
+		bm_w = static_cast<LONG>(bm_gm.gmBlackBoxX + ((4U - (bm_gm.gmBlackBoxX & 3U)) & 3U));
+		bm_h = static_cast<LONG>(bm_gm.gmBlackBoxY);
 
 		tmp_buf_offset_x = buf_offset_x + bm_gm.gmptGlyphOrigin.x;
 		tmp_buf_offset_y = buf_offset_y + font_tm.tmAscent - bm_gm.gmptGlyphOrigin.y;
 
-		for (UINT bm_y = 0U; bm_y < bm_h; ++bm_y) {
+		for (LONG bm_y = 0L; bm_y < bm_h; ++bm_y) {
 			buf_y = tmp_buf_offset_y + bm_y;
 
-			if (buf_y >= buf_h) {
+			if (buf_y < 0L) {
+				continue;
+			} else if (buf_y >= buf_h) {
 				break;
 			}
 
-			for(UINT bm_x = 0U; bm_x < bm_w; ++bm_x) {
+			for(LONG bm_x = 0L; bm_x < bm_w; ++bm_x) {
 				buf_x = tmp_buf_offset_x + bm_x;
 
-				if (buf_x >= buf_w) {
+				if (buf_x < 0L) {
+					continue;
+				} else if (buf_x >= buf_w) {
 					break;
 				}
 
