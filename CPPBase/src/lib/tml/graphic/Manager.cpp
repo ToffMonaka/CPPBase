@@ -837,6 +837,7 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 {
 	dst_buf.Init();
 	tml::MemoryUtil::Clear(&dst_msr, 1U);
+	tml::SetResult(dst_res, 0);
 
 	if (buf == nullptr) {
 		tml::SetResult(dst_res, -1);
@@ -854,33 +855,25 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 	tmp_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	tmp_buf_desc.MiscFlags = 0U;
 
-	if (FAILED(this->device_->CreateBuffer(&tmp_buf_desc, nullptr, &tmp_buf))) {
-		tml::SetResult(dst_res, -1);
+	if (SUCCEEDED(this->device_->CreateBuffer(&tmp_buf_desc, nullptr, &tmp_buf))) {
+		this->device_context_->CopyResource(tmp_buf, buf);
 
-		return (dst_buf);
-	}
+		D3D11_MAPPED_SUBRESOURCE msr;
 
-	this->device_context_->CopyResource(tmp_buf, buf);
+		if (SUCCEEDED(this->device_context_->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
+			dst_buf.Set(static_cast<BYTE *>(msr.pData), tmp_buf_desc.ByteWidth);
+			dst_msr = msr;
+			dst_msr.pData = nullptr;
 
-	D3D11_MAPPED_SUBRESOURCE msr;
+			this->device_context_->Unmap(tmp_buf, 0U);
+		} else {
+			tml::SetResult(dst_res, -1);
+		}
 
-	if (FAILED(this->device_context_->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
 		tmp_buf->Release();
-
+	} else {
 		tml::SetResult(dst_res, -1);
-
-		return (dst_buf);
 	}
-
-	dst_buf.Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
-	dst_msr = msr;
-	dst_msr.pData = nullptr;
-
-	this->device_context_->Unmap(tmp_buf, 0U);
-
-	tmp_buf->Release();
-
-	tml::SetResult(dst_res, 0);
 
 	return (dst_buf);
 }
@@ -899,6 +892,7 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 {
 	dst_buf.Init();
 	tml::MemoryUtil::Clear(&dst_msr, 1U);
+	tml::SetResult(dst_res, 0);
 
 	if (tex == nullptr) {
 		tml::SetResult(dst_res, -1);
@@ -916,33 +910,25 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 	tmp_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	tmp_tex_desc.MiscFlags = 0U;
 
-	if (FAILED(this->device_->CreateTexture2D(&tmp_tex_desc, nullptr, &tmp_tex))) {
-		tml::SetResult(dst_res, -1);
+	if (SUCCEEDED(this->device_->CreateTexture2D(&tmp_tex_desc, nullptr, &tmp_tex))) {
+		this->device_context_->CopyResource(tmp_tex, tex);
 
-		return (dst_buf);
-	}
+		D3D11_MAPPED_SUBRESOURCE msr;
 
-	this->device_context_->CopyResource(tmp_tex, tex);
+		if (SUCCEEDED(this->device_context_->Map(tmp_tex, 0U, D3D11_MAP_READ, 0U, &msr))) {
+			dst_buf.Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
+			dst_msr = msr;
+			dst_msr.pData = nullptr;
 
-	D3D11_MAPPED_SUBRESOURCE msr;
+			this->device_context_->Unmap(tmp_tex, 0U);
+		} else {
+			tml::SetResult(dst_res, -1);
+		}
 
-	if (FAILED(this->device_context_->Map(tmp_tex, 0U, D3D11_MAP_READ, 0U, &msr))) {
 		tmp_tex->Release();
-
+	} else {
 		tml::SetResult(dst_res, -1);
-
-		return (dst_buf);
 	}
-
-	dst_buf.Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
-	dst_msr = msr;
-	dst_msr.pData = nullptr;
-
-	this->device_context_->Unmap(tmp_tex, 0U);
-
-	tmp_tex->Release();
-
-	tml::SetResult(dst_res, 0);
 
 	return (dst_buf);
 }
@@ -961,6 +947,7 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 {
 	dst_buf_cont.clear();
 	dst_msr_cont.clear();
+	tml::SetResult(dst_res, 0);
 
 	if (tex == nullptr) {
 		tml::SetResult(dst_res, -1);
@@ -978,41 +965,35 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetBuffer(std::vector<tm
 	tmp_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	tmp_tex_desc.MiscFlags = 0U;
 
-	if (FAILED(this->device_->CreateTexture2D(&tmp_tex_desc, nullptr, &tmp_tex))) {
-		tml::SetResult(dst_res, -1);
+	if (SUCCEEDED(this->device_->CreateTexture2D(&tmp_tex_desc, nullptr, &tmp_tex))) {
+		this->device_context_->CopyResource(tmp_tex, tex);
 
-		return (dst_buf_cont);
-	}
+		dst_buf_cont.resize(tmp_tex_desc.MipLevels);
+		dst_msr_cont.resize(tmp_tex_desc.MipLevels);
 
-	this->device_context_->CopyResource(tmp_tex, tex);
+		for (UINT mm_i = 0U; mm_i < tmp_tex_desc.MipLevels; ++mm_i) {
+			D3D11_MAPPED_SUBRESOURCE msr;
 
-	dst_buf_cont.resize(tmp_tex_desc.MipLevels);
-	dst_msr_cont.resize(tmp_tex_desc.MipLevels);
+			if (SUCCEEDED(this->device_context_->Map(tmp_tex, mm_i, D3D11_MAP_READ, 0U, &msr))) {
+				dst_buf_cont[mm_i].Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
+				dst_msr_cont[mm_i] = msr;
+				dst_msr_cont[mm_i].pData = nullptr;
 
-	for (UINT mm_i = 0U; mm_i < tmp_tex_desc.MipLevels; ++mm_i) {
-		D3D11_MAPPED_SUBRESOURCE msr;
+				this->device_context_->Unmap(tmp_tex, mm_i);
+			} else {
+				dst_buf_cont.clear();
+				dst_msr_cont.clear();
 
-		if (FAILED(this->device_context_->Map(tmp_tex, mm_i, D3D11_MAP_READ, 0U, &msr))) {
-			tmp_tex->Release();
+				tml::SetResult(dst_res, -1);
 
-			dst_buf_cont.clear();
-			dst_msr_cont.clear();
-
-			tml::SetResult(dst_res, -1);
-
-			return (dst_buf_cont);
+				break;
+			}
 		}
 
-		dst_buf_cont[mm_i].Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
-		dst_msr_cont[mm_i] = msr;
-		dst_msr_cont[mm_i].pData = nullptr;
-
-		this->device_context_->Unmap(tmp_tex, mm_i);
+		tmp_tex->Release();
+	} else {
+		tml::SetResult(dst_res, -1);
 	}
-
-	tmp_tex->Release();
-
-	tml::SetResult(dst_res, 0);
 
 	return (dst_buf_cont);
 }

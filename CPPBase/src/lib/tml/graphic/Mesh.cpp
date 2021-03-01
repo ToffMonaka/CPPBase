@@ -306,6 +306,20 @@ void tml::graphic::Mesh::UploadVertexBufferCPUBuffer(void)
 		return;
 	}
 
+	if (this->vb_desc_.Usage == D3D11_USAGE_DYNAMIC) {
+		D3D11_MAPPED_SUBRESOURCE msr;
+
+		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->vb_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
+			memcpy(msr.pData, this->vb_cpu_buf_.Get(), this->vb_element_size_ * this->vb_element_cnt_);
+
+			this->GetManager()->GetDeviceContext()->Unmap(this->vb_, 0U);
+		}
+	} else {
+		CD3D11_BOX box(0L, 0L, 0L, this->vb_element_size_ * this->vb_element_cnt_, 1L, 1L);
+
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->vb_, 0U, &box, this->vb_cpu_buf_.Get(), 0U, 0U);
+	}
+
 	return;
 }
 
@@ -330,6 +344,20 @@ void tml::graphic::Mesh::UploadIndexBufferCPUBuffer(void)
 {
 	if (this->ib_cpu_buf_.GetLength() <= 0U) {
 		return;
+	}
+
+	if (this->ib_desc_.Usage == D3D11_USAGE_DYNAMIC) {
+		D3D11_MAPPED_SUBRESOURCE msr;
+
+		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->ib_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
+			memcpy(msr.pData, this->ib_cpu_buf_.Get(), this->ib_element_size_ * this->ib_element_cnt_);
+
+			this->GetManager()->GetDeviceContext()->Unmap(this->ib_, 0U);
+		}
+	} else {
+		CD3D11_BOX box(0L, 0L, 0L, this->ib_element_size_ * this->ib_element_cnt_, 1L, 1L);
+
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->ib_, 0U, &box, this->ib_cpu_buf_.Get(), 0U, 0U);
 	}
 
 	return;

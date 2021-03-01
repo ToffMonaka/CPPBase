@@ -363,6 +363,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 				srd.pSysMem = buf_cont[buf_i].Get();
 				srd.SysMemPitch = msr_cont[buf_i].RowPitch;
+				srd.SysMemSlicePitch = 0U;
 				srd_buf = std::move(buf_cont[buf_i]);
 			}
 		}
@@ -436,12 +437,6 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
 
 	if (desc.cpu_buffer_flag) {
-		if (this->tex_desc_.ArraySize > 1U) {
-			this->Init();
-
-			return (-1);
-		}
-
 		D3D11_MAPPED_SUBRESOURCE msr;
 		INT res = 0;
 
@@ -642,7 +637,9 @@ void tml::graphic::Texture::UploadCPUBuffer(void)
 			this->GetManager()->GetDeviceContext()->Unmap(this->tex_, 0U);
 		}
 	} else {
-		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->tex_, 0U, nullptr, this->cpu_buf_.Get(), this->size_.x * 4U, this->size_.x * this->size_.y * 4U);
+		CD3D11_BOX box(0L, 0L, 0L, this->size_.x, this->size_.y, 1L);
+
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->tex_, 0U, &box, this->cpu_buf_.Get(), this->size_.x * 4U, 0U);
 	}
 
 	return;
