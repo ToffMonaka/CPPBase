@@ -77,9 +77,6 @@ public:
 		};
 	} ELEMENT;
 
-private:
-	tml::graphic::HeaderShaderConstantBuffer::ELEMENT *element_;
-
 protected:
 	void Release(void);
 
@@ -92,10 +89,19 @@ public:
 
 	tml::graphic::HeaderShaderConstantBuffer::ELEMENT *GetElement(void);
 	void SetElement(const UINT, const UINT, const UINT, const UINT);
-	void UploadCPUBuffer(void);
-	void DownloadCPUBuffer(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::HeaderShaderConstantBuffer::Release(void)
+{
+	tml::graphic::ShaderConstantBuffer::Release();
+
+	return;
 }
 
 
@@ -106,27 +112,5 @@ public:
  */
 inline tml::graphic::HeaderShaderConstantBuffer::ELEMENT *tml::graphic::HeaderShaderConstantBuffer::GetElement(void)
 {
-	return (tml::graphic::ShaderConstantBuffer::GetElement(this->element_));
-}
-
-
-/**
- * @brief UploadCPUBufferä÷êî
- */
-inline void tml::graphic::HeaderShaderConstantBuffer::UploadCPUBuffer(void)
-{
-	tml::graphic::ShaderConstantBuffer::UploadCPUBuffer(reinterpret_cast<BYTE *>(this->element_));
-
-	return;
-}
-
-
-/**
- * @brief DownloadCPUBufferä÷êî
- */
-inline void tml::graphic::HeaderShaderConstantBuffer::DownloadCPUBuffer(void)
-{
-	tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(reinterpret_cast<BYTE *>(this->element_));
-
-	return;
+	return (tml::graphic::ShaderConstantBuffer::GetElement<tml::graphic::HeaderShaderConstantBuffer::ELEMENT>());
 }

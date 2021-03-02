@@ -44,8 +44,7 @@ void tml::graphic::LightShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::LightShaderStructuredBuffer::LightShaderStructuredBuffer() :
-	element_ary_(nullptr)
+tml::graphic::LightShaderStructuredBuffer::LightShaderStructuredBuffer()
 {
 	return;
 }
@@ -57,19 +56,6 @@ tml::graphic::LightShaderStructuredBuffer::LightShaderStructuredBuffer() :
 tml::graphic::LightShaderStructuredBuffer::~LightShaderStructuredBuffer()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::graphic::LightShaderStructuredBuffer::Release(void)
-{
-	tml::MemoryUtil::Release(&this->element_ary_);
-
-	tml::graphic::ShaderStructuredBuffer::Release();
 
 	return;
 }
@@ -103,8 +89,6 @@ INT tml::graphic::LightShaderStructuredBuffer::Create(const tml::graphic::LightS
 
 		return (-1);
 	}
-
-	this->element_ary_ = tml::MemoryUtil::Get<tml::graphic::LightShaderStructuredBuffer::ELEMENT>(desc.element_limit);
 
 	return (0);
 }

@@ -68,6 +68,7 @@ private:
 	UINT element_size_;
 	UINT element_limit_;
 	UINT element_cnt_;
+	tml::DynamicBuffer cpu_buf_;
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
 
@@ -76,9 +77,7 @@ protected:
 	INT Create(const tml::graphic::ShaderStructuredBufferDesc &);
 
 	template <typename T>
-	T *GetElement(T *, const UINT);
-	void UploadCPUBuffer(BYTE *);
-	void DownloadCPUBuffer(BYTE *);
+	T *GetElement(const UINT);
 
 public:
 	ShaderStructuredBuffer();
@@ -92,6 +91,9 @@ public:
 	UINT GetElementLimit(void) const;
 	UINT GetElementCount(void) const;
 	void SetElementCount(const UINT);
+	tml::DynamicBuffer &GetCPUBuffer(void);
+	void UploadCPUBuffer(void);
+	void DownloadCPUBuffer(void);
 	ID3D11ShaderResourceView *GetSR(void);
 	ID3D11UnorderedAccessView *GetUASR(void);
 };
@@ -163,13 +165,12 @@ inline void tml::graphic::ShaderStructuredBuffer::SetElementCount(const UINT ele
 
 /**
  * @brief GetElementä÷êî
- * @param element_ary (element_array)
  * @param index (index)
  * @return element (element)<br>
  * nullptr=é∏îs
  */
 template <typename T>
-inline T *tml::graphic::ShaderStructuredBuffer::GetElement(T *element_ary, const UINT index)
+inline T *tml::graphic::ShaderStructuredBuffer::GetElement(const UINT index)
 {
 	if (index >= this->element_limit_) {
 		return (nullptr);
@@ -179,7 +180,17 @@ inline T *tml::graphic::ShaderStructuredBuffer::GetElement(T *element_ary, const
 		this->element_cnt_ = index + 1U;
 	}
 
-	return (&element_ary[index]);
+	return (&reinterpret_cast<T *>(this->cpu_buf_.Get())[index]);
+}
+
+
+/**
+ * @brief GetCPUBufferä÷êî
+ * @return cpu_buf (cpu_buffer)
+ */
+inline tml::DynamicBuffer &tml::graphic::ShaderStructuredBuffer::GetCPUBuffer(void)
+{
+	return (this->cpu_buf_);
 }
 
 

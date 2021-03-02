@@ -44,8 +44,7 @@ void tml::graphic::SpriteModelLayerShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::SpriteModelLayerShaderStructuredBuffer::SpriteModelLayerShaderStructuredBuffer() :
-	element_ary_(nullptr)
+tml::graphic::SpriteModelLayerShaderStructuredBuffer::SpriteModelLayerShaderStructuredBuffer()
 {
 	return;
 }
@@ -57,19 +56,6 @@ tml::graphic::SpriteModelLayerShaderStructuredBuffer::SpriteModelLayerShaderStru
 tml::graphic::SpriteModelLayerShaderStructuredBuffer::~SpriteModelLayerShaderStructuredBuffer()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::graphic::SpriteModelLayerShaderStructuredBuffer::Release(void)
-{
-	tml::MemoryUtil::Release(&this->element_ary_);
-
-	tml::graphic::ShaderStructuredBuffer::Release();
 
 	return;
 }
@@ -103,8 +89,6 @@ INT tml::graphic::SpriteModelLayerShaderStructuredBuffer::Create(const tml::grap
 
 		return (-1);
 	}
-
-	this->element_ary_ = tml::MemoryUtil::Get<tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT>(desc.element_limit);
 
 	return (0);
 }

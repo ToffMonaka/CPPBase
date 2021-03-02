@@ -18,6 +18,7 @@
 #include "../thread/TestThread.h"
 
 #include "../../lib/tml/graphic/Camera.h"
+#include "../../lib/tml/graphic/Mesh.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/SpriteModel.h"

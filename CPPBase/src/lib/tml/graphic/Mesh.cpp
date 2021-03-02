@@ -315,9 +315,7 @@ void tml::graphic::Mesh::UploadVertexBufferCPUBuffer(void)
 			this->GetManager()->GetDeviceContext()->Unmap(this->vb_, 0U);
 		}
 	} else {
-		CD3D11_BOX box(0L, 0L, 0L, this->vb_element_size_ * this->vb_element_cnt_, 1L, 1L);
-
-		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->vb_, 0U, &box, this->vb_cpu_buf_.Get(), 0U, 0U);
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->vb_, 0U, nullptr, this->vb_cpu_buf_.Get(), 0U, 0U);
 	}
 
 	return;
@@ -331,6 +329,30 @@ void tml::graphic::Mesh::DownloadVertexBufferCPUBuffer(void)
 {
 	if (this->vb_cpu_buf_.GetLength() <= 0U) {
 		return;
+	}
+
+	ID3D11Buffer *tmp_buf = nullptr;
+	CD3D11_BUFFER_DESC tmp_buf_desc = this->vb_desc_;
+
+	tmp_buf_desc.BindFlags = 0U;
+	tmp_buf_desc.Usage = D3D11_USAGE_STAGING;
+	tmp_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	tmp_buf_desc.MiscFlags = 0U;
+
+	if (SUCCEEDED(this->GetManager()->GetDevice()->CreateBuffer(&tmp_buf_desc, nullptr, &tmp_buf))) {
+		this->GetManager()->GetDeviceContext()->CopyResource(tmp_buf, this->vb_);
+
+		D3D11_MAPPED_SUBRESOURCE msr;
+
+		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
+			if (msr.DepthPitch >= (this->vb_element_size_ * this->vb_element_cnt_)) {
+				memcpy(this->vb_cpu_buf_.Get(), static_cast<BYTE *>(msr.pData), this->vb_element_size_ * this->vb_element_cnt_);
+			}
+
+			this->GetManager()->GetDeviceContext()->Unmap(tmp_buf, 0U);
+		}
+
+		tmp_buf->Release();
 	}
 
 	return;
@@ -355,9 +377,7 @@ void tml::graphic::Mesh::UploadIndexBufferCPUBuffer(void)
 			this->GetManager()->GetDeviceContext()->Unmap(this->ib_, 0U);
 		}
 	} else {
-		CD3D11_BOX box(0L, 0L, 0L, this->ib_element_size_ * this->ib_element_cnt_, 1L, 1L);
-
-		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->ib_, 0U, &box, this->ib_cpu_buf_.Get(), 0U, 0U);
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->ib_, 0U, nullptr, this->ib_cpu_buf_.Get(), 0U, 0U);
 	}
 
 	return;
@@ -371,6 +391,30 @@ void tml::graphic::Mesh::DownloadIndexBufferCPUBuffer(void)
 {
 	if (this->ib_cpu_buf_.GetLength() <= 0U) {
 		return;
+	}
+
+	ID3D11Buffer *tmp_buf = nullptr;
+	CD3D11_BUFFER_DESC tmp_buf_desc = this->ib_desc_;
+
+	tmp_buf_desc.BindFlags = 0U;
+	tmp_buf_desc.Usage = D3D11_USAGE_STAGING;
+	tmp_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	tmp_buf_desc.MiscFlags = 0U;
+
+	if (SUCCEEDED(this->GetManager()->GetDevice()->CreateBuffer(&tmp_buf_desc, nullptr, &tmp_buf))) {
+		this->GetManager()->GetDeviceContext()->CopyResource(tmp_buf, this->ib_);
+
+		D3D11_MAPPED_SUBRESOURCE msr;
+
+		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
+			if (msr.DepthPitch >= (this->ib_element_size_ * this->ib_element_cnt_)) {
+				memcpy(this->ib_cpu_buf_.Get(), static_cast<BYTE *>(msr.pData), this->ib_element_size_ * this->ib_element_cnt_);
+			}
+
+			this->GetManager()->GetDeviceContext()->Unmap(tmp_buf, 0U);
+		}
+
+		tmp_buf->Release();
 	}
 
 	return;

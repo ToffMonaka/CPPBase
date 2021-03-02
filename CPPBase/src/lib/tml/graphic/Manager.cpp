@@ -861,7 +861,7 @@ tml::DynamicBuffer &tml::graphic::Manager::GetBuffer(tml::DynamicBuffer &dst_buf
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->device_context_->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
-			dst_buf.Set(static_cast<BYTE *>(msr.pData), tmp_buf_desc.ByteWidth);
+			dst_buf.Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
 			dst_msr = msr;
 			dst_msr.pData = nullptr;
 

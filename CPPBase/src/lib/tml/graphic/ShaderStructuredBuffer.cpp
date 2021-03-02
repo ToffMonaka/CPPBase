@@ -170,6 +170,7 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 	this->element_size_ = 0U;
 	this->element_limit_ = 0U;
 	this->element_cnt_ = 0U;
+	this->cpu_buf_.Init();
 
 	tml::graphic::Resource::Init();
 
@@ -202,6 +203,15 @@ INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStruc
 	this->element_size_ = desc.element_size;
 	this->element_limit_ = desc.element_limit;
 
+	D3D11_MAPPED_SUBRESOURCE msr;
+	INT res = 0;
+
+	this->GetManager()->GetBuffer(this->cpu_buf_, msr, this->buf_, &res);
+
+	if (res < 0) {
+		return (-1);
+	}
+
 	if (this->buf_desc_.BindFlags & D3D11_BIND_SHADER_RESOURCE) {
 		CD3D11_SHADER_RESOURCE_VIEW_DESC sr_desc = CD3D11_SHADER_RESOURCE_VIEW_DESC(D3D11_SRV_DIMENSION_BUFFER, DXGI_FORMAT_UNKNOWN, 0U, this->element_limit_);
 
@@ -224,11 +234,11 @@ INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStruc
 
 /**
  * @brief UploadCPUBufferŠÖ”
- * @param cpu_buf (cpu_buffer)
  */
-void tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(BYTE *cpu_buf)
+void tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(void)
 {
-	if (this->element_cnt_ <= 0U) {
+	if ((this->cpu_buf_.GetLength() <= 0U)
+	|| (this->element_cnt_ <= 0U)) {
 		return;
 	}
 
@@ -236,14 +246,14 @@ void tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(BYTE *cpu_buf)
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->buf_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-			memcpy(msr.pData, cpu_buf, this->element_size_ * this->element_cnt_);
+			memcpy(msr.pData, this->cpu_buf_.Get(), this->element_size_ * this->element_cnt_);
 
 			this->GetManager()->GetDeviceContext()->Unmap(this->buf_, 0U);
 		}
 	} else {
 		CD3D11_BOX box(0L, 0L, 0L, this->element_size_ * this->element_cnt_, 1L, 1L);
 
-		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, &box, cpu_buf, 0U, 0U);
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, &box, this->cpu_buf_.Get(), 0U, 0U);
 	}
 
 	return;
@@ -252,11 +262,11 @@ void tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(BYTE *cpu_buf)
 
 /**
  * @brief DownloadCPUBufferŠÖ”
- * @param cpu_buf (cpu_buffer)
  */
-void tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(BYTE *cpu_buf)
+void tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(void)
 {
-	if (this->element_cnt_ <= 0U) {
+	if ((this->cpu_buf_.GetLength() <= 0U)
+	|| (this->element_cnt_ <= 0U)) {
 		return;
 	}
 
@@ -275,7 +285,7 @@ void tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(BYTE *cpu_buf)
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
 			if (msr.DepthPitch >= (this->element_size_ * this->element_cnt_)) {
-				memcpy(cpu_buf, static_cast<BYTE *>(msr.pData), this->element_size_ * this->element_cnt_);
+				memcpy(this->cpu_buf_.Get(), static_cast<BYTE *>(msr.pData), this->element_size_ * this->element_cnt_);
 			}
 
 			this->GetManager()->GetDeviceContext()->Unmap(tmp_buf, 0U);

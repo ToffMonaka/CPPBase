@@ -144,6 +144,7 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
 {
 	this->buf_desc_ = CD3D11_BUFFER_DESC(0U, 0U);
 	this->element_size_ = 0U;
+	this->cpu_buf_.Init();
 
 	tml::graphic::Resource::Init();
 
@@ -175,26 +176,38 @@ INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstan
 	this->buf_->GetDesc(&this->buf_desc_);
 	this->element_size_ = desc.element_size;
 
+	D3D11_MAPPED_SUBRESOURCE msr;
+	INT res = 0;
+
+	this->GetManager()->GetBuffer(this->cpu_buf_, msr, this->buf_, &res);
+
+	if (res < 0) {
+		return (-1);
+	}
+
 	return (0);
 }
 
 
 /**
  * @brief UploadCPUBufferŠÖ”
- * @param cpu_buf (cpu_buffer)
  */
-void tml::graphic::ShaderConstantBuffer::UploadCPUBuffer(BYTE *cpu_buf)
+void tml::graphic::ShaderConstantBuffer::UploadCPUBuffer(void)
 {
+	if (this->cpu_buf_.GetLength() <= 0U) {
+		return;
+	}
+
 	if (this->buf_desc_.Usage == D3D11_USAGE_DYNAMIC) {
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->buf_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-			memcpy(msr.pData, cpu_buf, this->element_size_);
+			memcpy(msr.pData, this->cpu_buf_.Get(), this->element_size_);
 
 			this->GetManager()->GetDeviceContext()->Unmap(this->buf_, 0U);
 		}
 	} else {
-		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, nullptr, cpu_buf, 0U, 0U);
+		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->buf_, 0U, nullptr, this->cpu_buf_.Get(), 0U, 0U);
 	}
 
 	return;
@@ -203,10 +216,13 @@ void tml::graphic::ShaderConstantBuffer::UploadCPUBuffer(BYTE *cpu_buf)
 
 /**
  * @brief DownloadCPUBufferŠÖ”
- * @param cpu_buf (cpu_buffer)
  */
-void tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(BYTE *cpu_buf)
+void tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(void)
 {
+	if (this->cpu_buf_.GetLength() <= 0U) {
+		return;
+	}
+
 	ID3D11Buffer *tmp_buf = nullptr;
 	CD3D11_BUFFER_DESC tmp_buf_desc = this->buf_desc_;
 
@@ -222,7 +238,7 @@ void tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(BYTE *cpu_buf)
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
 			if (msr.DepthPitch >= this->element_size_) {
-				memcpy(cpu_buf, static_cast<BYTE *>(msr.pData), this->element_size_);
+				memcpy(this->cpu_buf_.Get(), static_cast<BYTE *>(msr.pData), this->element_size_);
 			}
 
 			this->GetManager()->GetDeviceContext()->Unmap(tmp_buf, 0U);

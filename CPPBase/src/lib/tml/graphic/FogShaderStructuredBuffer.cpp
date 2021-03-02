@@ -44,8 +44,7 @@ void tml::graphic::FogShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::FogShaderStructuredBuffer::FogShaderStructuredBuffer() :
-	element_ary_(nullptr)
+tml::graphic::FogShaderStructuredBuffer::FogShaderStructuredBuffer()
 {
 	return;
 }
@@ -57,19 +56,6 @@ tml::graphic::FogShaderStructuredBuffer::FogShaderStructuredBuffer() :
 tml::graphic::FogShaderStructuredBuffer::~FogShaderStructuredBuffer()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::graphic::FogShaderStructuredBuffer::Release(void)
-{
-	tml::MemoryUtil::Release(&this->element_ary_);
-
-	tml::graphic::ShaderStructuredBuffer::Release();
 
 	return;
 }
@@ -103,8 +89,6 @@ INT tml::graphic::FogShaderStructuredBuffer::Create(const tml::graphic::FogShade
 
 		return (-1);
 	}
-
-	this->element_ary_ = tml::MemoryUtil::Get<tml::graphic::FogShaderStructuredBuffer::ELEMENT>(desc.element_limit);
 
 	return (0);
 }

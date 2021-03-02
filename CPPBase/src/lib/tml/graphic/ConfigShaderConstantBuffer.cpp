@@ -44,8 +44,7 @@ void tml::graphic::ConfigShaderConstantBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::ConfigShaderConstantBuffer::ConfigShaderConstantBuffer() :
-	element_(nullptr)
+tml::graphic::ConfigShaderConstantBuffer::ConfigShaderConstantBuffer()
 {
 	return;
 }
@@ -57,19 +56,6 @@ tml::graphic::ConfigShaderConstantBuffer::ConfigShaderConstantBuffer() :
 tml::graphic::ConfigShaderConstantBuffer::~ConfigShaderConstantBuffer()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::graphic::ConfigShaderConstantBuffer::Release(void)
-{
-	tml::MemoryUtil::Release(&this->element_);
-
-	tml::graphic::ShaderConstantBuffer::Release();
 
 	return;
 }
@@ -103,8 +89,6 @@ INT tml::graphic::ConfigShaderConstantBuffer::Create(const tml::graphic::ConfigS
 
 		return (-1);
 	}
-
-	this->element_ = tml::MemoryUtil::Get<tml::graphic::ConfigShaderConstantBuffer::ELEMENT>(1U);
 
 	return (0);
 }

@@ -76,9 +76,6 @@ public:
 		};
 	} ELEMENT;
 
-private:
-	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *element_ary_;
-
 protected:
 	void Release(void);
 
@@ -91,10 +88,19 @@ public:
 
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	void SetElement(const UINT, const tml::graphic::Camera *, const XMMATRIX &, const XMMATRIX &, const XMMATRIX &);
-	void UploadCPUBuffer(void);
-	void DownloadCPUBuffer(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::CameraShaderStructuredBuffer::Release(void)
+{
+	tml::graphic::ShaderStructuredBuffer::Release();
+
+	return;
 }
 
 
@@ -106,27 +112,5 @@ public:
  */
 inline tml::graphic::CameraShaderStructuredBuffer::ELEMENT *tml::graphic::CameraShaderStructuredBuffer::GetElement(const UINT index)
 {
-	return (tml::graphic::ShaderStructuredBuffer::GetElement(this->element_ary_, index));
-}
-
-
-/**
- * @brief UploadCPUBufferä÷êî
- */
-inline void tml::graphic::CameraShaderStructuredBuffer::UploadCPUBuffer(void)
-{
-	tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(reinterpret_cast<BYTE *>(this->element_ary_));
-
-	return;
-}
-
-
-/**
- * @brief DownloadCPUBufferä÷êî
- */
-inline void tml::graphic::CameraShaderStructuredBuffer::DownloadCPUBuffer(void)
-{
-	tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(reinterpret_cast<BYTE *>(this->element_ary_));
-
-	return;
+	return (tml::graphic::ShaderStructuredBuffer::GetElement<tml::graphic::CameraShaderStructuredBuffer::ELEMENT>(index));
 }

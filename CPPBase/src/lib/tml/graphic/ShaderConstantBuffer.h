@@ -65,15 +65,14 @@ private:
 	ID3D11Buffer *buf_;
 	CD3D11_BUFFER_DESC buf_desc_;
 	UINT element_size_;
+	tml::DynamicBuffer cpu_buf_;
 
 protected:
 	void Release(void);
 	INT Create(const tml::graphic::ShaderConstantBufferDesc &);
 
 	template <typename T>
-	T *GetElement(T *);
-	void UploadCPUBuffer(BYTE *);
-	void DownloadCPUBuffer(BYTE *);
+	T *GetElement(void);
 
 public:
 	ShaderConstantBuffer();
@@ -84,6 +83,9 @@ public:
 	ID3D11Buffer *GetBuffer(void);
 	const CD3D11_BUFFER_DESC &GetBufferDesc(void) const;
 	UINT GetElementSize(void) const;
+	tml::DynamicBuffer &GetCPUBuffer(void);
+	void UploadCPUBuffer(void);
+	void DownloadCPUBuffer(void);
 	ID3D11Buffer *GetSR(void);
 };
 }
@@ -122,14 +124,23 @@ inline UINT tml::graphic::ShaderConstantBuffer::GetElementSize(void) const
 
 /**
  * @brief GetElementä÷êî
- * @param element (element)
  * @return element (element)<br>
  * nullptr=é∏îs
  */
 template <typename T>
-inline T *tml::graphic::ShaderConstantBuffer::GetElement(T *element)
+inline T *tml::graphic::ShaderConstantBuffer::GetElement(void)
 {
-	return (element);
+	return (reinterpret_cast<T *>(this->cpu_buf_.Get()));
+}
+
+
+/**
+ * @brief GetCPUBufferä÷êî
+ * @return cpu_buf (cpu_buffer)
+ */
+inline tml::DynamicBuffer &tml::graphic::ShaderConstantBuffer::GetCPUBuffer(void)
+{
+	return (this->cpu_buf_);
 }
 
 

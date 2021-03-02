@@ -77,9 +77,6 @@ public:
 		};
 	} ELEMENT;
 
-private:
-	tml::graphic::ConfigShaderConstantBuffer::ELEMENT *element_;
-
 protected:
 	void Release(void);
 
@@ -91,10 +88,19 @@ public:
 	INT Create(const tml::graphic::ConfigShaderConstantBufferDesc &);
 
 	tml::graphic::ConfigShaderConstantBuffer::ELEMENT *GetElement(void);
-	void UploadCPUBuffer(void);
-	void DownloadCPUBuffer(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ConfigShaderConstantBuffer::Release(void)
+{
+	tml::graphic::ShaderConstantBuffer::Release();
+
+	return;
 }
 
 
@@ -105,27 +111,5 @@ public:
  */
 inline tml::graphic::ConfigShaderConstantBuffer::ELEMENT *tml::graphic::ConfigShaderConstantBuffer::GetElement(void)
 {
-	return (tml::graphic::ShaderConstantBuffer::GetElement(this->element_));
-}
-
-
-/**
- * @brief UploadCPUBufferä÷êî
- */
-inline void tml::graphic::ConfigShaderConstantBuffer::UploadCPUBuffer(void)
-{
-	tml::graphic::ShaderConstantBuffer::UploadCPUBuffer(reinterpret_cast<BYTE *>(this->element_));
-
-	return;
-}
-
-
-/**
- * @brief DownloadCPUBufferä÷êî
- */
-inline void tml::graphic::ConfigShaderConstantBuffer::DownloadCPUBuffer(void)
-{
-	tml::graphic::ShaderConstantBuffer::DownloadCPUBuffer(reinterpret_cast<BYTE *>(this->element_));
-
-	return;
+	return (tml::graphic::ShaderConstantBuffer::GetElement<tml::graphic::ConfigShaderConstantBuffer::ELEMENT>());
 }

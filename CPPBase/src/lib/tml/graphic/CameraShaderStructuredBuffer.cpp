@@ -44,8 +44,7 @@ void tml::graphic::CameraShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::CameraShaderStructuredBuffer::CameraShaderStructuredBuffer() :
-	element_ary_(nullptr)
+tml::graphic::CameraShaderStructuredBuffer::CameraShaderStructuredBuffer()
 {
 	return;
 }
@@ -57,19 +56,6 @@ tml::graphic::CameraShaderStructuredBuffer::CameraShaderStructuredBuffer() :
 tml::graphic::CameraShaderStructuredBuffer::~CameraShaderStructuredBuffer()
 {
 	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::graphic::CameraShaderStructuredBuffer::Release(void)
-{
-	tml::MemoryUtil::Release(&this->element_ary_);
-
-	tml::graphic::ShaderStructuredBuffer::Release();
 
 	return;
 }
@@ -103,8 +89,6 @@ INT tml::graphic::CameraShaderStructuredBuffer::Create(const tml::graphic::Camer
 
 		return (-1);
 	}
-
-	this->element_ary_ = tml::MemoryUtil::Get<tml::graphic::CameraShaderStructuredBuffer::ELEMENT>(desc.element_limit);
 
 	return (0);
 }

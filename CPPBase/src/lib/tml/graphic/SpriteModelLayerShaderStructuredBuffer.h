@@ -78,9 +78,6 @@ public:
 		};
 	} ELEMENT;
 
-private:
-	tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT *element_ary_;
-
 protected:
 	void Release(void);
 
@@ -93,10 +90,19 @@ public:
 
 	tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	void SetElement(const UINT, const bool);
-	void UploadCPUBuffer(void);
-	void DownloadCPUBuffer(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::SpriteModelLayerShaderStructuredBuffer::Release(void)
+{
+	tml::graphic::ShaderStructuredBuffer::Release();
+
+	return;
 }
 
 
@@ -108,27 +114,5 @@ public:
  */
 inline tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT *tml::graphic::SpriteModelLayerShaderStructuredBuffer::GetElement(const UINT index)
 {
-	return (tml::graphic::ShaderStructuredBuffer::GetElement(this->element_ary_, index));
-}
-
-
-/**
- * @brief UploadCPUBufferä÷êî
- */
-inline void tml::graphic::SpriteModelLayerShaderStructuredBuffer::UploadCPUBuffer(void)
-{
-	tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(reinterpret_cast<BYTE *>(this->element_ary_));
-
-	return;
-}
-
-
-/**
- * @brief DownloadCPUBufferä÷êî
- */
-inline void tml::graphic::SpriteModelLayerShaderStructuredBuffer::DownloadCPUBuffer(void)
-{
-	tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(reinterpret_cast<BYTE *>(this->element_ary_));
-
-	return;
+	return (tml::graphic::ShaderStructuredBuffer::GetElement<tml::graphic::SpriteModelLayerShaderStructuredBuffer::ELEMENT>(index));
 }
