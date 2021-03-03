@@ -162,6 +162,9 @@ tml::graphic::Mesh::Mesh() :
 	ib_format_(DXGI_FORMAT_UNKNOWN),
 	pt_(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 {
+	tml::MemoryUtil::Clear(&this->vb_msr_, 1U);
+	tml::MemoryUtil::Clear(&this->ib_msr_, 1U);
+
 	return;
 }
 
@@ -211,11 +214,13 @@ void tml::graphic::Mesh::Init(void)
 	this->vb_element_size_ = 0U;
 	this->vb_element_cnt_ = 0U;
 	this->vb_cpu_buf_.Init();
+	tml::MemoryUtil::Clear(&this->vb_msr_, 1U);
 	this->ib_desc_ = CD3D11_BUFFER_DESC(0U, D3D11_BIND_INDEX_BUFFER);
 	this->ib_element_size_ = 0U;
 	this->ib_element_cnt_ = 0U;
 	this->ib_format_ = DXGI_FORMAT_UNKNOWN;
 	this->ib_cpu_buf_.Init();
+	tml::MemoryUtil::Clear(&this->ib_msr_, 1U);
 	this->pt_ = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	tml::graphic::Resource::Init();
@@ -252,10 +257,9 @@ INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
 		this->vb_element_cnt_ = desc.vertex_buffer_element_count;
 
 		if (desc.vertex_buffer_cpu_buffer_flag) {
-			D3D11_MAPPED_SUBRESOURCE msr;
 			INT res = 0;
 
-			this->GetManager()->GetBuffer(this->vb_cpu_buf_, msr, this->vb_, &res);
+			this->GetManager()->GetCPUBuffer(this->vb_cpu_buf_, this->vb_msr_, this->vb_, &res);
 
 			if (res < 0) {
 				this->Init();
@@ -278,10 +282,9 @@ INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
 		this->ib_format_ = desc.index_buffer_format;
 
 		if (desc.index_buffer_cpu_buffer_flag) {
-			D3D11_MAPPED_SUBRESOURCE msr;
 			INT res = 0;
 
-			this->GetManager()->GetBuffer(this->ib_cpu_buf_, msr, this->ib_, &res);
+			this->GetManager()->GetCPUBuffer(this->ib_cpu_buf_, this->ib_msr_, this->ib_, &res);
 
 			if (res < 0) {
 				this->Init();

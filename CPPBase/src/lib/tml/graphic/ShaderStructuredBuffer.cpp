@@ -119,6 +119,8 @@ tml::graphic::ShaderStructuredBuffer::ShaderStructuredBuffer() :
 	sr_(nullptr),
 	uasr_(nullptr)
 {
+	tml::MemoryUtil::Clear(&this->msr_, 1U);
+
 	return;
 }
 
@@ -171,6 +173,7 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 	this->element_limit_ = 0U;
 	this->element_cnt_ = 0U;
 	this->cpu_buf_.Init();
+	tml::MemoryUtil::Clear(&this->msr_, 1U);
 
 	tml::graphic::Resource::Init();
 
@@ -203,10 +206,9 @@ INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStruc
 	this->element_size_ = desc.element_size;
 	this->element_limit_ = desc.element_limit;
 
-	D3D11_MAPPED_SUBRESOURCE msr;
 	INT res = 0;
 
-	this->GetManager()->GetBuffer(this->cpu_buf_, msr, this->buf_, &res);
+	this->GetManager()->GetCPUBuffer(this->cpu_buf_, this->msr_, this->buf_, &res);
 
 	if (res < 0) {
 		return (-1);

@@ -69,6 +69,7 @@ private:
 	UINT element_limit_;
 	UINT element_cnt_;
 	tml::DynamicBuffer cpu_buf_;
+	D3D11_MAPPED_SUBRESOURCE msr_;
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
 
@@ -78,6 +79,8 @@ protected:
 
 	template <typename T>
 	T *GetElement(const UINT);
+	template <typename T>
+	T *GetElementArray(void);
 
 public:
 	ShaderStructuredBuffer();
@@ -94,6 +97,7 @@ public:
 	tml::DynamicBuffer &GetCPUBuffer(void);
 	void UploadCPUBuffer(void);
 	void DownloadCPUBuffer(void);
+	const D3D11_MAPPED_SUBRESOURCE &GetMappedSubresource(void) const;
 	ID3D11ShaderResourceView *GetSR(void);
 	ID3D11UnorderedAccessView *GetUASR(void);
 };
@@ -185,12 +189,33 @@ inline T *tml::graphic::ShaderStructuredBuffer::GetElement(const UINT index)
 
 
 /**
+ * @brief GetElementArrayä÷êî
+ * @return element_ary (element_array)
+ */
+template <typename T>
+inline T *tml::graphic::ShaderStructuredBuffer::GetElementArray(void)
+{
+	return (reinterpret_cast<T *>(this->cpu_buf_.Get()));
+}
+
+
+/**
  * @brief GetCPUBufferä÷êî
  * @return cpu_buf (cpu_buffer)
  */
 inline tml::DynamicBuffer &tml::graphic::ShaderStructuredBuffer::GetCPUBuffer(void)
 {
 	return (this->cpu_buf_);
+}
+
+
+/**
+ * @brief GetMappedSubresourceä÷êî
+ * @return msr (mapped_subresource)
+ */
+inline const D3D11_MAPPED_SUBRESOURCE &tml::graphic::ShaderStructuredBuffer::GetMappedSubresource(void) const
+{
+	return (this->msr_);
 }
 
 

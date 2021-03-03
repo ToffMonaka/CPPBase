@@ -85,6 +85,7 @@ public:
 	INT Create(const tml::graphic::SpriteModelShaderStructuredBufferDesc &);
 
 	tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
+	tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	void SetElement(const UINT, const XMMATRIX &, const XMMATRIX &, const tml::XMFLOAT4EX &);
 };
 }
@@ -111,4 +112,14 @@ inline void tml::graphic::SpriteModelShaderStructuredBuffer::Release(void)
 inline tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *tml::graphic::SpriteModelShaderStructuredBuffer::GetElement(const UINT index)
 {
 	return (tml::graphic::ShaderStructuredBuffer::GetElement<tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT>(index));
+}
+
+
+/**
+ * @brief GetElementArrayä÷êî
+ * @return element_ary (element_array)
+ */
+inline tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *tml::graphic::SpriteModelShaderStructuredBuffer::GetElementArray(void)
+{
+	return (tml::graphic::ShaderStructuredBuffer::GetElementArray<tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT>());
 }

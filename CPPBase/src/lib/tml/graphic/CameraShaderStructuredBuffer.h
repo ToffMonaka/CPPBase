@@ -87,6 +87,7 @@ public:
 	INT Create(const tml::graphic::CameraShaderStructuredBufferDesc &);
 
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
+	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	void SetElement(const UINT, const tml::graphic::Camera *, const XMMATRIX &, const XMMATRIX &, const XMMATRIX &);
 };
 }
@@ -113,4 +114,14 @@ inline void tml::graphic::CameraShaderStructuredBuffer::Release(void)
 inline tml::graphic::CameraShaderStructuredBuffer::ELEMENT *tml::graphic::CameraShaderStructuredBuffer::GetElement(const UINT index)
 {
 	return (tml::graphic::ShaderStructuredBuffer::GetElement<tml::graphic::CameraShaderStructuredBuffer::ELEMENT>(index));
+}
+
+
+/**
+ * @brief GetElementArrayä÷êî
+ * @return element_ary (element_array)
+ */
+inline tml::graphic::CameraShaderStructuredBuffer::ELEMENT *tml::graphic::CameraShaderStructuredBuffer::GetElementArray(void)
+{
+	return (tml::graphic::ShaderStructuredBuffer::GetElementArray<tml::graphic::CameraShaderStructuredBuffer::ELEMENT>());
 }

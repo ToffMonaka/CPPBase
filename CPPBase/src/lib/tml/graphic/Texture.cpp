@@ -99,16 +99,16 @@ INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
  * @param bind_flg (bind_flag)
  * @param format (format)
  * @param size (size)
- * @param buf_cnt (buffer_count)
+ * @param ary_cnt (array_count)
  * @param mm_cnt (mipmap_count)
  * @param ms_desc (multisample_desc)
  * @param dynamic_flg (dynamic_flag)
  */
-void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG bind_flg, const DXGI_FORMAT format, const XMUINT2EX &size, const UINT buf_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc, const bool dynamic_flg)
+void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG bind_flg, const DXGI_FORMAT format, const XMUINT2EX &size, const UINT ary_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc, const bool dynamic_flg)
 {
 	this->file_read_desc_container.clear();
-	this->file_read_desc_container.resize(buf_cnt);
-	this->texture_desc = CD3D11_TEXTURE2D_DESC(format, size.x, size.y, buf_cnt, mm_cnt, 0U);
+	this->file_read_desc_container.resize(ary_cnt);
+	this->texture_desc = CD3D11_TEXTURE2D_DESC(format, size.x, size.y, ary_cnt, mm_cnt, 0U);
 
 	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET)) {
 		this->texture_desc.BindFlags |= D3D11_BIND_RENDER_TARGET;
@@ -214,8 +214,9 @@ void tml::graphic::Texture::Init(void)
 
 	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
 	this->size_ = 0U;
-	this->cpu_buf_.Init();
-	this->clear_cpu_buf_.Init();
+	this->cpu_buf_cont_.clear();
+	this->msr_cont_.clear();
+	this->clear_cpu_buf_cont_.clear();
 
 	tml::graphic::Resource::Init();
 
@@ -302,6 +303,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				tex_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 				tex_desc.Usage = D3D11_USAGE_DEFAULT;
 				tex_desc.CPUAccessFlags = 0U;
+				tex_desc.MiscFlags = 0U;
 
 				if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tex_desc, nullptr, &tex))) {
 					this->Init();
@@ -334,11 +336,11 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				tmp_tex_desc_fixed_flg = true;
 			}
 
-			std::vector<tml::DynamicBuffer> buf_cont;
+			std::vector<tml::DynamicBuffer> cpu_buf_cont;
 			std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont;
 			INT res = 0;
 
-			this->GetManager()->GetBuffer(buf_cont, msr_cont, tex, &res);
+			this->GetManager()->GetCPUBuffer(cpu_buf_cont, msr_cont, tex, &res);
 
 			if (res < 0) {
 				tex->Release();
@@ -354,17 +356,14 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 			tex = nullptr;
 
-			for (size_t buf_i = 0U; buf_i < buf_cont.size(); ++buf_i) {
-				srd_cont.emplace_back();
-				srd_buf_cont.emplace_back();
+			for (size_t cpu_buf_i = 0U; cpu_buf_i < cpu_buf_cont.size(); ++cpu_buf_i) {
+				D3D11_SUBRESOURCE_DATA srd = {};
 
-				auto &srd = srd_cont.back();
-				auto &srd_buf = srd_buf_cont.back();
+				srd.pSysMem = cpu_buf_cont[cpu_buf_i].Get();
+				srd.SysMemPitch = msr_cont[cpu_buf_i].RowPitch;
 
-				srd.pSysMem = buf_cont[buf_i].Get();
-				srd.SysMemPitch = msr_cont[buf_i].RowPitch;
-				srd.SysMemSlicePitch = 0U;
-				srd_buf = std::move(buf_cont[buf_i]);
+				srd_cont.push_back(srd);
+				srd_buf_cont.push_back(std::move(cpu_buf_cont[cpu_buf_i]));
 			}
 		}
 
@@ -437,10 +436,9 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
 
 	if (desc.cpu_buffer_flag) {
-		D3D11_MAPPED_SUBRESOURCE msr;
 		INT res = 0;
 
-		this->GetManager()->GetBuffer(this->cpu_buf_, msr, this->tex_, &res);
+		this->GetManager()->GetCPUBuffer(this->cpu_buf_cont_, this->msr_cont_, this->tex_, &res);
 
 		if (res < 0) {
 			this->Init();
@@ -448,12 +446,17 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			return (-1);
 		}
 
-		this->clear_cpu_buf_ = this->cpu_buf_;
+		this->clear_cpu_buf_cont_.resize(this->cpu_buf_cont_.size());
 
-		UINT pixel_cnt = this->size_.x * this->size_.y;
+		for(size_t cpu_buf_i = 0U; cpu_buf_i < this->cpu_buf_cont_.size(); ++cpu_buf_i){
+			this->clear_cpu_buf_cont_[cpu_buf_i] = this->cpu_buf_cont_[cpu_buf_i];
 
-		for (UINT pixel_i = 0U; pixel_i < pixel_cnt; ++pixel_i) {
-			reinterpret_cast<UINT *>(this->clear_cpu_buf_.Get())[pixel_i] = 0U;
+			auto &clear_cpu_buf = this->clear_cpu_buf_cont_[cpu_buf_i];
+			auto pixel_cnt = clear_cpu_buf.GetLength() >> 2;
+
+			for (size_t pixel_i = 0U; pixel_i < pixel_cnt; ++pixel_i) {
+				reinterpret_cast<UINT *>(clear_cpu_buf.Get())[pixel_i] = 0U;
+			}
 		}
 	}
 
@@ -624,22 +627,31 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
  */
 void tml::graphic::Texture::UploadCPUBuffer(void)
 {
-	if (this->cpu_buf_.GetLength() <= 0U) {
+	if (this->cpu_buf_cont_.size() <= 0U) {
 		return;
 	}
 
 	if (this->tex_desc_.Usage == D3D11_USAGE_DYNAMIC) {
-		D3D11_MAPPED_SUBRESOURCE msr;
+		for (UINT ary_i = 0U; ary_i < this->tex_desc_.ArraySize; ++ary_i) {
+			for (UINT mm_i = 0U; mm_i < this->tex_desc_.MipLevels; ++mm_i) {
+				UINT cpu_buf_index = D3D11CalcSubresource(mm_i, ary_i, this->tex_desc_.MipLevels);
+				D3D11_MAPPED_SUBRESOURCE msr;
 
-		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->tex_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-			memcpy(msr.pData, this->cpu_buf_.Get(), this->size_.x * this->size_.y * 4U);
+				if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->tex_, cpu_buf_index, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
+					memcpy(msr.pData, this->cpu_buf_cont_[cpu_buf_index].Get(), this->cpu_buf_cont_[cpu_buf_index].GetLength());
 
-			this->GetManager()->GetDeviceContext()->Unmap(this->tex_, 0U);
+					this->GetManager()->GetDeviceContext()->Unmap(this->tex_, cpu_buf_index);
+				}
+			}
 		}
 	} else {
-		CD3D11_BOX box(0L, 0L, 0L, this->size_.x, this->size_.y, 1L);
+		for (UINT ary_i = 0U; ary_i < this->tex_desc_.ArraySize; ++ary_i) {
+			for (UINT mm_i = 0U; mm_i < this->tex_desc_.MipLevels; ++mm_i) {
+				UINT cpu_buf_index = D3D11CalcSubresource(mm_i, ary_i, this->tex_desc_.MipLevels);
 
-		this->GetManager()->GetDeviceContext()->UpdateSubresource(this->tex_, 0U, &box, this->cpu_buf_.Get(), this->size_.x * 4U, 0U);
+				this->GetManager()->GetDeviceContext()->UpdateSubresource(this->tex_, cpu_buf_index, nullptr, this->cpu_buf_cont_[cpu_buf_index].Get(), this->msr_cont_[cpu_buf_index].RowPitch, 0U);
+			}
+		}
 	}
 
 	return;
@@ -651,8 +663,40 @@ void tml::graphic::Texture::UploadCPUBuffer(void)
  */
 void tml::graphic::Texture::DownloadCPUBuffer(void)
 {
-	if (this->cpu_buf_.GetLength() <= 0U) {
+	if (this->cpu_buf_cont_.size() <= 0U) {
 		return;
+	}
+
+	ID3D11Texture2D *tmp_tex = nullptr;
+	CD3D11_TEXTURE2D_DESC tmp_tex_desc = this->tex_desc_;
+
+	tmp_tex_desc.BindFlags = 0U;
+	tmp_tex_desc.Usage = D3D11_USAGE_STAGING;
+	tmp_tex_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	tmp_tex_desc.MiscFlags = 0U;
+
+	if (SUCCEEDED(this->GetManager()->GetDevice()->CreateTexture2D(&tmp_tex_desc, nullptr, &tmp_tex))) {
+		this->GetManager()->GetDeviceContext()->CopyResource(tmp_tex, this->tex_);
+
+		for (UINT ary_i = 0U; ary_i < tmp_tex_desc.ArraySize; ++ary_i) {
+			for (UINT mm_i = 0U; mm_i < tmp_tex_desc.MipLevels; ++mm_i) {
+				UINT cpu_buf_index = D3D11CalcSubresource(mm_i, ary_i, tmp_tex_desc.MipLevels);
+				D3D11_MAPPED_SUBRESOURCE msr;
+
+				if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_tex, cpu_buf_index, D3D11_MAP_READ, 0U, &msr))) {
+					this->cpu_buf_cont_[cpu_buf_index].Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
+					this->msr_cont_[cpu_buf_index] = msr;
+					this->msr_cont_[cpu_buf_index].pData = nullptr;
+
+					this->GetManager()->GetDeviceContext()->Unmap(tmp_tex, cpu_buf_index);
+				} else {
+					ary_i = tmp_tex_desc.ArraySize;
+					mm_i = tmp_tex_desc.MipLevels;
+				}
+			}
+		}
+
+		tmp_tex->Release();
 	}
 
 	return;
@@ -664,11 +708,13 @@ void tml::graphic::Texture::DownloadCPUBuffer(void)
  */
 void tml::graphic::Texture::ClearCPUBuffer(void)
 {
-	if (this->cpu_buf_.GetLength() <= 0U) {
+	if (this->cpu_buf_cont_.size() <= 0U) {
 		return;
 	}
 
-	tml::MemoryUtil::Copy(this->cpu_buf_.Get(), this->clear_cpu_buf_.Get(), this->clear_cpu_buf_.GetLength());
+	for(size_t cpu_buf_i = 0U; cpu_buf_i < this->cpu_buf_cont_.size(); ++cpu_buf_i){
+		memcpy(this->cpu_buf_cont_[cpu_buf_i].Get(), this->clear_cpu_buf_cont_[cpu_buf_i].Get(), this->clear_cpu_buf_cont_[cpu_buf_i].GetLength());
+	}
 
 	return;
 }
@@ -682,14 +728,14 @@ void tml::graphic::Texture::ClearCPUBuffer(void)
  */
 void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMINT2EX &pos, tml::graphic::Font *font)
 {
-	if ((this->cpu_buf_.GetLength() <= 0U)
+	if ((this->cpu_buf_cont_.size() <= 0U)
 	|| (str[0] == 0)
 	|| (font == nullptr)) {
 		return;
 	}
 
 	size_t str_len = wcslen(str);
-	UINT *buf = reinterpret_cast<UINT *>(this->cpu_buf_.Get());
+	UINT *buf = reinterpret_cast<UINT *>(this->cpu_buf_cont_[0].Get());
 	LONG buf_w = static_cast<LONG>(this->size_.x);
 	LONG buf_h = static_cast<LONG>(this->size_.y);
 	LONG buf_x = 0L;

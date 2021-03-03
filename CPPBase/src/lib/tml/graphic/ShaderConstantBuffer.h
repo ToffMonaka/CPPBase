@@ -66,6 +66,7 @@ private:
 	CD3D11_BUFFER_DESC buf_desc_;
 	UINT element_size_;
 	tml::DynamicBuffer cpu_buf_;
+	D3D11_MAPPED_SUBRESOURCE msr_;
 
 protected:
 	void Release(void);
@@ -86,6 +87,7 @@ public:
 	tml::DynamicBuffer &GetCPUBuffer(void);
 	void UploadCPUBuffer(void);
 	void DownloadCPUBuffer(void);
+	const D3D11_MAPPED_SUBRESOURCE &GetMappedSubresource(void) const;
 	ID3D11Buffer *GetSR(void);
 };
 }
@@ -141,6 +143,16 @@ inline T *tml::graphic::ShaderConstantBuffer::GetElement(void)
 inline tml::DynamicBuffer &tml::graphic::ShaderConstantBuffer::GetCPUBuffer(void)
 {
 	return (this->cpu_buf_);
+}
+
+
+/**
+ * @brief GetMappedSubresourceŠÖ”
+ * @return msr (mapped_subresource)
+ */
+inline const D3D11_MAPPED_SUBRESOURCE &tml::graphic::ShaderConstantBuffer::GetMappedSubresource(void) const
+{
+	return (this->msr_);
 }
 
 

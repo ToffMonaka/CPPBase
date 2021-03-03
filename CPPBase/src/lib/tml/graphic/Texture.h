@@ -43,7 +43,7 @@ public:
 
 	virtual void Init(void);
 
-	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG, const DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &size = XMUINT2EX(0U), const UINT buf_cnt = 1U, const UINT mm_cnt = 1U, const DXGI_SAMPLE_DESC &ms_desc = {1U, 0U}, const bool dynamic_flg = false);
+	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG, const DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &size = XMUINT2EX(0U), const UINT ary_cnt = 1U, const UINT mm_cnt = 1U, const DXGI_SAMPLE_DESC &ms_desc = {1U, 0U}, const bool dynamic_flg = false);
 };
 }
 }
@@ -75,8 +75,9 @@ private:
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;
 	tml::XMUINT2EX size_;
-	tml::DynamicBuffer cpu_buf_;
-	tml::DynamicBuffer clear_cpu_buf_;
+	std::vector<tml::DynamicBuffer> cpu_buf_cont_;
+	std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont_;
+	std::vector<tml::DynamicBuffer> clear_cpu_buf_cont_;
 	ID3D11RenderTargetView *rt_;
 	ID3D11DepthStencilView *dt_;
 	ID3D11ShaderResourceView *sr_;
@@ -95,9 +96,14 @@ public:
 	ID3D11Texture2D *GetTexture(void);
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
 	const tml::XMUINT2EX &GetSize(void) const;
-	tml::DynamicBuffer &GetCPUBuffer(void);
+	UINT GetCPUBufferCount(void) const;
+	tml::DynamicBuffer *GetCPUBuffer(const UINT, const UINT);
+	tml::DynamicBuffer *GetCPUBufferArray(void);
 	void UploadCPUBuffer(void);
 	void DownloadCPUBuffer(void);
+	UINT GetMappedSubresourceCount(void) const;
+	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresource(const UINT, const UINT) const;
+	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresourceArray(void) const;
 	void ClearCPUBuffer(void);
 	void DrawCPUBufferString(const WCHAR *, const tml::XMINT2EX &, tml::graphic::Font *);
 	ID3D11RenderTargetView *GetRenderTarget(void);
@@ -142,12 +148,78 @@ inline const tml::XMUINT2EX &tml::graphic::Texture::GetSize(void) const
 
 
 /**
- * @brief GetCPUBufferä÷êî
- * @return cpu_buf (cpu_buffer)
+ * @brief GetCPUBufferCountä÷êî
+ * @return cpu_buf_cnt (cpu_buffer_count)
  */
-inline tml::DynamicBuffer &tml::graphic::Texture::GetCPUBuffer(void)
+inline UINT tml::graphic::Texture::GetCPUBufferCount(void) const
 {
-	return (this->cpu_buf_);
+	return (this->cpu_buf_cont_.size());
+}
+
+
+/**
+ * @brief GetCPUBufferä÷êî
+ * @param ary_index (array_index)
+ * @param mm_index (mipmap_index)
+ * @return cpu_buf (cpu_buffer)<br>
+ * nullptr=é∏îs
+ */
+inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBuffer(const UINT ary_index, const UINT mm_index)
+{
+	if ((ary_index >= this->tex_desc_.ArraySize)
+	|| (mm_index >= this->tex_desc_.MipLevels)) {
+		return (nullptr);
+	}
+
+	return (&this->cpu_buf_cont_[D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels)]);
+}
+
+
+/**
+ * @brief GetCPUBufferArrayä÷êî
+ * @return cpu_buf_ary (cpu_buffer_array)
+ */
+inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferArray(void)
+{
+	return (this->cpu_buf_cont_.data());
+}
+
+
+/**
+ * @brief GetMappedSubresourceCountä÷êî
+ * @return msr_cnt (mapped_subresource_count)
+ */
+inline UINT tml::graphic::Texture::GetMappedSubresourceCount(void) const
+{
+	return (this->msr_cont_.size());
+}
+
+
+/**
+ * @brief GetMappedSubresourceä÷êî
+ * @param ary_index (array_index)
+ * @param mm_index (mipmap_index)
+ * @return msr (mapped_subresource)<br>
+ * nullptr=é∏îs
+ */
+inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresource(const UINT ary_index, const UINT mm_index) const
+{
+	if ((ary_index >= this->tex_desc_.ArraySize)
+	|| (mm_index >= this->tex_desc_.MipLevels)) {
+		return (nullptr);
+	}
+
+	return (&this->msr_cont_[D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels)]);
+}
+
+
+/**
+ * @brief GetMappedSubresourceArrayä÷êî
+ * @return msr_ary (mapped_subresource_array)
+ */
+inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresourceArray(void) const
+{
+	return (this->msr_cont_.data());
 }
 
 

@@ -107,6 +107,8 @@ tml::graphic::ShaderConstantBuffer::ShaderConstantBuffer() :
 	buf_desc_(0U, 0U),
 	element_size_(0U)
 {
+	tml::MemoryUtil::Clear(&this->msr_, 1U);
+
 	return;
 }
 
@@ -145,6 +147,7 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
 	this->buf_desc_ = CD3D11_BUFFER_DESC(0U, 0U);
 	this->element_size_ = 0U;
 	this->cpu_buf_.Init();
+	tml::MemoryUtil::Clear(&this->msr_, 1U);
 
 	tml::graphic::Resource::Init();
 
@@ -176,10 +179,9 @@ INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstan
 	this->buf_->GetDesc(&this->buf_desc_);
 	this->element_size_ = desc.element_size;
 
-	D3D11_MAPPED_SUBRESOURCE msr;
 	INT res = 0;
 
-	this->GetManager()->GetBuffer(this->cpu_buf_, msr, this->buf_, &res);
+	this->GetManager()->GetCPUBuffer(this->cpu_buf_, this->msr_, this->buf_, &res);
 
 	if (res < 0) {
 		return (-1);

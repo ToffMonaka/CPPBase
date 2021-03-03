@@ -76,12 +76,14 @@ private:
 	UINT vb_element_size_;
 	UINT vb_element_cnt_;
 	tml::DynamicBuffer vb_cpu_buf_;
+	D3D11_MAPPED_SUBRESOURCE vb_msr_;
 	ID3D11Buffer *ib_;
 	CD3D11_BUFFER_DESC ib_desc_;
 	UINT ib_element_size_;
 	UINT ib_element_cnt_;
 	DXGI_FORMAT ib_format_;
 	tml::DynamicBuffer ib_cpu_buf_;
+	D3D11_MAPPED_SUBRESOURCE ib_msr_;
 	D3D11_PRIMITIVE_TOPOLOGY pt_;
 
 protected:
@@ -101,6 +103,7 @@ public:
 	tml::DynamicBuffer &GetVertexBufferCPUBuffer(void);
 	void UploadVertexBufferCPUBuffer(void);
 	void DownloadVertexBufferCPUBuffer(void);
+	const D3D11_MAPPED_SUBRESOURCE &GetVertexBufferMappedSubresource(void) const;
 	ID3D11Buffer *GetIndexBuffer(void);
 	const CD3D11_BUFFER_DESC &GetIndexBufferDesc(void) const;
 	UINT GetIndexBufferElementSize(void) const;
@@ -109,6 +112,7 @@ public:
 	tml::DynamicBuffer &GetIndexBufferCPUBuffer(void);
 	void UploadIndexBufferCPUBuffer(void);
 	void DownloadIndexBufferCPUBuffer(void);
+	const D3D11_MAPPED_SUBRESOURCE &GetIndexBufferMappedSubresource(void) const;
 	D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology(void) const;
 };
 }
@@ -162,6 +166,16 @@ inline UINT tml::graphic::Mesh::GetVertexBufferElementCount(void) const
 inline tml::DynamicBuffer &tml::graphic::Mesh::GetVertexBufferCPUBuffer(void)
 {
 	return (this->vb_cpu_buf_);
+}
+
+
+/**
+ * @brief GetVertexBufferMappedSubresourceŠÖ”
+ * @return vb_msr (vertex_buffer_mapped_subresource)
+ */
+inline const D3D11_MAPPED_SUBRESOURCE &tml::graphic::Mesh::GetVertexBufferMappedSubresource(void) const
+{
+	return (this->vb_msr_);
 }
 
 
@@ -222,6 +236,16 @@ inline DXGI_FORMAT tml::graphic::Mesh::GetIndexBufferFormat(void) const
 inline tml::DynamicBuffer &tml::graphic::Mesh::GetIndexBufferCPUBuffer(void)
 {
 	return (this->ib_cpu_buf_);
+}
+
+
+/**
+ * @brief GetIndexBufferMappedSubresourceŠÖ”
+ * @return ib_msr (index_buffer_mapped_subresource)
+ */
+inline const D3D11_MAPPED_SUBRESOURCE &tml::graphic::Mesh::GetIndexBufferMappedSubresource(void) const
+{
+	return (this->ib_msr_);
 }
 
 
