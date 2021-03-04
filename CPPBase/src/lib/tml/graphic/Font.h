@@ -103,7 +103,7 @@ public:
 
 	virtual void Init(void);
 
-	void SetFontDesc(const XMUINT2EX &, const WCHAR *);
+	void SetFontDesc(const tml::XMUINT2EX &, const WCHAR *);
 };
 }
 }

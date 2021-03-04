@@ -67,6 +67,7 @@ INT tml::graphic::FontBitmap::Create(const HDC dc_handle, const WCHAR code)
 	this->code_ = code;
 
 	const MAT2 mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
+	tml::DynamicBuffer buf;
 	DWORD buf_size = GetGlyphOutline(dc_handle, this->code_, GGO_GRAY4_BITMAP, &this->gm_, 0UL, nullptr, &mat);
 
 	if ((buf_size <= 0U)
@@ -76,16 +77,18 @@ INT tml::graphic::FontBitmap::Create(const HDC dc_handle, const WCHAR code)
 		return (-1);
 	}
 
-	this->buf_.SetSize(buf_size);
-	this->buf_.AddWriteIndex(buf_size);
+	buf.SetSize(buf_size);
+	buf.AddWriteIndex(buf.GetSize());
 
-	GetGlyphOutline(dc_handle, this->code_, GGO_GRAY4_BITMAP, &this->gm_, this->buf_.GetLength(), this->buf_.Get(), &mat);
+	GetGlyphOutline(dc_handle, this->code_, GGO_GRAY4_BITMAP, &this->gm_, buf.GetLength(), buf.Get(), &mat);
 
-	BYTE *buf = this->buf_.Get();
-	size_t buf_len = this->buf_.GetLength();
+	this->buf_.SetSize(buf.GetLength() << 2);
+	this->buf_.AddWriteIndex(this->buf_.GetSize());
 
-	for (size_t buf_i = 0U; buf_i < buf_len; ++buf_i) {
-		buf[buf_i] = static_cast<BYTE>((255U * static_cast<UINT>(buf[buf_i]) >> 4) & 0xFF);
+	for (size_t buf_i = 0U; buf_i < buf.GetLength(); ++buf_i) {
+		UINT a = (255U * static_cast<UINT>(buf.Get()[buf_i]) >> 4) & 0xFF;
+
+		reinterpret_cast<UINT *>(this->buf_.Get())[buf_i] = 0x00FFFFFFU | (a << 24);
 	}
 
 	return (0);
@@ -162,7 +165,7 @@ INT tml::graphic::FontDesc::ReadValue(const tml::INIFile &ini_file)
  * @param size (size)
  * @param family (family)
  */
-void tml::graphic::FontDesc::SetFontDesc(const XMUINT2EX &size, const WCHAR *family)
+void tml::graphic::FontDesc::SetFontDesc(const tml::XMUINT2EX &size, const WCHAR *family)
 {
 	tml::MemoryUtil::Clear(&this->font_desc, 1U);
 

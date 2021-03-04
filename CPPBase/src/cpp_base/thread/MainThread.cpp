@@ -301,7 +301,7 @@ INT cpp_base::MainThread::Start(void)
 					return (-1);
 				}
 
-				this->title_logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y)));
+				this->title_logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeArray()[0].x), static_cast<FLOAT>(tex->GetSizeArray()[0].y)));
 
 				this->title_logo_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 				this->graphic_mgr_.ReleaseResource(tex);
@@ -352,7 +352,7 @@ INT cpp_base::MainThread::Start(void)
 					return (-1);
 				}
 
-				this->fps_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y)));
+				this->fps_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeArray()[0].x), static_cast<FLOAT>(tex->GetSizeArray()[0].y)));
 
 				this->fps_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 				this->graphic_mgr_.ReleaseResource(tex);

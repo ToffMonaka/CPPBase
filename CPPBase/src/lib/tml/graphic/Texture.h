@@ -43,7 +43,7 @@ public:
 
 	virtual void Init(void);
 
-	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG, const DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, const XMUINT2EX &size = XMUINT2EX(0U), const UINT ary_cnt = 1U, const UINT mm_cnt = 1U, const DXGI_SAMPLE_DESC &ms_desc = {1U, 0U}, const bool dynamic_flg = false);
+	void SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG, const DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, const tml::XMUINT2EX &size = tml::XMUINT2EX(0U), const UINT ary_cnt = 1U, const UINT mm_cnt = 1U, const DXGI_SAMPLE_DESC &ms_desc = {1U, 0U}, const bool dynamic_flg = false);
 };
 }
 }
@@ -74,7 +74,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;
-	tml::XMUINT2EX size_;
+	std::vector<tml::XMUINT2EX> size_cont_;
 	std::vector<tml::DynamicBuffer> cpu_buf_cont_;
 	std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont_;
 	std::vector<tml::DynamicBuffer> clear_cpu_buf_cont_;
@@ -95,7 +95,9 @@ public:
 
 	ID3D11Texture2D *GetTexture(void);
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
-	const tml::XMUINT2EX &GetSize(void) const;
+	UINT GetSizeCount(void) const;
+	const tml::XMUINT2EX *GetSize(const UINT) const;
+	const tml::XMUINT2EX *GetSizeArray(void) const;
 	UINT GetCPUBufferCount(void) const;
 	tml::DynamicBuffer *GetCPUBuffer(const UINT, const UINT);
 	tml::DynamicBuffer *GetCPUBufferArray(void);
@@ -138,12 +140,38 @@ inline const CD3D11_TEXTURE2D_DESC &tml::graphic::Texture::GetTextureDesc(void) 
 
 
 /**
- * @brief GetSizeä÷êî
- * @return size (size)
+ * @brief GetSizeCountä÷êî
+ * @return size_cnt (size_count)
  */
-inline const tml::XMUINT2EX &tml::graphic::Texture::GetSize(void) const
+inline UINT tml::graphic::Texture::GetSizeCount(void) const
 {
-	return (this->size_);
+	return (this->size_cont_.size());
+}
+
+
+/**
+ * @brief GetSizeä÷êî
+ * @param mm_index (mipmap_index)
+ * @return size (size)<br>
+ * nullptr=é∏îs
+ */
+inline const tml::XMUINT2EX *tml::graphic::Texture::GetSize(const UINT mm_index) const
+{
+	if (mm_index >= this->tex_desc_.MipLevels) {
+		return (nullptr);
+	}
+
+	return (&this->size_cont_[mm_index]);
+}
+
+
+/**
+ * @brief GetSizeArrayä÷êî
+ * @return size_ary (size_array)
+ */
+inline const tml::XMUINT2EX *tml::graphic::Texture::GetSizeArray(void) const
+{
+	return (this->size_cont_.data());
 }
 
 

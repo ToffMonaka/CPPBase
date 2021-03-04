@@ -104,7 +104,7 @@ INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
  * @param ms_desc (multisample_desc)
  * @param dynamic_flg (dynamic_flag)
  */
-void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG bind_flg, const DXGI_FORMAT format, const XMUINT2EX &size, const UINT ary_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc, const bool dynamic_flg)
+void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG bind_flg, const DXGI_FORMAT format, const tml::XMUINT2EX &size, const UINT ary_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc, const bool dynamic_flg)
 {
 	this->file_read_desc_container.clear();
 	this->file_read_desc_container.resize(ary_cnt);
@@ -143,7 +143,6 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
 tml::graphic::Texture::Texture() :
 	tex_(nullptr),
 	tex_desc_(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
-	size_(0U),
 	rt_(nullptr),
 	dt_(nullptr),
 	sr_(nullptr),
@@ -213,7 +212,7 @@ void tml::graphic::Texture::Init(void)
 	this->Release();
 
 	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
-	this->size_ = 0U;
+	this->size_cont_.clear();
 	this->cpu_buf_cont_.clear();
 	this->msr_cont_.clear();
 	this->clear_cpu_buf_cont_.clear();
@@ -433,7 +432,17 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	}
 
 	this->tex_->GetDesc(&this->tex_desc_);
-	this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
+
+	tml::XMUINT2EX tmp_size(this->tex_desc_.Width, this->tex_desc_.Height);
+
+	this->size_cont_.resize(this->tex_desc_.MipLevels);
+
+	for (auto &size : this->size_cont_) {
+		size = tmp_size;
+
+		tmp_size.x = (tmp_size.x > 1U) ? (tmp_size.x >> 1) : 1U;
+		tmp_size.y = (tmp_size.y > 1U) ? (tmp_size.y >> 1) : 1U;
+	}
 
 	if (desc.cpu_buffer_flag) {
 		INT res = 0;
@@ -736,8 +745,8 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMI
 
 	size_t str_len = wcslen(str);
 	UINT *buf = reinterpret_cast<UINT *>(this->cpu_buf_cont_[0].Get());
-	LONG buf_w = static_cast<LONG>(this->size_.x);
-	LONG buf_h = static_cast<LONG>(this->size_.y);
+	LONG buf_w = static_cast<LONG>(this->size_cont_[0].x);
+	LONG buf_h = static_cast<LONG>(this->size_cont_[0].y);
 	LONG buf_x = 0L;
 	LONG buf_y = 0L;
 	LONG buf_offset_x = pos.x;
@@ -745,7 +754,7 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMI
 	LONG tmp_buf_offset_x = 0L;
 	LONG tmp_buf_offset_y = 0L;
 	WCHAR code = 0;
-	const BYTE *bm_buf = nullptr;
+	const UINT *bm_buf = nullptr;
 	LONG bm_w = 0L;
 	LONG bm_h = 0L;
 
@@ -781,7 +790,7 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMI
 
 		auto &bm_gm = bm->GetGlyphMetrics();
 
-		bm_buf = bm->GetBuffer().Get();
+		bm_buf = reinterpret_cast<const UINT *>(bm->GetBuffer().Get());
 		bm_w = static_cast<LONG>(bm_gm.gmBlackBoxX + ((4U - (bm_gm.gmBlackBoxX & 3U)) & 3U));
 		bm_h = static_cast<LONG>(bm_gm.gmBlackBoxY);
 
@@ -797,17 +806,15 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMI
 				break;
 			}
 
-			for(LONG bm_x = 0L; bm_x < bm_w; ++bm_x) {
-				buf_x = tmp_buf_offset_x + bm_x;
+			buf_x = tmp_buf_offset_x;
 
-				if (buf_x < 0L) {
-					continue;
-				} else if (buf_x >= buf_w) {
-					break;
-				}
-
-				buf[buf_x + buf_y * buf_w] = 0x00FFFFFF | (static_cast<UINT>(bm_buf[bm_x + bm_y * bm_w]) << 24);
+			if (buf_x < 0L) {
+				buf_x = 0L;
+			} else if (buf_x >= buf_w) {
+				break;
 			}
+
+			memcpy(&buf[buf_x + buf_y * buf_w], &bm_buf[bm_y * bm_w], ((bm_w > (buf_w - buf_x)) ? (buf_w - buf_x) : bm_w) << 2);
 		}
 
 		buf_offset_x += bm_gm.gmCellIncX;
