@@ -248,7 +248,9 @@ void tml::graphic::ShaderStructuredBuffer::UploadCPUBuffer(void)
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->buf_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-			memcpy(msr.pData, this->cpu_buf_.Get(), this->element_size_ * this->element_cnt_);
+			if (msr.DepthPitch >= (this->element_size_ * this->element_cnt_)) {
+				memcpy(msr.pData, this->cpu_buf_.Get(), this->element_size_ * this->element_cnt_);
+			}
 
 			this->GetManager()->GetDeviceContext()->Unmap(this->buf_, 0U);
 		}
@@ -287,7 +289,7 @@ void tml::graphic::ShaderStructuredBuffer::DownloadCPUBuffer(void)
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
 			if (msr.DepthPitch >= (this->element_size_ * this->element_cnt_)) {
-				memcpy(this->cpu_buf_.Get(), static_cast<BYTE *>(msr.pData), this->element_size_ * this->element_cnt_);
+				memcpy(this->cpu_buf_.Get(), msr.pData, this->element_size_ * this->element_cnt_);
 			}
 
 			this->GetManager()->GetDeviceContext()->Unmap(tmp_buf, 0U);

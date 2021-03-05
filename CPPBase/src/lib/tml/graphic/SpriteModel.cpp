@@ -434,8 +434,8 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
  */
 void tml::graphic::SpriteModel::DrawStageInit(void)
 {
-	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayer(0U);
+	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	auto layer = stage->GetLayerFast(0U);
 
 	XMMATRIX w_mat;
 
@@ -456,8 +456,8 @@ void tml::graphic::SpriteModel::DrawStageInit(void)
  */
 void tml::graphic::SpriteModel::DrawStageForward2D(void)
 {
-	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayer(0U);
+	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	auto layer = stage->GetLayerFast(0U);
 
 	std::array<tml::graphic::ShaderStructuredBuffer *, 2U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get()};
 

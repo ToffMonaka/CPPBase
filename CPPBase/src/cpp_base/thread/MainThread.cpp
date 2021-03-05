@@ -235,8 +235,8 @@ INT cpp_base::MainThread::Start(void)
 				return (-1);
 			}
 
-			auto stage = this->title_bg_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-			auto layer = stage->GetLayer(0U);
+			auto stage = this->title_bg_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+			auto layer = stage->GetLayerFast(0U);
 
 			layer->SetDiffuseTextureIndex(0U);
 
@@ -279,8 +279,8 @@ INT cpp_base::MainThread::Start(void)
 				return (-1);
 			}
 
-			auto stage = this->title_logo_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-			auto layer = stage->GetLayer(0U);
+			auto stage = this->title_logo_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+			auto layer = stage->GetLayerFast(0U);
 
 			layer->SetDiffuseTextureIndex(0U);
 
@@ -301,7 +301,7 @@ INT cpp_base::MainThread::Start(void)
 					return (-1);
 				}
 
-				this->title_logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeArray()[0].x), static_cast<FLOAT>(tex->GetSizeArray()[0].y)));
+				this->title_logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
 
 				this->title_logo_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 				this->graphic_mgr_.ReleaseResource(tex);
@@ -330,8 +330,8 @@ INT cpp_base::MainThread::Start(void)
 				return (-1);
 			}
 
-			auto stage = this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-			auto layer = stage->GetLayer(0U);
+			auto stage = this->fps_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+			auto layer = stage->GetLayerFast(0U);
 
 			layer->SetDiffuseTextureIndex(0U);
 
@@ -352,7 +352,7 @@ INT cpp_base::MainThread::Start(void)
 					return (-1);
 				}
 
-				this->fps_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeArray()[0].x), static_cast<FLOAT>(tex->GetSizeArray()[0].y)));
+				this->fps_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
 
 				this->fps_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 				this->graphic_mgr_.ReleaseResource(tex);

@@ -313,7 +313,9 @@ void tml::graphic::Mesh::UploadVertexBufferCPUBuffer(void)
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->vb_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-			memcpy(msr.pData, this->vb_cpu_buf_.Get(), this->vb_element_size_ * this->vb_element_cnt_);
+			if (msr.DepthPitch >= (this->vb_element_size_ * this->vb_element_cnt_)) {
+				memcpy(msr.pData, this->vb_cpu_buf_.Get(), this->vb_element_size_ * this->vb_element_cnt_);
+			}
 
 			this->GetManager()->GetDeviceContext()->Unmap(this->vb_, 0U);
 		}
@@ -349,7 +351,7 @@ void tml::graphic::Mesh::DownloadVertexBufferCPUBuffer(void)
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
 			if (msr.DepthPitch >= (this->vb_element_size_ * this->vb_element_cnt_)) {
-				memcpy(this->vb_cpu_buf_.Get(), static_cast<BYTE *>(msr.pData), this->vb_element_size_ * this->vb_element_cnt_);
+				memcpy(this->vb_cpu_buf_.Get(), msr.pData, this->vb_element_size_ * this->vb_element_cnt_);
 			}
 
 			this->GetManager()->GetDeviceContext()->Unmap(tmp_buf, 0U);
@@ -375,7 +377,9 @@ void tml::graphic::Mesh::UploadIndexBufferCPUBuffer(void)
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->ib_, 0U, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-			memcpy(msr.pData, this->ib_cpu_buf_.Get(), this->ib_element_size_ * this->ib_element_cnt_);
+			if (msr.DepthPitch >= (this->ib_element_size_ * this->ib_element_cnt_)) {
+				memcpy(msr.pData, this->ib_cpu_buf_.Get(), this->ib_element_size_ * this->ib_element_cnt_);
+			}
 
 			this->GetManager()->GetDeviceContext()->Unmap(this->ib_, 0U);
 		}
@@ -411,7 +415,7 @@ void tml::graphic::Mesh::DownloadIndexBufferCPUBuffer(void)
 
 		if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
 			if (msr.DepthPitch >= (this->ib_element_size_ * this->ib_element_cnt_)) {
-				memcpy(this->ib_cpu_buf_.Get(), static_cast<BYTE *>(msr.pData), this->ib_element_size_ * this->ib_element_cnt_);
+				memcpy(this->ib_cpu_buf_.Get(), msr.pData, this->ib_element_size_ * this->ib_element_cnt_);
 			}
 
 			this->GetManager()->GetDeviceContext()->Unmap(tmp_buf, 0U);

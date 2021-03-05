@@ -89,7 +89,7 @@ public:
 	INT Create(const tml::graphic::LightShaderStructuredBufferDesc &);
 
 	tml::graphic::LightShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	tml::graphic::LightShaderStructuredBuffer::ELEMENT *GetElementArray(void);
+	tml::graphic::LightShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
 	void SetElement(const UINT, const tml::graphic::Light *);
 	void SetElement(const UINT, const UINT, const tml::graphic::Light *const *);
 };
@@ -121,10 +121,12 @@ inline tml::graphic::LightShaderStructuredBuffer::ELEMENT *tml::graphic::LightSh
 
 
 /**
- * @brief GetElementArrayä÷êî
- * @return element_ary (element_array)
+ * @brief GetElementFastä÷êî
+ * @param index (index)
+ * @return element (element)<br>
+ * nullptr=é∏îs
  */
-inline tml::graphic::LightShaderStructuredBuffer::ELEMENT *tml::graphic::LightShaderStructuredBuffer::GetElementArray(void)
+inline tml::graphic::LightShaderStructuredBuffer::ELEMENT *tml::graphic::LightShaderStructuredBuffer::GetElementFast(const UINT index)
 {
-	return (tml::graphic::ShaderStructuredBuffer::GetElementArray<tml::graphic::LightShaderStructuredBuffer::ELEMENT>());
+	return (tml::graphic::ShaderStructuredBuffer::GetElementFast<tml::graphic::LightShaderStructuredBuffer::ELEMENT>(index));
 }

@@ -89,7 +89,7 @@ public:
 	INT Create(const tml::graphic::FogShaderStructuredBufferDesc &);
 
 	tml::graphic::FogShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
-	tml::graphic::FogShaderStructuredBuffer::ELEMENT *GetElementArray(void);
+	tml::graphic::FogShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
 	void SetElement(const UINT, const tml::graphic::Fog *);
 	void SetElement(const UINT, const UINT, const tml::graphic::Fog *const *);
 };
@@ -121,10 +121,12 @@ inline tml::graphic::FogShaderStructuredBuffer::ELEMENT *tml::graphic::FogShader
 
 
 /**
- * @brief GetElementArrayä÷êî
- * @return element_ary (element_array)
+ * @brief GetElementFastä÷êî
+ * @param index (index)
+ * @return element (element)<br>
+ * nullptr=é∏îs
  */
-inline tml::graphic::FogShaderStructuredBuffer::ELEMENT *tml::graphic::FogShaderStructuredBuffer::GetElementArray(void)
+inline tml::graphic::FogShaderStructuredBuffer::ELEMENT *tml::graphic::FogShaderStructuredBuffer::GetElementFast(const UINT index)
 {
-	return (tml::graphic::ShaderStructuredBuffer::GetElementArray<tml::graphic::FogShaderStructuredBuffer::ELEMENT>());
+	return (tml::graphic::ShaderStructuredBuffer::GetElementFast<tml::graphic::FogShaderStructuredBuffer::ELEMENT>(index));
 }

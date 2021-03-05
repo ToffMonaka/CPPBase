@@ -377,7 +377,6 @@ private:
 	std::vector<tml::shared_ptr<tml::graphic::DepthState>> ds_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Shader>> shader_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Mesh>> mesh_cont_;
-	std::vector<tml::shared_ptr<tml::graphic::Material>> material_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Texture>> tex_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
 
@@ -394,23 +393,37 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
+	UINT GetStageCount(void) const;
 	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
+	UINT GetRasterizerStateCount(void) const;
 	tml::graphic::RasterizerState *GetRasterizerState(const UINT);
+	tml::graphic::RasterizerState *GetRasterizerStateFast(const UINT);
 	void SetRasterizerState(const UINT, tml::shared_ptr<tml::graphic::RasterizerState> &);
+	UINT GetBlendStateCount(void) const;
 	tml::graphic::BlendState *GetBlendState(const UINT);
+	tml::graphic::BlendState *GetBlendStateFast(const UINT);
 	void SetBlendState(const UINT, tml::shared_ptr<tml::graphic::BlendState> &);
+	UINT GetDepthStateCount(void) const;
 	tml::graphic::DepthState *GetDepthState(const UINT);
+	tml::graphic::DepthState *GetDepthStateFast(const UINT);
 	void SetDepthState(const UINT, tml::shared_ptr<tml::graphic::DepthState> &);
+	UINT GetShaderCount(void) const;
 	tml::graphic::Shader *GetShader(const UINT);
+	tml::graphic::Shader *GetShaderFast(const UINT);
 	void SetShader(const UINT, tml::shared_ptr<tml::graphic::Shader> &);
+	UINT GetMeshCount(void) const;
 	tml::graphic::Mesh *GetMesh(const UINT);
+	tml::graphic::Mesh *GetMeshFast(const UINT);
 	void SetMesh(const UINT, tml::shared_ptr<tml::graphic::Mesh> &);
-	tml::graphic::Material *GetMaterial(const UINT);
-	void SetMaterial(const UINT, tml::shared_ptr<tml::graphic::Material> &);
+	UINT GetTextureCount(void) const;
 	tml::graphic::Texture *GetTexture(const UINT);
+	tml::graphic::Texture *GetTextureFast(const UINT);
 	void SetTexture(const UINT, tml::shared_ptr<tml::graphic::Texture> &);
+	UINT GetSamplerCount(void) const;
 	tml::graphic::Sampler *GetSampler(const UINT);
+	tml::graphic::Sampler *GetSamplerFast(const UINT);
 	void SetSampler(const UINT, tml::shared_ptr<tml::graphic::Sampler> &);
 
 	virtual void DrawStageInit(void);
@@ -434,6 +447,16 @@ inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void)
 
 
 /**
+ * @brief GetStageCountä÷êî
+ * @return stage_cnt (stage_count)
+ */
+inline UINT tml::graphic::Model::GetStageCount(void) const
+{
+	return (this->stage_cont_.size());
+}
+
+
+/**
  * @brief GetStageä÷êî
  * @param type (type)
  * @return stage (stage)<br>
@@ -442,6 +465,28 @@ inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void)
 inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
 	return (this->stage_cont_[static_cast<UINT>(type)].get());
+}
+
+
+/**
+ * @brief GetStageFastä÷êî
+ * @param type (type)
+ * @return stage (stage)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::ModelStage *tml::graphic::Model::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
+{
+	return (this->stage_cont_[static_cast<UINT>(type)].get());
+}
+
+
+/**
+ * @brief GetRasterizerStateCountä÷êî
+ * @return rs_cnt (rasterizer_state_count)
+ */
+inline UINT tml::graphic::Model::GetRasterizerStateCount(void) const
+{
+	return (this->rs_cont_.size());
 }
 
 
@@ -462,6 +507,28 @@ inline tml::graphic::RasterizerState *tml::graphic::Model::GetRasterizerState(co
 
 
 /**
+ * @brief GetRasterizerStateFastä÷êî
+ * @param index (index)
+ * @return rs (rasterizer_state)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::RasterizerState *tml::graphic::Model::GetRasterizerStateFast(const UINT index)
+{
+	return (this->rs_cont_[index].get());
+}
+
+
+/**
+ * @brief GetBlendStateCountä÷êî
+ * @return bs_cnt (blend_state_count)
+ */
+inline UINT tml::graphic::Model::GetBlendStateCount(void) const
+{
+	return (this->bs_cont_.size());
+}
+
+
+/**
  * @brief GetBlendStateä÷êî
  * @param index (index)
  * @return bs (blend_state)<br>
@@ -474,6 +541,28 @@ inline tml::graphic::BlendState *tml::graphic::Model::GetBlendState(const UINT i
 	}
 
 	return (this->bs_cont_[index].get());
+}
+
+
+/**
+ * @brief GetBlendStateFastä÷êî
+ * @param index (index)
+ * @return bs (blend_state)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::BlendState *tml::graphic::Model::GetBlendStateFast(const UINT index)
+{
+	return (this->bs_cont_[index].get());
+}
+
+
+/**
+ * @brief GetDepthStateCountä÷êî
+ * @return ds_cnt (depth_state_count)
+ */
+inline UINT tml::graphic::Model::GetDepthStateCount(void) const
+{
+	return (this->ds_cont_.size());
 }
 
 
@@ -494,6 +583,28 @@ inline tml::graphic::DepthState *tml::graphic::Model::GetDepthState(const UINT i
 
 
 /**
+ * @brief GetDepthStateFastä÷êî
+ * @param index (index)
+ * @return ds (depth_state)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::DepthState *tml::graphic::Model::GetDepthStateFast(const UINT index)
+{
+	return (this->ds_cont_[index].get());
+}
+
+
+/**
+ * @brief GetShaderCountä÷êî
+ * @return shader_cnt (shader_count)
+ */
+inline UINT tml::graphic::Model::GetShaderCount(void) const
+{
+	return (this->shader_cont_.size());
+}
+
+
+/**
  * @brief GetShaderä÷êî
  * @param index (index)
  * @return shader (shader)<br>
@@ -506,6 +617,28 @@ inline tml::graphic::Shader *tml::graphic::Model::GetShader(const UINT index)
 	}
 
 	return (this->shader_cont_[index].get());
+}
+
+
+/**
+ * @brief GetShaderFastä÷êî
+ * @param index (index)
+ * @return shader (shader)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::Shader *tml::graphic::Model::GetShaderFast(const UINT index)
+{
+	return (this->shader_cont_[index].get());
+}
+
+
+/**
+ * @brief GetMeshCountä÷êî
+ * @return mesh_cnt (mesh_count)
+ */
+inline UINT tml::graphic::Model::GetMeshCount(void) const
+{
+	return (this->mesh_cont_.size());
 }
 
 
@@ -526,18 +659,24 @@ inline tml::graphic::Mesh *tml::graphic::Model::GetMesh(const UINT index)
 
 
 /**
- * @brief GetMaterialä÷êî
+ * @brief GetMeshFastä÷êî
  * @param index (index)
- * @return material (material)<br>
+ * @return mesh (mesh)<br>
  * nullptr=é∏îs
  */
-inline tml::graphic::Material *tml::graphic::Model::GetMaterial(const UINT index)
+inline tml::graphic::Mesh *tml::graphic::Model::GetMeshFast(const UINT index)
 {
-	if (index >= this->material_cont_.size()) {
-		return (nullptr);
-	}
+	return (this->mesh_cont_[index].get());
+}
 
-	return (this->material_cont_[index].get());
+
+/**
+ * @brief GetTextureCountä÷êî
+ * @return tex_cnt (texture_count)
+ */
+inline UINT tml::graphic::Model::GetTextureCount(void) const
+{
+	return (this->tex_cont_.size());
 }
 
 
@@ -558,6 +697,28 @@ inline tml::graphic::Texture *tml::graphic::Model::GetTexture(const UINT index)
 
 
 /**
+ * @brief GetTextureFastä÷êî
+ * @param index (index)
+ * @return tex (texture)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::Texture *tml::graphic::Model::GetTextureFast(const UINT index)
+{
+	return (this->tex_cont_[index].get());
+}
+
+
+/**
+ * @brief GetSamplerCountä÷êî
+ * @return samp_cnt (sampler_count)
+ */
+inline UINT tml::graphic::Model::GetSamplerCount(void) const
+{
+	return (this->samp_cont_.size());
+}
+
+
+/**
  * @brief GetSamplerä÷êî
  * @param index (index)
  * @return samp (sampler)<br>
@@ -571,3 +732,355 @@ inline tml::graphic::Sampler *tml::graphic::Model::GetSampler(const UINT index)
 
 	return (this->samp_cont_[index].get());
 }
+
+
+/**
+ * @brief GetSamplerFastä÷êî
+ * @param index (index)
+ * @return samp (sampler)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::Sampler *tml::graphic::Model::GetSamplerFast(const UINT index)
+{
+	return (this->samp_cont_[index].get());
+}
+
+
+#if 0
+namespace tml {
+namespace graphic {
+/**
+ * @brief MaterialDescÉNÉâÉX
+ */
+class MaterialDesc : public tml::graphic::ResourceDesc
+{
+public:
+	tml::XMFLOAT3EX diffuse_color;
+	FLOAT diffuse_mul_value;
+	FLOAT transparent_mul_value;
+	FLOAT burn_mul_value;
+	FLOAT emissive_mul_value;
+	FLOAT bloom_mul_value;
+	FLOAT specular_mul_value;
+	FLOAT specular_exp_value;
+	FLOAT rim_mul_value;
+	FLOAT rim_exp_value;
+	bool light_flag;
+	bool fog_flag;
+
+protected:
+	void Release(void);
+
+	virtual INT ReadValue(const tml::INIFile &);
+
+public:
+	MaterialDesc();
+	virtual ~MaterialDesc();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::MaterialDesc::Release(void)
+{
+	tml::graphic::ResourceDesc::Release();
+
+	return;
+}
+
+
+namespace tml {
+namespace graphic {
+/**
+ * @brief MaterialÉNÉâÉX
+ */
+class Material : public tml::graphic::Resource
+{
+public: Material(const tml::graphic::Material &) = delete;
+public: tml::graphic::Material &operator =(const tml::graphic::Material &) = delete;
+protected: virtual void InterfaceDummy(void) {return;};
+
+private:
+	tml::XMFLOAT3EX diffuse_col_;
+	FLOAT diffuse_mul_val_;
+	FLOAT transparent_mul_val_;
+	FLOAT burn_mul_val_;
+	FLOAT emissive_mul_val_;
+	FLOAT bloom_mul_val_;
+	FLOAT specular_mul_val_;
+	FLOAT specular_exp_val_;
+	FLOAT rim_mul_val_;
+	FLOAT rim_exp_val_;
+	bool light_flg_;
+	bool fog_flg_;
+
+protected:
+	void Release(void);
+
+public:
+	Material();
+	virtual ~Material();
+
+	virtual void Init(void);
+	INT Create(const tml::graphic::MaterialDesc &);
+
+	const tml::XMFLOAT3EX &GetDiffuseColor(void) const;
+	void SetDiffuseColor(const tml::XMFLOAT3EX &);
+	FLOAT GetDiffuseMulValue(void) const;
+	void SetDiffuseMulValue(const FLOAT);
+	FLOAT GetTransparentMulValue(void) const;
+	void SetTransparentMulValue(const FLOAT);
+	FLOAT GetBurnMulValue(void) const;
+	void SetBurnMulValue(const FLOAT);
+	FLOAT GetEmissiveMulValue(void) const;
+	void SetEmissiveMulValue(const FLOAT);
+	FLOAT GetBloomMulValue(void) const;
+	void SetBloomMulValue(const FLOAT);
+	FLOAT GetSpecularMulValue(void) const;
+	void SetSpecularMulValue(const FLOAT);
+	FLOAT GetSpecularExpValue(void) const;
+	void SetSpecularExpValue(const FLOAT);
+	FLOAT GetRimMulValue(void) const;
+	void SetRimMulValue(const FLOAT);
+	FLOAT GetRimExpValue(void) const;
+	void SetRimExpValue(const FLOAT);
+};
+}
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::Material::Release(void)
+{
+	tml::graphic::Resource::Release();
+
+	return;
+}
+
+
+/**
+ * @brief GetDiffuseColorä÷êî
+ * @return diffuse_col (diffuse_color)
+ */
+inline const tml::XMFLOAT3EX &tml::graphic::Material::GetDiffuseColor(void) const
+{
+	return (this->diffuse_col_);
+}
+
+
+/**
+ * @brief SetDiffuseColorä÷êî
+ * @param diffuse_col (diffuse_color)
+ */
+inline void tml::graphic::Material::SetDiffuseColor(const tml::XMFLOAT3EX &diffuse_col)
+{
+	this->diffuse_col_ = diffuse_col;
+
+	return;
+}
+
+
+/**
+ * @brief GetDiffuseMulValueä÷êî
+ * @return diffuse_mul_val (diffuse_mul_value)
+ */
+inline FLOAT tml::graphic::Material::GetDiffuseMulValue(void) const
+{
+	return (this->diffuse_mul_val_);
+}
+
+
+/**
+ * @brief SetDiffuseMulValueä÷êî
+ * @param diffuse_mul_val (diffuse_mul_value)
+ */
+inline void tml::graphic::Material::SetDiffuseMulValue(const FLOAT diffuse_mul_val)
+{
+	this->diffuse_mul_val_ = diffuse_mul_val;
+	
+	return;
+}
+
+
+/**
+ * @brief GetTransparentMulValueä÷êî
+ * @return transparent_mul_val (transparent_mul_value)
+ */
+inline FLOAT tml::graphic::Material::GetTransparentMulValue(void) const
+{
+	return (this->transparent_mul_val_);
+}
+
+
+/**
+ * @brief SetTransparentMulValueä÷êî
+ * @param transparent_mul_val (transparent_mul_value)
+ */
+inline void tml::graphic::Material::SetTransparentMulValue(const FLOAT transparent_mul_val)
+{
+	this->transparent_mul_val_ = transparent_mul_val;
+	
+	return;
+}
+
+
+/**
+ * @brief GetBurnMulValueä÷êî
+ * @return burn_mul_val (burn_mul_value)
+ */
+inline FLOAT tml::graphic::Material::GetBurnMulValue(void) const
+{
+	return (this->burn_mul_val_);
+}
+
+
+/**
+ * @brief SetBurnMulValueä÷êî
+ * @param burn_mul_val (burn_mul_value)
+ */
+inline void tml::graphic::Material::SetBurnMulValue(const FLOAT burn_mul_val)
+{
+	this->burn_mul_val_ = burn_mul_val;
+	
+	return;
+}
+
+
+/**
+ * @brief GetEmissiveMulValueä÷êî
+ * @return emissive_mul_val (emissive_mul_value)
+ */
+inline FLOAT tml::graphic::Material::GetEmissiveMulValue(void) const
+{
+	return (this->emissive_mul_val_);
+}
+
+
+/**
+ * @brief SetEmissiveMulValueä÷êî
+ * @param emissive_mul_val (emissive_mul_value)
+ */
+inline void tml::graphic::Material::SetEmissiveMulValue(const FLOAT emissive_mul_val)
+{
+	this->emissive_mul_val_ = emissive_mul_val;
+	
+	return;
+}
+
+
+/**
+ * @brief GetBloomMulValueä÷êî
+ * @return bloom_mul_val (bloom_mul_value)
+ */
+inline FLOAT tml::graphic::Material::GetBloomMulValue(void) const
+{
+	return (this->bloom_mul_val_);
+}
+
+
+/**
+ * @brief SetBloomMulValueä÷êî
+ * @param bloom_mul_val (bloom_mul_value)
+ */
+inline void tml::graphic::Material::SetBloomMulValue(const FLOAT bloom_mul_val)
+{
+	this->bloom_mul_val_ = bloom_mul_val;
+	
+	return;
+}
+
+
+/**
+ * @brief GetSpecularMulValueä÷êî
+ * @return specular_mul_val (specular_mul_value)
+ */
+inline FLOAT tml::graphic::Material::GetSpecularMulValue(void) const
+{
+	return (this->specular_mul_val_);
+}
+
+
+/**
+ * @brief SetSpecularMulValueä÷êî
+ * @param specular_mul_val (specular_mul_value)
+ */
+inline void tml::graphic::Material::SetSpecularMulValue(const FLOAT specular_mul_val)
+{
+	this->specular_mul_val_ = specular_mul_val;
+	
+	return;
+}
+
+
+/**
+ * @brief GetSpecularExpValueä÷êî
+ * @return specular_exp_val (specular_exp_value)
+ */
+inline FLOAT tml::graphic::Material::GetSpecularExpValue(void) const
+{
+	return (this->specular_exp_val_);
+}
+
+
+/**
+ * @brief SetSpecularExpValueä÷êî
+ * @param specular_exp_val (specular_exp_value)
+ */
+inline void tml::graphic::Material::SetSpecularExpValue(const FLOAT specular_exp_val)
+{
+	this->specular_exp_val_ = specular_exp_val;
+	
+	return;
+}
+
+
+/**
+ * @brief GetRimMulValueä÷êî
+ * @return rim_mul_val (rim_mul_value)
+ */
+inline FLOAT tml::graphic::Material::GetRimMulValue(void) const
+{
+	return (this->rim_mul_val_);
+}
+
+
+/**
+ * @brief SetRimMulValueä÷êî
+ * @param rim_mul_val (rim_mul_value)
+ */
+inline void tml::graphic::Material::SetRimMulValue(const FLOAT rim_mul_val)
+{
+	this->rim_mul_val_ = rim_mul_val;
+	
+	return;
+}
+
+
+/**
+ * @brief GetRimExpValueä÷êî
+ * @return rim_exp_val (rim_exp_value)
+ */
+inline FLOAT tml::graphic::Material::GetRimExpValue(void) const
+{
+	return (this->rim_exp_val_);
+}
+
+
+/**
+ * @brief SetRimExpValueä÷êî
+ * @param rim_exp_val (rim_exp_value)
+ */
+inline void tml::graphic::Material::SetRimExpValue(const FLOAT rim_exp_val)
+{
+	this->rim_exp_val_ = rim_exp_val;
+	
+	return;
+}
+#endif

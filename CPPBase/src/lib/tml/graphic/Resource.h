@@ -30,7 +30,6 @@ class Camera;
 class Light;
 class Fog;
 class Mesh;
-class Material;
 class Texture;
 class Sampler;
 class Model;

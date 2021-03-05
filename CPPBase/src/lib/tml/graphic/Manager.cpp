@@ -20,7 +20,6 @@
 #include "Light.h"
 #include "Fog.h"
 #include "Mesh.h"
-#include "Material.h"
 #include "Texture.h"
 #include "Sampler.h"
 #include "ScreenModel.h"

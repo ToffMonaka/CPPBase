@@ -100,6 +100,10 @@ public:
 	const CD3D11_BUFFER_DESC &GetVertexBufferDesc(void) const;
 	UINT GetVertexBufferElementSize(void) const;
 	UINT GetVertexBufferElementCount(void) const;
+	template <typename T>
+	T *GetVertexBufferElement(const UINT);
+	template <typename T>
+	T *GetVertexBufferElementFast(const UINT);
 	tml::DynamicBuffer &GetVertexBufferCPUBuffer(void);
 	void UploadVertexBufferCPUBuffer(void);
 	void DownloadVertexBufferCPUBuffer(void);
@@ -108,6 +112,10 @@ public:
 	const CD3D11_BUFFER_DESC &GetIndexBufferDesc(void) const;
 	UINT GetIndexBufferElementSize(void) const;
 	UINT GetIndexBufferElementCount(void) const;
+	template <typename T>
+	T *GetIndexBufferElement(const UINT);
+	template <typename T>
+	T *GetIndexBufferElementFast(const UINT);
 	DXGI_FORMAT GetIndexBufferFormat(void) const;
 	tml::DynamicBuffer &GetIndexBufferCPUBuffer(void);
 	void UploadIndexBufferCPUBuffer(void);
@@ -156,6 +164,36 @@ inline UINT tml::graphic::Mesh::GetVertexBufferElementSize(void) const
 inline UINT tml::graphic::Mesh::GetVertexBufferElementCount(void) const
 {
 	return (this->vb_element_cnt_);
+}
+
+
+/**
+ * @brief GetVertexBufferElementŠÖ”
+ * @param index (index)
+ * @return vb_element (vertex_buffer_element)<br>
+ * nullptr=Ž¸”s
+ */
+template <typename T>
+inline T *tml::graphic::Mesh::GetVertexBufferElement(const UINT index)
+{
+	if (index >= this->vb_element_cnt_) {
+		return (nullptr);
+	}
+
+	return (&reinterpret_cast<T *>(this->vb_cpu_buf_.Get())[index]);
+}
+
+
+/**
+ * @brief GetVertexBufferElementFastŠÖ”
+ * @param index (index)
+ * @return vb_element (vertex_buffer_element)<br>
+ * nullptr=Ž¸”s
+ */
+template <typename T>
+inline T *tml::graphic::Mesh::GetVertexBufferElementFast(const UINT index)
+{
+	return (&reinterpret_cast<T *>(this->vb_cpu_buf_.Get())[index]);
 }
 
 
@@ -216,6 +254,36 @@ inline UINT tml::graphic::Mesh::GetIndexBufferElementSize(void) const
 inline UINT tml::graphic::Mesh::GetIndexBufferElementCount(void) const
 {
 	return (this->ib_element_cnt_);
+}
+
+
+/**
+ * @brief GetIndexBufferElementŠÖ”
+ * @param index (index)
+ * @return ib_element (index_buffer_element)<br>
+ * nullptr=Ž¸”s
+ */
+template <typename T>
+inline T *tml::graphic::Mesh::GetIndexBufferElement(const UINT index)
+{
+	if (index >= this->ib_element_cnt_) {
+		return (nullptr);
+	}
+
+	return (&reinterpret_cast<T *>(this->ib_cpu_buf_.Get())[index]);
+}
+
+
+/**
+ * @brief GetIndexBufferElementFastŠÖ”
+ * @param index (index)
+ * @return ib_element (index_buffer_element)<br>
+ * nullptr=Ž¸”s
+ */
+template <typename T>
+inline T *tml::graphic::Mesh::GetIndexBufferElementFast(const UINT index)
+{
+	return (&reinterpret_cast<T *>(this->ib_cpu_buf_.Get())[index]);
 }
 
 

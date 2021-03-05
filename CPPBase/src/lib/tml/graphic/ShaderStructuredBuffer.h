@@ -80,7 +80,7 @@ protected:
 	template <typename T>
 	T *GetElement(const UINT);
 	template <typename T>
-	T *GetElementArray(void);
+	T *GetElementFast(const UINT);
 
 public:
 	ShaderStructuredBuffer();
@@ -189,13 +189,19 @@ inline T *tml::graphic::ShaderStructuredBuffer::GetElement(const UINT index)
 
 
 /**
- * @brief GetElementArrayä÷êî
- * @return element_ary (element_array)
+ * @brief GetElementFastä÷êî
+ * @param index (index)
+ * @return element (element)<br>
+ * nullptr=é∏îs
  */
 template <typename T>
-inline T *tml::graphic::ShaderStructuredBuffer::GetElementArray(void)
+inline T *tml::graphic::ShaderStructuredBuffer::GetElementFast(const UINT index)
 {
-	return (reinterpret_cast<T *>(this->cpu_buf_.Get()));
+	if (index >= this->element_cnt_) {
+		this->element_cnt_ = index + 1U;
+	}
+
+	return (&reinterpret_cast<T *>(this->cpu_buf_.Get())[index]);
 }
 
 

@@ -97,15 +97,15 @@ public:
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
 	UINT GetSizeCount(void) const;
 	const tml::XMUINT2EX *GetSize(const UINT) const;
-	const tml::XMUINT2EX *GetSizeArray(void) const;
+	const tml::XMUINT2EX *GetSizeFast(const UINT) const;
 	UINT GetCPUBufferCount(void) const;
 	tml::DynamicBuffer *GetCPUBuffer(const UINT, const UINT);
-	tml::DynamicBuffer *GetCPUBufferArray(void);
+	tml::DynamicBuffer *GetCPUBufferFast(const UINT, const UINT);
 	void UploadCPUBuffer(void);
 	void DownloadCPUBuffer(void);
 	UINT GetMappedSubresourceCount(void) const;
 	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresource(const UINT, const UINT) const;
-	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresourceArray(void) const;
+	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresourceFast(const UINT, const UINT) const;
 	void ClearCPUBuffer(void);
 	void DrawCPUBufferString(const WCHAR *, const tml::XMINT2EX &, tml::graphic::Font *);
 	ID3D11RenderTargetView *GetRenderTarget(void);
@@ -157,7 +157,7 @@ inline UINT tml::graphic::Texture::GetSizeCount(void) const
  */
 inline const tml::XMUINT2EX *tml::graphic::Texture::GetSize(const UINT mm_index) const
 {
-	if (mm_index >= this->tex_desc_.MipLevels) {
+	if (mm_index >= this->size_cont_.size()) {
 		return (nullptr);
 	}
 
@@ -166,12 +166,14 @@ inline const tml::XMUINT2EX *tml::graphic::Texture::GetSize(const UINT mm_index)
 
 
 /**
- * @brief GetSizeArrayŠÖ”
- * @return size_ary (size_array)
+ * @brief GetSizeFastŠÖ”
+ * @param mm_index (mipmap_index)
+ * @return size (size)<br>
+ * nullptr=¸”s
  */
-inline const tml::XMUINT2EX *tml::graphic::Texture::GetSizeArray(void) const
+inline const tml::XMUINT2EX *tml::graphic::Texture::GetSizeFast(const UINT mm_index) const
 {
-	return (this->size_cont_.data());
+	return (&this->size_cont_[mm_index]);
 }
 
 
@@ -194,22 +196,28 @@ inline UINT tml::graphic::Texture::GetCPUBufferCount(void) const
  */
 inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBuffer(const UINT ary_index, const UINT mm_index)
 {
-	if ((ary_index >= this->tex_desc_.ArraySize)
-	|| (mm_index >= this->tex_desc_.MipLevels)) {
+	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels);
+
+	if (cpu_buf_index >= this->cpu_buf_cont_.size()) {
 		return (nullptr);
 	}
 
-	return (&this->cpu_buf_cont_[D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels)]);
+	return (&this->cpu_buf_cont_[cpu_buf_index]);
 }
 
 
 /**
- * @brief GetCPUBufferArrayŠÖ”
- * @return cpu_buf_ary (cpu_buffer_array)
+ * @brief GetCPUBufferFastŠÖ”
+ * @param ary_index (array_index)
+ * @param mm_index (mipmap_index)
+ * @return cpu_buf (cpu_buffer)<br>
+ * nullptr=¸”s
  */
-inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferArray(void)
+inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferFast(const UINT ary_index, const UINT mm_index)
 {
-	return (this->cpu_buf_cont_.data());
+	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels);
+
+	return (&this->cpu_buf_cont_[cpu_buf_index]);
 }
 
 
@@ -232,22 +240,28 @@ inline UINT tml::graphic::Texture::GetMappedSubresourceCount(void) const
  */
 inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresource(const UINT ary_index, const UINT mm_index) const
 {
-	if ((ary_index >= this->tex_desc_.ArraySize)
-	|| (mm_index >= this->tex_desc_.MipLevels)) {
+	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels);
+
+	if (cpu_buf_index >= this->msr_cont_.size()) {
 		return (nullptr);
 	}
 
-	return (&this->msr_cont_[D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels)]);
+	return (&this->msr_cont_[cpu_buf_index]);
 }
 
 
 /**
- * @brief GetMappedSubresourceArrayŠÖ”
- * @return msr_ary (mapped_subresource_array)
+ * @brief GetMappedSubresourceFastŠÖ”
+ * @param ary_index (array_index)
+ * @param mm_index (mipmap_index)
+ * @return msr (mapped_subresource)<br>
+ * nullptr=¸”s
  */
-inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresourceArray(void) const
+inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresourceFast(const UINT ary_index, const UINT mm_index) const
 {
-	return (this->msr_cont_.data());
+	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels);
+
+	return (&this->msr_cont_[cpu_buf_index]);
 }
 
 

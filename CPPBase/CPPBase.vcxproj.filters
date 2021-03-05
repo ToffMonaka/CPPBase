@@ -213,9 +213,6 @@
     <ClCompile Include="src\lib\tml\graphic\Mesh.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\lib\tml\graphic\Material.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\lib\tml\graphic\Shader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -525,9 +522,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\tml\graphic\Mesh.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\graphic\Material.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\tml\graphic\Shader.h">

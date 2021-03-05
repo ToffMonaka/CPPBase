@@ -28,7 +28,6 @@ namespace GRAPHIC {
 		LIGHT,
 		FOG,
 		MESH,
-		MATERIAL,
 		TEXTURE,
 		SAMPLER,
 		MODEL,

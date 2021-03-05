@@ -647,9 +647,14 @@ void tml::graphic::Texture::UploadCPUBuffer(void)
 				D3D11_MAPPED_SUBRESOURCE msr;
 
 				if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(this->tex_, cpu_buf_index, D3D11_MAP_WRITE_DISCARD, 0U, &msr))) {
-					memcpy(msr.pData, this->cpu_buf_cont_[cpu_buf_index].Get(), this->cpu_buf_cont_[cpu_buf_index].GetLength());
+					if (msr.DepthPitch >= this->cpu_buf_cont_[cpu_buf_index].GetLength()) {
+						memcpy(msr.pData, this->cpu_buf_cont_[cpu_buf_index].Get(), this->cpu_buf_cont_[cpu_buf_index].GetLength());
+					}
 
 					this->GetManager()->GetDeviceContext()->Unmap(this->tex_, cpu_buf_index);
+				} else {
+					ary_i = this->tex_desc_.ArraySize;
+					mm_i = this->tex_desc_.MipLevels;
 				}
 			}
 		}
@@ -693,9 +698,9 @@ void tml::graphic::Texture::DownloadCPUBuffer(void)
 				D3D11_MAPPED_SUBRESOURCE msr;
 
 				if (SUCCEEDED(this->GetManager()->GetDeviceContext()->Map(tmp_tex, cpu_buf_index, D3D11_MAP_READ, 0U, &msr))) {
-					this->cpu_buf_cont_[cpu_buf_index].Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
-					this->msr_cont_[cpu_buf_index] = msr;
-					this->msr_cont_[cpu_buf_index].pData = nullptr;
+					if (msr.DepthPitch >= this->cpu_buf_cont_[cpu_buf_index].GetLength()) {
+						memcpy(this->cpu_buf_cont_[cpu_buf_index].Get(), msr.pData, this->cpu_buf_cont_[cpu_buf_index].GetLength());
+					}
 
 					this->GetManager()->GetDeviceContext()->Unmap(tmp_tex, cpu_buf_index);
 				} else {
