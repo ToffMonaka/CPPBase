@@ -443,9 +443,56 @@ void cpp_base::MainThread::Update(void)
  */
 LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg_type, WPARAM msg_param1, LPARAM msg_param2)
 {
+	auto th = reinterpret_cast<cpp_base::MainThread *>(tml::ThreadUtil::Get());
+
 	switch (msg_type) {
+	case WM_CREATE: {
+		std::array<RAWINPUTDEVICE, 2U> rid_ary;
+
+		// Mouse Set
+		rid_ary[0].usUsagePage = 0x01;
+		rid_ary[0].usUsage = 0x02;
+		rid_ary[0].dwFlags = 0UL;
+		rid_ary[0].hwndTarget = wnd_handle;
+ 
+		// Keyboard Set
+		rid_ary[1].usUsagePage = 0x01;
+		rid_ary[1].usUsage = 0x06;
+		rid_ary[1].dwFlags = 0UL;
+		rid_ary[1].hwndTarget = wnd_handle;
+ 
+		RegisterRawInputDevices(rid_ary.data(), rid_ary.size(), sizeof(RAWINPUTDEVICE));
+
+		return (0);
+	}
 	case WM_DESTROY: {
 		PostQuitMessage(0);
+
+		return (0);
+	}
+	case WM_INPUT: {
+		RAWINPUT ri;
+		UINT ri_size = 0U;
+
+		GetRawInputData(reinterpret_cast<HRAWINPUT>(msg_param2), RID_INPUT, nullptr, &ri_size, sizeof(RAWINPUTHEADER));
+
+		if ((ri_size <= 0U)
+		|| (ri_size > sizeof(RAWINPUT))) {
+			return (0);
+		}
+
+		if (GetRawInputData(reinterpret_cast<HRAWINPUT>(msg_param2), RID_INPUT, &ri, &ri_size, sizeof(RAWINPUTHEADER)) != ri_size) {
+			return (0);
+		}
+
+		switch (ri.header.dwType) {
+		case RIM_TYPEMOUSE: {
+			break;
+		}
+		case RIM_TYPEKEYBOARD: {
+			break;
+		}
+		}
 
 		return (0);
 	}
