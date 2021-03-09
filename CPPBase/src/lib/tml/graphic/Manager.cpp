@@ -189,6 +189,8 @@ tml::graphic::Manager::~Manager()
  */
 void tml::graphic::Manager::Release(void)
 {
+	this->common_.Init();
+
 	for (auto &res_cont : this->res_cont_ary_) {
 		for (auto &res : res_cont) {
 			res->Init();
@@ -240,7 +242,6 @@ void tml::graphic::Manager::Init(void)
 
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
-	this->common.Init();
 
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
@@ -550,7 +551,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	this->device_context_->CSSetUnorderedAccessViews(0U, this->null_tex_uasr_ary_.size(), this->null_tex_uasr_ary_.data(), this->null_tex_uasr_init_cnt_ary_.data());
 	this->device_context_->CSSetSamplers(0U, this->null_samp_sr_ary_.size(), this->null_samp_sr_ary_.data());
 
-	if (this->common.Create(this) < 0) {
+	if (this->common_.Create(this) < 0) {
 		this->Init();
 
 		return (-1);
@@ -587,30 +588,30 @@ void tml::graphic::Manager::Update(void)
 	this->draw_stage_dat_->inverse_view_matrix_2d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
 	this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
 
-	std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->common.config_shader_constant_buffer.get(), this->common.header_shader_constant_buffer.get()};
-	std::array<tml::graphic::ShaderStructuredBuffer *, 5U> sys_ssb_ary = {this->common.camera_shader_structured_buffer.get(), this->common.light_shader_structured_buffer.get(), this->common.fog_shader_structured_buffer.get(), nullptr, nullptr};
+	std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->common_.config_shader_constant_buffer.get(), this->common_.header_shader_constant_buffer.get()};
+	std::array<tml::graphic::ShaderStructuredBuffer *, 5U> sys_ssb_ary = {this->common_.camera_shader_structured_buffer.get(), this->common_.light_shader_structured_buffer.get(), this->common_.fog_shader_structured_buffer.get(), nullptr, nullptr};
 
 	while (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
 		switch (this->draw_stage_type_) {
 		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT: {
-			this->common.main_render_target_texture->ClearRenderTarget(tml::XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
-			this->common.main_depth_target_texture->ClearDepthTarget();
+			this->common_.main_render_target_texture->ClearRenderTarget(tml::XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
+			this->common_.main_depth_target_texture->ClearDepthTarget();
 
-			this->common.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);
-			this->common.header_shader_constant_buffer->UploadCPUBuffer();
+			this->common_.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);
+			this->common_.header_shader_constant_buffer->UploadCPUBuffer();
 
-			this->common.camera_shader_structured_buffer->SetElementCount(0U);
-			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d, this->draw_stage_dat_->projection_matrix_3d);
-			this->common.camera_shader_structured_buffer->SetElement(1U, this->draw_camera_,this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d, this->draw_stage_dat_->projection_matrix_2d);
-			this->common.camera_shader_structured_buffer->UploadCPUBuffer();
+			this->common_.camera_shader_structured_buffer->SetElementCount(0U);
+			this->common_.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d, this->draw_stage_dat_->projection_matrix_3d);
+			this->common_.camera_shader_structured_buffer->SetElement(1U, this->draw_camera_,this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d, this->draw_stage_dat_->projection_matrix_2d);
+			this->common_.camera_shader_structured_buffer->UploadCPUBuffer();
 
-			this->common.light_shader_structured_buffer->SetElementCount(0U);
-			this->common.light_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
-			this->common.light_shader_structured_buffer->UploadCPUBuffer();
+			this->common_.light_shader_structured_buffer->SetElementCount(0U);
+			this->common_.light_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
+			this->common_.light_shader_structured_buffer->UploadCPUBuffer();
 
-			this->common.fog_shader_structured_buffer->SetElementCount(0U);
-			this->common.fog_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
-			this->common.fog_shader_structured_buffer->UploadCPUBuffer();
+			this->common_.fog_shader_structured_buffer->SetElementCount(0U);
+			this->common_.fog_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
+			this->common_.fog_shader_structured_buffer->UploadCPUBuffer();
 
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 				this->draw_model_ary_[draw_model_i]->DrawStageInit();
@@ -652,7 +653,7 @@ void tml::graphic::Manager::Update(void)
 		}
 		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
 			this->SetDrawViewport(&this->vp_);
-			this->SetDrawTarget(this->common.main_render_target_texture.get(), nullptr);
+			this->SetDrawTarget(this->common_.main_render_target_texture.get(), nullptr);
 
 			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 				this->draw_model_ary_[draw_model_i]->DrawStageForward2D();

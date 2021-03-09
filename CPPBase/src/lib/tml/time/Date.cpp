@@ -306,51 +306,45 @@ void tml::Date::SetString(const CHAR *str)
 	size_t str_index = 0U;
 	CHAR tmp_str[10] = "";
 
-	{// Year Set
-		memcpy(tmp_str, &str[str_index], 4U);
-		tmp_str[4] = 0;
-		this->year_ = tml::StringUtil::GetUINT(tmp_str);
+	// Year Set
+	memcpy(tmp_str, &str[str_index], 4U);
+	tmp_str[4] = 0;
+	this->year_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 5U;
-	}
+	str_index += 5U;
 
-	{// Month Set
-		memcpy(tmp_str, &str[str_index], 2U);
-		tmp_str[2] = 0;
-		this->mon_ = tml::StringUtil::GetUINT(tmp_str);
+	// Month Set
+	memcpy(tmp_str, &str[str_index], 2U);
+	tmp_str[2] = 0;
+	this->mon_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 3U;
-	}
+	str_index += 3U;
 
-	{// Day Set
-		memcpy(tmp_str, &str[str_index], 2U);
-		tmp_str[2] = 0;
-		this->day_ = tml::StringUtil::GetUINT(tmp_str);
+	// Day Set
+	memcpy(tmp_str, &str[str_index], 2U);
+	tmp_str[2] = 0;
+	this->day_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 3U;
-	}
+	str_index += 3U;
 
-	{// Hour Set
-		memcpy(tmp_str, &str[str_index], 2U);
-		tmp_str[2] = 0;
-		this->hour_ = tml::StringUtil::GetUINT(tmp_str);
+	// Hour Set
+	memcpy(tmp_str, &str[str_index], 2U);
+	tmp_str[2] = 0;
+	this->hour_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 3U;
-	}
+	str_index += 3U;
 
-	{// Minutes Set
-		memcpy(tmp_str, &str[str_index], 2U);
-		tmp_str[2] = 0;
-		this->min_ = tml::StringUtil::GetUINT(tmp_str);
+	// Minutes Set
+	memcpy(tmp_str, &str[str_index], 2U);
+	tmp_str[2] = 0;
+	this->min_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 3U;
-	}
+	str_index += 3U;
 
-	{// Seconds Set
-		memcpy(tmp_str, &str[str_index], 2U);
-		tmp_str[2] = 0;
-		this->sec_ = tml::StringUtil::GetUINT(tmp_str);
-	}
+	// Seconds Set
+	memcpy(tmp_str, &str[str_index], 2U);
+	tmp_str[2] = 0;
+	this->sec_ = tml::StringUtil::GetUINT(tmp_str);
 
 	this->SetStringSetTimePart();
 
@@ -375,51 +369,45 @@ void tml::Date::SetString(const WCHAR *str)
 	size_t str_index = 0U;
 	WCHAR tmp_str[10] = L"";
 
-	{// Year Set
-		memcpy(tmp_str, &str[str_index], 4U << 1);
-		tmp_str[4] = 0;
-		this->year_ = tml::StringUtil::GetUINT(tmp_str);
+	// Year Set
+	memcpy(tmp_str, &str[str_index], 4U << 1);
+	tmp_str[4] = 0;
+	this->year_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 5U;
-	}
+	str_index += 5U;
 
-	{// Month Set
-		memcpy(tmp_str, &str[str_index], 2U << 1);
-		tmp_str[2] = 0;
-		this->mon_ = tml::StringUtil::GetUINT(tmp_str);
+	// Month Set
+	memcpy(tmp_str, &str[str_index], 2U << 1);
+	tmp_str[2] = 0;
+	this->mon_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 3U;
-	}
+	str_index += 3U;
 
-	{// Day Set
-		memcpy(tmp_str, &str[str_index], 2U << 1);
-		tmp_str[2] = 0;
-		this->day_ = tml::StringUtil::GetUINT(tmp_str);
+	// Day Set
+	memcpy(tmp_str, &str[str_index], 2U << 1);
+	tmp_str[2] = 0;
+	this->day_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 3U;
-	}
+	str_index += 3U;
 
-	{// Hour Set
-		memcpy(tmp_str, &str[str_index], 2U << 1);
-		tmp_str[2] = 0;
-		this->hour_ = tml::StringUtil::GetUINT(tmp_str);
+	// Hour Set
+	memcpy(tmp_str, &str[str_index], 2U << 1);
+	tmp_str[2] = 0;
+	this->hour_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 3U;
-	}
+	str_index += 3U;
 
-	{// Minutes Set
-		memcpy(tmp_str, &str[str_index], 2U << 1);
-		tmp_str[2] = 0;
-		this->min_ = tml::StringUtil::GetUINT(tmp_str);
+	// Minutes Set
+	memcpy(tmp_str, &str[str_index], 2U << 1);
+	tmp_str[2] = 0;
+	this->min_ = tml::StringUtil::GetUINT(tmp_str);
 
-		str_index += 3U;
-	}
+	str_index += 3U;
 
-	{// Seconds Set
-		memcpy(tmp_str, &str[str_index], 2U << 1);
-		tmp_str[2] = 0;
-		this->sec_ = tml::StringUtil::GetUINT(tmp_str);
-	}
+	// Seconds Set
+	memcpy(tmp_str, &str[str_index], 2U << 1);
+	tmp_str[2] = 0;
+	this->sec_ = tml::StringUtil::GetUINT(tmp_str);
 
 	this->SetStringSetTimePart();
 

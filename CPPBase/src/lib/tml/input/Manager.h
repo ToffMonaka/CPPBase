@@ -6,7 +6,9 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <vector>
 #include "ManagerCommon.h"
+#include "Event.h"
 
 
 namespace tml {
@@ -55,10 +57,13 @@ public: tml::input::Manager &operator =(const tml::input::Manager &) = delete;
 private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
+	tml::input::ManagerCommon common_;
 	std::array<std::list<tml::shared_ptr<tml::input::Resource>>, tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT> res_cont_ary_;
-
-public:
-	tml::input::ManagerCommon common;
+	UINT event_index_;
+	std::array<UINT, 2U> event_cnt_ary_;
+	std::array<std::vector<tml::unique_ptr<tml::input::Event>>, 2U> event_cont_ary_;
+	std::array<UINT, tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT> stock_event_cnt_ary_;
+	std::array<std::vector<tml::unique_ptr<tml::input::Event>>, tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT> stock_event_cont_ary_;
 
 protected:
 	void Release(void);
@@ -73,12 +78,15 @@ public:
 	void Update(void);
 	HWND GetWindowHandle(void) const;
 	HDC GetWindowDeviceContextHandle(void) const;
+	tml::input::ManagerCommon &GetCommon(void);
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, tml::shared_ptr<T1> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
+	template <typename T, typename D>
+	INT AddEvent(const D &);
 };
 }
 }
@@ -105,6 +113,16 @@ inline HDC tml::input::Manager::GetWindowDeviceContextHandle(void) const
 
 
 /**
+ * @brief GetCommonä÷êî
+ * @return common (common)
+ */
+inline tml::input::ManagerCommon &tml::input::Manager::GetCommon(void)
+{
+	return (this->common_);
+}
+
+
+/**
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param desc (desc)
@@ -119,7 +137,7 @@ inline tml::shared_ptr<T2> &tml::input::Manager::GetResource(tml::shared_ptr<T2>
 		return (dst_res);
 	}
 
-	auto res = tml::make_shared<T1>(1U);
+	tml::shared_ptr<T1> res = tml::make_shared<T1>(1U);
 
 	if (res->Create(desc) < 0) {
 		return (dst_res);
@@ -176,4 +194,43 @@ inline void tml::input::Manager::ReleaseResource(tml::shared_ptr<T> &res)
 	res.reset();
 
 	return;
+}
+
+
+/**
+ * @brief AddEventä÷êî
+ * @param dat (data)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+template <typename T, typename D>
+inline INT tml::input::Manager::AddEvent(const D &dat)
+{
+	tml::unique_ptr<tml::input::Event> event;
+
+	auto event_index = static_cast<UINT>(T::EVENT_TYPE);
+
+	if (this->stock_event_cnt_ary_[event_index] > 0U) {
+		--this->stock_event_cnt_ary_[event_index];
+
+		auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
+
+		event = std::move(stock_event_cont[this->stock_event_cnt_ary_[event_index]]);
+	} else {
+		event = tml::make_unique<T>(1U);
+	}
+
+	reinterpret_cast<T *>(event.get())->SetData(dat);
+
+	auto &event_cont = this->event_cont_ary_[this->event_index_];
+
+	if (this->event_cnt_ary_[this->event_index_] >= event_cont.size()) {
+		event_cont.resize(this->event_cnt_ary_[this->event_index_] + 128U);
+	}
+
+	event_cont[this->event_cnt_ary_[this->event_index_]] = std::move(event);
+
+	++this->event_cnt_ary_[this->event_index_];
+
+	return (0);
 }

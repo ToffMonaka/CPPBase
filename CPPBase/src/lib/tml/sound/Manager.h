@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <vector>
 #include "ManagerCommon.h"
 
 
@@ -55,10 +56,8 @@ public: tml::sound::Manager &operator =(const tml::sound::Manager &) = delete;
 private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
+	tml::sound::ManagerCommon common_;
 	std::array<std::list<tml::shared_ptr<tml::sound::Resource>>, tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT> res_cont_ary_;
-
-public:
-	tml::sound::ManagerCommon common;
 
 protected:
 	void Release(void);
@@ -73,6 +72,7 @@ public:
 	void Update(void);
 	HWND GetWindowHandle(void) const;
 	HDC GetWindowDeviceContextHandle(void) const;
+	tml::sound::ManagerCommon &GetCommon(void);
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
@@ -105,6 +105,16 @@ inline HDC tml::sound::Manager::GetWindowDeviceContextHandle(void) const
 
 
 /**
+ * @brief GetCommonä÷êî
+ * @return common (common)
+ */
+inline tml::sound::ManagerCommon &tml::sound::Manager::GetCommon(void)
+{
+	return (this->common_);
+}
+
+
+/**
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param desc (desc)
@@ -119,7 +129,7 @@ inline tml::shared_ptr<T2> &tml::sound::Manager::GetResource(tml::shared_ptr<T2>
 		return (dst_res);
 	}
 
-	auto res = tml::make_shared<T1>(1U);
+	tml::shared_ptr<T1> res = tml::make_shared<T1>(1U);
 
 	if (res->Create(desc) < 0) {
 		return (dst_res);

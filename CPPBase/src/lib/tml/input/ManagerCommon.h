@@ -11,12 +11,6 @@
 
 namespace tml {
 namespace input {
-}
-}
-
-
-namespace tml {
-namespace input {
 /**
  * @brief ManagerCommonƒNƒ‰ƒX
  */

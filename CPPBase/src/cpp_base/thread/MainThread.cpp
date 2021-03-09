@@ -12,17 +12,18 @@
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
-#include "../constant/ConstantUtil_WINDOW.h"
-#include "../constant/ConstantUtil_FILE.h"
-#include "../resource/resource.h"
-#include "../thread/TestThread.h"
-
+#include "../../lib/tml/input/MouseEvent.h"
+#include "../../lib/tml/input/KeyboardEvent.h"
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Mesh.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/SpriteModel.h"
 #include "../../lib/tml/graphic/Font.h"
+#include "../constant/ConstantUtil_WINDOW.h"
+#include "../constant/ConstantUtil_FILE.h"
+#include "../resource/resource.h"
+#include "../thread/TestThread.h"
 
 
 /**
@@ -487,9 +488,17 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 		switch (ri.header.dwType) {
 		case RIM_TYPEMOUSE: {
+			tml::input::MouseEventData dat;
+
+			//th->GetInputManager().AddEvent<tml::input::MouseEvent>(dat);
+
 			break;
 		}
 		case RIM_TYPEKEYBOARD: {
+			tml::input::KeyboardEventData dat;
+
+			//th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(dat);
+
 			break;
 		}
 		}

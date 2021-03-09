@@ -276,7 +276,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		{// RasterizerState Create
 			tml::shared_ptr<tml::graphic::RasterizerState> rs;
 
-			this->GetManager()->GetResource(rs, this->GetManager()->common.back_culling_rasterizer_state);
+			this->GetManager()->GetResource(rs, this->GetManager()->GetCommon().back_culling_rasterizer_state);
 
 			if (rs == nullptr) {
 				this->Init();
@@ -291,7 +291,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		{// BlendState Create
 			tml::shared_ptr<tml::graphic::BlendState> bs;
 
-			this->GetManager()->GetResource(bs, this->GetManager()->common.alignment_blend_state_array[1]);
+			this->GetManager()->GetResource(bs, this->GetManager()->GetCommon().alignment_blend_state_array[1]);
 
 			if (bs == nullptr) {
 				this->Init();
@@ -306,7 +306,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		{// DepthState Create
 			tml::shared_ptr<tml::graphic::DepthState> ds;
 
-			this->GetManager()->GetResource(ds, this->GetManager()->common.reference_depth_state);
+			this->GetManager()->GetResource(ds, this->GetManager()->GetCommon().reference_depth_state);
 
 			if (ds == nullptr) {
 				this->Init();
@@ -321,7 +321,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		{// Shader Create
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
-			this->GetManager()->GetResource(shader, this->GetManager()->common.sprite_model_shader);
+			this->GetManager()->GetResource(shader, this->GetManager()->GetCommon().sprite_model_shader);
 
 			if (shader == nullptr) {
 				this->Init();
@@ -377,7 +377,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 			{// DiffuseSampler Create
 				tml::shared_ptr<tml::graphic::Sampler> samp;
 
-				this->GetManager()->GetResource(samp, this->GetManager()->common.cc_sampler);
+				this->GetManager()->GetResource(samp, this->GetManager()->GetCommon().cc_sampler);
 
 				if (samp == nullptr) {
 					this->Init();

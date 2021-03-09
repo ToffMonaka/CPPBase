@@ -70,6 +70,8 @@ tml::sound::Manager::~Manager()
  */
 void tml::sound::Manager::Release(void)
 {
+	this->common_.Init();
+
 	for (auto &res_cont : this->res_cont_ary_) {
 		for (auto &res : res_cont) {
 			res->Init();
@@ -91,7 +93,6 @@ void tml::sound::Manager::Init(void)
 
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
-	this->common.Init();
 
 	return;
 }
@@ -117,7 +118,7 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
 
-	if (this->common.Create(this) < 0) {
+	if (this->common_.Create(this) < 0) {
 		this->Init();
 
 		return (-1);

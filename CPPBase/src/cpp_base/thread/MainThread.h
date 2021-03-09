@@ -54,5 +54,60 @@ public:
 	virtual INT Start(void);
 	virtual void End(void);
 	virtual void Update(void);
+	const tml::FrameRate &GetFrameRate(void) const;
+	cpp_base::SystemConfigFile &GetSystemConfigFile(void);
+	tml::input::Manager &GetInputManager(void);
+	tml::graphic::Manager &GetGraphicManager(void);
+	tml::sound::Manager &GetSoundManager(void);
 };
+}
+
+
+/**
+ * @brief GetFrameRateŠÖ”
+ * @return frame_rate (frame_rate)
+ */
+inline const tml::FrameRate &cpp_base::MainThread::GetFrameRate(void) const
+{
+	return (this->frame_rate_);
+}
+
+
+/**
+ * @brief GetSystemConfigFileŠÖ”
+ * @return sys_conf_file (system_config_file)
+ */
+inline cpp_base::SystemConfigFile &cpp_base::MainThread::GetSystemConfigFile(void)
+{
+	return (this->sys_conf_file_);
+}
+
+
+/**
+ * @brief GetInputManagerŠÖ”
+ * @return input_mgr (input_manager)
+ */
+inline tml::input::Manager &cpp_base::MainThread::GetInputManager(void)
+{
+	return (this->input_mgr_);
+}
+
+
+/**
+ * @brief GetGraphicManagerŠÖ”
+ * @return graphic_mgr (graphic_manager)
+ */
+inline tml::graphic::Manager &cpp_base::MainThread::GetGraphicManager(void)
+{
+	return (this->graphic_mgr_);
+}
+
+
+/**
+ * @brief GetSoundManagerŠÖ”
+ * @return sound_mgr (sound_manager)
+ */
+inline tml::sound::Manager &cpp_base::MainThread::GetSoundManager(void)
+{
+	return (this->sound_mgr_);
 }

@@ -36,6 +36,7 @@ public:
 	virtual INT Start(void);
 	virtual void End(void);
 	virtual void Update(void);
+	const tml::FrameRate &GetFrameRate(void) const;
 };
 }
 
@@ -48,4 +49,14 @@ inline void cpp_base::TestThread::Release(void)
 	tml::SubThread::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetFrameRateŠÖ”
+ * @return frame_rate (frame_rate)
+ */
+inline const tml::FrameRate &cpp_base::TestThread::GetFrameRate(void) const
+{
+	return (this->frame_rate_);
 }

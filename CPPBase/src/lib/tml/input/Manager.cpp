@@ -48,7 +48,10 @@ void tml::input::ManagerDesc::Init(void)
  */
 tml::input::Manager::Manager() :
 	wnd_handle_(nullptr),
-	wnd_dc_handle_(nullptr)
+	wnd_dc_handle_(nullptr),
+	event_index_(0U),
+	event_cnt_ary_{},
+	stock_event_cnt_ary_{}
 {
 	return;
 }
@@ -70,6 +73,16 @@ tml::input::Manager::~Manager()
  */
 void tml::input::Manager::Release(void)
 {
+	for (auto &stock_event_cont : this->stock_event_cont_ary_) {
+		stock_event_cont.clear();
+	}
+
+	for (auto &event_cont : this->event_cont_ary_) {
+		event_cont.clear();
+	}
+
+	this->common_.Init();
+
 	for (auto &res_cont : this->res_cont_ary_) {
 		for (auto &res : res_cont) {
 			res->Init();
@@ -91,7 +104,9 @@ void tml::input::Manager::Init(void)
 
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
-	this->common.Init();
+	this->event_index_ = 0U;
+	this->event_cnt_ary_.fill(0U);
+	this->stock_event_cnt_ary_.fill(0U);
 
 	return;
 }
@@ -117,7 +132,7 @@ INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
 
-	if (this->common.Create(this) < 0) {
+	if (this->common_.Create(this) < 0) {
 		this->Init();
 
 		return (-1);

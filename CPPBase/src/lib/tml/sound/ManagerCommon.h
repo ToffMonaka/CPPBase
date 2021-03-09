@@ -11,12 +11,6 @@
 
 namespace tml {
 namespace sound {
-}
-}
-
-
-namespace tml {
-namespace sound {
 /**
  * @brief ManagerCommonƒNƒ‰ƒX
  */

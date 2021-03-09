@@ -97,6 +97,7 @@ public: tml::graphic::Manager &operator =(const tml::graphic::Manager &) = delet
 private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
+	tml::graphic::ManagerCommon common_;
 	std::array<std::list<tml::shared_ptr<tml::graphic::Resource>>, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT> res_cont_ary_;
 
 	IDXGIFactory1 *factory_;
@@ -193,9 +194,6 @@ private:
 	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::TEXTURE_UASR_LIMIT> cmp_tex_uasr_ary_;
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> cmp_samp_sr_ary_;
 
-public:
-	tml::graphic::ManagerCommon common;
-
 protected:
 	void Release(void);
 
@@ -209,6 +207,7 @@ public:
 	void Update(void);
 	HWND GetWindowHandle(void) const;
 	HDC GetWindowDeviceContextHandle(void) const;
+	tml::graphic::ManagerCommon &GetCommon(void);
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
@@ -337,6 +336,16 @@ inline HDC tml::graphic::Manager::GetWindowDeviceContextHandle(void) const
 
 
 /**
+ * @brief GetCommonä÷êî
+ * @return common (common)
+ */
+inline tml::graphic::ManagerCommon &tml::graphic::Manager::GetCommon(void)
+{
+	return (this->common_);
+}
+
+
+/**
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param desc (desc)
@@ -351,7 +360,7 @@ inline tml::shared_ptr<T2> &tml::graphic::Manager::GetResource(tml::shared_ptr<T
 		return (dst_res);
 	}
 
-	auto res = tml::make_shared<T1>(1U);
+	tml::shared_ptr<T1> res = tml::make_shared<T1>(1U);
 
 	if (res->Create(desc) < 0) {
 		return (dst_res);
