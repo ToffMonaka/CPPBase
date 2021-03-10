@@ -402,6 +402,30 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
+	for (UINT event_i = 0U; event_i < this->input_mgr_.GetEventCount(); ++event_i) {
+		auto &event = this->input_mgr_.GetEventArray()[event_i];
+
+		switch (event->GetEventType()) {
+		case tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE: {
+			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event.get())->GetData();
+
+			if (event_dat.type_flag & RI_MOUSE_LEFT_BUTTON_DOWN) {
+				this->fps_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->fps_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->fps_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
+			}
+
+			if (event_dat.type_flag & RI_MOUSE_RIGHT_BUTTON_DOWN) {
+				this->fps_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) - (this->fps_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->fps_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
+			}
+
+			if (event_dat.type_flag & RI_MOUSE_MIDDLE_BUTTON_DOWN) {
+				this->fps_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->fps_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
+			}
+
+			break;
+		}
+		}
+	}
+
 	this->fps_tex_update_time_ += this->frame_rate_.GetElapsedTime();
 
 	if (this->fps_tex_update_time_ >= tml::TIME_REAL(1.0)) {
@@ -488,16 +512,26 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 		switch (ri.header.dwType) {
 		case RIM_TYPEMOUSE: {
-			tml::input::MouseEventData dat;
+			if (ri.data.mouse.usButtonFlags & (RI_MOUSE_LEFT_BUTTON_DOWN | RI_MOUSE_RIGHT_BUTTON_DOWN | RI_MOUSE_RIGHT_BUTTON_DOWN | RI_MOUSE_RIGHT_BUTTON_UP | RI_MOUSE_MIDDLE_BUTTON_DOWN | RI_MOUSE_MIDDLE_BUTTON_UP)) {
+				POINT event_pos;
 
-			//th->GetInputManager().AddEvent<tml::input::MouseEvent>(dat);
+				GetCursorPos(&event_pos);
+				ScreenToClient(wnd_handle, &event_pos);
+
+				tml::input::MouseEventData event_dat;
+
+				event_dat.type_flag = ri.data.mouse.usButtonFlags;
+				event_dat.position = tml::XMUINT2EX(event_pos.x, event_pos.y);
+
+				th->GetInputManager().AddEvent<tml::input::MouseEvent>(event_dat);
+			}
 
 			break;
 		}
 		case RIM_TYPEKEYBOARD: {
 			tml::input::KeyboardEventData dat;
 
-			//th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(dat);
+			th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(dat);
 
 			break;
 		}

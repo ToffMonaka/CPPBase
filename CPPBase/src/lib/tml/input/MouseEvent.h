@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMath.h"
 #include "Event.h"
 
 
@@ -17,6 +18,8 @@ namespace input {
 class MouseEventData
 {
 public:
+	UINT type_flag;
+	tml::XMUINT2EX position;
 
 protected:
 	void Release(void);

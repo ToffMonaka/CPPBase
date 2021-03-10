@@ -10,7 +10,9 @@
 /**
  * @brief コンストラクタ
  */
-tml::input::MouseEventData::MouseEventData()
+tml::input::MouseEventData::MouseEventData() :
+	type_flag(0U),
+	position(0U)
 {
 	return;
 }
@@ -33,6 +35,9 @@ tml::input::MouseEventData::~MouseEventData()
 void tml::input::MouseEventData::Init(void)
 {
 	this->Release();
+
+	this->type_flag = 0U;
+	this->position = 0U;
 
 	return;
 }

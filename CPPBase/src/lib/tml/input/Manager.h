@@ -59,11 +59,15 @@ private:
 	HDC wnd_dc_handle_;
 	tml::input::ManagerCommon common_;
 	std::array<std::list<tml::shared_ptr<tml::input::Resource>>, tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT> res_cont_ary_;
-	UINT event_index_;
 	std::array<UINT, 2U> event_cnt_ary_;
 	std::array<std::vector<tml::unique_ptr<tml::input::Event>>, 2U> event_cont_ary_;
+	UINT front_event_index_;
+	UINT back_event_index_;
 	std::array<UINT, tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT> stock_event_cnt_ary_;
 	std::array<std::vector<tml::unique_ptr<tml::input::Event>>, tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT> stock_event_cont_ary_;
+
+private:
+	void UpdateEvent(void);
 
 protected:
 	void Release(void);
@@ -85,6 +89,8 @@ public:
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, tml::shared_ptr<T1> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
+	UINT GetEventCount(void) const;
+	const tml::unique_ptr<tml::input::Event> *GetEventArray(void) const;
 	template <typename T, typename D>
 	INT AddEvent(const D &);
 };
@@ -137,7 +143,7 @@ inline tml::shared_ptr<T2> &tml::input::Manager::GetResource(tml::shared_ptr<T2>
 		return (dst_res);
 	}
 
-	tml::shared_ptr<T1> res = tml::make_shared<T1>(1U);
+	auto res = tml::make_shared<T1>(1U);
 
 	if (res->Create(desc) < 0) {
 		return (dst_res);
@@ -198,6 +204,26 @@ inline void tml::input::Manager::ReleaseResource(tml::shared_ptr<T> &res)
 
 
 /**
+ * @brief GetEventCountŠÖ”
+ * @return event_cnt (event_count)
+ */
+inline UINT tml::input::Manager::GetEventCount(void) const
+{
+	return (this->event_cnt_ary_[this->front_event_index_]);
+}
+
+
+/**
+ * @brief GetEventArrayŠÖ”
+ * @return event_ary (event_array)
+ */
+inline const tml::unique_ptr<tml::input::Event> *tml::input::Manager::GetEventArray(void) const
+{
+	return (this->event_cont_ary_[this->front_event_index_].data());
+}
+
+
+/**
  * @brief AddEventŠÖ”
  * @param dat (data)
  * @return res (result)<br>
@@ -209,28 +235,33 @@ inline INT tml::input::Manager::AddEvent(const D &dat)
 	tml::unique_ptr<tml::input::Event> event;
 
 	auto event_index = static_cast<UINT>(T::EVENT_TYPE);
+	auto &stock_event_cnt = this->stock_event_cnt_ary_[event_index];
+	auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
 
-	if (this->stock_event_cnt_ary_[event_index] > 0U) {
-		--this->stock_event_cnt_ary_[event_index];
+	if (stock_event_cnt > 0U) {
+		--stock_event_cnt;
 
-		auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
-
-		event = std::move(stock_event_cont[this->stock_event_cnt_ary_[event_index]]);
+		event = std::move(stock_event_cont[stock_event_cnt]);
 	} else {
 		event = tml::make_unique<T>(1U);
+
+		if (reinterpret_cast<T *>(event.get())->Create(this) < 0) {
+			return (-1);
+		}
 	}
 
 	reinterpret_cast<T *>(event.get())->SetData(dat);
 
-	auto &event_cont = this->event_cont_ary_[this->event_index_];
+	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];
+	auto &back_event_cont = this->event_cont_ary_[this->back_event_index_];
 
-	if (this->event_cnt_ary_[this->event_index_] >= event_cont.size()) {
-		event_cont.resize(this->event_cnt_ary_[this->event_index_] + 128U);
+	if (back_event_cnt >= back_event_cont.size()) {
+		back_event_cont.resize(back_event_cnt + 128U);
 	}
 
-	event_cont[this->event_cnt_ary_[this->event_index_]] = std::move(event);
+	back_event_cont[back_event_cnt] = std::move(event);
 
-	++this->event_cnt_ary_[this->event_index_];
+	++back_event_cnt;
 
 	return (0);
 }

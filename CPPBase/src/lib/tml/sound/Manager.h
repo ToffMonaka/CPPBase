@@ -129,7 +129,7 @@ inline tml::shared_ptr<T2> &tml::sound::Manager::GetResource(tml::shared_ptr<T2>
 		return (dst_res);
 	}
 
-	tml::shared_ptr<T1> res = tml::make_shared<T1>(1U);
+	auto res = tml::make_shared<T1>(1U);
 
 	if (res->Create(desc) < 0) {
 		return (dst_res);
