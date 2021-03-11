@@ -18,8 +18,10 @@ namespace input {
 class MouseEventData
 {
 public:
-	UINT type_flag;
-	tml::XMUINT2EX position;
+	tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE type_flag;
+	tml::XMINT2EX position;
+	tml::XMINT2EX displacement;
+	tml::XMFLOAT2EX wheel;
 
 protected:
 	void Release(void);
@@ -29,6 +31,8 @@ public:
 	virtual ~MouseEventData();
 
 	virtual void Init(void);
+
+	void SetRawInput(const RAWMOUSE &, const tml::XMINT2EX &);
 };
 }
 }

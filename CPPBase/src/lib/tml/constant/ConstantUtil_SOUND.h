@@ -16,6 +16,11 @@ namespace SOUND {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::COUNT);
+	enum class EVENT_TYPE : UINT {
+		NONE = 0U,
+		COUNT
+	};
+	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::EVENT_TYPE::COUNT);
 }
 }
 }

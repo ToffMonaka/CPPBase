@@ -10,8 +10,8 @@
 /**
  * @brief コンストラクタ
  */
-tml::input::Event::Event() :
-	event_type_(tml::ConstantUtil::INPUT::EVENT_TYPE::NONE),
+tml::graphic::Event::Event() :
+	event_type_(tml::ConstantUtil::GRAPHIC::EVENT_TYPE::NONE),
 	mgr_(nullptr)
 {
 	return;
@@ -21,7 +21,7 @@ tml::input::Event::Event() :
 /**
  * @brief デストラクタ
  */
-tml::input::Event::~Event()
+tml::graphic::Event::~Event()
 {
 	return;
 }
@@ -30,9 +30,9 @@ tml::input::Event::~Event()
 /**
  * @brief Init関数
  */
-void tml::input::Event::Init(void)
+void tml::graphic::Event::Init(void)
 {
-	this->event_type_ = tml::ConstantUtil::INPUT::EVENT_TYPE::NONE;
+	this->event_type_ = tml::ConstantUtil::GRAPHIC::EVENT_TYPE::NONE;
 	this->mgr_ = nullptr;
 
 	return;
@@ -46,9 +46,9 @@ void tml::input::Event::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::input::Event::Create(const tml::ConstantUtil::INPUT::EVENT_TYPE event_type, tml::input::Manager *mgr)
+INT tml::graphic::Event::Create(const tml::ConstantUtil::GRAPHIC::EVENT_TYPE event_type, tml::graphic::Manager *mgr)
 {
-	if ((event_type == tml::ConstantUtil::INPUT::EVENT_TYPE::NONE)
+	if ((event_type == tml::ConstantUtil::GRAPHIC::EVENT_TYPE::NONE)
 	|| (mgr == nullptr)) {
 		return (-1);
 	}

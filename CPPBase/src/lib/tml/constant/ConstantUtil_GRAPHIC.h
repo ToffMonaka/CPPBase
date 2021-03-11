@@ -35,6 +35,11 @@ namespace GRAPHIC {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::COUNT);
+	enum class EVENT_TYPE : UINT {
+		NONE = 0U,
+		COUNT
+	};
+	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::EVENT_TYPE::COUNT);
 	enum class SAMPLER_QUALITY_TYPE : UINT {
 		NONE = 0U,
 		BILINEAR,

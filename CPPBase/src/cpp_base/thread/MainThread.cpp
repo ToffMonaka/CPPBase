@@ -409,16 +409,17 @@ void cpp_base::MainThread::Update(void)
 		case tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE: {
 			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event.get())->GetData();
 
-			if (event_dat.type_flag & RI_MOUSE_LEFT_BUTTON_DOWN) {
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 				this->fps_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->fps_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->fps_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
 			}
 
-			if (event_dat.type_flag & RI_MOUSE_RIGHT_BUTTON_DOWN) {
-				this->fps_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) - (this->fps_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->fps_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::WHEEL)) {
+				this->fps_sprite_model_->position.SetY(this->fps_sprite_model_->position.GetY() + event_dat.wheel.y * 2.0f);
 			}
 
-			if (event_dat.type_flag & RI_MOUSE_MIDDLE_BUTTON_DOWN) {
-				this->fps_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->fps_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::DISPLACEMENT)) {
+				this->fps_sprite_model_->position.SetX(this->fps_sprite_model_->position.GetX() + static_cast<FLOAT>(event_dat.displacement.x) * 4.0f);
+				this->fps_sprite_model_->position.SetY(this->fps_sprite_model_->position.GetY() + static_cast<FLOAT>(-event_dat.displacement.y) * 4.0f);
 			}
 
 			break;
@@ -501,8 +502,7 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 		GetRawInputData(reinterpret_cast<HRAWINPUT>(msg_param2), RID_INPUT, nullptr, &ri_size, sizeof(RAWINPUTHEADER));
 
-		if ((ri_size <= 0U)
-		|| (ri_size > sizeof(RAWINPUT))) {
+		if ((ri_size <= 0U) || (ri_size > sizeof(RAWINPUT))) {
 			return (0);
 		}
 
@@ -512,19 +512,16 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 		switch (ri.header.dwType) {
 		case RIM_TYPEMOUSE: {
-			if (ri.data.mouse.usButtonFlags & (RI_MOUSE_LEFT_BUTTON_DOWN | RI_MOUSE_RIGHT_BUTTON_DOWN | RI_MOUSE_RIGHT_BUTTON_DOWN | RI_MOUSE_RIGHT_BUTTON_UP | RI_MOUSE_MIDDLE_BUTTON_DOWN | RI_MOUSE_MIDDLE_BUTTON_UP)) {
-				POINT event_pos;
+			POINT mouse_pos;
 
-				GetCursorPos(&event_pos);
-				ScreenToClient(wnd_handle, &event_pos);
+			GetCursorPos(&mouse_pos);
+			ScreenToClient(wnd_handle, &mouse_pos);
 
-				tml::input::MouseEventData event_dat;
+			tml::input::MouseEventData event_dat;
 
-				event_dat.type_flag = ri.data.mouse.usButtonFlags;
-				event_dat.position = tml::XMUINT2EX(event_pos.x, event_pos.y);
+			event_dat.SetRawInput(ri.data.mouse, tml::XMINT2EX(mouse_pos.x, mouse_pos.y));
 
-				th->GetInputManager().AddEvent<tml::input::MouseEvent>(event_dat);
-			}
+			th->GetInputManager().AddEvent<tml::input::MouseEvent>(event_dat);
 
 			break;
 		}

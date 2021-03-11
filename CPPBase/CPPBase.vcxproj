@@ -185,6 +185,7 @@
     <ClCompile Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\DepthState.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Event.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Fog.cpp" />
     <ClCompile Include="src\lib\tml\graphic\FogShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Font.cpp" />
@@ -235,6 +236,7 @@
     <ClCompile Include="src\lib\tml\random\RandomSeed.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtil.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\sound\Event.cpp" />
     <ClCompile Include="src\lib\tml\sound\Manager.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\sound\Resource.cpp" />
@@ -293,6 +295,7 @@
     <ClInclude Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\DepthState.h" />
+    <ClInclude Include="src\lib\tml\graphic\Event.h" />
     <ClInclude Include="src\lib\tml\graphic\Fog.h" />
     <ClInclude Include="src\lib\tml\graphic\FogShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Font.h" />
@@ -343,6 +346,7 @@
     <ClInclude Include="src\lib\tml\random\RandomSeed.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtil.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\sound\Event.h" />
     <ClInclude Include="src\lib\tml\sound\Manager.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\sound\Resource.h" />

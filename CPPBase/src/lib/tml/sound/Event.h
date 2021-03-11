@@ -6,18 +6,18 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_INPUT.h"
+#include "../constant/ConstantUtil_SOUND.h"
 
 
 namespace tml {
-namespace input {
+namespace sound {
 class Manager;
 }
 }
 
 
 namespace tml {
-namespace input {
+namespace sound {
 /**
  * @brief EventƒNƒ‰ƒX
  *
@@ -25,17 +25,17 @@ namespace input {
  */
 class Event
 {
-public: Event(const tml::input::Event &) = delete;
-public: tml::input::Event &operator =(const tml::input::Event &) = delete;
+public: Event(const tml::sound::Event &) = delete;
+public: tml::sound::Event &operator =(const tml::sound::Event &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
-	tml::ConstantUtil::INPUT::EVENT_TYPE event_type_;
-	tml::input::Manager *mgr_;
+	tml::ConstantUtil::SOUND::EVENT_TYPE event_type_;
+	tml::sound::Manager *mgr_;
 
 protected:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::INPUT::EVENT_TYPE, tml::input::Manager *);
+	INT Create(const tml::ConstantUtil::SOUND::EVENT_TYPE, tml::sound::Manager *);
 
 public:
 	Event();
@@ -43,8 +43,8 @@ public:
 
 	virtual void Init(void);
 
-	tml::ConstantUtil::INPUT::EVENT_TYPE GetEventType(void) const;
-	tml::input::Manager *GetManager(void);
+	tml::ConstantUtil::SOUND::EVENT_TYPE GetEventType(void) const;
+	tml::sound::Manager *GetManager(void);
 };
 }
 }
@@ -53,7 +53,7 @@ public:
 /**
  * @brief ReleaseŠÖ”
  */
-inline void tml::input::Event::Release(void)
+inline void tml::sound::Event::Release(void)
 {
 	return;
 }
@@ -63,7 +63,7 @@ inline void tml::input::Event::Release(void)
  * @brief GetEventTypeŠÖ”
  * @return event_type (event_type)
  */
-inline tml::ConstantUtil::INPUT::EVENT_TYPE tml::input::Event::GetEventType(void) const
+inline tml::ConstantUtil::SOUND::EVENT_TYPE tml::sound::Event::GetEventType(void) const
 {
 	return (this->event_type_);
 }
@@ -73,7 +73,7 @@ inline tml::ConstantUtil::INPUT::EVENT_TYPE tml::input::Event::GetEventType(void
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::input::Manager *tml::input::Event::GetManager(void)
+inline tml::sound::Manager *tml::sound::Event::GetManager(void)
 {
 	return (this->mgr_);
 }

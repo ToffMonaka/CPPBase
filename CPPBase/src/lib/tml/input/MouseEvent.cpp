@@ -11,8 +11,10 @@
  * @brief コンストラクタ
  */
 tml::input::MouseEventData::MouseEventData() :
-	type_flag(0U),
-	position(0U)
+	type_flag(tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::NONE),
+	position(0),
+	displacement(0),
+	wheel(0.0f)
 {
 	return;
 }
@@ -36,8 +38,40 @@ void tml::input::MouseEventData::Init(void)
 {
 	this->Release();
 
-	this->type_flag = 0U;
-	this->position = 0U;
+	this->type_flag = tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::NONE;
+	this->position = 0;
+	this->displacement = 0;
+	this->wheel = 0.0f;
+
+	return;
+}
+
+
+/**
+ * @brief SetRawInput関数
+ * @param rm (raw_input)
+ * @param pos (position)
+ */
+void tml::input::MouseEventData::SetRawInput(const RAWMOUSE &rm, const tml::XMINT2EX &pos)
+{
+	this->type_flag = static_cast<tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE>(rm.usButtonFlags);
+	this->position = pos;
+
+	if ((rm.lLastX != 0L) || (rm.lLastY != 0L)) {
+		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::DISPLACEMENT;
+		this->displacement.x = rm.lLastX;
+		this->displacement.y = rm.lLastY;
+	} else {
+		this->displacement = 0;
+	}
+
+	if (rm.usButtonFlags & (RI_MOUSE_HWHEEL | RI_MOUSE_WHEEL)) {
+		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::WHEEL;
+		this->wheel.x = (rm.usButtonFlags & RI_MOUSE_HWHEEL) ? static_cast<FLOAT>(static_cast<SHORT>(rm.usButtonData)) / WHEEL_DELTA : 0.0f;
+		this->wheel.y = (rm.usButtonFlags & RI_MOUSE_WHEEL) ? static_cast<FLOAT>(static_cast<SHORT>(rm.usButtonData)) / WHEEL_DELTA : 0.0f;
+	} else {
+		this->wheel = 0.0f;
+	}
 
 	return;
 }

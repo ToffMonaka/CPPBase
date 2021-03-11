@@ -10,8 +10,8 @@
 /**
  * @brief コンストラクタ
  */
-tml::input::Event::Event() :
-	event_type_(tml::ConstantUtil::INPUT::EVENT_TYPE::NONE),
+tml::sound::Event::Event() :
+	event_type_(tml::ConstantUtil::SOUND::EVENT_TYPE::NONE),
 	mgr_(nullptr)
 {
 	return;
@@ -21,7 +21,7 @@ tml::input::Event::Event() :
 /**
  * @brief デストラクタ
  */
-tml::input::Event::~Event()
+tml::sound::Event::~Event()
 {
 	return;
 }
@@ -30,9 +30,9 @@ tml::input::Event::~Event()
 /**
  * @brief Init関数
  */
-void tml::input::Event::Init(void)
+void tml::sound::Event::Init(void)
 {
-	this->event_type_ = tml::ConstantUtil::INPUT::EVENT_TYPE::NONE;
+	this->event_type_ = tml::ConstantUtil::SOUND::EVENT_TYPE::NONE;
 	this->mgr_ = nullptr;
 
 	return;
@@ -46,9 +46,9 @@ void tml::input::Event::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::input::Event::Create(const tml::ConstantUtil::INPUT::EVENT_TYPE event_type, tml::input::Manager *mgr)
+INT tml::sound::Event::Create(const tml::ConstantUtil::SOUND::EVENT_TYPE event_type, tml::sound::Manager *mgr)
 {
-	if ((event_type == tml::ConstantUtil::INPUT::EVENT_TYPE::NONE)
+	if ((event_type == tml::ConstantUtil::SOUND::EVENT_TYPE::NONE)
 	|| (mgr == nullptr)) {
 		return (-1);
 	}

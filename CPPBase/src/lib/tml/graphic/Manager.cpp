@@ -73,6 +73,10 @@ void tml::graphic::ManagerDesc::Init(void)
 tml::graphic::Manager::Manager() :
 	wnd_handle_(nullptr),
 	wnd_dc_handle_(nullptr),
+	event_cnt_ary_{},
+	front_event_index_(0U),
+	back_event_index_(0U),
+	stock_event_cnt_ary_{},
 	factory_(nullptr),
 	adapter_(nullptr),
 	adapter_desc_{},
@@ -242,6 +246,20 @@ void tml::graphic::Manager::Init(void)
 
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
+	this->event_cnt_ary_.fill(0U);
+
+	for (auto &event_cont : this->event_cont_ary_) {
+		event_cont.clear();
+	}
+
+	this->front_event_index_ = 0U;
+	this->back_event_index_ = 0U;
+
+	this->stock_event_cnt_ary_.fill(0U);
+
+	for (auto &stock_event_cont : this->stock_event_cont_ary_) {
+		stock_event_cont.clear();
+	}
 
 	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
 	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
@@ -566,6 +584,8 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
  */
 void tml::graphic::Manager::Update(void)
 {
+	this->UpdateEvent();
+
 	XMVECTOR determinant;
 
 	XMMATRIX v_mat_3d;
@@ -683,6 +703,46 @@ void tml::graphic::Manager::Update(void)
 	this->ClearDrawFog();
 	this->ClearDrawMesh();
 	this->ClearDrawModel();
+
+	return;
+}
+
+
+/**
+ * @brief UpdateEventŠÖ”
+ */
+void tml::graphic::Manager::UpdateEvent(void)
+{
+	if (this->front_event_index_ == this->back_event_index_) {
+		this->front_event_index_ = 0U;
+		this->back_event_index_ = 1U;
+	} else {
+		auto tmp_event_index = this->front_event_index_;
+
+		this->front_event_index_ = this->back_event_index_;
+		this->back_event_index_ = tmp_event_index;
+	}
+
+	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];
+	auto &back_event_cont = this->event_cont_ary_[this->back_event_index_];
+
+	for (UINT back_event_i = 0U; back_event_i < back_event_cnt; ++back_event_i) {
+		tml::unique_ptr<tml::graphic::Event> &event = back_event_cont[back_event_i];
+
+		auto event_index = static_cast<UINT>(event->GetEventType());
+		auto &stock_event_cnt = this->stock_event_cnt_ary_[event_index];
+		auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
+
+		if (stock_event_cnt >= stock_event_cont.size()) {
+			stock_event_cont.resize(stock_event_cnt + 128U);
+		}
+
+		stock_event_cont[stock_event_cnt] = std::move(event);
+
+		++stock_event_cnt;
+	}
+
+	back_event_cnt = 0U;
 
 	return;
 }

@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include "ManagerCommon.h"
+#include "Event.h"
 
 
 namespace tml {
@@ -58,6 +59,15 @@ private:
 	HDC wnd_dc_handle_;
 	tml::sound::ManagerCommon common_;
 	std::array<std::list<tml::shared_ptr<tml::sound::Resource>>, tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT> res_cont_ary_;
+	std::array<UINT, 2U> event_cnt_ary_;
+	std::array<std::vector<tml::unique_ptr<tml::sound::Event>>, 2U> event_cont_ary_;
+	UINT front_event_index_;
+	UINT back_event_index_;
+	std::array<UINT, tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT> stock_event_cnt_ary_;
+	std::array<std::vector<tml::unique_ptr<tml::sound::Event>>, tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT> stock_event_cont_ary_;
+
+private:
+	void UpdateEvent(void);
 
 protected:
 	void Release(void);
@@ -79,6 +89,10 @@ public:
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, tml::shared_ptr<T1> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
+	UINT GetEventCount(void) const;
+	const tml::unique_ptr<tml::sound::Event> *GetEventArray(void) const;
+	template <typename T, typename D>
+	INT AddEvent(const D &);
 };
 }
 }
@@ -186,4 +200,68 @@ inline void tml::sound::Manager::ReleaseResource(tml::shared_ptr<T> &res)
 	res.reset();
 
 	return;
+}
+
+
+/**
+ * @brief GetEventCountä÷êî
+ * @return event_cnt (event_count)
+ */
+inline UINT tml::sound::Manager::GetEventCount(void) const
+{
+	return (this->event_cnt_ary_[this->front_event_index_]);
+}
+
+
+/**
+ * @brief GetEventArrayä÷êî
+ * @return event_ary (event_array)
+ */
+inline const tml::unique_ptr<tml::sound::Event> *tml::sound::Manager::GetEventArray(void) const
+{
+	return (this->event_cont_ary_[this->front_event_index_].data());
+}
+
+
+/**
+ * @brief AddEventä÷êî
+ * @param dat (data)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+template <typename T, typename D>
+inline INT tml::sound::Manager::AddEvent(const D &dat)
+{
+	tml::unique_ptr<tml::sound::Event> event;
+
+	auto event_index = static_cast<UINT>(T::EVENT_TYPE);
+	auto &stock_event_cnt = this->stock_event_cnt_ary_[event_index];
+	auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
+
+	if (stock_event_cnt > 0U) {
+		--stock_event_cnt;
+
+		event = std::move(stock_event_cont[stock_event_cnt]);
+	} else {
+		event = tml::make_unique<T>(1U);
+
+		if (reinterpret_cast<T *>(event.get())->Create(this) < 0) {
+			return (-1);
+		}
+	}
+
+	reinterpret_cast<T *>(event.get())->SetData(dat);
+
+	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];
+	auto &back_event_cont = this->event_cont_ary_[this->back_event_index_];
+
+	if (back_event_cnt >= back_event_cont.size()) {
+		back_event_cont.resize(back_event_cnt + 128U);
+	}
+
+	back_event_cont[back_event_cnt] = std::move(event);
+
+	++back_event_cnt;
+
+	return (0);
 }
