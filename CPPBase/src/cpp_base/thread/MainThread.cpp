@@ -14,23 +14,25 @@
 #include "../../lib/tml/thread/ThreadUtil.h"
 #include "../../lib/tml/input/MouseEvent.h"
 #include "../../lib/tml/input/KeyboardEvent.h"
-#include "../../lib/tml/graphic/Camera.h"
-#include "../../lib/tml/graphic/Mesh.h"
-#include "../../lib/tml/graphic/Texture.h"
-#include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/SpriteModel.h"
-#include "../../lib/tml/graphic/Font.h"
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../constant/ConstantUtil_FILE.h"
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
+
+#include "../../lib/tml/graphic/Camera.h"
+#include "../../lib/tml/graphic/Light.h"
+#include "../../lib/tml/graphic/Fog.h"
+#include "../../lib/tml/graphic/Texture.h"
+#include "../../lib/tml/graphic/Sampler.h"
+#include "../../lib/tml/graphic/SpriteModel.h"
+#include "../../lib/tml/graphic/Font.h"
 
 
 /**
  * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
  */
 cpp_base::MainThread::MainThread() :
-	fps_tex_update_time_(0.0)
+	log_update_time_(0.0)
 {
 	return;
 }
@@ -55,8 +57,12 @@ void cpp_base::MainThread::Release(void)
 	this->graphic_mgr_.ReleaseResource(this->camera_);
 	this->graphic_mgr_.ReleaseResource(this->title_bg_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->title_logo_sprite_model_);
-	this->graphic_mgr_.ReleaseResource(this->fps_sprite_model_);
-	this->graphic_mgr_.ReleaseResource(this->fps_font_);
+	this->graphic_mgr_.ReleaseResource(this->log_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->log_font_);
+
+	this->input_mgr_.Init();
+	this->graphic_mgr_.Init();
+	this->sound_mgr_.Init();
 
 	tml::MainThread::Release();
 
@@ -73,11 +79,8 @@ void cpp_base::MainThread::Init(void)
 
 	this->frame_rate_.Init();
 	this->sys_conf_file_.Init();
-	this->input_mgr_.Init();
-	this->graphic_mgr_.Init();
-	this->sound_mgr_.Init();
 
-	this->fps_tex_update_time_ = tml::TIME_REAL(0.0);
+	this->log_update_time_ = tml::TIME_REAL(0.0);
 
 	tml::MainThread::Init();
 
@@ -309,29 +312,28 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
-		tml::XMUINT2EX fps_tex_size = tml::XMUINT2EX(256U, 32U);
-		tml::XMUINT2EX fps_font_size = tml::XMUINT2EX(0U, 16U);
+		tml::XMUINT2EX log_tex_size = this->graphic_mgr_.GetSize();
+		tml::XMUINT2EX log_font_size = tml::XMUINT2EX(0U, 16U);
 
-		{// FPSSpriteModel Create
+		{// LogSpriteModel Create
 			tml::graphic::SpriteModelDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
-			desc.position = tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + static_cast<FLOAT>(fps_tex_size.x >> 1) + 4.0f, static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - static_cast<FLOAT>(fps_tex_size.y >> 1) - 4.0f);
 			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
 
 			desc.Read(read_desc);
 
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->fps_sprite_model_, desc);
+			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->log_sprite_model_, desc);
 
-			if (this->fps_sprite_model_ == nullptr) {
+			if (this->log_sprite_model_ == nullptr) {
 				this->Init();
 
 				return (-1);
 			}
 
-			auto stage = this->fps_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+			auto stage = this->log_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 			auto layer = stage->GetLayerFast(0U);
 
 			layer->SetDiffuseTextureIndex(0U);
@@ -342,7 +344,7 @@ INT cpp_base::MainThread::Start(void)
 				tml::graphic::TextureDesc desc;
 
 				desc.manager = &this->graphic_mgr_;
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, fps_tex_size);
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, log_tex_size);
 				desc.cpu_buffer_flag = true;
 
 				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
@@ -353,29 +355,29 @@ INT cpp_base::MainThread::Start(void)
 					return (-1);
 				}
 
-				this->fps_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+				this->log_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
 
-				this->fps_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+				this->log_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 				this->graphic_mgr_.ReleaseResource(tex);
 			}
 		}
 
-		{// FPSFont Create
+		{// LogFont Create
 			tml::graphic::FontDesc desc;
 
 			desc.manager = &this->graphic_mgr_;
-			desc.SetFontDesc(fps_font_size, L"‚l‚r ƒSƒVƒbƒN");
+			desc.SetFontDesc(log_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-			this->graphic_mgr_.GetResource<tml::graphic::Font>(this->fps_font_, desc);
+			this->graphic_mgr_.GetResource<tml::graphic::Font>(this->log_font_, desc);
 
-			if (this->fps_font_ == nullptr) {
+			if (this->log_font_ == nullptr) {
 				this->Init();
 
 				return (-1);
 			}
 		}
 
-		this->fps_tex_update_time_ = tml::TIME_REAL(1.0);
+		this->log_update_time_ = tml::TIME_REAL(1.0);
 
 		int a = 0;
 	}
@@ -410,16 +412,37 @@ void cpp_base::MainThread::Update(void)
 			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event.get())->GetData();
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-				this->fps_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->fps_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->fps_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
+				this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->log_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->log_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::WHEEL)) {
-				this->fps_sprite_model_->position.SetY(this->fps_sprite_model_->position.GetY() + event_dat.wheel.y * 2.0f);
-			}
+			break;
+		}
+		case tml::ConstantUtil::INPUT::EVENT_TYPE::KEYBOARD: {
+			auto &event_dat = reinterpret_cast<tml::input::KeyboardEvent *>(event.get())->GetData();
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::DISPLACEMENT)) {
-				this->fps_sprite_model_->position.SetX(this->fps_sprite_model_->position.GetX() + static_cast<FLOAT>(event_dat.displacement.x) * 4.0f);
-				this->fps_sprite_model_->position.SetY(this->fps_sprite_model_->position.GetY() + static_cast<FLOAT>(-event_dat.displacement.y) * 4.0f);
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_DOWN)) {
+				switch (event_dat.virtual_key_code) {
+				case tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::W: {
+					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX(), this->log_sprite_model_->position.GetY() + 50.0f));
+
+					break;
+				}
+				case tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::S: {
+					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX(), this->log_sprite_model_->position.GetY() - 50.0f));
+
+					break;
+				}
+				case tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::A: {
+					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX() - 50.0f, this->log_sprite_model_->position.GetY()));
+
+					break;
+				}
+				case tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::D: {
+					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX() + 50.0f, this->log_sprite_model_->position.GetY()));
+
+					break;
+				}
+				}
 			}
 
 			break;
@@ -427,26 +450,26 @@ void cpp_base::MainThread::Update(void)
 		}
 	}
 
-	this->fps_tex_update_time_ += this->frame_rate_.GetElapsedTime();
+	this->log_update_time_ += this->frame_rate_.GetElapsedTime();
 
-	if (this->fps_tex_update_time_ >= tml::TIME_REAL(1.0)) {
-		WCHAR fps_str[100];
+	if (this->log_update_time_ >= tml::TIME_REAL(1.0)) {
+		WCHAR log_str[1024];
 
-		_snwprintf_s(fps_str, sizeof(fps_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u", this->frame_rate_.GetFPS(), this->frame_rate_.GetLimit());
+		_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u", this->frame_rate_.GetFPS(), this->frame_rate_.GetLimit());
 
-		auto fps_tex = this->fps_sprite_model_->GetTexture(this->fps_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+		auto log_tex = this->log_sprite_model_->GetTexture(this->log_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
-		fps_tex->ClearCPUBuffer();
-		fps_tex->DrawCPUBufferString(fps_str, tml::XMINT2EX(0, 0), this->fps_font_.get());
-		fps_tex->UploadCPUBuffer();
+		log_tex->ClearCPUBuffer();
+		log_tex->DrawCPUBufferString(log_str, tml::XMINT2EX(4, 4), this->log_font_.get());
+		log_tex->UploadCPUBuffer();
 
-		this->fps_tex_update_time_ = tml::TIME_REAL(0.0);
+		this->log_update_time_ = tml::TIME_REAL(0.0);
 	}
 
 	this->graphic_mgr_.SetDrawCamera(this->camera_.get());
 	this->graphic_mgr_.SetDrawModel(this->title_bg_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->title_logo_sprite_model_.get());
-	this->graphic_mgr_.SetDrawModel(this->fps_sprite_model_.get());
+	this->graphic_mgr_.SetDrawModel(this->log_sprite_model_.get());
 
 	this->graphic_mgr_.Update();
 
@@ -526,9 +549,11 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 			break;
 		}
 		case RIM_TYPEKEYBOARD: {
-			tml::input::KeyboardEventData dat;
+			tml::input::KeyboardEventData event_dat;
 
-			th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(dat);
+			event_dat.SetRawInput(ri.data.keyboard);
+
+			th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(event_dat);
 
 			break;
 		}

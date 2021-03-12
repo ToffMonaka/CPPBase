@@ -20,8 +20,8 @@ class MouseEventData
 public:
 	tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE type_flag;
 	tml::XMINT2EX position;
-	tml::XMINT2EX displacement;
-	tml::XMFLOAT2EX wheel;
+	tml::XMINT2EX move_value;
+	tml::XMFLOAT2EX wheel_value;
 
 protected:
 	void Release(void);

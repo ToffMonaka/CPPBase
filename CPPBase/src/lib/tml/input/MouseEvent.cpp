@@ -13,8 +13,8 @@
 tml::input::MouseEventData::MouseEventData() :
 	type_flag(tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::NONE),
 	position(0),
-	displacement(0),
-	wheel(0.0f)
+	move_value(0),
+	wheel_value(0.0f)
 {
 	return;
 }
@@ -40,8 +40,8 @@ void tml::input::MouseEventData::Init(void)
 
 	this->type_flag = tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::NONE;
 	this->position = 0;
-	this->displacement = 0;
-	this->wheel = 0.0f;
+	this->move_value = 0;
+	this->wheel_value = 0.0f;
 
 	return;
 }
@@ -58,19 +58,19 @@ void tml::input::MouseEventData::SetRawInput(const RAWMOUSE &rm, const tml::XMIN
 	this->position = pos;
 
 	if ((rm.lLastX != 0L) || (rm.lLastY != 0L)) {
-		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::DISPLACEMENT;
-		this->displacement.x = rm.lLastX;
-		this->displacement.y = rm.lLastY;
+		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MOVE;
+		this->move_value.x = rm.lLastX;
+		this->move_value.y = rm.lLastY;
 	} else {
-		this->displacement = 0;
+		this->move_value = 0;
 	}
 
 	if (rm.usButtonFlags & (RI_MOUSE_HWHEEL | RI_MOUSE_WHEEL)) {
 		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::WHEEL;
-		this->wheel.x = (rm.usButtonFlags & RI_MOUSE_HWHEEL) ? static_cast<FLOAT>(static_cast<SHORT>(rm.usButtonData)) / WHEEL_DELTA : 0.0f;
-		this->wheel.y = (rm.usButtonFlags & RI_MOUSE_WHEEL) ? static_cast<FLOAT>(static_cast<SHORT>(rm.usButtonData)) / WHEEL_DELTA : 0.0f;
+		this->wheel_value.x = (rm.usButtonFlags & RI_MOUSE_HWHEEL) ? static_cast<FLOAT>(static_cast<SHORT>(rm.usButtonData)) / WHEEL_DELTA : 0.0f;
+		this->wheel_value.y = (rm.usButtonFlags & RI_MOUSE_WHEEL) ? static_cast<FLOAT>(static_cast<SHORT>(rm.usButtonData)) / WHEEL_DELTA : 0.0f;
 	} else {
-		this->wheel = 0.0f;
+		this->wheel_value = 0.0f;
 	}
 
 	return;

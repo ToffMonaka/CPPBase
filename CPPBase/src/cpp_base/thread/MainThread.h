@@ -27,6 +27,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	tml::FrameRate frame_rate_;
 	cpp_base::SystemConfigFile sys_conf_file_;
+
 	tml::input::Manager input_mgr_;
 	tml::graphic::Manager graphic_mgr_;
 	tml::sound::Manager sound_mgr_;
@@ -34,9 +35,9 @@ private:
 	tml::shared_ptr<tml::graphic::Camera> camera_;
 	tml::shared_ptr<tml::graphic::SpriteModel> title_bg_sprite_model_;
 	tml::shared_ptr<tml::graphic::SpriteModel> title_logo_sprite_model_;
-	tml::shared_ptr<tml::graphic::SpriteModel> fps_sprite_model_;
-	tml::shared_ptr<tml::graphic::Font> fps_font_;
-	tml::TIME_REAL fps_tex_update_time_;
+	tml::shared_ptr<tml::graphic::SpriteModel> log_sprite_model_;
+	tml::shared_ptr<tml::graphic::Font> log_font_;
+	tml::TIME_REAL log_update_time_;
 
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);

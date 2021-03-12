@@ -17,6 +17,8 @@ namespace input {
 class KeyboardEventData
 {
 public:
+	tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE type_flag;
+	tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE virtual_key_code;
 
 protected:
 	void Release(void);
@@ -26,6 +28,8 @@ public:
 	virtual ~KeyboardEventData();
 
 	virtual void Init(void);
+
+	void SetRawInput(const RAWKEYBOARD &);
 };
 }
 }
