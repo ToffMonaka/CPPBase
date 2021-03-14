@@ -18,7 +18,7 @@ class KeyboardEventData
 {
 public:
 	tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE type_flag;
-	tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE virtual_key_code;
+	tml::ConstantUtil::INPUT::KEYBOARD_CODE code;
 
 protected:
 	void Release(void);

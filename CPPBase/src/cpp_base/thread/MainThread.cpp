@@ -5,6 +5,7 @@
 
 
 #include "MainThread.h"
+#include <windowsx.h>
 #include "../../lib/tml/memory/MemoryUtil.h"
 #include "../../lib/tml/string/StringUtil.h"
 #include "../../lib/tml/time/TimeUtil.h"
@@ -404,6 +405,10 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
+	if (this->input_mgr_.GetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::LEFT)) {
+		this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->log_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(this->input_mgr_.GetMousePosition().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->log_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(this->input_mgr_.GetMousePosition().y)));
+	}
+
 	for (UINT event_i = 0U; event_i < this->input_mgr_.GetEventCount(); ++event_i) {
 		auto &event = this->input_mgr_.GetEventArray()[event_i];
 
@@ -411,7 +416,7 @@ void cpp_base::MainThread::Update(void)
 		case tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE: {
 			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event.get())->GetData();
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
 				this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->log_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->log_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
 			}
 
@@ -421,23 +426,23 @@ void cpp_base::MainThread::Update(void)
 			auto &event_dat = reinterpret_cast<tml::input::KeyboardEvent *>(event.get())->GetData();
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_DOWN)) {
-				switch (event_dat.virtual_key_code) {
-				case tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::W: {
+				switch (event_dat.code) {
+				case tml::ConstantUtil::INPUT::KEYBOARD_CODE::W: {
 					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX(), this->log_sprite_model_->position.GetY() + 50.0f));
 
 					break;
 				}
-				case tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::S: {
+				case tml::ConstantUtil::INPUT::KEYBOARD_CODE::S: {
 					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX(), this->log_sprite_model_->position.GetY() - 50.0f));
 
 					break;
 				}
-				case tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::A: {
+				case tml::ConstantUtil::INPUT::KEYBOARD_CODE::A: {
 					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX() - 50.0f, this->log_sprite_model_->position.GetY()));
 
 					break;
 				}
-				case tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::D: {
+				case tml::ConstantUtil::INPUT::KEYBOARD_CODE::D: {
 					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX() + 50.0f, this->log_sprite_model_->position.GetY()));
 
 					break;
@@ -455,7 +460,7 @@ void cpp_base::MainThread::Update(void)
 	if (this->log_update_time_ >= tml::TIME_REAL(1.0)) {
 		WCHAR log_str[1024];
 
-		_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u", this->frame_rate_.GetFPS(), this->frame_rate_.GetLimit());
+		_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u\n%d,%d", this->frame_rate_.GetFPS(), this->frame_rate_.GetLimit(), this->input_mgr_.GetMousePosition().x, this->input_mgr_.GetMousePosition().y);
 
 		auto log_tex = this->log_sprite_model_->GetTexture(this->log_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
@@ -485,14 +490,18 @@ void cpp_base::MainThread::Update(void)
  * @brief WindowProcedureä÷êî
  * @param wnd_handle (window_handle)
  * @param msg_type (message_type)
- * @param msg_param1 (message_parameter1)
- * @param msg_param2 (message_parameter2)
+ * @param msg_wp (message_wparameter)
+ * @param msg_lp (message_lparameter)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg_type, WPARAM msg_param1, LPARAM msg_param2)
+LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg_type, WPARAM msg_wp, LPARAM msg_lp)
 {
-	auto th = reinterpret_cast<cpp_base::MainThread *>(tml::ThreadUtil::Get());
+	static cpp_base::MainThread *th = nullptr;
+
+	if (th == nullptr) {
+		th = reinterpret_cast<cpp_base::MainThread *>(tml::ThreadUtil::Get());
+	}
 
 	switch (msg_type) {
 	case WM_CREATE: {
@@ -519,32 +528,76 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 		return (0);
 	}
+	case WM_SETFOCUS: {
+		return (0);
+	}
+	case WM_KILLFOCUS: {
+		th->GetInputManager().SetMouseCodeState(false);
+		th->GetInputManager().SetKeyboardCodeState(false);
+
+		return (0);
+	}
 	case WM_INPUT: {
 		RAWINPUT ri;
 		UINT ri_size = 0U;
 
-		GetRawInputData(reinterpret_cast<HRAWINPUT>(msg_param2), RID_INPUT, nullptr, &ri_size, sizeof(RAWINPUTHEADER));
+		GetRawInputData(reinterpret_cast<HRAWINPUT>(msg_lp), RID_INPUT, nullptr, &ri_size, sizeof(RAWINPUTHEADER));
 
 		if ((ri_size <= 0U) || (ri_size > sizeof(RAWINPUT))) {
 			return (0);
 		}
 
-		if (GetRawInputData(reinterpret_cast<HRAWINPUT>(msg_param2), RID_INPUT, &ri, &ri_size, sizeof(RAWINPUTHEADER)) != ri_size) {
+		if (GetRawInputData(reinterpret_cast<HRAWINPUT>(msg_lp), RID_INPUT, &ri, &ri_size, sizeof(RAWINPUTHEADER)) != ri_size) {
 			return (0);
 		}
 
 		switch (ri.header.dwType) {
 		case RIM_TYPEMOUSE: {
-			POINT mouse_pos;
-
-			GetCursorPos(&mouse_pos);
-			ScreenToClient(wnd_handle, &mouse_pos);
-
 			tml::input::MouseEventData event_dat;
 
-			event_dat.SetRawInput(ri.data.mouse, tml::XMINT2EX(mouse_pos.x, mouse_pos.y));
+			event_dat.SetRawInput(ri.data.mouse, th->GetInputManager().GetMousePosition());
 
 			th->GetInputManager().AddEvent<tml::input::MouseEvent>(event_dat);
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::LEFT, true);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_UP)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::LEFT, false);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::RIGHT, true);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_UP)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::RIGHT, false);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MIDDLE_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::MIDDLE, true);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MIDDLE_BUTTON_UP)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::MIDDLE, false);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE1_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE1, true);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE1_BUTTON_UP)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE1, false);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE2_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE2, true);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE2_BUTTON_UP)) {
+				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE2, false);
+			}
 
 			break;
 		}
@@ -555,13 +608,26 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 			th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(event_dat);
 
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_DOWN)) {
+				th->GetInputManager().SetKeyboardCodeState(event_dat.code, true);
+			}
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_UP)) {
+				th->GetInputManager().SetKeyboardCodeState(event_dat.code, false);
+			}
+
 			break;
 		}
 		}
 
 		return (0);
 	}
+	case WM_MOUSEMOVE: {
+		th->GetInputManager().SetMousePosition(tml::XMINT2EX(GET_X_LPARAM(msg_lp), GET_Y_LPARAM(msg_lp)));
+
+		return (0);
+	}
 	}
 
-	return (DefWindowProc(wnd_handle, msg_type, msg_param1, msg_param2));
+	return (DefWindowProc(wnd_handle, msg_type, msg_wp, msg_lp));
 }

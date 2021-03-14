@@ -12,7 +12,7 @@
  */
 tml::input::KeyboardEventData::KeyboardEventData() :
 	type_flag(tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::NONE),
-	virtual_key_code(tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::NONE)
+	code(tml::ConstantUtil::INPUT::KEYBOARD_CODE::NONE)
 {
 	return;
 }
@@ -37,7 +37,7 @@ void tml::input::KeyboardEventData::Init(void)
 	this->Release();
 
 	this->type_flag = tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::NONE;
-	this->virtual_key_code = tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE::NONE;
+	this->code = tml::ConstantUtil::INPUT::KEYBOARD_CODE::NONE;
 
 	return;
 }
@@ -45,12 +45,12 @@ void tml::input::KeyboardEventData::Init(void)
 
 /**
  * @brief SetRawInputŠÖ”
- * @param rm (raw_input)
+ * @param rk (raw_keyboard)
  */
 void tml::input::KeyboardEventData::SetRawInput(const RAWKEYBOARD &rk)
 {
 	this->type_flag = static_cast<tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE>((rk.Flags & 1) + 1);
-	this->virtual_key_code = static_cast<tml::ConstantUtil::INPUT::VIRTUAL_KEY_CODE>(rk.VKey);
+	this->code = static_cast<tml::ConstantUtil::INPUT::KEYBOARD_CODE>(rk.VKey);
 
 	return;
 }

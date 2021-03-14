@@ -52,7 +52,10 @@ tml::input::Manager::Manager() :
 	event_cnt_ary_{},
 	front_event_index_(0U),
 	back_event_index_(0U),
-	stock_event_cnt_ary_{}
+	stock_event_cnt_ary_{},
+	mouse_pos_(0),
+	mouse_code_stat_ary_{},
+	keyboard_code_stat_ary_{}
 {
 	return;
 }
@@ -112,6 +115,8 @@ void tml::input::Manager::Init(void)
 		stock_event_cont.clear();
 	}
 
+	this->mouse_pos_ = 0;
+
 	return;
 }
 
@@ -135,6 +140,13 @@ INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
+
+	POINT mouse_sys_pos;
+
+	GetCursorPos(&mouse_sys_pos);
+	ScreenToClient(this->wnd_handle_, &mouse_sys_pos);
+
+	this->mouse_pos_ = tml::XMINT2EX(mouse_sys_pos.x, mouse_sys_pos.y);
 
 	if (this->common_.Create(this) < 0) {
 		this->Init();

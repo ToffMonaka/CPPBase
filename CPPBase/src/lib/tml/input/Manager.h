@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
+#include "../math/XNAMath.h"
 #include "ManagerCommon.h"
 #include "Event.h"
 
@@ -66,6 +67,10 @@ private:
 	std::array<UINT, tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT> stock_event_cnt_ary_;
 	std::array<std::vector<tml::unique_ptr<tml::input::Event>>, tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT> stock_event_cont_ary_;
 
+	tml::XMINT2EX mouse_pos_;
+	std::array<bool, tml::ConstantUtil::INPUT::MOUSE_CODE_COUNT> mouse_code_stat_ary_;
+	std::array<bool, tml::ConstantUtil::INPUT::KEYBOARD_CODE_COUNT> keyboard_code_stat_ary_;
+
 private:
 	void UpdateEvent(void);
 
@@ -93,6 +98,19 @@ public:
 	const tml::unique_ptr<tml::input::Event> *GetEventArray(void) const;
 	template <typename T, typename D>
 	INT AddEvent(const D &);
+
+	const tml::XMINT2EX &GetMousePosition(void) const;
+	const tml::XMINT2EX &GetMousePosition(const bool);
+	void SetMousePosition(const tml::XMINT2EX &);
+	void SetMousePosition(const tml::XMINT2EX &, const bool);
+	bool GetMouseCodeState(const tml::ConstantUtil::INPUT::MOUSE_CODE) const;
+	bool GetMouseCodeState(const tml::ConstantUtil::INPUT::MOUSE_CODE, const bool);
+	void SetMouseCodeState(const tml::ConstantUtil::INPUT::MOUSE_CODE, const bool);
+	void SetMouseCodeState(const bool);
+	bool GetKeyboardCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_CODE) const;
+	bool GetKeyboardCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_CODE, const bool);
+	void SetKeyboardCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_CODE, const bool);
+	void SetKeyboardCodeState(const bool);
 };
 }
 }
@@ -264,4 +282,170 @@ inline INT tml::input::Manager::AddEvent(const D &dat)
 	++back_event_cnt;
 
 	return (0);
+}
+
+
+/**
+ * @brief GetMousePositionŠÖ”
+ * @return mouse_pos (mouse_position)
+ */
+inline const tml::XMINT2EX &tml::input::Manager::GetMousePosition(void) const
+{
+	return (this->mouse_pos_);
+}
+
+
+/**
+ * @brief GetMousePositionŠÖ”
+ * @param sys_flg (system_flag)
+ * @return mouse_pos (mouse_position)
+ */
+inline const tml::XMINT2EX &tml::input::Manager::GetMousePosition(const bool sys_flg)
+{
+	if (sys_flg) {
+		POINT mouse_sys_pos;
+
+		GetCursorPos(&mouse_sys_pos);
+		ScreenToClient(this->wnd_handle_, &mouse_sys_pos);
+
+		this->mouse_pos_ = tml::XMINT2EX(mouse_sys_pos.x, mouse_sys_pos.y);
+	}
+
+	return (this->mouse_pos_);
+}
+
+
+/**
+ * @brief SetMousePositionŠÖ”
+ * @param mouse_pos (mouse_position)
+ */
+inline void tml::input::Manager::SetMousePosition(const tml::XMINT2EX &mouse_pos)
+{
+	this->mouse_pos_ = mouse_pos;
+
+	return;
+}
+
+
+/**
+ * @brief SetMousePositionŠÖ”
+ * @param mouse_pos (mouse_position)
+ * @param sys_flg (system_flag)
+ */
+inline void tml::input::Manager::SetMousePosition(const tml::XMINT2EX &mouse_pos, const bool sys_flg)
+{
+	this->mouse_pos_ = mouse_pos;
+
+	if (sys_flg) {
+		POINT mouse_sys_pos = {this->mouse_pos_.x, this->mouse_pos_.y};
+
+		ClientToScreen(this->wnd_handle_, &mouse_sys_pos);
+		SetCursorPos(mouse_sys_pos.x, mouse_sys_pos.y);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief GetMouseCodeStateŠÖ”
+ * @param mouse_code (mouse_code)
+ * @return mouse_code_stat (mouse_code_state)
+ */
+inline bool tml::input::Manager::GetMouseCodeState(const tml::ConstantUtil::INPUT::MOUSE_CODE mouse_code) const
+{
+	return (this->mouse_code_stat_ary_[static_cast<UINT>(mouse_code)]);
+}
+
+
+/**
+ * @brief GetMouseCodeStateŠÖ”
+ * @param mouse_code (mouse_code)
+ * @param sys_flg (system_flag)
+ * @return mouse_code_stat (mouse_code_state)
+ */
+inline bool tml::input::Manager::GetMouseCodeState(const tml::ConstantUtil::INPUT::MOUSE_CODE mouse_code, const bool sys_flg)
+{
+	if (sys_flg) {
+		this->mouse_code_stat_ary_[static_cast<UINT>(mouse_code)] = GetKeyState(static_cast<UINT>(mouse_code)) & 0x8000;
+	}
+
+	return (this->mouse_code_stat_ary_[static_cast<UINT>(mouse_code)]);
+}
+
+
+/**
+ * @brief SetMouseCodeStateŠÖ”
+ * @param mouse_code (mouse_code)
+ * @param mouse_code_stat (mouse_code_state)
+ */
+inline void tml::input::Manager::SetMouseCodeState(const tml::ConstantUtil::INPUT::MOUSE_CODE mouse_code, const bool mouse_code_stat)
+{
+	this->mouse_code_stat_ary_[static_cast<UINT>(mouse_code)] = mouse_code_stat;
+
+	return;
+}
+
+
+/**
+ * @brief SetMouseCodeStateŠÖ”
+ * @param mouse_code_stat (mouse_code_state)
+ */
+inline void tml::input::Manager::SetMouseCodeState(const bool mouse_code_stat)
+{
+	this->mouse_code_stat_ary_.fill(mouse_code_stat);
+
+	return;
+}
+
+
+/**
+ * @brief GetKeyboardCodeStateŠÖ”
+ * @param keyboard_code (keyboard_code)
+ * @return keyboard_code_stat (keyboard_code_state)
+ */
+inline bool tml::input::Manager::GetKeyboardCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_CODE keyboard_code) const
+{
+	return (this->keyboard_code_stat_ary_[static_cast<UINT>(keyboard_code)]);
+}
+
+
+/**
+ * @brief GetKeyboardCodeStateŠÖ”
+ * @param keyboard_code (keyboard_code)
+ * @param sys_flg (system_flag)
+ * @return keyboard_code_stat (keyboard_code_state)
+ */
+inline bool tml::input::Manager::GetKeyboardCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_CODE keyboard_code, const bool sys_flg)
+{
+	if (sys_flg) {
+		this->keyboard_code_stat_ary_[static_cast<UINT>(keyboard_code)] = GetKeyState(static_cast<UINT>(keyboard_code)) & 0x8000;
+	}
+
+	return (this->keyboard_code_stat_ary_[static_cast<UINT>(keyboard_code)]);
+}
+
+
+/**
+ * @brief SetKeyboardCodeStateŠÖ”
+ * @param keyboard_code (keyboard_code)
+ * @param keyboard_code_stat (keyboard_code_state)
+ */
+inline void tml::input::Manager::SetKeyboardCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_CODE keyboard_code, const bool keyboard_code_stat)
+{
+	this->keyboard_code_stat_ary_[static_cast<UINT>(keyboard_code)] = keyboard_code_stat;
+
+	return;
+}
+
+
+/**
+ * @brief SetKeyboardCodeStateŠÖ”
+ * @param keyboard_code_stat (keyboard_code_state)
+ */
+inline void tml::input::Manager::SetKeyboardCodeState(const bool keyboard_code_stat)
+{
+	this->keyboard_code_stat_ary_.fill(keyboard_code_stat);
+
+	return;
 }
