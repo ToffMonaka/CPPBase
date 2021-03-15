@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Mainヘッダーファイルファイル
+ * @brief Mainヘッダーファイル
  */
 #pragma once
 
