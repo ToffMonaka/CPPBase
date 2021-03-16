@@ -14,6 +14,9 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dx11.lib")
 #endif
+#pragma comment(lib, "libogg.lib")
+#pragma comment(lib, "libvorbis.lib")
+#pragma comment(lib, "libvorbisfile.lib")
 
 
 #include "constant/ConstantUtil.h"
