@@ -39,6 +39,8 @@ public:
 	static void End(const bool finish_flg = false);
 	static void EndAll(const bool finish_flg = false);
 	static INT GetExitCode(void);
+	static INT CreateCOM(const DWORD);
+	static void DeleteCOM(void);
 };
 }
 
@@ -160,4 +162,33 @@ inline INT tml::ThreadUtil::GetExitCode(void)
 	}
 
 	return (tml::ThreadUtil::engine_->GetExitCode());
+}
+
+
+/**
+ * @brief CreateCOMŠÖ”
+ * @param init_flg (init_flag)
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+inline INT tml::ThreadUtil::CreateCOM(const DWORD init_flg)
+{
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return (-1);
+	}
+
+	return (tml::ThreadUtil::engine_->CreateCOM(init_flg));
+}
+
+
+/**
+ * @brief DeleteCOMŠÖ”
+ */
+inline void tml::ThreadUtil::DeleteCOM(void)
+{
+	if (tml::ThreadUtil::engine_ == nullptr) {
+		return;
+	}
+
+	return (tml::ThreadUtil::engine_->DeleteCOM());
 }

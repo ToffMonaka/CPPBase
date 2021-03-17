@@ -283,3 +283,34 @@ void tml::ThreadUtilEngine::EndAll(const bool finish_flg)
 
 	return;
 }
+
+
+/**
+ * @brief CreateCOMŠÖ”
+ * @param init_flg (init_flag)
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::ThreadUtilEngine::CreateCOM(const DWORD init_flg)
+{
+	{tml::ThreadLockBlock th_lock_block(this->com_th_lock_);
+		if (FAILED(CoInitializeEx(nullptr, init_flg))) {
+			return (-1);
+		}
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteCOMŠÖ”
+ */
+void tml::ThreadUtilEngine::DeleteCOM(void)
+{
+	{tml::ThreadLockBlock th_lock_block(this->com_th_lock_);
+		CoUninitialize();
+	}
+
+	return;
+}

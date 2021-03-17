@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include <list>
 #include <unordered_map>
+#include <objbase.h>
 #include "MainThread.h"
 #include "SubThread.h"
 
@@ -54,6 +55,7 @@ private:
 	std::unordered_map<std::thread::id, tml::Thread *> start_th_cont_with_th_id_;
 	tml::ThreadUtilEngine::STATE stat_;
 	tml::SpinThreadLock stat_th_lock_;
+	tml::MutexThreadLock com_th_lock_;
 
 protected:
 	void Release(void);
@@ -72,6 +74,8 @@ public:
 	void End(const bool finish_flg = false);
 	void EndAll(const bool finish_flg = false);
 	INT GetExitCode(void);
+	INT CreateCOM(const DWORD);
+	void DeleteCOM(void);
 };
 }
 

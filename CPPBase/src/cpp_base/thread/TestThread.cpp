@@ -5,6 +5,7 @@
 
 
 #include "TestThread.h"
+#include <xaudio2.h>
 
 
 /**
@@ -22,6 +23,19 @@ cpp_base::TestThread::TestThread()
 cpp_base::TestThread::~TestThread()
 {
 	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief ReleaseŠÖ”
+ */
+void cpp_base::TestThread::Release(void)
+{
+	this->DeleteCOM();
+
+	tml::SubThread::Release();
 
 	return;
 }
@@ -68,6 +82,12 @@ INT cpp_base::TestThread::Create(void)
  */
 INT cpp_base::TestThread::Start(void)
 {
+	{// COM Create
+		if (this->CreateCOM() < 0) {
+			return (-1);
+		}
+	}
+
 	this->frame_rate_.Start(60U);
 
 	return (0);

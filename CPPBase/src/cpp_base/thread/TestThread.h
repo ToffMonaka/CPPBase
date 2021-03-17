@@ -42,17 +42,6 @@ public:
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-inline void cpp_base::TestThread::Release(void)
-{
-	tml::SubThread::Release();
-
-	return;
-}
-
-
-/**
  * @brief GetFrameRateŠÖ”
  * @return frame_rate (frame_rate)
  */

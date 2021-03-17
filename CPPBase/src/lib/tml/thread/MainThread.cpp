@@ -5,6 +5,7 @@
 
 
 #include "MainThread.h"
+#include "ThreadUtil.h"
 #include "../memory/MemoryUtil.h"
 
 
@@ -12,6 +13,7 @@
  * @brief コンストラクタ
  */
 tml::MainThread::MainThread() :
+	com_created_flg_(false),
 	instance_handle_(nullptr),
 	wnd_handle_(nullptr),
 	wnd_dc_handle_(nullptr),
@@ -28,19 +30,6 @@ tml::MainThread::MainThread() :
  */
 tml::MainThread::~MainThread()
 {
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::MainThread::Release(void)
-{
-	this->DeleteWindow_();
-
-	tml::Thread::Release();
-
 	return;
 }
 
@@ -79,6 +68,44 @@ INT tml::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *wnd_na
 	this->wnd_show_type_ = wnd_show_type;
 
 	return (0);
+}
+
+
+/**
+ * @brief CreateCOM関数
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::MainThread::CreateCOM(void)
+{
+	if (this->com_created_flg_) {
+		return (0);
+	}
+
+	if (tml::ThreadUtil::CreateCOM(COINIT_APARTMENTTHREADED) < 0) {
+		return (-1);
+	}
+
+	this->com_created_flg_ = true;
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteCOM関数
+ */
+void tml::MainThread::DeleteCOM(void)
+{
+	if (!this->com_created_flg_) {
+		return;
+	}
+
+	tml::ThreadUtil::DeleteCOM();
+
+	this->com_created_flg_ = false;
+
+	return;
 }
 
 

@@ -5,12 +5,14 @@
 
 
 #include "SubThread.h"
+#include "ThreadUtil.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::SubThread::SubThread()
+tml::SubThread::SubThread() :
+	com_created_flg_(false)
 {
 	return;
 }
@@ -48,4 +50,42 @@ INT tml::SubThread::Create(void)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief CreateCOM関数
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::SubThread::CreateCOM(void)
+{
+	if (this->com_created_flg_) {
+		return (0);
+	}
+
+	if (tml::ThreadUtil::CreateCOM(COINIT_MULTITHREADED) < 0) {
+		return (-1);
+	}
+
+	this->com_created_flg_ = true;
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteCOM関数
+ */
+void tml::SubThread::DeleteCOM(void)
+{
+	if (!this->com_created_flg_) {
+		return;
+	}
+
+	tml::ThreadUtil::DeleteCOM();
+
+	this->com_created_flg_ = false;
+
+	return;
 }

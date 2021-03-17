@@ -6,6 +6,7 @@
 
 
 #include "ConstantUtil.h"
+#include <xaudio2.h>
 
 
 namespace tml {

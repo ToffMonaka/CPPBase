@@ -23,6 +23,7 @@ public: tml::MainThread &operator =(const tml::MainThread &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	bool com_created_flg_;
 	HINSTANCE instance_handle_;
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
@@ -35,6 +36,8 @@ protected:
 	void Release(void);
 	INT Create(const HINSTANCE, const WCHAR *, const INT);
 
+	INT CreateCOM(void);
+	void DeleteCOM(void);
 	INT CreateWindow_(const WNDCLASSEX &, const tml::XMUINT2EX &, const tml::XMUINT2EX &);
 	void DeleteWindow_(void);
 
@@ -53,6 +56,17 @@ public:
 	const std::wstring &GetWindowName(void) const;
 	INT GetWindowShowType(void) const;
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::MainThread::Release(void)
+{
+	tml::Thread::Release();
+
+	return;
 }
 
 

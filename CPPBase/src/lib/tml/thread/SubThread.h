@@ -21,9 +21,15 @@ public: SubThread(const tml::SubThread &) = delete;
 public: tml::SubThread &operator =(const tml::SubThread &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+private:
+	bool com_created_flg_;
+
 protected:
 	void Release(void);
 	INT Create(void);
+
+	INT CreateCOM(void);
+	void DeleteCOM(void);
 
 public:
 	SubThread();

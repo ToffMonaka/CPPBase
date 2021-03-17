@@ -67,6 +67,9 @@ void cpp_base::MainThread::Release(void)
 	this->graphic_mgr_.Init();
 	this->sound_mgr_.Init();
 
+	this->DeleteWindow_();
+	this->DeleteCOM();
+
 	tml::MainThread::Release();
 
 	return;
@@ -130,6 +133,12 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
  */
 INT cpp_base::MainThread::Start(void)
 {
+	{// COM Create
+		if (this->CreateCOM() < 0) {
+			return (-1);
+		}
+	}
+
 	{// Window Create
 		WNDCLASSEX wnd_class = {};
 
