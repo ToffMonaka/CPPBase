@@ -629,6 +629,27 @@
     <ClInclude Include="src\lib\tml\sound\Event.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_ConstantUtilBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\constant\ConstantInclude_ConstantUtilBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_LibOggBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_XNAMathBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_Direct3DBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_WindowsBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_DlmallocBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\cpp_base\resource\resource.rc">

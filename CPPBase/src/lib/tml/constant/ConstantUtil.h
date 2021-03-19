@@ -5,15 +5,7 @@
 #pragma once
 
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-#include <stdlib.h>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <chrono>
-#include <array>
+#include "ConstantInclude_ConstantUtilBase.h"
 
 
 #define TML_ENUM_CLASS_FLAG_OPERATOR(e, t) \
@@ -26,9 +18,6 @@ inline e &operator ^=(e &f1, const e &f2) {f1 = static_cast<e>(static_cast<t>(f1
 inline e operator ~(const e &f) {return (static_cast<e>(~static_cast<t>(f)));}
 
 
-using DOUBLE = double;
-
-
 namespace tml {
 using TIME_SECONDS = std::chrono::seconds;
 using TIME_MILLI = std::chrono::milliseconds;
@@ -36,10 +25,197 @@ using TIME_MICRO = std::chrono::microseconds;
 using TIME_NANO = std::chrono::nanoseconds;
 using TIME_REAL = std::chrono::duration<double>;
 
+template <typename T, size_t N>
+size_t GetCount(const T (&)[N]);
+template <typename T>
+void Clear(T *, const size_t);
+template <typename T>
+void Copy(T *, const T *, const size_t);
+template <typename T>
+void CopySelf(T *, const T *, const size_t);
+template <typename T>
+T Div(const T &, const T &);
+template <typename T>
+T Div(const T &, const T &, const T &);
+template <typename T>
+T Mod(const T &, const T &);
+template <typename T>
+T Mod(const T &, const T &, const T &);
+template <typename T>
+const T &Min(const T &, const T &);
+template <typename T>
+const T &Max(const T &, const T &);
+template <typename T>
+const T &Clamp(const T &, const T &, const T &);
 template <typename T1, typename T2>
 T1 CastTime(const T2 &time);
 bool CheckResult(const INT *);
 void SetResult(INT *, const INT);
+}
+
+
+/**
+ * @brief GetCountä÷êî
+ * @param ary (array)
+ * @return cnt (count)
+ */
+template <typename T, size_t N>
+inline size_t tml::GetCount(const T (&)[N])
+{
+	return (N);
+}
+
+
+/**
+ * @brief Clearä÷êî
+ * @param p (pointer)
+ * @param cnt (count)
+ */
+template <typename T>
+inline void tml::Clear(T *p, const size_t cnt)
+{
+	if ((p == nullptr)
+	|| (cnt <= 0U)) {
+		return;
+	}
+
+	memset(p, 0, sizeof(T) * cnt);
+
+	return;
+}
+
+
+/**
+ * @brief Copyä÷êî
+ * @param dst_p (dst_pointer)
+ * @param src_p (src_pointer)
+ * @param cnt (count)
+ */
+template <typename T>
+inline void tml::Copy(T *dst_p, const T *src_p, const size_t cnt)
+{
+	if ((dst_p == nullptr) || (src_p == nullptr) || (dst_p == src_p)
+	|| (cnt <= 0U)) {
+		return;
+	}
+
+	memcpy(dst_p, src_p, sizeof(T) * cnt);
+
+	return;
+}
+
+
+/**
+ * @brief CopySelfä÷êî
+ * @param dst_p (dst_pointer)
+ * @param src_p (src_pointer)
+ * @param cnt (count)
+ */
+template <typename T>
+inline void tml::CopySelf(T *dst_p, const T *src_p, const size_t cnt)
+{
+	if ((dst_p == nullptr) || (src_p == nullptr) || (dst_p == src_p)
+	|| (cnt <= 0U)) {
+		return;
+	}
+
+	memmove(dst_p, src_p, sizeof(T) * cnt);
+
+	return;
+}
+
+
+/**
+ * @brief Divä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
+ * @return val (value)
+ */
+template <typename T>
+inline T tml::Div(const T &val1, const T &val2)
+{
+	return (val1 / val2);
+}
+
+
+/**
+ * @brief Divä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
+ * @param zero_val (zero_value)
+ * @return val (value)
+ */
+template <typename T>
+inline T tml::Div(const T &val1, const T &val2, const T &zero_val)
+{
+	return ((val2 == static_cast<T>(0)) ? zero_val : (val1 / val2));
+}
+
+
+/**
+ * @brief Modä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
+ * @return val (value)
+ */
+template <typename T>
+inline T tml::Mod(const T &val1, const T &val2)
+{
+	return (val1 % val2);
+}
+
+
+/**
+ * @brief Modä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
+ * @param zero_val (zero_value)
+ * @return val (value)
+ */
+template <typename T>
+inline T tml::Mod(const T &val1, const T &val2, const T &zero_val)
+{
+	return ((val2 == static_cast<T>(0)) ? zero_val : (val1 % val2));
+}
+
+
+/**
+ * @brief Minä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
+ * @return val (value)
+ */
+template <typename T>
+inline const T &tml::Min(const T &val1, const T &val2)
+{
+	return ((val1 > val2) ? val2 : val1);
+}
+
+
+/**
+ * @brief Maxä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
+ * @return val (value)
+ */
+template <typename T>
+inline const T &tml::Max(const T &val1, const T &val2)
+{
+	return ((val1 < val2) ? val2 : val1);
+}
+
+
+/**
+ * @brief Clampä÷êî
+ * @param val (value)
+ * @param min_val (min_value)
+ * @param max_val (max_value)
+ * @return val (value)
+ */
+template <typename T>
+inline const T &tml::Clamp(const T &val, const T &min_val, const T &max_val)
+{
+	return ((val < min_val) ? min_val : (val > max_val) ? max_val : val);
 }
 
 

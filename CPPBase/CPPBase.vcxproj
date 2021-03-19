@@ -264,12 +264,19 @@
     <ClCompile Include="src\lib\tml\time\TimeUtilEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\cpp_base\constant\ConstantInclude_ConstantUtilBase.h" />
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_FILE.h" />
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_WINDOW.h" />
     <ClInclude Include="src\cpp_base\data\SystemConfigFile.h" />
     <ClInclude Include="src\cpp_base\resource\resource.h" />
     <ClInclude Include="src\cpp_base\thread\MainThread.h" />
     <ClInclude Include="src\cpp_base\thread\TestThread.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_ConstantUtilBase.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_Direct3DBase.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_DlmallocBase.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_LibOggBase.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_WindowsBase.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_XNAMathBase.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_DATE.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_GRAPHIC.h" />

@@ -66,9 +66,6 @@ private:
 	std::array<UINT, tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT> stock_event_cnt_ary_;
 	std::array<std::vector<tml::unique_ptr<tml::sound::Event>>, tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT> stock_event_cont_ary_;
 
-	IXAudio2 *device_;
-	IXAudio2MasteringVoice *mst_voice_;
-
 private:
 	void UpdateEvent(void);
 
@@ -96,31 +93,8 @@ public:
 	const tml::unique_ptr<tml::sound::Event> *GetEventArray(void) const;
 	template <typename T, typename D>
 	INT AddEvent(const D &);
-
-	IXAudio2 *GetDevice(void);
-	IXAudio2MasteringVoice *GetMasteringVoice(void);
 };
 }
-}
-
-
-/**
- * @brief GetDeviceŠÖ”
- * @return device (device)
- */
-inline IXAudio2 *tml::sound::Manager::GetDevice(void)
-{
-	return (this->device_);
-}
-
-
-/**
- * @brief GetMasteringVoiceŠÖ”
- * @return mst_voice (mastering_voice)
- */
-inline IXAudio2MasteringVoice *tml::sound::Manager::GetMasteringVoice(void)
-{
-	return (this->mst_voice_);
 }
 
 

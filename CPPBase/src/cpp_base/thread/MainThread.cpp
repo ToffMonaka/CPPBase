@@ -20,8 +20,7 @@
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 
-#include <vorbis/codec.h>
-#include <vorbis/vorbisfile.h>
+#include "../../lib/tml/constant/ConstantInclude_LibOggBase.h"
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Light.h"
 #include "../../lib/tml/graphic/Fog.h"
@@ -149,7 +148,7 @@ INT cpp_base::MainThread::Start(void)
 		wnd_class.cbWndExtra = 0;
 		wnd_class.hInstance = this->GetInstanceHandle();
 		wnd_class.hIcon = LoadIcon(this->GetInstanceHandle(), MAKEINTRESOURCE(IDI_APPLICATION_ICON1));
-		wnd_class.hCursor = LoadCursor(this->GetInstanceHandle(), IDC_ARROW);
+		wnd_class.hCursor = LoadCursor(nullptr, IDC_ARROW);
 		wnd_class.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
 		wnd_class.lpszMenuName = nullptr;
 		wnd_class.lpszClassName = cpp_base::ConstantUtil::WINDOW::CLASS_NAME;

@@ -52,9 +52,7 @@ tml::sound::Manager::Manager() :
 	event_cnt_ary_{},
 	front_event_index_(0U),
 	back_event_index_(0U),
-	stock_event_cnt_ary_{},
-	device_(nullptr),
-	mst_voice_(nullptr)
+	stock_event_cnt_ary_{}
 {
 	return;
 }
@@ -84,18 +82,6 @@ void tml::sound::Manager::Release(void)
 		}
 
 		res_cont.clear();
-	}
-
-	if (this->mst_voice_ != nullptr) {
-		this->mst_voice_->DestroyVoice();
-
-		this->mst_voice_ = nullptr;
-	}
-
-	if (this->device_ != nullptr) {
-		this->device_->Release();
-
-		this->device_ = nullptr;
 	}
 
 	return;
@@ -149,32 +135,6 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
-
-	/*
-	{// Device Create
-		UINT device_flg = 0U;
-
-		if (tml::ConstantUtil::LIBRARY::DEBUG_FLAG) {
-			device_flg = XAUDIO2_DEBUG_ENGINE;
-		} else {
-			device_flg = 0U;
-		}
-
-		if (FAILED(XAudio2Create(&this->device_, device_flg))) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
-	{// Mastering Voice Create
-		if (FAILED(this->device_->CreateMasteringVoice(&this->mst_voice_))) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-	*/
 
 	if (this->common_.Create(this) < 0) {
 		this->Init();
