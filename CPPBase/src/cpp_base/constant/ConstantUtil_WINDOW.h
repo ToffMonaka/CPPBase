@@ -6,7 +6,6 @@
 
 
 #include "ConstantUtil.h"
-#include "../../lib/tml/math/XNAMath.h"
 
 
 namespace cpp_base {

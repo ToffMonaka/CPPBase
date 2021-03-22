@@ -5,7 +5,6 @@
 
 
 #include "XNAMathPosition2D.h"
-#include "MathUtil.h"
 
 
 /**

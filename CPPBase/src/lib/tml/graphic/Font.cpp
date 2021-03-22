@@ -12,10 +12,9 @@
  * @brief コンストラクタ
  */
 tml::graphic::FontBitmap::FontBitmap() :
-	code_(0)
+	code_(0),
+	gm_{}
 {
-	tml::MemoryUtil::Clear(&this->gm_, 1U);
-
 	return;
 }
 
@@ -39,7 +38,7 @@ void tml::graphic::FontBitmap::Init(void)
 	this->Release();
 
 	this->code_ = 0;
-	tml::MemoryUtil::Clear(&this->gm_, 1U);
+	tml::Clear(&this->gm_, 1U);
 	this->buf_.Init();
 
 	return;
@@ -98,10 +97,9 @@ INT tml::graphic::FontBitmap::Create(const HDC dc_handle, const WCHAR code)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::FontDesc::FontDesc()
+tml::graphic::FontDesc::FontDesc() :
+	font_desc{}
 {
-	tml::MemoryUtil::Clear(&this->font_desc, 1U);
-
 	return;
 }
 
@@ -124,7 +122,7 @@ void tml::graphic::FontDesc::Init(void)
 {
 	this->Release();
 
-	tml::MemoryUtil::Clear(&this->font_desc, 1U);
+	tml::Clear(&this->font_desc, 1U);
 
 	tml::graphic::ResourceDesc::Init();
 
@@ -167,8 +165,7 @@ INT tml::graphic::FontDesc::ReadValue(const tml::INIFile &ini_file)
  */
 void tml::graphic::FontDesc::SetFontDesc(const tml::XMUINT2EX &size, const WCHAR *family)
 {
-	tml::MemoryUtil::Clear(&this->font_desc, 1U);
-
+	tml::Clear(&this->font_desc, 1U);
 	this->font_desc.lfHeight = -MulDiv(static_cast<LONG>(size.y), GetDeviceCaps(this->manager->GetWindowDeviceContextHandle(), LOGPIXELSY), 72);
 	this->font_desc.lfWidth = static_cast<LONG>(size.x);
 	this->font_desc.lfEscapement = 0L;
@@ -193,11 +190,10 @@ void tml::graphic::FontDesc::SetFontDesc(const tml::XMUINT2EX &size, const WCHAR
  */
 tml::graphic::Font::Font() :
 	dc_handle_(nullptr),
-	font_handle_(nullptr)
+	font_handle_(nullptr),
+	font_desc_{},
+	tm_{}
 {
-	tml::MemoryUtil::Clear(&this->font_desc_, 1U);
-	tml::MemoryUtil::Clear(&this->tm_, 1U);
-
 	return;
 }
 
@@ -243,8 +239,8 @@ void tml::graphic::Font::Init(void)
 {
 	this->Release();
 
-	tml::MemoryUtil::Clear(&this->font_desc_, 1U);
-	tml::MemoryUtil::Clear(&this->tm_, 1U);
+	tml::Clear(&this->font_desc_, 1U);
+	tml::Clear(&this->tm_, 1U);
 	this->bm_cont_.clear();
 
 	tml::graphic::Resource::Init();
@@ -285,7 +281,7 @@ INT tml::graphic::Font::Create(const tml::graphic::FontDesc &desc)
 		return (-1);
 	}
 
-	tml::MemoryUtil::Copy(&this->font_desc_, &desc.font_desc, 1U);
+	this->font_desc_ = desc.font_desc;
 
 	SelectObject(this->dc_handle_, this->font_handle_);
 

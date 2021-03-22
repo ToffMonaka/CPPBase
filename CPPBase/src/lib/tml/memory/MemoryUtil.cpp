@@ -636,7 +636,7 @@ FLOAT tml::MemoryUtil::ReadBufferFLOAT_B(const BYTE *buf, const size_t buf_size,
 		return (val);
 	}
 
-	tml::MemoryUtil::Copy(&val, reinterpret_cast<FLOAT *>(&tmp_val), 1U);
+	tml::Copy(&val, reinterpret_cast<FLOAT *>(&tmp_val), 1U);
 
 	if (std::isnan(val)) {
 		val = 0.0f;
@@ -667,7 +667,7 @@ FLOAT tml::MemoryUtil::ReadBufferFLOAT_L(const BYTE *buf, const size_t buf_size,
 		return (val);
 	}
 
-	tml::MemoryUtil::Copy(&val, reinterpret_cast<FLOAT *>(&tmp_val), 1U);
+	tml::Copy(&val, reinterpret_cast<FLOAT *>(&tmp_val), 1U);
 
 	if (std::isnan(val)) {
 		val = 0.0f;
@@ -698,7 +698,7 @@ DOUBLE tml::MemoryUtil::ReadBufferDOUBLE_B(const BYTE *buf, const size_t buf_siz
 		return (val);
 	}
 
-	tml::MemoryUtil::Copy(&val, reinterpret_cast<DOUBLE *>(&tmp_val), 1U);
+	tml::Copy(&val, reinterpret_cast<DOUBLE *>(&tmp_val), 1U);
 
 	if (std::isnan(val)) {
 		val = 0.0;
@@ -729,7 +729,7 @@ DOUBLE tml::MemoryUtil::ReadBufferDOUBLE_L(const BYTE *buf, const size_t buf_siz
 		return (val);
 	}
 
-	tml::MemoryUtil::Copy(&val, reinterpret_cast<DOUBLE *>(&tmp_val), 1U);
+	tml::Copy(&val, reinterpret_cast<DOUBLE *>(&tmp_val), 1U);
 
 	if (std::isnan(val)) {
 		val = 0.0;
@@ -769,7 +769,7 @@ BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size,
 		return (dst_ary);
 	}
 
-	tml::MemoryUtil::Copy(dst_ary, &buf[buf_index], read_size);
+	tml::Copy(dst_ary, &buf[buf_index], read_size);
 	buf_index += read_size;
 
 	return (dst_ary);
@@ -819,7 +819,7 @@ CHAR *tml::MemoryUtil::ReadBufferString_B(CHAR *dst_str, const size_t dst_str_si
 		return (dst_str);
 	}
 
-	tml::MemoryUtil::Copy(reinterpret_cast<BYTE *>(dst_str), &buf[buf_index], str_size);
+	tml::Copy(reinterpret_cast<BYTE *>(dst_str), &buf[buf_index], str_size);
 	buf_index += str_size;
 
 	dst_str[str_size] = 0;
@@ -871,7 +871,7 @@ CHAR *tml::MemoryUtil::ReadBufferString_L(CHAR *dst_str, const size_t dst_str_si
 		return (dst_str);
 	}
 
-	tml::MemoryUtil::Copy(reinterpret_cast<BYTE *>(dst_str), &buf[buf_index], str_size);
+	tml::Copy(reinterpret_cast<BYTE *>(dst_str), &buf[buf_index], str_size);
 	buf_index += str_size;
 
 	dst_str[str_size] = 0;
@@ -923,7 +923,7 @@ WCHAR *tml::MemoryUtil::ReadBufferString_B(WCHAR *dst_str, const size_t dst_str_
 		return (dst_str);
 	}
 
-	tml::MemoryUtil::Copy(reinterpret_cast<BYTE *>(dst_str), &buf[buf_index], str_size);
+	tml::Copy(reinterpret_cast<BYTE *>(dst_str), &buf[buf_index], str_size);
 	buf_index += str_size;
 
 	dst_str[str_size >> 1] = 0;
@@ -975,7 +975,7 @@ WCHAR *tml::MemoryUtil::ReadBufferString_L(WCHAR *dst_str, const size_t dst_str_
 		return (dst_str);
 	}
 
-	tml::MemoryUtil::Copy(reinterpret_cast<BYTE *>(dst_str), &buf[buf_index], str_size);
+	tml::Copy(reinterpret_cast<BYTE *>(dst_str), &buf[buf_index], str_size);
 	buf_index += str_size;
 
 	dst_str[str_size >> 1] = 0;
@@ -1482,7 +1482,7 @@ void tml::MemoryUtil::WriteBufferFLOAT_B(BYTE *dst_buf, const size_t dst_buf_siz
 
 	UINT tmp_val = 0U;
 
-	tml::MemoryUtil::Copy(&tmp_val, reinterpret_cast<const UINT *>(&val), 1U);
+	tml::Copy(&tmp_val, reinterpret_cast<const UINT *>(&val), 1U);
 
 	tml::MemoryUtil::WriteBufferUINT_B(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
 
@@ -1510,7 +1510,7 @@ void tml::MemoryUtil::WriteBufferFLOAT_L(BYTE *dst_buf, const size_t dst_buf_siz
 
 	UINT tmp_val = 0U;
 
-	tml::MemoryUtil::Copy(&tmp_val, reinterpret_cast<const UINT *>(&val), 1U);
+	tml::Copy(&tmp_val, reinterpret_cast<const UINT *>(&val), 1U);
 
 	tml::MemoryUtil::WriteBufferUINT_L(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
 
@@ -1538,7 +1538,7 @@ void tml::MemoryUtil::WriteBufferDOUBLE_B(BYTE *dst_buf, const size_t dst_buf_si
 
 	ULONGLONG tmp_val = 0ULL;
 
-	tml::MemoryUtil::Copy(&tmp_val, reinterpret_cast<const ULONGLONG *>(&val), 1U);
+	tml::Copy(&tmp_val, reinterpret_cast<const ULONGLONG *>(&val), 1U);
 
 	tml::MemoryUtil::WriteBufferULONGLONG_B(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
 
@@ -1566,7 +1566,7 @@ void tml::MemoryUtil::WriteBufferDOUBLE_L(BYTE *dst_buf, const size_t dst_buf_si
 
 	ULONGLONG tmp_val = 0ULL;
 
-	tml::MemoryUtil::Copy(&tmp_val, reinterpret_cast<const ULONGLONG *>(&val), 1U);
+	tml::Copy(&tmp_val, reinterpret_cast<const ULONGLONG *>(&val), 1U);
 
 	tml::MemoryUtil::WriteBufferULONGLONG_L(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
 
@@ -1603,7 +1603,7 @@ void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size,
 		return;
 	}
 
-	tml::MemoryUtil::Copy(&dst_buf[dst_buf_index], ary, write_size);
+	tml::Copy(&dst_buf[dst_buf_index], ary, write_size);
 	dst_buf_index += write_size;
 
 	return;

@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMath.h"
+#include "../math/XNAMathFLOAT.h"
 #include "ShaderStructuredBuffer.h"
 
 

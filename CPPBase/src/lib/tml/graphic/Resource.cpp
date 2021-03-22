@@ -5,7 +5,6 @@
 
 
 #include "Resource.h"
-#include "../string/StringUtil.h"
 
 
 /**

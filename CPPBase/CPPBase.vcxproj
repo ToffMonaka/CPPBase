@@ -217,7 +217,6 @@
     <ClCompile Include="src\lib\tml\math\DefaultMathUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtil.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtilEngine.cpp" />
-    <ClCompile Include="src\lib\tml\math\XNAMath.cpp" />
     <ClCompile Include="src\lib\tml\math\XNAMathFLOAT.cpp" />
     <ClCompile Include="src\lib\tml\math\XNAMathINT.cpp" />
     <ClCompile Include="src\lib\tml\math\XNAMathPosition.cpp" />
@@ -334,7 +333,6 @@
     <ClInclude Include="src\lib\tml\math\DefaultMathUtilEngine.h" />
     <ClInclude Include="src\lib\tml\math\MathUtil.h" />
     <ClInclude Include="src\lib\tml\math\MathUtilEngine.h" />
-    <ClInclude Include="src\lib\tml\math\XNAMath.h" />
     <ClInclude Include="src\lib\tml\math\XNAMathFLOAT.h" />
     <ClInclude Include="src\lib\tml\math\XNAMathINT.h" />
     <ClInclude Include="src\lib\tml\math\XNAMathPosition.h" />

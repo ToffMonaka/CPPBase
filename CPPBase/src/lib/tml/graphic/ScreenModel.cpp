@@ -6,6 +6,15 @@
 
 #include "ScreenModel.h"
 #include "Manager.h"
+#include "RasterizerState.h"
+#include "BlendState.h"
+#include "DepthState.h"
+#include "Shader.h"
+#include "SpriteModelShaderStructuredBuffer.h"
+#include "SpriteModelLayerShaderStructuredBuffer.h"
+#include "Mesh.h"
+#include "Texture.h"
+#include "Sampler.h"
 
 
 /**

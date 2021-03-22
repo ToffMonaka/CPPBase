@@ -256,7 +256,7 @@ INT tml::BinaryFile::Write(void)
 		while (1) {
 			write_size = std::min(this->data.file_buffer.GetLength() - file_buf_index, write_buf_size);
 
-			tml::MemoryUtil::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.file_buffer.Get()[file_buf_index]), write_size);
+			tml::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.file_buffer.Get()[file_buf_index]), write_size);
 
 			ofs.write(write_buf, write_size);
 

@@ -15,8 +15,8 @@
 #include "../../lib/tml/thread/ThreadUtil.h"
 #include "../../lib/tml/input/MouseEvent.h"
 #include "../../lib/tml/input/KeyboardEvent.h"
-#include "../constant/ConstantUtil_WINDOW.h"
 #include "../constant/ConstantUtil_FILE.h"
+#include "../constant/ConstantUtil_WINDOW.h"
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 
@@ -488,9 +488,11 @@ void cpp_base::MainThread::Update(void)
 	this->log_update_time_ += this->frame_rate_.GetElapsedTime();
 
 	if (this->log_update_time_ >= tml::TIME_REAL(1.0)) {
+		auto mem_allocator_info = tml::MemoryUtil::GetAllocatorInfo();
+
 		WCHAR log_str[1024];
 
-		_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u\n%d,%d", this->frame_rate_.GetFPS(), this->frame_rate_.GetLimit(), this->input_mgr_.GetMousePosition().x, this->input_mgr_.GetMousePosition().y);
+		_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u\nMEM=%u/%u/%u", this->frame_rate_.GetFPS(), this->frame_rate_.GetLimit(), mem_allocator_info.use_size, mem_allocator_info.size, mem_allocator_info.use_count);
 
 		auto log_tex = this->log_sprite_model_->GetTexture(this->log_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 

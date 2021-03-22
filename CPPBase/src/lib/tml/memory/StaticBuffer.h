@@ -167,7 +167,7 @@ inline tml::StaticBuffer<N>::StaticBuffer(const BYTE *ary, const size_t size) :
 		return;
 	}
 
-	tml::MemoryUtil::Copy(this->ary_, ary, size);
+	tml::Copy(this->ary_, ary, size);
 	this->size_ = size;
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
@@ -184,7 +184,7 @@ inline tml::StaticBuffer<N>::StaticBuffer(const BYTE *ary, const size_t size) :
 template <size_t N>
 inline tml::StaticBuffer<N>::StaticBuffer(const tml::StaticBuffer<N> &src)
 {
-	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	tml::Copy(this->ary_, src.ary_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -210,7 +210,7 @@ inline tml::StaticBuffer<N> &tml::StaticBuffer<N>::operator =(const tml::StaticB
 
 	this->Release();
 
-	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	tml::Copy(this->ary_, src.ary_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -229,7 +229,7 @@ inline tml::StaticBuffer<N> &tml::StaticBuffer<N>::operator =(const tml::StaticB
 template <size_t N>
 inline tml::StaticBuffer<N>::StaticBuffer(tml::StaticBuffer<N> &&src) noexcept
 {
-	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	tml::Copy(this->ary_, src.ary_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -257,7 +257,7 @@ inline tml::StaticBuffer<N> &tml::StaticBuffer<N>::operator =(tml::StaticBuffer<
 
 	this->Release();
 
-	tml::MemoryUtil::Copy(this->ary_, src.ary_, src.len_);
+	tml::Copy(this->ary_, src.ary_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -359,7 +359,7 @@ inline void tml::StaticBuffer<N>::Init(const BYTE *ary, const size_t size)
 		return;
 	}
 
-	tml::MemoryUtil::Copy(this->ary_, ary, size);
+	tml::Copy(this->ary_, ary, size);
 	this->size_ = size;
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
@@ -403,7 +403,7 @@ inline void tml::StaticBuffer<N>::Set(const BYTE *ary, const size_t size)
 		return;
 	}
 
-	tml::MemoryUtil::Copy(this->ary_, ary, size);
+	tml::Copy(this->ary_, ary, size);
 	this->size_ = size;
 	this->len_ = this->size_;
 	this->read_index_ = 0U;

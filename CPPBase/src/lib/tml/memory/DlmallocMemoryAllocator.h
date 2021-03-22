@@ -5,9 +5,8 @@
 #pragma once
 
 
-#include "../dlmalloc/malloc.h"
-
 #include "../constant/ConstantUtil.h"
+#include "../constant/ConstantInclude_DlmallocBase.h"
 #include "MemoryAllocator.h"
 
 

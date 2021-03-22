@@ -7,10 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_XNAMATH.h"
-#pragma warning(push)
-#pragma warning(disable: 4838)
-#include <xnamath.h>
-#pragma warning(pop)
+#include "../constant/ConstantInclude_XNAMathBase.h"
 
 
 namespace tml {

@@ -6,7 +6,6 @@
 
 #include "MainThread.h"
 #include "ThreadUtil.h"
-#include "../memory/MemoryUtil.h"
 
 
 /**
@@ -127,7 +126,7 @@ INT tml::MainThread::CreateWindow_(const WNDCLASSEX &wnd_class, const tml::XMUIN
 		return(-2);
 	}
 
-	tml::MemoryUtil::Copy(&this->wnd_class_, &wnd_class, 1U);
+	this->wnd_class_ = wnd_class;
 	this->wnd_class_atom_ = RegisterClassEx(&this->wnd_class_);
 
 	if (!this->wnd_class_atom_) {
@@ -189,7 +188,7 @@ void tml::MainThread::DeleteWindow_(void)
 	if (this->wnd_class_atom_) {
 		UnregisterClass(this->wnd_class_.lpszClassName, this->instance_handle_);
 
-		tml::MemoryUtil::Clear(&this->wnd_class_, 1U);
+		tml::Clear(&this->wnd_class_, 1U);
 		this->wnd_class_atom_ = 0;
 	}
 

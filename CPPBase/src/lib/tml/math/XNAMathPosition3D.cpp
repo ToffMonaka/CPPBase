@@ -5,7 +5,6 @@
 
 
 #include "XNAMathPosition3D.h"
-#include "MathUtil.h"
 
 
 /**
@@ -333,7 +332,7 @@ void tml::XMPosition3D::UpdateAngleFromQuaternion(void)
 		
 	XMStoreFloat3x3(&rot_mat, XMMatrixInverse(&determinant, XMMatrixRotationQuaternion(XMLoadFloat4(&this->quat_))));
 
-	this->angle_.x = std::asin(-tml::MathUtil::Clamp(rot_mat._23, -1.0f, 1.0f));
+	this->angle_.x = std::asin(-tml::Clamp(rot_mat._23, -1.0f, 1.0f));
 
 	if (std::abs(rot_mat._23) < 0.99999f) {
 		this->angle_.y = std::atan2(rot_mat._13, rot_mat._33);

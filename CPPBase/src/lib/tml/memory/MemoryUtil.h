@@ -37,12 +37,6 @@ public:
 	template <typename T>
 	static void Release(T **);
 	static tml::MemoryAllocator::INFO GetAllocatorInfo(void);
-	template <typename T>
-	static void Clear(T *, const size_t);
-	template <typename T>
-	static void Copy(T *, const T *, const size_t);
-	template <typename T>
-	static void CopySame(T *, const T *, const size_t);
 	static void SetBufferIndex(const size_t, size_t &, const size_t, INT *);
 	static void AddBufferIndex(const size_t, size_t &, const INT, INT *);
 	static CHAR ReadBufferCHAR(const BYTE *, const size_t, size_t &, INT *);
@@ -154,74 +148,6 @@ inline tml::MemoryAllocator::INFO tml::MemoryUtil::GetAllocatorInfo(void)
 	}
 
 	return (tml::MemoryUtil::engine_->GetAllocatorInfo());
-}
-
-
-/**
- * @brief Clear関数
- *
- * Create関数不要
- *
- * @param p (pointer)
- * @param cnt (count)
- */
-template <typename T>
-inline void tml::MemoryUtil::Clear(T *p, const size_t cnt)
-{
-	if ((p == nullptr)
-	|| (cnt <= 0U)) {
-		return;
-	}
-
-	memset(p, 0, sizeof(T) * cnt);
-
-	return;
-}
-
-
-/**
- * @brief Copy関数
- *
- * Create関数不要
- *
- * @param dst_p (dst_pointer)
- * @param src_p (src_pointer)
- * @param cnt (count)
- */
-template <typename T>
-inline void tml::MemoryUtil::Copy(T *dst_p, const T *src_p, const size_t cnt)
-{
-	if ((dst_p == nullptr) || (src_p == nullptr) || (dst_p == src_p)
-	|| (cnt <= 0U)) {
-		return;
-	}
-
-	memcpy(dst_p, src_p, sizeof(T) * cnt);
-
-	return;
-}
-
-
-/**
- * @brief CopySame関数
- *
- * Create関数不要
- *
- * @param dst_p (dst_pointer)
- * @param src_p (src_pointer)
- * @param cnt (count)
- */
-template <typename T>
-inline void tml::MemoryUtil::CopySame(T *dst_p, const T *src_p, const size_t cnt)
-{
-	if ((dst_p == nullptr) || (src_p == nullptr) || (dst_p == src_p)
-	|| (cnt <= 0U)) {
-		return;
-	}
-
-	memmove(dst_p, src_p, sizeof(T) * cnt);
-
-	return;
 }
 
 

@@ -144,7 +144,7 @@ inline void tml::DynamicBuffer::Set(const BYTE *ary, const size_t size)
 		this->ary_ = ary;
 	}
 
-	tml::MemoryUtil::Copy(this->ary_, ary, size);
+	tml::Copy(this->ary_, ary, size);
 	this->size_ = size;
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
@@ -173,7 +173,7 @@ inline void tml::DynamicBuffer::SetSize(const size_t size)
 	if (size > this->size_) {
 		auto ary = tml::MemoryUtil::Get<BYTE>(size);
 
-		tml::MemoryUtil::Copy(ary, this->ary_, this->size_);
+		tml::Copy(ary, this->ary_, this->size_);
 
 		tml::MemoryUtil::Release(&this->ary_);
 

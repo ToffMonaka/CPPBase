@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
+#include "../math/XNAMathUINT.h"
 #include "ManagerCommon.h"
 #include "Event.h"
 #include "Viewport.h"

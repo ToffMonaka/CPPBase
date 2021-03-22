@@ -6,7 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMath.h"
+#include "../math/XNAMathINT.h"
+#include "../math/XNAMathFLOAT.h"
 #include "Event.h"
 
 

@@ -116,11 +116,10 @@ tml::graphic::ShaderStructuredBuffer::ShaderStructuredBuffer() :
 	element_size_(0U),
 	element_limit_(0U),
 	element_cnt_(0U),
+	msr_{},
 	sr_(nullptr),
 	uasr_(nullptr)
 {
-	tml::MemoryUtil::Clear(&this->msr_, 1U);
-
 	return;
 }
 
@@ -173,7 +172,7 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 	this->element_limit_ = 0U;
 	this->element_cnt_ = 0U;
 	this->cpu_buf_.Init();
-	tml::MemoryUtil::Clear(&this->msr_, 1U);
+	tml::Clear(&this->msr_, 1U);
 
 	tml::graphic::Resource::Init();
 

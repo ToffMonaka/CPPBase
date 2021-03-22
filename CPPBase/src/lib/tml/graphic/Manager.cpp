@@ -261,8 +261,8 @@ void tml::graphic::Manager::Init(void)
 		stock_event_cont.clear();
 	}
 
-	tml::MemoryUtil::Clear(&this->adapter_desc_, 1U);
-	tml::MemoryUtil::Clear(&this->swap_chain_desc_, 1U);
+	tml::Clear(&this->adapter_desc_, 1U);
+	tml::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
 	this->size_ = 0U;
 	this->vsync_flg_ = true;
@@ -896,7 +896,7 @@ XMMATRIX &tml::graphic::Manager::GetProjectionMatrix2D(XMMATRIX &dst_mat, const 
 tml::DynamicBuffer &tml::graphic::Manager::GetCPUBuffer(tml::DynamicBuffer &dst_cpu_buf, D3D11_MAPPED_SUBRESOURCE &dst_msr, ID3D11Buffer *buf, INT *dst_res)
 {
 	dst_cpu_buf.Init();
-	tml::MemoryUtil::Clear(&dst_msr, 1U);
+	tml::Clear(&dst_msr, 1U);
 	tml::SetResult(dst_res, 0);
 
 	if (buf == nullptr) {
@@ -928,7 +928,7 @@ tml::DynamicBuffer &tml::graphic::Manager::GetCPUBuffer(tml::DynamicBuffer &dst_
 			this->device_context_->Unmap(tmp_buf, 0U);
 		} else {
 			dst_cpu_buf.Init();
-			tml::MemoryUtil::Clear(&dst_msr, 1U);
+			tml::Clear(&dst_msr, 1U);
 			tml::SetResult(dst_res, -1);
 		}
 

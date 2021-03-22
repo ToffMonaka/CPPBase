@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMath.h"
+#include "../math/XNAMathUINT.h"
 #include "Resource.h"
 
 

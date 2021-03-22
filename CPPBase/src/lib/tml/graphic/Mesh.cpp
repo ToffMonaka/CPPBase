@@ -13,19 +13,18 @@
  */
 tml::graphic::MeshDesc::MeshDesc() :
 	vertex_buffer_desc(0U, D3D11_BIND_VERTEX_BUFFER),
+	vertex_buffer_subresource_data{},
 	vertex_buffer_element_size(0U),
 	vertex_buffer_element_count(0U),
 	vertex_buffer_cpu_buffer_flag(false),
 	index_buffer_desc(0U, D3D11_BIND_INDEX_BUFFER),
+	index_buffer_subresource_data{},
 	index_buffer_element_size(0U),
 	index_buffer_element_count(0U),
 	index_buffer_format(DXGI_FORMAT_UNKNOWN),
 	index_buffer_cpu_buffer_flag(false),
 	primitive_topology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 {
-	tml::MemoryUtil::Clear(&this->vertex_buffer_subresource_data, 1U);
-	tml::MemoryUtil::Clear(&this->index_buffer_subresource_data, 1U);
-
 	return;
 }
 
@@ -49,12 +48,12 @@ void tml::graphic::MeshDesc::Init(void)
 	this->Release();
 
 	this->vertex_buffer_desc = CD3D11_BUFFER_DESC(0U, D3D11_BIND_VERTEX_BUFFER);
-	tml::MemoryUtil::Clear(&this->vertex_buffer_subresource_data, 1U);
+	tml::Clear(&this->vertex_buffer_subresource_data, 1U);
 	this->vertex_buffer_element_size = 0U;
 	this->vertex_buffer_element_count = 0U;
 	this->vertex_buffer_cpu_buffer_flag = false;
 	this->index_buffer_desc = CD3D11_BUFFER_DESC(0U, D3D11_BIND_INDEX_BUFFER);
-	tml::MemoryUtil::Clear(&this->index_buffer_subresource_data, 1U);
+	tml::Clear(&this->index_buffer_subresource_data, 1U);
 	this->index_buffer_element_size = 0U;
 	this->index_buffer_element_count = 0U;
 	this->index_buffer_format = DXGI_FORMAT_UNKNOWN;
@@ -111,7 +110,7 @@ void tml::graphic::MeshDesc::SetVertexBufferDesc(const UINT element_size, const 
 		this->vertex_buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	}
 
-	tml::MemoryUtil::Clear(&this->vertex_buffer_subresource_data, 1U);
+	tml::Clear(&this->vertex_buffer_subresource_data, 1U);
 	this->vertex_buffer_subresource_data.pSysMem = element_ary;
 	this->vertex_buffer_element_size = element_size;
 	this->vertex_buffer_element_count = element_cnt;
@@ -137,7 +136,7 @@ void tml::graphic::MeshDesc::SetIndexBufferDesc(const UINT element_size, const U
 		this->index_buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	}
 
-	tml::MemoryUtil::Clear(&this->index_buffer_subresource_data, 1U);
+	tml::Clear(&this->index_buffer_subresource_data, 1U);
 	this->index_buffer_subresource_data.pSysMem = element_ary;
 	this->index_buffer_element_size = element_size;
 	this->index_buffer_element_count = element_cnt;
@@ -155,16 +154,15 @@ tml::graphic::Mesh::Mesh() :
 	vb_desc_(0U, D3D11_BIND_VERTEX_BUFFER),
 	vb_element_size_(0U),
 	vb_element_cnt_(0U),
+	vb_msr_{},
 	ib_(nullptr),
 	ib_desc_(0U, D3D11_BIND_INDEX_BUFFER),
 	ib_element_size_(0U),
 	ib_element_cnt_(0U),
 	ib_format_(DXGI_FORMAT_UNKNOWN),
+	ib_msr_{},
 	pt_(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 {
-	tml::MemoryUtil::Clear(&this->vb_msr_, 1U);
-	tml::MemoryUtil::Clear(&this->ib_msr_, 1U);
-
 	return;
 }
 
@@ -214,13 +212,13 @@ void tml::graphic::Mesh::Init(void)
 	this->vb_element_size_ = 0U;
 	this->vb_element_cnt_ = 0U;
 	this->vb_cpu_buf_.Init();
-	tml::MemoryUtil::Clear(&this->vb_msr_, 1U);
+	tml::Clear(&this->vb_msr_, 1U);
 	this->ib_desc_ = CD3D11_BUFFER_DESC(0U, D3D11_BIND_INDEX_BUFFER);
 	this->ib_element_size_ = 0U;
 	this->ib_element_cnt_ = 0U;
 	this->ib_format_ = DXGI_FORMAT_UNKNOWN;
 	this->ib_cpu_buf_.Init();
-	tml::MemoryUtil::Clear(&this->ib_msr_, 1U);
+	tml::Clear(&this->ib_msr_, 1U);
 	this->pt_ = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	tml::graphic::Resource::Init();
