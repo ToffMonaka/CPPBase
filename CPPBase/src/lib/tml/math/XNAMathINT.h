@@ -7,119 +7,28 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_XNAMATH.h"
-#include "../constant/ConstantInclude_XNAMathBase.h"
-
-
-/**
- * @brief XMINT2構造体
- */
-typedef struct XMINT2_
-{
-	INT x;
-	INT y;
-
-	XMINT2_()
-	{
-		return;
-	};
-
-	XMINT2_(const INT x, const INT y) :
-		x(x),
-		y(y)
-	{
-		return;
-	};
-} XMINT2;
-
-
-/**
- * @brief XMINT3構造体
- */
-typedef struct XMINT3_
-{
-	INT x;
-	INT y;
-	INT z;
-
-	XMINT3_()
-	{
-		return;
-	};
-
-	XMINT3_(const INT x, const INT y, const INT z) :
-		x(x),
-		y(y),
-		z(z)
-	{
-		return;
-	};
-} XMINT3;
-
-
-/**
- * @brief XMINT4構造体
- */
-typedef struct XMINT4_
-{
-	INT x;
-	INT y;
-	INT z;
-	INT w;
-
-	XMINT4_()
-	{
-		return;
-	};
-
-	XMINT4_(const INT x, const INT y, const INT z, const INT w) :
-		x(x),
-		y(y),
-		z(z),
-		w(w)
-	{
-		return;
-	};
-} XMINT4;
 
 
 namespace tml {
 /**
  * @brief XMINT2EX構造体
  */
-typedef struct XMINT2EX_ : public XMINT2
+typedef struct XMINT2EX_ : public DirectX::XMINT2
 {
 	XMINT2EX_() :
-		XMINT2(0, 0)
+		DirectX::XMINT2(0, 0)
 	{
 		return;
 	};
 
 	explicit XMINT2EX_(const INT x, const INT y) :
-		XMINT2(x, y)
+		DirectX::XMINT2(x, y)
 	{
 		return;
 	};
 
 	explicit XMINT2EX_(const INT val) :
-		XMINT2(val, val)
-	{
-		return;
-	};
-
-	explicit XMINT2EX_(const XMINT2 &val) :
-		XMINT2(val.x, val.y)
-	{
-		return;
-	};
-
-	explicit XMINT2EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
-		XMINT2(1, 0)
-	{
-		return;
-	};
-
-	explicit XMINT2EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
-		XMINT2(0, 1)
+		DirectX::XMINT2(val, val)
 	{
 		return;
 	};
@@ -132,12 +41,24 @@ typedef struct XMINT2EX_ : public XMINT2
 		return ((*this));
 	};
 
-	tml::XMINT2EX_ &operator =(const XMINT2 &val)
+	explicit XMINT2EX_(const DirectX::XMINT2 &val) :
+		DirectX::XMINT2(val.x, val.y)
+	{
+		return;
+	};
+
+	tml::XMINT2EX_ &operator =(const DirectX::XMINT2 &val)
 	{
 		this->x = val.x;
 		this->y = val.y;
 
 		return ((*this));
+	};
+
+	explicit XMINT2EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
+		DirectX::XMINT2(1, 0)
+	{
+		return;
 	};
 
 	tml::XMINT2EX_ &operator =(const tml::ConstantUtil::XNAMATH::X_VECTOR type)
@@ -146,6 +67,12 @@ typedef struct XMINT2EX_ : public XMINT2
 		this->y = 0;
 
 		return ((*this));
+	};
+
+	explicit XMINT2EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
+		DirectX::XMINT2(0, 1)
+	{
+		return;
 	};
 
 	tml::XMINT2EX_ &operator =(const tml::ConstantUtil::XNAMATH::Y_VECTOR type)
@@ -161,7 +88,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return ((this->x == val) && (this->y == val));
 	};
 
-	bool operator ==(const XMINT2 &val) const
+	bool operator ==(const DirectX::XMINT2 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y));
 	};
@@ -171,7 +98,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return ((this->x != val) || (this->y != val));
 	};
 
-	bool operator !=(const XMINT2 &val) const
+	bool operator !=(const DirectX::XMINT2 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y));
 	};
@@ -181,7 +108,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return (tml::XMINT2EX_(this->x + val, this->y + val));
 	};
 
-	tml::XMINT2EX_ operator +(const XMINT2 &val) const
+	tml::XMINT2EX_ operator +(const DirectX::XMINT2 &val) const
 	{
 		return (tml::XMINT2EX_(this->x + val.x, this->y + val.y));
 	};
@@ -194,7 +121,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return ((*this));
 	};
 
-	tml::XMINT2EX_ &operator +=(const XMINT2 &val)
+	tml::XMINT2EX_ &operator +=(const DirectX::XMINT2 &val)
 	{
 		this->x += val.x;
 		this->y += val.y;
@@ -207,7 +134,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return (tml::XMINT2EX_(this->x - val, this->y - val));
 	};
 
-	tml::XMINT2EX_ operator -(const XMINT2 &val) const
+	tml::XMINT2EX_ operator -(const DirectX::XMINT2 &val) const
 	{
 		return (tml::XMINT2EX_(this->x - val.x, this->y - val.y));
 	};
@@ -220,7 +147,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return ((*this));
 	};
 
-	tml::XMINT2EX_ &operator -=(const XMINT2 &val)
+	tml::XMINT2EX_ &operator -=(const DirectX::XMINT2 &val)
 	{
 		this->x -= val.x;
 		this->y -= val.y;
@@ -233,7 +160,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return (tml::XMINT2EX_(this->x * val, this->y * val));
 	};
 
-	tml::XMINT2EX_ operator *(const XMINT2 &val) const
+	tml::XMINT2EX_ operator *(const DirectX::XMINT2 &val) const
 	{
 		return (tml::XMINT2EX_(this->x * val.x, this->y * val.y));
 	};
@@ -246,7 +173,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return ((*this));
 	};
 
-	tml::XMINT2EX_ &operator *=(const XMINT2 &val)
+	tml::XMINT2EX_ &operator *=(const DirectX::XMINT2 &val)
 	{
 		this->x *= val.x;
 		this->y *= val.y;
@@ -259,7 +186,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return (tml::XMINT2EX_(this->x / val, this->y / val));
 	};
 
-	tml::XMINT2EX_ operator /(const XMINT2 &val) const
+	tml::XMINT2EX_ operator /(const DirectX::XMINT2 &val) const
 	{
 		return (tml::XMINT2EX_(this->x / val.x, this->y / val.y));
 	};
@@ -272,7 +199,7 @@ typedef struct XMINT2EX_ : public XMINT2
 		return ((*this));
 	};
 
-	tml::XMINT2EX_ &operator /=(const XMINT2 &val)
+	tml::XMINT2EX_ &operator /=(const DirectX::XMINT2 &val)
 	{
 		this->x /= val.x;
 		this->y /= val.y;
@@ -290,46 +217,22 @@ typedef struct XMINT2EX_ : public XMINT2
 /**
  * @brief XMINT3EX構造体
  */
-typedef struct XMINT3EX_ : public XMINT3
+typedef struct XMINT3EX_ : public DirectX::XMINT3
 {
 	XMINT3EX_() :
-		XMINT3(0, 0, 0)
+		DirectX::XMINT3(0, 0, 0)
 	{
 		return;
 	};
 
 	explicit XMINT3EX_(const INT x, const INT y, const INT z) :
-		XMINT3(x, y, z)
+		DirectX::XMINT3(x, y, z)
 	{
 		return;
 	};
 
 	explicit XMINT3EX_(const INT val) :
-		XMINT3(val, val, val)
-	{
-		return;
-	};
-
-	explicit XMINT3EX_(const XMINT3 &val) :
-		XMINT3(val.x, val.y, val.z)
-	{
-		return;
-	};
-
-	explicit XMINT3EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
-		XMINT3(1, 0, 0)
-	{
-		return;
-	};
-
-	explicit XMINT3EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
-		XMINT3(0, 1, 0)
-	{
-		return;
-	};
-
-	explicit XMINT3EX_(const tml::ConstantUtil::XNAMATH::Z_VECTOR type) :
-		XMINT3(0, 0, 1)
+		DirectX::XMINT3(val, val, val)
 	{
 		return;
 	};
@@ -343,13 +246,25 @@ typedef struct XMINT3EX_ : public XMINT3
 		return ((*this));
 	};
 
-	tml::XMINT3EX_ &operator =(const XMINT3 &val)
+	explicit XMINT3EX_(const DirectX::XMINT3 &val) :
+		DirectX::XMINT3(val.x, val.y, val.z)
+	{
+		return;
+	};
+
+	tml::XMINT3EX_ &operator =(const DirectX::XMINT3 &val)
 	{
 		this->x = val.x;
 		this->y = val.y;
 		this->z = val.z;
 
 		return ((*this));
+	};
+
+	explicit XMINT3EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
+		DirectX::XMINT3(1, 0, 0)
+	{
+		return;
 	};
 
 	tml::XMINT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::X_VECTOR type)
@@ -361,6 +276,12 @@ typedef struct XMINT3EX_ : public XMINT3
 		return ((*this));
 	};
 
+	explicit XMINT3EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
+		DirectX::XMINT3(0, 1, 0)
+	{
+		return;
+	};
+
 	tml::XMINT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::Y_VECTOR type)
 	{
 		this->x = 0;
@@ -368,6 +289,12 @@ typedef struct XMINT3EX_ : public XMINT3
 		this->z = 0;
 
 		return ((*this));
+	};
+
+	explicit XMINT3EX_(const tml::ConstantUtil::XNAMATH::Z_VECTOR type) :
+		DirectX::XMINT3(0, 0, 1)
+	{
+		return;
 	};
 
 	tml::XMINT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::Z_VECTOR type)
@@ -384,7 +311,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return ((this->x == val) && (this->y == val) && (this->z == val));
 	};
 
-	bool operator ==(const XMINT3 &val) const
+	bool operator ==(const DirectX::XMINT3 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y) && (this->z == val.z));
 	};
@@ -394,7 +321,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return ((this->x != val) || (this->y != val) || (this->z != val));
 	};
 
-	bool operator !=(const XMINT3 &val) const
+	bool operator !=(const DirectX::XMINT3 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y) || (this->z != val.z));
 	};
@@ -404,7 +331,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return (tml::XMINT3EX_(this->x + val, this->y + val, this->z + val));
 	};
 
-	tml::XMINT3EX_ operator +(const XMINT3 &val) const
+	tml::XMINT3EX_ operator +(const DirectX::XMINT3 &val) const
 	{
 		return (tml::XMINT3EX_(this->x + val.x, this->y + val.y, this->z + val.z));
 	};
@@ -418,7 +345,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return ((*this));
 	};
 
-	tml::XMINT3EX_ &operator +=(const XMINT3 &val)
+	tml::XMINT3EX_ &operator +=(const DirectX::XMINT3 &val)
 	{
 		this->x += val.x;
 		this->y += val.y;
@@ -432,7 +359,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return (tml::XMINT3EX_(this->x - val, this->y - val, this->z - val));
 	};
 
-	tml::XMINT3EX_ operator -(const XMINT3 &val) const
+	tml::XMINT3EX_ operator -(const DirectX::XMINT3 &val) const
 	{
 		return (tml::XMINT3EX_(this->x - val.x, this->y - val.y, this->z - val.z));
 	};
@@ -446,7 +373,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return ((*this));
 	};
 
-	tml::XMINT3EX_ &operator -=(const XMINT3 &val)
+	tml::XMINT3EX_ &operator -=(const DirectX::XMINT3 &val)
 	{
 		this->x -= val.x;
 		this->y -= val.y;
@@ -460,7 +387,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return (tml::XMINT3EX_(this->x * val, this->y * val, this->z * val));
 	};
 
-	tml::XMINT3EX_ operator *(const XMINT3 &val) const
+	tml::XMINT3EX_ operator *(const DirectX::XMINT3 &val) const
 	{
 		return (tml::XMINT3EX_(this->x * val.x, this->y * val.y, this->z * val.z));
 	};
@@ -474,7 +401,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return ((*this));
 	};
 
-	tml::XMINT3EX_ &operator *=(const XMINT3 &val)
+	tml::XMINT3EX_ &operator *=(const DirectX::XMINT3 &val)
 	{
 		this->x *= val.x;
 		this->y *= val.y;
@@ -488,7 +415,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return (tml::XMINT3EX_(this->x / val, this->y / val, this->z / val));
 	};
 
-	tml::XMINT3EX_ operator /(const XMINT3 &val) const
+	tml::XMINT3EX_ operator /(const DirectX::XMINT3 &val) const
 	{
 		return (tml::XMINT3EX_(this->x / val.x, this->y / val.y, this->z / val.z));
 	};
@@ -502,7 +429,7 @@ typedef struct XMINT3EX_ : public XMINT3
 		return ((*this));
 	};
 
-	tml::XMINT3EX_ &operator /=(const XMINT3 &val)
+	tml::XMINT3EX_ &operator /=(const DirectX::XMINT3 &val)
 	{
 		this->x /= val.x;
 		this->y /= val.y;
@@ -521,34 +448,22 @@ typedef struct XMINT3EX_ : public XMINT3
 /**
  * @brief XMINT4EX構造体
  */
-typedef struct XMINT4EX_ : public XMINT4
+typedef struct XMINT4EX_ : public DirectX::XMINT4
 {
 	XMINT4EX_() :
-		XMINT4(0, 0, 0, 0)
+		DirectX::XMINT4(0, 0, 0, 0)
 	{
 		return;
 	};
 
 	explicit XMINT4EX_(const INT x, const INT y, const INT z, const INT w) :
-		XMINT4(x, y, z, w)
+		DirectX::XMINT4(x, y, z, w)
 	{
 		return;
 	};
 
 	explicit XMINT4EX_(const INT val) :
-		XMINT4(val, val, val, val)
-	{
-		return;
-	};
-
-	explicit XMINT4EX_(const XMINT4 &val) :
-		XMINT4(val.x, val.y, val.z, val.w)
-	{
-		return;
-	};
-
-	explicit XMINT4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type) :
-		XMINT4(0, 0, 0, 1)
+		DirectX::XMINT4(val, val, val, val)
 	{
 		return;
 	};
@@ -563,7 +478,13 @@ typedef struct XMINT4EX_ : public XMINT4
 		return ((*this));
 	};
 
-	tml::XMINT4EX_ &operator =(const XMINT4 &val)
+	explicit XMINT4EX_(const DirectX::XMINT4 &val) :
+		DirectX::XMINT4(val.x, val.y, val.z, val.w)
+	{
+		return;
+	};
+
+	tml::XMINT4EX_ &operator =(const DirectX::XMINT4 &val)
 	{
 		this->x = val.x;
 		this->y = val.y;
@@ -571,6 +492,12 @@ typedef struct XMINT4EX_ : public XMINT4
 		this->w = val.w;
 
 		return ((*this));
+	};
+
+	explicit XMINT4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type) :
+		DirectX::XMINT4(0, 0, 0, 1)
+	{
+		return;
 	};
 
 	tml::XMINT4EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type)
@@ -588,7 +515,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return ((this->x == val) && (this->y == val) && (this->z == val) && (this->w == val));
 	};
 
-	bool operator ==(const XMINT4 &val) const
+	bool operator ==(const DirectX::XMINT4 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y) && (this->z == val.z) && (this->w == val.w));
 	};
@@ -598,7 +525,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return ((this->x != val) || (this->y != val) || (this->z != val) || (this->w != val));
 	};
 
-	bool operator !=(const XMINT4 &val) const
+	bool operator !=(const DirectX::XMINT4 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y) || (this->z != val.z) || (this->w != val.w));
 	};
@@ -608,7 +535,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return (tml::XMINT4EX_(this->x + val, this->y + val, this->z + val, this->w + val));
 	};
 
-	tml::XMINT4EX_ operator +(const XMINT4 &val) const
+	tml::XMINT4EX_ operator +(const DirectX::XMINT4 &val) const
 	{
 		return (tml::XMINT4EX_(this->x + val.x, this->y + val.y, this->z + val.z, this->w + val.w));
 	};
@@ -622,7 +549,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return ((*this));
 	};
 
-	tml::XMINT4EX_ &operator +=(const XMINT4 &val)
+	tml::XMINT4EX_ &operator +=(const DirectX::XMINT4 &val)
 	{
 		this->x += val.x;
 		this->y += val.y;
@@ -637,7 +564,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return (tml::XMINT4EX_(this->x - val, this->y - val, this->z - val, this->w - val));
 	};
 
-	tml::XMINT4EX_ operator -(const XMINT4 &val) const
+	tml::XMINT4EX_ operator -(const DirectX::XMINT4 &val) const
 	{
 		return (tml::XMINT4EX_(this->x - val.x, this->y - val.y, this->z - val.z, this->w - val.w));
 	};
@@ -652,7 +579,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return ((*this));
 	};
 
-	tml::XMINT4EX_ &operator -=(const XMINT4 &val)
+	tml::XMINT4EX_ &operator -=(const DirectX::XMINT4 &val)
 	{
 		this->x -= val.x;
 		this->y -= val.y;
@@ -667,7 +594,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return (tml::XMINT4EX_(this->x * val, this->y * val, this->z * val, this->w * val));
 	};
 
-	tml::XMINT4EX_ operator *(const XMINT4 &val) const
+	tml::XMINT4EX_ operator *(const DirectX::XMINT4 &val) const
 	{
 		return (tml::XMINT4EX_(this->x * val.x, this->y * val.y, this->z * val.z, this->w * val.w));
 	};
@@ -682,7 +609,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return ((*this));
 	};
 
-	tml::XMINT4EX_ &operator *=(const XMINT4 &val)
+	tml::XMINT4EX_ &operator *=(const DirectX::XMINT4 &val)
 	{
 		this->x *= val.x;
 		this->y *= val.y;
@@ -697,7 +624,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return (tml::XMINT4EX_(this->x / val, this->y / val, this->z / val, this->w / val));
 	};
 
-	tml::XMINT4EX_ operator /(const XMINT4 &val) const
+	tml::XMINT4EX_ operator /(const DirectX::XMINT4 &val) const
 	{
 		return (tml::XMINT4EX_(this->x / val.x, this->y / val.y, this->z / val.z, this->w / val.w));
 	};
@@ -712,7 +639,7 @@ typedef struct XMINT4EX_ : public XMINT4
 		return ((*this));
 	};
 
-	tml::XMINT4EX_ &operator /=(const XMINT4 &val)
+	tml::XMINT4EX_ &operator /=(const DirectX::XMINT4 &val)
 	{
 		this->x /= val.x;
 		this->y /= val.y;

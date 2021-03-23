@@ -437,7 +437,7 @@ void tml::graphic::SpriteModel::DrawStageInit(void)
 	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 	auto layer = stage->GetLayerFast(0U);
 
-	XMMATRIX w_mat;
+	DirectX::XMMATRIX w_mat;
 
 	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size_ * this->scale_);
 

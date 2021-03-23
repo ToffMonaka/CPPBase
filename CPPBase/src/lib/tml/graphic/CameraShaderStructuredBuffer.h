@@ -88,7 +88,7 @@ public:
 
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
-	void SetElement(const UINT, const tml::graphic::Camera *, const XMMATRIX &, const XMMATRIX &, const XMMATRIX &);
+	void SetElement(const UINT, const tml::graphic::Camera *, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &);
 };
 }
 }

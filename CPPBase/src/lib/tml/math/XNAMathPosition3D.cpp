@@ -178,7 +178,7 @@ tml::XMPosition3D tml::XMPosition3D::operator +(const tml::XMPosition3D &pos) co
 	tml::XMFLOAT4EX tmp_quat(this->quat_);
 
 	tmp_pos += pos.pos_;
-	XMStoreFloat4(&tmp_quat, XMQuaternionNormalize(XMQuaternionMultiply(XMLoadFloat4(&tmp_quat), XMLoadFloat4(&pos.quat_))));
+	DirectX::XMStoreFloat4(&tmp_quat, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&tmp_quat), DirectX::XMLoadFloat4(&pos.quat_))));
 
 	return (tml::XMPosition3D(tmp_pos, tmp_quat));
 }
@@ -192,7 +192,7 @@ tml::XMPosition3D tml::XMPosition3D::operator +(const tml::XMPosition3D &pos) co
 tml::XMPosition3D &tml::XMPosition3D::operator +=(const tml::XMPosition3D &pos)
 {
 	this->pos_ += pos.pos_;
-	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionMultiply(XMLoadFloat4(&this->quat_), XMLoadFloat4(&pos.quat_))));
+	DirectX::XMStoreFloat4(&this->quat_, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&this->quat_), DirectX::XMLoadFloat4(&pos.quat_))));
 
 	this->UpdateAngleFromQuaternion();
 	this->UpdateAxisVectorFromQuaternion();
@@ -212,7 +212,7 @@ tml::XMPosition3D tml::XMPosition3D::operator -(const tml::XMPosition3D &pos) co
 	tml::XMFLOAT4EX tmp_quat(this->quat_);
 
 	tmp_pos -= pos.pos_;
-	XMStoreFloat4(&tmp_quat, XMQuaternionNormalize(XMQuaternionMultiply(XMLoadFloat4(&tmp_quat), XMQuaternionInverse(XMLoadFloat4(&pos.quat_)))));
+	DirectX::XMStoreFloat4(&tmp_quat, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&tmp_quat), DirectX::XMQuaternionInverse(DirectX::XMLoadFloat4(&pos.quat_)))));
 
 	return (tml::XMPosition3D(tmp_pos, tmp_quat));
 }
@@ -226,7 +226,7 @@ tml::XMPosition3D tml::XMPosition3D::operator -(const tml::XMPosition3D &pos) co
 tml::XMPosition3D &tml::XMPosition3D::operator -=(const tml::XMPosition3D &pos)
 {
 	this->pos_ -= pos.pos_;
-	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionMultiply(XMLoadFloat4(&this->quat_), XMQuaternionInverse(XMLoadFloat4(&pos.quat_)))));
+	DirectX::XMStoreFloat4(&this->quat_, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&this->quat_), DirectX::XMQuaternionInverse(DirectX::XMLoadFloat4(&pos.quat_)))));
 
 	this->UpdateAngleFromQuaternion();
 	this->UpdateAxisVectorFromQuaternion();
@@ -315,7 +315,7 @@ void tml::XMPosition3D::Init(const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &
  */
 void tml::XMPosition3D::UpdateQuaternionFromAngle(void)
 {
-	XMStoreFloat4(&this->quat_, XMQuaternionRotationRollPitchYaw(this->angle_.x, this->angle_.y, this->angle_.z));
+	DirectX::XMStoreFloat4(&this->quat_, DirectX::XMQuaternionRotationRollPitchYaw(this->angle_.x, this->angle_.y, this->angle_.z));
 
 	return;
 }
@@ -326,11 +326,11 @@ void tml::XMPosition3D::UpdateQuaternionFromAngle(void)
  */
 void tml::XMPosition3D::UpdateAngleFromQuaternion(void)
 {
-	XMVECTOR determinant;
+	DirectX::XMVECTOR determinant;
 
 	tml::XMFLOAT3X3EX rot_mat;
 		
-	XMStoreFloat3x3(&rot_mat, XMMatrixInverse(&determinant, XMMatrixRotationQuaternion(XMLoadFloat4(&this->quat_))));
+	DirectX::XMStoreFloat3x3(&rot_mat, DirectX::XMMatrixInverse(&determinant, DirectX::XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&this->quat_))));
 
 	this->angle_.x = std::asin(-tml::Clamp(rot_mat._23, -1.0f, 1.0f));
 
@@ -351,11 +351,11 @@ void tml::XMPosition3D::UpdateAngleFromQuaternion(void)
  */
 void tml::XMPosition3D::UpdateAxisVectorFromQuaternion(void)
 {
-	XMMATRIX rot_mat = XMMatrixRotationQuaternion(XMLoadFloat4(&this->quat_));
+	DirectX::XMMATRIX rot_mat = DirectX::XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&this->quat_));
 
-	XMStoreFloat3(&this->x_axis_vec_, XMVector2Transform(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), rot_mat));
-	XMStoreFloat3(&this->y_axis_vec_, XMVector2Transform(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), rot_mat));
-	XMStoreFloat3(&this->z_axis_vec_, XMVector2Transform(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), rot_mat));
+	DirectX::XMStoreFloat3(&this->x_axis_vec_, DirectX::XMVector2Transform(DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), rot_mat));
+	DirectX::XMStoreFloat3(&this->y_axis_vec_, DirectX::XMVector2Transform(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), rot_mat));
+	DirectX::XMStoreFloat3(&this->z_axis_vec_, DirectX::XMVector2Transform(DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), rot_mat));
 
 	return;
 }

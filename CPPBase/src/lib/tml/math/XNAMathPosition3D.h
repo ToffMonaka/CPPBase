@@ -72,8 +72,8 @@ public:
 	const tml::XMFLOAT3EX &GetXAxisVector(void) const;
 	const tml::XMFLOAT3EX &GetYAxisVector(void) const;
 	const tml::XMFLOAT3EX &GetZAxisVector(void) const;
-	FLOAT GetLength(const tml::XMFLOAT3EX &) const;
-	void SetLength(const tml::XMFLOAT3EX &, const FLOAT);
+	FLOAT GetDistance(const tml::XMFLOAT3EX &) const;
+	void SetDistance(const tml::XMFLOAT3EX &, const FLOAT);
 };
 }
 
@@ -206,7 +206,7 @@ inline void tml::XMPosition3D::Move(const tml::XMFLOAT3EX &axis_vec, const FLOAT
  */
 inline void tml::XMPosition3D::Rotation(const tml::XMFLOAT4EX &quat)
 {
-	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionMultiply(XMLoadFloat4(&this->quat_), XMLoadFloat4(&quat))));
+	DirectX::XMStoreFloat4(&this->quat_, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&this->quat_), DirectX::XMLoadFloat4(&quat))));
 
 	this->UpdateAngleFromQuaternion();
 	this->UpdateAxisVectorFromQuaternion();
@@ -237,7 +237,7 @@ inline void tml::XMPosition3D::Rotation(const tml::XMFLOAT3EX &angle)
  */
 inline void tml::XMPosition3D::Rotation(const tml::XMFLOAT3EX &axis_vec, const FLOAT angle)
 {
-	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionMultiply(XMLoadFloat4(&this->quat_), XMQuaternionRotationNormal(XMLoadFloat3(&axis_vec), angle))));
+	DirectX::XMStoreFloat4(&this->quat_, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&this->quat_), DirectX::XMQuaternionRotationNormal(DirectX::XMLoadFloat3(&axis_vec), angle))));
 
 	this->UpdateAngleFromQuaternion();
 	this->UpdateAxisVectorFromQuaternion();
@@ -252,23 +252,23 @@ inline void tml::XMPosition3D::Rotation(const tml::XMFLOAT3EX &axis_vec, const F
  */
 inline void tml::XMPosition3D::Look(const tml::XMFLOAT3EX &pos)
 {
-	XMVECTOR determinant;
+	DirectX::XMVECTOR determinant;
 
-	XMVECTOR tmp_pos = XMLoadFloat3(&this->pos_);
-	XMVECTOR tmp_vec = XMVectorSubtract(XMLoadFloat3(&pos), tmp_pos);
+	DirectX::XMVECTOR tmp_pos = DirectX::XMLoadFloat3(&this->pos_);
+	DirectX::XMVECTOR tmp_vec = DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&pos), tmp_pos);
 
-	if (XMVectorGetX(XMVector3LengthSq(tmp_vec)) <= 0.0f) {
-		tmp_vec = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+	if (DirectX::XMVectorGetX(DirectX::XMVector3LengthSq(tmp_vec)) <= 0.0f) {
+		tmp_vec = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	}
 
-	XMMATRIX rot_mat = XMMatrixInverse(&determinant, XMMatrixLookToLH(tmp_pos, tmp_vec, XMLoadFloat3(&this->y_axis_vec_)));
+	DirectX::XMMATRIX rot_mat = DirectX::XMMatrixInverse(&determinant, DirectX::XMMatrixLookToLH(tmp_pos, tmp_vec, DirectX::XMLoadFloat3(&this->y_axis_vec_)));
 
-	if (XMMatrixIsNaN(rot_mat)) {
-		tmp_vec = XMVectorAdd(tmp_vec, XMVectorSet(0.0f, 0.0f, 0.0001f, 0.0f));
-		rot_mat = XMMatrixInverse(&determinant, XMMatrixLookToLH(tmp_pos, tmp_vec, XMLoadFloat3(&this->y_axis_vec_)));
+	if (DirectX::XMMatrixIsNaN(rot_mat)) {
+		tmp_vec = DirectX::XMVectorAdd(tmp_vec, DirectX::XMVectorSet(0.0f, 0.0f, 0.0001f, 0.0f));
+		rot_mat = DirectX::XMMatrixInverse(&determinant, DirectX::XMMatrixLookToLH(tmp_pos, tmp_vec, DirectX::XMLoadFloat3(&this->y_axis_vec_)));
 	}
 
-	XMStoreFloat4(&this->quat_, XMQuaternionNormalize(XMQuaternionRotationMatrix(rot_mat)));
+	DirectX::XMStoreFloat4(&this->quat_, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionRotationMatrix(rot_mat)));
 
 	this->UpdateAngleFromQuaternion();
 	this->UpdateAxisVectorFromQuaternion();
@@ -358,28 +358,28 @@ inline const tml::XMFLOAT3EX &tml::XMPosition3D::GetZAxisVector(void) const
 
 
 /**
- * @brief GetLengthŠÖ”
+ * @brief GetDistanceŠÖ”
  * @param pos (position)
- * @return len (length)
+ * @return dist (distance)
  */
-inline FLOAT tml::XMPosition3D::GetLength(const tml::XMFLOAT3EX &pos) const
+inline FLOAT tml::XMPosition3D::GetDistance(const tml::XMFLOAT3EX &pos) const
 {
-	XMVECTOR tmp_pos = XMLoadFloat3(&pos);
+	DirectX::XMVECTOR tmp_pos = DirectX::XMLoadFloat3(&pos);
 
-	return (XMVectorGetX(XMVector3Length(XMVectorSubtract(XMLoadFloat3(&this->pos_), tmp_pos))));
+	return (DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&this->pos_), tmp_pos))));
 }
 
 
 /**
- * @brief SetLengthŠÖ”
+ * @brief SetDistanceŠÖ”
  * @param pos (position)
- * @param len (length)
+ * @param dist (distance)
  */
-inline void tml::XMPosition3D::SetLength(const tml::XMFLOAT3EX &pos, const FLOAT len)
+inline void tml::XMPosition3D::SetDistance(const tml::XMFLOAT3EX &pos, const FLOAT dist)
 {
-	XMVECTOR tmp_pos = XMLoadFloat3(&pos);
+	DirectX::XMVECTOR tmp_pos = DirectX::XMLoadFloat3(&pos);
 
-	XMStoreFloat3(&this->pos_, XMVectorMultiplyAdd(XMVector3Normalize(XMVectorSubtract(XMLoadFloat3(&this->pos_), tmp_pos)), XMVectorSet(len, len, len, 0.0f), tmp_pos));
+	DirectX::XMStoreFloat3(&this->pos_, DirectX::XMVectorMultiplyAdd(DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&this->pos_), tmp_pos)), DirectX::XMVectorSet(dist, dist, dist, 0.0f), tmp_pos));
 
 	return;
 }

@@ -260,10 +260,10 @@ void tml::XMPosition2D::Init(const tml::XMFLOAT2EX &pos, const FLOAT angle)
  */
 void tml::XMPosition2D::UpdateAxisVectorFromAngle(void)
 {
-	XMMATRIX rot_mat = XMMatrixRotationZ(this->angle_);
+	DirectX::XMMATRIX rot_mat = DirectX::XMMatrixRotationZ(this->angle_);
 
-	XMStoreFloat2(&this->x_axis_vec_, XMVector2Transform(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), rot_mat));
-	XMStoreFloat2(&this->y_axis_vec_, XMVector2Transform(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), rot_mat));
+	DirectX::XMStoreFloat2(&this->x_axis_vec_, DirectX::XMVector2Transform(DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), rot_mat));
+	DirectX::XMStoreFloat2(&this->y_axis_vec_, DirectX::XMVector2Transform(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), rot_mat));
 
 	return;
 }

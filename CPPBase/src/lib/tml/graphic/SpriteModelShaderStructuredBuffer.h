@@ -86,7 +86,7 @@ public:
 
 	tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::SpriteModelShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
-	void SetElement(const UINT, const XMMATRIX &, const XMMATRIX &, const tml::XMFLOAT4EX &);
+	void SetElement(const UINT, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const tml::XMFLOAT4EX &);
 };
 }
 }

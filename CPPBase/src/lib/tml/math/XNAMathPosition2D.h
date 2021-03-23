@@ -58,8 +58,8 @@ public:
 	void SetAngle(const FLOAT);
 	const tml::XMFLOAT2EX &GetXAxisVector(void) const;
 	const tml::XMFLOAT2EX &GetYAxisVector(void) const;
-	FLOAT GetLength(const tml::XMFLOAT2EX &) const;
-	void SetLength(const tml::XMFLOAT2EX &, const FLOAT);
+	FLOAT GetDistance(const tml::XMFLOAT2EX &) const;
+	void SetDistance(const tml::XMFLOAT2EX &, const FLOAT);
 };
 }
 
@@ -223,28 +223,28 @@ inline const tml::XMFLOAT2EX &tml::XMPosition2D::GetYAxisVector(void) const
 
 
 /**
- * @brief GetLengthŠÖ”
+ * @brief GetDistanceŠÖ”
  * @param pos (position)
- * @return len (length)
+ * @return dist (distance)
  */
-inline FLOAT tml::XMPosition2D::GetLength(const tml::XMFLOAT2EX &pos) const
+inline FLOAT tml::XMPosition2D::GetDistance(const tml::XMFLOAT2EX &pos) const
 {
-	XMVECTOR tmp_pos = XMLoadFloat2(&pos);
+	DirectX::XMVECTOR tmp_pos = DirectX::XMLoadFloat2(&pos);
 
-	return (XMVectorGetX(XMVector2Length(XMVectorSubtract(XMLoadFloat2(&this->pos_), tmp_pos))));
+	return (DirectX::XMVectorGetX(DirectX::XMVector2Length(DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&this->pos_), tmp_pos))));
 }
 
 
 /**
- * @brief SetLengthŠÖ”
+ * @brief SetDistanceŠÖ”
  * @param pos (position)
- * @param len (length)
+ * @param dist (distance)
  */
-inline void tml::XMPosition2D::SetLength(const tml::XMFLOAT2EX &pos, const FLOAT len)
+inline void tml::XMPosition2D::SetDistance(const tml::XMFLOAT2EX &pos, const FLOAT dist)
 {
-	XMVECTOR tmp_pos = XMLoadFloat2(&pos);
+	DirectX::XMVECTOR tmp_pos = DirectX::XMLoadFloat2(&pos);
 
-	XMStoreFloat2(&this->pos_, XMVectorMultiplyAdd(XMVector2Normalize(XMVectorSubtract(XMLoadFloat2(&this->pos_), tmp_pos)), XMVectorSet(len, len, 0.0f, 0.0f), tmp_pos));
+	DirectX::XMStoreFloat2(&this->pos_, DirectX::XMVectorMultiplyAdd(DirectX::XMVector2Normalize(DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&this->pos_), tmp_pos)), DirectX::XMVectorSet(dist, dist, 0.0f, 0.0f), tmp_pos));
 
 	return;
 }

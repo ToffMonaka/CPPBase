@@ -101,7 +101,7 @@ INT tml::graphic::SpriteModelShaderStructuredBuffer::Create(const tml::graphic::
  * @param p_mat (projection_matrix)
  * @param col (color)
  */
-void tml::graphic::SpriteModelShaderStructuredBuffer::SetElement(const UINT index, const XMMATRIX &w_mat, const XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
+void tml::graphic::SpriteModelShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
 {
 	auto element = this->GetElement(index);
 
@@ -109,9 +109,9 @@ void tml::graphic::SpriteModelShaderStructuredBuffer::SetElement(const UINT inde
 		return;
 	}
 
-	XMMATRIX wp_mat = w_mat * p_mat;
+	DirectX::XMMATRIX wp_mat = w_mat * p_mat;
 
-	XMStoreFloat4x4(&element->world_projection_matrix, XMMatrixTranspose(wp_mat));
+	DirectX::XMStoreFloat4x4(&element->world_projection_matrix, DirectX::XMMatrixTranspose(wp_mat));
 	element->color = col;
 
 	return;

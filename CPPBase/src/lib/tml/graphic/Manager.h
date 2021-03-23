@@ -20,12 +20,12 @@ namespace graphic {
  */
 typedef struct DRAW_STAGE_DATA_
 {
-	XMMATRIX &view_matrix_3d;
-	XMMATRIX &inverse_view_matrix_3d;
-	XMMATRIX &projection_matrix_3d;
-	XMMATRIX &view_matrix_2d;
-	XMMATRIX &inverse_view_matrix_2d;
-	XMMATRIX &projection_matrix_2d;
+	DirectX::XMMATRIX &view_matrix_3d;
+	DirectX::XMMATRIX &inverse_view_matrix_3d;
+	DirectX::XMMATRIX &projection_matrix_3d;
+	DirectX::XMMATRIX &view_matrix_2d;
+	DirectX::XMMATRIX &inverse_view_matrix_2d;
+	DirectX::XMMATRIX &projection_matrix_2d;
 
 	/**
 	 * @brief コンストラクタ
@@ -36,7 +36,7 @@ typedef struct DRAW_STAGE_DATA_
 	 * @param inv_v_mat_2d (inverse_view_matrix_2d)
 	 * @param p_mat_2d (projection_matrix_2d)
 	 */
-	DRAW_STAGE_DATA_(XMMATRIX &v_mat_3d, XMMATRIX &inv_v_mat_3d, XMMATRIX &p_mat_3d, XMMATRIX &v_mat_2d, XMMATRIX &inv_v_mat_2d, XMMATRIX &p_mat_2d) :
+	DRAW_STAGE_DATA_(DirectX::XMMATRIX &v_mat_3d, DirectX::XMMATRIX &inv_v_mat_3d, DirectX::XMMATRIX &p_mat_3d, DirectX::XMMATRIX &v_mat_2d, DirectX::XMMATRIX &inv_v_mat_2d, DirectX::XMMATRIX &p_mat_2d) :
 		view_matrix_3d(v_mat_3d),
 		inverse_view_matrix_3d(inv_v_mat_3d),
 		projection_matrix_3d(p_mat_3d),
@@ -245,13 +245,13 @@ public:
 	tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE GetAOQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE GetBloomQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE GetAAQualityType(void) const;
-	XMMATRIX &GetWorldMatrix3D(XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &, const tml::XMFLOAT3EX &);
-	XMMATRIX &GetWorldMatrix3D(XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
-	XMMATRIX &GetWorldMatrix2D(XMMATRIX &, const tml::XMFLOAT2EX &, const FLOAT, const tml::XMFLOAT2EX &);
-	XMMATRIX &GetViewMatrix3D(XMMATRIX &, const tml::graphic::Camera *);
-	XMMATRIX &GetViewMatrix2D(XMMATRIX &, const tml::graphic::Camera *);
-	XMMATRIX &GetProjectionMatrix3D(XMMATRIX &, const tml::graphic::Camera *);
-	XMMATRIX &GetProjectionMatrix2D(XMMATRIX &, const tml::graphic::Camera *);
+	DirectX::XMMATRIX &GetWorldMatrix3D(DirectX::XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &, const tml::XMFLOAT3EX &);
+	DirectX::XMMATRIX &GetWorldMatrix3D(DirectX::XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
+	DirectX::XMMATRIX &GetWorldMatrix2D(DirectX::XMMATRIX &, const tml::XMFLOAT2EX &, const FLOAT, const tml::XMFLOAT2EX &);
+	DirectX::XMMATRIX &GetViewMatrix3D(DirectX::XMMATRIX &, const tml::graphic::Camera *);
+	DirectX::XMMATRIX &GetViewMatrix2D(DirectX::XMMATRIX &, const tml::graphic::Camera *);
+	DirectX::XMMATRIX &GetProjectionMatrix3D(DirectX::XMMATRIX &, const tml::graphic::Camera *);
+	DirectX::XMMATRIX &GetProjectionMatrix2D(DirectX::XMMATRIX &, const tml::graphic::Camera *);
 	tml::DynamicBuffer &GetCPUBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_res = nullptr);
 	std::vector<tml::DynamicBuffer> &GetCPUBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
 

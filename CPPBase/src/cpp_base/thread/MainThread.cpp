@@ -218,7 +218,7 @@ INT cpp_base::MainThread::Start(void)
 
 			desc.manager = &this->graphic_mgr_;
 			desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
-			desc.fov_angle = XMConvertToRadians(55.0f);
+			desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
 			desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSize().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y));
 			desc.near_clip = 0.1f;
 			desc.far_clip = 1000.0f;

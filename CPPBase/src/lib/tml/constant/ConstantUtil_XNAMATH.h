@@ -6,6 +6,7 @@
 
 
 #include "ConstantUtil.h"
+#include "ConstantInclude_XNAMathBase.h"
 
 
 namespace tml {

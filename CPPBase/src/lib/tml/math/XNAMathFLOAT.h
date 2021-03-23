@@ -7,47 +7,28 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_XNAMATH.h"
-#include "../constant/ConstantInclude_XNAMathBase.h"
 
 
 namespace tml {
 /**
  * @brief XMFLOAT2EX構造体
  */
-typedef struct XMFLOAT2EX_ : public XMFLOAT2
+typedef struct XMFLOAT2EX_ : public DirectX::XMFLOAT2
 {
 	XMFLOAT2EX_() :
-		XMFLOAT2(0.0f, 0.0f)
+		DirectX::XMFLOAT2(0.0f, 0.0f)
 	{
 		return;
 	};
 
 	explicit XMFLOAT2EX_(const FLOAT x, const FLOAT y) :
-		XMFLOAT2(x, y)
+		DirectX::XMFLOAT2(x, y)
 	{
 		return;
 	};
 
 	explicit XMFLOAT2EX_(const FLOAT val) :
-		XMFLOAT2(val, val)
-	{
-		return;
-	};
-
-	explicit XMFLOAT2EX_(const XMFLOAT2 &val) :
-		XMFLOAT2(val.x, val.y)
-	{
-		return;
-	};
-
-	explicit XMFLOAT2EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
-		XMFLOAT2(1.0f, 0.0f)
-	{
-		return;
-	};
-
-	explicit XMFLOAT2EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
-		XMFLOAT2(0.0f, 1.0f)
+		DirectX::XMFLOAT2(val, val)
 	{
 		return;
 	};
@@ -60,12 +41,24 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return ((*this));
 	};
 
-	tml::XMFLOAT2EX_ &operator =(const XMFLOAT2 &val)
+	explicit XMFLOAT2EX_(const DirectX::XMFLOAT2 &val) :
+		DirectX::XMFLOAT2(val.x, val.y)
+	{
+		return;
+	};
+
+	tml::XMFLOAT2EX_ &operator =(const DirectX::XMFLOAT2 &val)
 	{
 		this->x = val.x;
 		this->y = val.y;
 
 		return ((*this));
+	};
+
+	explicit XMFLOAT2EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
+		DirectX::XMFLOAT2(1.0f, 0.0f)
+	{
+		return;
 	};
 
 	tml::XMFLOAT2EX_ &operator =(const tml::ConstantUtil::XNAMATH::X_VECTOR type)
@@ -74,6 +67,12 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		this->y = 0.0f;
 
 		return ((*this));
+	};
+
+	explicit XMFLOAT2EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
+		DirectX::XMFLOAT2(0.0f, 1.0f)
+	{
+		return;
 	};
 
 	tml::XMFLOAT2EX_ &operator =(const tml::ConstantUtil::XNAMATH::Y_VECTOR type)
@@ -89,7 +88,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return ((this->x == val) && (this->y == val));
 	};
 
-	bool operator ==(const XMFLOAT2 &val) const
+	bool operator ==(const DirectX::XMFLOAT2 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y));
 	};
@@ -99,7 +98,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return ((this->x != val) || (this->y != val));
 	};
 
-	bool operator !=(const XMFLOAT2 &val) const
+	bool operator !=(const DirectX::XMFLOAT2 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y));
 	};
@@ -109,7 +108,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return (tml::XMFLOAT2EX_(this->x + val, this->y + val));
 	};
 
-	tml::XMFLOAT2EX_ operator +(const XMFLOAT2 &val) const
+	tml::XMFLOAT2EX_ operator +(const DirectX::XMFLOAT2 &val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x + val.x, this->y + val.y));
 	};
@@ -122,7 +121,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return ((*this));
 	};
 
-	tml::XMFLOAT2EX_ &operator +=(const XMFLOAT2 &val)
+	tml::XMFLOAT2EX_ &operator +=(const DirectX::XMFLOAT2 &val)
 	{
 		this->x += val.x;
 		this->y += val.y;
@@ -135,7 +134,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return (tml::XMFLOAT2EX_(this->x - val, this->y - val));
 	};
 
-	tml::XMFLOAT2EX_ operator -(const XMFLOAT2 &val) const
+	tml::XMFLOAT2EX_ operator -(const DirectX::XMFLOAT2 &val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x - val.x, this->y - val.y));
 	};
@@ -148,7 +147,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return ((*this));
 	};
 
-	tml::XMFLOAT2EX_ &operator -=(const XMFLOAT2 &val)
+	tml::XMFLOAT2EX_ &operator -=(const DirectX::XMFLOAT2 &val)
 	{
 		this->x -= val.x;
 		this->y -= val.y;
@@ -161,7 +160,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return (tml::XMFLOAT2EX_(this->x * val, this->y * val));
 	};
 
-	tml::XMFLOAT2EX_ operator *(const XMFLOAT2 &val) const
+	tml::XMFLOAT2EX_ operator *(const DirectX::XMFLOAT2 &val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x * val.x, this->y * val.y));
 	};
@@ -174,7 +173,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return ((*this));
 	};
 
-	tml::XMFLOAT2EX_ &operator *=(const XMFLOAT2 &val)
+	tml::XMFLOAT2EX_ &operator *=(const DirectX::XMFLOAT2 &val)
 	{
 		this->x *= val.x;
 		this->y *= val.y;
@@ -189,7 +188,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return (tml::XMFLOAT2EX_(this->x * tmp_val, this->y * tmp_val));
 	};
 
-	tml::XMFLOAT2EX_ operator /(const XMFLOAT2 &val) const
+	tml::XMFLOAT2EX_ operator /(const DirectX::XMFLOAT2 &val) const
 	{
 		return (tml::XMFLOAT2EX_(this->x / val.x, this->y / val.y));
 	};
@@ -204,7 +203,7 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 		return ((*this));
 	};
 
-	tml::XMFLOAT2EX_ &operator /=(const XMFLOAT2 &val)
+	tml::XMFLOAT2EX_ &operator /=(const DirectX::XMFLOAT2 &val)
 	{
 		this->x /= val.x;
 		this->y /= val.y;
@@ -222,46 +221,22 @@ typedef struct XMFLOAT2EX_ : public XMFLOAT2
 /**
  * @brief XMFLOAT3EX構造体
  */
-typedef struct XMFLOAT3EX_ : public XMFLOAT3
+typedef struct XMFLOAT3EX_ : public DirectX::XMFLOAT3
 {
 	XMFLOAT3EX_() :
-		XMFLOAT3(0.0f, 0.0f, 0.0f)
+		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)
 	{
 		return;
 	};
 
 	explicit XMFLOAT3EX_(const FLOAT x, const FLOAT y, const FLOAT z) :
-		XMFLOAT3(x, y, z)
+		DirectX::XMFLOAT3(x, y, z)
 	{
 		return;
 	};
 
 	explicit XMFLOAT3EX_(const FLOAT val) :
-		XMFLOAT3(val, val, val)
-	{
-		return;
-	};
-
-	explicit XMFLOAT3EX_(const XMFLOAT3 &val) :
-		XMFLOAT3(val.x, val.y, val.z)
-	{
-		return;
-	};
-
-	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
-		XMFLOAT3(1.0f, 0.0f, 0.0f)
-	{
-		return;
-	};
-
-	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
-		XMFLOAT3(0.0f, 1.0f, 0.0f)
-	{
-		return;
-	};
-
-	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::Z_VECTOR type) :
-		XMFLOAT3(0.0f, 0.0f, 1.0f)
+		DirectX::XMFLOAT3(val, val, val)
 	{
 		return;
 	};
@@ -275,13 +250,25 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3EX_ &operator =(const XMFLOAT3 &val)
+	explicit XMFLOAT3EX_(const DirectX::XMFLOAT3 &val) :
+		DirectX::XMFLOAT3(val.x, val.y, val.z)
+	{
+		return;
+	};
+
+	tml::XMFLOAT3EX_ &operator =(const DirectX::XMFLOAT3 &val)
 	{
 		this->x = val.x;
 		this->y = val.y;
 		this->z = val.z;
 
 		return ((*this));
+	};
+
+	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::X_VECTOR type) :
+		DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f)
+	{
+		return;
 	};
 
 	tml::XMFLOAT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::X_VECTOR type)
@@ -293,6 +280,12 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return ((*this));
 	};
 
+	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::Y_VECTOR type) :
+		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f)
+	{
+		return;
+	};
+
 	tml::XMFLOAT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::Y_VECTOR type)
 	{
 		this->x = 0.0f;
@@ -300,6 +293,12 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		this->z = 0.0f;
 
 		return ((*this));
+	};
+
+	explicit XMFLOAT3EX_(const tml::ConstantUtil::XNAMATH::Z_VECTOR type) :
+		DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f)
+	{
+		return;
 	};
 
 	tml::XMFLOAT3EX_ &operator =(const tml::ConstantUtil::XNAMATH::Z_VECTOR type)
@@ -316,7 +315,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return ((this->x == val) && (this->y == val) && (this->z == val));
 	};
 
-	bool operator ==(const XMFLOAT3 &val) const
+	bool operator ==(const DirectX::XMFLOAT3 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y) && (this->z == val.z));
 	};
@@ -326,7 +325,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return ((this->x != val) || (this->y != val) || (this->z != val));
 	};
 
-	bool operator !=(const XMFLOAT3 &val) const
+	bool operator !=(const DirectX::XMFLOAT3 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y) || (this->z != val.z));
 	};
@@ -336,7 +335,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return (tml::XMFLOAT3EX_(this->x + val, this->y + val, this->z + val));
 	};
 
-	tml::XMFLOAT3EX_ operator +(const XMFLOAT3 &val) const
+	tml::XMFLOAT3EX_ operator +(const DirectX::XMFLOAT3 &val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x + val.x, this->y + val.y, this->z + val.z));
 	};
@@ -350,7 +349,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3EX_ &operator +=(const XMFLOAT3 &val)
+	tml::XMFLOAT3EX_ &operator +=(const DirectX::XMFLOAT3 &val)
 	{
 		this->x += val.x;
 		this->y += val.y;
@@ -364,7 +363,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return (tml::XMFLOAT3EX_(this->x - val, this->y - val, this->z - val));
 	};
 
-	tml::XMFLOAT3EX_ operator -(const XMFLOAT3 &val) const
+	tml::XMFLOAT3EX_ operator -(const DirectX::XMFLOAT3 &val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x - val.x, this->y - val.y, this->z - val.z));
 	};
@@ -378,7 +377,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3EX_ &operator -=(const XMFLOAT3 &val)
+	tml::XMFLOAT3EX_ &operator -=(const DirectX::XMFLOAT3 &val)
 	{
 		this->x -= val.x;
 		this->y -= val.y;
@@ -392,7 +391,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return (tml::XMFLOAT3EX_(this->x * val, this->y * val, this->z * val));
 	};
 
-	tml::XMFLOAT3EX_ operator *(const XMFLOAT3 &val) const
+	tml::XMFLOAT3EX_ operator *(const DirectX::XMFLOAT3 &val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x * val.x, this->y * val.y, this->z * val.z));
 	};
@@ -406,7 +405,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3EX_ &operator *=(const XMFLOAT3 &val)
+	tml::XMFLOAT3EX_ &operator *=(const DirectX::XMFLOAT3 &val)
 	{
 		this->x *= val.x;
 		this->y *= val.y;
@@ -422,7 +421,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return (tml::XMFLOAT3EX_(this->x * tmp_val, this->y * tmp_val, this->z * tmp_val));
 	};
 
-	tml::XMFLOAT3EX_ operator /(const XMFLOAT3 &val) const
+	tml::XMFLOAT3EX_ operator /(const DirectX::XMFLOAT3 &val) const
 	{
 		return (tml::XMFLOAT3EX_(this->x / val.x, this->y / val.y, this->z / val.z));
 	};
@@ -438,7 +437,7 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3EX_ &operator /=(const XMFLOAT3 &val)
+	tml::XMFLOAT3EX_ &operator /=(const DirectX::XMFLOAT3 &val)
 	{
 		this->x /= val.x;
 		this->y /= val.y;
@@ -457,34 +456,22 @@ typedef struct XMFLOAT3EX_ : public XMFLOAT3
 /**
  * @brief XMFLOAT4EX構造体
  */
-typedef struct XMFLOAT4EX_ : public XMFLOAT4
+typedef struct XMFLOAT4EX_ : public DirectX::XMFLOAT4
 {
 	XMFLOAT4EX_() :
-		XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)
+		DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)
 	{
 		return;
 	};
 
 	explicit XMFLOAT4EX_(const FLOAT x, const FLOAT y, const FLOAT z, const FLOAT w) :
-		XMFLOAT4(x, y, z, w)
+		DirectX::XMFLOAT4(x, y, z, w)
 	{
 		return;
 	};
 
 	explicit XMFLOAT4EX_(const FLOAT val) :
-		XMFLOAT4(val, val, val, val)
-	{
-		return;
-	};
-
-	explicit XMFLOAT4EX_(const XMFLOAT4 &val) :
-		XMFLOAT4(val.x, val.y, val.z, val.w)
-	{
-		return;
-	};
-
-	explicit XMFLOAT4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type) :
-		XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)
+		DirectX::XMFLOAT4(val, val, val, val)
 	{
 		return;
 	};
@@ -499,7 +486,13 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4EX_ &operator =(const XMFLOAT4 &val)
+	explicit XMFLOAT4EX_(const DirectX::XMFLOAT4 &val) :
+		DirectX::XMFLOAT4(val.x, val.y, val.z, val.w)
+	{
+		return;
+	};
+
+	tml::XMFLOAT4EX_ &operator =(const DirectX::XMFLOAT4 &val)
 	{
 		this->x = val.x;
 		this->y = val.y;
@@ -507,6 +500,12 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		this->w = val.w;
 
 		return ((*this));
+	};
+
+	explicit XMFLOAT4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type) :
+		DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)
+	{
+		return;
 	};
 
 	tml::XMFLOAT4EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_VECTOR type)
@@ -524,7 +523,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return ((this->x == val) && (this->y == val) && (this->z == val) && (this->w == val));
 	};
 
-	bool operator ==(const XMFLOAT4 &val) const
+	bool operator ==(const DirectX::XMFLOAT4 &val) const
 	{
 		return ((this->x == val.x) && (this->y == val.y) && (this->z == val.z) && (this->w == val.w));
 	};
@@ -534,7 +533,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return ((this->x != val) || (this->y != val) || (this->z != val) || (this->w != val));
 	};
 
-	bool operator !=(const XMFLOAT4 &val) const
+	bool operator !=(const DirectX::XMFLOAT4 &val) const
 	{
 		return ((this->x != val.x) || (this->y != val.y) || (this->z != val.z) || (this->w != val.w));
 	};
@@ -544,7 +543,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return (tml::XMFLOAT4EX_(this->x + val, this->y + val, this->z + val, this->w + val));
 	};
 
-	tml::XMFLOAT4EX_ operator +(const XMFLOAT4 &val) const
+	tml::XMFLOAT4EX_ operator +(const DirectX::XMFLOAT4 &val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x + val.x, this->y + val.y, this->z + val.z, this->w + val.w));
 	};
@@ -558,7 +557,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4EX_ &operator +=(const XMFLOAT4 &val)
+	tml::XMFLOAT4EX_ &operator +=(const DirectX::XMFLOAT4 &val)
 	{
 		this->x += val.x;
 		this->y += val.y;
@@ -573,7 +572,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return (tml::XMFLOAT4EX_(this->x - val, this->y - val, this->z - val, this->w - val));
 	};
 
-	tml::XMFLOAT4EX_ operator -(const XMFLOAT4 &val) const
+	tml::XMFLOAT4EX_ operator -(const DirectX::XMFLOAT4 &val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x - val.x, this->y - val.y, this->z - val.z, this->w - val.w));
 	};
@@ -588,7 +587,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4EX_ &operator -=(const XMFLOAT4 &val)
+	tml::XMFLOAT4EX_ &operator -=(const DirectX::XMFLOAT4 &val)
 	{
 		this->x -= val.x;
 		this->y -= val.y;
@@ -603,7 +602,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return (tml::XMFLOAT4EX_(this->x * val, this->y * val, this->z * val, this->w * val));
 	};
 
-	tml::XMFLOAT4EX_ operator *(const XMFLOAT4 &val) const
+	tml::XMFLOAT4EX_ operator *(const DirectX::XMFLOAT4 &val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x * val.x, this->y * val.y, this->z * val.z, this->w * val.w));
 	};
@@ -618,7 +617,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4EX_ &operator *=(const XMFLOAT4 &val)
+	tml::XMFLOAT4EX_ &operator *=(const DirectX::XMFLOAT4 &val)
 	{
 		this->x *= val.x;
 		this->y *= val.y;
@@ -635,7 +634,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return (tml::XMFLOAT4EX_(this->x * tmp_val, this->y * tmp_val, this->z * tmp_val, this->w * tmp_val));
 	};
 
-	tml::XMFLOAT4EX_ operator /(const XMFLOAT4 &val) const
+	tml::XMFLOAT4EX_ operator /(const DirectX::XMFLOAT4 &val) const
 	{
 		return (tml::XMFLOAT4EX_(this->x / val.x, this->y / val.y, this->z / val.z, this->w / val.w));
 	};
@@ -652,7 +651,7 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4EX_ &operator /=(const XMFLOAT4 &val)
+	tml::XMFLOAT4EX_ &operator /=(const DirectX::XMFLOAT4 &val)
 	{
 		this->x /= val.x;
 		this->y /= val.y;
@@ -672,10 +671,10 @@ typedef struct XMFLOAT4EX_ : public XMFLOAT4
 /**
  * @brief XMFLOAT3X3E構造体
  */
-typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
+typedef struct XMFLOAT3X3EX_ : public DirectX::XMFLOAT3X3
 {
 	XMFLOAT3X3EX_() :
-		XMFLOAT3X3(
+		DirectX::XMFLOAT3X3(
 			0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f
@@ -689,7 +688,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		const FLOAT _21, const FLOAT _22, const FLOAT _23,
 		const FLOAT _31, const FLOAT _32, const FLOAT _33
 	) :
-		XMFLOAT3X3(
+		DirectX::XMFLOAT3X3(
 			_11, _12, _13,
 			_21, _22, _23,
 			_31, _32, _33
@@ -699,30 +698,10 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 	};
 
 	explicit XMFLOAT3X3EX_(const FLOAT val) :
-		XMFLOAT3X3(
+		DirectX::XMFLOAT3X3(
 			val, val, val,
 			val, val, val,
 			val, val, val
-		)
-	{
-		return;
-	};
-
-	explicit XMFLOAT3X3EX_(const XMFLOAT3X3 &val) :
-		XMFLOAT3X3(
-			val._11, val._12, val._13,
-			val._21, val._22, val._23,
-			val._31, val._32, val._33
-		)
-	{
-		return;
-	};
-
-	explicit XMFLOAT3X3EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
-		XMFLOAT3X3(
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f
 		)
 	{
 		return;
@@ -737,13 +716,33 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3X3EX_ &operator =(const XMFLOAT3X3 &val)
+	explicit XMFLOAT3X3EX_(const DirectX::XMFLOAT3X3 &val) :
+		DirectX::XMFLOAT3X3(
+			val._11, val._12, val._13,
+			val._21, val._22, val._23,
+			val._31, val._32, val._33
+		)
+	{
+		return;
+	};
+
+	tml::XMFLOAT3X3EX_ &operator =(const DirectX::XMFLOAT3X3 &val)
 	{
 		this->_11 = val._11; this->_12 = val._12; this->_13 = val._13;
 		this->_21 = val._21; this->_22 = val._22; this->_23 = val._23;
 		this->_31 = val._31; this->_32 = val._32; this->_33 = val._33;
 
 		return ((*this));
+	};
+
+	explicit XMFLOAT3X3EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
+		DirectX::XMFLOAT3X3(
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f
+		)
+	{
+		return;
 	};
 
 	tml::XMFLOAT3X3EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type)
@@ -764,7 +763,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		);
 	};
 
-	bool operator ==(const XMFLOAT3X3 &val) const
+	bool operator ==(const DirectX::XMFLOAT3X3 &val) const
 	{
 		return (
 			(this->_11 == val._11) && (this->_12 == val._12) && (this->_13 == val._13) &&
@@ -782,7 +781,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		);
 	};
 
-	bool operator !=(const XMFLOAT3X3 &val) const
+	bool operator !=(const DirectX::XMFLOAT3X3 &val) const
 	{
 		return (
 			(this->_11 != val._11) || (this->_12 != val._12) || (this->_13 != val._13) ||
@@ -800,7 +799,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		));
 	};
 
-	tml::XMFLOAT3X3EX_ operator +(const XMFLOAT3X3 &val) const
+	tml::XMFLOAT3X3EX_ operator +(const DirectX::XMFLOAT3X3 &val) const
 	{
 		return (tml::XMFLOAT3X3EX_(
 			this->_11 + val._11, this->_12 + val._12, this->_13 + val._13,
@@ -818,7 +817,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3X3EX_ &operator +=(const XMFLOAT3X3 &val)
+	tml::XMFLOAT3X3EX_ &operator +=(const DirectX::XMFLOAT3X3 &val)
 	{
 		this->_11 += val._11; this->_12 += val._12; this->_13 += val._13;
 		this->_21 += val._21; this->_22 += val._22; this->_23 += val._23;
@@ -836,7 +835,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		));
 	};
 
-	tml::XMFLOAT3X3EX_ operator -(const XMFLOAT3X3 &val) const
+	tml::XMFLOAT3X3EX_ operator -(const DirectX::XMFLOAT3X3 &val) const
 	{
 		return (tml::XMFLOAT3X3EX_(
 			this->_11 - val._11, this->_12 - val._12, this->_13 - val._13,
@@ -854,7 +853,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3X3EX_ &operator -=(const XMFLOAT3X3 &val)
+	tml::XMFLOAT3X3EX_ &operator -=(const DirectX::XMFLOAT3X3 &val)
 	{
 		this->_11 -= val._11; this->_12 -= val._12; this->_13 -= val._13;
 		this->_21 -= val._21; this->_22 -= val._22; this->_23 -= val._23;
@@ -872,7 +871,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		));
 	};
 
-	tml::XMFLOAT3X3EX_ operator *(const XMFLOAT3X3 &val) const
+	tml::XMFLOAT3X3EX_ operator *(const DirectX::XMFLOAT3X3 &val) const
 	{
 		return (tml::XMFLOAT3X3EX_(
 			this->_11 * val._11, this->_12 * val._12, this->_13 * val._13,
@@ -890,7 +889,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3X3EX_ &operator *=(const XMFLOAT3X3 &val)
+	tml::XMFLOAT3X3EX_ &operator *=(const DirectX::XMFLOAT3X3 &val)
 	{
 		this->_11 *= val._11; this->_12 *= val._12; this->_13 *= val._13;
 		this->_21 *= val._21; this->_22 *= val._22; this->_23 *= val._23;
@@ -910,7 +909,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		));
 	};
 
-	tml::XMFLOAT3X3EX_ operator /(const XMFLOAT3X3 &val) const
+	tml::XMFLOAT3X3EX_ operator /(const DirectX::XMFLOAT3X3 &val) const
 	{
 		return (tml::XMFLOAT3X3EX_(
 			this->_11 / val._11, this->_12 / val._12, this->_13 / val._13,
@@ -930,7 +929,7 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT3X3EX_ &operator /=(const XMFLOAT3X3 &val)
+	tml::XMFLOAT3X3EX_ &operator /=(const DirectX::XMFLOAT3X3 &val)
 	{
 		this->_11 /= val._11; this->_12 /= val._12; this->_13 /= val._13;
 		this->_21 /= val._21; this->_22 /= val._22; this->_23 /= val._23;
@@ -953,10 +952,10 @@ typedef struct XMFLOAT3X3EX_ : public XMFLOAT3X3
 /**
  * @brief XMFLOAT4X3EX構造体
  */
-typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
+typedef struct XMFLOAT4X3EX_ : public DirectX::XMFLOAT4X3
 {
 	XMFLOAT4X3EX_() :
-		XMFLOAT4X3(
+		DirectX::XMFLOAT4X3(
 			0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
@@ -972,7 +971,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		const FLOAT _31, const FLOAT _32, const FLOAT _33,
 		const FLOAT _41, const FLOAT _42, const FLOAT _43
 	) :
-		XMFLOAT4X3(
+		DirectX::XMFLOAT4X3(
 			_11, _12, _13,
 			_21, _22, _23,
 			_31, _32, _33,
@@ -983,33 +982,11 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 	};
 
 	explicit XMFLOAT4X3EX_(const FLOAT val) :
-		XMFLOAT4X3(
+		DirectX::XMFLOAT4X3(
 			val, val, val,
 			val, val, val,
 			val, val, val,
 			val, val, val
-		)
-	{
-		return;
-	};
-
-	explicit XMFLOAT4X3EX_(const XMFLOAT4X3 &val) :
-		XMFLOAT4X3(
-			val._11, val._12, val._13,
-			val._21, val._22, val._23,
-			val._31, val._32, val._33,
-			val._41, val._42, val._43
-		)
-	{
-		return;
-	};
-
-	explicit XMFLOAT4X3EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
-		XMFLOAT4X3(
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 0.0f, 0.0f
 		)
 	{
 		return;
@@ -1025,7 +1002,18 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X3EX_ &operator =(const XMFLOAT4X3 &val)
+	explicit XMFLOAT4X3EX_(const DirectX::XMFLOAT4X3 &val) :
+		DirectX::XMFLOAT4X3(
+			val._11, val._12, val._13,
+			val._21, val._22, val._23,
+			val._31, val._32, val._33,
+			val._41, val._42, val._43
+		)
+	{
+		return;
+	};
+
+	tml::XMFLOAT4X3EX_ &operator =(const DirectX::XMFLOAT4X3 &val)
 	{
 		this->_11 = val._11; this->_12 = val._12; this->_13 = val._13;
 		this->_21 = val._21; this->_22 = val._22; this->_23 = val._23;
@@ -1033,6 +1021,17 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		this->_41 = val._41; this->_42 = val._42; this->_43 = val._43;
 
 		return ((*this));
+	};
+
+	explicit XMFLOAT4X3EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
+		DirectX::XMFLOAT4X3(
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, 0.0f
+		)
+	{
+		return;
 	};
 
 	tml::XMFLOAT4X3EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type)
@@ -1055,7 +1054,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		);
 	};
 
-	bool operator ==(const XMFLOAT4X3 &val) const
+	bool operator ==(const DirectX::XMFLOAT4X3 &val) const
 	{
 		return (
 			(this->_11 == val._11) && (this->_12 == val._12) && (this->_13 == val._13) &&
@@ -1075,7 +1074,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		);
 	};
 
-	bool operator !=(const XMFLOAT4X3 &val) const
+	bool operator !=(const DirectX::XMFLOAT4X3 &val) const
 	{
 		return (
 			(this->_11 != val._11) || (this->_12 != val._12) || (this->_13 != val._13) ||
@@ -1095,7 +1094,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		));
 	};
 
-	tml::XMFLOAT4X3EX_ operator +(const XMFLOAT4X3 &val) const
+	tml::XMFLOAT4X3EX_ operator +(const DirectX::XMFLOAT4X3 &val) const
 	{
 		return (tml::XMFLOAT4X3EX_(
 			this->_11 + val._11, this->_12 + val._12, this->_13 + val._13,
@@ -1115,7 +1114,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X3EX_ &operator +=(const XMFLOAT4X3 &val)
+	tml::XMFLOAT4X3EX_ &operator +=(const DirectX::XMFLOAT4X3 &val)
 	{
 		this->_11 += val._11; this->_12 += val._12; this->_13 += val._13;
 		this->_21 += val._21; this->_22 += val._22; this->_23 += val._23;
@@ -1135,7 +1134,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		));
 	};
 
-	tml::XMFLOAT4X3EX_ operator -(const XMFLOAT4X3 &val) const
+	tml::XMFLOAT4X3EX_ operator -(const DirectX::XMFLOAT4X3 &val) const
 	{
 		return (tml::XMFLOAT4X3EX_(
 			this->_11 - val._11, this->_12 - val._12, this->_13 - val._13,
@@ -1155,7 +1154,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X3EX_ &operator -=(const XMFLOAT4X3 &val)
+	tml::XMFLOAT4X3EX_ &operator -=(const DirectX::XMFLOAT4X3 &val)
 	{
 		this->_11 -= val._11; this->_12 -= val._12; this->_13 -= val._13;
 		this->_21 -= val._21; this->_22 -= val._22; this->_23 -= val._23;
@@ -1175,7 +1174,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		));
 	};
 
-	tml::XMFLOAT4X3EX_ operator *(const XMFLOAT4X3 &val) const
+	tml::XMFLOAT4X3EX_ operator *(const DirectX::XMFLOAT4X3 &val) const
 	{
 		return (tml::XMFLOAT4X3EX_(
 			this->_11 * val._11, this->_12 * val._12, this->_13 * val._13,
@@ -1195,7 +1194,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X3EX_ &operator *=(const XMFLOAT4X3 &val)
+	tml::XMFLOAT4X3EX_ &operator *=(const DirectX::XMFLOAT4X3 &val)
 	{
 		this->_11 *= val._11; this->_12 *= val._12; this->_13 *= val._13;
 		this->_21 *= val._21; this->_22 *= val._22; this->_23 *= val._23;
@@ -1217,7 +1216,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		));
 	};
 
-	tml::XMFLOAT4X3EX_ operator /(const XMFLOAT4X3 &val) const
+	tml::XMFLOAT4X3EX_ operator /(const DirectX::XMFLOAT4X3 &val) const
 	{
 		return (tml::XMFLOAT4X3EX_(
 			this->_11 / val._11, this->_12 / val._12, this->_13 / val._13,
@@ -1239,7 +1238,7 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X3EX_ &operator /=(const XMFLOAT4X3 &val)
+	tml::XMFLOAT4X3EX_ &operator /=(const DirectX::XMFLOAT4X3 &val)
 	{
 		this->_11 /= val._11; this->_12 /= val._12; this->_13 /= val._13;
 		this->_21 /= val._21; this->_22 /= val._22; this->_23 /= val._23;
@@ -1264,10 +1263,10 @@ typedef struct XMFLOAT4X3EX_ : public XMFLOAT4X3
 /**
  * @brief XMFLOAT4X4E構造体
  */
-typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
+typedef struct XMFLOAT4X4EX_ : public DirectX::XMFLOAT4X4
 {
 	XMFLOAT4X4EX_() :
-		XMFLOAT4X4(
+		DirectX::XMFLOAT4X4(
 			0.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f, 0.0f,
@@ -1283,7 +1282,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		const FLOAT _31, const FLOAT _32, const FLOAT _33, const FLOAT _34,
 		const FLOAT _41, const FLOAT _42, const FLOAT _43, const FLOAT _44
 	) :
-		XMFLOAT4X4(
+		DirectX::XMFLOAT4X4(
 			_11, _12, _13, _14,
 			_21, _22, _23, _24,
 			_31, _32, _33, _34,
@@ -1294,33 +1293,11 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 	};
 
 	explicit XMFLOAT4X4EX_(const FLOAT val) :
-		XMFLOAT4X4(
+		DirectX::XMFLOAT4X4(
 			val, val, val, val,
 			val, val, val, val,
 			val, val, val, val,
 			val, val, val, val
-		)
-	{
-		return;
-	};
-
-	explicit XMFLOAT4X4EX_(const XMFLOAT4X4 &val) :
-		XMFLOAT4X4(
-			val._11, val._12, val._13, val._14,
-			val._21, val._22, val._23, val._24,
-			val._31, val._32, val._33, val._34,
-			val._41, val._42, val._43, val._44
-		)
-	{
-		return;
-	};
-
-	explicit XMFLOAT4X4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
-		XMFLOAT4X4(
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
 		)
 	{
 		return;
@@ -1336,7 +1313,18 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X4EX_ &operator =(const XMFLOAT4X4 &val)
+	explicit XMFLOAT4X4EX_(const DirectX::XMFLOAT4X4 &val) :
+		DirectX::XMFLOAT4X4(
+			val._11, val._12, val._13, val._14,
+			val._21, val._22, val._23, val._24,
+			val._31, val._32, val._33, val._34,
+			val._41, val._42, val._43, val._44
+		)
+	{
+		return;
+	};
+
+	tml::XMFLOAT4X4EX_ &operator =(const DirectX::XMFLOAT4X4 &val)
 	{
 		this->_11 = val._11; this->_12 = val._12; this->_13 = val._13; this->_14 = val._14;
 		this->_21 = val._21; this->_22 = val._22; this->_23 = val._23; this->_24 = val._24;
@@ -1344,6 +1332,17 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		this->_41 = val._41; this->_42 = val._42; this->_43 = val._43; this->_44 = val._44;
 
 		return ((*this));
+	};
+
+	explicit XMFLOAT4X4EX_(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type) :
+		DirectX::XMFLOAT4X4(
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f
+		)
+	{
+		return;
 	};
 
 	tml::XMFLOAT4X4EX_ &operator =(const tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX type)
@@ -1366,7 +1365,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		);
 	};
 
-	bool operator ==(const XMFLOAT4X4 &val) const
+	bool operator ==(const DirectX::XMFLOAT4X4 &val) const
 	{
 		return (
 			(this->_11 == val._11) && (this->_12 == val._12) && (this->_13 == val._13) && (this->_14 == val._14) &&
@@ -1386,7 +1385,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		);
 	};
 
-	bool operator !=(const XMFLOAT4X4 &val) const
+	bool operator !=(const DirectX::XMFLOAT4X4 &val) const
 	{
 		return (
 			(this->_11 != val._11) || (this->_12 != val._12) || (this->_13 != val._13) || (this->_14 != val._14) ||
@@ -1406,7 +1405,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		));
 	};
 
-	tml::XMFLOAT4X4EX_ operator +(const XMFLOAT4X4 &val) const
+	tml::XMFLOAT4X4EX_ operator +(const DirectX::XMFLOAT4X4 &val) const
 	{
 		return (tml::XMFLOAT4X4EX_(
 			this->_11 + val._11, this->_12 + val._12, this->_13 + val._13, this->_14 + val._14,
@@ -1426,7 +1425,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X4EX_ &operator +=(const XMFLOAT4X4 &val)
+	tml::XMFLOAT4X4EX_ &operator +=(const DirectX::XMFLOAT4X4 &val)
 	{
 		this->_11 += val._11; this->_12 += val._12; this->_13 += val._13; this->_14 += val._14;
 		this->_21 += val._21; this->_22 += val._22; this->_23 += val._23; this->_24 += val._24;
@@ -1446,7 +1445,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		));
 	};
 
-	tml::XMFLOAT4X4EX_ operator -(const XMFLOAT4X4 &val) const
+	tml::XMFLOAT4X4EX_ operator -(const DirectX::XMFLOAT4X4 &val) const
 	{
 		return (tml::XMFLOAT4X4EX_(
 			this->_11 - val._11, this->_12 - val._12, this->_13 - val._13, this->_14 - val._14,
@@ -1466,7 +1465,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X4EX_ &operator -=(const XMFLOAT4X4 &val)
+	tml::XMFLOAT4X4EX_ &operator -=(const DirectX::XMFLOAT4X4 &val)
 	{
 		this->_11 -= val._11; this->_12 -= val._12; this->_13 -= val._13; this->_14 -= val._14;
 		this->_21 -= val._21; this->_22 -= val._22; this->_23 -= val._23; this->_24 -= val._24;
@@ -1486,7 +1485,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		));
 	};
 
-	tml::XMFLOAT4X4EX_ operator *(const XMFLOAT4X4 &val) const
+	tml::XMFLOAT4X4EX_ operator *(const DirectX::XMFLOAT4X4 &val) const
 	{
 		return (tml::XMFLOAT4X4EX_(
 			this->_11 * val._11, this->_12 * val._12, this->_13 * val._13, this->_14 * val._14,
@@ -1506,7 +1505,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X4EX_ &operator *=(const XMFLOAT4X4 &val)
+	tml::XMFLOAT4X4EX_ &operator *=(const DirectX::XMFLOAT4X4 &val)
 	{
 		this->_11 *= val._11; this->_12 *= val._12; this->_13 *= val._13; this->_14 *= val._14;
 		this->_21 *= val._21; this->_22 *= val._22; this->_23 *= val._23; this->_24 *= val._24;
@@ -1528,7 +1527,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		));
 	};
 
-	tml::XMFLOAT4X4EX_ operator /(const XMFLOAT4X4 &val) const
+	tml::XMFLOAT4X4EX_ operator /(const DirectX::XMFLOAT4X4 &val) const
 	{
 		return (tml::XMFLOAT4X4EX_(
 			this->_11 / val._11, this->_12 / val._12, this->_13 / val._13, this->_14 / val._14,
@@ -1550,7 +1549,7 @@ typedef struct XMFLOAT4X4EX_ : public XMFLOAT4X4
 		return ((*this));
 	};
 
-	tml::XMFLOAT4X4EX_ &operator /=(const XMFLOAT4X4 &val)
+	tml::XMFLOAT4X4EX_ &operator /=(const DirectX::XMFLOAT4X4 &val)
 	{
 		this->_11 /= val._11; this->_12 /= val._12; this->_13 /= val._13; this->_14 /= val._14;
 		this->_21 /= val._21; this->_22 /= val._22; this->_23 /= val._23; this->_24 /= val._24;

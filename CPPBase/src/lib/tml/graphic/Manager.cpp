@@ -586,14 +586,14 @@ void tml::graphic::Manager::Update(void)
 {
 	this->UpdateEvent();
 
-	XMVECTOR determinant;
+	DirectX::XMVECTOR determinant;
 
-	XMMATRIX v_mat_3d;
-	XMMATRIX inv_v_mat_3d;
-	XMMATRIX p_mat_3d;
-	XMMATRIX v_mat_2d;
-	XMMATRIX inv_v_mat_2d;
-	XMMATRIX p_mat_2d;
+	DirectX::XMMATRIX v_mat_3d;
+	DirectX::XMMATRIX inv_v_mat_3d;
+	DirectX::XMMATRIX p_mat_3d;
+	DirectX::XMMATRIX v_mat_2d;
+	DirectX::XMMATRIX inv_v_mat_2d;
+	DirectX::XMMATRIX p_mat_2d;
 
 	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(v_mat_3d, inv_v_mat_3d, p_mat_3d, v_mat_2d, inv_v_mat_2d, p_mat_2d);
 
@@ -601,11 +601,11 @@ void tml::graphic::Manager::Update(void)
 	this->draw_stage_dat_ = &draw_stage_dat;
 
 	this->GetViewMatrix3D(this->draw_stage_dat_->view_matrix_3d, this->draw_camera_);
-	this->draw_stage_dat_->inverse_view_matrix_3d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_3d);
+	this->draw_stage_dat_->inverse_view_matrix_3d = DirectX::XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_3d);
 	this->GetProjectionMatrix3D(this->draw_stage_dat_->projection_matrix_3d, this->draw_camera_);
 
 	this->GetViewMatrix2D(this->draw_stage_dat_->view_matrix_2d, this->draw_camera_);
-	this->draw_stage_dat_->inverse_view_matrix_2d = XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
+	this->draw_stage_dat_->inverse_view_matrix_2d = DirectX::XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
 	this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
 
 	std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->common_.config_shader_constant_buffer.get(), this->common_.header_shader_constant_buffer.get()};
@@ -756,9 +756,9 @@ void tml::graphic::Manager::UpdateEvent(void)
  * @param scale (scale)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat, const tml::XMFLOAT3EX &scale)
+DirectX::XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(DirectX::XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat, const tml::XMFLOAT3EX &scale)
 {
-	dst_mat = XMMatrixTransformation(g_XMZero, g_XMIdentityR3, XMLoadFloat3(&scale), g_XMZero, XMLoadFloat4(&quat), XMLoadFloat3(&pos));
+	dst_mat = DirectX::XMMatrixTransformation(DirectX::g_XMZero, DirectX::g_XMIdentityR3, DirectX::XMLoadFloat3(&scale), DirectX::g_XMZero, DirectX::XMLoadFloat4(&quat), DirectX::XMLoadFloat3(&pos));
 
 	return (dst_mat);
 }
@@ -772,9 +772,9 @@ XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::
  * @param scale (scale)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle, const tml::XMFLOAT3EX &scale)
+DirectX::XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(DirectX::XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle, const tml::XMFLOAT3EX &scale)
 {
-	dst_mat = XMMatrixTransformation(g_XMZero, g_XMIdentityR3, XMLoadFloat3(&scale), g_XMZero, XMQuaternionRotationRollPitchYaw(angle.x, angle.y, angle.z), XMLoadFloat3(&pos));
+	dst_mat = DirectX::XMMatrixTransformation(DirectX::g_XMZero, DirectX::g_XMIdentityR3, DirectX::XMLoadFloat3(&scale), DirectX::g_XMZero, DirectX::XMQuaternionRotationRollPitchYaw(angle.x, angle.y, angle.z), DirectX::XMLoadFloat3(&pos));
 
 	return (dst_mat);
 }
@@ -788,9 +788,9 @@ XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(XMMATRIX &dst_mat, const tml::
  * @param scale (scale)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetWorldMatrix2D(XMMATRIX &dst_mat, const tml::XMFLOAT2EX &pos, const FLOAT angle, const tml::XMFLOAT2EX &scale)
+DirectX::XMMATRIX &tml::graphic::Manager::GetWorldMatrix2D(DirectX::XMMATRIX &dst_mat, const tml::XMFLOAT2EX &pos, const FLOAT angle, const tml::XMFLOAT2EX &scale)
 {
-	dst_mat = XMMatrixTransformation2D(g_XMZero, 0.0f, XMVectorSet(scale.x, scale.y, 0.0f, 0.0f), g_XMZero, angle, XMVectorSet(pos.x, pos.y, 0.0f, 0.0f));
+	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale.x, scale.y, 0.0f, 0.0f), DirectX::g_XMZero, angle, DirectX::XMVectorSet(pos.x, pos.y, 0.0f, 0.0f));
 
 	return (dst_mat);
 }
@@ -802,9 +802,9 @@ XMMATRIX &tml::graphic::Manager::GetWorldMatrix2D(XMMATRIX &dst_mat, const tml::
  * @param camera (camera)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetViewMatrix3D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix3D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
 {
-	dst_mat = XMMatrixLookToLH(XMLoadFloat3(&camera->position.Get()), XMLoadFloat3(&camera->position.GetZAxisVector()), XMLoadFloat3(&camera->position.GetYAxisVector()));
+	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&camera->position.Get()), DirectX::XMLoadFloat3(&camera->position.GetZAxisVector()), DirectX::XMLoadFloat3(&camera->position.GetYAxisVector()));
 
 	return (dst_mat);
 }
@@ -816,9 +816,9 @@ XMMATRIX &tml::graphic::Manager::GetViewMatrix3D(XMMATRIX &dst_mat, const tml::g
  * @param camera (camera)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetViewMatrix2D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix2D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
 {
-	dst_mat = XMMatrixIdentity();
+	dst_mat = DirectX::XMMatrixIdentity();
 
 	return (dst_mat);
 }
@@ -830,21 +830,21 @@ XMMATRIX &tml::graphic::Manager::GetViewMatrix2D(XMMATRIX &dst_mat, const tml::g
  * @param camera (camera)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetProjectionMatrix3D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix3D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
 {
 	switch (camera->GetType()) {
 	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE: {
-		dst_mat = XMMatrixPerspectiveFovLH(camera->GetFOVAngle(), camera->GetFOVSize().x / camera->GetFOVSize().y, camera->GetNearClip(), camera->GetFarClip());
+		dst_mat = DirectX::XMMatrixPerspectiveFovLH(camera->GetFOVAngle(), camera->GetFOVSize().x / camera->GetFOVSize().y, camera->GetNearClip(), camera->GetFarClip());
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::ORTHOGRAPHIC: {
-		dst_mat = XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, camera->GetNearClip(), camera->GetFarClip());
+		dst_mat = DirectX::XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, camera->GetNearClip(), camera->GetFarClip());
 
 		break;
 	}
 	default: {
-		dst_mat = XMMatrixIdentity();
+		dst_mat = DirectX::XMMatrixIdentity();
 
 		break;
 	}
@@ -860,21 +860,21 @@ XMMATRIX &tml::graphic::Manager::GetProjectionMatrix3D(XMMATRIX &dst_mat, const 
  * @param camera (camera)
  * @return dst_mat (dst_matrix)
  */
-XMMATRIX &tml::graphic::Manager::GetProjectionMatrix2D(XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix2D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
 {
 	switch (camera->GetType()) {
 	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE: {
-		dst_mat = XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, 0.0f, 1.0f);
+		dst_mat = DirectX::XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, 0.0f, 1.0f);
 
 		break;
 	}
 	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::ORTHOGRAPHIC: {
-		dst_mat = XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, 0.0f, 1.0f);
+		dst_mat = DirectX::XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, 0.0f, 1.0f);
 
 		break;
 	}
 	default: {
-		dst_mat = XMMatrixIdentity();
+		dst_mat = DirectX::XMMatrixIdentity();
 
 		break;
 	}
