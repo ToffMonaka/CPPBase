@@ -20,6 +20,9 @@
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alext.h>
 #include "../../lib/tml/constant/ConstantInclude_LibOggBase.h"
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Light.h"
@@ -390,6 +393,46 @@ INT cpp_base::MainThread::Start(void)
 
 		this->log_update_time_ = tml::TIME_REAL(1.0);
 
+		ALCdevice *al_device = alcOpenDevice(nullptr);
+
+		if (al_device == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		ALCcontext *al_device_context = alcCreateContext(al_device, nullptr);
+
+		if (al_device_context == nullptr) {
+			if (al_device != nullptr) {
+				alcCloseDevice(al_device);
+
+				al_device = nullptr;
+			}
+
+			this->Init();
+
+			return (-1);
+		}
+
+		if (alcMakeContextCurrent(al_device_context) == ALC_FALSE) {
+			if (al_device_context != nullptr) {
+				alcDestroyContext(al_device_context);
+
+				al_device_context = nullptr;
+			}
+
+			if (al_device != nullptr) {
+				alcCloseDevice(al_device);
+
+				al_device = nullptr;
+			}
+
+			this->Init();
+
+			return (-1);
+		}
+
 		OggVorbis_File vorbis_file;
 
 		if (ov_fopen("res/title_bgm1.ogg", &vorbis_file)) {
@@ -411,6 +454,18 @@ INT cpp_base::MainThread::Start(void)
 		int a = 0;
 
 		ov_clear(&vorbis_file);
+
+		if (al_device_context != nullptr) {
+			alcDestroyContext(al_device_context);
+
+			al_device_context = nullptr;
+		}
+
+		if (al_device != nullptr) {
+			alcCloseDevice(al_device);
+
+			al_device = nullptr;
+		}
 	}
 
 	this->frame_rate_.Start(60U);
