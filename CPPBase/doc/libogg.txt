@@ -1,0 +1,25 @@
+■LibOggをインストール
+
+ダウンロード:
+https://xiph.org/downloads/
+から、
+libogg-1.3.4.zip
+libvorbis-1.3.7.zip
+をダウンロードします。
+
+インストール:
+libogg-1.3.4.zipを展開し、名前をliboggに変更します。
+libvorbis-1.3.7.zipを展開し、名前をlibvorbisに変更します。
+
+Visual Studio 2019でlibogg\win32\VS2015\libogg.slnを開きます。
+ソリューションのリビルドを実行します。
+
+Visual Studio 2019でlibvorbis\win32\VS2010\vorbis_static.slnを開きます。
+ソリューションのリビルドを実行します。
+
+Visual Studio 2019でlibvorbis\win32\VS2010\vorbis_dynamic.slnを開きます。
+全ての[プロジェクト]→[プロパティ]で、
+出力ディレクトリの$(Configuration)を$(Configuration)DLLに、
+中間ディレクトリの$(Configuration)を$(Configuration)DLLに、
+変更します。
+ソリューションのリビルドを実行します。

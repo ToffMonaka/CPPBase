@@ -1,0 +1,15 @@
+■Dlmallocをインストール
+
+ダウンロード:
+ftp://gee.cs.oswego.edu/pub/misc/malloc-2.8.6.h
+ftp://gee.cs.oswego.edu/pub/misc/malloc-2.8.6.c
+から、
+malloc-2.8.6.h
+malloc-2.8.6.c
+をダウンロードします。
+
+インストール:
+malloc-2.8.6.hの名前をmalloc.hに変更します。
+malloc-2.8.6.cの名前をmalloc.cに変更します。
+dlmallocフォルダを作成し、malloc.h、malloc.cを入れます。
+dlmallocフォルダをプロジェクトに追加します。

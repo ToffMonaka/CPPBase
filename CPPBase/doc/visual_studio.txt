@@ -1,0 +1,37 @@
+■Visual Studioをインストール
+
+Visual Studioはバージョンの古い順にインストールします。
+
+ダウンロード:
+https://visualstudio.microsoft.com/ja/downloads/
+から、
+(VS2015) ja_visual_studio_community_2015_with_update_3_x86_x64_web_installer_8922964.exe
+(VS2017) vs_Community.exe
+(VS2019) vs_community__1960487364.1536547704.exe
+をダウンロードします。
+
+インストール:
+(VS2015) ja_visual_studio_community_2015_with_update_3_x86_x64_web_installer_8922964.exeを実行します。
+この時にMicrosoft DirectX SDK (June 2010)もインストールされます。
+
+(VS2017) vs_Community.exeを実行します。
+ワークロードの、
+.NETデスクトップ開発
+C++によるデスクトップ開発
+ユニバーサルWindowsプラットフォーム開発
+を指定します。
+言語パックの、
+英語
+日本語
+を指定します。
+
+(VS2019) vs_community__1960487364.1536547704.exeを実行します。
+ワークロードの、
+.NETデスクトップ開発
+C++によるデスクトップ開発
+ユニバーサルWindowsプラットフォーム開発
+を指定します。
+言語パックの、
+英語
+日本語
+を指定します。

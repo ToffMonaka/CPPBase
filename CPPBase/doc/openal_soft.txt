@@ -1,0 +1,28 @@
+■OpenAL Softをインストール
+
+CMakeを事前にインストールします。
+
+ダウンロード:
+https://openal-soft.org/#download
+から、
+openal-soft-1.21.1.tar.bz2
+をダウンロードします。
+
+インストール:
+openal-soft-1.21.1.tar.bz2を展開し、名前をopenal-softに変更します。
+
+CMakeを起動します。
+Where is the source codeにopenal-softを指定します。
+Where to build the binariesにopenal-soft/buildを指定します。
+Configureを実行します。
+Visual Studio 16 2019を指定します。
+Win32を指定します。
+Finishを実行します。
+もう一度Configureを実行します。
+Generateを実行します。
+
+Visual Studio 2019でopenal-soft\build\OpenAL.slnを開きます。
+全ての[プロジェクト]→[プロパティ]で、
+優先するビルドツールアーキテクチャを既定に、
+変更します。
+ソリューションのリビルドを実行します。
