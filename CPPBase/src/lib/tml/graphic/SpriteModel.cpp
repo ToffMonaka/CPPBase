@@ -209,12 +209,23 @@ tml::graphic::SpriteModel::SpriteModel() :
  */
 tml::graphic::SpriteModel::~SpriteModel()
 {
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief ReleaseŠÖ”
+ */
+void tml::graphic::SpriteModel::Release(void)
+{
 	if (this->GetManager() != nullptr) {
 		this->GetManager()->ReleaseResource(this->ssb_);
 		this->GetManager()->ReleaseResource(this->layer_ssb_);
 	}
 
-	this->Release();
+	tml::graphic::Model::Release();
 
 	return;
 }

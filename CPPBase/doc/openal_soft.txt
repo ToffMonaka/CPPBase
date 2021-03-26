@@ -10,13 +10,15 @@ openal-soft-1.21.1.tar.bz2
 
 インストール:
 openal-soft-1.21.1.tar.bz2を展開し、名前をopenal-softに変更します。
+buildフォルダをコピーし、名前をbuild32に変更します。
+buildフォルダをコピーし、名前をbuild64に変更します。
 
 CMakeを起動します。
 Where is the source codeにopenal-softを指定します。
-Where to build the binariesにopenal-soft/buildを指定します。
+Where to build the binariesにopenal-soft/build32(64bitならopenal-soft/build64)を指定します。
 Configureを実行します。
 Visual Studio 16 2019を指定します。
-Win32を指定します。
+Win32(64bitならx64)を指定します。
 Finishを実行します。
 もう一度Configureを実行します。
 Generateを実行します。

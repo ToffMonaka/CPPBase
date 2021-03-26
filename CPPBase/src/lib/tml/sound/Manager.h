@@ -66,6 +66,9 @@ private:
 	std::array<UINT, tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT> stock_event_cnt_ary_;
 	std::array<std::vector<tml::unique_ptr<tml::sound::Event>>, tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT> stock_event_cont_ary_;
 
+	ALCdevice *device_;
+	ALCcontext *device_context_;
+
 private:
 	void UpdateEvent(void);
 
@@ -93,6 +96,9 @@ public:
 	const tml::unique_ptr<tml::sound::Event> *GetEventArray(void) const;
 	template <typename T, typename D>
 	INT AddEvent(const D &);
+
+	ALCdevice *GetDevice(void);
+	ALCcontext *GetDeviceContext(void);
 };
 }
 }
@@ -264,4 +270,24 @@ inline INT tml::sound::Manager::AddEvent(const D &dat)
 	++back_event_cnt;
 
 	return (0);
+}
+
+
+/**
+ * @brief GetDeviceŠÖ”
+ * @return device (device)
+ */
+inline ALCdevice *tml::sound::Manager::GetDevice(void)
+{
+	return (this->device_);
+}
+
+
+/**
+ * @brief GetDeviceContextŠÖ”
+ * @return device_context (device_context)
+ */
+inline ALCcontext *tml::sound::Manager::GetDeviceContext(void)
+{
+	return (this->device_context_);
 }

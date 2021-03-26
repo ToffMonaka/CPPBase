@@ -75,28 +75,28 @@
     <OutDir>$(ProjectDir)bin\x86\debug\</OutDir>
     <IntDir>$(ProjectDir)bin_middle\x86\debug\</IntDir>
     <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\openal-soft\include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\p\vs2019\openal-soft\build\Debug;D:\p\vs2019\libogg\win32\VS2015\Win32\DebugDLL;D:\p\vs2019\libvorbis\win32\VS2010\Win32\DebugDLL;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\p\vs2019\openal-soft\build32\Debug;D:\p\vs2019\libogg\win32\VS2015\Win32\DebugDLL;D:\p\vs2019\libvorbis\win32\VS2010\Win32\DebugDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)bin\x86\release\</OutDir>
     <IntDir>$(ProjectDir)bin_middle\x86\release\</IntDir>
     <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\openal-soft\include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\p\vs2019\openal-soft\build\Release;D:\p\vs2019\libogg\win32\VS2015\Win32\ReleaseDLL;D:\p\vs2019\libvorbis\win32\VS2010\Win32\ReleaseDLL;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\p\vs2019\openal-soft\build32\Release;D:\p\vs2019\libogg\win32\VS2015\Win32\ReleaseDLL;D:\p\vs2019\libvorbis\win32\VS2010\Win32\ReleaseDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)bin\x64\debug\</OutDir>
     <IntDir>$(ProjectDir)bin_middle\x64\debug\</IntDir>
-    <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;D:\p\vs2019\libogg\win32\VS2015\x64\DebugDLL;D:\p\vs2019\libvorbis\win32\VS2010\x64\DebugDLL;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\openal-soft\include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x64;D:\p\vs2019\openal-soft\build64\Debug;D:\p\vs2019\libogg\win32\VS2015\x64\DebugDLL;D:\p\vs2019\libvorbis\win32\VS2010\x64\DebugDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)bin\x64\release\</OutDir>
     <IntDir>$(ProjectDir)bin_middle\x64\release\</IntDir>
-    <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;D:\p\vs2019\libogg\win32\VS2015\x64\ReleaseDLL;D:\p\vs2019\libvorbis\win32\VS2010\x64\ReleaseDLL;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\openal-soft\include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x64;D:\p\vs2019\openal-soft\build64\Release;D:\p\vs2019\libogg\win32\VS2015\x64\ReleaseDLL;D:\p\vs2019\libvorbis\win32\VS2010\x64\ReleaseDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -235,10 +235,13 @@
     <ClCompile Include="src\lib\tml\random\RandomSeed.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtil.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\sound\BGMSound.cpp" />
     <ClCompile Include="src\lib\tml\sound\Event.cpp" />
     <ClCompile Include="src\lib\tml\sound\Manager.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\sound\Resource.cpp" />
+    <ClCompile Include="src\lib\tml\sound\SESound.cpp" />
+    <ClCompile Include="src\lib\tml\sound\Sound.cpp" />
     <ClCompile Include="src\lib\tml\string\DefaultStringUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\string\StringUtil.cpp" />
     <ClCompile Include="src\lib\tml\string\StringUtilEngine.cpp" />
@@ -274,6 +277,7 @@
     <ClInclude Include="src\lib\tml\constant\ConstantInclude_Direct3DBase.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantInclude_DlmallocBase.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantInclude_LibOggBase.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantInclude_OpenALSoftBase.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantInclude_WindowsBase.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantInclude_XNAMathBase.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil.h" />
@@ -351,10 +355,13 @@
     <ClInclude Include="src\lib\tml\random\RandomSeed.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtil.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\sound\BGMSound.h" />
     <ClInclude Include="src\lib\tml\sound\Event.h" />
     <ClInclude Include="src\lib\tml\sound\Manager.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\sound\Resource.h" />
+    <ClInclude Include="src\lib\tml\sound\SESound.h" />
+    <ClInclude Include="src\lib\tml\sound\Sound.h" />
     <ClInclude Include="src\lib\tml\string\DefaultStringUtilEngine.h" />
     <ClInclude Include="src\lib\tml\string\StringUtil.h" />
     <ClInclude Include="src\lib\tml\string\StringUtilEngine.h" />

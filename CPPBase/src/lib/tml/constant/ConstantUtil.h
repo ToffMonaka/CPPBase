@@ -56,7 +56,9 @@ void SetResult(INT *, const INT);
 
 /**
  * @brief GetCountŠÖ”
- * @param ary (array)
+ *
+ * 1st unnamed param ary (array)
+ *
  * @return cnt (count)
  */
 template <typename T, size_t N>

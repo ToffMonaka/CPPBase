@@ -155,6 +155,7 @@ private:
 	UINT bs_index_;
 	UINT ds_index_;
 	UINT shader_index_;
+
 	std::vector<tml::unique_ptr<tml::graphic::ModelLayer>> layer_cont_;
 
 protected:
@@ -176,6 +177,7 @@ public:
 	void SetDepthStateIndex(const UINT);
 	UINT GetShaderIndex(void) const;
 	void SetShaderIndex(const UINT);
+
 	UINT GetLayerCount(void) const;
 	tml::graphic::ModelLayer *GetLayer(const UINT);
 	tml::graphic::ModelLayer *GetLayerFast(const UINT);
@@ -371,7 +373,6 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE type_;
-	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::RasterizerState>> rs_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::BlendState>> bs_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::DepthState>> ds_cont_;
@@ -379,6 +380,8 @@ private:
 	std::vector<tml::shared_ptr<tml::graphic::Mesh>> mesh_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Texture>> tex_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
+
+	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_cont_;
 
 public:
 
@@ -393,10 +396,6 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
-	UINT GetStageCount(void) const;
-	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
 	UINT GetRasterizerStateCount(void) const;
 	tml::graphic::RasterizerState *GetRasterizerState(const UINT);
 	tml::graphic::RasterizerState *GetRasterizerStateFast(const UINT);
@@ -426,6 +425,11 @@ public:
 	tml::graphic::Sampler *GetSamplerFast(const UINT);
 	void SetSampler(const UINT, tml::shared_ptr<tml::graphic::Sampler> &);
 
+	UINT GetStageCount(void) const;
+	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
+
 	virtual void DrawStageInit(void);
 	virtual void DrawStageDeferred3D(void);
 	virtual void DrawStageDeferredShadow3D(void);
@@ -443,40 +447,6 @@ public:
 inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void) const
 {
 	return (this->type_);
-}
-
-
-/**
- * @brief GetStageCountŠÖ”
- * @return stage_cnt (stage_count)
- */
-inline UINT tml::graphic::Model::GetStageCount(void) const
-{
-	return (this->stage_cont_.size());
-}
-
-
-/**
- * @brief GetStageŠÖ”
- * @param type (type)
- * @return stage (stage)<br>
- * nullptr=Ž¸”s
- */
-inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
-{
-	return (this->stage_cont_[static_cast<UINT>(type)].get());
-}
-
-
-/**
- * @brief GetStageFastŠÖ”
- * @param type (type)
- * @return stage (stage)<br>
- * nullptr=Ž¸”s
- */
-inline tml::graphic::ModelStage *tml::graphic::Model::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
-{
-	return (this->stage_cont_[static_cast<UINT>(type)].get());
 }
 
 
@@ -743,6 +713,40 @@ inline tml::graphic::Sampler *tml::graphic::Model::GetSampler(const UINT index)
 inline tml::graphic::Sampler *tml::graphic::Model::GetSamplerFast(const UINT index)
 {
 	return (this->samp_cont_[index].get());
+}
+
+
+/**
+ * @brief GetStageCountŠÖ”
+ * @return stage_cnt (stage_count)
+ */
+inline UINT tml::graphic::Model::GetStageCount(void) const
+{
+	return (this->stage_cont_.size());
+}
+
+
+/**
+ * @brief GetStageŠÖ”
+ * @param type (type)
+ * @return stage (stage)<br>
+ * nullptr=Ž¸”s
+ */
+inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
+{
+	return (this->stage_cont_[static_cast<UINT>(type)].get());
+}
+
+
+/**
+ * @brief GetStageFastŠÖ”
+ * @param type (type)
+ * @return stage (stage)<br>
+ * nullptr=Ž¸”s
+ */
+inline tml::graphic::ModelStage *tml::graphic::Model::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
+{
+	return (this->stage_cont_[static_cast<UINT>(type)].get());
 }
 
 

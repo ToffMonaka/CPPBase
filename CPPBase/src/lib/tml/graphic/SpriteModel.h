@@ -72,6 +72,7 @@ public:
 	INT Create(tml::graphic::Manager *);
 
 	tml::graphic::SpriteModelLayer *GetLayer(const UINT);
+	tml::graphic::SpriteModelLayer *GetLayerFast(const UINT);
 	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::SpriteModelLayer> &);
 };
 }
@@ -98,6 +99,18 @@ inline void tml::graphic::SpriteModelStage::Release(void)
 inline tml::graphic::SpriteModelLayer *tml::graphic::SpriteModelStage::GetLayer(const UINT index)
 {
 	return (static_cast<tml::graphic::SpriteModelLayer *>(tml::graphic::ModelStage::GetLayer(index)));
+}
+
+
+/**
+ * @brief GetLayerFastä÷êî
+ * @param index (index)
+ * @return layer (layer)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::SpriteModelLayer *tml::graphic::SpriteModelStage::GetLayerFast(const UINT index)
+{
+	return (static_cast<tml::graphic::SpriteModelLayer *>(tml::graphic::ModelStage::GetLayerFast(index)));
 }
 
 
@@ -226,24 +239,15 @@ public:
 	void SetScale(const tml::XMFLOAT2EX &);
 	const tml::XMFLOAT4EX &GetColor(void) const;
 	void SetColor(const tml::XMFLOAT4EX &);
+
 	tml::graphic::SpriteModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	tml::graphic::SpriteModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::SpriteModelStage> &);
 
 	virtual void DrawStageInit(void);
 	virtual void DrawStageForward2D(void);
 };
 }
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-inline void tml::graphic::SpriteModel::Release(void)
-{
-	tml::graphic::Model::Release();
-
-	return;
 }
 
 
@@ -322,6 +326,18 @@ inline void tml::graphic::SpriteModel::SetColor(const tml::XMFLOAT4EX &col)
 inline tml::graphic::SpriteModelStage *tml::graphic::SpriteModel::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
 	return (static_cast<tml::graphic::SpriteModelStage *>(tml::graphic::Model::GetStage(type)));
+}
+
+
+/**
+ * @brief GetStageFastä÷êî
+ * @param type (type)
+ * @return stage (stage)<br>
+ * nullptr=é∏îs
+ */
+inline tml::graphic::SpriteModelStage *tml::graphic::SpriteModel::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
+{
+	return (static_cast<tml::graphic::SpriteModelStage *>(tml::graphic::Model::GetStageFast(type)));
 }
 
 

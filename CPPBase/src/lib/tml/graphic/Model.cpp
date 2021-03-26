@@ -333,19 +333,6 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 
 
 /**
- * @brief SetStageä÷êî
- * @param type (type)
- * @param stage (stage)
- */
-void tml::graphic::Model::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::ModelStage> &stage)
-{
-	this->stage_cont_[static_cast<UINT>(type)] = std::move(stage);
-
-	return;
-}
-
-
-/**
  * @brief SetRasterizerStateä÷êî
  * @param index (index)
  * @param rs (rasterizer_state)
@@ -459,6 +446,19 @@ void tml::graphic::Model::SetSampler(const UINT index, tml::shared_ptr<tml::grap
 	}
 
 	this->GetManager()->GetResource(this->samp_cont_[index], samp);
+
+	return;
+}
+
+
+/**
+ * @brief SetStageä÷êî
+ * @param type (type)
+ * @param stage (stage)
+ */
+void tml::graphic::Model::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::ModelStage> &stage)
+{
+	this->stage_cont_[static_cast<UINT>(type)] = std::move(stage);
 
 	return;
 }

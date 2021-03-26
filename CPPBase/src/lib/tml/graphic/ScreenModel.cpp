@@ -6,15 +6,6 @@
 
 #include "ScreenModel.h"
 #include "Manager.h"
-#include "RasterizerState.h"
-#include "BlendState.h"
-#include "DepthState.h"
-#include "Shader.h"
-#include "SpriteModelShaderStructuredBuffer.h"
-#include "SpriteModelLayerShaderStructuredBuffer.h"
-#include "Mesh.h"
-#include "Texture.h"
-#include "Sampler.h"
 
 
 /**
@@ -199,6 +190,17 @@ tml::graphic::ScreenModel::ScreenModel()
 tml::graphic::ScreenModel::~ScreenModel()
 {
 	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+void tml::graphic::ScreenModel::Release(void)
+{
+	tml::graphic::Model::Release();
 
 	return;
 }

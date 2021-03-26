@@ -6,6 +6,9 @@
 
 #include "ManagerCommon.h"
 #include "Manager.h"
+#include "Sound.h"
+#include "BGMSound.h"
+#include "SESound.h"
 
 
 /**

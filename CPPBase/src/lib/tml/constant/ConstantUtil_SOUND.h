@@ -6,6 +6,7 @@
 
 
 #include "ConstantUtil.h"
+#include "ConstantInclude_OpenALSoftBase.h"
 
 
 namespace tml {
@@ -13,6 +14,7 @@ namespace ConstantUtil {
 namespace SOUND {
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
+		SOUND,
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::COUNT);
@@ -21,6 +23,11 @@ namespace SOUND {
 		COUNT
 	};
 	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::EVENT_TYPE::COUNT);
+	enum class SOUND_TYPE : UINT {
+		NONE = 0U,
+		BGM,
+		SE
+	};
 }
 }
 }

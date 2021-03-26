@@ -5,6 +5,9 @@
 
 
 #include "Manager.h"
+#include "Sound.h"
+#include "BGMSound.h"
+#include "SESound.h"
 
 
 /**
@@ -52,7 +55,9 @@ tml::sound::Manager::Manager() :
 	event_cnt_ary_{},
 	front_event_index_(0U),
 	back_event_index_(0U),
-	stock_event_cnt_ary_{}
+	stock_event_cnt_ary_{},
+	device_(nullptr),
+	device_context_(nullptr)
 {
 	return;
 }
@@ -82,6 +87,18 @@ void tml::sound::Manager::Release(void)
 		}
 
 		res_cont.clear();
+	}
+
+	if (this->device_context_ != nullptr) {
+		alcDestroyContext(this->device_context_);
+
+		this->device_context_ = nullptr;
+	}
+
+	if (this->device_ != nullptr) {
+		alcCloseDevice(this->device_);
+
+		this->device_ = nullptr;
 	}
 
 	return;
@@ -135,6 +152,30 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
+
+	{// Device Create
+		this->device_ = alcOpenDevice(nullptr);
+
+		if (this->device_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->device_context_ = alcCreateContext(this->device_, nullptr);
+
+		if (this->device_context_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		if (alcMakeContextCurrent(this->device_context_) == ALC_FALSE) {
+			this->Init();
+
+			return (-1);
+		}
+	}
 
 	if (this->common_.Create(this) < 0) {
 		this->Init();

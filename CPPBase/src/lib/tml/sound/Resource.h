@@ -13,6 +13,9 @@
 namespace tml {
 namespace sound {
 class Manager;
+class Sound;
+class BGMSound;
+class SESound;
 }
 }
 
