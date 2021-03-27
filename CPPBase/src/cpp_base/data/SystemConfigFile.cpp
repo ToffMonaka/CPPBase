@@ -98,7 +98,7 @@ INT cpp_base::SystemConfigFile::Read(void)
 
 	ini_file.read_desc.parent_data = read_desc_dat;
 
-	if (ini_file.Read()) {
+	if (ini_file.Read() < 0) {
 		return (-1);
 	}
 
@@ -202,7 +202,7 @@ INT cpp_base::SystemConfigFile::Write(void)
 
 	txt_file.write_desc.parent_data = write_desc_dat;
 
-	if (txt_file.Write()) {
+	if (txt_file.Write() < 0) {
 		return (-1);
 	}
 

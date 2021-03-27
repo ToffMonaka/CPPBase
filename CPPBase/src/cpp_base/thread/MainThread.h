@@ -38,6 +38,8 @@ private:
 	tml::shared_ptr<tml::graphic::SpriteModel> log_sprite_model_;
 	tml::shared_ptr<tml::graphic::Font> log_font_;
 	tml::TIME_REAL log_update_time_;
+	tml::shared_ptr<tml::sound::BGMSound> title_bgm_sound_;
+	tml::shared_ptr<tml::sound::SESound> click_se_sound_;
 
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);

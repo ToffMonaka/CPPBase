@@ -165,7 +165,7 @@ INT tml::TextFile::Read(void)
 
 	bin_file.read_desc.parent_data = read_desc_dat;
 
-	if (bin_file.Read()) {
+	if (bin_file.Read() < 0) {
 		return (-1);
 	}
 
@@ -229,7 +229,7 @@ INT tml::TextFile::Write(void)
 
 	bin_file.write_desc.parent_data = write_desc_dat;
 
-	if (bin_file.Write()) {
+	if (bin_file.Write() < 0) {
 		return (-1);
 	}
 

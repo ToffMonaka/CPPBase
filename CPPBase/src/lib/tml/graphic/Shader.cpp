@@ -77,7 +77,7 @@ HRESULT __stdcall tml::graphic::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, L
 	bin_file.read_desc.data.file_path += L"/";
 	bin_file.read_desc.data.file_path += tml::StringUtil::GetString(bin_file_name, file_name);
 
-	if (bin_file.Read()) {
+	if (bin_file.Read() < 0) {
 		return (E_FAIL);
 	}
 
@@ -383,13 +383,13 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 
 	bin_file.read_desc.parent_data = file_read_desc_dat;
 
-	if (bin_file.Read()) {
+	if (bin_file.Read() < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
-	if (bin_file.data.file_buffer.GetSize() <= 0U) {
+	if (bin_file.data.file_buffer.GetLength() <= 0U) {
 		this->Init();
 
 		return (-1);

@@ -17,6 +17,7 @@ namespace sound {
 class SoundDesc : public tml::sound::ResourceDesc
 {
 public:
+	tml::BinaryFileReadDesc file_read_desc;
 
 protected:
 	void Release(void);
@@ -59,6 +60,8 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::ConstantUtil::SOUND::SOUND_TYPE type_;
+	ALuint buf_;
+	ALuint src_;
 
 protected:
 	void Release(void);
@@ -71,19 +74,10 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::SOUND::SOUND_TYPE GetType(void) const;
+	ALuint GetBuffer(void) const;
+	ALuint GetSource(void) const;
 };
 }
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-inline void tml::sound::Sound::Release(void)
-{
-	tml::sound::Resource::Release();
-
-	return;
 }
 
 
@@ -94,4 +88,24 @@ inline void tml::sound::Sound::Release(void)
 inline tml::ConstantUtil::SOUND::SOUND_TYPE tml::sound::Sound::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetBufferŠÖ”
+ * @return buf (buffer)
+ */
+inline ALuint tml::sound::Sound::GetBuffer(void) const
+{
+	return (this->buf_);
+}
+
+
+/**
+ * @brief GetSourceŠÖ”
+ * @return src (source)
+ */
+inline ALuint tml::sound::Sound::GetSource(void) const
+{
+	return (this->src_);
 }

@@ -262,13 +262,13 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 				bin_file.read_desc.parent_data = file_read_desc_dat;
 
-				if (bin_file.Read()) {
+				if (bin_file.Read() < 0) {
 					this->Init();
 
 					return (-1);
 				}
 
-				if (bin_file.data.file_buffer.GetSize() <= 0U) {
+				if (bin_file.data.file_buffer.GetLength() <= 0U) {
 					this->Init();
 
 					return (-1);
@@ -384,13 +384,13 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 			bin_file.read_desc.parent_data = file_read_desc_dat;
 
-			if (bin_file.Read()) {
+			if (bin_file.Read() < 0) {
 				this->Init();
 
 				return (-1);
 			}
 
-			if (bin_file.data.file_buffer.GetSize() <= 0U) {
+			if (bin_file.data.file_buffer.GetLength() <= 0U) {
 				this->Init();
 
 				return (-1);

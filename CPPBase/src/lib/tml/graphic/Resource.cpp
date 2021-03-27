@@ -56,7 +56,7 @@ INT tml::graphic::ResourceDesc::Read(const tml::INIFileReadDesc &read_desc)
 
 	ini_file.read_desc.parent_data = read_desc_dat;
 
-	if (ini_file.Read()) {
+	if (ini_file.Read() < 0) {
 		return (-1);
 	}
 

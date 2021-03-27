@@ -158,7 +158,7 @@ INT tml::INIFile::Read(void)
 
 	txt_file.read_desc.parent_data = read_desc_dat;
 
-	if (txt_file.Read()) {
+	if (txt_file.Read() < 0) {
 		return (-1);
 	}
 
@@ -296,7 +296,7 @@ INT tml::INIFile::Write(void)
 
 	txt_file.write_desc.parent_data = write_desc_dat;
 
-	if (txt_file.Write()) {
+	if (txt_file.Write() < 0) {
 		return (-1);
 	}
 

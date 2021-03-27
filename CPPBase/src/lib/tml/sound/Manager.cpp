@@ -90,6 +90,7 @@ void tml::sound::Manager::Release(void)
 	}
 
 	if (this->device_context_ != nullptr) {
+		alcMakeContextCurrent(nullptr);
 		alcDestroyContext(this->device_context_);
 
 		this->device_context_ = nullptr;

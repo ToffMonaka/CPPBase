@@ -20,7 +20,6 @@
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 
-#include "../../lib/tml/constant/ConstantInclude_LibOggBase.h"
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Light.h"
 #include "../../lib/tml/graphic/Fog.h"
@@ -28,6 +27,8 @@
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/SpriteModel.h"
 #include "../../lib/tml/graphic/Font.h"
+#include "../../lib/tml/sound/BGMSound.h"
+#include "../../lib/tml/sound/SESound.h"
 
 
 /**
@@ -61,6 +62,8 @@ void cpp_base::MainThread::Release(void)
 	this->graphic_mgr_.ReleaseResource(this->title_logo_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->log_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->log_font_);
+	this->sound_mgr_.ReleaseResource(this->title_bgm_sound_);
+	this->sound_mgr_.ReleaseResource(this->click_se_sound_);
 
 	this->input_mgr_.Init();
 	this->graphic_mgr_.Init();
@@ -390,27 +393,37 @@ INT cpp_base::MainThread::Start(void)
 
 		this->log_update_time_ = tml::TIME_REAL(1.0);
 
-		OggVorbis_File vorbis_file;
+		{// TitleBGMSound Create
+			tml::sound::BGMSoundDesc desc;
 
-		if (ov_fopen("res/title_bgm_sound1.ogg", &vorbis_file)) {
-			this->Init();
+			desc.manager = &this->sound_mgr_;
+			desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.ogg";
 
-			return (-1);
+			this->sound_mgr_.GetResource<tml::sound::BGMSound>(this->title_bgm_sound_, desc);
+
+			if (this->title_bgm_sound_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
 		}
 
-		vorbis_info *vorbis_info = ov_info(&vorbis_file, -1);
+		{// ClickSESound Create
+			tml::sound::SESoundDesc desc;
 
-		if (vorbis_info == nullptr) {
-			ov_clear(&vorbis_file);
+			desc.manager = &this->sound_mgr_;
+			desc.file_read_desc.data.file_path = L"res/click_se_sound1.wav";
 
-			this->Init();
+			this->sound_mgr_.GetResource<tml::sound::SESound>(this->click_se_sound_, desc);
 
-			return (-1);
+			if (this->click_se_sound_ == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
 		}
 
 		int a = 0;
-
-		ov_clear(&vorbis_file);
 	}
 
 	this->frame_rate_.Start(60U);
