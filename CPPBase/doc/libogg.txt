@@ -12,14 +12,41 @@ libogg-1.3.4.zipを展開し、名前をliboggに変更します。
 libvorbis-1.3.7.zipを展開し、名前をlibvorbisに変更します。
 
 Visual Studio 2019でlibogg\win32\VS2015\libogg.slnを開きます。
+ogg.defの
+LIBRARY ogg
+↓
+LIBRARY libogg
+に変更します。
 ソリューションのリビルドを実行します。
 
 Visual Studio 2019でlibvorbis\win32\VS2010\vorbis_static.slnを開きます。
+全ての[プロジェクト]→[プロパティ]で、
+追加のライブラリディレクトリの
+..\..\..\..\lobogg\win32\VS2010\$(Platform)\$(Configuration)
+↓
+..\..\..\..\lobogg\win32\VS2015\$(Platform)\$(Configuration)
+に変更します。
 ソリューションのリビルドを実行します。
 
 Visual Studio 2019でlibvorbis\win32\VS2010\vorbis_dynamic.slnを開きます。
 全ての[プロジェクト]→[プロパティ]で、
-出力ディレクトリの$(Configuration)を$(Configuration)DLLに、
-中間ディレクトリの$(Configuration)を$(Configuration)DLLに、
-変更します。
+出力ディレクトリの
+$(SolutionDir)$(Platform)$(Configuration)\
+↓
+$(SolutionDir)$(Platform)$(Configuration)DLL\
+
+中間ディレクトリの
+$(Platform)$(Configuration)\
+↓
+$(Platform)$(Configuration)DLL\
+
+追加のライブラリディレクトリの
+..\..\..\..\lobogg\win32\VS2010\$(Platform)\$(Configuration)
+↓
+..\..\..\..\lobogg\win32\VS2015\$(Platform)\$(Configuration)DLL
+
+..\$(Platform)\$(Configuration)
+↓
+..\$(Platform)\$(Configuration)DLL
+に変更します。
 ソリューションのリビルドを実行します。

@@ -20,6 +20,7 @@
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 
+#include "../../lib/tml/constant/ConstantInclude_LibOggBase.h"
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Light.h"
 #include "../../lib/tml/graphic/Fog.h"
@@ -423,7 +424,27 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
+		OggVorbis_File vorbis_file;
+
+		if (ov_fopen("res/title_bgm_sound1.ogg", &vorbis_file)) {
+			this->Init();
+
+			return (-1);
+		}
+
+		vorbis_info *vorbis_info = ov_info(&vorbis_file, -1);
+
+		if (vorbis_info == nullptr) {
+			ov_clear(&vorbis_file);
+
+			this->Init();
+
+			return (-1);
+		}
+
 		int a = 0;
+
+		ov_clear(&vorbis_file);
 	}
 
 	this->frame_rate_.Start(60U);
