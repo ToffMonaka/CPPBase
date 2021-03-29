@@ -75,28 +75,28 @@
     <OutDir>$(ProjectDir)bin\x86\debug\</OutDir>
     <IntDir>$(ProjectDir)bin_middle\x86\debug\</IntDir>
     <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\openal-soft\include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\p\vs2019\openal-soft\build32\Debug;D:\p\vs2019\libogg\win32\VS2015\Win32\DebugDLL;D:\p\vs2019\libvorbis\win32\VS2010\Win32\DebugDLL;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\p\vs2019\openal-soft\build32dll\Debug;D:\p\vs2019\libogg\win32\VS2015\Win32\DebugDLL;D:\p\vs2019\libvorbis\win32\VS2010\Win32\DebugDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)bin\x86\release\</OutDir>
     <IntDir>$(ProjectDir)bin_middle\x86\release\</IntDir>
     <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\openal-soft\include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\p\vs2019\openal-soft\build32\Release;D:\p\vs2019\libogg\win32\VS2015\Win32\ReleaseDLL;D:\p\vs2019\libvorbis\win32\VS2010\Win32\ReleaseDLL;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\p\vs2019\openal-soft\build32dll\Release;D:\p\vs2019\libogg\win32\VS2015\Win32\ReleaseDLL;D:\p\vs2019\libvorbis\win32\VS2010\Win32\ReleaseDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)bin\x64\debug\</OutDir>
     <IntDir>$(ProjectDir)bin_middle\x64\debug\</IntDir>
     <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\openal-soft\include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;D:\p\vs2019\openal-soft\build64\Debug;D:\p\vs2019\libogg\win32\VS2015\x64\DebugDLL;D:\p\vs2019\libvorbis\win32\VS2010\x64\DebugDLL;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x64;D:\p\vs2019\openal-soft\build64dll\Debug;D:\p\vs2019\libogg\win32\VS2015\x64\DebugDLL;D:\p\vs2019\libvorbis\win32\VS2010\x64\DebugDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)bin\x64\release\</OutDir>
     <IntDir>$(ProjectDir)bin_middle\x64\release\</IntDir>
     <IncludePath>$(DXSDK_DIR)Include;D:\p\vs2019\openal-soft\include;D:\p\vs2019\libogg\include;D:\p\vs2019\libvorbis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;D:\p\vs2019\openal-soft\build64\Release;D:\p\vs2019\libogg\win32\VS2015\x64\ReleaseDLL;D:\p\vs2019\libvorbis\win32\VS2010\x64\ReleaseDLL;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x64;D:\p\vs2019\openal-soft\build64dll\Release;D:\p\vs2019\libogg\win32\VS2015\x64\ReleaseDLL;D:\p\vs2019\libvorbis\win32\VS2010\x64\ReleaseDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

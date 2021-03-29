@@ -19,34 +19,30 @@ LIBRARY libogg
 に変更します。
 ソリューションのリビルドを実行します。
 
-Visual Studio 2019でlibvorbis\win32\VS2010\vorbis_static.slnを開きます。
+Visual Studio 2019でlibvorbis\win32\VS2010\vorbis_dynamic.slnを開きます。
+[ビルド]→[構成マネージャー]で、
+ソリューション構成の
+Debug
+↓
+DebugDLL
+
+Release
+↓
+ReleaseDLL
+
+プロジェクト構成の
+Debug
+↓
+DebugDLL
+
+Release
+↓
+ReleaseDLL
+に変更します。
 全ての[プロジェクト]→[プロパティ]で、
 追加のライブラリディレクトリの
 ..\..\..\..\lobogg\win32\VS2010\$(Platform)\$(Configuration)
 ↓
 ..\..\..\..\lobogg\win32\VS2015\$(Platform)\$(Configuration)
-に変更します。
-ソリューションのリビルドを実行します。
-
-Visual Studio 2019でlibvorbis\win32\VS2010\vorbis_dynamic.slnを開きます。
-全ての[プロジェクト]→[プロパティ]で、
-出力ディレクトリの
-$(SolutionDir)$(Platform)$(Configuration)\
-↓
-$(SolutionDir)$(Platform)$(Configuration)DLL\
-
-中間ディレクトリの
-$(Platform)$(Configuration)\
-↓
-$(Platform)$(Configuration)DLL\
-
-追加のライブラリディレクトリの
-..\..\..\..\lobogg\win32\VS2010\$(Platform)\$(Configuration)
-↓
-..\..\..\..\lobogg\win32\VS2015\$(Platform)\$(Configuration)DLL
-
-..\$(Platform)\$(Configuration)
-↓
-..\$(Platform)\$(Configuration)DLL
 に変更します。
 ソリューションのリビルドを実行します。
