@@ -17,7 +17,7 @@ tml::DynamicBuffer::DynamicBuffer() :
 	read_index_(0U),
 	read_res_(0),
 	write_index_(0U),
-	write_res_(10)
+	write_res_(0)
 {
 	return;
 }

@@ -5,6 +5,7 @@
 #pragma once
 
 
+#pragma comment(lib, "winmm.lib")
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")

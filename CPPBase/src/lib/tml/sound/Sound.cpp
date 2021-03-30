@@ -5,6 +5,9 @@
 
 
 #include "Sound.h"
+#include <mmsystem.h>
+#include <mmreg.h>
+#include "../constant/ConstantInclude_LibOggBase.h"
 #include "Manager.h"
 
 
@@ -164,6 +167,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
     UINT file_format = 0U;
 
     do {
+		// Check WAVE File
         if ((bin_file.data.file_buffer.GetLength() >= 4U)
         && (strncmp(reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()), "RIFF", 4U) == 0)) {
             file_format = 1U;
@@ -171,6 +175,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
             break;
         }
 
+		// Check Ogg File
         if ((bin_file.data.file_buffer.GetLength() >= 3U)
         && (strncmp(reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()), "ID3", 3U) == 0)) {
             file_format = 2U;
@@ -178,6 +183,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
             break;
         }
 
+		// Check MP3 File
         if ((bin_file.data.file_buffer.GetLength() >= 4U)
         && (strncmp(reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()), "OggS", 4U) == 0)) {
             file_format = 3U;
@@ -187,13 +193,128 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
     } while (0);
 
 	switch (file_format) {
-	case 1: {
+	case 1: {// Read WAVE File
+		MMIOINFO mmio_info = {};
+
+		mmio_info.fccIOProc = FOURCC_MEM;
+		mmio_info.cchBuffer = bin_file.data.file_buffer.GetLength();
+		mmio_info.pchBuffer = reinterpret_cast<HPSTR>(bin_file.data.file_buffer.Get());
+
+		HMMIO mmio_handle = mmioOpen(nullptr, &mmio_info, MMIO_READ);
+
+		if (mmio_handle == nullptr) {
+			return (-1);
+		}
+
+		MMCKINFO riff_mmck_info = {};
+
+		riff_mmck_info.fccType = mmioFOURCC('W', 'A', 'V', 'E');
+
+		if (mmioDescend(mmio_handle, &riff_mmck_info, nullptr, MMIO_FINDRIFF) != MMSYSERR_NOERROR) {
+			mmioClose(mmio_handle, 0U);
+
+			return (-1);
+		}
+
+		MMCKINFO fmt_mmck_info = {};
+
+		fmt_mmck_info.ckid = mmioFOURCC('f', 'm', 't', ' ');
+
+		if (mmioDescend(mmio_handle, &fmt_mmck_info, &riff_mmck_info, MMIO_FINDCHUNK) != MMSYSERR_NOERROR) {
+			mmioClose(mmio_handle, 0U);
+
+			return (-1);
+		}
+
+		WAVEFORMATEX wav_format;
+
+		if (fmt_mmck_info.cksize == sizeof(WAVEFORMATEXTENSIBLE)) {
+			WAVEFORMATEXTENSIBLE tmp_wav_format;
+
+			if (mmioRead(mmio_handle, reinterpret_cast<HPSTR>(&tmp_wav_format), sizeof(WAVEFORMATEXTENSIBLE)) != sizeof(WAVEFORMATEXTENSIBLE)) {
+				mmioClose(mmio_handle, 0U);
+
+				return (-1);
+			}
+
+			wav_format = tmp_wav_format.Format;
+		} else if (fmt_mmck_info.cksize == sizeof(WAVEFORMATEX)) {
+			WAVEFORMATEX tmp_wav_format;
+
+			if (mmioRead(mmio_handle, reinterpret_cast<HPSTR>(&tmp_wav_format), sizeof(WAVEFORMATEX)) != sizeof(WAVEFORMATEX)) {
+				mmioClose(mmio_handle, 0U);
+
+				return (-1);
+			}
+
+			wav_format = tmp_wav_format;
+		} else if (fmt_mmck_info.cksize == sizeof(PCMWAVEFORMAT)) {
+			PCMWAVEFORMAT tmp_wav_format;
+
+			if (mmioRead(mmio_handle, reinterpret_cast<HPSTR>(&tmp_wav_format), sizeof(PCMWAVEFORMAT)) != sizeof(PCMWAVEFORMAT)) {
+				mmioClose(mmio_handle, 0U);
+
+				return (-1);
+			}
+
+			tml::Copy(reinterpret_cast<PCMWAVEFORMAT *>(&wav_format), &tmp_wav_format, 1U);
+			wav_format.cbSize = 0;
+		} else {
+			mmioClose(mmio_handle, 0U);
+
+			return (-1);
+		}
+
+		mmioAscend(mmio_handle, &fmt_mmck_info, 0U);
+
+		MMCKINFO dat_mmck_info = {};
+
+		dat_mmck_info.ckid = mmioFOURCC('d', 'a', 't', 'a');
+
+		if (mmioDescend(mmio_handle, &dat_mmck_info, &riff_mmck_info, MMIO_FINDCHUNK) != MMSYSERR_NOERROR) {
+			mmioClose(mmio_handle, 0U);
+
+			return (-1);
+		}
+
+		tml::DynamicBuffer buf;
+
+		buf.SetSize(dat_mmck_info.cksize);
+		buf.AddWriteIndex(buf.GetSize());
+
+		if (mmioRead(mmio_handle, reinterpret_cast<HPSTR>(buf.Get()), buf.GetLength()) != buf.GetLength()) {
+			mmioClose(mmio_handle, 0U);
+
+			return (-1);
+		}
+
+		mmioClose(mmio_handle, 0U);
+
+        ALenum buf_format = AL_NONE;
+
+		if (wav_format.nChannels == 1) {
+			buf_format = AL_FORMAT_MONO16;
+		} else if (wav_format.nChannels == 2) {
+			buf_format = AL_FORMAT_STEREO16;
+		} else {
+			return (-1);
+		}
+
+		ALsizei buf_sampling_rate = wav_format.nSamplesPerSec;
+
+		alGenBuffers(1, &this->buf_);
+        alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
+
+		if (alGetError() != AL_NO_ERROR) {
+			return (-1);
+		}
+
 		break;
 	}
-	case 2: {
+	case 2: {// Read Ogg File
 		break;
 	}
-	case 3: {
+	case 3: {// Read MP3 File
 		break;
 	}
 	default: {
@@ -201,100 +322,15 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 	}
 	}
 
-	alGenBuffers(1, &this->buf_);
-
 	alGenSources(1, &this->src_);
+    alSourcei(this->src_, AL_BUFFER, static_cast<ALint>(this->buf_));
 
-#if 0
-    {
-        ALenum err, format;
-        ALuint buffer;
-        SNDFILE *sndfile;
-        SF_INFO sfinfo;
-        short *membuf;
-        sf_count_t num_frames;
-        ALsizei num_bytes;
+	if (alGetError() != AL_NO_ERROR) {
+		return (-1);
+	}
 
-        /* Open the audio file and check that it's usable. */
-        sndfile = sf_open(filename, SFM_READ, &sfinfo);
-        if(!sndfile)
-        {
-            fprintf(stderr, "Could not open audio in %s: %s\n", filename, sf_strerror(sndfile));
-            return 0;
-        }
-        if(sfinfo.frames < 1 || sfinfo.frames > (sf_count_t)(INT_MAX/sizeof(short))/sfinfo.channels)
-        {
-            fprintf(stderr, "Bad sample count in %s (%" PRId64 ")\n", filename, sfinfo.frames);
-            sf_close(sndfile);
-            return 0;
-        }
-
-        /* Get the sound format, and figure out the OpenAL format */
-        format = AL_NONE;
-        if(sfinfo.channels == 1)
-            format = AL_FORMAT_MONO16;
-        else if(sfinfo.channels == 2)
-            format = AL_FORMAT_STEREO16;
-        else if(sfinfo.channels == 3)
-        {
-            if(sf_command(sndfile, SFC_WAVEX_GET_AMBISONIC, NULL, 0) == SF_AMBISONIC_B_FORMAT)
-                format = AL_FORMAT_BFORMAT2D_16;
-        }
-        else if(sfinfo.channels == 4)
-        {
-            if(sf_command(sndfile, SFC_WAVEX_GET_AMBISONIC, NULL, 0) == SF_AMBISONIC_B_FORMAT)
-                format = AL_FORMAT_BFORMAT3D_16;
-        }
-        if(!format)
-        {
-            fprintf(stderr, "Unsupported channel count: %d\n", sfinfo.channels);
-            sf_close(sndfile);
-            return 0;
-        }
-
-        /* Decode the whole audio file to a buffer. */
-        membuf = malloc((size_t)(sfinfo.frames * sfinfo.channels) * sizeof(short));
-
-        num_frames = sf_readf_short(sndfile, membuf, sfinfo.frames);
-        if(num_frames < 1)
-        {
-            free(membuf);
-            sf_close(sndfile);
-            fprintf(stderr, "Failed to read samples in %s (%" PRId64 ")\n", filename, num_frames);
-            return 0;
-        }
-        num_bytes = (ALsizei)(num_frames * sfinfo.channels) * (ALsizei)sizeof(short);
-
-        /* Buffer the audio data into a new buffer object, then free the data and
-         * close the file.
-         */
-        buffer = 0;
-        alGenBuffers(1, &buffer);
-        alBufferData(buffer, format, membuf, num_bytes, sfinfo.samplerate);
-
-        free(membuf);
-        sf_close(sndfile);
-
-        /* Check if an error occured, and clean up if so. */
-        err = alGetError();
-        if(err != AL_NO_ERROR)
-        {
-            fprintf(stderr, "OpenAL Error: %s\n", alGetString(err));
-            if(buffer && alIsBuffer(buffer))
-                alDeleteBuffers(1, &buffer);
-            return 0;
-        }
-
-        return buffer;
-    }
-
-    {
-        source = 0;
-        alGenSources(1, &source);
-        alSourcei(source, AL_BUFFER, (ALint)buffer);
-        assert(alGetError()==AL_NO_ERROR && "Failed to setup sound source");
-    }
-#endif
+	alSourcef(this->src_, AL_GAIN, 0.5f);
+	alSourcei(this->src_, AL_LOOPING, AL_FALSE);
 
 	/*
 	OggVorbis_File vorbis_file;

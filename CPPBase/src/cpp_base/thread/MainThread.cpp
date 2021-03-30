@@ -20,7 +20,6 @@
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 
-#include "../../lib/tml/constant/ConstantInclude_LibOggBase.h"
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Light.h"
 #include "../../lib/tml/graphic/Fog.h"
@@ -424,27 +423,7 @@ INT cpp_base::MainThread::Start(void)
 			}
 		}
 
-		OggVorbis_File vorbis_file;
-
-		if (ov_fopen("res/title_bgm_sound1.ogg", &vorbis_file)) {
-			this->Init();
-
-			return (-1);
-		}
-
-		vorbis_info *vorbis_info = ov_info(&vorbis_file, -1);
-
-		if (vorbis_info == nullptr) {
-			ov_clear(&vorbis_file);
-
-			this->Init();
-
-			return (-1);
-		}
-
 		int a = 0;
-
-		ov_clear(&vorbis_file);
 	}
 
 	this->frame_rate_.Start(60U);
@@ -479,6 +458,10 @@ void cpp_base::MainThread::Update(void)
 		switch (event->GetEventType()) {
 		case tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE: {
 			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event.get())->GetData();
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+				alSourcePlay(this->click_se_sound_->GetSource());
+			}
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
 				this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->log_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->log_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
