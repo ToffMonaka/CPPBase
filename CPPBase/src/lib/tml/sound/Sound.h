@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../constant/ConstantInclude_LibOggBase.h"
 #include "Resource.h"
 
 
@@ -62,6 +63,15 @@ private:
 	tml::ConstantUtil::SOUND::SOUND_TYPE type_;
 	ALuint buf_;
 	ALuint src_;
+	BYTE *ogg_file_buf_;
+	LONG ogg_file_buf_size_;
+	LONG ogg_file_buf_pos_;
+
+private:
+	static size_t ReadOggFile(void *, size_t, size_t, void *);
+	static int SeekOggFile(void *, ogg_int64_t, int);
+	static int CloseOggFile(void *);
+	static long TellOggFile(void *);
 
 protected:
 	void Release(void);

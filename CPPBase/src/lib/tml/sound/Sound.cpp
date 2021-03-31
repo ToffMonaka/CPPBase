@@ -7,7 +7,6 @@
 #include "Sound.h"
 #include <mmsystem.h>
 #include <mmreg.h>
-#include "../constant/ConstantInclude_LibOggBase.h"
 #include "Manager.h"
 
 
@@ -80,7 +79,10 @@ INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &ini_file)
 tml::sound::Sound::Sound() :
 	type_(tml::ConstantUtil::SOUND::SOUND_TYPE::NONE),
 	buf_(0U),
-	src_(0U)
+	src_(0U),
+	ogg_file_buf_(0L),
+	ogg_file_buf_size_(0L),
+	ogg_file_buf_pos_(0L)
 {
 	return;
 }
@@ -124,6 +126,9 @@ void tml::sound::Sound::Release(void)
 void tml::sound::Sound::Init(void)
 {
 	this->type_ = tml::ConstantUtil::SOUND::SOUND_TYPE::NONE;
+	this->ogg_file_buf_ = nullptr;
+	this->ogg_file_buf_size_ = 0L;
+	this->ogg_file_buf_pos_ = 0L;
 
 	tml::sound::Resource::Init();
 
@@ -175,7 +180,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
             break;
         }
 
-		// Check Ogg File
+		// Check MP3 File
         if ((bin_file.data.file_buffer.GetLength() >= 3U)
         && (strncmp(reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()), "ID3", 3U) == 0)) {
             file_format = 2U;
@@ -183,7 +188,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
             break;
         }
 
-		// Check MP3 File
+		// Check Ogg File
         if ((bin_file.data.file_buffer.GetLength() >= 4U)
         && (strncmp(reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()), "OggS", 4U) == 0)) {
             file_format = 3U;
@@ -226,7 +231,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			return (-1);
 		}
 
-		WAVEFORMATEX wav_format;
+		WAVEFORMATEX wav_format = {};
 
 		if (fmt_mmck_info.cksize == sizeof(WAVEFORMATEXTENSIBLE)) {
 			WAVEFORMATEXTENSIBLE tmp_wav_format;
@@ -311,10 +316,94 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 
 		break;
 	}
-	case 2: {// Read Ogg File
+	case 2: {// Read MP3 File
 		break;
 	}
-	case 3: {// Read MP3 File
+	case 3: {// Read Ogg File
+		this->ogg_file_buf_ = bin_file.data.file_buffer.Get();
+		this->ogg_file_buf_size_ = bin_file.data.file_buffer.GetLength();
+		this->ogg_file_buf_pos_ = 0L;
+
+		OggVorbis_File ogg_file;
+		ov_callbacks ogg_file_callback = {
+			&tml::sound::Sound::ReadOggFile,
+			&tml::sound::Sound::SeekOggFile,
+			&tml::sound::Sound::CloseOggFile,
+			&tml::sound::Sound::TellOggFile
+		};
+
+		if (ov_open_callbacks(this, &ogg_file, nullptr, 0L, ogg_file_callback) != 0) {
+			return (-1);
+		}
+
+		vorbis_info *ogg_info = ov_info(&ogg_file, -1);
+
+		if (ogg_info == nullptr) {
+			ov_clear(&ogg_file);
+
+			return (-1);
+		}
+
+		WAVEFORMATEX wav_format = {};
+
+		wav_format.wFormatTag = WAVE_FORMAT_PCM;
+		wav_format.nChannels = ogg_info->channels;
+		wav_format.nSamplesPerSec = ogg_info->rate;
+		wav_format.nAvgBytesPerSec = ogg_info->rate * ogg_info->channels * 2;
+		wav_format.nBlockAlign = ogg_info->channels * 2;
+		wav_format.wBitsPerSample = 16;
+		wav_format.cbSize = 0;
+
+		tml::DynamicBuffer buf;
+
+		buf.SetSize(static_cast<size_t>(ov_pcm_total(&ogg_file, -1) * ogg_info->channels * 2));
+		buf.AddWriteIndex(buf.GetSize());
+
+		LONG read_size = 0L;
+		INT read_res = 0;
+		INT read_bitstream = 0;
+ 
+		while (read_size < static_cast<LONG>(buf.GetLength())) {
+			LONG tmp_read_size = ov_read(&ogg_file, reinterpret_cast<CHAR *>(&buf.Get()[read_size]), static_cast<LONG>(buf.GetLength()) - read_size, 0, 2, 1, &read_bitstream);
+ 
+			if (tmp_read_size < 0L) {
+				read_res = -1;
+
+				break;
+			} else if (tmp_read_size == 0L) {
+				break;
+			}
+ 
+			read_size += tmp_read_size;
+		}
+
+		if (read_res < 0) {
+			ov_clear(&ogg_file);
+
+			return (-1);
+		}
+
+		ov_clear(&ogg_file);
+
+        ALenum buf_format = AL_NONE;
+
+		if (wav_format.nChannels == 1) {
+			buf_format = AL_FORMAT_MONO16;
+		} else if (wav_format.nChannels == 2) {
+			buf_format = AL_FORMAT_STEREO16;
+		} else {
+			return (-1);
+		}
+
+		ALsizei buf_sampling_rate = wav_format.nSamplesPerSec;
+
+		alGenBuffers(1, &this->buf_);
+        alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
+
+		if (alGetError() != AL_NO_ERROR) {
+			return (-1);
+		}
+
 		break;
 	}
 	default: {
@@ -329,30 +418,116 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		return (-1);
 	}
 
-	alSourcef(this->src_, AL_GAIN, 0.5f);
-	alSourcei(this->src_, AL_LOOPING, AL_FALSE);
+	return (0);
+}
 
-	/*
-	OggVorbis_File vorbis_file;
 
-	if (ov_fopen("res/title_bgm_sound1.ogg", &vorbis_file)) {
-		this->Init();
+/**
+ * @brief ReadOggFileä÷êî
+ * @param buf (buffer)
+ * @param size (size)
+ * @param cnt (count)
+ * @param src (source)
+ * @return read_cnt (read_count)
+ */
+size_t tml::sound::Sound::ReadOggFile(void *buf, size_t size, size_t cnt, void *src)
+{
+	auto sound = reinterpret_cast<tml::sound::Sound *>(src);
 
+	if (sound == nullptr) {
+		return (0U);
+	}
+
+	size_t read_cnt = (sound->ogg_file_buf_size_ - sound->ogg_file_buf_pos_) / size;
+
+	if (read_cnt > cnt) {
+		read_cnt = cnt;
+	}
+
+	memcpy(buf, &sound->ogg_file_buf_[sound->ogg_file_buf_pos_], size * read_cnt);
+
+	sound->ogg_file_buf_pos_ += size * read_cnt;
+
+	return (read_cnt);
+}
+
+
+/**
+ * @brief SeekOggFileä÷êî
+ * @param src (source)
+ * @param offset (offset)
+ * @param flg (flag)
+ * @return res (result)<br>
+ * 0à»äO=é∏îs
+ */
+int tml::sound::Sound::SeekOggFile(void *src, ogg_int64_t offset, int flg)
+{
+	auto sound = reinterpret_cast<tml::sound::Sound *>(src);
+
+	if (sound == nullptr) {
 		return (-1);
 	}
 
-	vorbis_info *vorbis_info = ov_info(&vorbis_file, -1);
+	switch (flg) {
+	case SEEK_SET: {
+		sound->ogg_file_buf_pos_ = static_cast<LONG>(offset);
 
-	if (vorbis_info == nullptr) {
-		ov_clear(&vorbis_file);
+		break;
+	}
+	case SEEK_CUR: {
+		sound->ogg_file_buf_pos_ += static_cast<LONG>(offset);
 
-		this->Init();
+		break;
+	}
+	case SEEK_END: {
+		sound->ogg_file_buf_pos_ = sound->ogg_file_buf_size_ + static_cast<LONG>(offset);
+
+		break;
+	}
+	default: {
+		return (-1);
+	}
+	}
+
+	if (sound->ogg_file_buf_pos_ < 0L) {
+		sound->ogg_file_buf_pos_ = 0L;
+
+		return (-1);
+	} else if (sound->ogg_file_buf_pos_ > sound->ogg_file_buf_size_) {
+		sound->ogg_file_buf_pos_ = sound->ogg_file_buf_size_;
 
 		return (-1);
 	}
-
-	ov_clear(&vorbis_file);
-	*/
 
 	return (0);
+}
+
+
+/**
+ * @brief CloseOggFileä÷êî
+ * @param src (source)
+ * @return res (result)<br>
+ * -1=é∏îs
+ */
+int tml::sound::Sound::CloseOggFile(void *src)
+{
+	return (0);
+}
+
+
+/**
+ * @brief TellOggFileä÷êî
+ * @param src (source)
+ * @return res (result)<br>
+ * -1=é∏îs
+ */
+long tml::sound::Sound::TellOggFile(void *src)
+{
+	auto sound = reinterpret_cast<tml::sound::Sound *>(src);
+
+	if (sound == nullptr) {
+		return (-1L);
+	}
+
+	return (sound->ogg_file_buf_pos_);
 }

@@ -46,7 +46,7 @@ void tml::BinaryFileData::Init(void)
  * @brief コンストラクタ
  */
 tml::BinaryFileReadDescData::BinaryFileReadDescData() :
-	one_buffer_size(1024U)
+	one_buffer_size(2048U)
 {
 	return;
 }
@@ -70,7 +70,7 @@ void tml::BinaryFileReadDescData::Init(void)
 {
 	this->Release();
 
-	this->one_buffer_size = 1024U;
+	this->one_buffer_size = 2048U;
 
 	tml::FileReadDescData::Init();
 
@@ -82,7 +82,7 @@ void tml::BinaryFileReadDescData::Init(void)
  * @brief コンストラクタ
  */
 tml::BinaryFileWriteDescData::BinaryFileWriteDescData() :
-	one_buffer_size(1024U),
+	one_buffer_size(2048U),
 	add_flag(false)
 {
 	return;
@@ -107,7 +107,7 @@ void tml::BinaryFileWriteDescData::Init(void)
 {
 	this->Release();
 
-	this->one_buffer_size = 1024U;
+	this->one_buffer_size = 2048U;
 	this->add_flag = false;
 
 	tml::FileWriteDescData::Init();
