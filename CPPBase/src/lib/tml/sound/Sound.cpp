@@ -7,6 +7,7 @@
 #include "Sound.h"
 #include <mmsystem.h>
 #include <mmreg.h>
+#include <msacm.h>
 #include "Manager.h"
 
 
@@ -82,7 +83,7 @@ tml::sound::Sound::Sound() :
 	src_(0U),
 	ogg_file_buf_(0L),
 	ogg_file_buf_size_(0L),
-	ogg_file_buf_pos_(0L)
+	ogg_file_buf_index_(0L)
 {
 	return;
 }
@@ -128,7 +129,7 @@ void tml::sound::Sound::Init(void)
 	this->type_ = tml::ConstantUtil::SOUND::SOUND_TYPE::NONE;
 	this->ogg_file_buf_ = nullptr;
 	this->ogg_file_buf_size_ = 0L;
-	this->ogg_file_buf_pos_ = 0L;
+	this->ogg_file_buf_index_ = 0L;
 
 	tml::sound::Resource::Init();
 
@@ -165,7 +166,9 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		return (-1);
 	}
 
-	if (bin_file.data.file_buffer.GetLength() <= 0U) {
+	auto &file_buf = bin_file.data.file_buffer;
+
+	if (file_buf.GetLength() <= 0U) {
 		return (-1);
 	}
 
@@ -173,24 +176,24 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 
     do {
 		// Check WAVE File
-        if ((bin_file.data.file_buffer.GetLength() >= 4U)
-        && (strncmp(reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()), "RIFF", 4U) == 0)) {
+        if ((file_buf.GetLength() >= 4U)
+        && (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "RIFF", 4U) == 0)) {
             file_format = 1U;
 
             break;
         }
 
 		// Check MP3 File
-        if ((bin_file.data.file_buffer.GetLength() >= 3U)
-        && (strncmp(reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()), "ID3", 3U) == 0)) {
+        if ((file_buf.GetLength() >= 3U)
+        && (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "ID3", 3U) == 0)) {
             file_format = 2U;
 
             break;
         }
 
 		// Check Ogg File
-        if ((bin_file.data.file_buffer.GetLength() >= 4U)
-        && (strncmp(reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()), "OggS", 4U) == 0)) {
+        if ((file_buf.GetLength() >= 4U)
+        && (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "OggS", 4U) == 0)) {
             file_format = 3U;
 
             break;
@@ -202,8 +205,8 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		MMIOINFO mmio_info = {};
 
 		mmio_info.fccIOProc = FOURCC_MEM;
-		mmio_info.cchBuffer = bin_file.data.file_buffer.GetLength();
-		mmio_info.pchBuffer = reinterpret_cast<HPSTR>(bin_file.data.file_buffer.Get());
+		mmio_info.cchBuffer = file_buf.GetLength();
+		mmio_info.pchBuffer = reinterpret_cast<HPSTR>(file_buf.Get());
 
 		HMMIO mmio_handle = mmioOpen(nullptr, &mmio_info, MMIO_READ);
 
@@ -317,12 +320,109 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		break;
 	}
 	case 2: {// Read MP3 File
+        if ((file_buf.GetLength() >= 128U)
+        && (strncmp(reinterpret_cast<CHAR *>(&file_buf.Get()[file_buf.GetLength() - 128U]), "TAG", 3U) == 0)) {
+			file_buf.SetLength(file_buf.GetLength() - 128U);
+        }
+
+		size_t file_buf_index = 0U;
+
+		std::array<BYTE, 10U> mp3_tag_header;
+
+		if (file_buf.GetLength() < (file_buf_index + mp3_tag_header.size())) {
+			return (-1);
+		}
+
+		tml::Copy(mp3_tag_header.data(), &file_buf.Get()[file_buf_index], mp3_tag_header.size());
+
+		size_t mp3_tag_size = ((mp3_tag_header[6] << 21) | (mp3_tag_header[7] << 14) | (mp3_tag_header[8] << 7) | mp3_tag_header[9]) + mp3_tag_header.size();
+
+		if (file_buf.GetLength() < (file_buf_index + mp3_tag_size)) {
+			return (-1);
+		}
+
+		file_buf_index += mp3_tag_size;
+
+		std::array<BYTE, 4U> mp3_frame_header;
+
+		if (file_buf.GetLength() < (file_buf_index + mp3_frame_header.size())) {
+			return (-1);
+		}
+
+		tml::Copy(mp3_frame_header.data(), &file_buf.Get()[file_buf_index], mp3_frame_header.size());
+
+		if (!((mp3_frame_header[0] == 0xFF) && ((mp3_frame_header[1] & 0xE0) == 0xE0))) {
+			return (-1);
+		}
+
+		BYTE mp3_version = (mp3_frame_header[1] >> 3) & 0x03;
+		BYTE mp3_layer = (mp3_frame_header[1] >> 1) & 0x03;
+		BYTE mp3_bit_rate_code = (mp3_frame_header[2] >> 4) & 0x0F;
+		BYTE mp3_sampling_rate_code = (mp3_frame_header[2] >> 2) & 0x03;
+		BYTE mp3_padding = (mp3_frame_header[2] >> 1) & 0x01;
+		BYTE mp3_channel = (mp3_frame_header[3] >> 6) & 0x03;
+
+		const DWORD mp3_bit_rate_tbl[][16] = {
+			{0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, static_cast<DWORD>(-1)}, // MPEG1 Layer1
+			{0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, static_cast<DWORD>(-1)}, // MPEG1 Layer2
+			{0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, static_cast<DWORD>(-1)}, // MPEG1 Layer3
+			{0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, static_cast<DWORD>(-1)}, // MPEG2,2.5 Layer1
+			{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, static_cast<DWORD>(-1)} // MPEG2,2.5 Layer2,3
+		};
+		UINT mp3_bit_rate_index = 0U;
+
+		if (mp3_version == 3) {
+			mp3_bit_rate_index = 3U - mp3_layer;
+		} else {
+			if (mp3_layer == 3) {
+				mp3_bit_rate_index = 3U;
+			} else {
+				mp3_bit_rate_index = 4U;
+			}
+		}
+
+		DWORD mp3_bit_rate = mp3_bit_rate_tbl[mp3_bit_rate_index][mp3_bit_rate_code];
+
+		const DWORD mp3_sampling_rate_tbl[][4] = {
+			{44100, 48000, 32000, static_cast<DWORD>(-1)}, // MPEG1
+			{22050, 24000, 16000, static_cast<DWORD>(-1)}, // MPEG2
+			{11025, 12000, 8000, static_cast<DWORD>(-1)} // MPEG2.5
+		};
+		UINT mp3_sampling_rate_index = 0U;
+
+		if (mp3_version == 0) {
+			mp3_sampling_rate_index = 2U;
+		} else if (mp3_version == 2) {
+			mp3_sampling_rate_index = 1U;
+		} else if (mp3_version == 3) {
+			mp3_sampling_rate_index = 0U;
+		}
+
+		DWORD mp3_sampling_rate = mp3_sampling_rate_tbl[mp3_sampling_rate_index][mp3_sampling_rate_code];
+
+		MPEGLAYER3WAVEFORMAT mp3_format = {};
+
+		mp3_format.wfx.wFormatTag = WAVE_FORMAT_MPEGLAYER3;
+		mp3_format.wfx.nChannels = (mp3_channel == 3) ? 1 : 2;
+		mp3_format.wfx.nSamplesPerSec = mp3_sampling_rate;
+		mp3_format.wfx.nAvgBytesPerSec = (mp3_bit_rate * 1000) / 8;
+		mp3_format.wfx.nBlockAlign = 1;
+		mp3_format.wfx.wBitsPerSample = 0;
+		mp3_format.wfx.cbSize = MPEGLAYER3_WFX_EXTRA_BYTES;
+		mp3_format.wID = MPEGLAYER3_ID_MPEG;
+		mp3_format.fdwFlags = (mp3_padding) ? MPEGLAYER3_FLAG_PADDING_ON : MPEGLAYER3_FLAG_PADDING_OFF;
+		mp3_format.nBlockSize = static_cast<WORD>((144 * mp3_bit_rate * 1000) / mp3_sampling_rate) + mp3_padding;
+		mp3_format.nFramesPerBlock = 1;
+		mp3_format.nCodecDelay = 1393;
+
+		int a = 0;
+
 		break;
 	}
 	case 3: {// Read Ogg File
-		this->ogg_file_buf_ = bin_file.data.file_buffer.Get();
-		this->ogg_file_buf_size_ = bin_file.data.file_buffer.GetLength();
-		this->ogg_file_buf_pos_ = 0L;
+		this->ogg_file_buf_ = file_buf.Get();
+		this->ogg_file_buf_size_ = file_buf.GetLength();
+		this->ogg_file_buf_index_ = 0L;
 
 		OggVorbis_File ogg_file;
 		ov_callbacks ogg_file_callback = {
@@ -411,11 +511,13 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 	}
 	}
 
-	alGenSources(1, &this->src_);
-    alSourcei(this->src_, AL_BUFFER, static_cast<ALint>(this->buf_));
+	if (this->buf_ != 0U) {
+		alGenSources(1, &this->src_);
+		alSourcei(this->src_, AL_BUFFER, static_cast<ALint>(this->buf_));
 
-	if (alGetError() != AL_NO_ERROR) {
-		return (-1);
+		if (alGetError() != AL_NO_ERROR) {
+			return (-1);
+		}
 	}
 
 	return (0);
@@ -438,15 +540,15 @@ size_t tml::sound::Sound::ReadOggFile(void *buf, size_t size, size_t cnt, void *
 		return (0U);
 	}
 
-	size_t read_cnt = (sound->ogg_file_buf_size_ - sound->ogg_file_buf_pos_) / size;
+	size_t read_cnt = (sound->ogg_file_buf_size_ - sound->ogg_file_buf_index_) / size;
 
 	if (read_cnt > cnt) {
 		read_cnt = cnt;
 	}
 
-	memcpy(buf, &sound->ogg_file_buf_[sound->ogg_file_buf_pos_], size * read_cnt);
+	memcpy(buf, &sound->ogg_file_buf_[sound->ogg_file_buf_index_], size * read_cnt);
 
-	sound->ogg_file_buf_pos_ += size * read_cnt;
+	sound->ogg_file_buf_index_ += size * read_cnt;
 
 	return (read_cnt);
 }
@@ -470,17 +572,17 @@ int tml::sound::Sound::SeekOggFile(void *src, ogg_int64_t offset, int flg)
 
 	switch (flg) {
 	case SEEK_SET: {
-		sound->ogg_file_buf_pos_ = static_cast<LONG>(offset);
+		sound->ogg_file_buf_index_ = static_cast<LONG>(offset);
 
 		break;
 	}
 	case SEEK_CUR: {
-		sound->ogg_file_buf_pos_ += static_cast<LONG>(offset);
+		sound->ogg_file_buf_index_ += static_cast<LONG>(offset);
 
 		break;
 	}
 	case SEEK_END: {
-		sound->ogg_file_buf_pos_ = sound->ogg_file_buf_size_ + static_cast<LONG>(offset);
+		sound->ogg_file_buf_index_ = sound->ogg_file_buf_size_ + static_cast<LONG>(offset);
 
 		break;
 	}
@@ -489,12 +591,12 @@ int tml::sound::Sound::SeekOggFile(void *src, ogg_int64_t offset, int flg)
 	}
 	}
 
-	if (sound->ogg_file_buf_pos_ < 0L) {
-		sound->ogg_file_buf_pos_ = 0L;
+	if (sound->ogg_file_buf_index_ < 0L) {
+		sound->ogg_file_buf_index_ = 0L;
 
 		return (-1);
-	} else if (sound->ogg_file_buf_pos_ > sound->ogg_file_buf_size_) {
-		sound->ogg_file_buf_pos_ = sound->ogg_file_buf_size_;
+	} else if (sound->ogg_file_buf_index_ > sound->ogg_file_buf_size_) {
+		sound->ogg_file_buf_index_ = sound->ogg_file_buf_size_;
 
 		return (-1);
 	}
@@ -529,5 +631,5 @@ long tml::sound::Sound::TellOggFile(void *src)
 		return (-1L);
 	}
 
-	return (sound->ogg_file_buf_pos_);
+	return (sound->ogg_file_buf_index_);
 }

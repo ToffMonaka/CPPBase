@@ -389,7 +389,9 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 		return (-1);
 	}
 
-	if (bin_file.data.file_buffer.GetLength() <= 0U) {
+	auto &file_buf = bin_file.data.file_buffer;
+
+	if (file_buf.GetLength() <= 0U) {
 		this->Init();
 
 		return (-1);
@@ -421,7 +423,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	}
 
 	if (!desc.vertex_shader_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.vertex_shader_function_name.c_str(), desc.vertex_shader_model_name.c_str(), macro_ary.data());
+		auto blob = this->GetBlob(file_buf, desc.include_directory_path.c_str(), desc.vertex_shader_function_name.c_str(), desc.vertex_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -449,7 +451,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	}
 
 	if (!desc.hull_shader_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.hull_shader_function_name.c_str(), desc.hull_shader_model_name.c_str(), macro_ary.data());
+		auto blob = this->GetBlob(file_buf, desc.include_directory_path.c_str(), desc.hull_shader_function_name.c_str(), desc.hull_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -469,7 +471,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	}
 
 	if (!desc.domain_shader_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.domain_shader_function_name.c_str(), desc.domain_shader_model_name.c_str(), macro_ary.data());
+		auto blob = this->GetBlob(file_buf, desc.include_directory_path.c_str(), desc.domain_shader_function_name.c_str(), desc.domain_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -489,7 +491,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	}
 
 	if (!desc.geometry_shader_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.geometry_shader_function_name.c_str(), desc.geometry_shader_model_name.c_str(), macro_ary.data());
+		auto blob = this->GetBlob(file_buf, desc.include_directory_path.c_str(), desc.geometry_shader_function_name.c_str(), desc.geometry_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -509,7 +511,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	}
 
 	if (!desc.pixel_shader_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.pixel_shader_function_name.c_str(), desc.pixel_shader_model_name.c_str(), macro_ary.data());
+		auto blob = this->GetBlob(file_buf, desc.include_directory_path.c_str(), desc.pixel_shader_function_name.c_str(), desc.pixel_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();
@@ -529,7 +531,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	}
 
 	if (!desc.compute_shader_function_name.empty()) {
-		auto blob = this->GetBlob(bin_file.data.file_buffer, desc.include_directory_path.c_str(), desc.compute_shader_function_name.c_str(), desc.compute_shader_model_name.c_str(), macro_ary.data());
+		auto blob = this->GetBlob(file_buf, desc.include_directory_path.c_str(), desc.compute_shader_function_name.c_str(), desc.compute_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
 			this->Init();

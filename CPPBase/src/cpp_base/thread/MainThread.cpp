@@ -397,7 +397,7 @@ INT cpp_base::MainThread::Start(void)
 			tml::sound::BGMSoundDesc desc;
 
 			desc.manager = &this->sound_mgr_;
-			desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.ogg";
+			desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.mp3";
 
 			this->sound_mgr_.GetResource<tml::sound::BGMSound>(this->title_bgm_sound_, desc);
 
@@ -460,17 +460,21 @@ void cpp_base::MainThread::Update(void)
 			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event.get())->GetData();
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-				alSourcef(this->click_se_sound_->GetSource(), AL_GAIN, 0.5f);
-				alSourcei(this->click_se_sound_->GetSource(), AL_LOOPING, AL_FALSE);
-				alSourcePlay(this->click_se_sound_->GetSource());
+				if (this->click_se_sound_->GetSource() != 0U) {
+					alSourcef(this->click_se_sound_->GetSource(), AL_GAIN, 0.5f);
+					alSourcei(this->click_se_sound_->GetSource(), AL_LOOPING, AL_FALSE);
+					alSourcePlay(this->click_se_sound_->GetSource());
+				}
 			}
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
 				this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->log_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->log_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
 
-				alSourcef(this->title_bgm_sound_->GetSource(), AL_GAIN, 0.5f);
-				alSourcei(this->title_bgm_sound_->GetSource(), AL_LOOPING, AL_TRUE);
-				alSourcePlay(this->title_bgm_sound_->GetSource());
+				if (this->title_bgm_sound_->GetSource() != 0U) {
+					alSourcef(this->title_bgm_sound_->GetSource(), AL_GAIN, 0.5f);
+					alSourcei(this->title_bgm_sound_->GetSource(), AL_LOOPING, AL_TRUE);
+					alSourcePlay(this->title_bgm_sound_->GetSource());
+				}
 			}
 
 			break;

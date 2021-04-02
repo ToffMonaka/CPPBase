@@ -65,7 +65,7 @@ private:
 	ALuint src_;
 	BYTE *ogg_file_buf_;
 	LONG ogg_file_buf_size_;
-	LONG ogg_file_buf_pos_;
+	LONG ogg_file_buf_index_;
 
 private:
 	static size_t ReadOggFile(void *, size_t, size_t, void *);

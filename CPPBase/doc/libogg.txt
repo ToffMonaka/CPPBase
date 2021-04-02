@@ -1,5 +1,7 @@
 ■LibOggをインストール
 
+DLLを作成します。
+
 ダウンロード:
 https://xiph.org/downloads/
 から、
