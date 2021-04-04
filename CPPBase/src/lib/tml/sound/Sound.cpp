@@ -172,33 +172,33 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		return (-1);
 	}
 
-    UINT file_format = 0U;
+	UINT file_format = 0U;
 
-    do {
+	do {
 		// Check WAVE File
-        if ((file_buf.GetLength() >= 4U)
-        && (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "RIFF", 4U) == 0)) {
-            file_format = 1U;
+		if ((file_buf.GetLength() >= 4U)
+		&& (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "RIFF", 4U) == 0)) {
+			file_format = 1U;
 
-            break;
-        }
+			break;
+		}
 
 		// Check MP3 File
-        if ((file_buf.GetLength() >= 3U)
-        && (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "ID3", 3U) == 0)) {
-            file_format = 2U;
+		if ((file_buf.GetLength() >= 3U)
+		&& (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "ID3", 3U) == 0)) {
+			file_format = 2U;
 
-            break;
-        }
+			break;
+		}
 
 		// Check Ogg File
-        if ((file_buf.GetLength() >= 4U)
-        && (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "OggS", 4U) == 0)) {
-            file_format = 3U;
+		if ((file_buf.GetLength() >= 4U)
+		&& (strncmp(reinterpret_cast<CHAR *>(file_buf.Get()), "OggS", 4U) == 0)) {
+			file_format = 3U;
 
-            break;
-        }
-    } while (0);
+			break;
+		}
+	} while (0);
 
 	switch (file_format) {
 	case 1: {// Read WAVE File
@@ -298,7 +298,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 
 		mmioClose(mmio_handle, 0U);
 
-        ALenum buf_format = AL_NONE;
+		ALenum buf_format = AL_NONE;
 
 		if (wav_format.nChannels == 1) {
 			buf_format = AL_FORMAT_MONO16;
@@ -311,7 +311,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		ALsizei buf_sampling_rate = wav_format.nSamplesPerSec;
 
 		alGenBuffers(1, &this->buf_);
-        alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
+		alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
 
 		if (alGetError() != AL_NO_ERROR) {
 			return (-1);
@@ -320,10 +320,10 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		break;
 	}
 	case 2: {// Read MP3 File
-        if ((file_buf.GetLength() >= 128U)
-        && (strncmp(reinterpret_cast<CHAR *>(&file_buf.Get()[file_buf.GetLength() - 128U]), "TAG", 3U) == 0)) {
+		if ((file_buf.GetLength() >= 128U)
+		&& (strncmp(reinterpret_cast<CHAR *>(&file_buf.Get()[file_buf.GetLength() - 128U]), "TAG", 3U) == 0)) {
 			file_buf.SetLength(file_buf.GetLength() - 128U);
-        }
+		}
 
 		size_t file_buf_index = 0U;
 
@@ -415,7 +415,76 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		mp3_format.nFramesPerBlock = 1;
 		mp3_format.nCodecDelay = 1393;
 
-		int a = 0;
+		WAVEFORMATEX wav_format = {};
+
+		wav_format.wFormatTag = WAVE_FORMAT_PCM;
+
+		if (acmFormatSuggest(nullptr, &mp3_format.wfx, &wav_format, sizeof(WAVEFORMATEX), ACM_FORMATSUGGESTF_WFORMATTAG) != 0) {
+			return (-1);
+		}
+
+		HACMSTREAM acm_stream_handle = nullptr;
+
+		if (acmStreamOpen(&acm_stream_handle, nullptr, &mp3_format.wfx, &wav_format, nullptr, 0, 0, ACM_STREAMOPENF_NONREALTIME) != 0) {
+			return (-1);
+		}
+
+		DWORD mp3_buf_size = file_buf.GetLength() - file_buf_index;
+		DWORD wav_buf_size = 0UL;
+
+		if (acmStreamSize(acm_stream_handle, mp3_buf_size, &wav_buf_size, ACM_STREAMSIZEF_SOURCE) != 0) {
+			acmStreamClose(acm_stream_handle, 0UL);
+
+			return (-1);
+		}
+
+		ACMSTREAMHEADER acm_stream_header = {};
+
+		acm_stream_header.cbStruct = sizeof(ACMSTREAMHEADER);
+		acm_stream_header.pbSrc = new BYTE[mp3_buf_size];
+		acm_stream_header.cbSrcLength = mp3_buf_size;
+		acm_stream_header.pbDst = new BYTE[wav_buf_size];
+		acm_stream_header.cbDstLength = wav_buf_size;
+
+		tml::Copy(acm_stream_header.pbSrc, &file_buf.Get()[file_buf_index], acm_stream_header.cbSrcLength);
+
+		if (acmStreamPrepareHeader(acm_stream_handle, &acm_stream_header, 0UL) != 0) {
+			acmStreamClose(acm_stream_handle, 0UL);
+
+			return (-1);
+		}
+
+		if (acmStreamConvert(acm_stream_handle, &acm_stream_header, ACM_STREAMCONVERTF_BLOCKALIGN) != 0) {
+			acmStreamUnprepareHeader(acm_stream_handle, &acm_stream_header, 0UL);
+			acmStreamClose(acm_stream_handle, 0UL);
+
+			return (-1);
+		}
+
+		acmStreamUnprepareHeader(acm_stream_handle, &acm_stream_header, 0UL);
+		acmStreamClose(acm_stream_handle, 0UL);
+
+		ALenum buf_format = AL_NONE;
+
+		if (wav_format.nChannels == 1) {
+			buf_format = AL_FORMAT_MONO16;
+		} else if (wav_format.nChannels == 2) {
+			buf_format = AL_FORMAT_STEREO16;
+		} else {
+			return (-1);
+		}
+
+		ALsizei buf_sampling_rate = wav_format.nSamplesPerSec;
+
+		alGenBuffers(1, &this->buf_);
+		alBufferData(this->buf_, buf_format, acm_stream_header.pbDst, acm_stream_header.cbDstLengthUsed, buf_sampling_rate);
+
+		if (alGetError() != AL_NO_ERROR) {
+			return (-1);
+		}
+
+		delete [] acm_stream_header.pbSrc;
+		delete [] acm_stream_header.pbDst;
 
 		break;
 	}
@@ -485,7 +554,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 
 		ov_clear(&ogg_file);
 
-        ALenum buf_format = AL_NONE;
+		ALenum buf_format = AL_NONE;
 
 		if (wav_format.nChannels == 1) {
 			buf_format = AL_FORMAT_MONO16;
@@ -498,7 +567,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		ALsizei buf_sampling_rate = wav_format.nSamplesPerSec;
 
 		alGenBuffers(1, &this->buf_);
-        alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
+		alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
 
 		if (alGetError() != AL_NO_ERROR) {
 			return (-1);
@@ -511,13 +580,11 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 	}
 	}
 
-	if (this->buf_ != 0U) {
-		alGenSources(1, &this->src_);
-		alSourcei(this->src_, AL_BUFFER, static_cast<ALint>(this->buf_));
+	alGenSources(1, &this->src_);
+	alSourcei(this->src_, AL_BUFFER, static_cast<ALint>(this->buf_));
 
-		if (alGetError() != AL_NO_ERROR) {
-			return (-1);
-		}
+	if (alGetError() != AL_NO_ERROR) {
+		return (-1);
 	}
 
 	return (0);
