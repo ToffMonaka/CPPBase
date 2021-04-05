@@ -172,6 +172,10 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		return (-1);
 	}
 
+	tml::DynamicBuffer buf;
+	ALenum buf_format = AL_NONE;
+	ALsizei buf_sampling_rate = 0;
+
 	UINT file_format = 0U;
 
 	do {
@@ -285,8 +289,6 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			return (-1);
 		}
 
-		tml::DynamicBuffer buf;
-
 		buf.SetSize(dat_mmck_info.cksize);
 		buf.AddWriteIndex(buf.GetSize());
 
@@ -298,8 +300,6 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 
 		mmioClose(mmio_handle, 0U);
 
-		ALenum buf_format = AL_NONE;
-
 		if (wav_format.nChannels == 1) {
 			buf_format = AL_FORMAT_MONO16;
 		} else if (wav_format.nChannels == 2) {
@@ -308,14 +308,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			return (-1);
 		}
 
-		ALsizei buf_sampling_rate = wav_format.nSamplesPerSec;
-
-		alGenBuffers(1, &this->buf_);
-		alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
-
-		if (alGetError() != AL_NO_ERROR) {
-			return (-1);
-		}
+		buf_sampling_rate = wav_format.nSamplesPerSec;
 
 		break;
 	}
@@ -355,50 +348,42 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			return (-1);
 		}
 
-		BYTE mp3_version = (mp3_frame_header[1] >> 3) & 0x03;
-		BYTE mp3_layer = (mp3_frame_header[1] >> 1) & 0x03;
-		BYTE mp3_bit_rate_code = (mp3_frame_header[2] >> 4) & 0x0F;
-		BYTE mp3_sampling_rate_code = (mp3_frame_header[2] >> 2) & 0x03;
-		BYTE mp3_padding = (mp3_frame_header[2] >> 1) & 0x01;
-		BYTE mp3_channel = (mp3_frame_header[3] >> 6) & 0x03;
+		BYTE mp3_version_code = (mp3_frame_header[1] >> 3) & 0x03;
+		BYTE mp3_version = 0;
 
-		const DWORD mp3_bit_rate_tbl[][16] = {
-			{0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, static_cast<DWORD>(-1)}, // MPEG1 Layer1
-			{0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, static_cast<DWORD>(-1)}, // MPEG1 Layer2
-			{0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, static_cast<DWORD>(-1)}, // MPEG1 Layer3
-			{0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, static_cast<DWORD>(-1)}, // MPEG2,2.5 Layer1
-			{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, static_cast<DWORD>(-1)} // MPEG2,2.5 Layer2,3
-		};
-		UINT mp3_bit_rate_index = 0U;
-
-		if (mp3_version == 3) {
-			mp3_bit_rate_index = 3U - mp3_layer;
+		if (mp3_version_code == 3) {
+			mp3_version = 1;
+		} else if (mp3_version_code == 2) {
+			mp3_version = 2;
 		} else {
-			if (mp3_layer == 3) {
-				mp3_bit_rate_index = 3U;
-			} else {
-				mp3_bit_rate_index = 4U;
-			}
+			return (-1);
 		}
 
-		DWORD mp3_bit_rate = mp3_bit_rate_tbl[mp3_bit_rate_index][mp3_bit_rate_code];
+		BYTE mp3_layer_code = (mp3_frame_header[1] >> 1) & 0x03;
+		BYTE mp3_layer = 0;
+
+		if (mp3_layer_code == 1) {
+			mp3_layer = 3;
+		} else {
+			return (-1);
+		}
+
+		const DWORD mp3_bit_rate_tbl[][16] = {
+			{0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, static_cast<DWORD>(-1)}, // MPEG1 Layer3
+			{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, static_cast<DWORD>(-1)} // MPEG2 Layer3
+		};
+		BYTE mp3_bit_rate_code = (mp3_frame_header[2] >> 4) & 0x0F;
+		DWORD mp3_bit_rate = mp3_bit_rate_tbl[mp3_version - 1][mp3_bit_rate_code];
 
 		const DWORD mp3_sampling_rate_tbl[][4] = {
 			{44100, 48000, 32000, static_cast<DWORD>(-1)}, // MPEG1
-			{22050, 24000, 16000, static_cast<DWORD>(-1)}, // MPEG2
-			{11025, 12000, 8000, static_cast<DWORD>(-1)} // MPEG2.5
+			{22050, 24000, 16000, static_cast<DWORD>(-1)} // MPEG2
 		};
-		UINT mp3_sampling_rate_index = 0U;
+		BYTE mp3_sampling_rate_code = (mp3_frame_header[2] >> 2) & 0x03;
+		DWORD mp3_sampling_rate = mp3_sampling_rate_tbl[mp3_version - 1][mp3_sampling_rate_code];
 
-		if (mp3_version == 0) {
-			mp3_sampling_rate_index = 2U;
-		} else if (mp3_version == 2) {
-			mp3_sampling_rate_index = 1U;
-		} else if (mp3_version == 3) {
-			mp3_sampling_rate_index = 0U;
-		}
-
-		DWORD mp3_sampling_rate = mp3_sampling_rate_tbl[mp3_sampling_rate_index][mp3_sampling_rate_code];
+		BYTE mp3_padding = (mp3_frame_header[2] >> 1) & 0x01;
+		BYTE mp3_channel = (mp3_frame_header[3] >> 6) & 0x03;
 
 		MPEGLAYER3WAVEFORMAT mp3_format = {};
 
@@ -438,15 +423,16 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			return (-1);
 		}
 
+		buf.SetSize(wav_buf_size);
+		buf.AddWriteIndex(buf.GetSize());
+
 		ACMSTREAMHEADER acm_stream_header = {};
 
 		acm_stream_header.cbStruct = sizeof(ACMSTREAMHEADER);
-		acm_stream_header.pbSrc = new BYTE[mp3_buf_size];
+		acm_stream_header.pbSrc = &file_buf.Get()[file_buf_index];
 		acm_stream_header.cbSrcLength = mp3_buf_size;
-		acm_stream_header.pbDst = new BYTE[wav_buf_size];
+		acm_stream_header.pbDst = &buf.Get()[0];
 		acm_stream_header.cbDstLength = wav_buf_size;
-
-		tml::Copy(acm_stream_header.pbSrc, &file_buf.Get()[file_buf_index], acm_stream_header.cbSrcLength);
 
 		if (acmStreamPrepareHeader(acm_stream_handle, &acm_stream_header, 0UL) != 0) {
 			acmStreamClose(acm_stream_handle, 0UL);
@@ -461,10 +447,10 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			return (-1);
 		}
 
+		buf.SetLength(acm_stream_header.cbDstLengthUsed);
+
 		acmStreamUnprepareHeader(acm_stream_handle, &acm_stream_header, 0UL);
 		acmStreamClose(acm_stream_handle, 0UL);
-
-		ALenum buf_format = AL_NONE;
 
 		if (wav_format.nChannels == 1) {
 			buf_format = AL_FORMAT_MONO16;
@@ -474,17 +460,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			return (-1);
 		}
 
-		ALsizei buf_sampling_rate = wav_format.nSamplesPerSec;
-
-		alGenBuffers(1, &this->buf_);
-		alBufferData(this->buf_, buf_format, acm_stream_header.pbDst, acm_stream_header.cbDstLengthUsed, buf_sampling_rate);
-
-		if (alGetError() != AL_NO_ERROR) {
-			return (-1);
-		}
-
-		delete [] acm_stream_header.pbSrc;
-		delete [] acm_stream_header.pbDst;
+		buf_sampling_rate = wav_format.nSamplesPerSec;
 
 		break;
 	}
@@ -523,8 +499,6 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		wav_format.wBitsPerSample = 16;
 		wav_format.cbSize = 0;
 
-		tml::DynamicBuffer buf;
-
 		buf.SetSize(static_cast<size_t>(ov_pcm_total(&ogg_file, -1) * ogg_info->channels * 2));
 		buf.AddWriteIndex(buf.GetSize());
 
@@ -554,8 +528,6 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 
 		ov_clear(&ogg_file);
 
-		ALenum buf_format = AL_NONE;
-
 		if (wav_format.nChannels == 1) {
 			buf_format = AL_FORMAT_MONO16;
 		} else if (wav_format.nChannels == 2) {
@@ -564,20 +536,20 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			return (-1);
 		}
 
-		ALsizei buf_sampling_rate = wav_format.nSamplesPerSec;
-
-		alGenBuffers(1, &this->buf_);
-		alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
-
-		if (alGetError() != AL_NO_ERROR) {
-			return (-1);
-		}
+		buf_sampling_rate = wav_format.nSamplesPerSec;
 
 		break;
 	}
 	default: {
 		return (-1);
 	}
+	}
+
+	alGenBuffers(1, &this->buf_);
+	alBufferData(this->buf_, buf_format, buf.Get(), buf.GetLength(), buf_sampling_rate);
+
+	if (alGetError() != AL_NO_ERROR) {
+		return (-1);
 	}
 
 	alGenSources(1, &this->src_);
