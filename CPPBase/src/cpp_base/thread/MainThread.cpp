@@ -60,10 +60,12 @@ void cpp_base::MainThread::Release(void)
 	this->graphic_mgr_.ReleaseResource(this->camera_);
 	this->graphic_mgr_.ReleaseResource(this->title_bg_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->title_logo_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->title_start_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->title_start_font_);
 	this->graphic_mgr_.ReleaseResource(this->log_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->log_font_);
 	this->sound_mgr_.ReleaseResource(this->title_bgm_sound_);
-	this->sound_mgr_.ReleaseResource(this->click_se_sound_);
+	this->sound_mgr_.ReleaseResource(this->title_start_se_sound_);
 
 	this->input_mgr_.Init();
 	this->graphic_mgr_.Init();
@@ -203,228 +205,299 @@ INT cpp_base::MainThread::Start(void)
 		}
 	}
 
-	{// Test
-		{// TestThread Start
-			std::unique_ptr<tml::SubThread> th = std::make_unique<cpp_base::TestThread>();
+	{// TestThread Start
+		std::unique_ptr<tml::SubThread> th = std::make_unique<cpp_base::TestThread>();
 
-			if (dynamic_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
-				return (-1);
-			}
-
-			if (tml::ThreadUtil::Start(th) < 0) {
-				return (-1);
-			}
+		if (dynamic_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
+			return (-1);
 		}
 
-		{// Camera Create
-			tml::graphic::CameraDesc desc;
-
-			desc.manager = &this->graphic_mgr_;
-			desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
-			desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
-			desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSize().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y));
-			desc.near_clip = 0.1f;
-			desc.far_clip = 1000.0f;
-
-			this->graphic_mgr_.GetResource<tml::graphic::Camera>(this->camera_, desc);
-
-			if (this->camera_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
+		if (tml::ThreadUtil::Start(th) < 0) {
+			return (-1);
 		}
-
-		{// TitleBackgroundSpriteModell Create
-			tml::graphic::SpriteModelDesc desc;
-
-			desc.manager = &this->graphic_mgr_;
-			desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSize().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y));
-
-			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
-
-			desc.Read(read_desc);
-
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_bg_sprite_model_, desc);
-
-			if (this->title_bg_sprite_model_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			auto stage = this->title_bg_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-			auto layer = stage->GetLayerFast(0U);
-
-			layer->SetDiffuseTextureIndex(0U);
-
-			{// DiffuseTexture Create
-				tml::shared_ptr<tml::graphic::Texture> tex;
-
-				tml::graphic::TextureDesc desc;
-
-				desc.manager = &this->graphic_mgr_;
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-				desc.file_read_desc_container[0].data.file_path = L"res/title_bg_img1.png";
-
-				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
-
-				if (tex == nullptr) {
-					this->Init();
-
-					return (-1);
-				}
-
-				this->title_bg_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-				this->graphic_mgr_.ReleaseResource(tex);
-			}
-		}
-
-		{// TitleLogoSpriteModel Create
-			tml::graphic::SpriteModelDesc desc;
-
-			desc.manager = &this->graphic_mgr_;
-
-			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
-
-			desc.Read(read_desc);
-
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_logo_sprite_model_, desc);
-
-			if (this->title_logo_sprite_model_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			auto stage = this->title_logo_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-			auto layer = stage->GetLayerFast(0U);
-
-			layer->SetDiffuseTextureIndex(0U);
-
-			{// DiffuseTexture Create
-				tml::shared_ptr<tml::graphic::Texture> tex;
-
-				tml::graphic::TextureDesc desc;
-
-				desc.manager = &this->graphic_mgr_;
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-				desc.file_read_desc_container[0].data.file_path = L"res/title_logo_img1.png";
-
-				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
-
-				if (tex == nullptr) {
-					this->Init();
-
-					return (-1);
-				}
-
-				this->title_logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
-
-				this->title_logo_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-				this->graphic_mgr_.ReleaseResource(tex);
-			}
-		}
-
-		tml::XMUINT2EX log_tex_size = this->graphic_mgr_.GetSize();
-		tml::XMUINT2EX log_font_size = tml::XMUINT2EX(0U, 16U);
-
-		{// LogSpriteModel Create
-			tml::graphic::SpriteModelDesc desc;
-
-			desc.manager = &this->graphic_mgr_;
-			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
-
-			auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
-
-			desc.Read(read_desc);
-
-			this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->log_sprite_model_, desc);
-
-			if (this->log_sprite_model_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			auto stage = this->log_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-			auto layer = stage->GetLayerFast(0U);
-
-			layer->SetDiffuseTextureIndex(0U);
-
-			{// DiffuseTexture Create
-				tml::shared_ptr<tml::graphic::Texture> tex;
-
-				tml::graphic::TextureDesc desc;
-
-				desc.manager = &this->graphic_mgr_;
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, log_tex_size);
-				desc.cpu_buffer_flag = true;
-
-				this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
-
-				if (tex == nullptr) {
-					this->Init();
-
-					return (-1);
-				}
-
-				this->log_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
-
-				this->log_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-				this->graphic_mgr_.ReleaseResource(tex);
-			}
-		}
-
-		{// LogFont Create
-			tml::graphic::FontDesc desc;
-
-			desc.manager = &this->graphic_mgr_;
-			desc.SetFontDesc(log_font_size, L"‚l‚r ƒSƒVƒbƒN");
-
-			this->graphic_mgr_.GetResource<tml::graphic::Font>(this->log_font_, desc);
-
-			if (this->log_font_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-		}
-
-		this->log_update_time_ = tml::TIME_REAL(1.0);
-
-		{// TitleBGMSound Create
-			tml::sound::BGMSoundDesc desc;
-
-			desc.manager = &this->sound_mgr_;
-			desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.mp3";
-
-			this->sound_mgr_.GetResource<tml::sound::BGMSound>(this->title_bgm_sound_, desc);
-
-			if (this->title_bgm_sound_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-		}
-
-		{// ClickSESound Create
-			tml::sound::SESoundDesc desc;
-
-			desc.manager = &this->sound_mgr_;
-			desc.file_read_desc.data.file_path = L"res/click_se_sound1.wav";
-
-			this->sound_mgr_.GetResource<tml::sound::SESound>(this->click_se_sound_, desc);
-
-			if (this->click_se_sound_ == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-		}
-
-		int a = 0;
 	}
+
+	{// Camera Create
+		tml::graphic::CameraDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
+		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
+		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSize().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y));
+		desc.near_clip = 0.1f;
+		desc.far_clip = 1000.0f;
+
+		this->graphic_mgr_.GetResource<tml::graphic::Camera>(this->camera_, desc);
+
+		if (this->camera_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// TitleBackgroundSpriteModell Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->graphic_mgr_.GetSize().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y));
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_bg_sprite_model_, desc);
+
+		if (this->title_bg_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->title_bg_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+			desc.file_read_desc_container[0].data.file_path = L"res/title_bg_img1.png";
+
+			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->title_bg_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->graphic_mgr_.ReleaseResource(tex);
+		}
+	}
+
+	{// TitleLogoSpriteModel Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_logo_sprite_model_, desc);
+
+		if (this->title_logo_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->title_logo_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+			desc.file_read_desc_container[0].data.file_path = L"res/title_logo_img1.png";
+
+			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->title_logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+
+			this->title_logo_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->graphic_mgr_.ReleaseResource(tex);
+		}
+	}
+
+	tml::XMUINT2EX title_start_tex_size = tml::XMUINT2EX(128U, 32U);
+	tml::XMUINT2EX title_start_font_size = tml::XMUINT2EX(0U, 24U);
+
+	{// TitleStartSpriteModel Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, -192.0f));
+		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_start_sprite_model_, desc);
+
+		if (this->title_start_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->title_start_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, title_start_tex_size);
+			desc.cpu_buffer_flag = true;
+
+			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->title_start_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+
+			this->title_start_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->graphic_mgr_.ReleaseResource(tex);
+		}
+	}
+
+	{// TitleStartFont Create
+		tml::graphic::FontDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.SetFontDesc(title_start_font_size, L"‚l‚r ƒSƒVƒbƒN");
+
+		this->graphic_mgr_.GetResource<tml::graphic::Font>(this->title_start_font_, desc);
+
+		if (this->title_start_font_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	auto title_start_tex = this->title_start_sprite_model_->GetTexture(this->title_start_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+
+	title_start_tex->ClearCPUBuffer();
+	title_start_tex->DrawCPUBufferString(L"ƒXƒ^[ƒg", tml::XMINT2EX(0, 0), this->title_start_font_.get());
+	title_start_tex->UploadCPUBuffer();
+
+	tml::XMUINT2EX log_tex_size = this->graphic_mgr_.GetSize();
+	tml::XMUINT2EX log_font_size = tml::XMUINT2EX(0U, 16U);
+
+	{// LogSpriteModel Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->log_sprite_model_, desc);
+
+		if (this->log_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->log_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, log_tex_size);
+			desc.cpu_buffer_flag = true;
+
+			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->log_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+
+			this->log_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->graphic_mgr_.ReleaseResource(tex);
+		}
+	}
+
+	{// LogFont Create
+		tml::graphic::FontDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.SetFontDesc(log_font_size, L"‚l‚r ƒSƒVƒbƒN");
+
+		this->graphic_mgr_.GetResource<tml::graphic::Font>(this->log_font_, desc);
+
+		if (this->log_font_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	this->log_update_time_ = tml::TIME_REAL(1.0);
+
+	{// TitleBGMSound Create
+		tml::sound::BGMSoundDesc desc;
+
+		desc.manager = &this->sound_mgr_;
+		desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.mp3";
+
+		this->sound_mgr_.GetResource<tml::sound::BGMSound>(this->title_bgm_sound_, desc);
+
+		if (this->title_bgm_sound_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// TitleStartSESound Create
+		tml::sound::SESoundDesc desc;
+
+		desc.manager = &this->sound_mgr_;
+		desc.file_read_desc.data.file_path = L"res/title_start_se_sound1.mp3";
+
+		this->sound_mgr_.GetResource<tml::sound::SESound>(this->title_start_se_sound_, desc);
+
+		if (this->title_start_se_sound_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	this->sound_mgr_.Play(this->title_bgm_sound_.get(), true);
 
 	this->frame_rate_.Start(60U);
 
@@ -448,10 +521,6 @@ void cpp_base::MainThread::Update(void)
 {
 	this->input_mgr_.Update();
 
-	if (this->input_mgr_.GetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::LEFT)) {
-		this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->log_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(this->input_mgr_.GetMousePosition().x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->log_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(this->input_mgr_.GetMousePosition().y)));
-	}
-
 	for (UINT event_i = 0U; event_i < this->input_mgr_.GetEventCount(); ++event_i) {
 		auto &event = this->input_mgr_.GetEventArray()[event_i];
 
@@ -460,51 +529,7 @@ void cpp_base::MainThread::Update(void)
 			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event.get())->GetData();
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-				if (this->click_se_sound_->GetSource() != 0U) {
-					alSourcef(this->click_se_sound_->GetSource(), AL_GAIN, 0.5f);
-					alSourcei(this->click_se_sound_->GetSource(), AL_LOOPING, AL_FALSE);
-					alSourcePlay(this->click_se_sound_->GetSource());
-				}
-			}
-
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
-				this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(-static_cast<FLOAT>(this->graphic_mgr_.GetSize().x >> 1) + (this->log_sprite_model_->GetSize().x / 2) + static_cast<FLOAT>(event_dat.position.x), static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) - (this->log_sprite_model_->GetSize().y / 2) - static_cast<FLOAT>(event_dat.position.y)));
-
-				if (this->title_bgm_sound_->GetSource() != 0U) {
-					alSourcef(this->title_bgm_sound_->GetSource(), AL_GAIN, 0.5f);
-					alSourcei(this->title_bgm_sound_->GetSource(), AL_LOOPING, AL_TRUE);
-					alSourcePlay(this->title_bgm_sound_->GetSource());
-				}
-			}
-
-			break;
-		}
-		case tml::ConstantUtil::INPUT::EVENT_TYPE::KEYBOARD: {
-			auto &event_dat = reinterpret_cast<tml::input::KeyboardEvent *>(event.get())->GetData();
-
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_DOWN)) {
-				switch (event_dat.code) {
-				case tml::ConstantUtil::INPUT::KEYBOARD_CODE::W: {
-					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX(), this->log_sprite_model_->position.GetY() + 50.0f));
-
-					break;
-				}
-				case tml::ConstantUtil::INPUT::KEYBOARD_CODE::S: {
-					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX(), this->log_sprite_model_->position.GetY() - 50.0f));
-
-					break;
-				}
-				case tml::ConstantUtil::INPUT::KEYBOARD_CODE::A: {
-					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX() - 50.0f, this->log_sprite_model_->position.GetY()));
-
-					break;
-				}
-				case tml::ConstantUtil::INPUT::KEYBOARD_CODE::D: {
-					this->log_sprite_model_->position.Set(tml::XMFLOAT2EX(this->log_sprite_model_->position.GetX() + 50.0f, this->log_sprite_model_->position.GetY()));
-
-					break;
-				}
-				}
+				this->sound_mgr_.Play(this->title_start_se_sound_.get(), false);
 			}
 
 			break;
@@ -533,6 +558,7 @@ void cpp_base::MainThread::Update(void)
 	this->graphic_mgr_.SetDrawCamera(this->camera_.get());
 	this->graphic_mgr_.SetDrawModel(this->title_bg_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->title_logo_sprite_model_.get());
+	this->graphic_mgr_.SetDrawModel(this->title_start_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->log_sprite_model_.get());
 
 	this->graphic_mgr_.Update();

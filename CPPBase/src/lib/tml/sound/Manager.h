@@ -99,6 +99,10 @@ public:
 
 	ALCdevice *GetDevice(void);
 	ALCcontext *GetDeviceContext(void);
+
+	void Play(tml::sound::Sound *, const bool);
+	void Stop(tml::sound::Sound *);
+	void Pause(tml::sound::Sound *);
 };
 }
 }

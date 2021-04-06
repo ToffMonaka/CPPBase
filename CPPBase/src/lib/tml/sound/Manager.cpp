@@ -237,3 +237,57 @@ void tml::sound::Manager::UpdateEvent(void)
 
 	return;
 }
+
+
+/**
+ * @brief PlayŠÖ”
+ * @param sound (sound)
+ * @param loop_flg (loop_flag)
+ */
+void tml::sound::Manager::Play(tml::sound::Sound *sound, const bool loop_flg)
+{
+	if ((sound == nullptr)
+	|| (sound->GetSource() == 0U)) {
+		return;
+	}
+
+	alSourcei(sound->GetSource(), AL_LOOPING, loop_flg);
+
+	alSourcePlay(sound->GetSource());
+
+	return;
+}
+
+
+/**
+ * @brief StopŠÖ”
+ * @param sound (sound)
+ */
+void tml::sound::Manager::Stop(tml::sound::Sound *sound)
+{
+	if ((sound == nullptr)
+	|| (sound->GetSource() == 0U)) {
+		return;
+	}
+
+	alSourceStop(sound->GetSource());
+
+	return;
+}
+
+
+/**
+ * @brief PauseŠÖ”
+ * @param sound (sound)
+ */
+void tml::sound::Manager::Pause(tml::sound::Sound *sound)
+{
+	if ((sound == nullptr)
+	|| (sound->GetSource() == 0U)) {
+		return;
+	}
+
+	alSourcePause(sound->GetSource());
+
+	return;
+}

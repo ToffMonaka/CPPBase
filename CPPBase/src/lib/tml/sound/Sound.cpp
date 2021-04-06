@@ -127,6 +127,7 @@ void tml::sound::Sound::Release(void)
 void tml::sound::Sound::Init(void)
 {
 	this->type_ = tml::ConstantUtil::SOUND::SOUND_TYPE::NONE;
+
 	this->ogg_file_buf_ = nullptr;
 	this->ogg_file_buf_size_ = 0L;
 	this->ogg_file_buf_index_ = 0L;
