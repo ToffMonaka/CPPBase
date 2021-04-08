@@ -63,7 +63,6 @@ private:
 	tml::ConstantUtil::SOUND::SOUND_TYPE type_;
 	ALuint buf_;
 	ALuint src_;
-
 	BYTE *ogg_file_buf_;
 	LONG ogg_file_buf_size_;
 	LONG ogg_file_buf_index_;

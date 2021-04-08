@@ -17,6 +17,9 @@ tml::sound::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
 	window_device_context_handle(nullptr)
 {
+	this->volume_array.fill(0.5f);
+	this->mute_flag_array.fill(false);
+
 	return;
 }
 
@@ -41,6 +44,8 @@ void tml::sound::ManagerDesc::Init(void)
 
 	this->window_handle = nullptr;
 	this->window_device_context_handle = nullptr;
+	this->volume_array.fill(0.5f);
+	this->mute_flag_array.fill(false);
 
 	return;
 }
@@ -59,6 +64,9 @@ tml::sound::Manager::Manager() :
 	device_(nullptr),
 	device_context_(nullptr)
 {
+	this->volume_ary_.fill(0.5f);
+	this->mute_flg_ary_.fill(false);
+
 	return;
 }
 
@@ -130,6 +138,9 @@ void tml::sound::Manager::Init(void)
 		stock_event_cont.clear();
 	}
 
+	this->volume_ary_.fill(0.5f);
+	this->mute_flg_ary_.fill(false);
+
 	return;
 }
 
@@ -177,6 +188,9 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 			return (-1);
 		}
 	}
+
+	this->volume_ary_ = desc.volume_array;
+	this->mute_flg_ary_ = desc.mute_flag_array;
 
 	if (this->common_.Create(this) < 0) {
 		this->Init();
@@ -240,6 +254,52 @@ void tml::sound::Manager::UpdateEvent(void)
 
 
 /**
+ * @brief SetVolumeŠÖ”
+ * @param volume (volume)
+ */
+void tml::sound::Manager::SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const FLOAT volume)
+{
+	this->volume_ary_[static_cast<UINT>(type)] = volume;
+
+	for (auto &res : this->res_cont_ary_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND)]) {
+		auto sound = reinterpret_cast<tml::sound::Sound *>(res.get());
+
+		if ((sound->GetType() != type)
+		|| (sound->GetSource() == 0U)) {
+			continue;
+		}
+
+		alSourcef(sound->GetSource(), AL_GAIN, (this->mute_flg_ary_[static_cast<UINT>(sound->GetType())]) ? 0.0f : this->volume_ary_[static_cast<UINT>(sound->GetType())]);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetMuteFlagŠÖ”
+ * @param mute_flg (mute_flag)
+ */
+void tml::sound::Manager::SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const bool mute_flg)
+{
+	this->mute_flg_ary_[static_cast<UINT>(type)] = mute_flg;
+
+	for (auto &res : this->res_cont_ary_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND)]) {
+		auto sound = reinterpret_cast<tml::sound::Sound *>(res.get());
+
+		if ((sound->GetType() != type)
+		|| (sound->GetSource() == 0U)) {
+			continue;
+		}
+
+		alSourcef(sound->GetSource(), AL_GAIN, (this->mute_flg_ary_[static_cast<UINT>(sound->GetType())]) ? 0.0f : this->volume_ary_[static_cast<UINT>(sound->GetType())]);
+	}
+
+	return;
+}
+
+
+/**
  * @brief PlayŠÖ”
  * @param sound (sound)
  * @param loop_flg (loop_flag)
@@ -251,6 +311,7 @@ void tml::sound::Manager::Play(tml::sound::Sound *sound, const bool loop_flg)
 		return;
 	}
 
+	alSourcef(sound->GetSource(), AL_GAIN, (this->mute_flg_ary_[static_cast<UINT>(sound->GetType())]) ? 0.0f : this->volume_ary_[static_cast<UINT>(sound->GetType())]);
 	alSourcei(sound->GetSource(), AL_LOOPING, loop_flg);
 
 	alSourcePlay(sound->GetSource());

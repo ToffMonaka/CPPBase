@@ -183,7 +183,8 @@ INT cpp_base::MainThread::Start(void)
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
 		desc.size = this->sys_conf_file_.data.window_size;
-		desc.vsync_flag = true;
+		desc.vsync_flag = this->sys_conf_file_.data.graphic_vsync_flag;
+		desc.frame_rate_limit = this->sys_conf_file_.data.graphic_frame_rate_limit;
 
 		if (this->graphic_mgr_.Create(desc) < 0) {
 			this->Init();
@@ -197,6 +198,10 @@ INT cpp_base::MainThread::Start(void)
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_volume);
+		desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_mute_flag);
+		desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_volume);
+		desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_mute_flag);
 
 		if (this->sound_mgr_.Create(desc) < 0) {
 			this->Init();
@@ -499,7 +504,7 @@ INT cpp_base::MainThread::Start(void)
 
 	this->sound_mgr_.Play(this->title_bgm_sound_.get(), true);
 
-	this->frame_rate_.Start(60U);
+	this->frame_rate_.Start(this->graphic_mgr_.GetFrameRateLimit());
 
 	return (0);
 }

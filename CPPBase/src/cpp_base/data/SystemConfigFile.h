@@ -21,6 +21,12 @@ public:
 	std::string application_locale_name;
 	tml::XMUINT2EX window_position;
 	tml::XMUINT2EX window_size;
+	bool graphic_vsync_flag;
+	UINT graphic_frame_rate_limit;
+	FLOAT sound_bgm_volume;
+	bool sound_bgm_mute_flag;
+	FLOAT sound_se_volume;
+	bool sound_se_mute_flag;
 
 protected:
 	void Release(void);

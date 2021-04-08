@@ -63,6 +63,7 @@ public:
 	HDC window_device_context_handle;
 	tml::XMUINT2EX size;
 	bool vsync_flag;
+	UINT frame_rate_limit;
 
 protected:
 	void Release(void);
@@ -118,6 +119,7 @@ private:
 	D3D_FEATURE_LEVEL device_future_lv_;
 	tml::XMUINT2EX size_;
 	bool vsync_flg_;
+	UINT frame_rate_limit_;
 	tml::graphic::Viewport vp_;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE samp_quality_type_;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE motion_quality_type_;
@@ -239,6 +241,8 @@ public:
 	ID3D11DeviceContext *GetDeviceContext(void);
 	D3D_FEATURE_LEVEL GetDeviceFeatureLevel(void) const;
 	const tml::XMUINT2EX &GetSize(void) const;
+	bool GetVsyncFlag(void) const;
+	UINT GetFrameRateLimit(void) const;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE GetSamplerQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE GetMotionQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE GetShadowQualityType(void) const;
@@ -586,6 +590,26 @@ inline D3D_FEATURE_LEVEL tml::graphic::Manager::GetDeviceFeatureLevel(void) cons
 inline const tml::XMUINT2EX &tml::graphic::Manager::GetSize(void) const
 {
 	return (this->size_);
+}
+
+
+/**
+ * @brief GetVsyncFlagŠÖ”
+ * @return vsync_flg (vsync_flag)
+ */
+inline bool tml::graphic::Manager::GetVsyncFlag(void) const
+{
+	return (this->vsync_flg_);
+}
+
+
+/**
+ * @brief GetFrameRateLimitŠÖ”
+ * @return frame_rate_limit (frame_rate_limit)
+ */
+inline UINT tml::graphic::Manager::GetFrameRateLimit(void) const
+{
+	return (this->frame_rate_limit_);
 }
 
 

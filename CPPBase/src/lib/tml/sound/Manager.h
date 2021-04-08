@@ -21,6 +21,8 @@ class ManagerDesc
 public:
 	HWND window_handle;
 	HDC window_device_context_handle;
+	std::array<FLOAT, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> volume_array;
+	std::array<bool, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> mute_flag_array;
 
 protected:
 	void Release(void);
@@ -30,6 +32,11 @@ public:
 	virtual ~ManagerDesc();
 
 	virtual void Init(void);
+
+	FLOAT GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
+	void SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE, const FLOAT);
+	bool GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
+	void SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE, const bool);
 };
 }
 }
@@ -40,6 +47,50 @@ public:
  */
 inline void tml::sound::ManagerDesc::Release(void)
 {
+	return;
+}
+
+
+/**
+ * @brief GetVolumeŠÖ”
+ * @return volume (volume)
+ */
+inline FLOAT tml::sound::ManagerDesc::GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
+{
+	return (this->volume_array[static_cast<UINT>(type)]);
+}
+
+
+/**
+ * @brief SetVolumeŠÖ”
+ * @param volume (volume)
+ */
+inline void tml::sound::ManagerDesc::SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const FLOAT volume)
+{
+	this->volume_array[static_cast<UINT>(type)] = volume;
+
+	return;
+}
+
+
+/**
+ * @brief GetMuteFlagŠÖ”
+ * @return mute_flg (mute_flag)
+ */
+inline bool tml::sound::ManagerDesc::GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
+{
+	return (this->mute_flag_array[static_cast<UINT>(type)]);
+}
+
+
+/**
+ * @brief SetMuteFlagŠÖ”
+ * @param mute_flg (mute_flag)
+ */
+inline void tml::sound::ManagerDesc::SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const bool mute_flg)
+{
+	this->mute_flag_array[static_cast<UINT>(type)] = mute_flg;
+
 	return;
 }
 
@@ -68,6 +119,8 @@ private:
 
 	ALCdevice *device_;
 	ALCcontext *device_context_;
+	std::array<FLOAT, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> volume_ary_;
+	std::array<bool, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> mute_flg_ary_;
 
 private:
 	void UpdateEvent(void);
@@ -99,6 +152,10 @@ public:
 
 	ALCdevice *GetDevice(void);
 	ALCcontext *GetDeviceContext(void);
+	FLOAT GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
+	void SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE, const FLOAT);
+	bool GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
+	void SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE, const bool);
 
 	void Play(tml::sound::Sound *, const bool);
 	void Stop(tml::sound::Sound *);
@@ -294,4 +351,24 @@ inline ALCdevice *tml::sound::Manager::GetDevice(void)
 inline ALCcontext *tml::sound::Manager::GetDeviceContext(void)
 {
 	return (this->device_context_);
+}
+
+
+/**
+ * @brief GetVolumeŠÖ”
+ * @return volume (volume)
+ */
+inline FLOAT tml::sound::Manager::GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
+{
+	return (this->volume_ary_[static_cast<UINT>(type)]);
+}
+
+
+/**
+ * @brief GetMuteFlagŠÖ”
+ * @return mute_flg (mute_flag)
+ */
+inline bool tml::sound::Manager::GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
+{
+	return (this->mute_flg_ary_[static_cast<UINT>(type)]);
 }

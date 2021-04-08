@@ -15,7 +15,13 @@ cpp_base::SystemConfigFileData::SystemConfigFileData() :
 	application_memory_allocator_size(1048576U),
 	application_locale_name("Japanese"),
 	window_position(0U),
-	window_size(1280U, 800U)
+	window_size(1280U, 800U),
+	graphic_vsync_flag(true),
+	graphic_frame_rate_limit(60U),
+	sound_bgm_volume(0.5f),
+	sound_bgm_mute_flag(false),
+	sound_se_volume(0.5f),
+	sound_se_mute_flag(false)
 {
 	return;
 }
@@ -43,6 +49,12 @@ void cpp_base::SystemConfigFileData::Init(void)
 	this->application_locale_name = "Japanese";
 	this->window_position = 0U;
 	this->window_size = tml::XMUINT2EX(1280U, 800U);
+	this->graphic_vsync_flag = true;
+	this->graphic_frame_rate_limit = 60U;
+	this->sound_bgm_volume = 0.5f;
+	this->sound_bgm_mute_flag = false;
+	this->sound_se_volume = 0.5f;
+	this->sound_se_mute_flag = false;
 
 	return;
 }
@@ -155,6 +167,54 @@ INT cpp_base::SystemConfigFile::Read(void)
 
 			if (val != nullptr) {
 				tml::StringUtil::GetValue(this->data.window_size.y, val->c_str());
+			}
+		}
+	}
+
+	{// Graphic Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"GRAPHIC");
+
+		if (val_name_cont != nullptr) {
+			val = ini_file.data.GetValue((*val_name_cont), L"VSYNC_FLG");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.graphic_vsync_flag, val->c_str());
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"FRAME_RATE_LIMIT");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.graphic_frame_rate_limit, val->c_str());
+			}
+		}
+	}
+
+	{// Sound Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"SOUND");
+
+		if (val_name_cont != nullptr) {
+			val = ini_file.data.GetValue((*val_name_cont), L"BGM_VOLUME");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.sound_bgm_volume, val->c_str());
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"BGM_MUTE_FLG");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.sound_bgm_mute_flag, val->c_str());
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"SE_VOLUME");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.sound_se_volume, val->c_str());
+			}
+
+			val = ini_file.data.GetValue((*val_name_cont), L"SE_MUTE_FLG");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.sound_se_mute_flag, val->c_str());
 			}
 		}
 	}

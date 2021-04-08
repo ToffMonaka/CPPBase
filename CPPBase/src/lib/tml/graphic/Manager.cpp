@@ -37,7 +37,8 @@ tml::graphic::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
 	window_device_context_handle(nullptr),
 	size(0U),
-	vsync_flag(true)
+	vsync_flag(true),
+	frame_rate_limit(60U)
 {
 	return;
 }
@@ -65,6 +66,7 @@ void tml::graphic::ManagerDesc::Init(void)
 	this->window_device_context_handle = nullptr;
 	this->size = 0U;
 	this->vsync_flag = true;
+	this->frame_rate_limit = 60U;
 
 	return;
 }
@@ -90,6 +92,7 @@ tml::graphic::Manager::Manager() :
 	device_future_lv_(static_cast<D3D_FEATURE_LEVEL>(0)),
 	size_(0U),
 	vsync_flg_(true),
+	frame_rate_limit_(60U),
 	samp_quality_type_(tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE),
 	motion_quality_type_(tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE),
 	motion_frame_rate_limit_(0U),
@@ -269,6 +272,7 @@ void tml::graphic::Manager::Init(void)
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
 	this->size_ = 0U;
 	this->vsync_flg_ = true;
+	this->frame_rate_limit_ = 60U;
 	this->vp_.Init();
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE;
 	this->motion_quality_type_ = tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE;
@@ -416,7 +420,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 
 		mode_desc.Width = desc.size.x;
 		mode_desc.Height = desc.size.y;
-		mode_desc.RefreshRate.Numerator = 60U;
+		mode_desc.RefreshRate.Numerator = desc.frame_rate_limit;
 		mode_desc.RefreshRate.Denominator = 1U;
 		mode_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		mode_desc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -461,6 +465,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 
 	this->size_ = tml::XMUINT2EX(this->swap_chain_desc_.BufferDesc.Width, this->swap_chain_desc_.BufferDesc.Height);
 	this->vsync_flg_ = desc.vsync_flag;
+	this->frame_rate_limit_ =  desc.frame_rate_limit;
 	this->vp_.Init(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(static_cast<FLOAT>(this->swap_chain_desc_.BufferDesc.Width), static_cast<FLOAT>(this->swap_chain_desc_.BufferDesc.Height)));
 
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC4;

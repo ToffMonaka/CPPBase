@@ -56,6 +56,8 @@ public:
 	static FLOAT GetFLOAT(const WCHAR *);
 	static DOUBLE GetDOUBLE(const CHAR *);
 	static DOUBLE GetDOUBLE(const WCHAR *);
+	static bool GetBool(const CHAR *);
+	static bool GetBool(const WCHAR *);
 	static INT &GetValue(INT &, const CHAR *, const INT radix = 10);
 	static INT &GetValue(INT &, const WCHAR *, const INT radix = 10);
 	static UINT &GetValue(UINT &, const CHAR *, const INT radix = 10);
@@ -68,6 +70,8 @@ public:
 	static FLOAT &GetValue(FLOAT &, const WCHAR *);
 	static DOUBLE &GetValue(DOUBLE &, const CHAR *);
 	static DOUBLE &GetValue(DOUBLE &, const WCHAR *);
+	static bool &GetValue(bool &, const CHAR *);
+	static bool &GetValue(bool &, const WCHAR *);
 	static const CHAR *GetString(const std::string *);
 	static const WCHAR *GetString(const std::wstring *);
 	static std::string &GetString(std::string &, const INT);
@@ -396,6 +400,34 @@ inline DOUBLE tml::StringUtil::GetDOUBLE(const WCHAR *str)
 
 
 /**
+ * @brief GetBool関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @return val (value)
+ */
+inline bool tml::StringUtil::GetBool(const CHAR *str)
+{
+	return (tml::StringUtil::GetINT(str));
+}
+
+
+/**
+ * @brief GetBool関数
+ *
+ * Create関数不要
+ *
+ * @param str (string)
+ * @return val (value)
+ */
+inline bool tml::StringUtil::GetBool(const WCHAR *str)
+{
+	return (tml::StringUtil::GetINT(str));
+}
+
+
+/**
  * @brief GetValue関数
  *
  * Create関数不要
@@ -602,6 +634,40 @@ inline DOUBLE &tml::StringUtil::GetValue(DOUBLE &dst_val, const CHAR *str)
 inline DOUBLE &tml::StringUtil::GetValue(DOUBLE &dst_val, const WCHAR *str)
 {
 	dst_val = tml::StringUtil::GetDOUBLE(str);
+
+	return (dst_val);
+}
+
+
+/**
+ * @brief GetValue関数
+ *
+ * Create関数不要
+ *
+ * @param dst_val (dst_value)
+ * @param str (string)
+ * @return dst_val (dst_value)
+ */
+inline bool &tml::StringUtil::GetValue(bool &dst_val, const CHAR *str)
+{
+	dst_val = tml::StringUtil::GetBool(str);
+
+	return (dst_val);
+}
+
+
+/**
+ * @brief GetValue関数
+ *
+ * Create関数不要
+ *
+ * @param dst_val (dst_value)
+ * @param str (string)
+ * @return dst_val (dst_value)
+ */
+inline bool &tml::StringUtil::GetValue(bool &dst_val, const WCHAR *str)
+{
+	dst_val = tml::StringUtil::GetBool(str);
 
 	return (dst_val);
 }
