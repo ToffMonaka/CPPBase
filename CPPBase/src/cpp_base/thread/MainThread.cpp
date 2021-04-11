@@ -62,6 +62,8 @@ void cpp_base::MainThread::Release(void)
 	this->graphic_mgr_.ReleaseResource(this->title_logo_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->title_start_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->title_start_font_);
+	this->graphic_mgr_.ReleaseResource(this->title_footer_sprite_model_);
+	this->graphic_mgr_.ReleaseResource(this->title_footer_font_);
 	this->graphic_mgr_.ReleaseResource(this->log_sprite_model_);
 	this->graphic_mgr_.ReleaseResource(this->log_font_);
 	this->sound_mgr_.ReleaseResource(this->title_bgm_sound_);
@@ -399,11 +401,97 @@ INT cpp_base::MainThread::Start(void)
 		}
 	}
 
-	auto title_start_tex = this->title_start_sprite_model_->GetTexture(this->title_start_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+	{// TitleStartTexture Update
+		auto tex = this->title_start_sprite_model_->GetTexture(this->title_start_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
-	title_start_tex->ClearCPUBuffer();
-	title_start_tex->DrawCPUBufferString(L"スタート", tml::XMINT2EX(0, 0), this->title_start_font_.get());
-	title_start_tex->UploadCPUBuffer();
+		tex->ClearCPUBuffer();
+		tex->DrawCPUBufferString(L"スタート", tml::XMINT2EX(0, 0), this->title_start_font_.get());
+		tex->UploadCPUBuffer();
+	}
+
+	tml::XMUINT2EX title_footer_tex_size = tml::XMUINT2EX(this->graphic_mgr_.GetSize().x, 32U);
+	tml::XMUINT2EX title_footer_font_size = tml::XMUINT2EX(0U, 16U);
+
+	{// TitleFooterSpriteModel Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) + static_cast<FLOAT>(title_footer_tex_size.y >> 1)));
+		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_footer_sprite_model_, desc);
+
+		if (this->title_footer_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->title_footer_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = &this->graphic_mgr_;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, title_footer_tex_size);
+			desc.cpu_buffer_flag = true;
+
+			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->title_footer_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+
+			this->title_footer_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->graphic_mgr_.ReleaseResource(tex);
+		}
+	}
+
+	{// TitleFooterFont Create
+		tml::graphic::FontDesc desc;
+
+		desc.manager = &this->graphic_mgr_;
+		desc.SetFontDesc(title_footer_font_size, L"ＭＳ ゴシック");
+
+		this->graphic_mgr_.GetResource<tml::graphic::Font>(this->title_footer_font_, desc);
+
+		if (this->title_footer_font_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// TitleFooterTexture Update
+		std::wstring company_name;
+
+		company_name += cpp_base::ConstantUtil::APPLICATION::COMPANY_NAME;
+
+		std::wstring version_name;
+
+		version_name += L"Version ";
+		version_name += cpp_base::ConstantUtil::APPLICATION::VERSION_NAME;
+
+		auto tex = this->title_footer_sprite_model_->GetTexture(this->title_footer_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+
+		tex->ClearCPUBuffer();
+		tex->DrawCPUBufferString(company_name.c_str(), tml::XMINT2EX(4, 4), this->title_footer_font_.get());
+		tex->DrawCPUBufferString(version_name.c_str(), tml::XMINT2EX(this->graphic_mgr_.GetSize().x - 256 - 4, 4), this->title_footer_font_.get());
+		tex->UploadCPUBuffer();
+	}
 
 	tml::XMUINT2EX log_tex_size = this->graphic_mgr_.GetSize();
 	tml::XMUINT2EX log_font_size = tml::XMUINT2EX(0U, 16U);
@@ -545,17 +633,20 @@ void cpp_base::MainThread::Update(void)
 	this->log_update_time_ += this->frame_rate_.GetElapsedTime();
 
 	if (this->log_update_time_ >= tml::TIME_REAL(1.0)) {
-		auto mem_allocator_info = tml::MemoryUtil::GetAllocatorInfo();
+		{// LogTexture Update
+			auto &frame_rate = this->frame_rate_;
+			auto mem_allocator_info = tml::MemoryUtil::GetAllocatorInfo();
 
-		WCHAR log_str[1024];
+			WCHAR log_str[1024];
 
-		_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u\nMEM=%u/%u/%u", this->frame_rate_.GetFPS(), this->frame_rate_.GetLimit(), mem_allocator_info.use_size, mem_allocator_info.size, mem_allocator_info.use_count);
+			_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u\nMEM=%u/%u/%u", frame_rate.GetFPS(), frame_rate.GetLimit(), mem_allocator_info.use_size, mem_allocator_info.size, mem_allocator_info.use_count);
 
-		auto log_tex = this->log_sprite_model_->GetTexture(this->log_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+			auto tex = this->log_sprite_model_->GetTexture(this->log_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
-		log_tex->ClearCPUBuffer();
-		log_tex->DrawCPUBufferString(log_str, tml::XMINT2EX(4, 4), this->log_font_.get());
-		log_tex->UploadCPUBuffer();
+			tex->ClearCPUBuffer();
+			tex->DrawCPUBufferString(log_str, tml::XMINT2EX(4, 4), this->log_font_.get());
+			tex->UploadCPUBuffer();
+		}
 
 		this->log_update_time_ = tml::TIME_REAL(0.0);
 	}
@@ -564,6 +655,7 @@ void cpp_base::MainThread::Update(void)
 	this->graphic_mgr_.SetDrawModel(this->title_bg_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->title_logo_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->title_start_sprite_model_.get());
+	this->graphic_mgr_.SetDrawModel(this->title_footer_sprite_model_.get());
 	this->graphic_mgr_.SetDrawModel(this->log_sprite_model_.get());
 
 	this->graphic_mgr_.Update();

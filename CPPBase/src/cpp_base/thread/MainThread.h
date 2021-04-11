@@ -37,6 +37,8 @@ private:
 	tml::shared_ptr<tml::graphic::SpriteModel> title_logo_sprite_model_;
 	tml::shared_ptr<tml::graphic::SpriteModel> title_start_sprite_model_;
 	tml::shared_ptr<tml::graphic::Font> title_start_font_;
+	tml::shared_ptr<tml::graphic::SpriteModel> title_footer_sprite_model_;
+	tml::shared_ptr<tml::graphic::Font> title_footer_font_;
 	tml::shared_ptr<tml::graphic::SpriteModel> log_sprite_model_;
 	tml::shared_ptr<tml::graphic::Font> log_font_;
 	tml::TIME_REAL log_update_time_;
