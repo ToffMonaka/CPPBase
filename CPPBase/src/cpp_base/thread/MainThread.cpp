@@ -478,11 +478,11 @@ INT cpp_base::MainThread::Start(void)
 	{// TitleFooterTexture Update
 		std::wstring company_name;
 
-		company_name += cpp_base::ConstantUtil::APPLICATION::COMPANY_NAME;
+		company_name = cpp_base::ConstantUtil::APPLICATION::COMPANY_NAME;
 
 		std::wstring version_name;
 
-		version_name += L"Version ";
+		version_name = L"Version ";
 		version_name += cpp_base::ConstantUtil::APPLICATION::VERSION_NAME;
 
 		auto tex = this->title_footer_sprite_model_->GetTexture(this->title_footer_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());

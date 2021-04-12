@@ -14,6 +14,9 @@ tml::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
 	window_device_context_handle(nullptr)
 {
+	this->resource_count.clear();
+	this->event_count = 0U;
+
 	return;
 }
 
@@ -38,6 +41,8 @@ void tml::ManagerDesc::Init(void)
 
 	this->window_handle = nullptr;
 	this->window_device_context_handle = nullptr;
+	this->resource_count.clear();
+	this->event_count = 0U;
 
 	return;
 }
@@ -48,20 +53,15 @@ void tml::ManagerDesc::Init(void)
  */
 tml::Manager::Manager() :
 	wnd_handle_(nullptr),
-	wnd_dc_handle_(nullptr)
-	/*
-	event_cnt_ary_{},
+	wnd_dc_handle_(nullptr),
 	front_event_index_(0U),
-	back_event_index_(0U),
-	stock_event_cnt_ary_{},
-	device_(nullptr),
-	device_context_(nullptr)
-	*/
+	back_event_index_(0U)
 {
-	/*
-	this->volume_ary_.fill(0.5f);
-	this->mute_flg_ary_.fill(false);
-	*/
+	this->event_cnt_ary_.fill(0U);
+
+	for (auto &event_cont : this->event_cont_ary_) {
+		event_cont.clear();
+	}
 
 	return;
 }
@@ -72,8 +72,6 @@ tml::Manager::Manager() :
  */
 tml::Manager::~Manager()
 {
-	this->Release();
-
 	return;
 }
 
@@ -83,15 +81,15 @@ tml::Manager::~Manager()
  */
 void tml::Manager::Release(void)
 {
-	/*
-	for (auto &res_cont : this->res_cont_ary_) {
-		for (auto &res : res_cont) {
-			res->Init();
-		}
+	for (auto &res_main_cont : this->res_cont_ary_) {
+		for (auto &res_sub_cont : res_main_cont) {
+			for (auto &res : res_sub_cont) {
+				res->Init();
+			}
 
-		res_cont.clear();
+			res_sub_cont.clear();
+		}
 	}
-	*/
 
 	return;
 }
@@ -102,12 +100,9 @@ void tml::Manager::Release(void)
  */
 void tml::Manager::Init(void)
 {
-	this->Release();
-
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
 
-	/*
 	this->event_cnt_ary_.fill(0U);
 
 	for (auto &event_cont : this->event_cont_ary_) {
@@ -116,13 +111,8 @@ void tml::Manager::Init(void)
 
 	this->front_event_index_ = 0U;
 	this->back_event_index_ = 0U;
-
-	this->stock_event_cnt_ary_.fill(0U);
-
-	for (auto &stock_event_cont : this->stock_event_cont_ary_) {
-		stock_event_cont.clear();
-	}
-	*/
+	this->stock_event_cnt_ary_.clear();
+	this->stock_event_cont_ary_.clear();
 
 	return;
 }
@@ -138,15 +128,20 @@ INT tml::Manager::Create(const tml::ManagerDesc &desc)
 {
 	if ((desc.window_handle == nullptr)
 	|| (desc.window_device_context_handle == nullptr)) {
-		this->Init();
-
 		return (-1);
 	}
 
-	this->Init();
-
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
+
+	this->res_cont_ary_.resize(desc.resource_count.size());
+
+	for (UINT res_cont_i = 0U; res_cont_i < this->res_cont_ary_.size(); ++res_cont_i) {
+		this->res_cont_ary_[res_cont_i].resize(desc.resource_count[res_cont_i]);
+	}
+
+	this->stock_event_cnt_ary_.resize(desc.event_count);
+	this->stock_event_cont_ary_.resize(desc.event_count);
 
 	return (0);
 }
@@ -157,7 +152,6 @@ INT tml::Manager::Create(const tml::ManagerDesc &desc)
  */
 void tml::Manager::Update(void)
 {
-	/*
 	if (this->front_event_index_ == this->back_event_index_) {
 		this->front_event_index_ = 0U;
 		this->back_event_index_ = 1U;
@@ -172,9 +166,9 @@ void tml::Manager::Update(void)
 	auto &back_event_cont = this->event_cont_ary_[this->back_event_index_];
 
 	for (UINT back_event_i = 0U; back_event_i < back_event_cnt; ++back_event_i) {
-		tml::unique_ptr<tml::Event> &event = back_event_cont[back_event_i];
+		tml::unique_ptr<tml::ManagerEvent> &event = back_event_cont[back_event_i];
+		UINT event_index = event->GetEventIndex();
 
-		auto event_index = static_cast<UINT>(event->GetEventType());
 		auto &stock_event_cnt = this->stock_event_cnt_ary_[event_index];
 		auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
 
@@ -188,7 +182,6 @@ void tml::Manager::Update(void)
 	}
 
 	back_event_cnt = 0U;
-	*/
 
 	return;
 }

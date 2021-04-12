@@ -7,6 +7,8 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
+#include <list>
+#include "../memory/MemoryUtil.h"
 #include "ManagerResource.h"
 #include "ManagerEvent.h"
 
@@ -20,6 +22,8 @@ class ManagerDesc
 public:
 	HWND window_handle;
 	HDC window_device_context_handle;
+	std::vector<UINT> resource_count;
+	UINT event_count;
 
 protected:
 	void Release(void);
@@ -45,39 +49,43 @@ inline void tml::ManagerDesc::Release(void)
 namespace tml {
 /**
  * @brief Managerクラス
+ *
+ * インターフェースパターン
  */
 class Manager
 {
 public: Manager(const tml::Manager &) = delete;
 public: tml::Manager &operator =(const tml::Manager &) = delete;
+protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
-
-	/*
-	std::array<std::list<tml::shared_ptr<tml::Resource>>, tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT> res_cont_ary_;
+	std::vector<std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>>> res_cont_ary_;
 	std::array<UINT, 2U> event_cnt_ary_;
-	std::array<std::vector<tml::unique_ptr<tml::Event>>, 2U> event_cont_ary_;
+	std::array<std::vector<tml::unique_ptr<tml::ManagerEvent>>, 2U> event_cont_ary_;
 	UINT front_event_index_;
 	UINT back_event_index_;
-	std::array<UINT, tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT> stock_event_cnt_ary_;
-	std::array<std::vector<tml::unique_ptr<tml::Event>>, tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT> stock_event_cont_ary_;
-	*/
+	std::vector<UINT> stock_event_cnt_ary_;
+	std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>> stock_event_cont_ary_;
 
 protected:
 	void Release(void);
+	INT Create(const tml::ManagerDesc &);
 
 public:
 	Manager();
 	virtual ~Manager();
 
 	virtual void Init(void);
-	INT Create(const tml::ManagerDesc &);
 
 	void Update(void);
 	HWND GetWindowHandle(void) const;
 	HDC GetWindowDeviceContextHandle(void) const;
+	UINT GetEventCount(void) const;
+	const tml::unique_ptr<tml::ManagerEvent> *GetEventArray(void) const;
+	template <typename T, typename D>
+	INT AddEvent(const D &);
 
 	/*
 	template <typename T1, typename T2, typename D>
@@ -86,10 +94,6 @@ public:
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, tml::shared_ptr<T1> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
-	UINT GetEventCount(void) const;
-	const tml::unique_ptr<tml::Event> *GetEventArray(void) const;
-	template <typename T, typename D>
-	INT AddEvent(const D &);
 	*/
 };
 }
@@ -189,6 +193,7 @@ inline void tml::Manager::ReleaseResource(tml::shared_ptr<T> &res)
 
 	return;
 }
+#endif
 
 
 /**
@@ -205,7 +210,7 @@ inline UINT tml::Manager::GetEventCount(void) const
  * @brief GetEventArray関数
  * @return event_ary (event_array)
  */
-inline const tml::unique_ptr<tml::Event> *tml::Manager::GetEventArray(void) const
+inline const tml::unique_ptr<tml::ManagerEvent> *tml::Manager::GetEventArray(void) const
 {
 	return (this->event_cont_ary_[this->front_event_index_].data());
 }
@@ -220,9 +225,9 @@ inline const tml::unique_ptr<tml::Event> *tml::Manager::GetEventArray(void) cons
 template <typename T, typename D>
 inline INT tml::Manager::AddEvent(const D &dat)
 {
-	tml::unique_ptr<tml::Event> event;
+	tml::unique_ptr<tml::ManagerEvent> event;
+	UINT event_index = static_cast<UINT>(T::EVENT_TYPE);
 
-	auto event_index = static_cast<UINT>(T::EVENT_TYPE);
 	auto &stock_event_cnt = this->stock_event_cnt_ary_[event_index];
 	auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
 
@@ -253,4 +258,3 @@ inline INT tml::Manager::AddEvent(const D &dat)
 
 	return (0);
 }
-#endif
