@@ -25,7 +25,6 @@ namespace SOUND {
 	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::EVENT_TYPE::COUNT);
 	enum class SOUND_TYPE : UINT {
 		NONE = 0U,
-		ETC,
 		BGM,
 		SE,
 		COUNT

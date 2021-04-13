@@ -81,7 +81,7 @@ tml::Manager::~Manager()
  */
 void tml::Manager::Release(void)
 {
-	for (auto &res_main_cont : this->res_cont_ary_) {
+	for (auto &res_main_cont : this->res_cont_cont_) {
 		for (auto &res_sub_cont : res_main_cont) {
 			for (auto &res : res_sub_cont) {
 				res->Init();
@@ -89,7 +89,11 @@ void tml::Manager::Release(void)
 
 			res_sub_cont.clear();
 		}
+
+		res_main_cont.clear();
 	}
+
+	this->res_cont_cont_.clear();
 
 	return;
 }
@@ -111,8 +115,8 @@ void tml::Manager::Init(void)
 
 	this->front_event_index_ = 0U;
 	this->back_event_index_ = 0U;
-	this->stock_event_cnt_ary_.clear();
-	this->stock_event_cont_ary_.clear();
+	this->stock_event_cnt_cont_.clear();
+	this->stock_event_cont_cont_.clear();
 
 	return;
 }
@@ -134,14 +138,16 @@ INT tml::Manager::Create(const tml::ManagerDesc &desc)
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
 
-	this->res_cont_ary_.resize(desc.resource_count.size());
+	this->res_cont_cont_.resize(desc.resource_count.size());
 
-	for (UINT res_cont_i = 0U; res_cont_i < this->res_cont_ary_.size(); ++res_cont_i) {
-		this->res_cont_ary_[res_cont_i].resize(desc.resource_count[res_cont_i]);
+	for (UINT res_cont_i = 0U; res_cont_i < this->res_cont_cont_.size(); ++res_cont_i) {
+		this->res_cont_cont_[res_cont_i].resize(desc.resource_count[res_cont_i]);
 	}
 
-	this->stock_event_cnt_ary_.resize(desc.event_count);
-	this->stock_event_cont_ary_.resize(desc.event_count);
+	this->front_event_index_ = 0U;
+	this->back_event_index_ = 0U;
+	this->stock_event_cnt_cont_.resize(desc.event_count);
+	this->stock_event_cont_cont_.resize(desc.event_count);
 
 	return (0);
 }
@@ -169,8 +175,8 @@ void tml::Manager::Update(void)
 		tml::unique_ptr<tml::ManagerEvent> &event = back_event_cont[back_event_i];
 		UINT event_index = event->GetEventIndex();
 
-		auto &stock_event_cnt = this->stock_event_cnt_ary_[event_index];
-		auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
+		auto &stock_event_cnt = this->stock_event_cnt_cont_[event_index];
+		auto &stock_event_cont = this->stock_event_cont_cont_[event_index];
 
 		if (stock_event_cnt >= stock_event_cont.size()) {
 			stock_event_cont.resize(stock_event_cnt + 128U);

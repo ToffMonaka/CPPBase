@@ -61,13 +61,13 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
-	std::vector<std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>>> res_cont_ary_;
+	std::vector<std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>>> res_cont_cont_;
 	std::array<UINT, 2U> event_cnt_ary_;
 	std::array<std::vector<tml::unique_ptr<tml::ManagerEvent>>, 2U> event_cont_ary_;
 	UINT front_event_index_;
 	UINT back_event_index_;
-	std::vector<UINT> stock_event_cnt_ary_;
-	std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>> stock_event_cont_ary_;
+	std::vector<UINT> stock_event_cnt_cont_;
+	std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>> stock_event_cont_cont_;
 
 protected:
 	void Release(void);
@@ -82,19 +82,16 @@ public:
 	void Update(void);
 	HWND GetWindowHandle(void) const;
 	HDC GetWindowDeviceContextHandle(void) const;
-	UINT GetEventCount(void) const;
-	const tml::unique_ptr<tml::ManagerEvent> *GetEventArray(void) const;
-	template <typename T, typename D>
-	INT AddEvent(const D &);
-
-	/*
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, tml::shared_ptr<T1> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
-	*/
+	UINT GetEventCount(void) const;
+	const tml::unique_ptr<tml::ManagerEvent> *GetEventArray(void) const;
+	template <typename T, typename D>
+	INT AddEvent(const D &);
 };
 }
 
@@ -119,7 +116,6 @@ inline HDC tml::Manager::GetWindowDeviceContextHandle(void) const
 }
 
 
-#if 0
 /**
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
@@ -131,19 +127,21 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 {
 	this->ReleaseResource(dst_res);
 
-	if (desc.manager != this) {
+	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T1>(1U);
+
+	if (reinterpret_cast<T1 *>(res.get())->Create(desc) < 0) {
 		return (dst_res);
 	}
 
-	auto res = tml::make_shared<T1>(1U);
+	UINT res_main_index = res->GetResourceMainIndex();
+	UINT res_sub_index = res->GetResourceSubIndex();
 
-	if (res->Create(desc) < 0) {
+	if ((res_main_index >= this->res_cont_cont_.size())
+	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
 		return (dst_res);
 	}
 
-	auto res_index = static_cast<UINT>(res->GetResourceType());
-
-	this->res_cont_ary_[res_index].push_back(res);
+	this->res_cont_cont_[res_main_index][res_sub_index].push_back(res);
 
 	dst_res = res;
 
@@ -183,17 +181,24 @@ inline void tml::Manager::ReleaseResource(tml::shared_ptr<T> &res)
 		return;
 	}
 
-	auto res_index = static_cast<UINT>(res->GetResourceType());
+	UINT res_main_index = res->GetResourceMainIndex();
+	UINT res_sub_index = res->GetResourceSubIndex();
+
+	if ((res_main_index >= this->res_cont_cont_.size())
+	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
+		res.reset();
+
+		return;
+	}
 
 	if (res.use_count() <= 2L) {
-		this->res_cont_ary_[res_index].remove(res);
+		this->res_cont_cont_[res_main_index][res_sub_index].remove(res);
 	}
 
 	res.reset();
 
 	return;
 }
-#endif
 
 
 /**
@@ -228,8 +233,8 @@ inline INT tml::Manager::AddEvent(const D &dat)
 	tml::unique_ptr<tml::ManagerEvent> event;
 	UINT event_index = static_cast<UINT>(T::EVENT_TYPE);
 
-	auto &stock_event_cnt = this->stock_event_cnt_ary_[event_index];
-	auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
+	auto &stock_event_cnt = this->stock_event_cnt_cont_[event_index];
+	auto &stock_event_cont = this->stock_event_cont_cont_[event_index];
 
 	if (stock_event_cnt > 0U) {
 		--stock_event_cnt;
