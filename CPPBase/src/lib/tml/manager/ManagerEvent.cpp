@@ -10,6 +10,37 @@
 /**
  * @brief コンストラクタ
  */
+tml::ManagerEventDesc::ManagerEventDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::ManagerEventDesc::~ManagerEventDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::ManagerEventDesc::Init(void)
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::ManagerEvent::ManagerEvent() :
 	event_index_(0U)
 {
@@ -39,11 +70,12 @@ void tml::ManagerEvent::Init(void)
 
 /**
  * @brief Create関数
+ * @param desc (desc)
  * @param event_index (event_index)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::ManagerEvent::Create(const UINT event_index)
+INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc, const UINT event_index)
 {
 	this->event_index_ = event_index;
 

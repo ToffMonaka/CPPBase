@@ -80,6 +80,41 @@ void tml::input::MouseEventData::SetRawInput(const RAWMOUSE &rm, const tml::XMIN
 /**
  * @brief コンストラクタ
  */
+tml::input::MouseEventDesc::MouseEventDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::input::MouseEventDesc::~MouseEventDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::input::MouseEventDesc::Init(void)
+{
+	this->Release();
+
+	this->data.Init();
+
+	tml::input::ManagerEventDesc::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::input::MouseEvent::MouseEvent()
 {
 	return;
@@ -106,7 +141,7 @@ void tml::input::MouseEvent::Init(void)
 
 	this->dat_.Init();
 
-	tml::input::Event::Init();
+	tml::input::ManagerEvent::Init();
 
 	return;
 }
@@ -114,19 +149,21 @@ void tml::input::MouseEvent::Init(void)
 
 /**
  * @brief Create関数
- * @param mgr (manager)
+ * @param desc (desc)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::input::MouseEvent::Create(tml::input::Manager *mgr)
+INT tml::input::MouseEvent::Create(const tml::input::MouseEventDesc &desc)
 {
 	this->Init();
 
-	if (tml::input::Event::Create(tml::input::MouseEvent::EVENT_TYPE, mgr) < 0) {
+	if (tml::input::ManagerEvent::Create(desc, tml::input::MouseEvent::EVENT_TYPE) < 0) {
 		this->Init();
 
 		return (-1);
 	}
+
+	this->SetData(desc.data);
 
 	return (0);
 }

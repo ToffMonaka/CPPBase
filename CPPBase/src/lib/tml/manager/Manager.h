@@ -8,7 +8,6 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include <list>
-#include "../memory/MemoryUtil.h"
 #include "ManagerResource.h"
 #include "ManagerEvent.h"
 
@@ -22,7 +21,7 @@ class ManagerDesc
 public:
 	HWND window_handle;
 	HDC window_device_context_handle;
-	std::vector<UINT> resource_count;
+	std::vector<UINT> resource_count_container;
 	UINT event_count;
 
 protected:
@@ -223,12 +222,12 @@ inline const tml::unique_ptr<tml::ManagerEvent> *tml::Manager::GetEventArray(voi
 
 /**
  * @brief AddEventä÷êî
- * @param dat (data)
+ * @param desc (desc)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <typename T, typename D>
-inline INT tml::Manager::AddEvent(const D &dat)
+inline INT tml::Manager::AddEvent(const D &desc)
 {
 	tml::unique_ptr<tml::ManagerEvent> event;
 	UINT event_index = static_cast<UINT>(T::EVENT_TYPE);
@@ -240,15 +239,15 @@ inline INT tml::Manager::AddEvent(const D &dat)
 		--stock_event_cnt;
 
 		event = std::move(stock_event_cont[stock_event_cnt]);
+
+		reinterpret_cast<T *>(event.get())->SetData(desc.data);
 	} else {
 		event = tml::make_unique<T>(1U);
 
-		if (reinterpret_cast<T *>(event.get())->Create(this) < 0) {
+		if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {
 			return (-1);
 		}
 	}
-
-	reinterpret_cast<T *>(event.get())->SetData(dat);
 
 	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];
 	auto &back_event_cont = this->event_cont_ary_[this->back_event_index_];

@@ -59,6 +59,41 @@ void tml::input::KeyboardEventData::SetRawInput(const RAWKEYBOARD &rk)
 /**
  * @brief コンストラクタ
  */
+tml::input::KeyboardEventDesc::KeyboardEventDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::input::KeyboardEventDesc::~KeyboardEventDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::input::KeyboardEventDesc::Init(void)
+{
+	this->Release();
+
+	this->data.Init();
+
+	tml::input::ManagerEventDesc::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::input::KeyboardEvent::KeyboardEvent()
 {
 	return;
@@ -85,7 +120,7 @@ void tml::input::KeyboardEvent::Init(void)
 
 	this->dat_.Init();
 
-	tml::input::Event::Init();
+	tml::input::ManagerEvent::Init();
 
 	return;
 }
@@ -93,19 +128,21 @@ void tml::input::KeyboardEvent::Init(void)
 
 /**
  * @brief Create関数
- * @param mgr (manager)
+ * @param desc (desc)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::input::KeyboardEvent::Create(tml::input::Manager *mgr)
+INT tml::input::KeyboardEvent::Create(const tml::input::KeyboardEventDesc &desc)
 {
 	this->Init();
 
-	if (tml::input::Event::Create(tml::input::KeyboardEvent::EVENT_TYPE, mgr) < 0) {
+	if (tml::input::ManagerEvent::Create(desc, tml::input::KeyboardEvent::EVENT_TYPE) < 0) {
 		this->Init();
 
 		return (-1);
 	}
+
+	this->SetData(desc.data);
 
 	return (0);
 }

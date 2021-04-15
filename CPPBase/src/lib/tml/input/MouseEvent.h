@@ -8,7 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMathINT.h"
 #include "../math/XNAMathFLOAT.h"
-#include "Event.h"
+#include "ManagerEvent.h"
 
 
 namespace tml {
@@ -51,9 +51,43 @@ inline void tml::input::MouseEventData::Release(void)
 namespace tml {
 namespace input {
 /**
+ * @brief MouseEventDescクラス
+ */
+class MouseEventDesc : public tml::input::ManagerEventDesc
+{
+public:
+	tml::input::MouseEventData data;
+
+protected:
+	void Release(void);
+
+public:
+	MouseEventDesc();
+	virtual ~MouseEventDesc();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::input::MouseEventDesc::Release(void)
+{
+	tml::input::ManagerEventDesc::Release();
+
+	return;
+}
+
+
+namespace tml {
+namespace input {
+/**
  * @brief MouseEventクラス
  */
-class MouseEvent : public tml::input::Event
+class MouseEvent : public tml::input::ManagerEvent
 {
 public: MouseEvent(const tml::input::MouseEvent &) = delete;
 public: tml::input::MouseEvent &operator =(const tml::input::MouseEvent &) = delete;
@@ -73,7 +107,7 @@ public:
 	virtual ~MouseEvent();
 
 	virtual void Init(void);
-	INT Create(tml::input::Manager *);
+	INT Create(const tml::input::MouseEventDesc &);
 
 	const tml::input::MouseEventData &GetData(void) const;
 	void SetData(const tml::input::MouseEventData &);
@@ -87,7 +121,7 @@ public:
  */
 inline void tml::input::MouseEvent::Release(void)
 {
-	tml::input::Event::Release();
+	tml::input::ManagerEvent::Release();
 
 	return;
 }

@@ -15,21 +15,24 @@ namespace SOUND {
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
 		SOUND,
+		USER,
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::COUNT);
-	enum class EVENT_TYPE : UINT {
-		NONE = 0U,
-		COUNT
-	};
-	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::EVENT_TYPE::COUNT);
 	enum class SOUND_TYPE : UINT {
 		NONE = 0U,
 		BGM,
 		SE,
+		USER,
 		COUNT
 	};
 	const UINT SOUND_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::SOUND_TYPE::COUNT);
+	enum class EVENT_TYPE : UINT {
+		NONE = 0U,
+		USER,
+		COUNT
+	};
+	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::EVENT_TYPE::COUNT);
 }
 }
 }

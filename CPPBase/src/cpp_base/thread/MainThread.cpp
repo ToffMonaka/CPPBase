@@ -615,11 +615,11 @@ void cpp_base::MainThread::Update(void)
 	this->input_mgr_.Update();
 
 	for (UINT event_i = 0U; event_i < this->input_mgr_.GetEventCount(); ++event_i) {
-		auto &event = this->input_mgr_.GetEventArray()[event_i];
+		auto event = reinterpret_cast<tml::input::ManagerEvent *>(this->input_mgr_.GetEventArray()[event_i].get());
 
 		switch (event->GetEventType()) {
 		case tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE: {
-			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event.get())->GetData();
+			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event)->GetData();
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 				this->sound_mgr_.Play(this->title_start_se_sound_.get(), false);
@@ -735,67 +735,69 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 		switch (ri.header.dwType) {
 		case RIM_TYPEMOUSE: {
-			tml::input::MouseEventData event_dat;
+			tml::input::MouseEventDesc event_desc;
 
-			event_dat.SetRawInput(ri.data.mouse, th->GetInputManager().GetMousePosition());
+			event_desc.manager = &th->GetInputManager();
+			event_desc.data.SetRawInput(ri.data.mouse, th->GetInputManager().GetMousePosition());
 
-			th->GetInputManager().AddEvent<tml::input::MouseEvent>(event_dat);
+			th->GetInputManager().AddEvent<tml::input::MouseEvent>(event_desc);
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::LEFT, true);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_UP)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_UP)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::LEFT, false);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::RIGHT, true);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_UP)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_UP)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::RIGHT, false);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MIDDLE_BUTTON_DOWN)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MIDDLE_BUTTON_DOWN)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::MIDDLE, true);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MIDDLE_BUTTON_UP)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MIDDLE_BUTTON_UP)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::MIDDLE, false);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE1_BUTTON_DOWN)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE1_BUTTON_DOWN)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE1, true);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE1_BUTTON_UP)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE1_BUTTON_UP)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE1, false);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE2_BUTTON_DOWN)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE2_BUTTON_DOWN)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE2, true);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE2_BUTTON_UP)) {
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE2_BUTTON_UP)) {
 				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE2, false);
 			}
 
 			break;
 		}
 		case RIM_TYPEKEYBOARD: {
-			tml::input::KeyboardEventData event_dat;
+			tml::input::KeyboardEventDesc event_desc;
 
-			event_dat.SetRawInput(ri.data.keyboard);
+			event_desc.manager = &th->GetInputManager();
+			event_desc.data.SetRawInput(ri.data.keyboard);
 
-			th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(event_dat);
+			th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(event_desc);
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_DOWN)) {
-				th->GetInputManager().SetKeyboardCodeState(event_dat.code, true);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_DOWN)) {
+				th->GetInputManager().SetKeyboardCodeState(event_desc.data.code, true);
 			}
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_UP)) {
-				th->GetInputManager().SetKeyboardCodeState(event_dat.code, false);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_UP)) {
+				th->GetInputManager().SetKeyboardCodeState(event_desc.data.code, false);
 			}
 
 			break;

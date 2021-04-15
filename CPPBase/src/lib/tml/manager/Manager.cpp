@@ -14,7 +14,7 @@ tml::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
 	window_device_context_handle(nullptr)
 {
-	this->resource_count.clear();
+	this->resource_count_container.clear();
 	this->event_count = 0U;
 
 	return;
@@ -41,7 +41,7 @@ void tml::ManagerDesc::Init(void)
 
 	this->window_handle = nullptr;
 	this->window_device_context_handle = nullptr;
-	this->resource_count.clear();
+	this->resource_count_container.clear();
 	this->event_count = 0U;
 
 	return;
@@ -138,10 +138,10 @@ INT tml::Manager::Create(const tml::ManagerDesc &desc)
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
 
-	this->res_cont_cont_.resize(desc.resource_count.size());
+	this->res_cont_cont_.resize(desc.resource_count_container.size());
 
 	for (UINT res_cont_i = 0U; res_cont_i < this->res_cont_cont_.size(); ++res_cont_i) {
-		this->res_cont_cont_[res_cont_i].resize(desc.resource_count[res_cont_i]);
+		this->res_cont_cont_[res_cont_i].resize(desc.resource_count_container[res_cont_i]);
 	}
 
 	this->front_event_index_ = 0U;

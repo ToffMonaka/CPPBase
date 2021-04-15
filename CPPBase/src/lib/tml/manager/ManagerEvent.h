@@ -10,6 +10,35 @@
 
 namespace tml {
 /**
+ * @brief ManagerEventDescクラス
+ */
+class ManagerEventDesc
+{
+public:
+
+protected:
+	void Release(void);
+
+public:
+	ManagerEventDesc();
+	virtual ~ManagerEventDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::ManagerEventDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief ManagerEventクラス
  *
  * インターフェースパターン
@@ -25,7 +54,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const UINT);
+	INT Create(const tml::ManagerEventDesc &, const UINT);
 
 public:
 	ManagerEvent();

@@ -41,6 +41,59 @@ void tml::ManagerResourceDesc::Init(void)
 
 
 /**
+ * @brief Read関数
+ * @param read_desc (read_desc)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::ManagerResourceDesc::Read(const tml::INIFileReadDesc &read_desc)
+{
+	auto read_desc_dat = read_desc.GetDataByParent();
+
+	tml::INIFile ini_file;
+
+	ini_file.read_desc.parent_data = read_desc_dat;
+
+	if (ini_file.Read() < 0) {
+		return (-1);
+	}
+
+	if (ini_file.data.value_container.empty()) {
+		return (0);
+	}
+
+	return (this->ReadValue(ini_file));
+}
+
+
+/**
+ * @brief ReadValue関数
+ * @param ini_file (ini_file)
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
+{
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Resource Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"RES");
+
+		if (val_name_cont != nullptr) {
+			val = ini_file.data.GetValue((*val_name_cont), L"NAME");
+
+			if (val != nullptr) {
+				this->name = (*val);
+			}
+		}
+	}
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::ManagerResource::ManagerResource() :

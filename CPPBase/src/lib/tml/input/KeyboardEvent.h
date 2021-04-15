@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "Event.h"
+#include "ManagerEvent.h"
 
 
 namespace tml {
@@ -47,9 +47,43 @@ inline void tml::input::KeyboardEventData::Release(void)
 namespace tml {
 namespace input {
 /**
+ * @brief KeyboardEventDescクラス
+ */
+class KeyboardEventDesc : public tml::input::ManagerEventDesc
+{
+public:
+	tml::input::KeyboardEventData data;
+
+protected:
+	void Release(void);
+
+public:
+	KeyboardEventDesc();
+	virtual ~KeyboardEventDesc();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::input::KeyboardEventDesc::Release(void)
+{
+	tml::input::ManagerEventDesc::Release();
+
+	return;
+}
+
+
+namespace tml {
+namespace input {
+/**
  * @brief KeyboardEventクラス
  */
-class KeyboardEvent : public tml::input::Event
+class KeyboardEvent : public tml::input::ManagerEvent
 {
 public: KeyboardEvent(const tml::input::KeyboardEvent &) = delete;
 public: tml::input::KeyboardEvent &operator =(const tml::input::KeyboardEvent &) = delete;
@@ -69,7 +103,7 @@ public:
 	virtual ~KeyboardEvent();
 
 	virtual void Init(void);
-	INT Create(tml::input::Manager *);
+	INT Create(const tml::input::KeyboardEventDesc &);
 
 	const tml::input::KeyboardEventData &GetData(void) const;
 	void SetData(const tml::input::KeyboardEventData &);
@@ -83,7 +117,7 @@ public:
  */
 inline void tml::input::KeyboardEvent::Release(void)
 {
-	tml::input::Event::Release();
+	tml::input::ManagerEvent::Release();
 
 	return;
 }
