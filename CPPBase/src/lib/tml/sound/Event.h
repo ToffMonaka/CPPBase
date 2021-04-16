@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief Eventヘッダーファイル
@@ -77,3 +78,4 @@ inline tml::sound::Manager *tml::sound::Event::GetManager(void)
 {
 	return (this->mgr_);
 }
+#endif

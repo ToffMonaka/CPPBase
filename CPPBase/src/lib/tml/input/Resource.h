@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief Resourceヘッダーファイル
@@ -127,3 +128,4 @@ inline const std::wstring &tml::input::Resource::GetName(void) const
 {
 	return (this->name_);
 }
+#endif

@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief Eventコードファイル
@@ -58,3 +59,4 @@ INT tml::sound::Event::Create(const tml::ConstantUtil::SOUND::EVENT_TYPE event_t
 
 	return (0);
 }
+#endif

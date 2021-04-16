@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief Resourceコードファイル
@@ -148,3 +149,4 @@ INT tml::sound::Resource::Create(const tml::sound::ResourceDesc &desc, const tml
 
 	return (0);
 }
+#endif

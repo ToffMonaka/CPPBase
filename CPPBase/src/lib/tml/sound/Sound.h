@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantInclude_LibOggBase.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -15,7 +15,7 @@ namespace sound {
 /**
  * @brief SoundDescクラス
  */
-class SoundDesc : public tml::sound::ResourceDesc
+class SoundDesc : public tml::sound::ManagerResourceDesc
 {
 public:
 	tml::BinaryFileReadDesc file_read_desc;
@@ -40,7 +40,7 @@ public:
  */
 inline void tml::sound::SoundDesc::Release(void)
 {
-	tml::sound::ResourceDesc::Release();
+	tml::sound::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -53,7 +53,7 @@ namespace sound {
  *
  * インターフェースパターン
  */
-class Sound : public tml::sound::Resource
+class Sound : public tml::sound::ManagerResource
 {
 public: Sound(const tml::sound::Sound &) = delete;
 public: tml::sound::Sound &operator =(const tml::sound::Sound &) = delete;

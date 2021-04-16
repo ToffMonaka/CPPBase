@@ -72,6 +72,9 @@ protected:
 	void Release(void);
 	INT Create(const tml::ManagerDesc &);
 
+	INT CreateResourceContainer(const std::vector<UINT> &);
+	void DeleteResourceContainer(void);
+
 public:
 	Manager();
 	virtual ~Manager();
@@ -87,6 +90,8 @@ public:
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, tml::shared_ptr<T1> &);
 	template <typename T>
 	void ReleaseResource(tml::shared_ptr<T> &);
+	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT) const;
+	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT) const;
 	UINT GetEventCount(void) const;
 	const tml::unique_ptr<tml::ManagerEvent> *GetEventArray(void) const;
 	template <typename T, typename D>
@@ -142,7 +147,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 	this->res_cont_cont_[res_main_index][res_sub_index].push_back(res);
 
-	dst_res = res;
+	dst_res = std::dynamic_pointer_cast<T2>(res);
 
 	return (dst_res);
 }
@@ -197,6 +202,40 @@ inline void tml::Manager::ReleaseResource(tml::shared_ptr<T> &res)
 	res.reset();
 
 	return;
+}
+
+
+/**
+ * @brief GetResourceContainerä÷êî
+ * @param res_main_index (resource_main_index)
+ * @return res_cont (resource_container)<br>
+ * nullptr=é∏îs
+ */
+inline const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *tml::Manager::GetResourceContainer(const UINT res_main_index) const
+{
+	if (res_main_index >= this->res_cont_cont_.size()) {
+		return (nullptr);
+	}
+
+	return (&this->res_cont_cont_[res_main_index]);
+}
+
+
+/**
+ * @brief GetResourceContainerä÷êî
+ * @param res_main_index (resource_main_index)
+ * @param res_sub_index (resource_sub_index)
+ * @return res_cont (resource_container)<br>
+ * nullptr=é∏îs
+ */
+inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::GetResourceContainer(const UINT res_main_index, const UINT res_sub_index) const
+{
+	if ((res_main_index >= this->res_cont_cont_.size())
+	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
+		return (nullptr);
+	}
+
+	return (&this->res_cont_cont_[res_main_index][res_sub_index]);
 }
 
 

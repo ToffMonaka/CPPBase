@@ -81,19 +81,7 @@ tml::Manager::~Manager()
  */
 void tml::Manager::Release(void)
 {
-	for (auto &res_main_cont : this->res_cont_cont_) {
-		for (auto &res_sub_cont : res_main_cont) {
-			for (auto &res : res_sub_cont) {
-				res->Init();
-			}
-
-			res_sub_cont.clear();
-		}
-
-		res_main_cont.clear();
-	}
-
-	this->res_cont_cont_.clear();
+	this->DeleteResourceContainer();
 
 	return;
 }
@@ -138,10 +126,8 @@ INT tml::Manager::Create(const tml::ManagerDesc &desc)
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
 
-	this->res_cont_cont_.resize(desc.resource_count_container.size());
-
-	for (UINT res_cont_i = 0U; res_cont_i < this->res_cont_cont_.size(); ++res_cont_i) {
-		this->res_cont_cont_[res_cont_i].resize(desc.resource_count_container[res_cont_i]);
+	if (this->CreateResourceContainer(desc.resource_count_container) < 0) {
+		return (-1);
 	}
 
 	this->front_event_index_ = 0U;
@@ -188,6 +174,49 @@ void tml::Manager::Update(void)
 	}
 
 	back_event_cnt = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief CreateResourceContainerä÷êî
+ * @param res_cnt_cont (resource_count_container)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::Manager::CreateResourceContainer(const std::vector<UINT> &res_cnt_cont)
+{
+	this->DeleteResourceContainer();
+
+	this->res_cont_cont_.resize(res_cnt_cont.size());
+
+	for (UINT res_cont_i = 0U; res_cont_i < this->res_cont_cont_.size(); ++res_cont_i) {
+		this->res_cont_cont_[res_cont_i].resize(res_cnt_cont[res_cont_i]);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteResourceContainerä÷êî
+ */
+void tml::Manager::DeleteResourceContainer(void)
+{
+	for (auto &res_main_cont : this->res_cont_cont_) {
+		for (auto &res_sub_cont : res_main_cont) {
+			for (auto &res : res_sub_cont) {
+				res->Init();
+			}
+
+			res_sub_cont.clear();
+		}
+
+		res_main_cont.clear();
+	}
+
+	this->res_cont_cont_.clear();
 
 	return;
 }

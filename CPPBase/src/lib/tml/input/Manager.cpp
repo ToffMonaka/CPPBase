@@ -77,6 +77,7 @@ tml::input::Manager::~Manager()
 void tml::input::Manager::Release(void)
 {
 	this->common_.Init();
+	this->DeleteResourceContainer();
 
 	tml::Manager::Release();
 

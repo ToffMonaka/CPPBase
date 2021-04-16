@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief Resourceコードファイル
@@ -148,3 +149,4 @@ INT tml::input::Resource::Create(const tml::input::ResourceDesc &desc, const tml
 
 	return (0);
 }
+#endif

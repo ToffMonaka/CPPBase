@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief Eventコードファイル
@@ -58,3 +59,4 @@ INT tml::input::Event::Create(const tml::ConstantUtil::INPUT::EVENT_TYPE event_t
 
 	return (0);
 }
+#endif

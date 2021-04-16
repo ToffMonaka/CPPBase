@@ -1,3 +1,4 @@
+#if 0
 /**
  * @file
  * @brief Resourceヘッダーファイル
@@ -130,3 +131,4 @@ inline const std::wstring &tml::sound::Resource::GetName(void) const
 {
 	return (this->name_);
 }
+#endif

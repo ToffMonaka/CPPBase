@@ -40,7 +40,7 @@ void tml::sound::SoundDesc::Init(void)
 
 	this->file_read_desc.Init();
 
-	tml::sound::ResourceDesc::Init();
+	tml::sound::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -54,7 +54,7 @@ void tml::sound::SoundDesc::Init(void)
  */
 INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::sound::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::sound::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -115,7 +115,7 @@ void tml::sound::Sound::Release(void)
 		this->buf_ = 0U;
 	}
 
-	tml::sound::Resource::Release();
+	tml::sound::ManagerResource::Release();
 
 	return;
 }
@@ -127,12 +127,11 @@ void tml::sound::Sound::Release(void)
 void tml::sound::Sound::Init(void)
 {
 	this->type_ = tml::ConstantUtil::SOUND::SOUND_TYPE::NONE;
-
 	this->ogg_file_buf_ = nullptr;
 	this->ogg_file_buf_size_ = 0L;
 	this->ogg_file_buf_index_ = 0L;
 
-	tml::sound::Resource::Init();
+	tml::sound::ManagerResource::Init();
 
 	return;
 }
@@ -151,7 +150,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		return (-1);
 	}
 
-	if (tml::sound::Resource::Create(desc, tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND) < 0) {
+	if (tml::sound::ManagerResource::Create(desc, tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND, static_cast<UINT>(type)) < 0) {
 		return (-1);
 	}
 
