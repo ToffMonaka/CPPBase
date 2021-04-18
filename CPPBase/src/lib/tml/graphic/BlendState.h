@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -14,7 +14,7 @@ namespace graphic {
 /**
  * @brief BlendStateDescクラス
  */
-class BlendStateDesc : public tml::graphic::ResourceDesc
+class BlendStateDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	CD3D11_BLEND_DESC blend_state_desc;
@@ -42,7 +42,7 @@ public:
  */
 inline void tml::graphic::BlendStateDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -53,7 +53,7 @@ namespace graphic {
 /**
  * @brief BlendStateクラス
  */
-class BlendState : public tml::graphic::Resource
+class BlendState : public tml::graphic::ManagerResource
 {
 public: BlendState(const tml::graphic::BlendState &) = delete;
 public: tml::graphic::BlendState &operator =(const tml::graphic::BlendState &) = delete;

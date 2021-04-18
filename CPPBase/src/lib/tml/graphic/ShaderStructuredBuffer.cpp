@@ -42,7 +42,7 @@ void tml::graphic::ShaderStructuredBufferDesc::Init(void)
 	this->element_size = 0U;
 	this->element_limit = 0U;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -56,7 +56,7 @@ void tml::graphic::ShaderStructuredBufferDesc::Init(void)
  */
 INT tml::graphic::ShaderStructuredBufferDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -156,7 +156,7 @@ void tml::graphic::ShaderStructuredBuffer::Release(void)
 		this->buf_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -174,7 +174,7 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 	this->cpu_buf_.Init();
 	tml::Clear(&this->msr_, 1U);
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -193,7 +193,7 @@ INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStruc
 		return (-1);
 	}
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER, 1U) < 0) {
 		return (-1);
 	}
 

@@ -10,7 +10,7 @@
 #include "../math/XNAMathINT.h"
 #include "../math/XNAMathUINT.h"
 #include "../math/XNAMathFLOAT.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -18,7 +18,7 @@ namespace graphic {
 /**
  * @brief TextureDescクラス
  */
-class TextureDesc : public tml::graphic::ResourceDesc
+class TextureDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	IDXGISwapChain *swap_chain;
@@ -56,7 +56,7 @@ public:
  */
 inline void tml::graphic::TextureDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -67,7 +67,7 @@ namespace graphic {
 /**
  * @brief Textureクラス
  */
-class Texture : public tml::graphic::Resource
+class Texture : public tml::graphic::ManagerResource
 {
 public: Texture(const tml::graphic::Texture &) = delete;
 public: tml::graphic::Texture &operator =(const tml::graphic::Texture &) = delete;

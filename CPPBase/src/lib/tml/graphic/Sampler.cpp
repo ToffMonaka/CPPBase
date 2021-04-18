@@ -41,7 +41,7 @@ void tml::graphic::SamplerDesc::Init(void)
 	this->sampler_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
 	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -55,7 +55,7 @@ void tml::graphic::SamplerDesc::Init(void)
  */
 INT tml::graphic::SamplerDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -189,7 +189,7 @@ void tml::graphic::Sampler::Release(void)
 		this->samp_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -205,7 +205,7 @@ void tml::graphic::Sampler::Init(void)
 	this->samp_desc_ = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
 	this->samp_desc_.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -221,7 +221,7 @@ INT tml::graphic::Sampler::Create(const tml::graphic::SamplerDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER, 1U) < 0) {
 		this->Init();
 
 		return (-1);

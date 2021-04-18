@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMathPosition.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -15,7 +15,7 @@ namespace graphic {
 /**
  * @brief FogDescクラス
  */
-class FogDesc : public tml::graphic::ResourceDesc
+class FogDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE type;
@@ -45,7 +45,7 @@ public:
  */
 inline void tml::graphic::FogDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -56,7 +56,7 @@ namespace graphic {
 /**
  * @brief Fogクラス
  */
-class Fog : public tml::graphic::Resource
+class Fog : public tml::graphic::ManagerResource
 {
 public: Fog(const tml::graphic::Fog &) = delete;
 public: tml::graphic::Fog &operator =(const tml::graphic::Fog &) = delete;
@@ -105,7 +105,7 @@ public:
  */
 inline void tml::graphic::Fog::Release(void)
 {
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }

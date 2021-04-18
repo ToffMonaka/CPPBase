@@ -47,7 +47,7 @@ void tml::graphic::FogDesc::Init(void)
 	this->near_range = 0.0f;
 	this->far_range = 0.0f;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -61,7 +61,7 @@ void tml::graphic::FogDesc::Init(void)
  */
 INT tml::graphic::FogDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -124,7 +124,7 @@ void tml::graphic::Fog::Init(void)
 	this->rng_val1_ = 0.0f;
 	this->rng_val2_ = 0.0f;
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -146,7 +146,7 @@ INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc)
 
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG, 1U) < 0) {
 		this->Init();
 
 		return (-1);

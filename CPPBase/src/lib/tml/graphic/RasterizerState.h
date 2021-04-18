@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -14,7 +14,7 @@ namespace graphic {
 /**
  * @brief RasterizerStateDescクラス
  */
-class RasterizerStateDesc : public tml::graphic::ResourceDesc
+class RasterizerStateDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	CD3D11_RASTERIZER_DESC rasterizer_state_desc;
@@ -41,7 +41,7 @@ public:
  */
 inline void tml::graphic::RasterizerStateDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -52,7 +52,7 @@ namespace graphic {
 /**
  * @brief RasterizerStateクラス
  */
-class RasterizerState : public tml::graphic::Resource
+class RasterizerState : public tml::graphic::ManagerResource
 {
 public: RasterizerState(const tml::graphic::RasterizerState &) = delete;
 public: tml::graphic::RasterizerState &operator =(const tml::graphic::RasterizerState &) = delete;

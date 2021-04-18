@@ -28,11 +28,13 @@ namespace GRAPHIC {
 		SAMPLER,
 		MODEL,
 		FONT,
+		USER,
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
+		USER,
 		COUNT
 	};
 	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::EVENT_TYPE::COUNT);

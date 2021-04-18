@@ -60,7 +60,7 @@ void tml::graphic::TextureDesc::Init(void)
 	this->uasr_format = DXGI_FORMAT_UNKNOWN;
 	this->uasr_desc_null_flag = false;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -74,7 +74,7 @@ void tml::graphic::TextureDesc::Init(void)
  */
 INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -198,7 +198,7 @@ void tml::graphic::Texture::Release(void)
 		this->tex_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -217,7 +217,7 @@ void tml::graphic::Texture::Init(void)
 	this->msr_cont_.clear();
 	this->clear_cpu_buf_cont_.clear();
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -233,7 +233,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE, 1U) < 0) {
 		this->Init();
 
 		return (-1);

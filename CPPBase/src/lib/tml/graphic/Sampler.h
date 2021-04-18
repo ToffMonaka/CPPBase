@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -14,7 +14,7 @@ namespace graphic {
 /**
  * @brief SamplerDescクラス
  */
-class SamplerDesc : public tml::graphic::ResourceDesc
+class SamplerDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	CD3D11_SAMPLER_DESC sampler_desc;
@@ -41,7 +41,7 @@ public:
  */
 inline void tml::graphic::SamplerDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -52,7 +52,7 @@ namespace graphic {
 /**
  * @brief Samplerクラス
  */
-class Sampler : public tml::graphic::Resource
+class Sampler : public tml::graphic::ManagerResource
 {
 public: Sampler(const tml::graphic::Sampler &) = delete;
 public: tml::graphic::Sampler &operator =(const tml::graphic::Sampler &) = delete;

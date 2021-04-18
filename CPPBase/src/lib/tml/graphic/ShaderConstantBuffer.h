@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -14,7 +14,7 @@ namespace graphic {
 /**
  * @brief ShaderConstantBufferDescクラス
  */
-class ShaderConstantBufferDesc : public tml::graphic::ResourceDesc
+class ShaderConstantBufferDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	CD3D11_BUFFER_DESC buffer_desc;
@@ -42,7 +42,7 @@ public:
  */
 inline void tml::graphic::ShaderConstantBufferDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -55,7 +55,7 @@ namespace graphic {
  *
  * インターフェースパターン
  */
-class ShaderConstantBuffer : public tml::graphic::Resource
+class ShaderConstantBuffer : public tml::graphic::ManagerResource
 {
 public: ShaderConstantBuffer(const tml::graphic::ShaderConstantBuffer &) = delete;
 public: tml::graphic::ShaderConstantBuffer &operator =(const tml::graphic::ShaderConstantBuffer &) = delete;

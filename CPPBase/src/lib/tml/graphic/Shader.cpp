@@ -153,7 +153,7 @@ void tml::graphic::ShaderDesc::Init(void)
 	this->compute_shader_model_name.clear();
 	this->macro_container.clear();
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -167,7 +167,7 @@ void tml::graphic::ShaderDesc::Init(void)
  */
 INT tml::graphic::ShaderDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -342,7 +342,7 @@ void tml::graphic::Shader::Release(void)
 		this->vs_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -355,7 +355,7 @@ void tml::graphic::Shader::Init(void)
 {
 	this->Release();
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -371,7 +371,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER, 1U) < 0) {
 		this->Init();
 
 		return (-1);

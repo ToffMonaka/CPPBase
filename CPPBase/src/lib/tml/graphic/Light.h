@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMathPosition.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -15,7 +15,7 @@ namespace graphic {
 /**
  * @brief LightDescクラス
  */
-class LightDesc : public tml::graphic::ResourceDesc
+class LightDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type;
@@ -51,7 +51,7 @@ public:
  */
 inline void tml::graphic::LightDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -62,7 +62,7 @@ namespace graphic {
 /**
  * @brief Lightクラス
  */
-class Light : public tml::graphic::Resource
+class Light : public tml::graphic::ManagerResource
 {
 public: Light(const tml::graphic::Light &) = delete;
 public: tml::graphic::Light &operator =(const tml::graphic::Light &) = delete;
@@ -127,7 +127,7 @@ public:
  */
 inline void tml::graphic::Light::Release(void)
 {
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }

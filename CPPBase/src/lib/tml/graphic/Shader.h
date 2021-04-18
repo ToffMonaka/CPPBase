@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -53,7 +53,7 @@ namespace graphic {
 /**
  * @brief ShaderDescクラス
  */
-class ShaderDesc : public tml::graphic::ResourceDesc
+class ShaderDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	tml::BinaryFileReadDesc file_read_desc;
@@ -94,7 +94,7 @@ public:
  */
 inline void tml::graphic::ShaderDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -105,7 +105,7 @@ namespace graphic {
 /**
  * @brief Shaderクラス
  */
-class Shader : public tml::graphic::Resource
+class Shader : public tml::graphic::ManagerResource
 {
 public: Shader(const tml::graphic::Shader &) = delete;
 public: tml::graphic::Shader &operator =(const tml::graphic::Shader &) = delete;

@@ -38,7 +38,7 @@ void tml::graphic::DepthStateDesc::Init(void)
 
 	this->depth_state_desc = CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT());
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -52,7 +52,7 @@ void tml::graphic::DepthStateDesc::Init(void)
  */
 INT tml::graphic::DepthStateDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -128,7 +128,7 @@ void tml::graphic::DepthState::Release(void)
 		this->ds_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -141,7 +141,7 @@ void tml::graphic::DepthState::Init(void)
 {
 	this->Release();
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -157,7 +157,7 @@ INT tml::graphic::DepthState::Create(const tml::graphic::DepthStateDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE, 1U) < 0) {
 		this->Init();
 
 		return (-1);

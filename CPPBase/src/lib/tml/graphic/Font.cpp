@@ -124,7 +124,7 @@ void tml::graphic::FontDesc::Init(void)
 
 	tml::Clear(&this->font_desc, 1U);
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -138,7 +138,7 @@ void tml::graphic::FontDesc::Init(void)
  */
 INT tml::graphic::FontDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -226,7 +226,7 @@ void tml::graphic::Font::Release(void)
 		this->dc_handle_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -243,7 +243,7 @@ void tml::graphic::Font::Init(void)
 	tml::Clear(&this->tm_, 1U);
 	this->bm_cont_.clear();
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -259,7 +259,7 @@ INT tml::graphic::Font::Create(const tml::graphic::FontDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT, 1U) < 0) {
 		this->Init();
 
 		return (-1);

@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -14,7 +14,7 @@ namespace graphic {
 /**
  * @brief MeshDescクラス
  */
-class MeshDesc : public tml::graphic::ResourceDesc
+class MeshDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	CD3D11_BUFFER_DESC vertex_buffer_desc;
@@ -53,7 +53,7 @@ public:
  */
 inline void tml::graphic::MeshDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -64,7 +64,7 @@ namespace graphic {
 /**
  * @brief Meshクラス
  */
-class Mesh : public tml::graphic::Resource
+class Mesh : public tml::graphic::ManagerResource
 {
 public: Mesh(const tml::graphic::Mesh &) = delete;
 public: tml::graphic::Mesh &operator =(const tml::graphic::Mesh &) = delete;

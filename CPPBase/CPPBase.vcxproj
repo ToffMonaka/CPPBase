@@ -185,7 +185,6 @@
     <ClCompile Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\DepthState.cpp" />
-    <ClCompile Include="src\lib\tml\graphic\Event.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Fog.cpp" />
     <ClCompile Include="src\lib\tml\graphic\FogShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Font.cpp" />
@@ -195,7 +194,6 @@
     <ClCompile Include="src\lib\tml\graphic\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ManagerEvent.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ManagerResource.cpp" />
-    <ClCompile Include="src\lib\tml\graphic\Resource.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Light.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Mesh.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Model.cpp" />
@@ -210,14 +208,12 @@
     <ClCompile Include="src\lib\tml\graphic\SpriteModelShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Texture.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Viewport.cpp" />
-    <ClCompile Include="src\lib\tml\input\Event.cpp" />
     <ClCompile Include="src\lib\tml\input\KeyboardEvent.cpp" />
     <ClCompile Include="src\lib\tml\input\Manager.cpp" />
     <ClCompile Include="src\lib\tml\input\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\input\ManagerEvent.cpp" />
     <ClCompile Include="src\lib\tml\input\ManagerResource.cpp" />
     <ClCompile Include="src\lib\tml\input\MouseEvent.cpp" />
-    <ClCompile Include="src\lib\tml\input\Resource.cpp" />
     <ClCompile Include="src\lib\tml\manager\Manager.cpp" />
     <ClCompile Include="src\lib\tml\manager\ManagerEvent.cpp" />
     <ClCompile Include="src\lib\tml\manager\ManagerResource.cpp" />
@@ -243,12 +239,10 @@
     <ClCompile Include="src\lib\tml\random\RandomUtil.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\sound\BGMSound.cpp" />
-    <ClCompile Include="src\lib\tml\sound\Event.cpp" />
     <ClCompile Include="src\lib\tml\sound\Manager.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerEvent.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerResource.cpp" />
-    <ClCompile Include="src\lib\tml\sound\Resource.cpp" />
     <ClCompile Include="src\lib\tml\sound\SESound.cpp" />
     <ClCompile Include="src\lib\tml\sound\Sound.cpp" />
     <ClCompile Include="src\lib\tml\string\DefaultStringUtilEngine.cpp" />
@@ -314,7 +308,6 @@
     <ClInclude Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\DepthState.h" />
-    <ClInclude Include="src\lib\tml\graphic\Event.h" />
     <ClInclude Include="src\lib\tml\graphic\Fog.h" />
     <ClInclude Include="src\lib\tml\graphic\FogShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Font.h" />
@@ -324,7 +317,6 @@
     <ClInclude Include="src\lib\tml\graphic\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\graphic\ManagerEvent.h" />
     <ClInclude Include="src\lib\tml\graphic\ManagerResource.h" />
-    <ClInclude Include="src\lib\tml\graphic\Resource.h" />
     <ClInclude Include="src\lib\tml\graphic\Light.h" />
     <ClInclude Include="src\lib\tml\graphic\Mesh.h" />
     <ClInclude Include="src\lib\tml\graphic\Model.h" />
@@ -339,14 +331,12 @@
     <ClInclude Include="src\lib\tml\graphic\SpriteModelShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Texture.h" />
     <ClInclude Include="src\lib\tml\graphic\Viewport.h" />
-    <ClInclude Include="src\lib\tml\input\Event.h" />
     <ClInclude Include="src\lib\tml\input\KeyboardEvent.h" />
     <ClInclude Include="src\lib\tml\input\Manager.h" />
     <ClInclude Include="src\lib\tml\input\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\input\ManagerEvent.h" />
     <ClInclude Include="src\lib\tml\input\ManagerResource.h" />
     <ClInclude Include="src\lib\tml\input\MouseEvent.h" />
-    <ClInclude Include="src\lib\tml\input\Resource.h" />
     <ClInclude Include="src\lib\tml\manager\Manager.h" />
     <ClInclude Include="src\lib\tml\manager\ManagerEvent.h" />
     <ClInclude Include="src\lib\tml\manager\ManagerResource.h" />
@@ -372,12 +362,10 @@
     <ClInclude Include="src\lib\tml\random\RandomUtil.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtilEngine.h" />
     <ClInclude Include="src\lib\tml\sound\BGMSound.h" />
-    <ClInclude Include="src\lib\tml\sound\Event.h" />
     <ClInclude Include="src\lib\tml\sound\Manager.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerEvent.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerResource.h" />
-    <ClInclude Include="src\lib\tml\sound\Resource.h" />
     <ClInclude Include="src\lib\tml\sound\SESound.h" />
     <ClInclude Include="src\lib\tml\sound\Sound.h" />
     <ClInclude Include="src\lib\tml\string\DefaultStringUtilEngine.h" />

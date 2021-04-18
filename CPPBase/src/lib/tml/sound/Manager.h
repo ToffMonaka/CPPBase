@@ -52,6 +52,7 @@ inline void tml::sound::ManagerDesc::Release(void)
 
 /**
  * @brief GetVolumeä÷êî
+ * @param type (type)
  * @return volume (volume)
  */
 inline FLOAT tml::sound::ManagerDesc::GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
@@ -62,6 +63,7 @@ inline FLOAT tml::sound::ManagerDesc::GetVolume(const tml::ConstantUtil::SOUND::
 
 /**
  * @brief SetVolumeä÷êî
+ * @param type (type)
  * @param volume (volume)
  */
 inline void tml::sound::ManagerDesc::SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const FLOAT volume)
@@ -74,6 +76,7 @@ inline void tml::sound::ManagerDesc::SetVolume(const tml::ConstantUtil::SOUND::S
 
 /**
  * @brief GetMuteFlagä÷êî
+ * @param type (type)
  * @return mute_flg (mute_flag)
  */
 inline bool tml::sound::ManagerDesc::GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
@@ -84,6 +87,7 @@ inline bool tml::sound::ManagerDesc::GetMuteFlag(const tml::ConstantUtil::SOUND:
 
 /**
  * @brief SetMuteFlagä÷êî
+ * @param type (type)
  * @param mute_flg (mute_flag)
  */
 inline void tml::sound::ManagerDesc::SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const bool mute_flg)
@@ -173,6 +177,7 @@ inline ALCcontext *tml::sound::Manager::GetDeviceContext(void)
 
 /**
  * @brief GetVolumeä÷êî
+ * @param type (type)
  * @return volume (volume)
  */
 inline FLOAT tml::sound::Manager::GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
@@ -183,6 +188,7 @@ inline FLOAT tml::sound::Manager::GetVolume(const tml::ConstantUtil::SOUND::SOUN
 
 /**
  * @brief GetMuteFlagä÷êî
+ * @param type (type)
  * @return mute_flg (mute_flag)
  */
 inline bool tml::sound::Manager::GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const

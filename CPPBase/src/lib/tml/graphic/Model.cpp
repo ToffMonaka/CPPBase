@@ -184,7 +184,7 @@ void tml::graphic::ModelDesc::Init(void)
 {
 	this->Release();
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -198,7 +198,7 @@ void tml::graphic::ModelDesc::Init(void)
  */
 INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -290,7 +290,7 @@ void tml::graphic::Model::Release(void)
 		this->samp_cont_.clear();
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -303,7 +303,7 @@ void tml::graphic::Model::Init(void)
 {
 	this->type_ = tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE;
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -322,7 +322,7 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 		return (-1);
 	}
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL, 1U) < 0) {
 		return (-1);
 	}
 
@@ -562,7 +562,7 @@ void tml::graphic::MaterialDesc::Init(void)
 	this->light_flag = false;
 	this->fog_flag = false;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -576,7 +576,7 @@ void tml::graphic::MaterialDesc::Init(void)
  */
 INT tml::graphic::MaterialDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -648,7 +648,7 @@ void tml::graphic::Material::Init(void)
 	this->light_flg_ = false;
 	this->fog_flg_ = false;
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -664,7 +664,7 @@ INT tml::graphic::Material::Create(const tml::graphic::MaterialDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MATERIAL) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MATERIAL, 1U) < 0) {
 		this->Init();
 
 		return (-1);

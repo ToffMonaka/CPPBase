@@ -59,7 +59,7 @@ void tml::graphic::LightDesc::Init(void)
 	this->soft_angle = 0.0f;
 	this->shadow_flag = false;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -73,7 +73,7 @@ void tml::graphic::LightDesc::Init(void)
  */
 INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -148,7 +148,7 @@ void tml::graphic::Light::Init(void)
 	this->soft_val_ = 0.0f;
 	this->shadow_flg_ = false;
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -170,7 +170,7 @@ INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc)
 
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT, 1U) < 0) {
 		this->Init();
 
 		return (-1);

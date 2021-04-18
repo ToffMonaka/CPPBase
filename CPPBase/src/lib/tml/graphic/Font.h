@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMathUINT.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -87,7 +87,7 @@ namespace graphic {
 /**
  * @brief FontDescクラス
  */
-class FontDesc : public tml::graphic::ResourceDesc
+class FontDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	LOGFONT font_desc;
@@ -114,7 +114,7 @@ public:
  */
 inline void tml::graphic::FontDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -125,7 +125,7 @@ namespace graphic {
 /**
  * @brief Fontクラス
  */
-class Font : public tml::graphic::Resource
+class Font : public tml::graphic::ManagerResource
 {
 public: Font(const tml::graphic::Font &) = delete;
 public: tml::graphic::Font &operator =(const tml::graphic::Font &) = delete;

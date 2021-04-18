@@ -41,7 +41,7 @@ void tml::graphic::BlendStateDesc::Init(void)
 	this->blend_state_desc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
 	this->factor_array.fill(D3D11_BLEND_ZERO);
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -55,7 +55,7 @@ void tml::graphic::BlendStateDesc::Init(void)
  */
 INT tml::graphic::BlendStateDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -257,7 +257,7 @@ void tml::graphic::BlendState::Release(void)
 		this->bs_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -272,7 +272,7 @@ void tml::graphic::BlendState::Init(void)
 
 	this->factor_ary_.fill(D3D11_BLEND_ZERO);
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -288,7 +288,7 @@ INT tml::graphic::BlendState::Create(const tml::graphic::BlendStateDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE, 1U) < 0) {
 		this->Init();
 
 		return (-1);

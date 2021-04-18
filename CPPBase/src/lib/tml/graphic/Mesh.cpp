@@ -60,7 +60,7 @@ void tml::graphic::MeshDesc::Init(void)
 	this->index_buffer_cpu_buffer_flag = false;
 	this->primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -74,7 +74,7 @@ void tml::graphic::MeshDesc::Init(void)
  */
 INT tml::graphic::MeshDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -195,7 +195,7 @@ void tml::graphic::Mesh::Release(void)
 		this->vb_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -221,7 +221,7 @@ void tml::graphic::Mesh::Init(void)
 	tml::Clear(&this->ib_msr_, 1U);
 	this->pt_ = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -237,7 +237,7 @@ INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH, 1U) < 0) {
 		this->Init();
 
 		return (-1);

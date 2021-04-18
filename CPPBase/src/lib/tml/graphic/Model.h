@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -328,7 +328,7 @@ namespace graphic {
 /**
  * @brief ModelDescクラス
  */
-class ModelDesc : public tml::graphic::ResourceDesc
+class ModelDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 
@@ -352,7 +352,7 @@ public:
  */
 inline void tml::graphic::ModelDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -365,7 +365,7 @@ namespace graphic {
  *
  * インターフェースパターン
  */
-class Model : public tml::graphic::Resource
+class Model : public tml::graphic::ManagerResource
 {
 public: Model(const tml::graphic::Model &) = delete;
 public: tml::graphic::Model &operator =(const tml::graphic::Model &) = delete;
@@ -756,7 +756,7 @@ namespace graphic {
 /**
  * @brief MaterialDescクラス
  */
-class MaterialDesc : public tml::graphic::ResourceDesc
+class MaterialDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	tml::XMFLOAT3EX diffuse_color;
@@ -792,7 +792,7 @@ public:
  */
 inline void tml::graphic::MaterialDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -803,7 +803,7 @@ namespace graphic {
 /**
  * @brief Materialクラス
  */
-class Material : public tml::graphic::Resource
+class Material : public tml::graphic::ManagerResource
 {
 public: Material(const tml::graphic::Material &) = delete;
 public: tml::graphic::Material &operator =(const tml::graphic::Material &) = delete;
@@ -863,7 +863,7 @@ public:
  */
 inline void tml::graphic::Material::Release(void)
 {
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }

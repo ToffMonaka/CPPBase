@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMathPosition.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -15,7 +15,7 @@ namespace graphic {
 /**
  * @brief CameraDescクラス
  */
-class CameraDesc : public tml::graphic::ResourceDesc
+class CameraDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type;
@@ -45,7 +45,7 @@ public:
  */
 inline void tml::graphic::CameraDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -56,7 +56,7 @@ namespace graphic {
 /**
  * @brief Cameraクラス
  */
-class Camera : public tml::graphic::Resource
+class Camera : public tml::graphic::ManagerResource
 {
 public: Camera(const tml::graphic::Camera &) = delete;
 public: tml::graphic::Camera &operator =(const tml::graphic::Camera &) = delete;
@@ -101,7 +101,7 @@ public:
  */
 inline void tml::graphic::Camera::Release(void)
 {
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }

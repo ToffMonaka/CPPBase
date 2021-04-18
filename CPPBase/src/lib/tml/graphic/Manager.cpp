@@ -34,12 +34,28 @@
  * @brief コンストラクタ
  */
 tml::graphic::ManagerDesc::ManagerDesc() :
-	window_handle(nullptr),
-	window_device_context_handle(nullptr),
 	size(0U),
 	vsync_flag(true),
 	frame_rate_limit(60U)
 {
+	this->resource_count_container.clear();
+	this->resource_count_container.resize(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT);
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT)] = 2U;
+	this->event_count = tml::ConstantUtil::GRAPHIC::EVENT_TYPE_COUNT;
+
 	return;
 }
 
@@ -62,11 +78,29 @@ void tml::graphic::ManagerDesc::Init(void)
 {
 	this->Release();
 
-	this->window_handle = nullptr;
-	this->window_device_context_handle = nullptr;
+	this->resource_count_container.clear();
+	this->resource_count_container.resize(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT);
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL)] = 2U;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT)] = 2U;
+	this->event_count = tml::ConstantUtil::GRAPHIC::EVENT_TYPE_COUNT;
+
 	this->size = 0U;
 	this->vsync_flag = true;
 	this->frame_rate_limit = 60U;
+
+	tml::ManagerDesc::Init();
 
 	return;
 }
@@ -76,12 +110,6 @@ void tml::graphic::ManagerDesc::Init(void)
  * @brief コンストラクタ
  */
 tml::graphic::Manager::Manager() :
-	wnd_handle_(nullptr),
-	wnd_dc_handle_(nullptr),
-	event_cnt_ary_{},
-	front_event_index_(0U),
-	back_event_index_(0U),
-	stock_event_cnt_ary_{},
 	factory_(nullptr),
 	adapter_(nullptr),
 	adapter_desc_{},
@@ -200,14 +228,7 @@ tml::graphic::Manager::~Manager()
 void tml::graphic::Manager::Release(void)
 {
 	this->common_.Init();
-
-	for (auto &res_cont : this->res_cont_ary_) {
-		for (auto &res : res_cont) {
-			res->Init();
-		}
-
-		res_cont.clear();
-	}
+	this->DeleteResourceContainer();
 
 	if (this->swap_chain_ != nullptr) {
 		this->swap_chain_->Release();
@@ -239,6 +260,8 @@ void tml::graphic::Manager::Release(void)
 		this->factory_ = nullptr;
 	}
 
+	tml::Manager::Release();
+
 	return;
 }
 
@@ -249,23 +272,6 @@ void tml::graphic::Manager::Release(void)
 void tml::graphic::Manager::Init(void)
 {
 	this->Release();
-
-	this->wnd_handle_ = nullptr;
-	this->wnd_dc_handle_ = nullptr;
-	this->event_cnt_ary_.fill(0U);
-
-	for (auto &event_cont : this->event_cont_ary_) {
-		event_cont.clear();
-	}
-
-	this->front_event_index_ = 0U;
-	this->back_event_index_ = 0U;
-
-	this->stock_event_cnt_ary_.fill(0U);
-
-	for (auto &stock_event_cont : this->stock_event_cont_ary_) {
-		stock_event_cont.clear();
-	}
 
 	tml::Clear(&this->adapter_desc_, 1U);
 	tml::Clear(&this->swap_chain_desc_, 1U);
@@ -339,6 +345,8 @@ void tml::graphic::Manager::Init(void)
 	this->cmp_tex_uasr_ary_.fill(nullptr);
 	this->cmp_samp_sr_ary_.fill(nullptr);
 
+	tml::Manager::Init();
+
 	return;
 }
 
@@ -351,17 +359,13 @@ void tml::graphic::Manager::Init(void)
  */
 INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 {
-	if ((desc.window_handle == nullptr)
-	|| (desc.window_device_context_handle == nullptr)) {
+	this->Init();
+
+	if (tml::Manager::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
 	}
-
-	this->Init();
-
-	this->wnd_handle_ = desc.window_handle;
-	this->wnd_dc_handle_ = desc.window_device_context_handle;
 
 	{// Factory Create
 		if (FAILED(CreateDXGIFactory1(IID_PPV_ARGS(&this->factory_)))) {
@@ -592,7 +596,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
  */
 void tml::graphic::Manager::Update(void)
 {
-	this->UpdateEvent();
+	tml::Manager::Update();
 
 	DirectX::XMVECTOR determinant;
 
@@ -711,46 +715,6 @@ void tml::graphic::Manager::Update(void)
 	this->ClearDrawFog();
 	this->ClearDrawMesh();
 	this->ClearDrawModel();
-
-	return;
-}
-
-
-/**
- * @brief UpdateEvent関数
- */
-void tml::graphic::Manager::UpdateEvent(void)
-{
-	if (this->front_event_index_ == this->back_event_index_) {
-		this->front_event_index_ = 0U;
-		this->back_event_index_ = 1U;
-	} else {
-		auto tmp_event_index = this->front_event_index_;
-
-		this->front_event_index_ = this->back_event_index_;
-		this->back_event_index_ = tmp_event_index;
-	}
-
-	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];
-	auto &back_event_cont = this->event_cont_ary_[this->back_event_index_];
-
-	for (UINT back_event_i = 0U; back_event_i < back_event_cnt; ++back_event_i) {
-		tml::unique_ptr<tml::graphic::Event> &event = back_event_cont[back_event_i];
-
-		auto event_index = static_cast<UINT>(event->GetEventType());
-		auto &stock_event_cnt = this->stock_event_cnt_ary_[event_index];
-		auto &stock_event_cont = this->stock_event_cont_ary_[event_index];
-
-		if (stock_event_cnt >= stock_event_cont.size()) {
-			stock_event_cont.resize(stock_event_cnt + 128U);
-		}
-
-		stock_event_cont[stock_event_cnt] = std::move(event);
-
-		++stock_event_cnt;
-	}
-
-	back_event_cnt = 0U;
 
 	return;
 }

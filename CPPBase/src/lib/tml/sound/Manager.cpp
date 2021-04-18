@@ -193,6 +193,7 @@ void tml::sound::Manager::Update(void)
 
 /**
  * @brief SetVolumeä÷êî
+ * @param type (type)
  * @param volume (volume)
  */
 void tml::sound::Manager::SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const FLOAT volume)
@@ -219,6 +220,7 @@ void tml::sound::Manager::SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE t
 
 /**
  * @brief SetMuteFlagä÷êî
+ * @param type (type)
  * @param mute_flg (mute_flag)
  */
 void tml::sound::Manager::SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const bool mute_flg)

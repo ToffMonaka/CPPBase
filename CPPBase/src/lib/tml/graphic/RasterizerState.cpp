@@ -41,7 +41,7 @@ void tml::graphic::RasterizerStateDesc::Init(void)
 	this->rasterizer_state_desc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
 	this->rasterizer_state_desc.CullMode = D3D11_CULL_NONE;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -55,7 +55,7 @@ void tml::graphic::RasterizerStateDesc::Init(void)
  */
 INT tml::graphic::RasterizerStateDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -142,7 +142,7 @@ void tml::graphic::RasterizerState::Release(void)
 		this->rs_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -155,7 +155,7 @@ void tml::graphic::RasterizerState::Init(void)
 {
 	this->Release();
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -171,7 +171,7 @@ INT tml::graphic::RasterizerState::Create(const tml::graphic::RasterizerStateDes
 {
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE, 1U) < 0) {
 		this->Init();
 
 		return (-1);

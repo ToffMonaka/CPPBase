@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "Resource.h"
+#include "ManagerResource.h"
 
 
 namespace tml {
@@ -14,7 +14,7 @@ namespace graphic {
 /**
  * @brief DepthStateDescクラス
  */
-class DepthStateDesc : public tml::graphic::ResourceDesc
+class DepthStateDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	CD3D11_DEPTH_STENCIL_DESC depth_state_desc;
@@ -41,7 +41,7 @@ public:
  */
 inline void tml::graphic::DepthStateDesc::Release(void)
 {
-	tml::graphic::ResourceDesc::Release();
+	tml::graphic::ManagerResourceDesc::Release();
 
 	return;
 }
@@ -52,7 +52,7 @@ namespace graphic {
 /**
  * @brief DepthStateクラス
  */
-class DepthState : public tml::graphic::Resource
+class DepthState : public tml::graphic::ManagerResource
 {
 public: DepthState(const tml::graphic::DepthState &) = delete;
 public: tml::graphic::DepthState &operator =(const tml::graphic::DepthState &) = delete;

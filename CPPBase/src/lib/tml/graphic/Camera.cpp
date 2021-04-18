@@ -47,7 +47,7 @@ void tml::graphic::CameraDesc::Init(void)
 	this->near_clip = 0.0f;
 	this->far_clip = 0.0f;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -61,7 +61,7 @@ void tml::graphic::CameraDesc::Init(void)
  */
 INT tml::graphic::CameraDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -120,7 +120,7 @@ void tml::graphic::Camera::Init(void)
 	this->near_clip_ = 0.0f;
 	this->far_clip_ = 0.0f;
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -142,7 +142,7 @@ INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc)
 
 	this->Init();
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA, 1U) < 0) {
 		this->Init();
 
 		return (-1);

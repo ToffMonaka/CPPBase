@@ -40,7 +40,7 @@ void tml::graphic::ShaderConstantBufferDesc::Init(void)
 	this->buffer_desc = CD3D11_BUFFER_DESC(0U, 0U);
 	this->element_size = 0U;
 
-	tml::graphic::ResourceDesc::Init();
+	tml::graphic::ManagerResourceDesc::Init();
 
 	return;
 }
@@ -54,7 +54,7 @@ void tml::graphic::ShaderConstantBufferDesc::Init(void)
  */
 INT tml::graphic::ShaderConstantBufferDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::graphic::ResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -132,7 +132,7 @@ void tml::graphic::ShaderConstantBuffer::Release(void)
 		this->buf_ = nullptr;
 	}
 
-	tml::graphic::Resource::Release();
+	tml::graphic::ManagerResource::Release();
 
 	return;
 }
@@ -148,7 +148,7 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
 	this->cpu_buf_.Init();
 	tml::Clear(&this->msr_, 1U);
 
-	tml::graphic::Resource::Init();
+	tml::graphic::ManagerResource::Init();
 
 	return;
 }
@@ -167,7 +167,7 @@ INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstan
 		return (-1);
 	}
 
-	if (tml::graphic::Resource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER, 1U) < 0) {
 		return (-1);
 	}
 
