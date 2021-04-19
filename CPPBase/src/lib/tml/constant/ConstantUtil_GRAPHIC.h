@@ -14,6 +14,7 @@ namespace ConstantUtil {
 namespace GRAPHIC {
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
+		ETC,
 		RASTERIZER_STATE,
 		BLEND_STATE,
 		DEPTH_STATE,
@@ -32,8 +33,117 @@ namespace GRAPHIC {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::COUNT);
+	enum class RASTERIZER_STATE_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT RASTERIZER_STATE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_TYPE::COUNT);
+	enum class BLEND_STATE_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT BLEND_STATE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::BLEND_STATE_TYPE::COUNT);
+	enum class DEPTH_STATE_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT DEPTH_STATE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_TYPE::COUNT);
+	enum class SHADER_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT SHADER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_TYPE::COUNT);
+	enum class SHADER_CONSTANT_BUFFER_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT SHADER_CONSTANT_BUFFER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_TYPE::COUNT);
+	enum class SHADER_STRUCTURED_BUFFER_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT SHADER_STRUCTURED_BUFFER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_TYPE::COUNT);
+	enum class CAMERA_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		PERSPECTIVE,
+		ORTHOGRAPHIC,
+		USER,
+		COUNT
+	};
+	const UINT CAMERA_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::COUNT);
+	enum class LIGHT_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		AMBIENT,
+		DIRECTIONAL,
+		POINT,
+		SPOT,
+		USER,
+		COUNT
+	};
+	const UINT LIGHT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::COUNT);
+	enum class FOG_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		WIDTH,
+		HEIGHT,
+		USER,
+		COUNT
+	};
+	const UINT FOG_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::COUNT);
+	enum class MESH_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT MESH_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MESH_TYPE::COUNT);
+	enum class TEXTURE_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT TEXTURE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::COUNT);
+	enum class SAMPLER_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT SAMPLER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE::COUNT);
+	enum class MODEL_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		SCREEN,
+		SPRITE,
+		USER,
+		COUNT
+	};
+	const UINT MODEL_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::COUNT);
+	enum class FONT_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT FONT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FONT_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
+		ETC,
 		USER,
 		COUNT
 	};
@@ -110,24 +220,6 @@ namespace GRAPHIC {
 		DEFAULT,
 		REFERENCE
 	};
-	enum class SHADER_TYPE : UINT {
-		NONE = 0U,
-		VERTEX_,
-		HULL_,
-		DOMAIN_,
-		GEOMETRY_,
-		PIXEL_,
-		COMPUTE_
-	};
-	enum class SHADER_TYPE_FLAG : UINT {
-		NONE = 0U,
-		VERTEX_ = 1U << 0,
-		HULL_ = 1U << 1,
-		DOMAIN_ = 1U << 2,
-		GEOMETRY_ = 1U << 3,
-		PIXEL_ = 1U << 4,
-		COMPUTE_ = 1U << 5
-	};
 	enum class SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG : UINT {
 		NONE = 0U,
 		SR = 1U << 0
@@ -156,23 +248,6 @@ namespace GRAPHIC {
 		USER
 	};
 	}
-	enum class CAMERA_TYPE : UINT {
-		NONE = 0U,
-		PERSPECTIVE,
-		ORTHOGRAPHIC
-	};
-	enum class LIGHT_TYPE : UINT {
-		NONE = 0U,
-		AMBIENT,
-		DIRECTIONAL,
-		POINT,
-		SPOT
-	};
-	enum class FOG_TYPE : UINT {
-		NONE = 0U,
-		WIDTH,
-		HEIGHT
-	};
 	enum class TEXTURE_DESC_BIND_FLAG : UINT {
 		NONE = 0U,
 		RENDER_TARGET = 1U << 0,
@@ -191,11 +266,6 @@ namespace GRAPHIC {
 		CW,
 		WC,
 		WW
-	};
-	enum class MODEL_TYPE : UINT {
-		NONE = 0U,
-		SCREEN,
-		SPRITE
 	};
 	const UINT SCREEN_MODEL_INPUT_ELEMENT_DESC_COUNT = 3U;
 	const D3D11_INPUT_ELEMENT_DESC SCREEN_MODEL_INPUT_ELEMENT_DESC_ARRAY[tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_COUNT] = {
@@ -224,7 +294,6 @@ namespace GRAPHIC {
 }
 
 
-TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::SHADER_TYPE_FLAG, UINT)
 TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG, UINT)
 TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG, UINT)
 TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG, UINT)

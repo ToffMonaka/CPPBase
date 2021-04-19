@@ -322,7 +322,7 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
 		return (-1);
 	}
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL, 1U) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL, static_cast<UINT>(type)) < 0) {
 		return (-1);
 	}
 

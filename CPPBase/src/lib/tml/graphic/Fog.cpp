@@ -146,7 +146,7 @@ INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc)
 
 	this->Init();
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG, 1U) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG, static_cast<UINT>(desc.type)) < 0) {
 		this->Init();
 
 		return (-1);

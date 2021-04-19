@@ -13,12 +13,14 @@ namespace ConstantUtil {
 namespace INPUT {
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
+		ETC,
 		USER,
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::RESOURCE_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
+		ETC,
 		MOUSE,
 		KEYBOARD,
 		USER,
