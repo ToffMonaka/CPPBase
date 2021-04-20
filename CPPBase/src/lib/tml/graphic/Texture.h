@@ -80,6 +80,7 @@ private:
 	std::vector<tml::DynamicBuffer> cpu_buf_cont_;
 	std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont_;
 	std::vector<tml::DynamicBuffer> clear_cpu_buf_cont_;
+	std::vector<LONG> str_line_w_cont_;
 	ID3D11RenderTargetView *rt_;
 	ID3D11DepthStencilView *dt_;
 	ID3D11ShaderResourceView *sr_;
@@ -109,7 +110,7 @@ public:
 	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresource(const UINT, const UINT) const;
 	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresourceFast(const UINT, const UINT) const;
 	void ClearCPUBuffer(void);
-	void DrawCPUBufferString(const WCHAR *, const tml::XMINT2EX &, tml::graphic::Font *);
+	void DrawCPUBufferString(const WCHAR *, const tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE, const tml::XMINT2EX &, const tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE, tml::graphic::Font *);
 	ID3D11RenderTargetView *GetRenderTarget(void);
 	void ClearRenderTarget(const tml::XMFLOAT4EX &);
 	ID3D11DepthStencilView *GetDepthTarget(void);

@@ -405,7 +405,7 @@ INT cpp_base::MainThread::Start(void)
 		auto tex = this->title_start_sprite_model_->GetTexture(this->title_start_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
-		tex->DrawCPUBufferString(L"スタート", tml::XMINT2EX(0, 0), this->title_start_font_.get());
+		tex->DrawCPUBufferString(L"スタート", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->title_start_font_.get());
 		tex->UploadCPUBuffer();
 	}
 
@@ -488,8 +488,8 @@ INT cpp_base::MainThread::Start(void)
 		auto tex = this->title_footer_sprite_model_->GetTexture(this->title_footer_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
-		tex->DrawCPUBufferString(company_name.c_str(), tml::XMINT2EX(4, 4), this->title_footer_font_.get());
-		tex->DrawCPUBufferString(version_name.c_str(), tml::XMINT2EX(this->graphic_mgr_.GetSize().x - 256 - 4, 4), this->title_footer_font_.get());
+		tex->DrawCPUBufferString(company_name.c_str(), tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(4, -4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_LEFT, this->title_footer_font_.get());
+		tex->DrawCPUBufferString(version_name.c_str(), tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(-4, -4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_RIGHT, this->title_footer_font_.get());
 		tex->UploadCPUBuffer();
 	}
 
@@ -644,7 +644,7 @@ void cpp_base::MainThread::Update(void)
 			auto tex = this->log_sprite_model_->GetTexture(this->log_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 			tex->ClearCPUBuffer();
-			tex->DrawCPUBufferString(log_str, tml::XMINT2EX(4, 4), this->log_font_.get());
+			tex->DrawCPUBufferString(log_str, tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(4, 4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::TOP_LEFT, this->log_font_.get());
 			tex->UploadCPUBuffer();
 		}
 

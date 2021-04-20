@@ -216,6 +216,7 @@ void tml::graphic::Texture::Init(void)
 	this->cpu_buf_cont_.clear();
 	this->msr_cont_.clear();
 	this->clear_cpu_buf_cont_.clear();
+	this->str_line_w_cont_.clear();
 
 	tml::graphic::ManagerResource::Init();
 
@@ -737,10 +738,12 @@ void tml::graphic::Texture::ClearCPUBuffer(void)
 /**
  * @brief DrawCPUBufferStringŠÖ”
  * @param str (string)
+ * @param str_alignment_type (string_alignment_type)
  * @param pos (position)
+ * @param pos_fit_type (position_fit_type)
  * @param font (font)
  */
-void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMINT2EX &pos, tml::graphic::Font *font)
+void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE str_alignment_type, const tml::XMINT2EX &pos, const tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE pos_fit_type, tml::graphic::Font *font)
 {
 	if ((this->cpu_buf_cont_.size() <= 0U)
 	|| (str[0] == 0)
@@ -749,16 +752,22 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMI
 	}
 
 	size_t str_len = wcslen(str);
+	LONG str_w = 0L;
+	LONG str_h = 0L;
+	LONG tmp_str_w = 0L;
+	LONG tmp_str_h = 0L;
+	size_t str_line_w_index = 0U;
+	LONG str_line_max_w = 0L;
+	tml::XMINT2EX tmp_pos;
 	UINT *buf = reinterpret_cast<UINT *>(this->cpu_buf_cont_[0].Get());
 	LONG buf_w = static_cast<LONG>(this->size_cont_[0].x);
 	LONG buf_h = static_cast<LONG>(this->size_cont_[0].y);
 	LONG buf_x = 0L;
 	LONG buf_y = 0L;
-	LONG buf_offset_x = pos.x;
-	LONG buf_offset_y = pos.y;
+	LONG buf_offset_x = 0L;
+	LONG buf_offset_y = 0L;
 	LONG tmp_buf_offset_x = 0L;
 	LONG tmp_buf_offset_y = 0L;
-	WCHAR code = 0;
 	const UINT *bm_buf = nullptr;
 	LONG bm_w = 0L;
 	LONG bm_h = 0L;
@@ -766,63 +775,196 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::XMI
 	auto &font_tm = font->GetTextMetric();
 
 	for (size_t str_i = 0U; str_i < str_len; ++str_i) {
-		code = str[str_i];
+		auto code = str[str_i];
+
+		if (code == L' ') {
+			tmp_str_w += font_tm.tmAveCharWidth;
+		} else if (code == L'@') {
+			tmp_str_w += font_tm.tmAveCharWidth << 1;
+		} else if (code == L'\n') {
+			str_w = tml::Max(str_w, tmp_str_w);
+
+			if (str_line_w_index >= this->str_line_w_cont_.size()) {
+				this->str_line_w_cont_.resize(str_line_w_index + 128U);
+			}
+
+			this->str_line_w_cont_[str_line_w_index] = str_w;
+			str_line_max_w = tml::Max(str_line_max_w, str_w);
+
+			++str_line_w_index;
+
+			tmp_str_w = 0L;
+			tmp_str_h += font_tm.tmHeight;
+		} else if (code == L'\t') {
+			tmp_str_w += font_tm.tmAveCharWidth << 2;
+		} else {
+			auto bm = font->GetBitmap(code);
+
+			if (bm == nullptr) {
+				continue;
+			}
+
+			auto &bm_gm = bm->GetGlyphMetrics();
+
+			tmp_str_w += bm_gm.gmCellIncX;
+		}
+	}
+
+	str_w = tml::Max(str_w, tmp_str_w);
+
+	if (str_line_w_index >= this->str_line_w_cont_.size()) {
+		this->str_line_w_cont_.resize(str_line_w_index + 128U);
+	}
+
+	this->str_line_w_cont_[str_line_w_index] = str_w;
+	str_line_max_w = tml::Max(str_line_max_w, str_w);
+
+	str_line_w_index = 0U;
+
+	str_h = font_tm.tmHeight + tmp_str_h;
+
+	switch (pos_fit_type) {
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER: {
+		tmp_pos.x = (buf_w >> 1) - (str_w >> 1) + pos.x;
+		tmp_pos.y = (buf_h >> 1) - (str_h >> 1) + pos.y;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::TOP_LEFT: {
+		tmp_pos.x = pos.x;
+		tmp_pos.y = pos.y;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::TOP_CENTER: {
+		tmp_pos.x = (buf_w >> 1) - (str_w >> 1) + pos.x;
+		tmp_pos.y = pos.y;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::TOP_RIGHT: {
+		tmp_pos.x = buf_w - str_w + pos.x;
+		tmp_pos.y = pos.y;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER_LEFT: {
+		tmp_pos.x = pos.x;
+		tmp_pos.y = (buf_h >> 1) - (str_h >> 1) + pos.y;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER_RIGHT: {
+		tmp_pos.x = buf_w - str_w + pos.x;
+		tmp_pos.y = (buf_h >> 1) - (str_h >> 1) + pos.y;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_LEFT: {
+		tmp_pos.x = pos.x;
+		tmp_pos.y = buf_h - str_h + pos.y;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_CENTER: {
+		tmp_pos.x = (buf_w >> 1) - (str_w >> 1) + pos.x;
+		tmp_pos.y = buf_h - str_h + pos.y;
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_RIGHT: {
+		tmp_pos.x = buf_w - str_w + pos.x;
+		tmp_pos.y = buf_h - str_h + pos.y;
+
+		break;
+	}
+	}
+
+	buf_offset_x = tmp_pos.x;
+
+	switch (str_alignment_type) {
+	case tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::CENTER: {
+		buf_offset_x += (str_line_max_w >> 1) - (this->str_line_w_cont_[str_line_w_index] >> 1);
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::RIGHT: {
+		buf_offset_x += str_line_max_w - this->str_line_w_cont_[str_line_w_index];
+
+		break;
+	}
+	}
+
+	++str_line_w_index;
+
+	buf_offset_y = tmp_pos.y;
+
+	for (size_t str_i = 0U; str_i < str_len; ++str_i) {
+		auto code = str[str_i];
 
 		if (code == L' ') {
 			buf_offset_x += font_tm.tmAveCharWidth;
-
-			continue;
 		} else if (code == L'@') {
 			buf_offset_x += font_tm.tmAveCharWidth << 1;
-
-			continue;
 		} else if (code == L'\n') {
-			buf_offset_x = pos.x;
-			buf_offset_y += font_tm.tmHeight;
+			buf_offset_x = tmp_pos.x;
 
-			continue;
+			switch (str_alignment_type) {
+			case tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::CENTER: {
+				buf_offset_x += (str_line_max_w >> 1) - (this->str_line_w_cont_[str_line_w_index] >> 1);
+
+				break;
+			}
+			case tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::RIGHT: {
+				buf_offset_x += str_line_max_w - this->str_line_w_cont_[str_line_w_index];
+
+				break;
+			}
+			}
+
+			++str_line_w_index;
+
+			buf_offset_y += font_tm.tmHeight;
 		} else if (code == L'\t') {
 			buf_offset_x += font_tm.tmAveCharWidth << 2;
+		} else {
+			auto bm = font->GetBitmap(code);
 
-			continue;
-		}
-
-		auto bm = font->GetBitmap(code);
-
-		if (bm == nullptr) {
-			continue;
-		}
-
-		auto &bm_gm = bm->GetGlyphMetrics();
-
-		bm_buf = reinterpret_cast<const UINT *>(bm->GetBuffer().Get());
-		bm_w = static_cast<LONG>(bm_gm.gmBlackBoxX + ((4U - (bm_gm.gmBlackBoxX & 3U)) & 3U));
-		bm_h = static_cast<LONG>(bm_gm.gmBlackBoxY);
-
-		tmp_buf_offset_x = buf_offset_x + bm_gm.gmptGlyphOrigin.x;
-		tmp_buf_offset_y = buf_offset_y + font_tm.tmAscent - bm_gm.gmptGlyphOrigin.y;
-
-		for (LONG bm_y = 0L; bm_y < bm_h; ++bm_y) {
-			buf_y = tmp_buf_offset_y + bm_y;
-
-			if (buf_y < 0L) {
+			if (bm == nullptr) {
 				continue;
-			} else if (buf_y >= buf_h) {
-				break;
 			}
 
-			buf_x = tmp_buf_offset_x;
+			auto &bm_gm = bm->GetGlyphMetrics();
 
-			if (buf_x < 0L) {
-				buf_x = 0L;
-			} else if (buf_x >= buf_w) {
-				break;
+			bm_buf = reinterpret_cast<const UINT *>(bm->GetBuffer().Get());
+			bm_w = static_cast<LONG>(bm_gm.gmBlackBoxX + ((4U - (bm_gm.gmBlackBoxX & 3U)) & 3U));
+			bm_h = static_cast<LONG>(bm_gm.gmBlackBoxY);
+
+			tmp_buf_offset_x = buf_offset_x + bm_gm.gmptGlyphOrigin.x;
+			tmp_buf_offset_y = buf_offset_y + font_tm.tmAscent - bm_gm.gmptGlyphOrigin.y;
+
+			for (LONG bm_y = 0L; bm_y < bm_h; ++bm_y) {
+				buf_y = tmp_buf_offset_y + bm_y;
+
+				if (buf_y < 0L) {
+					continue;
+				} else if (buf_y >= buf_h) {
+					break;
+				}
+
+				buf_x = tmp_buf_offset_x;
+
+				if (buf_x < 0L) {
+					buf_x = 0L;
+				} else if (buf_x >= buf_w) {
+					break;
+				}
+
+				memcpy(&buf[buf_x + buf_y * buf_w], &bm_buf[bm_y * bm_w], ((bm_w > (buf_w - buf_x)) ? (buf_w - buf_x) : bm_w) << 2);
 			}
 
-			memcpy(&buf[buf_x + buf_y * buf_w], &bm_buf[bm_y * bm_w], ((bm_w > (buf_w - buf_x)) ? (buf_w - buf_x) : bm_w) << 2);
+			buf_offset_x += bm_gm.gmCellIncX;
 		}
-
-		buf_offset_x += bm_gm.gmCellIncX;
 	}
 
 	return;
