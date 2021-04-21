@@ -109,6 +109,7 @@ private:
 	ID3D11DeviceContext *device_context_;
 	D3D_FEATURE_LEVEL device_future_lv_;
 	tml::XMUINT2EX size_;
+	tml::XMUINT2EX half_size_;
 	bool vsync_flg_;
 	UINT frame_rate_limit_;
 	tml::graphic::Viewport vp_;
@@ -217,6 +218,7 @@ public:
 	ID3D11DeviceContext *GetDeviceContext(void);
 	D3D_FEATURE_LEVEL GetDeviceFeatureLevel(void) const;
 	const tml::XMUINT2EX &GetSize(void) const;
+	const tml::XMUINT2EX &GetHalfSize(void) const;
 	bool GetVsyncFlag(void) const;
 	UINT GetFrameRateLimit(void) const;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE GetSamplerQualityType(void) const;
@@ -407,6 +409,16 @@ inline D3D_FEATURE_LEVEL tml::graphic::Manager::GetDeviceFeatureLevel(void) cons
 inline const tml::XMUINT2EX &tml::graphic::Manager::GetSize(void) const
 {
 	return (this->size_);
+}
+
+
+/**
+ * @brief GetHalfSizeŠÖ”
+ * @return half_size (half_size)
+ */
+inline const tml::XMUINT2EX &tml::graphic::Manager::GetHalfSize(void) const
+{
+	return (this->half_size_);
 }
 
 

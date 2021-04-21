@@ -416,7 +416,7 @@ INT cpp_base::MainThread::Start(void)
 		tml::graphic::SpriteModelDesc desc;
 
 		desc.manager = &this->graphic_mgr_;
-		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(this->graphic_mgr_.GetSize().y >> 1) + static_cast<FLOAT>(title_footer_tex_size.y >> 1)));
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(this->graphic_mgr_.GetHalfSize().y) + static_cast<FLOAT>(title_footer_tex_size.y >> 1)));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
@@ -622,12 +622,22 @@ void cpp_base::MainThread::Update(void)
 			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event)->GetData();
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-				this->sound_mgr_.Play(this->title_start_se_sound_.get(), false);
+				if (this->title_start_sprite_model_->IsHitByMouse(this->input_mgr_.GetMousePosition())) {
+					this->sound_mgr_.Play(this->title_start_se_sound_.get(), false);
+				}
 			}
 
 			break;
 		}
 		}
+	}
+
+	if (this->title_start_sprite_model_->IsHitByMouse(this->input_mgr_.GetMousePosition())) {
+		this->title_start_sprite_model_->SetScale(tml::XMFLOAT2EX(1.2f, 1.2f));
+		this->title_start_sprite_model_->SetColor(tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), 1.0f));
+	} else {
+		this->title_start_sprite_model_->SetScale(tml::XMFLOAT2EX(1.0f, 1.0f));
+		this->title_start_sprite_model_->SetColor(tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
 	this->log_update_time_ += this->frame_rate_.GetElapsedTime();

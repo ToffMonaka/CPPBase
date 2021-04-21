@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMathINT.h"
 #include "../math/XNAMathPosition.h"
 #include "Model.h"
 
@@ -215,6 +216,7 @@ public:
 
 private:
 	tml::XMFLOAT2EX size_;
+	tml::XMFLOAT2EX half_size_;
 	tml::XMFLOAT2EX scale_;
 	tml::XMFLOAT4EX col_;
 	tml::shared_ptr<tml::graphic::SpriteModelShaderStructuredBuffer> ssb_;
@@ -235,6 +237,7 @@ public:
 
 	const tml::XMFLOAT2EX &GetSize(void) const;
 	void SetSize(const tml::XMFLOAT2EX &);
+	const tml::XMFLOAT2EX &GetHalfSize(void) const;
 	const tml::XMFLOAT2EX &GetScale(void) const;
 	void SetScale(const tml::XMFLOAT2EX &);
 	const tml::XMFLOAT4EX &GetColor(void) const;
@@ -246,6 +249,8 @@ public:
 
 	virtual void DrawStageInit(void);
 	virtual void DrawStageForward2D(void);
+
+	bool IsHitByMouse(const tml::XMINT2EX &);
 };
 }
 }
@@ -268,8 +273,20 @@ inline const tml::XMFLOAT2EX &tml::graphic::SpriteModel::GetSize(void) const
 inline void tml::graphic::SpriteModel::SetSize(const tml::XMFLOAT2EX &size)
 {
 	this->size_ = size;
+	this->half_size_.x = this->size_.x * 0.5f;
+	this->half_size_.y = this->size_.y * 0.5f;
 	
 	return;
+}
+
+
+/**
+ * @brief GetHalfSizeŠÖ”
+ * @return half_size (half_size)
+ */
+inline const tml::XMFLOAT2EX &tml::graphic::SpriteModel::GetHalfSize(void) const
+{
+	return (this->half_size_);
 }
 
 

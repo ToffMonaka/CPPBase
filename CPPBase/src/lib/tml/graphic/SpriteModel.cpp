@@ -197,6 +197,7 @@ INT tml::graphic::SpriteModelDesc::ReadValue(const tml::INIFile &ini_file)
  */
 tml::graphic::SpriteModel::SpriteModel() :
 	size_(0.0f),
+	half_size_(0.0f),
 	scale_(1.0f),
 	col_(1.0f)
 {
@@ -240,6 +241,7 @@ void tml::graphic::SpriteModel::Init(void)
 
 	this->position.Init();
 	this->size_ = 0.0f;
+	this->half_size_ = 0.0f;
 	this->scale_ = 1.0f;
 	this->col_ = 1.0f;
 
@@ -267,6 +269,8 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 
 	this->position = desc.position;
 	this->size_ = desc.size;
+	this->half_size_.x = this->size_.x * 0.5f;
+	this->half_size_.y = this->size_.y * 0.5f;
 	this->scale_ = desc.scale;
 	this->col_ = desc.color;
 
@@ -488,4 +492,28 @@ void tml::graphic::SpriteModel::DrawStageForward2D(void)
 	this->GetManager()->ClearDrawSamplerSR(0U);
 
 	return;
+}
+
+
+/**
+ * @brief IsHitByMouseä÷êî
+ * @param pos (position)
+ * @return hit_flg (hit_flag)
+ */
+bool tml::graphic::SpriteModel::IsHitByMouse(const tml::XMINT2EX &pos)
+{
+	tml::XMFLOAT2EX tmp_pos;
+
+	tmp_pos.x = static_cast<FLOAT>(pos.x - static_cast<INT>(this->GetManager()->GetHalfSize().x));
+	tmp_pos.y = static_cast<FLOAT>(-pos.y + static_cast<INT>(this->GetManager()->GetHalfSize().y));
+
+	if ((tmp_pos.x >= (this->position.GetX() - (this->half_size_.x * this->scale_.x)))
+	&& (tmp_pos.x <= (this->position.GetX() + (this->half_size_.x * this->scale_.x)))
+	&& (tmp_pos.y >= (this->position.GetY() - (this->half_size_.y * this->scale_.y)))
+	&& (tmp_pos.y <= (this->position.GetY() + (this->half_size_.y * this->scale_.y)))
+	) {
+		return (true);
+	}
+
+	return (false);
 }
