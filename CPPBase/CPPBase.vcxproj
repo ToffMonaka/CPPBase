@@ -238,6 +238,10 @@
     <ClCompile Include="src\lib\tml\random\RandomSeed.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtil.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\scene\Manager.cpp" />
+    <ClCompile Include="src\lib\tml\scene\ManagerCommon.cpp" />
+    <ClCompile Include="src\lib\tml\scene\ManagerEvent.cpp" />
+    <ClCompile Include="src\lib\tml\scene\ManagerResource.cpp" />
     <ClCompile Include="src\lib\tml\sound\BGMSound.cpp" />
     <ClCompile Include="src\lib\tml\sound\Manager.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerCommon.cpp" />
@@ -290,6 +294,7 @@
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_MATH.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_MEMORY.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_NEWLINE_CODE.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_SCENE.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_SOUND.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_THREAD.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_XNAMATH.h" />
@@ -361,6 +366,10 @@
     <ClInclude Include="src\lib\tml\random\RandomSeed.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtil.h" />
     <ClInclude Include="src\lib\tml\random\RandomUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\scene\Manager.h" />
+    <ClInclude Include="src\lib\tml\scene\ManagerCommon.h" />
+    <ClInclude Include="src\lib\tml\scene\ManagerEvent.h" />
+    <ClInclude Include="src\lib\tml\scene\ManagerResource.h" />
     <ClInclude Include="src\lib\tml\sound\BGMSound.h" />
     <ClInclude Include="src\lib\tml\sound\Manager.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerCommon.h" />

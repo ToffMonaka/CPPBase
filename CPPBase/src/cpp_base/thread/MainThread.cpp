@@ -72,6 +72,7 @@ void cpp_base::MainThread::Release(void)
 	this->input_mgr_.Init();
 	this->graphic_mgr_.Init();
 	this->sound_mgr_.Init();
+	this->scene_mgr_.Init();
 
 	this->DeleteWindow_();
 	this->DeleteCOM();
@@ -206,6 +207,19 @@ INT cpp_base::MainThread::Start(void)
 		desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_mute_flag);
 
 		if (this->sound_mgr_.Create(desc) < 0) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// SceneManager Create
+		tml::scene::ManagerDesc desc;
+
+		desc.window_handle = this->GetWindowHandle();
+		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+
+		if (this->scene_mgr_.Create(desc) < 0) {
 			this->Init();
 
 			return (-1);
@@ -671,6 +685,8 @@ void cpp_base::MainThread::Update(void)
 	this->graphic_mgr_.Update();
 
 	this->sound_mgr_.Update();
+
+	this->scene_mgr_.Update();
 
 	this->frame_rate_.Update();
 

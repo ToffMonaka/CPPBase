@@ -11,6 +11,7 @@
 #include "../../lib/tml/input/Manager.h"
 #include "../../lib/tml/graphic/Manager.h"
 #include "../../lib/tml/sound/Manager.h"
+#include "../../lib/tml/scene/Manager.h"
 #include "../data/SystemConfigFile.h"
 
 
@@ -31,6 +32,7 @@ private:
 	tml::input::Manager input_mgr_;
 	tml::graphic::Manager graphic_mgr_;
 	tml::sound::Manager sound_mgr_;
+	tml::scene::Manager scene_mgr_;
 
 	tml::shared_ptr<tml::graphic::Camera> camera_;
 	tml::shared_ptr<tml::graphic::SpriteModel> title_bg_sprite_model_;
@@ -66,6 +68,7 @@ public:
 	tml::input::Manager &GetInputManager(void);
 	tml::graphic::Manager &GetGraphicManager(void);
 	tml::sound::Manager &GetSoundManager(void);
+	tml::scene::Manager &GetSceneManager(void);
 };
 }
 
@@ -117,4 +120,14 @@ inline tml::graphic::Manager &cpp_base::MainThread::GetGraphicManager(void)
 inline tml::sound::Manager &cpp_base::MainThread::GetSoundManager(void)
 {
 	return (this->sound_mgr_);
+}
+
+
+/**
+ * @brief GetSceneManagerŠÖ”
+ * @return scene_mgr (scene_manager)
+ */
+inline tml::scene::Manager &cpp_base::MainThread::GetSceneManager(void)
+{
+	return (this->scene_mgr_);
 }
