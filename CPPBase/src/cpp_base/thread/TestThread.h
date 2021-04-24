@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../../lib/tml/time/FrameRate.h"
 #include "../../lib/tml/thread/SubThread.h"
 
 
@@ -21,7 +20,6 @@ public: cpp_base::TestThread &operator =(const cpp_base::TestThread &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::FrameRate frame_rate_;
 
 protected:
 	void Release(void);
@@ -36,16 +34,5 @@ public:
 	virtual INT Start(void);
 	virtual void End(void);
 	virtual void Update(void);
-	const tml::FrameRate &GetFrameRate(void) const;
 };
-}
-
-
-/**
- * @brief GetFrameRateŠÖ”
- * @return frame_rate (frame_rate)
- */
-inline const tml::FrameRate &cpp_base::TestThread::GetFrameRate(void) const
-{
-	return (this->frame_rate_);
 }

@@ -6,8 +6,22 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../time/FrameRate.h"
 #include "../manager/Manager.h"
 #include "ManagerCommon.h"
+
+
+namespace tml {
+namespace input {
+class Manager;
+}
+namespace graphic {
+class Manager;
+}
+namespace sound {
+class Manager;
+}
+}
 
 
 namespace tml {
@@ -18,6 +32,9 @@ namespace scene {
 class ManagerDesc : public tml::ManagerDesc
 {
 public:
+	tml::input::Manager *input_manager;
+	tml::graphic::Manager *graphic_manager;
+	tml::sound::Manager *sound_manager;
 
 protected:
 	void Release(void);
@@ -57,6 +74,11 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	tml::scene::ManagerCommon common_;
 
+	tml::input::Manager *input_mgr_;
+	tml::graphic::Manager *graphic_mgr_;
+	tml::sound::Manager *sound_mgr_;
+	tml::FrameRate frame_rate_;
+
 protected:
 	void Release(void);
 
@@ -69,6 +91,11 @@ public:
 
 	void Update(void);
 	tml::scene::ManagerCommon &GetCommon(void);
+
+	tml::input::Manager *GetInputManager(void);
+	tml::graphic::Manager *GetGraphicManager(void);
+	tml::sound::Manager *GetSoundManager(void);
+	const tml::FrameRate &GetFrameRate(void) const;
 };
 }
 }
@@ -81,4 +108,44 @@ public:
 inline tml::scene::ManagerCommon &tml::scene::Manager::GetCommon(void)
 {
 	return (this->common_);
+}
+
+
+/**
+ * @brief GetInputManagerŠÖ”
+ * @return input_mgr (input_manager)
+ */
+inline tml::input::Manager *tml::scene::Manager::GetInputManager(void)
+{
+	return (this->input_mgr_);
+}
+
+
+/**
+ * @brief GetGraphicManagerŠÖ”
+ * @return graphic_mgr (graphic_manager)
+ */
+inline tml::graphic::Manager *tml::scene::Manager::GetGraphicManager(void)
+{
+	return (this->graphic_mgr_);
+}
+
+
+/**
+ * @brief GetSoundManagerŠÖ”
+ * @return sound_mgr (sound_manager)
+ */
+inline tml::sound::Manager *tml::scene::Manager::GetSoundManager(void)
+{
+	return (this->sound_mgr_);
+}
+
+
+/**
+ * @brief GetFrameRateŠÖ”
+ * @return frame_rate (frame_rate)
+ */
+inline const tml::FrameRate &tml::scene::Manager::GetFrameRate(void) const
+{
+	return (this->frame_rate_);
 }

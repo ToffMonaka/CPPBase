@@ -69,10 +69,10 @@ void cpp_base::MainThread::Release(void)
 	this->sound_mgr_.ReleaseResource(this->title_bgm_sound_);
 	this->sound_mgr_.ReleaseResource(this->title_start_se_sound_);
 
-	this->input_mgr_.Init();
-	this->graphic_mgr_.Init();
-	this->sound_mgr_.Init();
 	this->scene_mgr_.Init();
+	this->sound_mgr_.Init();
+	this->graphic_mgr_.Init();
+	this->input_mgr_.Init();
 
 	this->DeleteWindow_();
 	this->DeleteCOM();
@@ -90,7 +90,6 @@ void cpp_base::MainThread::Init(void)
 {
 	this->Release();
 
-	this->frame_rate_.Init();
 	this->sys_conf_file_.Init();
 
 	this->log_update_time_ = tml::TIME_REAL(0.0);
@@ -218,6 +217,9 @@ INT cpp_base::MainThread::Start(void)
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		desc.input_manager = &this->input_mgr_;
+		desc.graphic_manager = &this->graphic_mgr_;
+		desc.sound_manager = &this->sound_mgr_;
 
 		if (this->scene_mgr_.Create(desc) < 0) {
 			this->Init();
@@ -606,8 +608,6 @@ INT cpp_base::MainThread::Start(void)
 
 	this->sound_mgr_.Play(this->title_bgm_sound_.get(), true);
 
-	this->frame_rate_.Start(this->graphic_mgr_.GetFrameRateLimit());
-
 	return (0);
 }
 
@@ -654,11 +654,11 @@ void cpp_base::MainThread::Update(void)
 		this->title_start_sprite_model_->SetColor(tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
-	this->log_update_time_ += this->frame_rate_.GetElapsedTime();
+	this->log_update_time_ += this->scene_mgr_.GetFrameRate().GetElapsedTime();
 
 	if (this->log_update_time_ >= tml::TIME_REAL(1.0)) {
 		{// LogTexture Update
-			auto &frame_rate = this->frame_rate_;
+			auto &frame_rate = this->scene_mgr_.GetFrameRate();
 			auto mem_allocator_info = tml::MemoryUtil::GetAllocatorInfo();
 
 			WCHAR log_str[1024];
@@ -687,8 +687,6 @@ void cpp_base::MainThread::Update(void)
 	this->sound_mgr_.Update();
 
 	this->scene_mgr_.Update();
-
-	this->frame_rate_.Update();
 
 	return;
 }

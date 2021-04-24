@@ -473,7 +473,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	this->half_size_.x = this->size_.x >> 1;
 	this->half_size_.y = this->size_.y >> 1;
 	this->vsync_flg_ = desc.vsync_flag;
-	this->frame_rate_limit_ =  desc.frame_rate_limit;
+	this->frame_rate_limit_ = desc.frame_rate_limit;
 	this->vp_.Init(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(static_cast<FLOAT>(this->swap_chain_desc_.BufferDesc.Width), static_cast<FLOAT>(this->swap_chain_desc_.BufferDesc.Height)));
 
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC4;

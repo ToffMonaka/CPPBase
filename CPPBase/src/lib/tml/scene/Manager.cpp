@@ -5,12 +5,19 @@
 
 
 #include "Manager.h"
+#include "../input/Manager.h"
+#include "../graphic/Manager.h"
+#include "../sound/Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::scene::ManagerDesc::ManagerDesc()
+tml::scene::ManagerDesc::ManagerDesc() :
+	input_manager(nullptr),
+	graphic_manager(nullptr),
+	sound_manager(nullptr)
+
 {
 	this->resource_count_container.clear();
 	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
@@ -42,6 +49,10 @@ void tml::scene::ManagerDesc::Init(void)
 	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
 	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
+	this->input_manager = nullptr;
+	this->graphic_manager = nullptr;
+	this->sound_manager = nullptr;
+
 	tml::ManagerDesc::Init();
 
 	return;
@@ -51,7 +62,10 @@ void tml::scene::ManagerDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::scene::Manager::Manager()
+tml::scene::Manager::Manager() :
+	input_mgr_(nullptr),
+	graphic_mgr_(nullptr),
+	sound_mgr_(nullptr)
 {
 	return;
 }
@@ -89,6 +103,11 @@ void tml::scene::Manager::Init(void)
 {
 	this->Release();
 
+	this->input_mgr_ = nullptr;
+	this->graphic_mgr_ = nullptr;
+	this->sound_mgr_ = nullptr;
+	this->frame_rate_.Init();
+
 	tml::Manager::Init();
 
 	return;
@@ -103,6 +122,14 @@ void tml::scene::Manager::Init(void)
  */
 INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 {
+	if ((desc.input_manager == nullptr)
+	|| (desc.graphic_manager == nullptr)
+	|| (desc.sound_manager == nullptr)) {
+		this->Init();
+
+		return (-1);
+	}
+
 	this->Init();
 
 	if (tml::Manager::Create(desc) < 0) {
@@ -117,6 +144,12 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 		return (-1);
 	}
 
+	this->input_mgr_ = desc.input_manager;
+	this->graphic_mgr_ = desc.graphic_manager;
+	this->sound_mgr_ = desc.sound_manager;
+
+	this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
+
 	return (0);
 }
 
@@ -127,6 +160,8 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 void tml::scene::Manager::Update(void)
 {
 	tml::Manager::Update();
+
+	this->frame_rate_.Update();
 
 	return;
 }

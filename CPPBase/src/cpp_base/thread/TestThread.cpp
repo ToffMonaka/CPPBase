@@ -5,6 +5,7 @@
 
 
 #include "TestThread.h"
+#include "../../lib/tml/time/TimeUtil.h"
 
 
 /**
@@ -47,8 +48,6 @@ void cpp_base::TestThread::Init(void)
 {
 	this->Release();
 
-	this->frame_rate_.Init();
-
 	tml::SubThread::Init();
 
 	return;
@@ -87,8 +86,6 @@ INT cpp_base::TestThread::Start(void)
 		}
 	}
 
-	this->frame_rate_.Start(60U);
-
 	return (0);
 }
 
@@ -107,7 +104,7 @@ void cpp_base::TestThread::End(void)
  */
 void cpp_base::TestThread::Update(void)
 {
-	this->frame_rate_.Update();
+	tml::TimeUtil::Sleep(tml::TIME_REAL(0.1));
 
 	return;
 }

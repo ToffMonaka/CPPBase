@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../../lib/tml/time/FrameRate.h"
 #include "../../lib/tml/thread/MainThread.h"
 #include "../../lib/tml/input/Manager.h"
 #include "../../lib/tml/graphic/Manager.h"
@@ -26,9 +25,7 @@ public: cpp_base::MainThread &operator =(const cpp_base::MainThread &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::FrameRate frame_rate_;
 	cpp_base::SystemConfigFile sys_conf_file_;
-
 	tml::input::Manager input_mgr_;
 	tml::graphic::Manager graphic_mgr_;
 	tml::sound::Manager sound_mgr_;
@@ -63,23 +60,12 @@ public:
 	virtual INT Start(void);
 	virtual void End(void);
 	virtual void Update(void);
-	const tml::FrameRate &GetFrameRate(void) const;
 	cpp_base::SystemConfigFile &GetSystemConfigFile(void);
 	tml::input::Manager &GetInputManager(void);
 	tml::graphic::Manager &GetGraphicManager(void);
 	tml::sound::Manager &GetSoundManager(void);
 	tml::scene::Manager &GetSceneManager(void);
 };
-}
-
-
-/**
- * @brief GetFrameRateŠÖ”
- * @return frame_rate (frame_rate)
- */
-inline const tml::FrameRate &cpp_base::MainThread::GetFrameRate(void) const
-{
-	return (this->frame_rate_);
 }
 
 

@@ -1,0 +1,17 @@
+■RapidXMLをインストール
+
+ダウンロード:
+http://rapidxml.sourceforge.net/
+から、
+rapidxml-1.13.zip
+をダウンロードします。
+
+インストール:
+rapidxml-1.13.zipを展開します。
+rapidxmlフォルダを作成し、
+rapidxml.hpp
+rapidxml_iterators.hpp
+rapidxml_print.hpp
+rapidxml_utils.hpp
+を入れます。
+rapidxmlフォルダをプロジェクトに追加します。
