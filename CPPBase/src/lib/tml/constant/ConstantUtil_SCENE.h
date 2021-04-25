@@ -14,10 +14,17 @@ namespace SCENE {
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
 		ETC,
+		SCENE,
 		USER,
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::COUNT);
+	enum class SCENE_TYPE : UINT {
+		NONE = 0U,
+		USER,
+		COUNT
+	};
+	const UINT SCENE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
 		ETC,

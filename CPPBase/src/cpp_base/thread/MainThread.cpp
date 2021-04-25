@@ -29,6 +29,7 @@
 #include "../../lib/tml/graphic/Font.h"
 #include "../../lib/tml/sound/BGMSound.h"
 #include "../../lib/tml/sound/SESound.h"
+#include "../scene/InitScene.h"
 
 
 /**
@@ -173,8 +174,6 @@ INT cpp_base::MainThread::Start(void)
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
 
 		if (this->input_mgr_.Create(desc) < 0) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -189,8 +188,6 @@ INT cpp_base::MainThread::Start(void)
 		desc.frame_rate_limit = this->sys_conf_file_.data.graphic_frame_rate_limit;
 
 		if (this->graphic_mgr_.Create(desc) < 0) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -206,8 +203,6 @@ INT cpp_base::MainThread::Start(void)
 		desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_mute_flag);
 
 		if (this->sound_mgr_.Create(desc) < 0) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -217,15 +212,36 @@ INT cpp_base::MainThread::Start(void)
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		desc.resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = cpp_base::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
 		desc.input_manager = &this->input_mgr_;
 		desc.graphic_manager = &this->graphic_mgr_;
 		desc.sound_manager = &this->sound_mgr_;
 
 		if (this->scene_mgr_.Create(desc) < 0) {
-			this->Init();
-
 			return (-1);
 		}
+	}
+
+	{// InitScene Start
+		tml::shared_ptr<cpp_base::scene::InitScene> scene;
+
+		cpp_base::scene::InitSceneDesc desc;
+
+		desc.manager = &this->scene_mgr_;
+
+		this->scene_mgr_.GetResource<cpp_base::scene::InitScene>(scene, desc);
+
+		if (scene == nullptr) {
+			return (-1);
+		}
+
+		/*
+		if (this->scene_mgr_.Start(scene) < 0) {
+			return (-1);
+		}
+		*/
+
+		this->scene_mgr_.ReleaseResource(scene);
 	}
 
 	{// TestThread Start
@@ -253,8 +269,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::Camera>(this->camera_, desc);
 
 		if (this->camera_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -272,8 +286,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_bg_sprite_model_, desc);
 
 		if (this->title_bg_sprite_model_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -294,8 +306,6 @@ INT cpp_base::MainThread::Start(void)
 			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
 
 			if (tex == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -317,8 +327,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_logo_sprite_model_, desc);
 
 		if (this->title_logo_sprite_model_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -339,8 +347,6 @@ INT cpp_base::MainThread::Start(void)
 			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
 
 			if (tex == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -368,8 +374,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_start_sprite_model_, desc);
 
 		if (this->title_start_sprite_model_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -390,8 +394,6 @@ INT cpp_base::MainThread::Start(void)
 			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
 
 			if (tex == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -411,8 +413,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::Font>(this->title_start_font_, desc);
 
 		if (this->title_start_font_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -442,8 +442,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->title_footer_sprite_model_, desc);
 
 		if (this->title_footer_sprite_model_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -464,8 +462,6 @@ INT cpp_base::MainThread::Start(void)
 			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
 
 			if (tex == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -485,8 +481,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::Font>(this->title_footer_font_, desc);
 
 		if (this->title_footer_font_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -525,8 +519,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::SpriteModel>(this->log_sprite_model_, desc);
 
 		if (this->log_sprite_model_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -547,8 +539,6 @@ INT cpp_base::MainThread::Start(void)
 			this->graphic_mgr_.GetResource<tml::graphic::Texture>(tex, desc);
 
 			if (tex == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -568,8 +558,6 @@ INT cpp_base::MainThread::Start(void)
 		this->graphic_mgr_.GetResource<tml::graphic::Font>(this->log_font_, desc);
 
 		if (this->log_font_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -585,8 +573,6 @@ INT cpp_base::MainThread::Start(void)
 		this->sound_mgr_.GetResource<tml::sound::BGMSound>(this->title_bgm_sound_, desc);
 
 		if (this->title_bgm_sound_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -600,8 +586,6 @@ INT cpp_base::MainThread::Start(void)
 		this->sound_mgr_.GetResource<tml::sound::SESound>(this->title_start_se_sound_, desc);
 
 		if (this->title_start_se_sound_ == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}

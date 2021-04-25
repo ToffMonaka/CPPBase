@@ -1,0 +1,83 @@
+/**
+ * @file
+ * @brief InitSceneヘッダーファイル
+ */
+#pragma once
+
+
+#include "../constant/ConstantUtil.h"
+#include "../constant/ConstantUtil_SCENE.h"
+#include "../../lib/tml/scene/Scene.h"
+
+
+namespace cpp_base {
+namespace scene {
+/**
+ * @brief InitSceneDescクラス
+ */
+class InitSceneDesc : public tml::scene::SceneDesc
+{
+public:
+
+protected:
+	void Release(void);
+
+	virtual INT ReadValue(const tml::INIFile &);
+
+public:
+	InitSceneDesc();
+	virtual ~InitSceneDesc();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void cpp_base::scene::InitSceneDesc::Release(void)
+{
+	tml::scene::SceneDesc::Release();
+
+	return;
+}
+
+
+namespace cpp_base {
+namespace scene {
+/**
+ * @brief InitSceneクラス
+ */
+class InitScene : public tml::scene::Scene
+{
+public: InitScene(const cpp_base::scene::InitScene &) = delete;
+public: cpp_base::scene::InitScene &operator =(const cpp_base::scene::InitScene &) = delete;
+protected: virtual void InterfaceDummy(void) {return;};
+
+private:
+
+protected:
+	void Release(void);
+
+public:
+	InitScene();
+	virtual ~InitScene();
+
+	virtual void Init(void);
+	INT Create(const cpp_base::scene::InitSceneDesc &);
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void cpp_base::scene::InitScene::Release(void)
+{
+	tml::scene::Scene::Release();
+
+	return;
+}

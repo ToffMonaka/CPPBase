@@ -21,6 +21,7 @@ tml::scene::ManagerDesc::ManagerDesc() :
 {
 	this->resource_count_container.clear();
 	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
 	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
 	return;
