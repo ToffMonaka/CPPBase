@@ -13,6 +13,7 @@
 namespace tml {
 namespace scene {
 class Manager;
+class Scene;
 }
 }
 

@@ -8,6 +8,7 @@
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
+#include "Scene.h"
 
 
 /**
@@ -66,7 +67,8 @@ void tml::scene::ManagerDesc::Init(void)
 tml::scene::Manager::Manager() :
 	input_mgr_(nullptr),
 	graphic_mgr_(nullptr),
-	sound_mgr_(nullptr)
+	sound_mgr_(nullptr),
+	scene_end_flg_(false)
 {
 	return;
 }
@@ -88,6 +90,14 @@ tml::scene::Manager::~Manager()
  */
 void tml::scene::Manager::Release(void)
 {
+	if (this->scene_ != nullptr) {
+		this->scene_->End();
+
+		this->scene_end_flg_ = false;
+
+		this->ReleaseResource(this->scene_);
+	}
+
 	this->common_.Init();
 	this->DeleteResourceContainer();
 
@@ -139,17 +149,15 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 		return (-1);
 	}
 
+	this->input_mgr_ = desc.input_manager;
+	this->graphic_mgr_ = desc.graphic_manager;
+	this->sound_mgr_ = desc.sound_manager;
+
 	if (this->common_.Create(this) < 0) {
 		this->Init();
 
 		return (-1);
 	}
-
-	this->input_mgr_ = desc.input_manager;
-	this->graphic_mgr_ = desc.graphic_manager;
-	this->sound_mgr_ = desc.sound_manager;
-
-	this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
 
 	return (0);
 }
@@ -162,7 +170,72 @@ void tml::scene::Manager::Update(void)
 {
 	tml::Manager::Update();
 
-	this->frame_rate_.Update();
+	if (this->scene_ != nullptr) {
+		this->input_mgr_->Update();
+
+		this->scene_->Update();
+
+		this->graphic_mgr_->Update();
+
+		this->sound_mgr_->Update();
+
+		this->frame_rate_.Update();
+
+		if (this->scene_end_flg_) {
+			this->scene_->End();
+
+			this->scene_end_flg_ = false;
+
+			this->ReleaseResource(this->scene_);
+		}
+	}
+
+	return;
+}
+
+
+/**
+ * @brief StartŠÖ”
+ * @param scene (scene)
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::scene::Manager::Start(tml::shared_ptr<tml::scene::Scene> &scene)
+{
+	if (scene == nullptr) {
+		return (-1);
+	}
+
+	if (this->scene_ != nullptr) {
+		return (-1);
+	}
+
+	this->GetResource(this->scene_, scene);
+
+	if (this->scene_ == nullptr) {
+		return (-1);
+	}
+
+	if (this->scene_->Start() < 0) {
+		this->ReleaseResource(this->scene_);
+
+		return (-1);
+	}
+
+	this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
+
+	return (0);
+}
+
+
+/**
+ * @brief EndŠÖ”
+ */
+void tml::scene::Manager::End(void)
+{
+	if (this->scene_ != nullptr) {
+		this->scene_end_flg_ = true;
+	}
 
 	return;
 }

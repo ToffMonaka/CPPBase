@@ -5,6 +5,21 @@
 
 
 #include "TitleScene.h"
+#include "../../lib/tml/math/MathUtil.h"
+#include "../../lib/tml/input/Manager.h"
+#include "../../lib/tml/input/MouseEvent.h"
+#include "../../lib/tml/input/KeyboardEvent.h"
+#include "../../lib/tml/graphic/Manager.h"
+#include "../../lib/tml/graphic/Camera.h"
+#include "../../lib/tml/graphic/Light.h"
+#include "../../lib/tml/graphic/Fog.h"
+#include "../../lib/tml/graphic/Texture.h"
+#include "../../lib/tml/graphic/Sampler.h"
+#include "../../lib/tml/graphic/SpriteModel.h"
+#include "../../lib/tml/graphic/Font.h"
+#include "../../lib/tml/sound/Manager.h"
+#include "../../lib/tml/sound/BGMSound.h"
+#include "../../lib/tml/sound/SESound.h"
 #include "../../lib/tml/scene/Manager.h"
 
 
@@ -72,7 +87,8 @@ INT cpp_base::scene::TitleSceneDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief ÉRÉìÉXÉgÉâÉNÉ^
  */
-cpp_base::scene::TitleScene::TitleScene()
+cpp_base::scene::TitleScene::TitleScene() :
+	log_update_time_(0.0)
 {
 	return;
 }
@@ -90,11 +106,47 @@ cpp_base::scene::TitleScene::~TitleScene()
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+void cpp_base::scene::TitleScene::Release(void)
+{
+	if (this->GetManager() != nullptr) {
+		auto graphic_mgr = this->GetManager()->GetGraphicManager();
+
+		if (graphic_mgr != nullptr) {
+			graphic_mgr->ReleaseResource(this->camera_);
+			graphic_mgr->ReleaseResource(this->bg_sprite_model_);
+			graphic_mgr->ReleaseResource(this->logo_sprite_model_);
+			graphic_mgr->ReleaseResource(this->start_sprite_model_);
+			graphic_mgr->ReleaseResource(this->start_font_);
+			graphic_mgr->ReleaseResource(this->footer_sprite_model_);
+			graphic_mgr->ReleaseResource(this->footer_font_);
+			graphic_mgr->ReleaseResource(this->log_sprite_model_);
+			graphic_mgr->ReleaseResource(this->log_font_);
+		}
+
+		auto sound_mgr = this->GetManager()->GetSoundManager();
+
+		if (sound_mgr != nullptr) {
+			sound_mgr->ReleaseResource(this->bgm_sound_);
+			sound_mgr->ReleaseResource(this->start_se_sound_);
+		}
+	}
+
+	tml::scene::Scene::Release();
+
+	return;
+}
+
+
+/**
  * @brief Initä÷êî
  */
 void cpp_base::scene::TitleScene::Init(void)
 {
 	this->Release();
+
+	this->log_update_time_ = tml::TIME_REAL(0.0);
 
 	tml::scene::Scene::Init();
 
@@ -118,5 +170,467 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		return (-1);
 	}
 
+	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+	auto sound_mgr = this->GetManager()->GetSoundManager();
+
+	{// Camera Create
+		tml::graphic::CameraDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
+		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
+		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+		desc.near_clip = 0.1f;
+		desc.far_clip = 1000.0f;
+
+		graphic_mgr->GetResource<tml::graphic::Camera>(this->camera_, desc);
+
+		if (this->camera_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// BackgroundSpriteModell Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->bg_sprite_model_, desc);
+
+		if (this->bg_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->bg_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = graphic_mgr;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+			desc.file_read_desc_container[0].data.file_path = L"res/title_bg_img1.png";
+
+			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->bg_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			graphic_mgr->ReleaseResource(tex);
+		}
+	}
+
+	{// LogoSpriteModel Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->logo_sprite_model_, desc);
+
+		if (this->logo_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->logo_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = graphic_mgr;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+			desc.file_read_desc_container[0].data.file_path = L"res/title_logo_img1.png";
+
+			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+
+			this->logo_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			graphic_mgr->ReleaseResource(tex);
+		}
+	}
+
+	tml::XMUINT2EX start_tex_size = tml::XMUINT2EX(128U, 32U);
+	tml::XMUINT2EX start_font_size = tml::XMUINT2EX(0U, 24U);
+
+	{// StartSpriteModel Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, -192.0f));
+		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->start_sprite_model_, desc);
+
+		if (this->start_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->start_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = graphic_mgr;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, start_tex_size);
+			desc.cpu_buffer_flag = true;
+
+			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->start_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+
+			this->start_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			graphic_mgr->ReleaseResource(tex);
+		}
+	}
+
+	{// StartFont Create
+		tml::graphic::FontDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.SetFontDesc(start_font_size, L"ÇlÇr ÉSÉVÉbÉN");
+
+		graphic_mgr->GetResource<tml::graphic::Font>(this->start_font_, desc);
+
+		if (this->start_font_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// StartTexture Update
+		auto tex = this->start_sprite_model_->GetTexture(this->start_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+
+		tex->ClearCPUBuffer();
+		tex->DrawCPUBufferString(L"ÉXÉ^Å[Ég", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->start_font_.get());
+		tex->UploadCPUBuffer();
+	}
+
+	tml::XMUINT2EX footer_tex_size = tml::XMUINT2EX(graphic_mgr->GetSize().x, 32U);
+	tml::XMUINT2EX footer_font_size = tml::XMUINT2EX(0U, 16U);
+
+	{// FooterSpriteModel Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(graphic_mgr->GetHalfSize().y) + static_cast<FLOAT>(footer_tex_size.y >> 1)));
+		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->footer_sprite_model_, desc);
+
+		if (this->footer_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->footer_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = graphic_mgr;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, footer_tex_size);
+			desc.cpu_buffer_flag = true;
+
+			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->footer_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+
+			this->footer_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			graphic_mgr->ReleaseResource(tex);
+		}
+	}
+
+	{// FooterFont Create
+		tml::graphic::FontDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.SetFontDesc(footer_font_size, L"ÇlÇr ÉSÉVÉbÉN");
+
+		graphic_mgr->GetResource<tml::graphic::Font>(this->footer_font_, desc);
+
+		if (this->footer_font_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// FooterTexture Update
+		std::wstring company_name;
+
+		company_name = cpp_base::ConstantUtil::APPLICATION::COMPANY_NAME;
+
+		std::wstring version_name;
+
+		version_name = L"Version ";
+		version_name += cpp_base::ConstantUtil::APPLICATION::VERSION_NAME;
+
+		auto tex = this->footer_sprite_model_->GetTexture(this->footer_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+
+		tex->ClearCPUBuffer();
+		tex->DrawCPUBufferString(company_name.c_str(), tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(4, -4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_LEFT, this->footer_font_.get());
+		tex->DrawCPUBufferString(version_name.c_str(), tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(-4, -4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_RIGHT, this->footer_font_.get());
+		tex->UploadCPUBuffer();
+	}
+
+	{// BGMSound Create
+		tml::sound::BGMSoundDesc desc;
+
+		desc.manager = sound_mgr;
+		desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.mp3";
+
+		sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound_, desc);
+
+		if (this->bgm_sound_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// StartSESound Create
+		tml::sound::SESoundDesc desc;
+
+		desc.manager = sound_mgr;
+		desc.file_read_desc.data.file_path = L"res/title_start_se_sound1.mp3";
+
+		sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound_, desc);
+
+		if (this->start_se_sound_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	tml::XMUINT2EX log_tex_size = graphic_mgr->GetSize();
+	tml::XMUINT2EX log_font_size = tml::XMUINT2EX(0U, 16U);
+
+	{// LogSpriteModel Create
+		tml::graphic::SpriteModelDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
+
+		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+
+		desc.Read(read_desc);
+
+		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->log_sprite_model_, desc);
+
+		if (this->log_sprite_model_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		auto stage = this->log_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto layer = stage->GetLayerFast(0U);
+
+		layer->SetDiffuseTextureIndex(0U);
+
+		{// DiffuseTexture Create
+			tml::shared_ptr<tml::graphic::Texture> tex;
+
+			tml::graphic::TextureDesc desc;
+
+			desc.manager = graphic_mgr;
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, log_tex_size);
+			desc.cpu_buffer_flag = true;
+
+			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
+
+			if (tex == nullptr) {
+				this->Init();
+
+				return (-1);
+			}
+
+			this->log_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+
+			this->log_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			graphic_mgr->ReleaseResource(tex);
+		}
+	}
+
+	{// LogFont Create
+		tml::graphic::FontDesc desc;
+
+		desc.manager = graphic_mgr;
+		desc.SetFontDesc(log_font_size, L"ÇlÇr ÉSÉVÉbÉN");
+
+		graphic_mgr->GetResource<tml::graphic::Font>(this->log_font_, desc);
+
+		if (this->log_font_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	this->log_update_time_ = tml::TIME_REAL(1.0);
+
 	return (0);
+}
+
+
+/**
+ * @brief Startä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::scene::TitleScene::Start(void)
+{
+	auto sound_mgr = this->GetManager()->GetSoundManager();
+
+	sound_mgr->Play(this->bgm_sound_.get(), true);
+
+	return (0);
+}
+
+
+/**
+ * @brief Endä÷êî
+ */
+void cpp_base::scene::TitleScene::End(void)
+{
+	return;
+}
+
+
+/**
+ * @brief Updateä÷êî
+ */
+void cpp_base::scene::TitleScene::Update(void)
+{
+	auto input_mgr = this->GetManager()->GetInputManager();
+	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+	auto sound_mgr = this->GetManager()->GetSoundManager();
+
+	for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(); ++event_i) {
+		auto event = reinterpret_cast<tml::input::ManagerEvent *>(input_mgr->GetEventArray()[event_i].get());
+
+		switch (event->GetEventType()) {
+		case tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE: {
+			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event)->GetData();
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+				if (this->start_sprite_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
+					sound_mgr->Play(this->start_se_sound_.get(), false);
+
+					this->GetManager()->End();
+				}
+			}
+
+			break;
+		}
+		}
+	}
+
+	if (this->start_sprite_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
+		this->start_sprite_model_->SetScale(tml::XMFLOAT2EX(1.2f, 1.2f));
+		this->start_sprite_model_->SetColor(tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), 1.0f));
+	} else {
+		this->start_sprite_model_->SetScale(tml::XMFLOAT2EX(1.0f, 1.0f));
+		this->start_sprite_model_->SetColor(tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+
+	this->log_update_time_ += this->GetManager()->GetFrameRate().GetElapsedTime();
+
+	if (this->log_update_time_ >= tml::TIME_REAL(1.0)) {
+		{// LogTexture Update
+			auto &frame_rate = this->GetManager()->GetFrameRate();
+			auto mem_allocator_info = tml::MemoryUtil::GetAllocatorInfo();
+
+			WCHAR log_str[1024];
+
+			_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u\nMEM=%u/%u/%u", frame_rate.GetFPS(), frame_rate.GetLimit(), mem_allocator_info.use_size, mem_allocator_info.size, mem_allocator_info.use_count);
+
+			auto tex = this->log_sprite_model_->GetTexture(this->log_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+
+			tex->ClearCPUBuffer();
+			tex->DrawCPUBufferString(log_str, tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(4, 4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::TOP_LEFT, this->log_font_.get());
+			tex->UploadCPUBuffer();
+		}
+
+		this->log_update_time_ = tml::TIME_REAL(0.0);
+	}
+
+	graphic_mgr->SetDrawCamera(this->camera_.get());
+	graphic_mgr->SetDrawModel(this->bg_sprite_model_.get());
+	graphic_mgr->SetDrawModel(this->logo_sprite_model_.get());
+	graphic_mgr->SetDrawModel(this->start_sprite_model_.get());
+	graphic_mgr->SetDrawModel(this->footer_sprite_model_.get());
+	graphic_mgr->SetDrawModel(this->log_sprite_model_.get());
+
+	return;
 }

@@ -78,6 +78,8 @@ private:
 	tml::graphic::Manager *graphic_mgr_;
 	tml::sound::Manager *sound_mgr_;
 	tml::FrameRate frame_rate_;
+	tml::shared_ptr<tml::scene::Scene> scene_;
+	bool scene_end_flg_;
 
 protected:
 	void Release(void);
@@ -96,6 +98,10 @@ public:
 	tml::graphic::Manager *GetGraphicManager(void);
 	tml::sound::Manager *GetSoundManager(void);
 	const tml::FrameRate &GetFrameRate(void) const;
+
+	tml::scene::Scene *Get(void);
+	INT Start(tml::shared_ptr<tml::scene::Scene> &);
+	void End(void);
 };
 }
 }
@@ -148,4 +154,14 @@ inline tml::sound::Manager *tml::scene::Manager::GetSoundManager(void)
 inline const tml::FrameRate &tml::scene::Manager::GetFrameRate(void) const
 {
 	return (this->frame_rate_);
+}
+
+
+/**
+ * @brief GetŠÖ”
+ * @return scene (scene)
+ */
+inline tml::scene::Scene *tml::scene::Manager::Get(void)
+{
+	return (this->scene_.get());
 }

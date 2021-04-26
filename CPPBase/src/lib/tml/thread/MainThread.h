@@ -50,6 +50,7 @@ public:
 	virtual INT Start(void) = 0;
 	virtual void End(void) = 0;
 	virtual void Update(void) = 0;
+
 	HINSTANCE GetInstanceHandle(void) const;
 	HWND GetWindowHandle(void) const;
 	HDC GetWindowDeviceContextHandle(void) const;

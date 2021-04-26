@@ -90,6 +90,20 @@ cpp_base::scene::InitScene::~InitScene()
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+void cpp_base::scene::InitScene::Release(void)
+{
+	if (this->GetManager() != nullptr) {
+	}
+
+	tml::scene::Scene::Release();
+
+	return;
+}
+
+
+/**
  * @brief Initä÷êî
  */
 void cpp_base::scene::InitScene::Init(void)
@@ -119,4 +133,33 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief Startä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::scene::InitScene::Start(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief Endä÷êî
+ */
+void cpp_base::scene::InitScene::End(void)
+{
+	return;
+}
+
+
+/**
+ * @brief Updateä÷êî
+ */
+void cpp_base::scene::InitScene::Update(void)
+{
+	return;
 }

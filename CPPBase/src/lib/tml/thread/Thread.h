@@ -44,6 +44,7 @@ public:
 	virtual INT Start(void) = 0;
 	virtual void End(void) = 0;
 	virtual void Update(void) = 0;
+
 	const std::thread::id &GetID(void) const;
 	tml::ConstantUtil::THREAD::TYPE GetType(void) const;
 	bool GetLoopFlag(void) const;

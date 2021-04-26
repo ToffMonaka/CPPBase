@@ -31,19 +31,6 @@ private:
 	tml::sound::Manager sound_mgr_;
 	tml::scene::Manager scene_mgr_;
 
-	tml::shared_ptr<tml::graphic::Camera> camera_;
-	tml::shared_ptr<tml::graphic::SpriteModel> title_bg_sprite_model_;
-	tml::shared_ptr<tml::graphic::SpriteModel> title_logo_sprite_model_;
-	tml::shared_ptr<tml::graphic::SpriteModel> title_start_sprite_model_;
-	tml::shared_ptr<tml::graphic::Font> title_start_font_;
-	tml::shared_ptr<tml::graphic::SpriteModel> title_footer_sprite_model_;
-	tml::shared_ptr<tml::graphic::Font> title_footer_font_;
-	tml::shared_ptr<tml::graphic::SpriteModel> log_sprite_model_;
-	tml::shared_ptr<tml::graphic::Font> log_font_;
-	tml::TIME_REAL log_update_time_;
-	tml::shared_ptr<tml::sound::BGMSound> title_bgm_sound_;
-	tml::shared_ptr<tml::sound::SESound> title_start_se_sound_;
-
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
 
@@ -60,6 +47,7 @@ public:
 	virtual INT Start(void);
 	virtual void End(void);
 	virtual void Update(void);
+
 	cpp_base::SystemConfigFile &GetSystemConfigFile(void);
 	tml::input::Manager &GetInputManager(void);
 	tml::graphic::Manager &GetGraphicManager(void);

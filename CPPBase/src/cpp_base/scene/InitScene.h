@@ -67,17 +67,10 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::InitSceneDesc &);
+
+	virtual INT Start(void);
+	virtual void End(void);
+	virtual void Update(void);
 };
 }
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-inline void cpp_base::scene::InitScene::Release(void)
-{
-	tml::scene::Scene::Release();
-
-	return;
 }
