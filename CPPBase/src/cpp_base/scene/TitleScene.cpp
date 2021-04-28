@@ -11,8 +11,6 @@
 #include "../../lib/tml/input/KeyboardEvent.h"
 #include "../../lib/tml/graphic/Manager.h"
 #include "../../lib/tml/graphic/Camera.h"
-#include "../../lib/tml/graphic/Light.h"
-#include "../../lib/tml/graphic/Fog.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/SpriteModel.h"
@@ -192,7 +190,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		}
 	}
 
-	{// BackgroundSpriteModell Create
+	{// BackgroundSpriteModel Create
 		tml::graphic::SpriteModelDesc desc;
 
 		desc.manager = graphic_mgr;
@@ -358,7 +356,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tex->UploadCPUBuffer();
 	}
 
-	tml::XMUINT2EX footer_tex_size = tml::XMUINT2EX(graphic_mgr->GetSize().x, 32U);
+	tml::XMUINT2EX footer_tex_size = tml::XMUINT2EX(graphic_mgr->GetSize().x, 24U);
 	tml::XMUINT2EX footer_font_size = tml::XMUINT2EX(0U, 16U);
 
 	{// FooterSpriteModel Create
@@ -472,6 +470,8 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		}
 	}
 
+	this->log_update_time_ = tml::TIME_REAL(1.0);
+
 	tml::XMUINT2EX log_tex_size = graphic_mgr->GetSize();
 	tml::XMUINT2EX log_font_size = tml::XMUINT2EX(0U, 16U);
 
@@ -536,8 +536,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			return (-1);
 		}
 	}
-
-	this->log_update_time_ = tml::TIME_REAL(1.0);
 
 	return (0);
 }
@@ -606,7 +604,7 @@ void cpp_base::scene::TitleScene::Update(void)
 
 	this->log_update_time_ += this->GetManager()->GetFrameRate().GetElapsedTime();
 
-	if (this->log_update_time_ >= tml::TIME_REAL(1.0)) {
+	if (this->log_update_time_.count() >= 1.0) {
 		{// LogTexture Update
 			auto &frame_rate = this->GetManager()->GetFrameRate();
 			auto mem_allocator_info = tml::MemoryUtil::GetAllocatorInfo();

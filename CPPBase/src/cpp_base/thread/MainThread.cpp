@@ -21,7 +21,6 @@
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 #include "../scene/InitScene.h"
-#include "../scene/TitleScene.h"
 
 
 /**
@@ -199,27 +198,6 @@ INT cpp_base::MainThread::Start(void)
 		}
 	}
 
-	{// TitleScene Start
-		tml::shared_ptr<tml::scene::Scene> scene;
-
-		cpp_base::scene::TitleSceneDesc desc;
-
-		desc.manager = &this->scene_mgr_;
-
-		this->scene_mgr_.GetResource<cpp_base::scene::TitleScene>(scene, desc);
-
-		if (scene == nullptr) {
-			return (-1);
-		}
-
-		if (this->scene_mgr_.Start(scene) < 0) {
-			return (-1);
-		}
-
-		this->scene_mgr_.ReleaseResource(scene);
-	}
-
-	/*
 	{// InitScene Start
 		tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -239,7 +217,6 @@ INT cpp_base::MainThread::Start(void)
 
 		this->scene_mgr_.ReleaseResource(scene);
 	}
-	*/
 
 	{// TestThread Start
 		std::unique_ptr<tml::SubThread> th = std::make_unique<cpp_base::TestThread>();

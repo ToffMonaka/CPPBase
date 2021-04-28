@@ -96,6 +96,7 @@ void tml::scene::Manager::Release(void)
 		this->scene_end_flg_ = false;
 
 		this->ReleaseResource(this->scene_);
+		this->ReleaseResource(this->next_scene_);
 	}
 
 	this->common_.Init();
@@ -187,6 +188,31 @@ void tml::scene::Manager::Update(void)
 			this->scene_end_flg_ = false;
 
 			this->ReleaseResource(this->scene_);
+			this->ReleaseResource(this->next_scene_);
+		}
+
+		if (this->next_scene_ != nullptr) {
+			this->scene_->End();
+
+			this->scene_end_flg_ = false;
+
+			this->GetResource(this->scene_, this->next_scene_);
+
+			if (this->scene_ == nullptr) {
+				this->ReleaseResource(this->next_scene_);
+
+				return;
+			}
+
+			this->ReleaseResource(this->next_scene_);
+
+			if (this->scene_->Start() < 0) {
+				this->ReleaseResource(this->scene_);
+
+				return;
+			}
+
+			this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
 		}
 	}
 
@@ -207,14 +233,24 @@ INT tml::scene::Manager::Start(tml::shared_ptr<tml::scene::Scene> &scene)
 	}
 
 	if (this->scene_ != nullptr) {
-		return (-1);
+		this->GetResource(this->next_scene_, scene);
+
+		if (this->next_scene_ == nullptr) {
+			return (-1);
+		}
+
+		return (0);
 	}
 
 	this->GetResource(this->scene_, scene);
 
 	if (this->scene_ == nullptr) {
+		this->ReleaseResource(this->next_scene_);
+
 		return (-1);
 	}
+
+	this->ReleaseResource(this->next_scene_);
 
 	if (this->scene_->Start() < 0) {
 		this->ReleaseResource(this->scene_);

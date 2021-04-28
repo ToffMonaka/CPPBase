@@ -941,7 +941,32 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::Con
 			bm_h = static_cast<LONG>(bm_gm.gmBlackBoxY);
 
 			tmp_buf_offset_x = buf_offset_x + bm_gm.gmptGlyphOrigin.x;
+
+			if (((tmp_buf_offset_x + bm_w) <= 0L)
+			|| (tmp_buf_offset_x >= buf_w)) {
+				buf_offset_x += bm_gm.gmCellIncX;
+
+				continue;
+			}
+
 			tmp_buf_offset_y = buf_offset_y + font_tm.tmAscent - bm_gm.gmptGlyphOrigin.y;
+
+			if (((tmp_buf_offset_y + bm_h) <= 0L)
+			|| (tmp_buf_offset_y >= buf_h)) {
+				buf_offset_x += bm_gm.gmCellIncX;
+
+				continue;
+			}
+
+			LONG bm_x = 0L;
+
+			buf_x = tmp_buf_offset_x;
+
+			if (buf_x < 0L) {
+				bm_x = -buf_x;
+
+				buf_x = 0L;
+			}
 
 			for (LONG bm_y = 0L; bm_y < bm_h; ++bm_y) {
 				buf_y = tmp_buf_offset_y + bm_y;
@@ -952,15 +977,7 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::Con
 					break;
 				}
 
-				buf_x = tmp_buf_offset_x;
-
-				if (buf_x < 0L) {
-					buf_x = 0L;
-				} else if (buf_x >= buf_w) {
-					break;
-				}
-
-				memcpy(&buf[buf_x + buf_y * buf_w], &bm_buf[bm_y * bm_w], ((bm_w > (buf_w - buf_x)) ? (buf_w - buf_x) : bm_w) << 2);
+				memcpy(&buf[buf_x + buf_y * buf_w], &bm_buf[bm_x + bm_y * bm_w], (((bm_w - bm_x) > (buf_w - buf_x)) ? (buf_w - buf_x) : (bm_w - bm_x)) << 2);
 			}
 
 			buf_offset_x += bm_gm.gmCellIncX;

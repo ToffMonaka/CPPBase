@@ -80,6 +80,7 @@ private:
 	tml::FrameRate frame_rate_;
 	tml::shared_ptr<tml::scene::Scene> scene_;
 	bool scene_end_flg_;
+	tml::shared_ptr<tml::scene::Scene> next_scene_;
 
 protected:
 	void Release(void);
