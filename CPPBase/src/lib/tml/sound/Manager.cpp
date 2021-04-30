@@ -89,7 +89,7 @@ tml::sound::Manager::~Manager()
  */
 void tml::sound::Manager::Release(void)
 {
-	this->common_.Init();
+	this->DeleteCommon();
 	this->DeleteResourceContainer();
 
 	if (this->device_context_ != nullptr) {
@@ -170,7 +170,7 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 	this->volume_ary_ = desc.volume_array;
 	this->mute_flg_ary_ = desc.mute_flag_array;
 
-	if (this->common_.Create(this) < 0) {
+	if (this->CreateCommon() < 0) {
 		this->Init();
 
 		return (-1);
@@ -186,6 +186,32 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 void tml::sound::Manager::Update(void)
 {
 	tml::Manager::Update();
+
+	return;
+}
+
+
+/**
+ * @brief CreateCommonŠÖ”
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::sound::Manager::CreateCommon(void)
+{
+	if (this->common_.Create(this) < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteCommonŠÖ”
+ */
+void tml::sound::Manager::DeleteCommon(void)
+{
+	this->common_.Init();
 
 	return;
 }

@@ -401,7 +401,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	std::vector<std::string> macro_name_ary;
 	std::vector<std::string> macro_val_ary;
 
-	if (desc.macro_container.size() > 0U) {
+	if (!desc.macro_container.empty()) {
 		macro_ary.resize(desc.macro_container.size() + 1U);
 		macro_name_ary.resize(desc.macro_container.size());
 		macro_val_ary.resize(desc.macro_container.size());

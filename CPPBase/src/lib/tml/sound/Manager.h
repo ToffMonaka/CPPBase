@@ -120,6 +120,9 @@ private:
 protected:
 	void Release(void);
 
+	INT CreateCommon(void);
+	void DeleteCommon(void);
+
 public:
 	Manager();
 	virtual ~Manager();

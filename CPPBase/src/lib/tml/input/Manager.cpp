@@ -76,7 +76,7 @@ tml::input::Manager::~Manager()
  */
 void tml::input::Manager::Release(void)
 {
-	this->common_.Init();
+	this->DeleteCommon();
 	this->DeleteResourceContainer();
 
 	tml::Manager::Release();
@@ -125,7 +125,7 @@ INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 
 	this->mouse_pos_ = tml::XMINT2EX(mouse_sys_pos.x, mouse_sys_pos.y);
 
-	if (this->common_.Create(this) < 0) {
+	if (this->CreateCommon() < 0) {
 		this->Init();
 
 		return (-1);
@@ -141,6 +141,32 @@ INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 void tml::input::Manager::Update(void)
 {
 	tml::Manager::Update();
+
+	return;
+}
+
+
+/**
+ * @brief CreateCommonŠÖ”
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::input::Manager::CreateCommon(void)
+{
+	if (this->common_.Create(this) < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteCommonŠÖ”
+ */
+void tml::input::Manager::DeleteCommon(void)
+{
+	this->common_.Init();
 
 	return;
 }

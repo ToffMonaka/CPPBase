@@ -54,14 +54,12 @@ void tml::ManagerDesc::Init(void)
 tml::Manager::Manager() :
 	wnd_handle_(nullptr),
 	wnd_dc_handle_(nullptr),
+	event_cnt_ary_{},
 	front_event_index_(0U),
 	back_event_index_(0U)
 {
-	this->event_cnt_ary_.fill(0U);
-
-	for (auto &event_cont : this->event_cont_ary_) {
-		event_cont.clear();
-	}
+	this->check_res_cont_.clear();
+	this->check_res_itr_ = this->check_res_cont_.end();
 
 	return;
 }
@@ -144,6 +142,36 @@ INT tml::Manager::Create(const tml::ManagerDesc &desc)
  */
 void tml::Manager::Update(void)
 {
+	if (this->check_res_itr_ == this->check_res_cont_.end()) {
+		this->check_res_itr_ = this->check_res_cont_.begin();
+	}
+
+	UINT check_res_cnt = 0U;
+
+	while (this->check_res_itr_ != this->check_res_cont_.end()) {
+		if (this->check_res_itr_->use_count() <= 2L) {
+			auto &res = (*this->check_res_itr_);
+
+			UINT res_main_index = res->GetResourceMainIndex();
+			UINT res_sub_index = res->GetResourceSubIndex();
+
+			if ((res_main_index < this->res_cont_cont_.size())
+			&& (res_sub_index < this->res_cont_cont_[res_main_index].size())) {
+				this->res_cont_cont_[res_main_index][res_sub_index].remove(res);
+
+				this->check_res_itr_ = this->check_res_cont_.erase(this->check_res_itr_);
+			}
+		} else {
+			++this->check_res_itr_;
+		}
+
+		++check_res_cnt;
+
+		if (check_res_cnt >= 10U) {
+			break;
+		}
+	}
+
 	if (this->front_event_index_ == this->back_event_index_) {
 		this->front_event_index_ = 0U;
 		this->back_event_index_ = 1U;
@@ -217,6 +245,8 @@ void tml::Manager::DeleteResourceContainer(void)
 	}
 
 	this->res_cont_cont_.clear();
+	this->check_res_cont_.clear();
+	this->check_res_itr_ = this->check_res_cont_.end();
 
 	return;
 }

@@ -61,6 +61,8 @@ private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
 	std::vector<std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>>> res_cont_cont_;
+	std::list<tml::shared_ptr<tml::ManagerResource>> check_res_cont_;
+	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator check_res_itr_;
 	std::array<UINT, 2U> event_cnt_ary_;
 	std::array<std::vector<tml::unique_ptr<tml::ManagerEvent>>, 2U> event_cont_ary_;
 	UINT front_event_index_;
@@ -140,14 +142,14 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 	UINT res_main_index = res->GetResourceMainIndex();
 	UINT res_sub_index = res->GetResourceSubIndex();
 
-	if ((res_main_index >= this->res_cont_cont_.size())
-	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
-		return (dst_res);
+	if ((res_main_index < this->res_cont_cont_.size())
+	&& (res_sub_index < this->res_cont_cont_[res_main_index].size())) {
+		this->res_cont_cont_[res_main_index][res_sub_index].push_back(res);
+
+		this->check_res_cont_.push_back(res);
+
+		dst_res = std::dynamic_pointer_cast<T2>(res);
 	}
-
-	this->res_cont_cont_[res_main_index][res_sub_index].push_back(res);
-
-	dst_res = std::dynamic_pointer_cast<T2>(res);
 
 	return (dst_res);
 }

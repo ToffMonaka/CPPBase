@@ -99,7 +99,7 @@ void tml::scene::Manager::Release(void)
 		this->ReleaseResource(this->next_scene_);
 	}
 
-	this->common_.Init();
+	this->DeleteCommon();
 	this->DeleteResourceContainer();
 
 	tml::Manager::Release();
@@ -154,7 +154,7 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 	this->graphic_mgr_ = desc.graphic_manager;
 	this->sound_mgr_ = desc.sound_manager;
 
-	if (this->common_.Create(this) < 0) {
+	if (this->CreateCommon() < 0) {
 		this->Init();
 
 		return (-1);
@@ -215,6 +215,32 @@ void tml::scene::Manager::Update(void)
 			this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
 		}
 	}
+
+	return;
+}
+
+
+/**
+ * @brief CreateCommonŠÖ”
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::scene::Manager::CreateCommon(void)
+{
+	if (this->common_.Create(this) < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteCommonŠÖ”
+ */
+void tml::scene::Manager::DeleteCommon(void)
+{
+	this->common_.Init();
 
 	return;
 }
