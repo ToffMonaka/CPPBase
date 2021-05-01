@@ -214,8 +214,6 @@ INT cpp_base::MainThread::Start(void)
 		if (this->scene_mgr_.Start(scene) < 0) {
 			return (-1);
 		}
-
-		this->scene_mgr_.ReleaseResource(scene);
 	}
 
 	{// TestThread Start

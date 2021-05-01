@@ -101,8 +101,6 @@ void tml::graphic::ModelStage::Release(void)
 		layer.reset();
 	}
 
-	this->layer_cont_.clear();
-
 	return;
 }
 
@@ -246,50 +244,6 @@ void tml::graphic::Model::Release(void)
 		stage.reset();
 	}
 
-	if (this->GetManager() != nullptr) {
-		for (auto &rs : this->rs_cont_) {
-			this->GetManager()->ReleaseResource(rs);
-		}
-
-		this->rs_cont_.clear();
-
-		for (auto &bs : this->bs_cont_) {
-			this->GetManager()->ReleaseResource(bs);
-		}
-
-		this->bs_cont_.clear();
-
-		for (auto &ds : this->ds_cont_) {
-			this->GetManager()->ReleaseResource(ds);
-		}
-
-		this->ds_cont_.clear();
-
-		for (auto &shader : this->shader_cont_) {
-			this->GetManager()->ReleaseResource(shader);
-		}
-
-		this->shader_cont_.clear();
-
-		for (auto &mesh : this->mesh_cont_) {
-			this->GetManager()->ReleaseResource(mesh);
-		}
-
-		this->mesh_cont_.clear();
-
-		for (auto &tex : this->tex_cont_) {
-			this->GetManager()->ReleaseResource(tex);
-		}
-
-		this->tex_cont_.clear();
-
-		for (auto &samp : this->samp_cont_) {
-			this->GetManager()->ReleaseResource(samp);
-		}
-
-		this->samp_cont_.clear();
-	}
-
 	tml::graphic::ManagerResource::Release();
 
 	return;
@@ -302,6 +256,13 @@ void tml::graphic::Model::Release(void)
 void tml::graphic::Model::Init(void)
 {
 	this->type_ = tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE;
+	this->rs_cont_.clear();
+	this->bs_cont_.clear();
+	this->ds_cont_.clear();
+	this->shader_cont_.clear();
+	this->mesh_cont_.clear();
+	this->tex_cont_.clear();
+	this->samp_cont_.clear();
 
 	tml::graphic::ManagerResource::Init();
 
@@ -343,7 +304,7 @@ void tml::graphic::Model::SetRasterizerState(const UINT index, tml::shared_ptr<t
 		this->rs_cont_.push_back(tml::make_shared<tml::graphic::RasterizerState>());
 	}
 
-	this->GetManager()->GetResource(this->rs_cont_[index], rs);
+	this->rs_cont_[index] = rs;
 
 	return;
 }
@@ -360,7 +321,7 @@ void tml::graphic::Model::SetBlendState(const UINT index, tml::shared_ptr<tml::g
 		this->bs_cont_.push_back(tml::make_shared<tml::graphic::BlendState>());
 	}
 
-	this->GetManager()->GetResource(this->bs_cont_[index], bs);
+	this->bs_cont_[index] = bs;
 
 	return;
 }
@@ -377,7 +338,7 @@ void tml::graphic::Model::SetDepthState(const UINT index, tml::shared_ptr<tml::g
 		this->ds_cont_.push_back(tml::make_shared<tml::graphic::DepthState>());
 	}
 
-	this->GetManager()->GetResource(this->ds_cont_[index], ds);
+	this->ds_cont_[index] = ds;
 
 	return;
 }
@@ -394,7 +355,7 @@ void tml::graphic::Model::SetShader(const UINT index, tml::shared_ptr<tml::graph
 		this->shader_cont_.push_back(tml::make_shared<tml::graphic::Shader>());
 	}
 
-	this->GetManager()->GetResource(this->shader_cont_[index], shader);
+	this->shader_cont_[index] = shader;
 
 	return;
 }
@@ -411,7 +372,7 @@ void tml::graphic::Model::SetMesh(const UINT index, tml::shared_ptr<tml::graphic
 		this->mesh_cont_.push_back(tml::make_shared<tml::graphic::Mesh>());
 	}
 
-	this->GetManager()->GetResource(this->mesh_cont_[index], mesh);
+	this->mesh_cont_[index] = mesh;
 
 	return;
 }
@@ -428,7 +389,7 @@ void tml::graphic::Model::SetTexture(const UINT index, tml::shared_ptr<tml::grap
 		this->tex_cont_.push_back(tml::make_shared<tml::graphic::Texture>());
 	}
 
-	this->GetManager()->GetResource(this->tex_cont_[index], tex);
+	this->tex_cont_[index] = tex;
 
 	return;
 }
@@ -445,7 +406,7 @@ void tml::graphic::Model::SetSampler(const UINT index, tml::shared_ptr<tml::grap
 		this->samp_cont_.push_back(tml::make_shared<tml::graphic::Sampler>());
 	}
 
-	this->GetManager()->GetResource(this->samp_cont_[index], samp);
+	this->samp_cont_[index] = samp;
 
 	return;
 }

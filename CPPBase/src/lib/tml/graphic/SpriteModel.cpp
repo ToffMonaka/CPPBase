@@ -221,11 +221,6 @@ tml::graphic::SpriteModel::~SpriteModel()
  */
 void tml::graphic::SpriteModel::Release(void)
 {
-	if (this->GetManager() != nullptr) {
-		this->GetManager()->ReleaseResource(this->ssb_);
-		this->GetManager()->ReleaseResource(this->layer_ssb_);
-	}
-
 	tml::graphic::Model::Release();
 
 	return;
@@ -244,6 +239,8 @@ void tml::graphic::SpriteModel::Init(void)
 	this->half_size_ = 0.0f;
 	this->scale_ = 1.0f;
 	this->col_ = 1.0f;
+	this->ssb_.reset();
+	this->layer_ssb_.reset();
 
 	tml::graphic::Model::Init();
 
@@ -291,7 +288,7 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 		{// RasterizerState Create
 			tml::shared_ptr<tml::graphic::RasterizerState> rs;
 
-			this->GetManager()->GetResource(rs, this->GetManager()->GetCommon().back_culling_rasterizer_state);
+			rs = this->GetManager()->GetCommon().back_culling_rasterizer_state;
 
 			if (rs == nullptr) {
 				this->Init();
@@ -300,13 +297,12 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 			}
 
 			this->SetRasterizerState(stage->GetRasterizerStateIndex(), rs);
-			this->GetManager()->ReleaseResource(rs);
 		}
 
 		{// BlendState Create
 			tml::shared_ptr<tml::graphic::BlendState> bs;
 
-			this->GetManager()->GetResource(bs, this->GetManager()->GetCommon().alignment_blend_state_array[1]);
+			bs = this->GetManager()->GetCommon().alignment_blend_state_array[1];
 
 			if (bs == nullptr) {
 				this->Init();
@@ -315,13 +311,12 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 			}
 
 			this->SetBlendState(stage->GetBlendStateIndex(), bs);
-			this->GetManager()->ReleaseResource(bs);
 		}
 
 		{// DepthState Create
 			tml::shared_ptr<tml::graphic::DepthState> ds;
 
-			this->GetManager()->GetResource(ds, this->GetManager()->GetCommon().reference_depth_state);
+			ds = this->GetManager()->GetCommon().reference_depth_state;
 
 			if (ds == nullptr) {
 				this->Init();
@@ -330,13 +325,12 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 			}
 
 			this->SetDepthState(stage->GetDepthStateIndex(), ds);
-			this->GetManager()->ReleaseResource(ds);
 		}
 
 		{// Shader Create
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
-			this->GetManager()->GetResource(shader, this->GetManager()->GetCommon().sprite_model_shader);
+			shader = this->GetManager()->GetCommon().sprite_model_shader;
 
 			if (shader == nullptr) {
 				this->Init();
@@ -345,7 +339,6 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 			}
 
 			this->SetShader(stage->GetShaderIndex(), shader);
-			this->GetManager()->ReleaseResource(shader);
 		}
 
 		{// Layer0 Create
@@ -386,13 +379,12 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 				}
 
 				this->SetMesh(layer->GetMeshIndex(), mesh);
-				this->GetManager()->ReleaseResource(mesh);
 			}
 
 			{// DiffuseSampler Create
 				tml::shared_ptr<tml::graphic::Sampler> samp;
 
-				this->GetManager()->GetResource(samp, this->GetManager()->GetCommon().cc_sampler);
+				samp = this->GetManager()->GetCommon().cc_sampler;
 
 				if (samp == nullptr) {
 					this->Init();
@@ -401,7 +393,6 @@ INT tml::graphic::SpriteModel::Create(const tml::graphic::SpriteModelDesc &desc)
 				}
 
 				this->SetSampler(layer->GetDiffuseSamplerIndex(), samp);
-				this->GetManager()->ReleaseResource(samp);
 			}
 
 			stage->SetLayer(0U, layer);

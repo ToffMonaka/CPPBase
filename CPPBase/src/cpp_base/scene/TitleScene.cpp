@@ -108,29 +108,6 @@ cpp_base::scene::TitleScene::~TitleScene()
  */
 void cpp_base::scene::TitleScene::Release(void)
 {
-	if (this->GetManager() != nullptr) {
-		auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
-		if (graphic_mgr != nullptr) {
-			graphic_mgr->ReleaseResource(this->camera_);
-			graphic_mgr->ReleaseResource(this->bg_sprite_model_);
-			graphic_mgr->ReleaseResource(this->logo_sprite_model_);
-			graphic_mgr->ReleaseResource(this->start_sprite_model_);
-			graphic_mgr->ReleaseResource(this->start_font_);
-			graphic_mgr->ReleaseResource(this->footer_sprite_model_);
-			graphic_mgr->ReleaseResource(this->footer_font_);
-			graphic_mgr->ReleaseResource(this->log_sprite_model_);
-			graphic_mgr->ReleaseResource(this->log_font_);
-		}
-
-		auto sound_mgr = this->GetManager()->GetSoundManager();
-
-		if (sound_mgr != nullptr) {
-			sound_mgr->ReleaseResource(this->bgm_sound_);
-			sound_mgr->ReleaseResource(this->start_se_sound_);
-		}
-	}
-
 	tml::scene::Scene::Release();
 
 	return;
@@ -144,7 +121,18 @@ void cpp_base::scene::TitleScene::Init(void)
 {
 	this->Release();
 
+	this->camera_.reset();
+	this->bg_sprite_model_.reset();
+	this->logo_sprite_model_.reset();
+	this->start_sprite_model_.reset();
+	this->start_font_.reset();
+	this->footer_sprite_model_.reset();
+	this->footer_font_.reset();
+	this->bgm_sound_.reset();
+	this->start_se_sound_.reset();
 	this->log_update_time_ = tml::TIME_REAL(0.0);
+	this->log_sprite_model_.reset();
+	this->log_font_.reset();
 
 	tml::scene::Scene::Init();
 
@@ -231,7 +219,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			}
 
 			this->bg_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-			graphic_mgr->ReleaseResource(tex);
 		}
 	}
 
@@ -278,7 +265,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			this->logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
 
 			this->logo_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-			graphic_mgr->ReleaseResource(tex);
 		}
 	}
 
@@ -329,7 +315,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			this->start_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
 
 			this->start_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-			graphic_mgr->ReleaseResource(tex);
 		}
 	}
 
@@ -403,7 +388,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			this->footer_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
 
 			this->footer_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-			graphic_mgr->ReleaseResource(tex);
 		}
 	}
 
@@ -518,7 +502,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			this->log_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
 
 			this->log_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-			graphic_mgr->ReleaseResource(tex);
 		}
 	}
 

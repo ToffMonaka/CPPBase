@@ -219,7 +219,7 @@ INT tml::Manager::CreateResourceContainer(const std::vector<UINT> &res_cnt_cont)
 
 	this->res_cont_cont_.resize(res_cnt_cont.size());
 
-	for (UINT res_cont_i = 0U; res_cont_i < this->res_cont_cont_.size(); ++res_cont_i) {
+	for (size_t res_cont_i = 0U; res_cont_i < this->res_cont_cont_.size(); ++res_cont_i) {
 		this->res_cont_cont_[res_cont_i].resize(res_cnt_cont[res_cont_i]);
 	}
 

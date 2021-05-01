@@ -60,8 +60,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	tml::shared_ptr<tml::graphic::Camera> camera_;
 	tml::shared_ptr<tml::graphic::SpriteModel> bg_sprite_model_;
-	tml::shared_ptr<tml::graphic::SpriteModel> wait_sprite_model_;
 	tml::TIME_REAL wait_update_time_;
+	tml::shared_ptr<tml::graphic::SpriteModel> wait_sprite_model_;
 	tml::shared_ptr<tml::graphic::Font> wait_font_;
 
 protected:

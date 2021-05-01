@@ -57,38 +57,6 @@ tml::graphic::ManagerCommon::~ManagerCommon()
  */
 void tml::graphic::ManagerCommon::Release(void)
 {
-	if (this->mgr_ != nullptr) {
-		this->mgr_->ReleaseResource(this->default_rasterizer_state);
-		this->mgr_->ReleaseResource(this->wireframe_rasterizer_state);
-		this->mgr_->ReleaseResource(this->front_culling_rasterizer_state);
-		this->mgr_->ReleaseResource(this->back_culling_rasterizer_state);
-
-		for (UINT rt_i = 0U; rt_i < 2U; ++rt_i) {
-			this->mgr_->ReleaseResource(this->default_blend_state_array[rt_i]);
-			this->mgr_->ReleaseResource(this->alignment_blend_state_array[rt_i]);
-			this->mgr_->ReleaseResource(this->add_blend_state_array[rt_i]);
-			this->mgr_->ReleaseResource(this->sub_blend_state_array[rt_i]);
-			this->mgr_->ReleaseResource(this->mul_blend_state_array[rt_i]);
-			this->mgr_->ReleaseResource(this->reverse_blend_state_array[rt_i]);
-			this->mgr_->ReleaseResource(this->total_blend_state_array[rt_i]);
-		}
-
-		this->mgr_->ReleaseResource(this->default_depth_state);
-		this->mgr_->ReleaseResource(this->reference_depth_state);
-		this->mgr_->ReleaseResource(this->screen_model_shader);
-		this->mgr_->ReleaseResource(this->sprite_model_shader);
-		this->mgr_->ReleaseResource(this->config_shader_constant_buffer);
-		this->mgr_->ReleaseResource(this->camera_shader_structured_buffer);
-		this->mgr_->ReleaseResource(this->light_shader_structured_buffer);
-		this->mgr_->ReleaseResource(this->fog_shader_structured_buffer);
-		this->mgr_->ReleaseResource(this->main_render_target_texture);
-		this->mgr_->ReleaseResource(this->main_depth_target_texture);
-		this->mgr_->ReleaseResource(this->cc_sampler);
-		this->mgr_->ReleaseResource(this->cw_sampler);
-		this->mgr_->ReleaseResource(this->wc_sampler);
-		this->mgr_->ReleaseResource(this->ww_sampler);
-	}
-
 	return;
 }
 
@@ -101,6 +69,36 @@ void tml::graphic::ManagerCommon::Init(void)
 	this->Release();
 
 	this->mgr_ = nullptr;
+
+	this->default_rasterizer_state.reset();
+	this->wireframe_rasterizer_state.reset();
+	this->front_culling_rasterizer_state.reset();
+	this->back_culling_rasterizer_state.reset();
+
+	for (UINT rt_i = 0U; rt_i < 2U; ++rt_i) {
+		this->default_blend_state_array[rt_i].reset();
+		this->alignment_blend_state_array[rt_i].reset();
+		this->add_blend_state_array[rt_i].reset();
+		this->sub_blend_state_array[rt_i].reset();
+		this->mul_blend_state_array[rt_i].reset();
+		this->reverse_blend_state_array[rt_i].reset();
+		this->total_blend_state_array[rt_i].reset();
+	}
+
+	this->default_depth_state.reset();
+	this->reference_depth_state.reset();
+	this->screen_model_shader.reset();
+	this->sprite_model_shader.reset();
+	this->config_shader_constant_buffer.reset();
+	this->camera_shader_structured_buffer.reset();
+	this->light_shader_structured_buffer.reset();
+	this->fog_shader_structured_buffer.reset();
+	this->main_render_target_texture.reset();
+	this->main_depth_target_texture.reset();
+	this->cc_sampler.reset();
+	this->cw_sampler.reset();
+	this->wc_sampler.reset();
+	this->ww_sampler.reset();
 
 	return;
 }

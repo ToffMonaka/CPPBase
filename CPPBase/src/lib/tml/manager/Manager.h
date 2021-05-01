@@ -88,10 +88,6 @@ public:
 	HDC GetWindowDeviceContextHandle(void) const;
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
-	template <typename T1, typename T2>
-	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, tml::shared_ptr<T1> &);
-	template <typename T>
-	void ReleaseResource(tml::shared_ptr<T> &);
 	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT) const;
 	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT) const;
 	UINT GetEventCount(void) const;
@@ -131,7 +127,7 @@ inline HDC tml::Manager::GetWindowDeviceContextHandle(void) const
 template <typename T1, typename T2, typename D>
 inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const D &desc)
 {
-	this->ReleaseResource(dst_res);
+	dst_res.reset();
 
 	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T1>(1U);
 
@@ -142,68 +138,18 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 	UINT res_main_index = res->GetResourceMainIndex();
 	UINT res_sub_index = res->GetResourceSubIndex();
 
-	if ((res_main_index < this->res_cont_cont_.size())
-	&& (res_sub_index < this->res_cont_cont_[res_main_index].size())) {
-		this->res_cont_cont_[res_main_index][res_sub_index].push_back(res);
-
-		this->check_res_cont_.push_back(res);
-
-		dst_res = std::dynamic_pointer_cast<T2>(res);
-	}
-
-	return (dst_res);
-}
-
-
-/**
- * @brief GetResourceä÷êî
- * @param dst_res (dst_resource)
- * @param res (resource)
- * @return dst_res (dst_resource)
- */
-template <typename T1, typename T2>
-inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, tml::shared_ptr<T1> &res)
-{
-	if (dst_res == res) {
+	if ((res_main_index >= this->res_cont_cont_.size())
+	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
 		return (dst_res);
 	}
 
-	this->ReleaseResource(dst_res);
+	this->res_cont_cont_[res_main_index][res_sub_index].push_back(res);
 
-	dst_res = res;
+	this->check_res_cont_.push_back(res);
+
+	dst_res = std::dynamic_pointer_cast<T2>(res);
 
 	return (dst_res);
-}
-
-
-/**
- * @brief ReleaseResourceä÷êî
- * @param res (resource)
- */
-template <typename T>
-inline void tml::Manager::ReleaseResource(tml::shared_ptr<T> &res)
-{
-	if (res == nullptr) {
-		return;
-	}
-
-	UINT res_main_index = res->GetResourceMainIndex();
-	UINT res_sub_index = res->GetResourceSubIndex();
-
-	if ((res_main_index >= this->res_cont_cont_.size())
-	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
-		res.reset();
-
-		return;
-	}
-
-	if (res.use_count() <= 2L) {
-		this->res_cont_cont_[res_main_index][res_sub_index].remove(res);
-	}
-
-	res.reset();
-
-	return;
 }
 
 

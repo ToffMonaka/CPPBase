@@ -103,17 +103,6 @@ cpp_base::scene::InitScene::~InitScene()
  */
 void cpp_base::scene::InitScene::Release(void)
 {
-	if (this->GetManager() != nullptr) {
-		auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
-		if (graphic_mgr != nullptr) {
-			graphic_mgr->ReleaseResource(this->camera_);
-			graphic_mgr->ReleaseResource(this->bg_sprite_model_);
-			graphic_mgr->ReleaseResource(this->wait_sprite_model_);
-			graphic_mgr->ReleaseResource(this->wait_font_);
-		}
-	}
-
 	tml::scene::Scene::Release();
 
 	return;
@@ -127,7 +116,11 @@ void cpp_base::scene::InitScene::Init(void)
 {
 	this->Release();
 
+	this->camera_.reset();
+	this->bg_sprite_model_.reset();
 	this->wait_update_time_ = tml::TIME_REAL(0.0);
+	this->wait_sprite_model_.reset();
+	this->wait_font_.reset();
 
 	tml::scene::Scene::Init();
 
@@ -214,7 +207,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 			}
 
 			this->bg_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-			graphic_mgr->ReleaseResource(tex);
 		}
 	}
 
@@ -264,7 +256,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 			this->wait_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
 
 			this->wait_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-			graphic_mgr->ReleaseResource(tex);
 		}
 	}
 
@@ -345,8 +336,6 @@ void cpp_base::scene::InitScene::Update(void)
 
 				return;
 			}
-
-			this->GetManager()->ReleaseResource(scene);
 		}
 	}
 
