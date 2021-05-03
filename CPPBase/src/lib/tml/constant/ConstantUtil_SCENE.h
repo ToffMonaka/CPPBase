@@ -15,6 +15,7 @@ namespace SCENE {
 		NONE = 0U,
 		ETC,
 		SCENE,
+		NODE,
 		USER,
 		COUNT
 	};
@@ -25,6 +26,13 @@ namespace SCENE {
 		COUNT
 	};
 	const UINT SCENE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_TYPE::COUNT);
+	enum class NODE_TYPE : UINT {
+		NONE = 0U,
+		OBJECT_2D,
+		USER,
+		COUNT
+	};
+	const UINT NODE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
 		ETC,

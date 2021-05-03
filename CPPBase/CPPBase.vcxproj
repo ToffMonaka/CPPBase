@@ -199,6 +199,9 @@
     <ClCompile Include="src\lib\tml\graphic\Light.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Mesh.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Model.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Object2DModel.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Object2DModelLayerShaderStructuredBuffer.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Object2DModelShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\RasterizerState.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Sampler.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ScreenModel.cpp" />
@@ -244,6 +247,8 @@
     <ClCompile Include="src\lib\tml\scene\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\scene\ManagerEvent.cpp" />
     <ClCompile Include="src\lib\tml\scene\ManagerResource.cpp" />
+    <ClCompile Include="src\lib\tml\scene\Node.cpp" />
+    <ClCompile Include="src\lib\tml\scene\Object2DNode.cpp" />
     <ClCompile Include="src\lib\tml\scene\Scene.cpp" />
     <ClCompile Include="src\lib\tml\sound\BGMSound.cpp" />
     <ClCompile Include="src\lib\tml\sound\Manager.cpp" />
@@ -332,6 +337,9 @@
     <ClInclude Include="src\lib\tml\graphic\Light.h" />
     <ClInclude Include="src\lib\tml\graphic\Mesh.h" />
     <ClInclude Include="src\lib\tml\graphic\Model.h" />
+    <ClInclude Include="src\lib\tml\graphic\Object2DModel.h" />
+    <ClInclude Include="src\lib\tml\graphic\Object2DModelLayerShaderStructuredBuffer.h" />
+    <ClInclude Include="src\lib\tml\graphic\Object2DModelShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\RasterizerState.h" />
     <ClInclude Include="src\lib\tml\graphic\Sampler.h" />
     <ClInclude Include="src\lib\tml\graphic\ScreenModel.h" />
@@ -381,6 +389,8 @@
     <ClInclude Include="src\lib\tml\scene\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\scene\ManagerEvent.h" />
     <ClInclude Include="src\lib\tml\scene\ManagerResource.h" />
+    <ClInclude Include="src\lib\tml\scene\Node.h" />
+    <ClInclude Include="src\lib\tml\scene\Object2DNode.h" />
     <ClInclude Include="src\lib\tml\scene\Scene.h" />
     <ClInclude Include="src\lib\tml\sound\BGMSound.h" />
     <ClInclude Include="src\lib\tml\sound\Manager.h" />

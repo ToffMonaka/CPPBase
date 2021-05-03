@@ -44,6 +44,7 @@ public:
 	FLOAT GetFLOAT(const FLOAT, const FLOAT);
 	DOUBLE GetDOUBLE(void);
 	DOUBLE GetDOUBLE(const DOUBLE, const DOUBLE);
+	bool GetBool(void);
 	INT &GetValue(INT &);
 	INT &GetValue(INT &, const INT, const INT);
 	UINT &GetValue(UINT &);
@@ -56,6 +57,7 @@ public:
 	FLOAT &GetValue(FLOAT &, const FLOAT, const FLOAT);
 	DOUBLE &GetValue(DOUBLE &);
 	DOUBLE &GetValue(DOUBLE &, const DOUBLE, const DOUBLE);
+	bool &GetValue(bool &);
 };
 }
 
@@ -243,6 +245,16 @@ inline DOUBLE tml::RandomSeed::GetDOUBLE(const DOUBLE min_val, const DOUBLE max_
 
 
 /**
+ * @brief GetBoolŠÖ”
+ * @return val (value)
+ */
+inline bool tml::RandomSeed::GetBool(void)
+{
+	return (this->GetINT() & 1);
+}
+
+
+/**
  * @brief GetValueŠÖ”
  * @param dst_val (dst_value)
  * @return dst_val (dst_value)
@@ -405,6 +417,19 @@ inline DOUBLE &tml::RandomSeed::GetValue(DOUBLE &dst_val)
 inline DOUBLE &tml::RandomSeed::GetValue(DOUBLE &dst_val, const DOUBLE min_val, const DOUBLE max_val)
 {
 	dst_val = this->GetDOUBLE(min_val, max_val);
+
+	return (dst_val);
+}
+
+
+/**
+ * @brief GetValueŠÖ”
+ * @param dst_val (dst_value)
+ * @return dst_val (dst_value)
+ */
+inline bool &tml::RandomSeed::GetValue(bool &dst_val)
+{
+	dst_val = this->GetBool();
 
 	return (dst_val);
 }

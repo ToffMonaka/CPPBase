@@ -14,6 +14,8 @@ namespace tml {
 namespace scene {
 class Manager;
 class Scene;
+class Node;
+class Object2DNode;
 }
 }
 

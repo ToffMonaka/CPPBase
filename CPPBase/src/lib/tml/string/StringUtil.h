@@ -86,6 +86,8 @@ public:
 	static std::wstring &GetString(std::wstring &, const FLOAT);
 	static std::string &GetString(std::string &, const DOUBLE);
 	static std::wstring &GetString(std::wstring &, const DOUBLE);
+	static std::string &GetString(std::string &, const bool);
+	static std::wstring &GetString(std::wstring &, const bool);
 	static std::string &GetString(std::string &, const WCHAR *);
 	static std::wstring &GetString(std::wstring &, const CHAR *);
 };
@@ -902,4 +904,34 @@ inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const DOU
 	dst_str = std::to_wstring(val);
 
 	return (dst_str);
+}
+
+
+/**
+ * @brief GetString関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param val (value)
+ * @return dst_str (dst_string)
+ */
+inline std::string &tml::StringUtil::GetString(std::string &dst_str, const bool val)
+{
+	return (tml::StringUtil::GetString(dst_str, static_cast<INT>(val)));
+}
+
+
+/**
+ * @brief GetString関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param val (value)
+ * @return dst_str (dst_string)
+ */
+inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const bool val)
+{
+	return (tml::StringUtil::GetString(dst_str, static_cast<INT>(val)));
 }

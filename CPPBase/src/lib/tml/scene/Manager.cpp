@@ -9,6 +9,8 @@
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
 #include "Scene.h"
+#include "Node.h"
+#include "Object2DNode.h"
 
 
 /**
@@ -23,6 +25,7 @@ tml::scene::ManagerDesc::ManagerDesc() :
 	this->resource_count_container.clear();
 	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_TYPE_COUNT;
 	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
 	return;
@@ -49,6 +52,8 @@ void tml::scene::ManagerDesc::Init(void)
 
 	this->resource_count_container.clear();
 	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_TYPE_COUNT;
 	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
 	this->input_manager = nullptr;

@@ -49,6 +49,7 @@ public:
 	static FLOAT GetFLOAT(const FLOAT, const FLOAT);
 	static DOUBLE GetDOUBLE(void);
 	static DOUBLE GetDOUBLE(const DOUBLE, const DOUBLE);
+	static bool GetBool(void);
 	static INT &GetValue(INT &);
 	static INT &GetValue(INT &, const INT, const INT);
 	static UINT &GetValue(UINT &);
@@ -61,6 +62,7 @@ public:
 	static FLOAT &GetValue(FLOAT &, const FLOAT, const FLOAT);
 	static DOUBLE &GetValue(DOUBLE &);
 	static DOUBLE &GetValue(DOUBLE &, const DOUBLE, const DOUBLE);
+	static bool &GetValue(bool &);
 };
 }
 
@@ -273,6 +275,19 @@ inline DOUBLE tml::RandomUtil::GetDOUBLE(const DOUBLE min_val, const DOUBLE max_
 
 
 /**
+ * @brief GetBool関数
+ *
+ * Create関数不要
+ *
+ * @return val (value)
+ */
+inline bool tml::RandomUtil::GetBool(void)
+{tml::ThreadLockBlock th_lock_block(tml::RandomUtil::seed_th_lock_);
+	return (tml::RandomUtil::seed_.GetBool());
+}
+
+
+/**
  * @brief GetValue関数
  *
  * Create関数不要
@@ -471,6 +486,22 @@ inline DOUBLE &tml::RandomUtil::GetValue(DOUBLE &dst_val)
 inline DOUBLE &tml::RandomUtil::GetValue(DOUBLE &dst_val, const DOUBLE min_val, const DOUBLE max_val)
 {
 	dst_val = tml::RandomUtil::GetDOUBLE(min_val, max_val);
+
+	return (dst_val);
+}
+
+
+/**
+ * @brief GetValue関数
+ *
+ * Create関数不要
+ *
+ * @param dst_val (dst_value)
+ * @return dst_val (dst_value)
+ */
+inline bool &tml::RandomUtil::GetValue(bool &dst_val)
+{
+	dst_val = tml::RandomUtil::GetBool();
 
 	return (dst_val);
 }
