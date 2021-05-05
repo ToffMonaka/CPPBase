@@ -119,7 +119,6 @@ tml::graphic::Manager::Manager() :
 	device_context_(nullptr),
 	device_future_lv_(static_cast<D3D_FEATURE_LEVEL>(0)),
 	size_(0U),
-	half_size_(0U),
 	vsync_flg_(true),
 	frame_rate_limit_(60U),
 	samp_quality_type_(tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE),
@@ -278,7 +277,6 @@ void tml::graphic::Manager::Init(void)
 	tml::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
 	this->size_ = 0U;
-	this->half_size_ = 0U;
 	this->vsync_flg_ = true;
 	this->frame_rate_limit_ = 60U;
 	this->vp_.Init();
@@ -470,8 +468,6 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	}
 
 	this->size_ = tml::XMUINT2EX(this->swap_chain_desc_.BufferDesc.Width, this->swap_chain_desc_.BufferDesc.Height);
-	this->half_size_.x = this->size_.x >> 1;
-	this->half_size_.y = this->size_.y >> 1;
 	this->vsync_flg_ = desc.vsync_flag;
 	this->frame_rate_limit_ = desc.frame_rate_limit;
 	this->vp_.Init(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(static_cast<FLOAT>(this->swap_chain_desc_.BufferDesc.Width), static_cast<FLOAT>(this->swap_chain_desc_.BufferDesc.Height)));

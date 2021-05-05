@@ -180,7 +180,7 @@ INT tml::BinaryFile::Read(void)
 				return (-1);
 			}
 
-			read_buf_size = std::max(read_desc_dat->one_buffer_size, sizeof(size_t));
+			read_buf_size = tml::Max(read_desc_dat->one_buffer_size, sizeof(size_t));
 			read_buf = tml::MemoryUtil::Get<CHAR>(read_buf_size);
 
 			while (1) {
@@ -250,11 +250,11 @@ INT tml::BinaryFile::Write(void)
 			return (0);
 		}
 
-		write_buf_size = std::max(write_desc_dat->one_buffer_size, sizeof(size_t));
+		write_buf_size = tml::Max(write_desc_dat->one_buffer_size, sizeof(size_t));
 		write_buf = tml::MemoryUtil::Get<CHAR>(write_buf_size);
 
 		while (1) {
-			write_size = std::min(this->data.file_buffer.GetLength() - file_buf_index, write_buf_size);
+			write_size = tml::Min(this->data.file_buffer.GetLength() - file_buf_index, write_buf_size);
 
 			tml::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.file_buffer.Get()[file_buf_index]), write_size);
 

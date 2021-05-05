@@ -130,6 +130,7 @@ namespace GRAPHIC {
 		ETC,
 		SCREEN,
 		SPRITE,
+		OBJECT_2D,
 		USER,
 		COUNT
 	};

@@ -215,6 +215,16 @@ typedef struct XMFLOAT2EX_ : public DirectX::XMFLOAT2
 	{
 		return (tml::XMFLOAT2EX_(-this->x, -this->y));
 	};
+
+	float GetHalfX(void) const
+	{
+		return (this->x * 0.5f);
+	};
+
+	float GetHalfY(void) const
+	{
+		return (this->y * 0.5f);
+	};
 } XMFLOAT2EX;
 
 
@@ -450,6 +460,21 @@ typedef struct XMFLOAT3EX_ : public DirectX::XMFLOAT3
 	{
 		return (tml::XMFLOAT3EX_(-this->x, -this->y, -this->z));
 	};
+
+	float GetHalfX(void) const
+	{
+		return (this->x * 0.5f);
+	};
+
+	float GetHalfY(void) const
+	{
+		return (this->y * 0.5f);
+	};
+
+	float GetHalfZ(void) const
+	{
+		return (this->z * 0.5f);
+	};
 } XMFLOAT3EX;
 
 
@@ -664,6 +689,26 @@ typedef struct XMFLOAT4EX_ : public DirectX::XMFLOAT4
 	tml::XMFLOAT4EX_ operator -(void)
 	{
 		return (tml::XMFLOAT4EX_(-this->x, -this->y, -this->z, -this->w));
+	};
+
+	float GetHalfX(void) const
+	{
+		return (this->x * 0.5f);
+	};
+
+	float GetHalfY(void) const
+	{
+		return (this->y * 0.5f);
+	};
+
+	float GetHalfZ(void) const
+	{
+		return (this->z * 0.5f);
+	};
+
+	float GetHalfW(void) const
+	{
+		return (this->w * 0.5f);
 	};
 } XMFLOAT4EX;
 

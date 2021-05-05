@@ -211,6 +211,16 @@ typedef struct XMINT2EX_ : public DirectX::XMINT2
 	{
 		return (tml::XMINT2EX_(-this->x, -this->y));
 	};
+
+	INT GetHalfX(void) const
+	{
+		return (this->x >> 1);
+	};
+
+	INT GetHalfY(void) const
+	{
+		return (this->y >> 1);
+	};
 } XMINT2EX;
 
 
@@ -442,6 +452,21 @@ typedef struct XMINT3EX_ : public DirectX::XMINT3
 	{
 		return (tml::XMINT3EX_(-this->x, -this->y, -this->z));
 	};
+
+	INT GetHalfX(void) const
+	{
+		return (this->x >> 1);
+	};
+
+	INT GetHalfY(void) const
+	{
+		return (this->y >> 1);
+	};
+
+	INT GetHalfZ(void) const
+	{
+		return (this->z >> 1);
+	};
 } XMINT3EX;
 
 
@@ -652,6 +677,26 @@ typedef struct XMINT4EX_ : public DirectX::XMINT4
 	tml::XMINT4EX_ operator -(void)
 	{
 		return (tml::XMINT4EX_(-this->x, -this->y, -this->z, -this->w));
+	};
+
+	INT GetHalfX(void) const
+	{
+		return (this->x >> 1);
+	};
+
+	INT GetHalfY(void) const
+	{
+		return (this->y >> 1);
+	};
+
+	INT GetHalfZ(void) const
+	{
+		return (this->z >> 1);
+	};
+
+	INT GetHalfW(void) const
+	{
+		return (this->w >> 1);
 	};
 } XMINT4EX;
 }

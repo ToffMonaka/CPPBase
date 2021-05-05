@@ -495,8 +495,8 @@ bool tml::graphic::SpriteModel::IsHitByMouse(const tml::XMINT2EX &pos)
 {
 	tml::XMFLOAT2EX tmp_pos;
 
-	tmp_pos.x = static_cast<FLOAT>(pos.x - static_cast<INT>(this->GetManager()->GetHalfSize().x));
-	tmp_pos.y = static_cast<FLOAT>(-pos.y + static_cast<INT>(this->GetManager()->GetHalfSize().y));
+	tmp_pos.x = static_cast<FLOAT>(pos.x - static_cast<INT>(this->GetManager()->GetSize().GetHalfX()));
+	tmp_pos.y = static_cast<FLOAT>(-pos.y + static_cast<INT>(this->GetManager()->GetSize().GetHalfY()));
 
 	if ((tmp_pos.x >= (this->position.GetX() - (this->half_size_.x * this->scale_.x)))
 	&& (tmp_pos.x <= (this->position.GetX() + (this->half_size_.x * this->scale_.x)))

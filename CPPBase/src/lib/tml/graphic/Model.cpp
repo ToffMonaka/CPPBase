@@ -145,8 +145,8 @@ INT tml::graphic::ModelStage::Create(tml::graphic::Manager *mgr)
  */
 void tml::graphic::ModelStage::SetLayer(const UINT index, tml::unique_ptr<tml::graphic::ModelLayer> &layer)
 {
-	while (index >= this->layer_cont_.size()) {
-		this->layer_cont_.push_back(tml::make_unique<tml::graphic::ModelLayer>());
+	if (index >= this->layer_cont_.size()) {
+		this->layer_cont_.resize(index + 1U);
 	}
 
 	this->layer_cont_[index] = std::move(layer);
@@ -300,8 +300,8 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
  */
 void tml::graphic::Model::SetRasterizerState(const UINT index, tml::shared_ptr<tml::graphic::RasterizerState> &rs)
 {
-	while (index >= this->rs_cont_.size()) {
-		this->rs_cont_.push_back(tml::make_shared<tml::graphic::RasterizerState>());
+	if (index >= this->rs_cont_.size()) {
+		this->rs_cont_.resize(index + 1U);
 	}
 
 	this->rs_cont_[index] = rs;
@@ -317,8 +317,8 @@ void tml::graphic::Model::SetRasterizerState(const UINT index, tml::shared_ptr<t
  */
 void tml::graphic::Model::SetBlendState(const UINT index, tml::shared_ptr<tml::graphic::BlendState> &bs)
 {
-	while (index >= this->bs_cont_.size()) {
-		this->bs_cont_.push_back(tml::make_shared<tml::graphic::BlendState>());
+	if (index >= this->bs_cont_.size()) {
+		this->bs_cont_.resize(index + 1U);
 	}
 
 	this->bs_cont_[index] = bs;
@@ -334,8 +334,8 @@ void tml::graphic::Model::SetBlendState(const UINT index, tml::shared_ptr<tml::g
  */
 void tml::graphic::Model::SetDepthState(const UINT index, tml::shared_ptr<tml::graphic::DepthState> &ds)
 {
-	while (index >= this->ds_cont_.size()) {
-		this->ds_cont_.push_back(tml::make_shared<tml::graphic::DepthState>());
+	if (index >= this->ds_cont_.size()) {
+		this->ds_cont_.resize(index + 1U);
 	}
 
 	this->ds_cont_[index] = ds;
@@ -351,8 +351,8 @@ void tml::graphic::Model::SetDepthState(const UINT index, tml::shared_ptr<tml::g
  */
 void tml::graphic::Model::SetShader(const UINT index, tml::shared_ptr<tml::graphic::Shader> &shader)
 {
-	while (index >= this->shader_cont_.size()) {
-		this->shader_cont_.push_back(tml::make_shared<tml::graphic::Shader>());
+	if (index >= this->shader_cont_.size()) {
+		this->shader_cont_.resize(index + 1U);
 	}
 
 	this->shader_cont_[index] = shader;
@@ -368,8 +368,8 @@ void tml::graphic::Model::SetShader(const UINT index, tml::shared_ptr<tml::graph
  */
 void tml::graphic::Model::SetMesh(const UINT index, tml::shared_ptr<tml::graphic::Mesh> &mesh)
 {
-	while (index >= this->mesh_cont_.size()) {
-		this->mesh_cont_.push_back(tml::make_shared<tml::graphic::Mesh>());
+	if (index >= this->mesh_cont_.size()) {
+		this->mesh_cont_.resize(index + 1U);
 	}
 
 	this->mesh_cont_[index] = mesh;
@@ -385,8 +385,8 @@ void tml::graphic::Model::SetMesh(const UINT index, tml::shared_ptr<tml::graphic
  */
 void tml::graphic::Model::SetTexture(const UINT index, tml::shared_ptr<tml::graphic::Texture> &tex)
 {
-	while (index >= this->tex_cont_.size()) {
-		this->tex_cont_.push_back(tml::make_shared<tml::graphic::Texture>());
+	if (index >= this->tex_cont_.size()) {
+		this->tex_cont_.resize(index + 1U);
 	}
 
 	this->tex_cont_[index] = tex;
@@ -402,8 +402,8 @@ void tml::graphic::Model::SetTexture(const UINT index, tml::shared_ptr<tml::grap
  */
 void tml::graphic::Model::SetSampler(const UINT index, tml::shared_ptr<tml::graphic::Sampler> &samp)
 {
-	while (index >= this->samp_cont_.size()) {
-		this->samp_cont_.push_back(tml::make_shared<tml::graphic::Sampler>());
+	if (index >= this->samp_cont_.size()) {
+		this->samp_cont_.resize(index + 1U);
 	}
 
 	this->samp_cont_[index] = samp;
@@ -468,182 +468,3 @@ void tml::graphic::Model::DrawStageForward2D(void)
 {
 	return;
 }
-
-
-#if 0
-/**
- * @brief コンストラクタ
- */
-tml::graphic::MaterialDesc::MaterialDesc() :
-	diffuse_color(0.0f),
-	diffuse_mul_value(0.0f),
-	transparent_mul_value(0.0f),
-	burn_mul_value(0.0f),
-	emissive_mul_value(0.0f),
-	bloom_mul_value(0.0f),
-	specular_mul_value(0.0f),
-	specular_exp_value(1.0f),
-	rim_mul_value(0.0f),
-	rim_exp_value(1.0f),
-	light_flag(false),
-	fog_flag(false)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::graphic::MaterialDesc::~MaterialDesc()
-{
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::graphic::MaterialDesc::Init(void)
-{
-	this->Release();
-
-	this->diffuse_color = 0.0f;
-	this->diffuse_mul_value = 0.0f;
-	this->transparent_mul_value = 0.0f;
-	this->burn_mul_value = 0.0f;
-	this->emissive_mul_value = 0.0f;
-	this->bloom_mul_value = 0.0f;
-	this->specular_mul_value = 0.0f;
-	this->specular_exp_value = 1.0f;
-	this->rim_mul_value = 0.0f;
-	this->rim_exp_value = 1.0f;
-	this->light_flag = false;
-	this->fog_flag = false;
-
-	tml::graphic::ManagerResourceDesc::Init();
-
-	return;
-}
-
-
-/**
- * @brief ReadValue関数
- * @param ini_file (ini_file)
- * @return res (result)<br>
- * 0未満=失敗
- */
-INT tml::graphic::MaterialDesc::ReadValue(const tml::INIFile &ini_file)
-{
-	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
-		return (-1);
-	}
-
-	/*
-	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
-	const std::wstring *val = nullptr;
-
-	{// Material Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"MATERIAL");
-
-		if (val_name_cont != nullptr) {
-		}
-	}
-	*/
-
-	return (0);
-}
-
-
-/**
- * @brief コンストラクタ
- */
-tml::graphic::Material::Material() :
-	diffuse_col_(0.0f),
-	diffuse_mul_val_(0.0f),
-	transparent_mul_val_(0.0f),
-	burn_mul_val_(0.0f),
-	emissive_mul_val_(0.0f),
-	bloom_mul_val_(0.0f),
-	specular_mul_val_(0.0f),
-	specular_exp_val_(1.0f),
-	rim_mul_val_(0.0f),
-	rim_exp_val_(1.0f),
-	light_flg_(false),
-	fog_flg_(false)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::graphic::Material::~Material()
-{
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::graphic::Material::Init(void)
-{
-	this->Release();
-
-	this->diffuse_col_ = 0.0f;
-	this->diffuse_mul_val_ = 0.0f;
-	this->transparent_mul_val_ = 0.0f;
-	this->burn_mul_val_ = 0.0f;
-	this->emissive_mul_val_ = 0.0f;
-	this->bloom_mul_val_ = 0.0f;
-	this->specular_mul_val_ = 0.0f;
-	this->specular_exp_val_ = 1.0f;
-	this->rim_mul_val_ = 0.0f;
-	this->rim_exp_val_ = 1.0f;
-	this->light_flg_ = false;
-	this->fog_flg_ = false;
-
-	tml::graphic::ManagerResource::Init();
-
-	return;
-}
-
-
-/**
- * @brief Create関数
- * @param desc (desc)
- * @return res (result)<br>
- * 0未満=失敗
- */
-INT tml::graphic::Material::Create(const tml::graphic::MaterialDesc &desc)
-{
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MATERIAL, 1U) < 0) {
-		this->Init();
-
-		return (-1);
-	}
-
-	this->diffuse_col_ = desc.diffuse_color;
-	this->diffuse_mul_val_ = desc.diffuse_mul_value;
-	this->transparent_mul_val_ = desc.transparent_mul_value;
-	this->burn_mul_val_ = desc.burn_mul_value;
-	this->emissive_mul_val_ = desc.emissive_mul_value;
-	this->bloom_mul_val_ = desc.bloom_mul_value;
-	this->specular_mul_val_ = desc.specular_mul_value;
-	this->specular_exp_val_ = desc.specular_exp_value;
-	this->rim_mul_val_ = desc.rim_mul_value;
-	this->rim_exp_val_ = desc.rim_exp_value;
-	this->light_flg_ = desc.light_flag;
-	this->fog_flg_ = desc.fog_flag;
-
-	return (0);
-}
-#endif

@@ -348,7 +348,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::SpriteModelDesc desc;
 
 		desc.manager = graphic_mgr;
-		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(graphic_mgr->GetHalfSize().y) + static_cast<FLOAT>(footer_tex_size.y >> 1)));
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(graphic_mgr->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_tex_size.y >> 1)));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");

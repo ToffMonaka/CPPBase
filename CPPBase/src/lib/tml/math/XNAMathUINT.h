@@ -206,6 +206,16 @@ typedef struct XMUINT2EX_ : public DirectX::XMUINT2
 
 		return ((*this));
 	};
+
+	UINT GetHalfX(void) const
+	{
+		return (this->x >> 1);
+	};
+
+	UINT GetHalfY(void) const
+	{
+		return (this->y >> 1);
+	};
 } XMUINT2EX;
 
 
@@ -432,6 +442,21 @@ typedef struct XMUINT3EX_ : public DirectX::XMUINT3
 
 		return ((*this));
 	};
+
+	UINT GetHalfX(void) const
+	{
+		return (this->x >> 1);
+	};
+
+	UINT GetHalfY(void) const
+	{
+		return (this->y >> 1);
+	};
+
+	UINT GetHalfZ(void) const
+	{
+		return (this->z >> 1);
+	};
 } XMUINT3EX;
 
 
@@ -637,6 +662,26 @@ typedef struct XMUINT4EX_ : public DirectX::XMUINT4
 		this->w /= val.w;
 
 		return ((*this));
+	};
+
+	UINT GetHalfX(void) const
+	{
+		return (this->x >> 1);
+	};
+
+	UINT GetHalfY(void) const
+	{
+		return (this->y >> 1);
+	};
+
+	UINT GetHalfZ(void) const
+	{
+		return (this->z >> 1);
+	};
+
+	UINT GetHalfW(void) const
+	{
+		return (this->w >> 1);
 	};
 } XMUINT4EX;
 }
