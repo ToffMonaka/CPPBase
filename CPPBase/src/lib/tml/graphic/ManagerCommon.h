@@ -37,7 +37,7 @@ public:
 	tml::shared_ptr<tml::graphic::DepthState> default_depth_state;
 	tml::shared_ptr<tml::graphic::DepthState> reference_depth_state;
 	tml::shared_ptr<tml::graphic::Shader> screen_model_shader;
-	tml::shared_ptr<tml::graphic::Shader> sprite_model_shader;
+	tml::shared_ptr<tml::graphic::Shader> object_2d_model_shader;
 	tml::shared_ptr<tml::graphic::ConfigShaderConstantBuffer> config_shader_constant_buffer;
 	tml::shared_ptr<tml::graphic::HeaderShaderConstantBuffer> header_shader_constant_buffer;
 	tml::shared_ptr<tml::graphic::CameraShaderStructuredBuffer> camera_shader_structured_buffer;

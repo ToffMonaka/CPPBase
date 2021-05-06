@@ -1,5 +1,5 @@
-#ifndef __SPRITE_MODEL_UTIL_H__
-#define __SPRITE_MODEL_UTIL_H__
+#ifndef __OBJ_2D_MODEL_UTIL_H__
+#define __OBJ_2D_MODEL_UTIL_H__
 
 
 #include "constant_util_h.fx"

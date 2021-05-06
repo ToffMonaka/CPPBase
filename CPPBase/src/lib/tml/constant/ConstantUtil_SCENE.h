@@ -22,12 +22,14 @@ namespace SCENE {
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::COUNT);
 	enum class SCENE_TYPE : UINT {
 		NONE = 0U,
+		ETC,
 		USER,
 		COUNT
 	};
 	const UINT SCENE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_TYPE::COUNT);
 	enum class NODE_TYPE : UINT {
 		NONE = 0U,
+		ETC,
 		OBJECT_2D,
 		USER,
 		COUNT

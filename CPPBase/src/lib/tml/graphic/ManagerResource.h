@@ -24,8 +24,6 @@ class ShaderStructuredBuffer;
 class CameraShaderStructuredBuffer;
 class LightShaderStructuredBuffer;
 class FogShaderStructuredBuffer;
-class SpriteModelShaderStructuredBuffer;
-class SpriteModelLayerShaderStructuredBuffer;
 class Object2DModelShaderStructuredBuffer;
 class Object2DModelLayerShaderStructuredBuffer;
 class Camera;
@@ -36,7 +34,6 @@ class Texture;
 class Sampler;
 class Model;
 class ScreenModel;
-class SpriteModel;
 class Object2DModel;
 class Font;
 }

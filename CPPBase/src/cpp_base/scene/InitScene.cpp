@@ -10,7 +10,7 @@
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/SpriteModel.h"
+#include "../../lib/tml/graphic/Object2DModel.h"
 #include "../../lib/tml/graphic/Font.h"
 #include "../../lib/tml/scene/Manager.h"
 #include "../scene/TitleScene.h"
@@ -117,9 +117,9 @@ void cpp_base::scene::InitScene::Init(void)
 	this->Release();
 
 	this->camera_.reset();
-	this->bg_sprite_model_.reset();
+	this->bg_model_.reset();
 	this->wait_update_time_ = tml::TIME_REAL(0.0);
-	this->wait_sprite_model_.reset();
+	this->wait_model_.reset();
 	this->wait_font_.reset();
 
 	tml::scene::Scene::Init();
@@ -165,26 +165,26 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		}
 	}
 
-	{// BackgroundSpriteModel Create
-		tml::graphic::SpriteModelDesc desc;
+	{// BackgroundModel Create
+		tml::graphic::Object2DModelDesc desc;
 
 		desc.manager = graphic_mgr;
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
 
 		desc.Read(read_desc);
 
-		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->bg_sprite_model_, desc);
+		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc);
 
-		if (this->bg_sprite_model_ == nullptr) {
+		if (this->bg_model_ == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->bg_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->bg_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -206,32 +206,32 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 				return (-1);
 			}
 
-			this->bg_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->bg_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 		}
 	}
 
 	tml::XMUINT2EX wait_tex_size = tml::XMUINT2EX(320U, 32U);
 	tml::XMUINT2EX wait_font_size = tml::XMUINT2EX(0U, 24U);
 
-	{// WaitSpriteModel Create
-		tml::graphic::SpriteModelDesc desc;
+	{// WaitModel Create
+		tml::graphic::Object2DModelDesc desc;
 
 		desc.manager = graphic_mgr;
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
 
 		desc.Read(read_desc);
 
-		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->wait_sprite_model_, desc);
+		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->wait_model_, desc);
 
-		if (this->wait_sprite_model_ == nullptr) {
+		if (this->wait_model_ == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->wait_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->wait_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -253,9 +253,9 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 				return (-1);
 			}
 
-			this->wait_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+			this->wait_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->wait_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->wait_model_->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y));
 		}
 	}
 
@@ -275,7 +275,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	}
 
 	{// WaitTexture Update
-		auto tex = this->wait_sprite_model_->GetTexture(this->wait_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+		auto tex = this->wait_model_->GetTexture(this->wait_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
 		tex->DrawCPUBufferString(L"‚¿‚å‚Á‚Æ‘Ò‚Á‚Ä‚ËB", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->wait_font_.get());
@@ -340,8 +340,8 @@ void cpp_base::scene::InitScene::Update(void)
 	}
 
 	graphic_mgr->SetDrawCamera(this->camera_.get());
-	graphic_mgr->SetDrawModel(this->bg_sprite_model_.get());
-	graphic_mgr->SetDrawModel(this->wait_sprite_model_.get());
+	graphic_mgr->SetDrawModel(this->bg_model_.get());
+	graphic_mgr->SetDrawModel(this->wait_model_.get());
 
 	return;
 }

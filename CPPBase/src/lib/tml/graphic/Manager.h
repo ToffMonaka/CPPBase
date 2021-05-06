@@ -65,6 +65,9 @@ public:
 protected:
 	void Release(void);
 
+	void InitResourceCount(void);
+	void InitEventCount(void);
+
 public:
 	ManagerDesc();
 	virtual ~ManagerDesc();

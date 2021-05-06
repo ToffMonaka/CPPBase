@@ -17,8 +17,8 @@
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
-#include "SpriteModelShaderStructuredBuffer.h"
-#include "SpriteModelLayerShaderStructuredBuffer.h"
+#include "Object2DModelShaderStructuredBuffer.h"
+#include "Object2DModelLayerShaderStructuredBuffer.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Fog.h"
@@ -27,7 +27,7 @@
 #include "Sampler.h"
 #include "Model.h"
 #include "ScreenModel.h"
-#include "SpriteModel.h"
+#include "Object2DModel.h"
 #include "Font.h"
 
 
@@ -88,7 +88,7 @@ void tml::graphic::ManagerCommon::Init(void)
 	this->default_depth_state.reset();
 	this->reference_depth_state.reset();
 	this->screen_model_shader.reset();
-	this->sprite_model_shader.reset();
+	this->object_2d_model_shader.reset();
 	this->config_shader_constant_buffer.reset();
 	this->camera_shader_structured_buffer.reset();
 	this->light_shader_structured_buffer.reset();
@@ -374,20 +374,20 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// SpriteModelShader Create
+	{// Object2DModelShader Create
 		tml::graphic::ShaderDesc desc;
 
 		desc.manager = this->mgr_;
-		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::SPRITE_MODEL_INPUT_ELEMENT_DESC_COUNT;
-		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::SPRITE_MODEL_INPUT_ELEMENT_DESC_ARRAY;
+		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_COUNT;
+		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_ARRAY;
 
-		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model_shader.ini");
+		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model_shader.ini");
 
 		desc.Read(read_desc);
 
-		this->mgr_->GetResource<tml::graphic::Shader>(this->sprite_model_shader, desc);
+		this->mgr_->GetResource<tml::graphic::Shader>(this->object_2d_model_shader, desc);
 
-		if (this->sprite_model_shader == nullptr) {
+		if (this->object_2d_model_shader == nullptr) {
 			this->Init();
 
 			return (-1);

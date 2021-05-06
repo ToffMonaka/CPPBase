@@ -326,7 +326,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// Shader Create
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
-			shader = this->GetManager()->GetCommon().sprite_model_shader;
+			shader = this->GetManager()->GetCommon().object_2d_model_shader;
 
 			if (shader == nullptr) {
 				this->Init();

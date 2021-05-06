@@ -22,11 +22,8 @@ tml::scene::ManagerDesc::ManagerDesc() :
 	sound_manager(nullptr)
 
 {
-	this->resource_count_container.clear();
-	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_TYPE_COUNT;
-	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
+	this->InitResourceCount();
+	this->InitEventCount();
 
 	return;
 }
@@ -50,17 +47,39 @@ void tml::scene::ManagerDesc::Init(void)
 {
 	this->Release();
 
-	this->resource_count_container.clear();
-	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_TYPE_COUNT;
-	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
-
 	this->input_manager = nullptr;
 	this->graphic_manager = nullptr;
 	this->sound_manager = nullptr;
 
 	tml::ManagerDesc::Init();
+
+	this->InitResourceCount();
+	this->InitEventCount();
+
+	return;
+}
+
+
+/**
+ * @brief InitResourceCountŠÖ”
+ */
+void tml::scene::ManagerDesc::InitResourceCount(void)
+{
+	this->resource_count_container.clear();
+	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_TYPE_COUNT;
+
+	return;
+}
+
+
+/**
+ * @brief InitEventCountŠÖ”
+ */
+void tml::scene::ManagerDesc::InitEventCount(void)
+{
+	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
 	return;
 }

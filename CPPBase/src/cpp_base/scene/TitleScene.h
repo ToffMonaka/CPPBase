@@ -60,16 +60,16 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	tml::shared_ptr<tml::graphic::Camera> camera_;
-	tml::shared_ptr<tml::graphic::SpriteModel> bg_sprite_model_;
-	tml::shared_ptr<tml::graphic::SpriteModel> logo_sprite_model_;
-	tml::shared_ptr<tml::graphic::SpriteModel> start_sprite_model_;
+	tml::shared_ptr<tml::graphic::Object2DModel> bg_model_;
+	tml::shared_ptr<tml::graphic::Object2DModel> logo_model_;
+	tml::shared_ptr<tml::graphic::Object2DModel> start_model_;
 	tml::shared_ptr<tml::graphic::Font> start_font_;
-	tml::shared_ptr<tml::graphic::SpriteModel> footer_sprite_model_;
+	tml::shared_ptr<tml::sound::SESound> start_se_sound_;
+	tml::shared_ptr<tml::graphic::Object2DModel> footer_model_;
 	tml::shared_ptr<tml::graphic::Font> footer_font_;
 	tml::shared_ptr<tml::sound::BGMSound> bgm_sound_;
-	tml::shared_ptr<tml::sound::SESound> start_se_sound_;
 	tml::TIME_REAL log_update_time_;
-	tml::shared_ptr<tml::graphic::SpriteModel> log_sprite_model_;
+	tml::shared_ptr<tml::graphic::Object2DModel> log_model_;
 	tml::shared_ptr<tml::graphic::Font> log_font_;
 
 protected:

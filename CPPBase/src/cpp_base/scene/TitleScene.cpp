@@ -13,7 +13,7 @@
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/SpriteModel.h"
+#include "../../lib/tml/graphic/Object2DModel.h"
 #include "../../lib/tml/graphic/Font.h"
 #include "../../lib/tml/sound/Manager.h"
 #include "../../lib/tml/sound/BGMSound.h"
@@ -122,16 +122,16 @@ void cpp_base::scene::TitleScene::Init(void)
 	this->Release();
 
 	this->camera_.reset();
-	this->bg_sprite_model_.reset();
-	this->logo_sprite_model_.reset();
-	this->start_sprite_model_.reset();
+	this->bg_model_.reset();
+	this->logo_model_.reset();
+	this->start_model_.reset();
 	this->start_font_.reset();
-	this->footer_sprite_model_.reset();
+	this->start_se_sound_.reset();
+	this->footer_model_.reset();
 	this->footer_font_.reset();
 	this->bgm_sound_.reset();
-	this->start_se_sound_.reset();
 	this->log_update_time_ = tml::TIME_REAL(0.0);
-	this->log_sprite_model_.reset();
+	this->log_model_.reset();
 	this->log_font_.reset();
 
 	tml::scene::Scene::Init();
@@ -178,25 +178,25 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		}
 	}
 
-	{// BackgroundSpriteModel Create
-		tml::graphic::SpriteModelDesc desc;
+	{// BackgroundModel Create
+		tml::graphic::Object2DModelDesc desc;
 
 		desc.manager = graphic_mgr;
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 
-		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
 
 		desc.Read(read_desc);
 
-		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->bg_sprite_model_, desc);
+		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc);
 
-		if (this->bg_sprite_model_ == nullptr) {
+		if (this->bg_model_ == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->bg_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->bg_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -218,29 +218,29 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 				return (-1);
 			}
 
-			this->bg_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->bg_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 		}
 	}
 
-	{// LogoSpriteModel Create
-		tml::graphic::SpriteModelDesc desc;
+	{// LogoModel Create
+		tml::graphic::Object2DModelDesc desc;
 
 		desc.manager = graphic_mgr;
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
 
-		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
 
 		desc.Read(read_desc);
 
-		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->logo_sprite_model_, desc);
+		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->logo_model_, desc);
 
-		if (this->logo_sprite_model_ == nullptr) {
+		if (this->logo_model_ == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->logo_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->logo_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -262,35 +262,35 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 				return (-1);
 			}
 
-			this->logo_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+			this->logo_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->logo_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->logo_model_->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y));
 		}
 	}
 
 	tml::XMUINT2EX start_tex_size = tml::XMUINT2EX(128U, 32U);
 	tml::XMUINT2EX start_font_size = tml::XMUINT2EX(0U, 24U);
 
-	{// StartSpriteModel Create
-		tml::graphic::SpriteModelDesc desc;
+	{// StartModel Create
+		tml::graphic::Object2DModelDesc desc;
 
 		desc.manager = graphic_mgr;
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -192.0f));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
 
 		desc.Read(read_desc);
 
-		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->start_sprite_model_, desc);
+		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->start_model_, desc);
 
-		if (this->start_sprite_model_ == nullptr) {
+		if (this->start_model_ == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->start_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->start_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -312,9 +312,9 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 				return (-1);
 			}
 
-			this->start_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+			this->start_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->start_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->start_model_->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y));
 		}
 	}
 
@@ -334,36 +334,51 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	}
 
 	{// StartTexture Update
-		auto tex = this->start_sprite_model_->GetTexture(this->start_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+		auto tex = this->start_model_->GetTexture(this->start_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
 		tex->DrawCPUBufferString(L"スタート", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->start_font_.get());
 		tex->UploadCPUBuffer();
 	}
 
+	{// StartSESound Create
+		tml::sound::SESoundDesc desc;
+
+		desc.manager = sound_mgr;
+		desc.file_read_desc.data.file_path = L"res/title_start_se_sound1.mp3";
+
+		sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound_, desc);
+
+		if (this->start_se_sound_ == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
 	tml::XMUINT2EX footer_tex_size = tml::XMUINT2EX(graphic_mgr->GetSize().x, 24U);
 	tml::XMUINT2EX footer_font_size = tml::XMUINT2EX(0U, 16U);
 
-	{// FooterSpriteModel Create
-		tml::graphic::SpriteModelDesc desc;
+	{// FooterModel Create
+		tml::graphic::Object2DModelDesc desc;
 
 		desc.manager = graphic_mgr;
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(graphic_mgr->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_tex_size.y >> 1)));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
 
 		desc.Read(read_desc);
 
-		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->footer_sprite_model_, desc);
+		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->footer_model_, desc);
 
-		if (this->footer_sprite_model_ == nullptr) {
+		if (this->footer_model_ == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->footer_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->footer_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -385,9 +400,9 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 				return (-1);
 			}
 
-			this->footer_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+			this->footer_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->footer_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->footer_model_->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y));
 		}
 	}
 
@@ -416,7 +431,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		version_name = L"Version ";
 		version_name += cpp_base::ConstantUtil::APPLICATION::VERSION_NAME;
 
-		auto tex = this->footer_sprite_model_->GetTexture(this->footer_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+		auto tex = this->footer_model_->GetTexture(this->footer_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
 		tex->DrawCPUBufferString(company_name.c_str(), tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(4, -4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_LEFT, this->footer_font_.get());
@@ -439,45 +454,30 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		}
 	}
 
-	{// StartSESound Create
-		tml::sound::SESoundDesc desc;
-
-		desc.manager = sound_mgr;
-		desc.file_read_desc.data.file_path = L"res/title_start_se_sound1.mp3";
-
-		sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound_, desc);
-
-		if (this->start_se_sound_ == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
 	this->log_update_time_ = tml::TIME_REAL(1.0);
 
 	tml::XMUINT2EX log_tex_size = graphic_mgr->GetSize();
 	tml::XMUINT2EX log_font_size = tml::XMUINT2EX(0U, 16U);
 
-	{// LogSpriteModel Create
-		tml::graphic::SpriteModelDesc desc;
+	{// LogModel Create
+		tml::graphic::Object2DModelDesc desc;
 
 		desc.manager = graphic_mgr;
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		auto read_desc = tml::INIFileReadDesc(L"res/sprite_model.ini");
+		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
 
 		desc.Read(read_desc);
 
-		graphic_mgr->GetResource<tml::graphic::SpriteModel>(this->log_sprite_model_, desc);
+		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->log_model_, desc);
 
-		if (this->log_sprite_model_ == nullptr) {
+		if (this->log_model_ == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->log_sprite_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->log_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -499,9 +499,9 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 				return (-1);
 			}
 
-			this->log_sprite_model_->SetSize(tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y)));
+			this->log_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->log_sprite_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->log_model_->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y));
 		}
 	}
 
@@ -565,7 +565,7 @@ void cpp_base::scene::TitleScene::Update(void)
 			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event)->GetData();
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-				if (this->start_sprite_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
+				if (this->start_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
 					sound_mgr->Play(this->start_se_sound_.get(), false);
 
 					this->GetManager()->End();
@@ -577,12 +577,12 @@ void cpp_base::scene::TitleScene::Update(void)
 		}
 	}
 
-	if (this->start_sprite_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
-		this->start_sprite_model_->SetScale(tml::XMFLOAT2EX(1.2f, 1.2f));
-		this->start_sprite_model_->SetColor(tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), 1.0f));
+	if (this->start_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
+		this->start_model_->scale = tml::XMFLOAT2EX(1.2f, 1.2f);
+		this->start_model_->color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), 1.0f);
 	} else {
-		this->start_sprite_model_->SetScale(tml::XMFLOAT2EX(1.0f, 1.0f));
-		this->start_sprite_model_->SetColor(tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f));
+		this->start_model_->scale = tml::XMFLOAT2EX(1.0f, 1.0f);
+		this->start_model_->color = tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	this->log_update_time_ += this->GetManager()->GetFrameRate().GetElapsedTime();
@@ -596,7 +596,7 @@ void cpp_base::scene::TitleScene::Update(void)
 
 			_snwprintf_s(log_str, sizeof(log_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u\nMEM=%u/%u/%u", frame_rate.GetFPS(), frame_rate.GetLimit(), mem_allocator_info.use_size, mem_allocator_info.size, mem_allocator_info.use_count);
 
-			auto tex = this->log_sprite_model_->GetTexture(this->log_sprite_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+			auto tex = this->log_model_->GetTexture(this->log_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 			tex->ClearCPUBuffer();
 			tex->DrawCPUBufferString(log_str, tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(4, 4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::TOP_LEFT, this->log_font_.get());
@@ -607,11 +607,11 @@ void cpp_base::scene::TitleScene::Update(void)
 	}
 
 	graphic_mgr->SetDrawCamera(this->camera_.get());
-	graphic_mgr->SetDrawModel(this->bg_sprite_model_.get());
-	graphic_mgr->SetDrawModel(this->logo_sprite_model_.get());
-	graphic_mgr->SetDrawModel(this->start_sprite_model_.get());
-	graphic_mgr->SetDrawModel(this->footer_sprite_model_.get());
-	graphic_mgr->SetDrawModel(this->log_sprite_model_.get());
+	graphic_mgr->SetDrawModel(this->bg_model_.get());
+	graphic_mgr->SetDrawModel(this->logo_model_.get());
+	graphic_mgr->SetDrawModel(this->start_model_.get());
+	graphic_mgr->SetDrawModel(this->footer_model_.get());
+	graphic_mgr->SetDrawModel(this->log_model_.get());
 
 	return;
 }

@@ -14,8 +14,8 @@ tml::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
 	window_device_context_handle(nullptr)
 {
-	this->resource_count_container.clear();
-	this->event_count = 0U;
+	this->InitResourceCount();
+	this->InitEventCount();
 
 	return;
 }
@@ -41,7 +41,30 @@ void tml::ManagerDesc::Init(void)
 
 	this->window_handle = nullptr;
 	this->window_device_context_handle = nullptr;
+
+	this->InitResourceCount();
+	this->InitEventCount();
+
+	return;
+}
+
+
+/**
+ * @brief InitResourceCountŠÖ”
+ */
+void tml::ManagerDesc::InitResourceCount(void)
+{
 	this->resource_count_container.clear();
+
+	return;
+}
+
+
+/**
+ * @brief InitEventCountŠÖ”
+ */
+void tml::ManagerDesc::InitEventCount(void)
+{
 	this->event_count = 0U;
 
 	return;

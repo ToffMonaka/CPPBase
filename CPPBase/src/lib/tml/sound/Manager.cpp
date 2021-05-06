@@ -15,13 +15,11 @@
  */
 tml::sound::ManagerDesc::ManagerDesc()
 {
-	this->resource_count_container.clear();
-	this->resource_count_container.resize(tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT);
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND)] = tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT;
-	this->event_count = tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT;
-
 	this->volume_array.fill(0.5f);
 	this->mute_flag_array.fill(false);
+
+	this->InitResourceCount();
+	this->InitEventCount();
 
 	return;
 }
@@ -45,15 +43,37 @@ void tml::sound::ManagerDesc::Init(void)
 {
 	this->Release();
 
-	this->resource_count_container.clear();
-	this->resource_count_container.resize(tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT);
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND)] = tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT;
-	this->event_count = tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT;
-
 	this->volume_array.fill(0.5f);
 	this->mute_flag_array.fill(false);
 
 	tml::ManagerDesc::Init();
+
+	this->InitResourceCount();
+	this->InitEventCount();
+
+	return;
+}
+
+
+/**
+ * @brief InitResourceCountŠÖ”
+ */
+void tml::sound::ManagerDesc::InitResourceCount(void)
+{
+	this->resource_count_container.clear();
+	this->resource_count_container.resize(tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT);
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND)] = tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT;
+
+	return;
+}
+
+
+/**
+ * @brief InitEventCountŠÖ”
+ */
+void tml::sound::ManagerDesc::InitEventCount(void)
+{
+	this->event_count = tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT;
 
 	return;
 }

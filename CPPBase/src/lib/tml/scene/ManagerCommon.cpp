@@ -6,6 +6,9 @@
 
 #include "ManagerCommon.h"
 #include "Manager.h"
+#include "Scene.h"
+#include "Node.h"
+#include "Object2DNode.h"
 
 
 /**
