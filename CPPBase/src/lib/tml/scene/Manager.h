@@ -36,11 +36,12 @@ public:
 	tml::graphic::Manager *graphic_manager;
 	tml::sound::Manager *sound_manager;
 
-protected:
-	void Release(void);
-
+private:
 	void InitResourceCount(void);
 	void InitEventCount(void);
+
+protected:
+	void Release(void);
 
 public:
 	ManagerDesc();

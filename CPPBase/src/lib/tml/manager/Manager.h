@@ -24,11 +24,12 @@ public:
 	std::vector<UINT> resource_count_container;
 	UINT event_count;
 
-protected:
-	void Release(void);
-
+private:
 	void InitResourceCount(void);
 	void InitEventCount(void);
+
+protected:
+	void Release(void);
 
 public:
 	ManagerDesc();
@@ -91,10 +92,11 @@ public:
 	HDC GetWindowDeviceContextHandle(void) const;
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
-	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT) const;
-	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT) const;
+	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
+	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
 	UINT GetEventCount(void) const;
-	const tml::unique_ptr<tml::ManagerEvent> *GetEventArray(void) const;
+	const tml::ManagerEvent *GetEvent(const UINT) const;
+	const tml::ManagerEvent *GetEventFast(const UINT) const;
 	template <typename T, typename D>
 	INT AddEvent(const D &);
 };
@@ -162,7 +164,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
  * @return res_cont (resource_container)<br>
  * nullptr=Ž¸”s
  */
-inline const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *tml::Manager::GetResourceContainer(const UINT res_main_index) const
+inline const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *tml::Manager::GetResourceContainer(const UINT res_main_index)
 {
 	if (res_main_index >= this->res_cont_cont_.size()) {
 		return (nullptr);
@@ -179,7 +181,7 @@ inline const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *tml:
  * @return res_cont (resource_container)<br>
  * nullptr=Ž¸”s
  */
-inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::GetResourceContainer(const UINT res_main_index, const UINT res_sub_index) const
+inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::GetResourceContainer(const UINT res_main_index, const UINT res_sub_index)
 {
 	if ((res_main_index >= this->res_cont_cont_.size())
 	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
@@ -201,12 +203,30 @@ inline UINT tml::Manager::GetEventCount(void) const
 
 
 /**
- * @brief GetEventArrayŠÖ”
- * @return event_ary (event_array)
+ * @brief GetEventŠÖ”
+ * @param index (index)
+ * @return event (event)<br>
+ * nullptr=Ž¸”s
  */
-inline const tml::unique_ptr<tml::ManagerEvent> *tml::Manager::GetEventArray(void) const
+inline const tml::ManagerEvent *tml::Manager::GetEvent(const UINT index) const
 {
-	return (this->event_cont_ary_[this->front_event_index_].data());
+	if (index >= this->event_cont_ary_[this->front_event_index_].size()) {
+		return (nullptr);
+	}
+
+	return (this->event_cont_ary_[this->front_event_index_][index].get());
+}
+
+
+/**
+ * @brief GetEventFastŠÖ”
+ * @param index (index)
+ * @return event (event)<br>
+ * nullptr=Ž¸”s
+ */
+inline const tml::ManagerEvent *tml::Manager::GetEventFast(const UINT index) const
+{
+	return (this->event_cont_ary_[this->front_event_index_][index].get());
 }
 
 

@@ -88,7 +88,7 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
 			return (-1);
 		} else {
 			this->start_th_cont_.push_back(tmp_th);
-			this->start_th_cont_with_th_id_.insert(std::make_pair(tmp_th->GetID(), tmp_th));
+			this->start_th_cont_by_th_id_.insert(std::make_pair(tmp_th->GetID(), tmp_th));
 		}
 
 		this->main_th_ = std::move(th);
@@ -130,7 +130,7 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::SubThread> &th)
 			tmp_th->CreateCore();
 
 			this->start_th_cont_.push_back(tmp_th);
-			this->start_th_cont_with_th_id_.insert(std::make_pair(tmp_th->GetID(), tmp_th));
+			this->start_th_cont_by_th_id_.insert(std::make_pair(tmp_th->GetID(), tmp_th));
 		} else {
 			this->ready_th_cont_.push_back(tmp_th);
 		}
@@ -165,7 +165,7 @@ INT tml::ThreadUtilEngine::StartAll(void)
 			tmp_th->CreateCore();
 
 			this->start_th_cont_.push_back(tmp_th);
-			this->start_th_cont_with_th_id_.insert(std::make_pair(tmp_th->GetID(), tmp_th));
+			this->start_th_cont_by_th_id_.insert(std::make_pair(tmp_th->GetID(), tmp_th));
 		}
 
 		this->ready_th_cont_.clear();
@@ -215,9 +215,9 @@ void tml::ThreadUtilEngine::End(const bool finish_flg)
 	auto th_id = std::this_thread::get_id();
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		auto th_itr = this->start_th_cont_with_th_id_.find(th_id);
+		auto th_itr = this->start_th_cont_by_th_id_.find(th_id);
 
-		if (th_itr == this->start_th_cont_with_th_id_.end()) {
+		if (th_itr == this->start_th_cont_by_th_id_.end()) {
 			return;
 		}
 
@@ -227,7 +227,7 @@ void tml::ThreadUtilEngine::End(const bool finish_flg)
 
 		if (finish_flg) {
 			this->start_th_cont_.remove(th);
-			this->start_th_cont_with_th_id_.erase(th_id);
+			this->start_th_cont_by_th_id_.erase(th_id);
 		}
 	}
 

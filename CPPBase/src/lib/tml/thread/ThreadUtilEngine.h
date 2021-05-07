@@ -52,7 +52,7 @@ private:
 	std::list<std::unique_ptr<tml::SubThread>> sub_th_cont_;
 	std::list<tml::Thread *> ready_th_cont_;
 	std::list<tml::Thread *> start_th_cont_;
-	std::unordered_map<std::thread::id, tml::Thread *> start_th_cont_with_th_id_;
+	std::unordered_map<std::thread::id, tml::Thread *> start_th_cont_by_th_id_;
 	tml::ThreadUtilEngine::STATE stat_;
 	tml::SpinThreadLock stat_th_lock_;
 	tml::MutexThreadLock com_th_lock_;
@@ -91,9 +91,9 @@ inline tml::Thread *tml::ThreadUtilEngine::Get(void)
 	auto th_id = std::this_thread::get_id();
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		auto th_itr = this->start_th_cont_with_th_id_.find(th_id);
+		auto th_itr = this->start_th_cont_by_th_id_.find(th_id);
 
-		if (th_itr != this->start_th_cont_with_th_id_.end()) {
+		if (th_itr != this->start_th_cont_by_th_id_.end()) {
 			th = th_itr->second;
 		}
 	}

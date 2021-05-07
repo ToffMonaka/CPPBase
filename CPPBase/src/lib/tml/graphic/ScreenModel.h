@@ -211,6 +211,8 @@ public:
 
 private:
 
+public:
+
 protected:
 	void Release(void);
 
