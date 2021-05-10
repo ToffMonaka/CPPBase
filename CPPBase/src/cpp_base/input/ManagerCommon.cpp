@@ -6,15 +6,12 @@
 
 #include "ManagerCommon.h"
 #include "Manager.h"
-#include "Sound.h"
-#include "BGMSound.h"
-#include "SESound.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::sound::ManagerCommon::ManagerCommon() :
+cpp_base::input::ManagerCommon::ManagerCommon() :
 	mgr_(nullptr)
 {
 	return;
@@ -24,7 +21,7 @@ tml::sound::ManagerCommon::ManagerCommon() :
 /**
  * @brief デストラクタ
  */
-tml::sound::ManagerCommon::~ManagerCommon()
+cpp_base::input::ManagerCommon::~ManagerCommon()
 {
 	this->Release();
 
@@ -35,7 +32,7 @@ tml::sound::ManagerCommon::~ManagerCommon()
 /**
  * @brief Init関数
  */
-void tml::sound::ManagerCommon::Init(void)
+void cpp_base::input::ManagerCommon::Init(void)
 {
 	this->Release();
 
@@ -51,7 +48,7 @@ void tml::sound::ManagerCommon::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::sound::ManagerCommon::Create(tml::sound::Manager *mgr)
+INT cpp_base::input::ManagerCommon::Create(cpp_base::input::Manager *mgr)
 {
 	if (mgr == nullptr) {
 		this->Init();

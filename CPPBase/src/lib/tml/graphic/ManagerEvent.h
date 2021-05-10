@@ -12,13 +12,6 @@
 
 namespace tml {
 namespace graphic {
-class Manager;
-}
-}
-
-
-namespace tml {
-namespace graphic {
 /**
  * @brief ManagerEventDescƒNƒ‰ƒX
  */

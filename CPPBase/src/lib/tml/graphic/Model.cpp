@@ -38,6 +38,15 @@ tml::graphic::ModelLayer::~ModelLayer()
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+void tml::graphic::ModelLayer::Release(void)
+{
+	return;
+}
+
+
+/**
  * @brief Initä÷êî
  */
 void tml::graphic::ModelLayer::Init(void)

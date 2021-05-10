@@ -89,17 +89,6 @@ tml::scene::Node::~Node()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::scene::Node::Release(void)
-{
-	tml::scene::ManagerResource::Release();
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::scene::Node::Init(void)

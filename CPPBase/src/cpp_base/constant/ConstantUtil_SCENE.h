@@ -21,3 +21,10 @@ namespace SCENE {
 }
 }
 }
+
+
+namespace cpp_base {
+namespace scene {
+class Manager;
+}
+}

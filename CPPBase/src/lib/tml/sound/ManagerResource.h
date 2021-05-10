@@ -12,16 +12,6 @@
 
 namespace tml {
 namespace sound {
-class Manager;
-class Sound;
-class BGMSound;
-class SESound;
-}
-}
-
-
-namespace tml {
-namespace sound {
 /**
  * @brief ManagerResourceDescƒNƒ‰ƒX
  */

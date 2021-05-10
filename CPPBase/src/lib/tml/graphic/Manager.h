@@ -62,12 +62,11 @@ public:
 	bool vsync_flag;
 	UINT frame_rate_limit;
 
-private:
-	void InitResourceCount(void);
-	void InitEventCount(void);
-
 protected:
 	void Release(void);
+
+	void InitResourceCount(void);
+	void InitEventCount(void);
 
 public:
 	ManagerDesc();

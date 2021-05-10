@@ -77,6 +77,17 @@ public:
 
 
 /**
+ * @brief ReleaseŠÖ”
+ */
+inline void tml::scene::Node::Release(void)
+{
+	tml::scene::ManagerResource::Release();
+
+	return;
+}
+
+
+/**
  * @brief GetTypeŠÖ”
  * @return type (type)
  */

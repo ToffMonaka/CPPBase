@@ -12,9 +12,8 @@
  */
 tml::input::ManagerDesc::ManagerDesc()
 {
-	this->resource_count_container.clear();
-	this->resource_count_container.resize(tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT);
-	this->event_count = tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT;
+	this->InitResourceCount();
+	this->InitEventCount();
 
 	return;
 }
@@ -38,11 +37,36 @@ void tml::input::ManagerDesc::Init(void)
 {
 	this->Release();
 
-	this->resource_count_container.clear();
-	this->resource_count_container.resize(tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT);
-	this->event_count = tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT;
-
 	tml::ManagerDesc::Init();
+
+	this->InitResourceCount();
+	this->InitEventCount();
+
+	return;
+}
+
+
+/**
+ * @brief InitResourceCountŠÖ”
+ */
+void tml::input::ManagerDesc::InitResourceCount(void)
+{
+	tml::ManagerDesc::InitResourceCount();
+
+	this->resource_count_container.resize(tml::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT);
+
+	return;
+}
+
+
+/**
+ * @brief InitEventCountŠÖ”
+ */
+void tml::input::ManagerDesc::InitEventCount(void)
+{
+	tml::ManagerDesc::InitEventCount();
+
+	this->event_count = tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT;
 
 	return;
 }

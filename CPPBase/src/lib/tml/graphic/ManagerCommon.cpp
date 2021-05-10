@@ -53,15 +53,6 @@ tml::graphic::ManagerCommon::~ManagerCommon()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::graphic::ManagerCommon::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::graphic::ManagerCommon::Init(void)

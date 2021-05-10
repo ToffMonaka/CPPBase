@@ -12,13 +12,6 @@
 
 namespace tml {
 namespace sound {
-class Manager;
-}
-}
-
-
-namespace tml {
-namespace sound {
 /**
  * @brief ManagerEventDescƒNƒ‰ƒX
  */

@@ -6,7 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "ManagerResource.h"
+#include "../constant/ConstantUtil_GRAPHIC.h"
+#include "../memory/MemoryUtil.h"
 
 
 namespace tml {
@@ -63,6 +64,15 @@ public:
 	tml::graphic::Manager *GetManager(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::ManagerCommon::Release(void)
+{
+	return;
 }
 
 

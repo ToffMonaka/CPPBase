@@ -12,16 +12,6 @@
 
 namespace tml {
 namespace scene {
-class Manager;
-class Scene;
-class Node;
-class Object2DNode;
-}
-}
-
-
-namespace tml {
-namespace scene {
 /**
  * @brief ManagerResourceDescƒNƒ‰ƒX
  */

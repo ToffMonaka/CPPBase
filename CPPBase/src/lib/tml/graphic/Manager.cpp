@@ -81,7 +81,8 @@ void tml::graphic::ManagerDesc::Init(void)
  */
 void tml::graphic::ManagerDesc::InitResourceCount(void)
 {
-	this->resource_count_container.clear();
+	tml::ManagerDesc::InitResourceCount();
+
 	this->resource_count_container.resize(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT);
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE)] = tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE)] = tml::ConstantUtil::GRAPHIC::BLEND_STATE_TYPE_COUNT;
@@ -107,6 +108,8 @@ void tml::graphic::ManagerDesc::InitResourceCount(void)
  */
 void tml::graphic::ManagerDesc::InitEventCount(void)
 {
+	tml::ManagerDesc::InitEventCount();
+
 	this->event_count = tml::ConstantUtil::GRAPHIC::EVENT_TYPE_COUNT;
 
 	return;
@@ -619,13 +622,17 @@ void tml::graphic::Manager::Update(void)
 	this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT;
 	this->draw_stage_dat_ = &draw_stage_dat;
 
-	this->GetViewMatrix3D(this->draw_stage_dat_->view_matrix_3d, this->draw_camera_);
-	this->draw_stage_dat_->inverse_view_matrix_3d = DirectX::XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_3d);
-	this->GetProjectionMatrix3D(this->draw_stage_dat_->projection_matrix_3d, this->draw_camera_);
+	if (this->draw_camera_ != nullptr) {
+		this->GetViewMatrix3D(this->draw_stage_dat_->view_matrix_3d, this->draw_camera_);
+		this->draw_stage_dat_->inverse_view_matrix_3d = DirectX::XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_3d);
+		this->GetProjectionMatrix3D(this->draw_stage_dat_->projection_matrix_3d, this->draw_camera_);
 
-	this->GetViewMatrix2D(this->draw_stage_dat_->view_matrix_2d, this->draw_camera_);
-	this->draw_stage_dat_->inverse_view_matrix_2d = DirectX::XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
-	this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
+		this->GetViewMatrix2D(this->draw_stage_dat_->view_matrix_2d, this->draw_camera_);
+		this->draw_stage_dat_->inverse_view_matrix_2d = DirectX::XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
+		this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
+	} else {
+		return;
+	}
 
 	std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->common_.config_shader_constant_buffer.get(), this->common_.header_shader_constant_buffer.get()};
 	std::array<tml::graphic::ShaderStructuredBuffer *, 5U> sys_ssb_ary = {this->common_.camera_shader_structured_buffer.get(), this->common_.light_shader_structured_buffer.get(), this->common_.fog_shader_structured_buffer.get(), nullptr, nullptr};

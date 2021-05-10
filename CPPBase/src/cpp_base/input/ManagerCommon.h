@@ -7,21 +7,21 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_INPUT.h"
-#include "../memory/MemoryUtil.h"
+#include "../../lib/tml/memory/MemoryUtil.h"
 
 
-namespace tml {
+namespace cpp_base {
 namespace input {
 /**
  * @brief ManagerCommonƒNƒ‰ƒX
  */
 class ManagerCommon
 {
-public: ManagerCommon(const tml::input::ManagerCommon &) = delete;
-public: tml::input::ManagerCommon &operator =(const tml::input::ManagerCommon &) = delete;
+public: ManagerCommon(const cpp_base::input::ManagerCommon &) = delete;
+public: cpp_base::input::ManagerCommon &operator =(const cpp_base::input::ManagerCommon &) = delete;
 
 private:
-	tml::input::Manager *mgr_;
+	cpp_base::input::Manager *mgr_;
 
 public:
 
@@ -33,9 +33,9 @@ public:
 	virtual ~ManagerCommon();
 
 	virtual void Init(void);
-	INT Create(tml::input::Manager *);
+	INT Create(cpp_base::input::Manager *);
 
-	tml::input::Manager *GetManager(void);
+	cpp_base::input::Manager *GetManager(void);
 };
 }
 }
@@ -44,7 +44,7 @@ public:
 /**
  * @brief ReleaseŠÖ”
  */
-inline void tml::input::ManagerCommon::Release(void)
+inline void cpp_base::input::ManagerCommon::Release(void)
 {
 	return;
 }
@@ -54,7 +54,7 @@ inline void tml::input::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::input::Manager *tml::input::ManagerCommon::GetManager(void)
+inline cpp_base::input::Manager *cpp_base::input::ManagerCommon::GetManager(void)
 {
 	return (this->mgr_);
 }

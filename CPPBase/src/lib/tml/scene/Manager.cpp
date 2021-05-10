@@ -65,7 +65,8 @@ void tml::scene::ManagerDesc::Init(void)
  */
 void tml::scene::ManagerDesc::InitResourceCount(void)
 {
-	this->resource_count_container.clear();
+	tml::ManagerDesc::InitResourceCount();
+
 	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_TYPE_COUNT;
@@ -79,7 +80,45 @@ void tml::scene::ManagerDesc::InitResourceCount(void)
  */
 void tml::scene::ManagerDesc::InitEventCount(void)
 {
+	tml::ManagerDesc::InitEventCount();
+
 	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
+
+	return;
+}
+
+
+/**
+ * @brief SetInputManagerŠÖ”
+ * @param input_mgr (input_manager)
+ */
+void tml::scene::ManagerDesc::SetInputManager(tml::input::Manager *input_mgr)
+{
+	this->input_manager = input_mgr;
+
+	return;
+}
+
+
+/**
+ * @brief SetGraphicManagerŠÖ”
+ * @param graphic_mgr (graphic_manager)
+ */
+void tml::scene::ManagerDesc::SetGraphicManager(tml::graphic::Manager *graphic_mgr)
+{
+	this->graphic_manager = graphic_mgr;
+
+	return;
+}
+
+
+/**
+ * @brief SetSoundManagerŠÖ”
+ * @param sound_mgr (sound_manager)
+ */
+void tml::scene::ManagerDesc::SetSoundManager(tml::sound::Manager *sound_mgr)
+{
+	this->sound_manager = sound_mgr;
 
 	return;
 }

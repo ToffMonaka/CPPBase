@@ -13,7 +13,6 @@
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
-#include "../../lib/tml/input/Manager.h"
 #include "../../lib/tml/input/MouseEvent.h"
 #include "../../lib/tml/input/KeyboardEvent.h"
 #include "../constant/ConstantUtil_FILE.h"
@@ -144,7 +143,7 @@ INT cpp_base::MainThread::Start(void)
 	}
 
 	{// InputManager Create
-		tml::input::ManagerDesc desc;
+		cpp_base::input::ManagerDesc desc;
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
@@ -155,7 +154,7 @@ INT cpp_base::MainThread::Start(void)
 	}
 
 	{// GraphicManager Create
-		tml::graphic::ManagerDesc desc;
+		cpp_base::graphic::ManagerDesc desc;
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
@@ -169,7 +168,7 @@ INT cpp_base::MainThread::Start(void)
 	}
 
 	{// SoundManager Create
-		tml::sound::ManagerDesc desc;
+		cpp_base::sound::ManagerDesc desc;
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
@@ -184,14 +183,13 @@ INT cpp_base::MainThread::Start(void)
 	}
 
 	{// SceneManager Create
-		tml::scene::ManagerDesc desc;
+		cpp_base::scene::ManagerDesc desc;
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
-		desc.resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = cpp_base::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
-		desc.input_manager = &this->input_mgr_;
-		desc.graphic_manager = &this->graphic_mgr_;
-		desc.sound_manager = &this->sound_mgr_;
+		desc.SetInputManager(&this->input_mgr_);
+		desc.SetGraphicManager(&this->graphic_mgr_);
+		desc.SetSoundManager(&this->sound_mgr_);
 
 		if (this->scene_mgr_.Create(desc) < 0) {
 			return (-1);

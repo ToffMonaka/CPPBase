@@ -30,18 +30,6 @@ tml::input::ManagerCommon::~ManagerCommon()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void tml::input::ManagerCommon::Release(void)
-{
-	if (this->mgr_ != nullptr) {
-	}
-
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void tml::input::ManagerCommon::Init(void)

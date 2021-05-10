@@ -12,13 +12,6 @@
 
 namespace tml {
 namespace input {
-class Manager;
-}
-}
-
-
-namespace tml {
-namespace input {
 /**
  * @brief ManagerEventDescƒNƒ‰ƒX
  */

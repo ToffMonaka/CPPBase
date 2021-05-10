@@ -60,7 +60,8 @@ void tml::sound::ManagerDesc::Init(void)
  */
 void tml::sound::ManagerDesc::InitResourceCount(void)
 {
-	this->resource_count_container.clear();
+	tml::ManagerDesc::InitResourceCount();
+
 	this->resource_count_container.resize(tml::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT);
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND)] = tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT;
 
@@ -73,6 +74,8 @@ void tml::sound::ManagerDesc::InitResourceCount(void)
  */
 void tml::sound::ManagerDesc::InitEventCount(void)
 {
+	tml::ManagerDesc::InitEventCount();
+
 	this->event_count = tml::ConstantUtil::SOUND::EVENT_TYPE_COUNT;
 
 	return;

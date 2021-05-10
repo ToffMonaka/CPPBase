@@ -36,18 +36,21 @@ public:
 	tml::graphic::Manager *graphic_manager;
 	tml::sound::Manager *sound_manager;
 
-private:
-	void InitResourceCount(void);
-	void InitEventCount(void);
-
 protected:
 	void Release(void);
+
+	void InitResourceCount(void);
+	void InitEventCount(void);
 
 public:
 	ManagerDesc();
 	virtual ~ManagerDesc();
 
 	virtual void Init(void);
+
+	void SetInputManager(tml::input::Manager *);
+	void SetGraphicManager(tml::graphic::Manager *);
+	void SetSoundManager(tml::sound::Manager *);
 };
 }
 }

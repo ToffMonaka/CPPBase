@@ -7,11 +7,11 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../../lib/tml/thread/MainThread.h"
-#include "../../lib/tml/input/Manager.h"
-#include "../../lib/tml/graphic/Manager.h"
-#include "../../lib/tml/sound/Manager.h"
-#include "../../lib/tml/scene/Manager.h"
 #include "../data/SystemConfigFile.h"
+#include "../input/Manager.h"
+#include "../graphic/Manager.h"
+#include "../sound/Manager.h"
+#include "../scene/Manager.h"
 
 
 namespace cpp_base {
@@ -26,10 +26,10 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	cpp_base::SystemConfigFile sys_conf_file_;
-	tml::input::Manager input_mgr_;
-	tml::graphic::Manager graphic_mgr_;
-	tml::sound::Manager sound_mgr_;
-	tml::scene::Manager scene_mgr_;
+	cpp_base::input::Manager input_mgr_;
+	cpp_base::graphic::Manager graphic_mgr_;
+	cpp_base::sound::Manager sound_mgr_;
+	cpp_base::scene::Manager scene_mgr_;
 
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
@@ -49,10 +49,10 @@ public:
 	virtual void Update(void);
 
 	cpp_base::SystemConfigFile &GetSystemConfigFile(void);
-	tml::input::Manager &GetInputManager(void);
-	tml::graphic::Manager &GetGraphicManager(void);
-	tml::sound::Manager &GetSoundManager(void);
-	tml::scene::Manager &GetSceneManager(void);
+	cpp_base::input::Manager &GetInputManager(void);
+	cpp_base::graphic::Manager &GetGraphicManager(void);
+	cpp_base::sound::Manager &GetSoundManager(void);
+	cpp_base::scene::Manager &GetSceneManager(void);
 };
 }
 
@@ -71,7 +71,7 @@ inline cpp_base::SystemConfigFile &cpp_base::MainThread::GetSystemConfigFile(voi
  * @brief GetInputManagerŠÖ”
  * @return input_mgr (input_manager)
  */
-inline tml::input::Manager &cpp_base::MainThread::GetInputManager(void)
+inline cpp_base::input::Manager &cpp_base::MainThread::GetInputManager(void)
 {
 	return (this->input_mgr_);
 }
@@ -81,7 +81,7 @@ inline tml::input::Manager &cpp_base::MainThread::GetInputManager(void)
  * @brief GetGraphicManagerŠÖ”
  * @return graphic_mgr (graphic_manager)
  */
-inline tml::graphic::Manager &cpp_base::MainThread::GetGraphicManager(void)
+inline cpp_base::graphic::Manager &cpp_base::MainThread::GetGraphicManager(void)
 {
 	return (this->graphic_mgr_);
 }
@@ -91,7 +91,7 @@ inline tml::graphic::Manager &cpp_base::MainThread::GetGraphicManager(void)
  * @brief GetSoundManagerŠÖ”
  * @return sound_mgr (sound_manager)
  */
-inline tml::sound::Manager &cpp_base::MainThread::GetSoundManager(void)
+inline cpp_base::sound::Manager &cpp_base::MainThread::GetSoundManager(void)
 {
 	return (this->sound_mgr_);
 }
@@ -101,7 +101,7 @@ inline tml::sound::Manager &cpp_base::MainThread::GetSoundManager(void)
  * @brief GetSceneManagerŠÖ”
  * @return scene_mgr (scene_manager)
  */
-inline tml::scene::Manager &cpp_base::MainThread::GetSceneManager(void)
+inline cpp_base::scene::Manager &cpp_base::MainThread::GetSceneManager(void)
 {
 	return (this->scene_mgr_);
 }

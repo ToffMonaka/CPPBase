@@ -24,12 +24,11 @@ public:
 	std::vector<UINT> resource_count_container;
 	UINT event_count;
 
-private:
-	void InitResourceCount(void);
-	void InitEventCount(void);
-
 protected:
 	void Release(void);
+
+	void InitResourceCount(void);
+	void InitEventCount(void);
 
 public:
 	ManagerDesc();

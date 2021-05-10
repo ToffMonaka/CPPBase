@@ -7,21 +7,21 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_SCENE.h"
-#include "../memory/MemoryUtil.h"
+#include "../../lib/tml/memory/MemoryUtil.h"
 
 
-namespace tml {
+namespace cpp_base {
 namespace scene {
 /**
  * @brief ManagerCommonƒNƒ‰ƒX
  */
 class ManagerCommon
 {
-public: ManagerCommon(const tml::scene::ManagerCommon &) = delete;
-public: tml::scene::ManagerCommon &operator =(const tml::scene::ManagerCommon &) = delete;
+public: ManagerCommon(const cpp_base::scene::ManagerCommon &) = delete;
+public: cpp_base::scene::ManagerCommon &operator =(const cpp_base::scene::ManagerCommon &) = delete;
 
 private:
-	tml::scene::Manager *mgr_;
+	cpp_base::scene::Manager *mgr_;
 
 public:
 
@@ -33,9 +33,9 @@ public:
 	virtual ~ManagerCommon();
 
 	virtual void Init(void);
-	INT Create(tml::scene::Manager *);
+	INT Create(cpp_base::scene::Manager *);
 
-	tml::scene::Manager *GetManager(void);
+	cpp_base::scene::Manager *GetManager(void);
 };
 }
 }
@@ -44,7 +44,7 @@ public:
 /**
  * @brief ReleaseŠÖ”
  */
-inline void tml::scene::ManagerCommon::Release(void)
+inline void cpp_base::scene::ManagerCommon::Release(void)
 {
 	return;
 }
@@ -54,7 +54,7 @@ inline void tml::scene::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::scene::Manager *tml::scene::ManagerCommon::GetManager(void)
+inline cpp_base::scene::Manager *cpp_base::scene::ManagerCommon::GetManager(void)
 {
 	return (this->mgr_);
 }

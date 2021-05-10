@@ -21,12 +21,11 @@ public:
 	std::array<FLOAT, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> volume_array;
 	std::array<bool, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> mute_flag_array;
 
-private:
-	void InitResourceCount(void);
-	void InitEventCount(void);
-
 protected:
 	void Release(void);
+
+	void InitResourceCount(void);
+	void InitEventCount(void);
 
 public:
 	ManagerDesc();

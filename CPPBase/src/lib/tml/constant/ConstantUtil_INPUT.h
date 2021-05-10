@@ -162,3 +162,10 @@ namespace INPUT {
 
 TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE, UINT)
 TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE, UINT)
+
+
+namespace tml {
+namespace input {
+class Manager;
+}
+}

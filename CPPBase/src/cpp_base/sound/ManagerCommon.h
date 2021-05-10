@@ -7,21 +7,21 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_SOUND.h"
-#include "../memory/MemoryUtil.h"
+#include "../../lib/tml/memory/MemoryUtil.h"
 
 
-namespace tml {
+namespace cpp_base {
 namespace sound {
 /**
  * @brief ManagerCommonƒNƒ‰ƒX
  */
 class ManagerCommon
 {
-public: ManagerCommon(const tml::sound::ManagerCommon &) = delete;
-public: tml::sound::ManagerCommon &operator =(const tml::sound::ManagerCommon &) = delete;
+public: ManagerCommon(const cpp_base::sound::ManagerCommon &) = delete;
+public: cpp_base::sound::ManagerCommon &operator =(const cpp_base::sound::ManagerCommon &) = delete;
 
 private:
-	tml::sound::Manager *mgr_;
+	cpp_base::sound::Manager *mgr_;
 
 public:
 
@@ -33,9 +33,9 @@ public:
 	virtual ~ManagerCommon();
 
 	virtual void Init(void);
-	INT Create(tml::sound::Manager *);
+	INT Create(cpp_base::sound::Manager *);
 
-	tml::sound::Manager *GetManager(void);
+	cpp_base::sound::Manager *GetManager(void);
 };
 }
 }
@@ -44,7 +44,7 @@ public:
 /**
  * @brief ReleaseŠÖ”
  */
-inline void tml::sound::ManagerCommon::Release(void)
+inline void cpp_base::sound::ManagerCommon::Release(void)
 {
 	return;
 }
@@ -54,7 +54,7 @@ inline void tml::sound::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::sound::Manager *tml::sound::ManagerCommon::GetManager(void)
+inline cpp_base::sound::Manager *cpp_base::sound::ManagerCommon::GetManager(void)
 {
 	return (this->mgr_);
 }

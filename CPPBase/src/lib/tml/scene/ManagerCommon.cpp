@@ -33,18 +33,6 @@ tml::scene::ManagerCommon::~ManagerCommon()
 
 
 /**
- * @brief Releaseä÷êî
- */
-void tml::scene::ManagerCommon::Release(void)
-{
-	if (this->mgr_ != nullptr) {
-	}
-
-	return;
-}
-
-
-/**
  * @brief Initä÷êî
  */
 void tml::scene::ManagerCommon::Init(void)

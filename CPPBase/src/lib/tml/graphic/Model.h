@@ -52,15 +52,6 @@ public:
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-inline void tml::graphic::ModelLayer::Release(void)
-{
-	return;
-}
-
-
-/**
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */

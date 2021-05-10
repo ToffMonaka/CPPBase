@@ -12,13 +12,6 @@
 
 namespace tml {
 namespace scene {
-class Manager;
-}
-}
-
-
-namespace tml {
-namespace scene {
 /**
  * @brief ManagerEventDescƒNƒ‰ƒX
  */
