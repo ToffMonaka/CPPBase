@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../constant/ConstantUtil_GRAPHIC.h"
 #include "../constant/ConstantUtil_SCENE.h"
 #include "../../lib/tml/memory/MemoryUtil.h"
 
@@ -24,6 +25,9 @@ private:
 	cpp_base::scene::Manager *mgr_;
 
 public:
+	tml::TIME_REAL log_update_time;
+	tml::shared_ptr<tml::graphic::Object2DModel> log_model;
+	tml::shared_ptr<tml::graphic::Font> log_font;
 
 protected:
 	void Release(void);
@@ -36,6 +40,8 @@ public:
 	INT Create(cpp_base::scene::Manager *);
 
 	cpp_base::scene::Manager *GetManager(void);
+
+	void UpdateLog(const tml::TIME_REAL &);
 };
 }
 }

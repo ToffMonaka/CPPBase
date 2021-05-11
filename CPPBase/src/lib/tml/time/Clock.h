@@ -34,7 +34,7 @@ public:
 	virtual void Init(void);
 
 	void SetNowTime(void);
-	tml::TIME_MILLI GetTime(void) const;
+	const tml::TIME_MILLI &GetTime(void) const;
 	void SetTime(const tml::TIME_MILLI &);
 };
 }
@@ -78,7 +78,7 @@ inline void tml::Clock::SetNowTime(void)
  * @brief GetTimeŠÖ”
  * @return time (time)
  */
-inline tml::TIME_MILLI tml::Clock::GetTime(void) const
+inline const tml::TIME_MILLI &tml::Clock::GetTime(void) const
 {
 	return (this->time_);
 }

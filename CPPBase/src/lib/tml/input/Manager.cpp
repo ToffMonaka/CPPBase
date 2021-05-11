@@ -177,7 +177,7 @@ void tml::input::Manager::Update(void)
  */
 INT tml::input::Manager::CreateCommon(void)
 {
-	if (this->common_.Create(this) < 0) {
+	if (this->common.Create(this) < 0) {
 		return (-1);
 	}
 
@@ -190,7 +190,7 @@ INT tml::input::Manager::CreateCommon(void)
  */
 void tml::input::Manager::DeleteCommon(void)
 {
-	this->common_.Init();
+	this->common.Init();
 
 	return;
 }

@@ -6,14 +6,14 @@
 
 #include "InitScene.h"
 #include "../../lib/tml/math/MathUtil.h"
-#include "../../lib/tml/graphic/Manager.h"
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Object2DModel.h"
 #include "../../lib/tml/graphic/Font.h"
-#include "../../lib/tml/scene/Manager.h"
-#include "../scene/TitleScene.h"
+#include "../graphic/Manager.h"
+#include "Manager.h"
+#include "TitleScene.h"
 
 
 /**
@@ -43,7 +43,7 @@ void cpp_base::scene::InitSceneDesc::Init(void)
 {
 	this->Release();
 
-	tml::scene::SceneDesc::Init();
+	cpp_base::scene::SceneDesc::Init();
 
 	return;
 }
@@ -57,7 +57,7 @@ void cpp_base::scene::InitSceneDesc::Init(void)
  */
 INT cpp_base::scene::InitSceneDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::scene::SceneDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::SceneDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -103,7 +103,7 @@ cpp_base::scene::InitScene::~InitScene()
  */
 void cpp_base::scene::InitScene::Release(void)
 {
-	tml::scene::Scene::Release();
+	cpp_base::scene::Scene::Release();
 
 	return;
 }
@@ -122,7 +122,7 @@ void cpp_base::scene::InitScene::Init(void)
 	this->wait_model_.reset();
 	this->wait_font_.reset();
 
-	tml::scene::Scene::Init();
+	cpp_base::scene::Scene::Init();
 
 	return;
 }
@@ -138,7 +138,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 {
 	this->Init();
 
-	if (tml::scene::Scene::Create(desc, static_cast<tml::ConstantUtil::SCENE::SCENE_TYPE>(cpp_base::ConstantUtil::SCENE::SCENE_TYPE::INIT)) < 0) {
+	if (cpp_base::scene::Scene::Create(desc, cpp_base::ConstantUtil::SCENE::SCENE_TYPE::INIT) < 0) {
 		this->Init();
 
 		return (-1);
@@ -321,7 +321,7 @@ void cpp_base::scene::InitScene::Update(void)
 
 			cpp_base::scene::TitleSceneDesc desc;
 
-			desc.manager = this->GetManager();
+			desc.SetManager(this->GetManager());
 
 			this->GetManager()->GetResource<cpp_base::scene::TitleScene>(scene, desc);
 
@@ -342,6 +342,12 @@ void cpp_base::scene::InitScene::Update(void)
 	graphic_mgr->SetDrawCamera(this->camera_.get());
 	graphic_mgr->SetDrawModel(this->bg_model_.get());
 	graphic_mgr->SetDrawModel(this->wait_model_.get());
+
+	if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+		this->GetManager()->common2.UpdateLog(this->GetManager()->GetFrameRate().GetElapsedTime());
+
+		graphic_mgr->SetDrawModel(this->GetManager()->common2.log_model.get());
+	}
 
 	return;
 }

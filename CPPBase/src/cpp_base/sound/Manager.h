@@ -59,7 +59,9 @@ public: cpp_base::sound::Manager &operator =(const cpp_base::sound::Manager &) =
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	cpp_base::sound::ManagerCommon common2_;
+
+public:
+	cpp_base::sound::ManagerCommon common2;
 
 protected:
 	void Release(void);
@@ -73,18 +75,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::sound::ManagerDesc &);
-
-	cpp_base::sound::ManagerCommon &GetCommon2(void);
 };
 }
-}
-
-
-/**
- * @brief GetCommon2ŠÖ”
- * @return common2 (common2)
- */
-inline cpp_base::sound::ManagerCommon &cpp_base::sound::Manager::GetCommon2(void)
-{
-	return (this->common2_);
 }

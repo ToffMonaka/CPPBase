@@ -34,7 +34,8 @@ public:
 
 	INT Start(void);
 	void Stop(void);
-	tml::TIME_REAL GetElapsedTime(void) const;
+	void Update(void);
+	const tml::TIME_REAL &GetElapsedTime(void) const;
 };
 }
 
@@ -52,7 +53,7 @@ inline void tml::Timer::Release(void)
  * @brief GetElapsedTimeŠÖ”
  * @return elapsed_time (elapsed_time)
  */
-inline tml::TIME_REAL tml::Timer::GetElapsedTime(void) const
+inline const tml::TIME_REAL &tml::Timer::GetElapsedTime(void) const
 {
-	return ((this->started_flg_) ? tml::CastTime<tml::TIME_REAL>(std::chrono::steady_clock::now() - this->start_time_) : this->elapsed_time_);
+	return (this->elapsed_time_);
 }

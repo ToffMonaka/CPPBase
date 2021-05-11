@@ -6,10 +6,9 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_SCENE.h"
-#include "../../lib/tml/graphic/ManagerResource.h"
-#include "../../lib/tml/sound/ManagerResource.h"
-#include "../../lib/tml/scene/Scene.h"
+#include "../constant/ConstantUtil_GRAPHIC.h"
+#include "../constant/ConstantUtil_SOUND.h"
+#include "Scene.h"
 
 
 namespace cpp_base {
@@ -17,7 +16,7 @@ namespace scene {
 /**
  * @brief TitleSceneDescクラス
  */
-class TitleSceneDesc : public tml::scene::SceneDesc
+class TitleSceneDesc : public cpp_base::scene::SceneDesc
 {
 public:
 
@@ -41,7 +40,7 @@ public:
  */
 inline void cpp_base::scene::TitleSceneDesc::Release(void)
 {
-	tml::scene::SceneDesc::Release();
+	cpp_base::scene::SceneDesc::Release();
 
 	return;
 }
@@ -52,7 +51,7 @@ namespace scene {
 /**
  * @brief TitleSceneクラス
  */
-class TitleScene : public tml::scene::Scene
+class TitleScene : public cpp_base::scene::Scene
 {
 public: TitleScene(const cpp_base::scene::TitleScene &) = delete;
 public: cpp_base::scene::TitleScene &operator =(const cpp_base::scene::TitleScene &) = delete;
@@ -68,9 +67,6 @@ private:
 	tml::shared_ptr<tml::graphic::Object2DModel> footer_model_;
 	tml::shared_ptr<tml::graphic::Font> footer_font_;
 	tml::shared_ptr<tml::sound::BGMSound> bgm_sound_;
-	tml::TIME_REAL log_update_time_;
-	tml::shared_ptr<tml::graphic::Object2DModel> log_model_;
-	tml::shared_ptr<tml::graphic::Font> log_font_;
 
 protected:
 	void Release(void);

@@ -59,11 +59,12 @@ public: tml::input::Manager &operator =(const tml::input::Manager &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::input::ManagerCommon common_;
-
 	tml::XMINT2EX mouse_pos_;
 	std::array<bool, tml::ConstantUtil::INPUT::MOUSE_CODE_COUNT> mouse_code_stat_ary_;
 	std::array<bool, tml::ConstantUtil::INPUT::KEYBOARD_CODE_COUNT> keyboard_code_stat_ary_;
+
+public:
+	tml::input::ManagerCommon common;
 
 protected:
 	void Release(void);
@@ -79,7 +80,6 @@ public:
 	INT Create(const tml::input::ManagerDesc &);
 
 	void Update(void);
-	tml::input::ManagerCommon &GetCommon(void);
 
 	const tml::XMINT2EX &GetMousePosition(void) const;
 	const tml::XMINT2EX &GetMousePosition(const bool);
@@ -95,16 +95,6 @@ public:
 	void SetKeyboardCodeState(const bool);
 };
 }
-}
-
-
-/**
- * @brief GetCommonŠÖ”
- * @return common (common)
- */
-inline tml::input::ManagerCommon &tml::input::Manager::GetCommon(void)
-{
-	return (this->common_);
 }
 
 

@@ -79,8 +79,6 @@ public: tml::scene::Manager &operator =(const tml::scene::Manager &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::scene::ManagerCommon common_;
-
 	tml::input::Manager *input_mgr_;
 	tml::graphic::Manager *graphic_mgr_;
 	tml::sound::Manager *sound_mgr_;
@@ -88,6 +86,9 @@ private:
 	tml::shared_ptr<tml::scene::Scene> scene_;
 	bool scene_end_flg_;
 	tml::shared_ptr<tml::scene::Scene> next_scene_;
+
+public:
+	tml::scene::ManagerCommon common;
 
 protected:
 	void Release(void);
@@ -103,7 +104,6 @@ public:
 	INT Create(const tml::scene::ManagerDesc &);
 
 	void Update(void);
-	tml::scene::ManagerCommon &GetCommon(void);
 
 	tml::input::Manager *GetInputManager(void);
 	tml::graphic::Manager *GetGraphicManager(void);
@@ -115,16 +115,6 @@ public:
 	void End(void);
 };
 }
-}
-
-
-/**
- * @brief GetCommonŠÖ”
- * @return common (common)
- */
-inline tml::scene::ManagerCommon &tml::scene::Manager::GetCommon(void)
-{
-	return (this->common_);
 }
 
 

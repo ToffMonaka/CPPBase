@@ -148,7 +148,7 @@ INT cpp_base::input::Manager::Create(const cpp_base::input::ManagerDesc &desc)
  */
 INT cpp_base::input::Manager::CreateCommon2(void)
 {
-	if (this->common2_.Create(this) < 0) {
+	if (this->common2.Create(this) < 0) {
 		return (-1);
 	}
 
@@ -161,7 +161,7 @@ INT cpp_base::input::Manager::CreateCommon2(void)
  */
 void cpp_base::input::Manager::DeleteCommon2(void)
 {
-	this->common2_.Init();
+	this->common2.Init();
 
 	return;
 }

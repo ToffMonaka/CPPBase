@@ -201,7 +201,7 @@ INT cpp_base::MainThread::Start(void)
 
 		cpp_base::scene::InitSceneDesc desc;
 
-		desc.manager = &this->scene_mgr_;
+		desc.SetManager(&this->scene_mgr_);
 
 		this->scene_mgr_.GetResource<cpp_base::scene::InitScene>(scene, desc);
 

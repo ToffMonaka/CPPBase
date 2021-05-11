@@ -113,12 +113,13 @@ public: tml::sound::Manager &operator =(const tml::sound::Manager &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::sound::ManagerCommon common_;
-
 	ALCdevice *device_;
 	ALCcontext *device_context_;
 	std::array<FLOAT, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> volume_ary_;
 	std::array<bool, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> mute_flg_ary_;
+
+public:
+	tml::sound::ManagerCommon common;
 
 protected:
 	void Release(void);
@@ -134,7 +135,6 @@ public:
 	INT Create(const tml::sound::ManagerDesc &);
 
 	void Update(void);
-	tml::sound::ManagerCommon &GetCommon(void);
 
 	ALCdevice *GetDevice(void);
 	ALCcontext *GetDeviceContext(void);
@@ -148,16 +148,6 @@ public:
 	void Pause(tml::sound::Sound *);
 };
 }
-}
-
-
-/**
- * @brief GetCommonŠÖ”
- * @return common (common)
- */
-inline tml::sound::ManagerCommon &tml::sound::Manager::GetCommon(void)
-{
-	return (this->common_);
 }
 
 

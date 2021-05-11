@@ -101,8 +101,6 @@ public: tml::graphic::Manager &operator =(const tml::graphic::Manager &) = delet
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::graphic::ManagerCommon common_;
-
 	IDXGIFactory1 *factory_;
 	IDXGIAdapter1 *adapter_;
 	DXGI_ADAPTER_DESC1 adapter_desc_;
@@ -198,6 +196,9 @@ private:
 	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::TEXTURE_UASR_LIMIT> cmp_tex_uasr_ary_;
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> cmp_samp_sr_ary_;
 
+public:
+	tml::graphic::ManagerCommon common;
+
 protected:
 	void Release(void);
 
@@ -212,7 +213,6 @@ public:
 	INT Create(const tml::graphic::ManagerDesc &);
 
 	void Update(void);
-	tml::graphic::ManagerCommon &GetCommon(void);
 
 	IDXGIFactory1 *GetFactory(void);
 	IDXGIAdapter1 *GetAdapter(void);
@@ -313,16 +313,6 @@ public:
 	void ClearComputeSamplerSR(const UINT, const UINT);
 };
 }
-}
-
-
-/**
- * @brief GetCommonŠÖ”
- * @return common (common)
- */
-inline tml::graphic::ManagerCommon &tml::graphic::Manager::GetCommon(void)
-{
-	return (this->common_);
 }
 
 

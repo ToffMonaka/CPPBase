@@ -49,7 +49,7 @@ public:
 	UINT GetLimit(void) const;
 	UINT GetCount(void) const;
 	DOUBLE GetFPS(void) const;
-	tml::TIME_REAL GetElapsedTime(void) const;
+	const tml::TIME_REAL &GetElapsedTime(void) const;
 };
 }
 
@@ -97,7 +97,7 @@ inline DOUBLE tml::FrameRate::GetFPS(void) const
  * @brief GetElapsedTimeŠÖ”
  * @return elapsed_time (elapsed_time)
  */
-inline tml::TIME_REAL tml::FrameRate::GetElapsedTime(void) const
+inline const tml::TIME_REAL &tml::FrameRate::GetElapsedTime(void) const
 {
 	return (this->elapsed_time_);
 }

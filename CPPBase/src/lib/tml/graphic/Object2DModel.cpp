@@ -284,7 +284,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// RasterizerState Create
 			tml::shared_ptr<tml::graphic::RasterizerState> rs;
 
-			rs = this->GetManager()->GetCommon().back_culling_rasterizer_state;
+			rs = this->GetManager()->common.back_culling_rasterizer_state;
 
 			if (rs == nullptr) {
 				this->Init();
@@ -298,7 +298,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// BlendState Create
 			tml::shared_ptr<tml::graphic::BlendState> bs;
 
-			bs = this->GetManager()->GetCommon().alignment_blend_state_array[1];
+			bs = this->GetManager()->common.alignment_blend_state_array[1];
 
 			if (bs == nullptr) {
 				this->Init();
@@ -312,7 +312,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// DepthState Create
 			tml::shared_ptr<tml::graphic::DepthState> ds;
 
-			ds = this->GetManager()->GetCommon().reference_depth_state;
+			ds = this->GetManager()->common.reference_depth_state;
 
 			if (ds == nullptr) {
 				this->Init();
@@ -326,7 +326,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// Shader Create
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
-			shader = this->GetManager()->GetCommon().object_2d_model_shader;
+			shader = this->GetManager()->common.object_2d_model_shader;
 
 			if (shader == nullptr) {
 				this->Init();
@@ -380,7 +380,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 			{// DiffuseSampler Create
 				tml::shared_ptr<tml::graphic::Sampler> samp;
 
-				samp = this->GetManager()->GetCommon().cc_sampler;
+				samp = this->GetManager()->common.cc_sampler;
 
 				if (samp == nullptr) {
 					this->Init();

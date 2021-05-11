@@ -59,7 +59,9 @@ public: cpp_base::graphic::Manager &operator =(const cpp_base::graphic::Manager 
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	cpp_base::graphic::ManagerCommon common2_;
+
+public:
+	cpp_base::graphic::ManagerCommon common2;
 
 protected:
 	void Release(void);
@@ -73,18 +75,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::graphic::ManagerDesc &);
-
-	cpp_base::graphic::ManagerCommon &GetCommon2(void);
 };
 }
-}
-
-
-/**
- * @brief GetCommon2ŠÖ”
- * @return common2 (common2)
- */
-inline cpp_base::graphic::ManagerCommon &cpp_base::graphic::Manager::GetCommon2(void)
-{
-	return (this->common2_);
 }

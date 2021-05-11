@@ -47,7 +47,7 @@ public:
 	virtual void Init(void);
 
 	void SetNowTime(void);
-	tml::TIME_SECONDS GetTime(void) const;
+	const tml::TIME_SECONDS &GetTime(void) const;
 	void SetTime(const tml::TIME_SECONDS &);
 	USHORT GetYear(void) const;
 	UCHAR GetMonth(void) const;
@@ -104,7 +104,7 @@ inline void tml::Date::SetNowTime(void)
  * @brief GetTimeŠÖ”
  * @return time (time)
  */
-inline tml::TIME_SECONDS tml::Date::GetTime(void) const
+inline const tml::TIME_SECONDS &tml::Date::GetTime(void) const
 {
 	return (this->time_);
 }

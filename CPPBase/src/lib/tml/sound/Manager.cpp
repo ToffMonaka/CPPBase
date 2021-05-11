@@ -221,7 +221,7 @@ void tml::sound::Manager::Update(void)
  */
 INT tml::sound::Manager::CreateCommon(void)
 {
-	if (this->common_.Create(this) < 0) {
+	if (this->common.Create(this) < 0) {
 		return (-1);
 	}
 
@@ -234,7 +234,7 @@ INT tml::sound::Manager::CreateCommon(void)
  */
 void tml::sound::Manager::DeleteCommon(void)
 {
-	this->common_.Init();
+	this->common.Init();
 
 	return;
 }

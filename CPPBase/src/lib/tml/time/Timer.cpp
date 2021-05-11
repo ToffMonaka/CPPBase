@@ -149,3 +149,18 @@ void tml::Timer::Stop(void)
 
 	return;
 }
+
+
+/**
+ * @brief UpdateŠÖ”
+ */
+void tml::Timer::Update(void)
+{
+	if (!this->started_flg_) {
+		return;
+	}
+
+	this->elapsed_time_ = tml::CastTime<tml::TIME_REAL>(std::chrono::steady_clock::now() - this->start_time_);
+
+	return;
+}

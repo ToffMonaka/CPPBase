@@ -221,6 +221,8 @@ void tml::FrameRate::Stop(void)
 		return;
 	}
 
+	this->elapsed_time_ = tml::TIME_REAL(0.0);
+
 	this->started_flg_ = false;
 
 	return;
