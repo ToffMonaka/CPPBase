@@ -23,6 +23,7 @@ namespace SCENE {
 	enum class SCENE_TYPE : UINT {
 		NONE = 0U,
 		ETC,
+		BASE,
 		USER,
 		COUNT
 	};
@@ -30,7 +31,7 @@ namespace SCENE {
 	enum class NODE_TYPE : UINT {
 		NONE = 0U,
 		ETC,
-		OBJECT_2D,
+		BASE_2D,
 		USER,
 		COUNT
 	};
@@ -51,7 +52,8 @@ namespace tml {
 namespace scene {
 class Manager;
 class Scene;
+class BaseScene;
 class Node;
-class Object2DNode;
+class Base2DNode;
 }
 }

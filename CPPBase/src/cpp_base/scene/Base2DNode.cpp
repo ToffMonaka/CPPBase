@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief Sceneコードファイル
+ * @brief Base2DNodeコードファイル
  */
 
 
-#include "Scene.h"
+#include "Base2DNode.h"
 #include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::SceneDesc::SceneDesc() :
+cpp_base::scene::Base2DNodeDesc::Base2DNodeDesc() :
 	manager2(nullptr)
 {
 	return;
@@ -21,7 +21,7 @@ cpp_base::scene::SceneDesc::SceneDesc() :
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::SceneDesc::~SceneDesc()
+cpp_base::scene::Base2DNodeDesc::~Base2DNodeDesc()
 {
 	this->Release();
 
@@ -32,13 +32,13 @@ cpp_base::scene::SceneDesc::~SceneDesc()
 /**
  * @brief Init関数
  */
-void cpp_base::scene::SceneDesc::Init(void)
+void cpp_base::scene::Base2DNodeDesc::Init(void)
 {
 	this->Release();
 
 	this->manager2 = nullptr;
 
-	tml::scene::SceneDesc::Init();
+	tml::scene::Base2DNodeDesc::Init();
 
 	return;
 }
@@ -50,9 +50,9 @@ void cpp_base::scene::SceneDesc::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::SceneDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::Base2DNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::scene::SceneDesc::ReadValue(ini_file) < 0) {
+	if (tml::scene::Base2DNodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -60,8 +60,8 @@ INT cpp_base::scene::SceneDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// Scene Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"SCENE");
+	{// Base2DNode Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"BASE_2D_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -76,7 +76,7 @@ INT cpp_base::scene::SceneDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief SetManager関数
  * @param mgr (manager)
  */
-void cpp_base::scene::SceneDesc::SetManager(cpp_base::scene::Manager *mgr)
+void cpp_base::scene::Base2DNodeDesc::SetManager(cpp_base::scene::Manager *mgr)
 {
 	this->manager = mgr;
 	this->manager2 = mgr;
@@ -88,7 +88,7 @@ void cpp_base::scene::SceneDesc::SetManager(cpp_base::scene::Manager *mgr)
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::Scene::Scene() :
+cpp_base::scene::Base2DNode::Base2DNode() :
 	mgr2_(nullptr)
 {
 	return;
@@ -98,8 +98,21 @@ cpp_base::scene::Scene::Scene() :
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::Scene::~Scene()
+cpp_base::scene::Base2DNode::~Base2DNode()
 {
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void cpp_base::scene::Base2DNode::Release(void)
+{
+	tml::scene::Base2DNode::Release();
+
 	return;
 }
 
@@ -107,11 +120,13 @@ cpp_base::scene::Scene::~Scene()
 /**
  * @brief Init関数
  */
-void cpp_base::scene::Scene::Init(void)
+void cpp_base::scene::Base2DNode::Init(void)
 {
+	this->Release();
+
 	this->mgr2_ = nullptr;
 
-	tml::scene::Scene::Init();
+	tml::scene::Base2DNode::Init();
 
 	return;
 }
@@ -120,17 +135,22 @@ void cpp_base::scene::Scene::Init(void)
 /**
  * @brief Create関数
  * @param desc (desc)
- * @param type (type)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::Scene::Create(const cpp_base::scene::SceneDesc &desc, const cpp_base::ConstantUtil::SCENE::SCENE_TYPE type)
+INT cpp_base::scene::Base2DNode::Create(const cpp_base::scene::Base2DNodeDesc &desc)
 {
 	if (desc.manager2 != desc.manager) {
+		this->Init();
+
 		return (-1);
 	}
 
-	if (tml::scene::Scene::Create(desc, static_cast<tml::ConstantUtil::SCENE::SCENE_TYPE>(type)) < 0) {
+	this->Init();
+
+	if (tml::scene::Base2DNode::Create(desc) < 0) {
+		this->Init();
+
 		return (-1);
 	}
 

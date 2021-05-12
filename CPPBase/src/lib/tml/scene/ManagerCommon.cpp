@@ -7,8 +7,9 @@
 #include "ManagerCommon.h"
 #include "Manager.h"
 #include "Scene.h"
+#include "BaseScene.h"
 #include "Node.h"
-#include "Object2DNode.h"
+#include "Base2DNode.h"
 
 
 /**

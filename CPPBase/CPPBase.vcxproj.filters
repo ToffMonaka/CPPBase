@@ -330,9 +330,6 @@
     <ClCompile Include="src\lib\tml\scene\Node.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\lib\tml\scene\Object2DNode.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\lib\tml\graphic\Object2DModel.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -366,7 +363,16 @@
     <ClCompile Include="src\cpp_base\sound\ManagerCommon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp_base\scene\Scene.cpp">
+    <ClCompile Include="src\lib\tml\scene\BaseScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp_base\scene\BaseScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lib\tml\scene\Base2DNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp_base\scene\Base2DNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -773,9 +779,6 @@
     <ClInclude Include="src\lib\tml\scene\Node.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\lib\tml\scene\Object2DNode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\lib\tml\graphic\Object2DModel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -818,7 +821,16 @@
     <ClInclude Include="src\cpp_base\sound\ManagerCommon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\cpp_base\scene\Scene.h">
+    <ClInclude Include="src\lib\tml\scene\BaseScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\scene\BaseScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\scene\Base2DNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\scene\Base2DNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

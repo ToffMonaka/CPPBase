@@ -64,8 +64,6 @@ void cpp_base::scene::ManagerDesc::InitResourceCount(void)
 {
 	tml::scene::ManagerDesc::InitResourceCount();
 
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = cpp_base::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
-
 	return;
 }
 

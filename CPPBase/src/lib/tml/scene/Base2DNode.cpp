@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief Object2DNodeコードファイル
+ * @brief Base2DNodeコードファイル
  */
 
 
-#include "Object2DNode.h"
+#include "Base2DNode.h"
 #include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::scene::Object2DNodeDesc::Object2DNodeDesc() :
+tml::scene::Base2DNodeDesc::Base2DNodeDesc() :
 	size(0.0f),
 	scale(1.0f),
 	color(1.0f)
@@ -23,7 +23,7 @@ tml::scene::Object2DNodeDesc::Object2DNodeDesc() :
 /**
  * @brief デストラクタ
  */
-tml::scene::Object2DNodeDesc::~Object2DNodeDesc()
+tml::scene::Base2DNodeDesc::~Base2DNodeDesc()
 {
 	this->Release();
 
@@ -34,7 +34,7 @@ tml::scene::Object2DNodeDesc::~Object2DNodeDesc()
 /**
  * @brief Init関数
  */
-void tml::scene::Object2DNodeDesc::Init(void)
+void tml::scene::Base2DNodeDesc::Init(void)
 {
 	this->Release();
 
@@ -55,7 +55,7 @@ void tml::scene::Object2DNodeDesc::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::scene::Object2DNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::scene::Base2DNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
 	if (tml::scene::NodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
@@ -65,8 +65,8 @@ INT tml::scene::Object2DNodeDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// Object2DNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"OBJ_2D_NODE");
+	{// Base2DNode Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"BASE_2D_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -80,7 +80,7 @@ INT tml::scene::Object2DNodeDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-tml::scene::Object2DNode::Object2DNode() :
+tml::scene::Base2DNode::Base2DNode() :
 	size(0.0f),
 	scale(1.0f),
 	color(1.0f)
@@ -92,7 +92,7 @@ tml::scene::Object2DNode::Object2DNode() :
 /**
  * @brief デストラクタ
  */
-tml::scene::Object2DNode::~Object2DNode()
+tml::scene::Base2DNode::~Base2DNode()
 {
 	this->Release();
 
@@ -103,7 +103,7 @@ tml::scene::Object2DNode::~Object2DNode()
 /**
  * @brief Release関数
  */
-void tml::scene::Object2DNode::Release(void)
+void tml::scene::Base2DNode::Release(void)
 {
 	tml::scene::Node::Release();
 
@@ -114,7 +114,7 @@ void tml::scene::Object2DNode::Release(void)
 /**
  * @brief Init関数
  */
-void tml::scene::Object2DNode::Init(void)
+void tml::scene::Base2DNode::Init(void)
 {
 	this->Release();
 
@@ -135,11 +135,11 @@ void tml::scene::Object2DNode::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::scene::Object2DNode::Create(const tml::scene::Object2DNodeDesc &desc)
+INT tml::scene::Base2DNode::Create(const tml::scene::Base2DNodeDesc &desc)
 {
 	this->Init();
 
-	if (tml::scene::Node::Create(desc, tml::ConstantUtil::SCENE::NODE_TYPE::OBJECT_2D) < 0) {
+	if (tml::scene::Node::Create(desc, tml::ConstantUtil::SCENE::NODE_TYPE::BASE_2D) < 0) {
 		this->Init();
 
 		return (-1);

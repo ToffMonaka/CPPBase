@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Object2DNodeヘッダーファイル
+ * @brief Base2DNodeヘッダーファイル
  */
 #pragma once
 
@@ -13,9 +13,9 @@
 namespace tml {
 namespace scene {
 /**
- * @brief Object2DNodeDescクラス
+ * @brief Base2DNodeDescクラス
  */
-class Object2DNodeDesc : public tml::scene::NodeDesc
+class Base2DNodeDesc : public tml::scene::NodeDesc
 {
 public:
 	tml::XMPosition2D position;
@@ -29,8 +29,8 @@ protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
-	Object2DNodeDesc();
-	virtual ~Object2DNodeDesc();
+	Base2DNodeDesc();
+	virtual ~Base2DNodeDesc();
 
 	virtual void Init(void);
 };
@@ -41,7 +41,7 @@ public:
 /**
  * @brief Release関数
  */
-inline void tml::scene::Object2DNodeDesc::Release(void)
+inline void tml::scene::Base2DNodeDesc::Release(void)
 {
 	tml::scene::NodeDesc::Release();
 
@@ -52,12 +52,12 @@ inline void tml::scene::Object2DNodeDesc::Release(void)
 namespace tml {
 namespace scene {
 /**
- * @brief Object2DNodeクラス
+ * @brief Base2DNodeクラス
  */
-class Object2DNode : public tml::scene::Node
+class Base2DNode : public tml::scene::Node
 {
-public: Object2DNode(const tml::scene::Object2DNode &) = delete;
-public: tml::scene::Object2DNode &operator =(const tml::scene::Object2DNode &) = delete;
+public: Base2DNode(const tml::scene::Base2DNode &) = delete;
+public: tml::scene::Base2DNode &operator =(const tml::scene::Base2DNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -72,11 +72,11 @@ protected:
 	void Release(void);
 
 public:
-	Object2DNode();
-	virtual ~Object2DNode();
+	Base2DNode();
+	virtual ~Base2DNode();
 
 	virtual void Init(void);
-	INT Create(const tml::scene::Object2DNodeDesc &);
+	INT Create(const tml::scene::Base2DNodeDesc &);
 };
 }
 }
