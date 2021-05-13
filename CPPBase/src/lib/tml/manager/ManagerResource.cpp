@@ -34,7 +34,7 @@ void tml::ManagerResourceDesc::Init(void)
 {
 	this->Release();
 
-	this->name.clear();
+	this->resource_name.clear();
 
 	return;
 }
@@ -84,7 +84,7 @@ INT tml::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
 			val = ini_file.data.GetValue((*val_name_cont), L"NAME");
 
 			if (val != nullptr) {
-				this->name = (*val);
+				this->resource_name = (*val);
 			}
 		}
 	}
@@ -120,7 +120,7 @@ void tml::ManagerResource::Init(void)
 {
 	this->res_main_index_ = 0U;
 	this->res_sub_index_ = 0U;
-	this->name_.clear();
+	this->res_name_.clear();
 
 	return;
 }
@@ -138,7 +138,7 @@ INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc, const UIN
 {
 	this->res_main_index_ = res_main_index;
 	this->res_sub_index_ = res_sub_index;
-	this->name_ = desc.name;
+	this->res_name_ = desc.resource_name;
 
 	return (0);
 }

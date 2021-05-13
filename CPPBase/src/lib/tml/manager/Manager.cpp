@@ -170,20 +170,31 @@ void tml::Manager::Update(void)
 	}
 
 	UINT check_res_cnt = 0U;
+	UINT use_res_cnt = 0U;
 
 	while (this->check_res_itr_ != this->check_res_cont_.end()) {
-		if (this->check_res_itr_->use_count() <= 2L) {
-			auto &res = (*this->check_res_itr_);
+		auto &res = (*this->check_res_itr_);
 
+		use_res_cnt = 2U;
+
+		if (!res->GetResourceName().empty()) {
+			++use_res_cnt;
+		}
+
+		if (this->check_res_itr_->use_count() <= static_cast<LONG>(use_res_cnt)) {
 			UINT res_main_index = res->GetResourceMainIndex();
 			UINT res_sub_index = res->GetResourceSubIndex();
 
-			if ((res_main_index < this->res_cont_cont_.size())
-			&& (res_sub_index < this->res_cont_cont_[res_main_index].size())) {
-				this->res_cont_cont_[res_main_index][res_sub_index].remove(res);
-
-				this->check_res_itr_ = this->check_res_cont_.erase(this->check_res_itr_);
+			if ((res_main_index < this->res_cont_.size())
+			&& (res_sub_index < this->res_cont_[res_main_index].size())) {
+				this->res_cont_[res_main_index][res_sub_index].remove(res);
 			}
+
+			if (!res->GetResourceName().empty()) {
+				this->res_cont_by_name_.erase(res->GetResourceName());
+			}
+
+			this->check_res_itr_ = this->check_res_cont_.erase(this->check_res_itr_);
 		} else {
 			++this->check_res_itr_;
 		}
@@ -240,10 +251,10 @@ INT tml::Manager::CreateResourceContainer(const std::vector<UINT> &res_cnt_cont)
 {
 	this->DeleteResourceContainer();
 
-	this->res_cont_cont_.resize(res_cnt_cont.size());
+	this->res_cont_.resize(res_cnt_cont.size());
 
-	for (size_t res_cont_i = 0U; res_cont_i < this->res_cont_cont_.size(); ++res_cont_i) {
-		this->res_cont_cont_[res_cont_i].resize(res_cnt_cont[res_cont_i]);
+	for (size_t res_cont_i = 0U; res_cont_i < this->res_cont_.size(); ++res_cont_i) {
+		this->res_cont_[res_cont_i].resize(res_cnt_cont[res_cont_i]);
 	}
 
 	return (0);
@@ -255,7 +266,7 @@ INT tml::Manager::CreateResourceContainer(const std::vector<UINT> &res_cnt_cont)
  */
 void tml::Manager::DeleteResourceContainer(void)
 {
-	for (auto &res_main_cont : this->res_cont_cont_) {
+	for (auto &res_main_cont : this->res_cont_) {
 		for (auto &res_sub_cont : res_main_cont) {
 			for (auto &res : res_sub_cont) {
 				res->Init();
@@ -267,7 +278,8 @@ void tml::Manager::DeleteResourceContainer(void)
 		res_main_cont.clear();
 	}
 
-	this->res_cont_cont_.clear();
+	this->res_cont_.clear();
+	this->res_cont_by_name_.clear();
 	this->check_res_cont_.clear();
 	this->check_res_itr_ = this->check_res_cont_.end();
 

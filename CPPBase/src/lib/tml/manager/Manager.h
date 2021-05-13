@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include <list>
+#include <unordered_map>
 #include "ManagerResource.h"
 #include "ManagerEvent.h"
 
@@ -63,7 +64,8 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
-	std::vector<std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>>> res_cont_cont_;
+	std::vector<std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>>> res_cont_;
+	std::unordered_map<std::wstring, tml::shared_ptr<tml::ManagerResource>> res_cont_by_name_;
 	std::list<tml::shared_ptr<tml::ManagerResource>> check_res_cont_;
 	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator check_res_itr_;
 	std::array<UINT, 2U> event_cnt_ary_;
@@ -91,6 +93,8 @@ public:
 	HDC GetWindowDeviceContextHandle(void) const;
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
+	template <typename T1, typename T2>
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *);
 	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
 	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
 	UINT GetEventCount(void) const;
@@ -139,19 +143,66 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		return (dst_res);
 	}
 
+	const std::wstring &tmp_res_name = res->GetResourceName();
+
+	if (!tmp_res_name.empty()) {
+		auto res_itr = this->res_cont_by_name_.find(tmp_res_name);
+
+		if (res_itr != this->res_cont_by_name_.end()) {
+			dst_res = std::dynamic_pointer_cast<T2>(res_itr->second);
+
+			return (dst_res);
+		}
+	}
+
 	UINT res_main_index = res->GetResourceMainIndex();
 	UINT res_sub_index = res->GetResourceSubIndex();
 
-	if ((res_main_index >= this->res_cont_cont_.size())
-	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
+	if ((res_main_index < this->res_cont_.size())
+	&& (res_sub_index < this->res_cont_[res_main_index].size())) {
+		this->res_cont_[res_main_index][res_sub_index].push_back(res);
+	} else {
 		return (dst_res);
 	}
 
-	this->res_cont_cont_[res_main_index][res_sub_index].push_back(res);
+	if (!res->GetResourceName().empty()) {
+		this->res_cont_by_name_.insert(std::make_pair(res->GetResourceName(), res));
+	}
 
 	this->check_res_cont_.push_back(res);
 
 	dst_res = std::dynamic_pointer_cast<T2>(res);
+
+	return (dst_res);
+}
+
+
+/**
+ * @brief GetResourceä÷êî
+ * @param dst_res (dst_resource)
+ * @param res_name (resource_name)
+ * @return dst_res (dst_resource)
+ */
+template <typename T1, typename T2>
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const WCHAR *res_name)
+{
+	dst_res.reset();
+
+	if (res_name == nullptr) {
+		return (dst_res);
+	}
+
+	std::wstring tmp_res_name = res_name;
+
+	if (!tmp_res_name.empty()) {
+		auto res_itr = this->res_cont_by_name_.find(tmp_res_name);
+
+		if (res_itr != this->res_cont_by_name_.end()) {
+			dst_res = std::dynamic_pointer_cast<T2>(res_itr->second);
+
+			return (dst_res);
+		}
+	}
 
 	return (dst_res);
 }
@@ -165,11 +216,11 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
  */
 inline const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *tml::Manager::GetResourceContainer(const UINT res_main_index)
 {
-	if (res_main_index >= this->res_cont_cont_.size()) {
+	if (res_main_index >= this->res_cont_.size()) {
 		return (nullptr);
 	}
 
-	return (&this->res_cont_cont_[res_main_index]);
+	return (&this->res_cont_[res_main_index]);
 }
 
 
@@ -182,12 +233,12 @@ inline const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *tml:
  */
 inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::GetResourceContainer(const UINT res_main_index, const UINT res_sub_index)
 {
-	if ((res_main_index >= this->res_cont_cont_.size())
-	|| (res_sub_index >= this->res_cont_cont_[res_main_index].size())) {
+	if ((res_main_index >= this->res_cont_.size())
+	|| (res_sub_index >= this->res_cont_[res_main_index].size())) {
 		return (nullptr);
 	}
 
-	return (&this->res_cont_cont_[res_main_index][res_sub_index]);
+	return (&this->res_cont_[res_main_index][res_sub_index]);
 }
 
 

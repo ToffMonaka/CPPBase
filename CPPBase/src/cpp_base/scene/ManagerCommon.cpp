@@ -85,10 +85,6 @@ INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)
 			desc.manager = graphic_mgr;
 			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-			auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
-
-			desc.Read(read_desc);
-
 			graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->log_model, desc);
 
 			if (this->log_model == nullptr) {

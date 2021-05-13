@@ -172,10 +172,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
-
-		desc.Read(read_desc);
-
 		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc);
 
 		if (this->bg_model_ == nullptr) {
@@ -218,10 +214,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 
 		desc.manager = graphic_mgr;
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
-
-		auto read_desc = tml::INIFileReadDesc(L"res/obj_2d_model.ini");
-
-		desc.Read(read_desc);
 
 		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->wait_model_, desc);
 
@@ -321,6 +313,7 @@ void cpp_base::scene::InitScene::Update(void)
 
 			cpp_base::scene::TitleSceneDesc desc;
 
+			desc.resource_name = L"TITLE_SCENE";
 			desc.SetManager(this->GetManager());
 
 			this->GetManager()->GetResource<cpp_base::scene::TitleScene>(scene, desc);

@@ -16,7 +16,7 @@ namespace tml {
 class ManagerResourceDesc
 {
 public:
-	std::wstring name;
+	std::wstring resource_name;
 
 protected:
 	void Release(void);
@@ -58,7 +58,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	UINT res_main_index_;
 	UINT res_sub_index_;
-	std::wstring name_;
+	std::wstring res_name_;
 
 protected:
 	void Release(void);
@@ -72,7 +72,7 @@ public:
 
 	UINT GetResourceMainIndex(void) const;
 	UINT GetResourceSubIndex(void) const;
-	const std::wstring &GetName(void) const;
+	const std::wstring &GetResourceName(void) const;
 };
 }
 
@@ -107,10 +107,10 @@ inline UINT tml::ManagerResource::GetResourceSubIndex(void) const
 
 
 /**
- * @brief GetNameŠÖ”
- * @return name (name)
+ * @brief GetResourceNameŠÖ”
+ * @return res_name (resource_name)
  */
-inline const std::wstring &tml::ManagerResource::GetName(void) const
+inline const std::wstring &tml::ManagerResource::GetResourceName(void) const
 {
-	return (this->name_);
+	return (this->res_name_);
 }
