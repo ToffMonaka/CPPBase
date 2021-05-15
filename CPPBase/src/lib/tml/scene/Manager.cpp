@@ -18,9 +18,9 @@
  * @brief コンストラクタ
  */
 tml::scene::ManagerDesc::ManagerDesc() :
-	input_manager(nullptr),
-	graphic_manager(nullptr),
-	sound_manager(nullptr)
+	input_mgr_(nullptr),
+	graphic_mgr_(nullptr),
+	sound_mgr_(nullptr)
 
 {
 	this->InitResourceCount();
@@ -48,9 +48,9 @@ void tml::scene::ManagerDesc::Init(void)
 {
 	this->Release();
 
-	this->input_manager = nullptr;
-	this->graphic_manager = nullptr;
-	this->sound_manager = nullptr;
+	this->input_mgr_ = nullptr;
+	this->graphic_mgr_ = nullptr;
+	this->sound_mgr_ = nullptr;
 
 	tml::ManagerDesc::Init();
 
@@ -95,7 +95,7 @@ void tml::scene::ManagerDesc::InitEventCount(void)
  */
 void tml::scene::ManagerDesc::SetInputManager(tml::input::Manager *input_mgr)
 {
-	this->input_manager = input_mgr;
+	this->input_mgr_ = input_mgr;
 
 	return;
 }
@@ -107,7 +107,7 @@ void tml::scene::ManagerDesc::SetInputManager(tml::input::Manager *input_mgr)
  */
 void tml::scene::ManagerDesc::SetGraphicManager(tml::graphic::Manager *graphic_mgr)
 {
-	this->graphic_manager = graphic_mgr;
+	this->graphic_mgr_ = graphic_mgr;
 
 	return;
 }
@@ -119,7 +119,7 @@ void tml::scene::ManagerDesc::SetGraphicManager(tml::graphic::Manager *graphic_m
  */
 void tml::scene::ManagerDesc::SetSoundManager(tml::sound::Manager *sound_mgr)
 {
-	this->sound_manager = sound_mgr;
+	this->sound_mgr_ = sound_mgr;
 
 	return;
 }
@@ -198,9 +198,9 @@ void tml::scene::Manager::Init(void)
  */
 INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 {
-	if ((desc.input_manager == nullptr)
-	|| (desc.graphic_manager == nullptr)
-	|| (desc.sound_manager == nullptr)) {
+	if ((desc.GetInputManager() == nullptr)
+	|| (desc.GetGraphicManager() == nullptr)
+	|| (desc.GetSoundManager() == nullptr)) {
 		this->Init();
 
 		return (-1);
@@ -214,9 +214,9 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 		return (-1);
 	}
 
-	this->input_mgr_ = desc.input_manager;
-	this->graphic_mgr_ = desc.graphic_manager;
-	this->sound_mgr_ = desc.sound_manager;
+	this->input_mgr_ = desc.GetInputManager();
+	this->graphic_mgr_ = desc.GetGraphicManager();
+	this->sound_mgr_ = desc.GetSoundManager();
 
 	if (this->CreateCommon() < 0) {
 		this->Init();

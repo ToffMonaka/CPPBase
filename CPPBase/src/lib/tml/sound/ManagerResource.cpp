@@ -5,13 +5,14 @@
 
 
 #include "ManagerResource.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
 tml::sound::ManagerResourceDesc::ManagerResourceDesc() :
-	manager(nullptr)
+	mgr_(nullptr)
 {
 	return;
 }
@@ -35,7 +36,7 @@ void tml::sound::ManagerResourceDesc::Init(void)
 {
 	this->Release();
 
-	this->manager = nullptr;
+	this->mgr_ = nullptr;
 
 	tml::ManagerResourceDesc::Init();
 
@@ -68,6 +69,20 @@ INT tml::sound::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
 	*/
 
 	return (0);
+}
+
+
+/**
+ * @brief SetManager関数
+ * @param mgr (manager)
+ */
+void tml::sound::ManagerResourceDesc::SetManager(tml::sound::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	tml::ManagerResourceDesc::SetManager(mgr);
+
+	return;
 }
 
 
@@ -116,7 +131,7 @@ void tml::sound::ManagerResource::Init(void)
  */
 INT tml::sound::ManagerResource::Create(const tml::sound::ManagerResourceDesc &desc, const tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type, const UINT res_sub_index)
 {
-	if ((desc.manager == nullptr)
+	if ((desc.GetManager() == nullptr)
 	|| (res_type == tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE)) {
 		return (-1);
 	}
@@ -125,7 +140,7 @@ INT tml::sound::ManagerResource::Create(const tml::sound::ManagerResourceDesc &d
 		return (-1);
 	}
 
-	this->mgr_ = desc.manager;
+	this->mgr_ = desc.GetManager();
 	this->res_type_ = res_type;
 
 	return (0);

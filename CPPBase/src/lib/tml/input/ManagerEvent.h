@@ -17,8 +17,10 @@ namespace input {
  */
 class ManagerEventDesc : public tml::ManagerEventDesc
 {
+private:
+	tml::input::Manager *mgr_;
+
 public:
-	tml::input::Manager *manager;
 
 protected:
 	void Release(void);
@@ -28,6 +30,9 @@ public:
 	virtual ~ManagerEventDesc();
 
 	virtual void Init(void);
+
+	tml::input::Manager *GetManager(void) const;
+	void SetManager(tml::input::Manager *);
 };
 }
 }
@@ -41,6 +46,16 @@ inline void tml::input::ManagerEventDesc::Release(void)
 	tml::ManagerEventDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::input::Manager *tml::input::ManagerEventDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -71,7 +86,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::input::Manager *GetManager(void);
+	tml::input::Manager *GetManager(void) const;
 	tml::ConstantUtil::INPUT::EVENT_TYPE GetEventType(void) const;
 };
 }
@@ -93,7 +108,7 @@ inline void tml::input::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::input::Manager *tml::input::ManagerEvent::GetManager(void)
+inline tml::input::Manager *tml::input::ManagerEvent::GetManager(void) const
 {
 	return (this->mgr_);
 }

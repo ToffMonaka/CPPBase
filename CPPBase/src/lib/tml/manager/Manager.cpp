@@ -77,9 +77,11 @@ void tml::ManagerDesc::InitEventCount(void)
 tml::Manager::Manager() :
 	wnd_handle_(nullptr),
 	wnd_dc_handle_(nullptr),
+	friend_res_(nullptr),
 	event_cnt_ary_{},
 	front_event_index_(0U),
-	back_event_index_(0U)
+	back_event_index_(0U),
+	friend_event_(nullptr)
 {
 	this->check_res_cont_.clear();
 	this->check_res_itr_ = this->check_res_cont_.end();
@@ -115,6 +117,7 @@ void tml::Manager::Init(void)
 {
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
+	this->friend_res_ = nullptr;
 
 	this->event_cnt_ary_.fill(0U);
 
@@ -126,6 +129,7 @@ void tml::Manager::Init(void)
 	this->back_event_index_ = 0U;
 	this->stock_event_cnt_cont_.clear();
 	this->stock_event_cont_cont_.clear();
+	this->friend_event_ = nullptr;
 
 	return;
 }
@@ -284,4 +288,36 @@ void tml::Manager::DeleteResourceContainer(void)
 	this->check_res_itr_ = this->check_res_cont_.end();
 
 	return;
+}
+
+
+/**
+ * @brief CheckFriendResourceŠÖ”
+ * @param res (resource)
+ * @return res_flg (result_flag)<br>
+ * false=¸”s,true=¬Œ÷
+ */
+bool tml::Manager::CheckFriendResource(const tml::ManagerResource *res)
+{
+	if (res == nullptr) {
+		return (false);
+	}
+
+	return (res == this->friend_res_);
+}
+
+
+/**
+ * @brief CheckFriendEventŠÖ”
+ * @param event (event)
+ * @return res_flg (result_flag)<br>
+ * false=¸”s,true=¬Œ÷
+ */
+bool tml::Manager::CheckFriendEvent(const tml::ManagerEvent *event)
+{
+	if (event == nullptr) {
+		return (false);
+	}
+
+	return (event == this->friend_event_);
 }

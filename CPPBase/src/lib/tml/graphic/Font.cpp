@@ -166,7 +166,7 @@ INT tml::graphic::FontDesc::ReadValue(const tml::INIFile &ini_file)
 void tml::graphic::FontDesc::SetFontDesc(const tml::XMUINT2EX &size, const WCHAR *family)
 {
 	tml::Clear(&this->font_desc, 1U);
-	this->font_desc.lfHeight = -MulDiv(static_cast<LONG>(size.y), GetDeviceCaps(this->manager->GetWindowDeviceContextHandle(), LOGPIXELSY), 72);
+	this->font_desc.lfHeight = -MulDiv(static_cast<LONG>(size.y), GetDeviceCaps(this->GetManager()->GetWindowDeviceContextHandle(), LOGPIXELSY), 72);
 	this->font_desc.lfWidth = static_cast<LONG>(size.x);
 	this->font_desc.lfEscapement = 0L;
 	this->font_desc.lfOrientation = 0L;

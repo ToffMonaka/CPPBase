@@ -5,13 +5,14 @@
 
 
 #include "ManagerResource.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
 tml::scene::ManagerResourceDesc::ManagerResourceDesc() :
-	manager(nullptr)
+	mgr_(nullptr)
 {
 	return;
 }
@@ -35,7 +36,7 @@ void tml::scene::ManagerResourceDesc::Init(void)
 {
 	this->Release();
 
-	this->manager = nullptr;
+	this->mgr_ = nullptr;
 
 	tml::ManagerResourceDesc::Init();
 
@@ -68,6 +69,20 @@ INT tml::scene::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
 	*/
 
 	return (0);
+}
+
+
+/**
+ * @brief SetManager関数
+ * @param mgr (manager)
+ */
+void tml::scene::ManagerResourceDesc::SetManager(tml::scene::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	tml::ManagerResourceDesc::SetManager(mgr);
+
+	return;
 }
 
 
@@ -116,7 +131,7 @@ void tml::scene::ManagerResource::Init(void)
  */
 INT tml::scene::ManagerResource::Create(const tml::scene::ManagerResourceDesc &desc, const tml::ConstantUtil::SCENE::RESOURCE_TYPE res_type, const UINT res_sub_index)
 {
-	if ((desc.manager == nullptr)
+	if ((desc.GetManager() == nullptr)
 	|| (res_type == tml::ConstantUtil::SCENE::RESOURCE_TYPE::NONE)) {
 		return (-1);
 	}
@@ -125,7 +140,7 @@ INT tml::scene::ManagerResource::Create(const tml::scene::ManagerResourceDesc &d
 		return (-1);
 	}
 
-	this->mgr_ = desc.manager;
+	this->mgr_ = desc.GetManager();
 	this->res_type_ = res_type;
 
 	return (0);

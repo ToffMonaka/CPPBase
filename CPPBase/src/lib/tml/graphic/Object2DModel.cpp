@@ -361,7 +361,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 				};
 				std::array<UINT, 4U> ib_element_ary = {0U, 1U, 2U, 3U};
 
-				desc.manager = this->GetManager();
+				desc.SetManager(this->GetManager());
 				desc.SetVertexBufferDesc(sizeof(tml::graphic::Object2DModel::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
 				desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
 				desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
@@ -400,7 +400,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 	{// ShaderStructuredBuffer Create
 		tml::graphic::Object2DModelShaderStructuredBufferDesc desc;
 
-		desc.manager = this->GetManager();
+		desc.SetManager(this->GetManager());
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Object2DModelShaderStructuredBuffer::ELEMENT), 1U);
 
 		this->GetManager()->GetResource<tml::graphic::Object2DModelShaderStructuredBuffer>(this->ssb_, desc);
@@ -415,7 +415,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 	{// LayerShaderStructuredBuffer Create
 		tml::graphic::Object2DModelLayerShaderStructuredBufferDesc desc;
 
-		desc.manager = this->GetManager();
+		desc.SetManager(this->GetManager());
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Object2DModelLayerShaderStructuredBuffer::ELEMENT), 1U);
 
 		this->GetManager()->GetResource<tml::graphic::Object2DModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc);

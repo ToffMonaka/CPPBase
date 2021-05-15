@@ -35,7 +35,7 @@ public:
 	virtual void Init(void);
 	INT Create(tml::scene::Manager *);
 
-	tml::scene::Manager *GetManager(void);
+	tml::scene::Manager *GetManager(void) const;
 };
 }
 }
@@ -54,7 +54,7 @@ inline void tml::scene::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::scene::Manager *tml::scene::ManagerCommon::GetManager(void)
+inline tml::scene::Manager *tml::scene::ManagerCommon::GetManager(void) const
 {
 	return (this->mgr_);
 }

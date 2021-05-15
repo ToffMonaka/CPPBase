@@ -17,8 +17,10 @@ namespace graphic {
  */
 class ManagerResourceDesc : public tml::ManagerResourceDesc
 {
+private:
+	tml::graphic::Manager *mgr_;
+
 public:
-	tml::graphic::Manager *manager;
 
 protected:
 	void Release(void);
@@ -30,6 +32,9 @@ public:
 	virtual ~ManagerResourceDesc();
 
 	virtual void Init(void);
+
+	tml::graphic::Manager *GetManager(void) const;
+	void SetManager(tml::graphic::Manager *);
 };
 }
 }
@@ -43,6 +48,16 @@ inline void tml::graphic::ManagerResourceDesc::Release(void)
 	tml::ManagerResourceDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::graphic::Manager *tml::graphic::ManagerResourceDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -73,7 +88,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::graphic::Manager *GetManager(void);
+	tml::graphic::Manager *GetManager(void) const;
 	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
@@ -95,7 +110,7 @@ inline void tml::graphic::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ManagerResource::GetManager(void)
+inline tml::graphic::Manager *tml::graphic::ManagerResource::GetManager(void) const
 {
 	return (this->mgr_);
 }

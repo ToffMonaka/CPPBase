@@ -12,7 +12,7 @@
  * @brief コンストラクタ
  */
 cpp_base::scene::Base2DNodeDesc::Base2DNodeDesc() :
-	manager2(nullptr)
+	mgr_(nullptr)
 {
 	return;
 }
@@ -36,7 +36,7 @@ void cpp_base::scene::Base2DNodeDesc::Init(void)
 {
 	this->Release();
 
-	this->manager2 = nullptr;
+	this->mgr_ = nullptr;
 
 	tml::scene::Base2DNodeDesc::Init();
 
@@ -78,8 +78,9 @@ INT cpp_base::scene::Base2DNodeDesc::ReadValue(const tml::INIFile &ini_file)
  */
 void cpp_base::scene::Base2DNodeDesc::SetManager(cpp_base::scene::Manager *mgr)
 {
-	this->manager = mgr;
-	this->manager2 = mgr;
+	this->mgr_ = mgr;
+
+	tml::scene::Base2DNodeDesc::SetManager(mgr);
 
 	return;
 }
@@ -89,7 +90,7 @@ void cpp_base::scene::Base2DNodeDesc::SetManager(cpp_base::scene::Manager *mgr)
  * @brief コンストラクタ
  */
 cpp_base::scene::Base2DNode::Base2DNode() :
-	mgr2_(nullptr)
+	mgr_(nullptr)
 {
 	return;
 }
@@ -124,7 +125,7 @@ void cpp_base::scene::Base2DNode::Init(void)
 {
 	this->Release();
 
-	this->mgr2_ = nullptr;
+	this->mgr_ = nullptr;
 
 	tml::scene::Base2DNode::Init();
 
@@ -140,7 +141,7 @@ void cpp_base::scene::Base2DNode::Init(void)
  */
 INT cpp_base::scene::Base2DNode::Create(const cpp_base::scene::Base2DNodeDesc &desc)
 {
-	if (desc.manager2 != desc.manager) {
+	if (desc.GetManager() == nullptr) {
 		this->Init();
 
 		return (-1);
@@ -154,7 +155,7 @@ INT cpp_base::scene::Base2DNode::Create(const cpp_base::scene::Base2DNodeDesc &d
 		return (-1);
 	}
 
-	this->mgr2_ = desc.manager2;
+	this->mgr_ = desc.GetManager();
 
 	return (0);
 }

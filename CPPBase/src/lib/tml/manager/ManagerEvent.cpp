@@ -5,12 +5,14 @@
 
 
 #include "ManagerEvent.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::ManagerEventDesc::ManagerEventDesc()
+tml::ManagerEventDesc::ManagerEventDesc() :
+	mgr_(nullptr)
 {
 	return;
 }
@@ -34,6 +36,20 @@ void tml::ManagerEventDesc::Init(void)
 {
 	this->Release();
 
+	this->mgr_ = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief SetManager関数
+ * @param mgr (manager)
+ */
+void tml::ManagerEventDesc::SetManager(tml::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
 	return;
 }
 
@@ -42,6 +58,7 @@ void tml::ManagerEventDesc::Init(void)
  * @brief コンストラクタ
  */
 tml::ManagerEvent::ManagerEvent() :
+	mgr_(nullptr),
 	event_index_(0U)
 {
 	return;
@@ -62,7 +79,7 @@ tml::ManagerEvent::~ManagerEvent()
  */
 void tml::ManagerEvent::Init(void)
 {
-	this->event_index_ = 0U;
+	this->mgr_ = nullptr;
 
 	return;
 }
@@ -77,6 +94,12 @@ void tml::ManagerEvent::Init(void)
  */
 INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc, const UINT event_index)
 {
+	if ((desc.GetManager() == nullptr)
+	|| (!desc.GetManager()->CheckFriendEvent(this))) {
+		return (-1);
+	}
+
+	this->mgr_ = desc.GetManager();
 	this->event_index_ = event_index;
 
 	return (0);

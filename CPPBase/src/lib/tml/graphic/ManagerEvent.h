@@ -17,8 +17,10 @@ namespace graphic {
  */
 class ManagerEventDesc : public tml::ManagerEventDesc
 {
+private:
+	tml::graphic::Manager *mgr_;
+
 public:
-	tml::graphic::Manager *manager;
 
 protected:
 	void Release(void);
@@ -28,6 +30,9 @@ public:
 	virtual ~ManagerEventDesc();
 
 	virtual void Init(void);
+
+	tml::graphic::Manager *GetManager(void) const;
+	void SetManager(tml::graphic::Manager *);
 };
 }
 }
@@ -41,6 +46,16 @@ inline void tml::graphic::ManagerEventDesc::Release(void)
 	tml::ManagerEventDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::graphic::Manager *tml::graphic::ManagerEventDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -71,7 +86,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::graphic::Manager *GetManager(void);
+	tml::graphic::Manager *GetManager(void) const;
 	tml::ConstantUtil::GRAPHIC::EVENT_TYPE GetEventType(void) const;
 };
 }
@@ -93,7 +108,7 @@ inline void tml::graphic::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ManagerEvent::GetManager(void)
+inline tml::graphic::Manager *tml::graphic::ManagerEvent::GetManager(void) const
 {
 	return (this->mgr_);
 }

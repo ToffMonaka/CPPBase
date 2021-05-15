@@ -35,7 +35,7 @@ public:
 	virtual void Init(void);
 	INT Create(tml::input::Manager *);
 
-	tml::input::Manager *GetManager(void);
+	tml::input::Manager *GetManager(void) const;
 };
 }
 }
@@ -54,7 +54,7 @@ inline void tml::input::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::input::Manager *tml::input::ManagerCommon::GetManager(void)
+inline tml::input::Manager *tml::input::ManagerCommon::GetManager(void) const
 {
 	return (this->mgr_);
 }

@@ -17,8 +17,10 @@ namespace scene {
  */
 class ManagerResourceDesc : public tml::ManagerResourceDesc
 {
+private:
+	tml::scene::Manager *mgr_;
+
 public:
-	tml::scene::Manager *manager;
 
 protected:
 	void Release(void);
@@ -30,6 +32,9 @@ public:
 	virtual ~ManagerResourceDesc();
 
 	virtual void Init(void);
+
+	tml::scene::Manager *GetManager(void) const;
+	void SetManager(tml::scene::Manager *);
 };
 }
 }
@@ -43,6 +48,16 @@ inline void tml::scene::ManagerResourceDesc::Release(void)
 	tml::ManagerResourceDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::scene::Manager *tml::scene::ManagerResourceDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -73,7 +88,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::scene::Manager *GetManager(void);
+	tml::scene::Manager *GetManager(void) const;
 	tml::ConstantUtil::SCENE::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
@@ -95,7 +110,7 @@ inline void tml::scene::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::scene::Manager *tml::scene::ManagerResource::GetManager(void)
+inline tml::scene::Manager *tml::scene::ManagerResource::GetManager(void) const
 {
 	return (this->mgr_);
 }

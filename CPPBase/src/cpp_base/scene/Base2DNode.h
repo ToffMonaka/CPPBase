@@ -17,8 +17,10 @@ namespace scene {
  */
 class Base2DNodeDesc : public tml::scene::Base2DNodeDesc
 {
+private:
+	cpp_base::scene::Manager *mgr_;
+
 public:
-	cpp_base::scene::Manager *manager2;
 
 protected:
 	void Release(void);
@@ -31,6 +33,7 @@ public:
 
 	virtual void Init(void);
 
+	cpp_base::scene::Manager *GetManager(void) const;
 	void SetManager(cpp_base::scene::Manager *);
 };
 }
@@ -48,6 +51,16 @@ inline void cpp_base::scene::Base2DNodeDesc::Release(void)
 }
 
 
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline cpp_base::scene::Manager *cpp_base::scene::Base2DNodeDesc::GetManager(void) const
+{
+	return (this->mgr_);
+}
+
+
 namespace cpp_base {
 namespace scene {
 /**
@@ -60,7 +73,7 @@ public: cpp_base::scene::Base2DNode &operator =(const cpp_base::scene::Base2DNod
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	cpp_base::scene::Manager *mgr2_;
+	cpp_base::scene::Manager *mgr_;
 
 protected:
 	void Release(void);
@@ -72,7 +85,7 @@ public:
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::Base2DNodeDesc &);
 
-	cpp_base::scene::Manager *GetManager(void);
+	cpp_base::scene::Manager *GetManager(void) const;
 };
 }
 }
@@ -82,7 +95,7 @@ public:
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline cpp_base::scene::Manager *cpp_base::scene::Base2DNode::GetManager(void)
+inline cpp_base::scene::Manager *cpp_base::scene::Base2DNode::GetManager(void) const
 {
-	return (this->mgr2_);
+	return (this->mgr_);
 }

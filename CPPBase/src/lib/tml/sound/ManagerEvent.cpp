@@ -5,13 +5,14 @@
 
 
 #include "ManagerEvent.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
 tml::sound::ManagerEventDesc::ManagerEventDesc() :
-	manager(nullptr)
+	mgr_(nullptr)
 {
 	return;
 }
@@ -35,9 +36,23 @@ void tml::sound::ManagerEventDesc::Init(void)
 {
 	this->Release();
 
-	this->manager = nullptr;
+	this->mgr_ = nullptr;
 
 	tml::ManagerEventDesc::Init();
+
+	return;
+}
+
+
+/**
+ * @brief SetManager関数
+ * @param mgr (manager)
+ */
+void tml::sound::ManagerEventDesc::SetManager(tml::sound::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	tml::ManagerEventDesc::SetManager(mgr);
 
 	return;
 }
@@ -86,7 +101,7 @@ void tml::sound::ManagerEvent::Init(void)
  */
 INT tml::sound::ManagerEvent::Create(const tml::sound::ManagerEventDesc &desc, const tml::ConstantUtil::SOUND::EVENT_TYPE event_type)
 {
-	if ((desc.manager == nullptr)
+	if ((desc.GetManager() == nullptr)
 	|| (event_type == tml::ConstantUtil::SOUND::EVENT_TYPE::NONE)) {
 		return (-1);
 	}
@@ -95,7 +110,7 @@ INT tml::sound::ManagerEvent::Create(const tml::sound::ManagerEventDesc &desc, c
 		return (-1);
 	}
 
-	this->mgr_ = desc.manager;
+	this->mgr_ = desc.GetManager();
 	this->event_type_ = event_type;
 
 	return (0);

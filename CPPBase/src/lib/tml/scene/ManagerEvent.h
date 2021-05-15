@@ -17,8 +17,10 @@ namespace scene {
  */
 class ManagerEventDesc : public tml::ManagerEventDesc
 {
+private:
+	tml::scene::Manager *mgr_;
+
 public:
-	tml::scene::Manager *manager;
 
 protected:
 	void Release(void);
@@ -28,6 +30,9 @@ public:
 	virtual ~ManagerEventDesc();
 
 	virtual void Init(void);
+
+	tml::scene::Manager *GetManager(void) const;
+	void SetManager(tml::scene::Manager *);
 };
 }
 }
@@ -41,6 +46,16 @@ inline void tml::scene::ManagerEventDesc::Release(void)
 	tml::ManagerEventDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::scene::Manager *tml::scene::ManagerEventDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -71,7 +86,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::scene::Manager *GetManager(void);
+	tml::scene::Manager *GetManager(void) const;
 	tml::ConstantUtil::SCENE::EVENT_TYPE GetEventType(void) const;
 };
 }
@@ -93,7 +108,7 @@ inline void tml::scene::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::scene::Manager *tml::scene::ManagerEvent::GetManager(void)
+inline tml::scene::Manager *tml::scene::ManagerEvent::GetManager(void) const
 {
 	return (this->mgr_);
 }

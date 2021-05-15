@@ -116,7 +116,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// DefaultRasterizerState Create
 		tml::graphic::RasterizerStateDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT);
 
 		this->mgr_->GetResource<tml::graphic::RasterizerState>(this->default_rasterizer_state, desc);
@@ -131,7 +131,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// WireframeRasterizerState Create
 		tml::graphic::RasterizerStateDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::WIREFRAME);
 
 		this->mgr_->GetResource<tml::graphic::RasterizerState>(this->wireframe_rasterizer_state, desc);
@@ -146,7 +146,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// FrontCullingRasterizerState Create
 		tml::graphic::RasterizerStateDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::FRONT_CULLING);
 
 		this->mgr_->GetResource<tml::graphic::RasterizerState>(this->front_culling_rasterizer_state, desc);
@@ -161,7 +161,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// BackCullingRasterizerState Create
 		tml::graphic::RasterizerStateDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::BACK_CULLING);
 
 		this->mgr_->GetResource<tml::graphic::RasterizerState>(this->back_culling_rasterizer_state, desc);
@@ -177,7 +177,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		{// DefaultBlendState Create
 			tml::graphic::BlendStateDesc desc;
 
-			desc.manager = this->mgr_;
+			desc.SetManager(this->mgr_);
 			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::NONE, rt_i);
 
 			this->mgr_->GetResource<tml::graphic::BlendState>(this->default_blend_state_array[rt_i], desc);
@@ -192,7 +192,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		{// AlignmentBlendState Create
 			tml::graphic::BlendStateDesc desc;
 
-			desc.manager = this->mgr_;
+			desc.SetManager(this->mgr_);
 			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ALIGNMENT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->mgr_->GetResource<tml::graphic::BlendState>(this->alignment_blend_state_array[rt_i], desc);
@@ -207,7 +207,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		{// AddBlendState Create
 			tml::graphic::BlendStateDesc desc;
 
-			desc.manager = this->mgr_;
+			desc.SetManager(this->mgr_);
 			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ADD, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->mgr_->GetResource<tml::graphic::BlendState>(this->add_blend_state_array[rt_i], desc);
@@ -222,7 +222,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		{// SubBlendState Create
 			tml::graphic::BlendStateDesc desc;
 
-			desc.manager = this->mgr_;
+			desc.SetManager(this->mgr_);
 			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::SUB, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->mgr_->GetResource<tml::graphic::BlendState>(this->sub_blend_state_array[rt_i], desc);
@@ -237,7 +237,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		{// MulBlendState Create
 			tml::graphic::BlendStateDesc desc;
 
-			desc.manager = this->mgr_;
+			desc.SetManager(this->mgr_);
 			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::MUL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->mgr_->GetResource<tml::graphic::BlendState>(this->mul_blend_state_array[rt_i], desc);
@@ -252,7 +252,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		{// ReverseBlendState Create
 			tml::graphic::BlendStateDesc desc;
 
-			desc.manager = this->mgr_;
+			desc.SetManager(this->mgr_);
 			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::REVERSE, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
 			this->mgr_->GetResource<tml::graphic::BlendState>(this->reverse_blend_state_array[rt_i], desc);
@@ -267,7 +267,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		{// TotalBlendState Create
 			tml::graphic::BlendStateDesc desc;
 
-			desc.manager = this->mgr_;
+			desc.SetManager(this->mgr_);
 			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::TOTAL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::TOTAL, rt_i);
 
 			this->mgr_->GetResource<tml::graphic::BlendState>(this->total_blend_state_array[rt_i], desc);
@@ -283,7 +283,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// DefaultDepthState Create
 		tml::graphic::DepthStateDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetDepthStateDesc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT);
 
 		this->mgr_->GetResource<tml::graphic::DepthState>(this->default_depth_state, desc);
@@ -298,7 +298,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// ReferenceDepthState Create
 		tml::graphic::DepthStateDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetDepthStateDesc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::REFERENCE);
 
 		this->mgr_->GetResource<tml::graphic::DepthState>(this->reference_depth_state, desc);
@@ -313,7 +313,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// MainRenderTargetTexture Create
 		tml::graphic::TextureDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.swap_chain = this->mgr_->GetSwapChain();
 		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::UASR);
 		desc.render_target_desc_null_flag = true;
@@ -332,7 +332,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// MainDepthTargetTexture Create
 		tml::graphic::TextureDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::DEPTH_TARGET, DXGI_FORMAT_R24G8_TYPELESS, this->mgr_->GetSize());
 		desc.depth_target_format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
@@ -348,7 +348,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// ScreenModelShader Create
 		tml::graphic::ShaderDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_COUNT;
 		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_ARRAY;
 
@@ -368,7 +368,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// Object2DModelShader Create
 		tml::graphic::ShaderDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_COUNT;
 		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_ARRAY;
 
@@ -388,7 +388,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// ConfigShaderConstantBuffer Create
 		tml::graphic::ConfigShaderConstantBufferDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::ConfigShaderConstantBuffer::ELEMENT));
 
 		this->mgr_->GetResource<tml::graphic::ConfigShaderConstantBuffer>(this->config_shader_constant_buffer, desc);
@@ -403,7 +403,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// HeaderShaderConstantBuffer Create
 		tml::graphic::HeaderShaderConstantBufferDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::HeaderShaderConstantBuffer::ELEMENT));
 
 		this->mgr_->GetResource<tml::graphic::HeaderShaderConstantBuffer>(this->header_shader_constant_buffer, desc);
@@ -418,7 +418,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// CameraShaderStructuredBuffer Create
 		tml::graphic::CameraShaderStructuredBufferDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::CameraShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT);
 
 		this->mgr_->GetResource<tml::graphic::CameraShaderStructuredBuffer>(this->camera_shader_structured_buffer, desc);
@@ -433,7 +433,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// LightShaderStructuredBuffer Create
 		tml::graphic::LightShaderStructuredBufferDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::LightShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT);
 
 		this->mgr_->GetResource<tml::graphic::LightShaderStructuredBuffer>(this->light_shader_structured_buffer, desc);
@@ -448,7 +448,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// FogShaderStructuredBuffer Create
 		tml::graphic::FogShaderStructuredBufferDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FogShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT);
 
 		this->mgr_->GetResource<tml::graphic::FogShaderStructuredBuffer>(this->fog_shader_structured_buffer, desc);
@@ -463,7 +463,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// CCSampler Create
 		tml::graphic::SamplerDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
 
 		this->mgr_->GetResource<tml::graphic::Sampler>(this->cc_sampler, desc);
@@ -478,7 +478,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// CWSampler Create
 		tml::graphic::SamplerDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
 
 		this->mgr_->GetResource<tml::graphic::Sampler>(this->cw_sampler, desc);
@@ -493,7 +493,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// WCSampler Create
 		tml::graphic::SamplerDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
 
 		this->mgr_->GetResource<tml::graphic::Sampler>(this->wc_sampler, desc);
@@ -508,7 +508,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	{// WWSampler Create
 		tml::graphic::SamplerDesc desc;
 
-		desc.manager = this->mgr_;
+		desc.SetManager(this->mgr_);
 		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
 
 		this->mgr_->GetResource<tml::graphic::Sampler>(this->ww_sampler, desc);

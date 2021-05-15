@@ -31,10 +31,12 @@ namespace scene {
  */
 class ManagerDesc : public tml::ManagerDesc
 {
+private:
+	tml::input::Manager *input_mgr_;
+	tml::graphic::Manager *graphic_mgr_;
+	tml::sound::Manager *sound_mgr_;
+
 public:
-	tml::input::Manager *input_manager;
-	tml::graphic::Manager *graphic_manager;
-	tml::sound::Manager *sound_manager;
 
 protected:
 	void Release(void);
@@ -48,8 +50,11 @@ public:
 
 	virtual void Init(void);
 
+	tml::input::Manager *GetInputManager(void) const;
 	void SetInputManager(tml::input::Manager *);
+	tml::graphic::Manager *GetGraphicManager(void) const;
 	void SetGraphicManager(tml::graphic::Manager *);
+	tml::sound::Manager *GetSoundManager(void) const;
 	void SetSoundManager(tml::sound::Manager *);
 };
 }
@@ -64,6 +69,36 @@ inline void tml::scene::ManagerDesc::Release(void)
 	tml::ManagerDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetInputManagerŠÖ”
+ * @return input_mgr (input_manager)
+ */
+inline tml::input::Manager *tml::scene::ManagerDesc::GetInputManager(void) const
+{
+	return (this->input_mgr_);
+}
+
+
+/**
+ * @brief GetGraphicManagerŠÖ”
+ * @return graphic_mgr (graphic_manager)
+ */
+inline tml::graphic::Manager *tml::scene::ManagerDesc::GetGraphicManager(void) const
+{
+	return (this->graphic_mgr_);
+}
+
+
+/**
+ * @brief GetSoundManagerŠÖ”
+ * @return sound_mgr (sound_manager)
+ */
+inline tml::sound::Manager *tml::scene::ManagerDesc::GetSoundManager(void) const
+{
+	return (this->sound_mgr_);
 }
 
 
@@ -105,9 +140,9 @@ public:
 
 	void Update(void);
 
-	tml::input::Manager *GetInputManager(void);
-	tml::graphic::Manager *GetGraphicManager(void);
-	tml::sound::Manager *GetSoundManager(void);
+	tml::input::Manager *GetInputManager(void) const;
+	tml::graphic::Manager *GetGraphicManager(void) const;
+	tml::sound::Manager *GetSoundManager(void) const;
 	const tml::FrameRate &GetFrameRate(void) const;
 
 	tml::scene::Scene *Get(void);
@@ -122,7 +157,7 @@ public:
  * @brief GetInputManagerŠÖ”
  * @return input_mgr (input_manager)
  */
-inline tml::input::Manager *tml::scene::Manager::GetInputManager(void)
+inline tml::input::Manager *tml::scene::Manager::GetInputManager(void) const
 {
 	return (this->input_mgr_);
 }
@@ -132,7 +167,7 @@ inline tml::input::Manager *tml::scene::Manager::GetInputManager(void)
  * @brief GetGraphicManagerŠÖ”
  * @return graphic_mgr (graphic_manager)
  */
-inline tml::graphic::Manager *tml::scene::Manager::GetGraphicManager(void)
+inline tml::graphic::Manager *tml::scene::Manager::GetGraphicManager(void) const
 {
 	return (this->graphic_mgr_);
 }
@@ -142,7 +177,7 @@ inline tml::graphic::Manager *tml::scene::Manager::GetGraphicManager(void)
  * @brief GetSoundManagerŠÖ”
  * @return sound_mgr (sound_manager)
  */
-inline tml::sound::Manager *tml::scene::Manager::GetSoundManager(void)
+inline tml::sound::Manager *tml::scene::Manager::GetSoundManager(void) const
 {
 	return (this->sound_mgr_);
 }

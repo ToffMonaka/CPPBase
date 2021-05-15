@@ -17,8 +17,10 @@ namespace sound {
  */
 class ManagerResourceDesc : public tml::ManagerResourceDesc
 {
+private:
+	tml::sound::Manager *mgr_;
+
 public:
-	tml::sound::Manager *manager;
 
 protected:
 	void Release(void);
@@ -30,6 +32,9 @@ public:
 	virtual ~ManagerResourceDesc();
 
 	virtual void Init(void);
+
+	tml::sound::Manager *GetManager(void) const;
+	void SetManager(tml::sound::Manager *);
 };
 }
 }
@@ -43,6 +48,16 @@ inline void tml::sound::ManagerResourceDesc::Release(void)
 	tml::ManagerResourceDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::sound::Manager *tml::sound::ManagerResourceDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -73,7 +88,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::sound::Manager *GetManager(void);
+	tml::sound::Manager *GetManager(void) const;
 	tml::ConstantUtil::SOUND::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
@@ -95,7 +110,7 @@ inline void tml::sound::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::sound::Manager *tml::sound::ManagerResource::GetManager(void)
+inline tml::sound::Manager *tml::sound::ManagerResource::GetManager(void) const
 {
 	return (this->mgr_);
 }

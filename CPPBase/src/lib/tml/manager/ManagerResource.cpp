@@ -5,12 +5,14 @@
 
 
 #include "ManagerResource.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::ManagerResourceDesc::ManagerResourceDesc()
+tml::ManagerResourceDesc::ManagerResourceDesc() :
+	mgr_(nullptr)
 {
 	return;
 }
@@ -34,6 +36,7 @@ void tml::ManagerResourceDesc::Init(void)
 {
 	this->Release();
 
+	this->mgr_ = nullptr;
 	this->resource_name.clear();
 
 	return;
@@ -94,9 +97,22 @@ INT tml::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
 
 
 /**
+ * @brief SetManager関数
+ * @param mgr (manager)
+ */
+void tml::ManagerResourceDesc::SetManager(tml::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::ManagerResource::ManagerResource() :
+	mgr_(nullptr),
 	res_main_index_(0U),
 	res_sub_index_(0U)
 {
@@ -118,9 +134,7 @@ tml::ManagerResource::~ManagerResource()
  */
 void tml::ManagerResource::Init(void)
 {
-	this->res_main_index_ = 0U;
-	this->res_sub_index_ = 0U;
-	this->res_name_.clear();
+	this->mgr_ = nullptr;
 
 	return;
 }
@@ -136,6 +150,12 @@ void tml::ManagerResource::Init(void)
  */
 INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc, const UINT res_main_index, const UINT res_sub_index)
 {
+	if ((desc.GetManager() == nullptr)
+	|| (!desc.GetManager()->CheckFriendResource(this))) {
+		return (-1);
+	}
+
+	this->mgr_ = desc.GetManager();
 	this->res_main_index_ = res_main_index;
 	this->res_sub_index_ = res_sub_index;
 	this->res_name_ = desc.resource_name;

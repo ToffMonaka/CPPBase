@@ -14,9 +14,9 @@
  * @brief コンストラクタ
  */
 cpp_base::scene::ManagerDesc::ManagerDesc() :
-	input_manager2(nullptr),
-	graphic_manager2(nullptr),
-	sound_manager2(nullptr)
+	input_mgr_(nullptr),
+	graphic_mgr_(nullptr),
+	sound_mgr_(nullptr)
 
 {
 	this->InitResourceCount();
@@ -44,9 +44,9 @@ void cpp_base::scene::ManagerDesc::Init(void)
 {
 	this->Release();
 
-	this->input_manager2 = nullptr;
-	this->graphic_manager2 = nullptr;
-	this->sound_manager2 = nullptr;
+	this->input_mgr_ = nullptr;
+	this->graphic_mgr_ = nullptr;
+	this->sound_mgr_ = nullptr;
 
 	tml::scene::ManagerDesc::Init();
 
@@ -85,8 +85,9 @@ void cpp_base::scene::ManagerDesc::InitEventCount(void)
  */
 void cpp_base::scene::ManagerDesc::SetInputManager(cpp_base::input::Manager *input_mgr)
 {
-	this->input_manager = input_mgr;
-	this->input_manager2 = input_mgr;
+	this->input_mgr_ = input_mgr;
+
+	tml::scene::ManagerDesc::SetInputManager(input_mgr);
 
 	return;
 }
@@ -98,8 +99,9 @@ void cpp_base::scene::ManagerDesc::SetInputManager(cpp_base::input::Manager *inp
  */
 void cpp_base::scene::ManagerDesc::SetGraphicManager(cpp_base::graphic::Manager *graphic_mgr)
 {
-	this->graphic_manager = graphic_mgr;
-	this->graphic_manager2 = graphic_mgr;
+	this->graphic_mgr_ = graphic_mgr;
+
+	tml::scene::ManagerDesc::SetGraphicManager(graphic_mgr);
 
 	return;
 }
@@ -111,8 +113,9 @@ void cpp_base::scene::ManagerDesc::SetGraphicManager(cpp_base::graphic::Manager 
  */
 void cpp_base::scene::ManagerDesc::SetSoundManager(cpp_base::sound::Manager *sound_mgr)
 {
-	this->sound_manager = sound_mgr;
-	this->sound_manager2 = sound_mgr;
+	this->sound_mgr_ = sound_mgr;
+
+	tml::scene::ManagerDesc::SetSoundManager(sound_mgr);
 
 	return;
 }
@@ -122,9 +125,9 @@ void cpp_base::scene::ManagerDesc::SetSoundManager(cpp_base::sound::Manager *sou
  * @brief コンストラクタ
  */
 cpp_base::scene::Manager::Manager() :
-	input_mgr2_(nullptr),
-	graphic_mgr2_(nullptr),
-	sound_mgr2_(nullptr)
+	input_mgr_(nullptr),
+	graphic_mgr_(nullptr),
+	sound_mgr_(nullptr)
 {
 	return;
 }
@@ -161,9 +164,9 @@ void cpp_base::scene::Manager::Init(void)
 {
 	this->Release();
 
-	this->input_mgr2_ = nullptr;
-	this->graphic_mgr2_ = nullptr;
-	this->sound_mgr2_ = nullptr;
+	this->input_mgr_ = nullptr;
+	this->graphic_mgr_ = nullptr;
+	this->sound_mgr_ = nullptr;
 
 	tml::scene::Manager::Init();
 
@@ -179,9 +182,9 @@ void cpp_base::scene::Manager::Init(void)
  */
 INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 {
-	if ((desc.input_manager2 != desc.input_manager)
-	|| (desc.graphic_manager2 != desc.graphic_manager)
-	|| (desc.sound_manager2 != desc.sound_manager)) {
+	if ((desc.GetInputManager() == nullptr)
+	|| (desc.GetGraphicManager() == nullptr)
+	|| (desc.GetSoundManager() == nullptr)) {
 		this->Init();
 
 		return (-1);
@@ -195,9 +198,9 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 		return (-1);
 	}
 
-	this->input_mgr2_ = desc.input_manager2;
-	this->graphic_mgr2_ = desc.graphic_manager2;
-	this->sound_mgr2_ = desc.sound_manager2;
+	this->input_mgr_ = desc.GetInputManager();
+	this->graphic_mgr_ = desc.GetGraphicManager();
+	this->sound_mgr_ = desc.GetSoundManager();
 
 	if (this->CreateCommon2() < 0) {
 		this->Init();

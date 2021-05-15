@@ -17,8 +17,10 @@ namespace sound {
  */
 class ManagerEventDesc : public tml::ManagerEventDesc
 {
+private:
+	tml::sound::Manager *mgr_;
+
 public:
-	tml::sound::Manager *manager;
 
 protected:
 	void Release(void);
@@ -28,6 +30,9 @@ public:
 	virtual ~ManagerEventDesc();
 
 	virtual void Init(void);
+
+	tml::sound::Manager *GetManager(void) const;
+	void SetManager(tml::sound::Manager *);
 };
 }
 }
@@ -41,6 +46,16 @@ inline void tml::sound::ManagerEventDesc::Release(void)
 	tml::ManagerEventDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::sound::Manager *tml::sound::ManagerEventDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -71,7 +86,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::sound::Manager *GetManager(void);
+	tml::sound::Manager *GetManager(void) const;
 	tml::ConstantUtil::SOUND::EVENT_TYPE GetEventType(void) const;
 };
 }
@@ -93,7 +108,7 @@ inline void tml::sound::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::sound::Manager *tml::sound::ManagerEvent::GetManager(void)
+inline tml::sound::Manager *tml::sound::ManagerEvent::GetManager(void) const
 {
 	return (this->mgr_);
 }

@@ -149,7 +149,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	{// Camera Create
 		tml::graphic::CameraDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
 		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
 		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
@@ -168,7 +168,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	{// BackgroundModel Create
 		tml::graphic::Object2DModelDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
@@ -190,7 +190,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 
 			tml::graphic::TextureDesc desc;
 
-			desc.manager = graphic_mgr;
+			desc.SetManager(graphic_mgr);
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = L"res/bg_img1.png";
 
@@ -212,7 +212,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	{// WaitModel Create
 		tml::graphic::Object2DModelDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
 		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->wait_model_, desc);
@@ -233,7 +233,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 
 			tml::graphic::TextureDesc desc;
 
-			desc.manager = graphic_mgr;
+			desc.SetManager(graphic_mgr);
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, wait_tex_size);
 			desc.cpu_buffer_flag = true;
 
@@ -254,7 +254,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	{// WaitFont Create
 		tml::graphic::FontDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.SetFontDesc(wait_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
 		graphic_mgr->GetResource<tml::graphic::Font>(this->wait_font_, desc);
@@ -313,8 +313,8 @@ void cpp_base::scene::InitScene::Update(void)
 
 			cpp_base::scene::TitleSceneDesc desc;
 
-			desc.resource_name = L"TITLE_SCENE";
 			desc.SetManager(this->GetManager());
+			desc.resource_name = L"TITLE_SCENE";
 
 			this->GetManager()->GetResource<cpp_base::scene::TitleScene>(scene, desc);
 

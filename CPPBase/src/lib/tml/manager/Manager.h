@@ -68,12 +68,14 @@ private:
 	std::unordered_map<std::wstring, tml::shared_ptr<tml::ManagerResource>> res_cont_by_name_;
 	std::list<tml::shared_ptr<tml::ManagerResource>> check_res_cont_;
 	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator check_res_itr_;
+	tml::ManagerResource *friend_res_;
 	std::array<UINT, 2U> event_cnt_ary_;
 	std::array<std::vector<tml::unique_ptr<tml::ManagerEvent>>, 2U> event_cont_ary_;
 	UINT front_event_index_;
 	UINT back_event_index_;
 	std::vector<UINT> stock_event_cnt_cont_;
 	std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>> stock_event_cont_cont_;
+	tml::ManagerEvent *friend_event_;
 
 protected:
 	void Release(void);
@@ -97,11 +99,13 @@ public:
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *);
 	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
 	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
+	bool CheckFriendResource(const tml::ManagerResource *);
 	UINT GetEventCount(void) const;
 	const tml::ManagerEvent *GetEvent(const UINT) const;
 	const tml::ManagerEvent *GetEventFast(const UINT) const;
 	template <typename T, typename D>
 	INT AddEvent(const D &);
+	bool CheckFriendEvent(const tml::ManagerEvent *);
 };
 }
 
@@ -137,13 +141,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 {
 	dst_res.reset();
 
-	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T1>(1U);
-
-	if (reinterpret_cast<T1 *>(res.get())->Create(desc) < 0) {
-		return (dst_res);
-	}
-
-	const std::wstring &tmp_res_name = res->GetResourceName();
+	const std::wstring &tmp_res_name = desc.resource_name;
 
 	if (!tmp_res_name.empty()) {
 		auto res_itr = this->res_cont_by_name_.find(tmp_res_name);
@@ -154,6 +152,18 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 			return (dst_res);
 		}
 	}
+
+	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T1>(1U);
+
+	this->friend_res_ = res.get();
+
+	if (reinterpret_cast<T1 *>(res.get())->Create(desc) < 0) {
+		this->friend_res_ = nullptr;
+
+		return (dst_res);
+	}
+
+	this->friend_res_ = nullptr;
 
 	UINT res_main_index = res->GetResourceMainIndex();
 	UINT res_sub_index = res->GetResourceSubIndex();
@@ -304,9 +314,15 @@ inline INT tml::Manager::AddEvent(const D &desc)
 	} else {
 		event = tml::make_unique<T>(1U);
 
+		this->friend_event_ = event.get();
+
 		if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {
+			this->friend_event_ = nullptr;
+
 			return (-1);
 		}
+
+		this->friend_event_ = nullptr;
 	}
 
 	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];

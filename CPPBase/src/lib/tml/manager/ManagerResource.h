@@ -10,11 +10,19 @@
 
 
 namespace tml {
+class Manager;
+}
+
+
+namespace tml {
 /**
  * @brief ManagerResourceDescƒNƒ‰ƒX
  */
 class ManagerResourceDesc
 {
+private:
+	tml::Manager *mgr_;
+
 public:
 	std::wstring resource_name;
 
@@ -30,6 +38,9 @@ public:
 	virtual void Init(void);
 
 	INT Read(const tml::INIFileReadDesc &);
+
+	tml::Manager *GetManager(void) const;
+	void SetManager(tml::Manager *);
 };
 }
 
@@ -40,6 +51,16 @@ public:
 inline void tml::ManagerResourceDesc::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::Manager *tml::ManagerResourceDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -56,6 +77,7 @@ public: tml::ManagerResource &operator =(const tml::ManagerResource &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	tml::Manager *mgr_;
 	UINT res_main_index_;
 	UINT res_sub_index_;
 	std::wstring res_name_;
@@ -70,6 +92,7 @@ public:
 
 	virtual void Init(void);
 
+	tml::Manager *GetManager(void) const;
 	UINT GetResourceMainIndex(void) const;
 	UINT GetResourceSubIndex(void) const;
 	const std::wstring &GetResourceName(void) const;
@@ -83,6 +106,16 @@ public:
 inline void tml::ManagerResource::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::Manager *tml::ManagerResource::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 

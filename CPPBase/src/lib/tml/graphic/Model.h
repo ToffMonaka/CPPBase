@@ -39,7 +39,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::graphic::Manager *GetManager(void);
+	tml::graphic::Manager *GetManager(void) const;
 	UINT GetMeshIndex(void) const;
 	void SetMeshIndex(const UINT);
 	UINT GetDiffuseTextureIndex(void) const;
@@ -55,7 +55,7 @@ public:
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ModelLayer::GetManager(void)
+inline tml::graphic::Manager *tml::graphic::ModelLayer::GetManager(void) const
 {
 	return (this->mgr_);
 }
@@ -159,7 +159,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::graphic::Manager *GetManager(void);
+	tml::graphic::Manager *GetManager(void) const;
 	UINT GetRasterizerStateIndex(void) const;
 	void SetRasterizerStateIndex(const UINT);
 	UINT GetBlendStateIndex(void) const;
@@ -182,7 +182,7 @@ public:
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ModelStage::GetManager(void)
+inline tml::graphic::Manager *tml::graphic::ModelStage::GetManager(void) const
 {
 	return (this->mgr_);
 }

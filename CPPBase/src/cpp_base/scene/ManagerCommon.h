@@ -39,7 +39,7 @@ public:
 	virtual void Init(void);
 	INT Create(cpp_base::scene::Manager *);
 
-	cpp_base::scene::Manager *GetManager(void);
+	cpp_base::scene::Manager *GetManager(void) const;
 
 	void UpdateLog(const tml::TIME_REAL &);
 };
@@ -60,7 +60,7 @@ inline void cpp_base::scene::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline cpp_base::scene::Manager *cpp_base::scene::ManagerCommon::GetManager(void)
+inline cpp_base::scene::Manager *cpp_base::scene::ManagerCommon::GetManager(void) const
 {
 	return (this->mgr_);
 }

@@ -17,8 +17,10 @@ namespace input {
  */
 class ManagerResourceDesc : public tml::ManagerResourceDesc
 {
+private:
+	tml::input::Manager *mgr_;
+
 public:
-	tml::input::Manager *manager;
 
 protected:
 	void Release(void);
@@ -30,6 +32,9 @@ public:
 	virtual ~ManagerResourceDesc();
 
 	virtual void Init(void);
+
+	tml::input::Manager *GetManager(void) const;
+	void SetManager(tml::input::Manager *);
 };
 }
 }
@@ -43,6 +48,16 @@ inline void tml::input::ManagerResourceDesc::Release(void)
 	tml::ManagerResourceDesc::Release();
 
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::input::Manager *tml::input::ManagerResourceDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -73,7 +88,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::input::Manager *GetManager(void);
+	tml::input::Manager *GetManager(void) const;
 	tml::ConstantUtil::INPUT::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
@@ -95,7 +110,7 @@ inline void tml::input::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::input::Manager *tml::input::ManagerResource::GetManager(void)
+inline tml::input::Manager *tml::input::ManagerResource::GetManager(void) const
 {
 	return (this->mgr_);
 }

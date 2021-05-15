@@ -201,8 +201,8 @@ INT cpp_base::MainThread::Start(void)
 
 		cpp_base::scene::InitSceneDesc desc;
 
-		desc.resource_name = L"INIT_SCENE";
 		desc.SetManager(&this->scene_mgr_);
+		desc.resource_name = L"INIT_SCENE";
 
 		this->scene_mgr_.GetResource<cpp_base::scene::InitScene>(scene, desc);
 
@@ -324,7 +324,7 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 		case RIM_TYPEMOUSE: {
 			tml::input::MouseEventDesc event_desc;
 
-			event_desc.manager = &th->GetInputManager();
+			event_desc.SetManager(&th->GetInputManager());
 			event_desc.data.SetRawInput(ri.data.mouse, th->GetInputManager().GetMousePosition());
 
 			th->GetInputManager().AddEvent<tml::input::MouseEvent>(event_desc);
@@ -374,7 +374,7 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 		case RIM_TYPEKEYBOARD: {
 			tml::input::KeyboardEventDesc event_desc;
 
-			event_desc.manager = &th->GetInputManager();
+			event_desc.SetManager(&th->GetInputManager());
 			event_desc.data.SetRawInput(ri.data.keyboard);
 
 			th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(event_desc);

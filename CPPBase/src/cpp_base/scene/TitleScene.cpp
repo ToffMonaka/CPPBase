@@ -158,7 +158,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// Camera Create
 		tml::graphic::CameraDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
 		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
 		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
@@ -177,7 +177,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// BackgroundModel Create
 		tml::graphic::Object2DModelDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 
 		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc);
@@ -198,7 +198,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			tml::graphic::TextureDesc desc;
 
-			desc.manager = graphic_mgr;
+			desc.SetManager(graphic_mgr);
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = L"res/title_bg_img1.png";
 
@@ -217,7 +217,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// LogoModel Create
 		tml::graphic::Object2DModelDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
 
 		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->logo_model_, desc);
@@ -238,7 +238,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			tml::graphic::TextureDesc desc;
 
-			desc.manager = graphic_mgr;
+			desc.SetManager(graphic_mgr);
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = L"res/title_logo_img1.png";
 
@@ -262,7 +262,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// StartModel Create
 		tml::graphic::Object2DModelDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -192.0f));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
@@ -284,7 +284,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			tml::graphic::TextureDesc desc;
 
-			desc.manager = graphic_mgr;
+			desc.SetManager(graphic_mgr);
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, start_tex_size);
 			desc.cpu_buffer_flag = true;
 
@@ -305,7 +305,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// StartFont Create
 		tml::graphic::FontDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.SetFontDesc(start_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
 		graphic_mgr->GetResource<tml::graphic::Font>(this->start_font_, desc);
@@ -328,7 +328,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// StartSESound Create
 		tml::sound::SESoundDesc desc;
 
-		desc.manager = sound_mgr;
+		desc.SetManager(sound_mgr);
 		desc.file_read_desc.data.file_path = L"res/title_start_se_sound1.mp3";
 
 		sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound_, desc);
@@ -346,7 +346,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// FooterModel Create
 		tml::graphic::Object2DModelDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(graphic_mgr->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_tex_size.y >> 1)));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
@@ -368,7 +368,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			tml::graphic::TextureDesc desc;
 
-			desc.manager = graphic_mgr;
+			desc.SetManager(graphic_mgr);
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, footer_tex_size);
 			desc.cpu_buffer_flag = true;
 
@@ -389,7 +389,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// FooterFont Create
 		tml::graphic::FontDesc desc;
 
-		desc.manager = graphic_mgr;
+		desc.SetManager(graphic_mgr);
 		desc.SetFontDesc(footer_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
 		graphic_mgr->GetResource<tml::graphic::Font>(this->footer_font_, desc);
@@ -422,7 +422,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// BGMSound Create
 		tml::sound::BGMSoundDesc desc;
 
-		desc.manager = sound_mgr;
+		desc.SetManager(sound_mgr);
 		desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.mp3";
 
 		sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound_, desc);

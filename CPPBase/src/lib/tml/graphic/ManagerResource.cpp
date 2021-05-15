@@ -5,13 +5,14 @@
 
 
 #include "ManagerResource.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
 tml::graphic::ManagerResourceDesc::ManagerResourceDesc() :
-	manager(nullptr)
+	mgr_(nullptr)
 {
 	return;
 }
@@ -35,7 +36,7 @@ void tml::graphic::ManagerResourceDesc::Init(void)
 {
 	this->Release();
 
-	this->manager = nullptr;
+	this->mgr_ = nullptr;
 
 	tml::ManagerResourceDesc::Init();
 
@@ -68,6 +69,20 @@ INT tml::graphic::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
 	*/
 
 	return (0);
+}
+
+
+/**
+ * @brief SetManager関数
+ * @param mgr (manager)
+ */
+void tml::graphic::ManagerResourceDesc::SetManager(tml::graphic::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	tml::ManagerResourceDesc::SetManager(mgr);
+
+	return;
 }
 
 
@@ -116,7 +131,7 @@ void tml::graphic::ManagerResource::Init(void)
  */
 INT tml::graphic::ManagerResource::Create(const tml::graphic::ManagerResourceDesc &desc, const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type, const UINT res_sub_index)
 {
-	if ((desc.manager == nullptr)
+	if ((desc.GetManager() == nullptr)
 	|| (res_type == tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::NONE)) {
 		return (-1);
 	}
@@ -125,7 +140,7 @@ INT tml::graphic::ManagerResource::Create(const tml::graphic::ManagerResourceDes
 		return (-1);
 	}
 
-	this->mgr_ = desc.manager;
+	this->mgr_ = desc.GetManager();
 	this->res_type_ = res_type;
 
 	return (0);

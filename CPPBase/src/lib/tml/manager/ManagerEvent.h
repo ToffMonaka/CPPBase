@@ -9,11 +9,19 @@
 
 
 namespace tml {
+class Manager;
+}
+
+
+namespace tml {
 /**
  * @brief ManagerEventDescƒNƒ‰ƒX
  */
 class ManagerEventDesc
 {
+private:
+	tml::Manager *mgr_;
+
 public:
 
 protected:
@@ -24,6 +32,9 @@ public:
 	virtual ~ManagerEventDesc();
 
 	virtual void Init(void);
+
+	tml::Manager *GetManager(void) const;
+	void SetManager(tml::Manager *);
 };
 }
 
@@ -34,6 +45,16 @@ public:
 inline void tml::ManagerEventDesc::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::Manager *tml::ManagerEventDesc::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
@@ -50,6 +71,7 @@ public: tml::ManagerEvent &operator =(const tml::ManagerEvent &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	tml::Manager *mgr_;
 	UINT event_index_;
 
 protected:
@@ -62,6 +84,7 @@ public:
 
 	virtual void Init(void);
 
+	tml::Manager *GetManager(void) const;
 	UINT GetEventIndex(void) const;
 };
 }
@@ -73,6 +96,16 @@ public:
 inline void tml::ManagerEvent::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetManagerŠÖ”
+ * @return mgr (manager)
+ */
+inline tml::Manager *tml::ManagerEvent::GetManager(void) const
+{
+	return (this->mgr_);
 }
 
 
