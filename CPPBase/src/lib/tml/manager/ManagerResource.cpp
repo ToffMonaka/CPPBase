@@ -134,8 +134,6 @@ tml::ManagerResource::~ManagerResource()
  */
 void tml::ManagerResource::Init(void)
 {
-	this->mgr_ = nullptr;
-
 	return;
 }
 
@@ -161,4 +159,20 @@ INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc, const UIN
 	this->res_name_ = desc.resource_name;
 
 	return (0);
+}
+
+
+/**
+ * @brief SetResourceNameŠÖ”
+ * @param res_name (resource_name)
+ */
+void tml::ManagerResource::SetResourceName(const WCHAR *res_name)
+{
+	if (!this->mgr_->CheckFriendResource(this)) {
+		return;
+	}
+
+	this->res_name_ = res_name;
+
+	return;
 }

@@ -96,6 +96,7 @@ public:
 	UINT GetResourceMainIndex(void) const;
 	UINT GetResourceSubIndex(void) const;
 	const std::wstring &GetResourceName(void) const;
+	void SetResourceName(const WCHAR *);
 };
 }
 

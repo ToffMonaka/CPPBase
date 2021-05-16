@@ -65,6 +65,7 @@ private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
 	std::vector<std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>>> res_cont_;
+	std::unordered_map<tml::ManagerResource *, tml::shared_ptr<tml::ManagerResource>> res_cont_by_res_;
 	std::unordered_map<std::wstring, tml::shared_ptr<tml::ManagerResource>> res_cont_by_name_;
 	std::list<tml::shared_ptr<tml::ManagerResource>> check_res_cont_;
 	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator check_res_itr_;
@@ -97,6 +98,7 @@ public:
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *);
+	void SetResourceName(tml::ManagerResource *, const WCHAR *);
 	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
 	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
 	bool CheckFriendResource(const tml::ManagerResource *);
@@ -153,6 +155,10 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		}
 	}
 
+	if (desc.GetManager() != this) {
+		return (dst_res);
+	}
+
 	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T1>(1U);
 
 	this->friend_res_ = res.get();
@@ -168,12 +174,14 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 	UINT res_main_index = res->GetResourceMainIndex();
 	UINT res_sub_index = res->GetResourceSubIndex();
 
-	if ((res_main_index < this->res_cont_.size())
-	&& (res_sub_index < this->res_cont_[res_main_index].size())) {
-		this->res_cont_[res_main_index][res_sub_index].push_back(res);
-	} else {
+	if ((res_main_index >= this->res_cont_.size())
+	|| (res_sub_index >= this->res_cont_[res_main_index].size())) {
 		return (dst_res);
 	}
+
+	this->res_cont_[res_main_index][res_sub_index].push_back(res);
+
+	this->res_cont_by_res_.insert(std::make_pair(res.get(), res));
 
 	if (!res->GetResourceName().empty()) {
 		this->res_cont_by_name_.insert(std::make_pair(res->GetResourceName(), res));
@@ -312,6 +320,10 @@ inline INT tml::Manager::AddEvent(const D &desc)
 
 		reinterpret_cast<T *>(event.get())->SetData(desc.data);
 	} else {
+		if (desc.GetManager() != this) {
+			return (-1);
+		}
+
 		event = tml::make_unique<T>(1U);
 
 		this->friend_event_ = event.get();

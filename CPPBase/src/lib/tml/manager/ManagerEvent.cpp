@@ -79,8 +79,6 @@ tml::ManagerEvent::~ManagerEvent()
  */
 void tml::ManagerEvent::Init(void)
 {
-	this->mgr_ = nullptr;
-
 	return;
 }
 
