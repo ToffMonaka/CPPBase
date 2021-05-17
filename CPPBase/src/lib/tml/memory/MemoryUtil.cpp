@@ -7,7 +7,6 @@
 #include "MemoryUtil.h"
 
 
-tml::ThreadFix tml::MemoryUtil::th_fix_;
 std::unique_ptr<tml::MemoryUtilEngine> tml::MemoryUtil::engine_;
 
 
@@ -16,7 +15,7 @@ std::unique_ptr<tml::MemoryUtilEngine> tml::MemoryUtil::engine_;
  */
 void tml::MemoryUtil::Init(void)
 {
-	if (!tml::MemoryUtil::th_fix_.Check()) {
+	if (!tml::MemoryUtil::CheckFixedThread()) {
 		return;
 	}
 
@@ -34,7 +33,7 @@ void tml::MemoryUtil::Init(void)
  */
 INT tml::MemoryUtil::Create(std::unique_ptr<tml::MemoryUtilEngine> &engine)
 {
-	if (!tml::MemoryUtil::th_fix_.Check()) {
+	if (!tml::MemoryUtil::CheckFixedThread()) {
 		tml::MemoryUtil::Init();
 
 		return (-1);

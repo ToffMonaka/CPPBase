@@ -7,7 +7,6 @@
 #include "MathUtil.h"
 
 
-tml::ThreadFix tml::MathUtil::th_fix_;
 std::unique_ptr<tml::MathUtilEngine> tml::MathUtil::engine_;
 
 
@@ -16,7 +15,7 @@ std::unique_ptr<tml::MathUtilEngine> tml::MathUtil::engine_;
  */
 void tml::MathUtil::Init(void)
 {
-	if (!tml::MathUtil::th_fix_.Check()) {
+	if (!tml::MathUtil::CheckFixedThread()) {
 		return;
 	}
 
@@ -34,7 +33,7 @@ void tml::MathUtil::Init(void)
  */
 INT tml::MathUtil::Create(std::unique_ptr<tml::MathUtilEngine> &engine)
 {
-	if (!tml::MathUtil::th_fix_.Check()) {
+	if (!tml::MathUtil::CheckFixedThread()) {
 		tml::MathUtil::Init();
 
 		return (-1);

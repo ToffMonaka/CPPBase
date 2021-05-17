@@ -7,7 +7,6 @@
 #include "FileUtil.h"
 
 
-tml::ThreadFix tml::FileUtil::th_fix_;
 std::unique_ptr<tml::FileUtilEngine> tml::FileUtil::engine_;
 tml::MutexThreadLock tml::FileUtil::file_th_lock_;
 tml::MutexThreadLock tml::FileUtil::dir_th_lock_;
@@ -18,7 +17,7 @@ tml::MutexThreadLock tml::FileUtil::dir_th_lock_;
  */
 void tml::FileUtil::Init(void)
 {
-	if (!tml::FileUtil::th_fix_.Check()) {
+	if (!tml::FileUtil::CheckFixedThread()) {
 		return;
 	}
 
@@ -36,7 +35,7 @@ void tml::FileUtil::Init(void)
  */
 INT tml::FileUtil::Create(std::unique_ptr<tml::FileUtilEngine> &engine)
 {
-	if (!tml::FileUtil::th_fix_.Check()) {
+	if (!tml::FileUtil::CheckFixedThread()) {
 		tml::FileUtil::Init();
 
 		return (-1);

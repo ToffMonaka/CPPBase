@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../thread/ThreadFix.h"
+#include "../util/Util.h"
 #include "RandomUtilEngine.h"
 #include "RandomSeed.h"
 
@@ -25,7 +25,6 @@ public: RandomUtil(const tml::RandomUtil &) = delete;
 public: tml::RandomUtil &operator =(const tml::RandomUtil &) = delete;
 
 private:
-	static tml::ThreadFix th_fix_;
 	static std::unique_ptr<tml::RandomUtilEngine> engine_;
 	static tml::RandomSeed seed_;
 	static tml::SpinThreadLock seed_th_lock_;
@@ -34,7 +33,7 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::RandomUtilEngine> &);
 
-	static bool CheckThreadFix(void);
+	static bool CheckFixedThread(void);
 	static std::vector<tml::RandomSeed::SEED_VALUE_TYPE> GetSeedValueContainer(void);
 	static void SetSeedValueContainer(const std::vector<tml::RandomSeed::SEED_VALUE_TYPE> &);
 	static INT GetINT(void);
@@ -68,13 +67,13 @@ public:
 
 
 /**
- * @brief CheckThreadFixä÷êî
+ * @brief CheckFixedThreadä÷êî
  * @return res_flg (result_flag)<br>
  * false=é∏îs,true=ê¨å˜
  */
-inline bool tml::RandomUtil::CheckThreadFix(void)
+inline bool tml::RandomUtil::CheckFixedThread(void)
 {
-	return (tml::RandomUtil::th_fix_.Check());
+	return (tml::Util::CheckFixedThread());
 }
 
 

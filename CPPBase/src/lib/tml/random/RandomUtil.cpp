@@ -7,7 +7,6 @@
 #include "RandomUtil.h"
 
 
-tml::ThreadFix tml::RandomUtil::th_fix_;
 std::unique_ptr<tml::RandomUtilEngine> tml::RandomUtil::engine_;
 tml::RandomSeed tml::RandomUtil::seed_;
 tml::SpinThreadLock tml::RandomUtil::seed_th_lock_;
@@ -18,7 +17,7 @@ tml::SpinThreadLock tml::RandomUtil::seed_th_lock_;
  */
 void tml::RandomUtil::Init(void)
 {
-	if (!tml::RandomUtil::th_fix_.Check()) {
+	if (!tml::RandomUtil::CheckFixedThread()) {
 		return;
 	}
 
@@ -36,7 +35,7 @@ void tml::RandomUtil::Init(void)
  */
 INT tml::RandomUtil::Create(std::unique_ptr<tml::RandomUtilEngine> &engine)
 {
-	if (!tml::RandomUtil::th_fix_.Check()) {
+	if (!tml::RandomUtil::CheckFixedThread()) {
 		tml::RandomUtil::Init();
 
 		return (-1);

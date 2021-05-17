@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief ThreadFixコードファイル
+ * @brief FixedThreadコードファイル
  */
 
 
-#include "ThreadFix.h"
+#include "FixedThread.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::ThreadFix::ThreadFix()
+tml::FixedThread::FixedThread()
 {
 	return;
 }
@@ -19,7 +19,7 @@ tml::ThreadFix::ThreadFix()
 /**
  * @brief デストラクタ
  */
-tml::ThreadFix::~ThreadFix()
+tml::FixedThread::~FixedThread()
 {
 	return;
 }
@@ -30,7 +30,7 @@ tml::ThreadFix::~ThreadFix()
  * @return res_flg (result_flag)<br>
  * false=失敗,true=成功
  */
-bool tml::ThreadFix::Check(void)
+bool tml::FixedThread::Check(void)
 {
 	auto th_id = std::this_thread::get_id();
 

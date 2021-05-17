@@ -8,7 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include <list>
-#include "../thread/ThreadFix.h"
+#include "../util/Util.h"
 #include "StringUtilEngine.h"
 
 
@@ -26,7 +26,6 @@ public: StringUtil(const tml::StringUtil &) = delete;
 public: tml::StringUtil &operator =(const tml::StringUtil &) = delete;
 
 private:
-	static tml::ThreadFix th_fix_;
 	static std::unique_ptr<tml::StringUtilEngine> engine_;
 	static std::string old_locale_name_;
 	static bool old_locale_flg_;
@@ -35,7 +34,7 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::StringUtilEngine> &);
 
-	static bool CheckThreadFix(void);
+	static bool CheckFixedThread(void);
 	static std::vector<std::string> &Split(std::vector<std::string> &, const CHAR *, const CHAR *);
 	static std::vector<std::wstring> &Split(std::vector<std::wstring> &, const WCHAR *, const WCHAR *);
 	static std::list<std::string> &Split(std::list<std::string> &, const CHAR *, const CHAR *);
@@ -95,13 +94,13 @@ public:
 
 
 /**
- * @brief CheckThreadFixä÷êî
+ * @brief CheckFixedThreadä÷êî
  * @return res_flg (result_flag)<br>
  * false=é∏îs,true=ê¨å˜
  */
-inline bool tml::StringUtil::CheckThreadFix(void)
+inline bool tml::StringUtil::CheckFixedThread(void)
 {
-	return (tml::StringUtil::th_fix_.Check());
+	return (tml::Util::CheckFixedThread());
 }
 
 

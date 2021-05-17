@@ -6,6 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../thread/MutexThreadLock.h"
+#include "../thread/SpinThreadLock.h"
 
 
 namespace tml {

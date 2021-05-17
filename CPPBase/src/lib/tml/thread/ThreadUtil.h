@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../thread/ThreadFix.h"
+#include "../util/Util.h"
 #include "ThreadUtilEngine.h"
 
 
@@ -24,14 +24,13 @@ public: ThreadUtil(const tml::ThreadUtil &) = delete;
 public: tml::ThreadUtil &operator =(const tml::ThreadUtil &) = delete;
 
 private:
-	static tml::ThreadFix th_fix_;
 	static std::unique_ptr<tml::ThreadUtilEngine> engine_;
 
 public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::ThreadUtilEngine> &);
 
-	static bool CheckThreadFix(void);
+	static bool CheckFixedThread(void);
 	static tml::Thread *Get(void);
 	static INT Start(std::unique_ptr<tml::MainThread> &);
 	static INT Start(std::unique_ptr<tml::SubThread> &);
@@ -46,13 +45,13 @@ public:
 
 
 /**
- * @brief CheckThreadFixä÷êî
+ * @brief CheckFixedThreadä÷êî
  * @return res_flg (result_flag)<br>
  * false=é∏îs,true=ê¨å˜
  */
-inline bool tml::ThreadUtil::CheckThreadFix(void)
+inline bool tml::ThreadUtil::CheckFixedThread(void)
 {
-	return (tml::ThreadUtil::th_fix_.Check());
+	return (tml::Util::CheckFixedThread());
 }
 
 

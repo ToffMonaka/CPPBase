@@ -9,7 +9,6 @@
 #include "../memory/MemoryUtil.h"
 
 
-tml::ThreadFix tml::StringUtil::th_fix_;
 std::unique_ptr<tml::StringUtilEngine> tml::StringUtil::engine_;
 std::string tml::StringUtil::old_locale_name_;
 bool tml::StringUtil::old_locale_flg_ = false;
@@ -20,7 +19,7 @@ bool tml::StringUtil::old_locale_flg_ = false;
  */
 void tml::StringUtil::Init(void)
 {
-	if (!tml::StringUtil::th_fix_.Check()) {
+	if (!tml::StringUtil::CheckFixedThread()) {
 		return;
 	}
 
@@ -49,7 +48,7 @@ void tml::StringUtil::Init(void)
  */
 INT tml::StringUtil::Create(std::unique_ptr<tml::StringUtilEngine> &engine)
 {
-	if (!tml::StringUtil::th_fix_.Check()) {
+	if (!tml::StringUtil::CheckFixedThread()) {
 		tml::StringUtil::Init();
 
 		return (-1);

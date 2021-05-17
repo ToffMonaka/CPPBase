@@ -9,6 +9,8 @@
 #include <list>
 #include <unordered_map>
 #include <objbase.h>
+#include "MutexThreadLock.h"
+#include "SpinThreadLock.h"
 #include "MainThread.h"
 #include "SubThread.h"
 

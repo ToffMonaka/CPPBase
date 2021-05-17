@@ -7,7 +7,6 @@
 #include "TimeUtil.h"
 
 
-tml::ThreadFix tml::TimeUtil::th_fix_;
 std::unique_ptr<tml::TimeUtilEngine> tml::TimeUtil::engine_;
 
 
@@ -16,7 +15,7 @@ std::unique_ptr<tml::TimeUtilEngine> tml::TimeUtil::engine_;
  */
 void tml::TimeUtil::Init(void)
 {
-	if (!tml::TimeUtil::th_fix_.Check()) {
+	if (!tml::TimeUtil::CheckFixedThread()) {
 		return;
 	}
 
@@ -34,7 +33,7 @@ void tml::TimeUtil::Init(void)
  */
 INT tml::TimeUtil::Create(std::unique_ptr<tml::TimeUtilEngine> &engine)
 {
-	if (!tml::TimeUtil::th_fix_.Check()) {
+	if (!tml::TimeUtil::CheckFixedThread()) {
 		tml::TimeUtil::Init();
 
 		return (-1);

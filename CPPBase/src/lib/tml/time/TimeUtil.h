@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../thread/ThreadFix.h"
+#include "../util/Util.h"
 #include "TimeUtilEngine.h"
 
 
@@ -24,14 +24,13 @@ public: TimeUtil(const tml::TimeUtil &) = delete;
 public: tml::TimeUtil &operator =(const tml::TimeUtil &) = delete;
 
 private:
-	static tml::ThreadFix th_fix_;
 	static std::unique_ptr<tml::TimeUtilEngine> engine_;
 
 public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::TimeUtilEngine> &);
 
-	static bool CheckThreadFix(void);
+	static bool CheckFixedThread(void);
 	static tml::TIME_REAL Sleep(const tml::TIME_REAL &);
 	static tml::TIME_REAL Wait(const tml::TIME_REAL &);
 };
@@ -39,11 +38,11 @@ public:
 
 
 /**
- * @brief CheckThreadFixä÷êî
+ * @brief CheckFixedThreadä÷êî
  * @return res_flg (result_flag)<br>
  * false=é∏îs,true=ê¨å˜
  */
-inline bool tml::TimeUtil::CheckThreadFix(void)
+inline bool tml::TimeUtil::CheckFixedThread(void)
 {
-	return (tml::TimeUtil::th_fix_.Check());
+	return (tml::Util::CheckFixedThread());
 }

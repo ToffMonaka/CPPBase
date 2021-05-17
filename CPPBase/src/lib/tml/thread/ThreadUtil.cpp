@@ -7,7 +7,6 @@
 #include "ThreadUtil.h"
 
 
-tml::ThreadFix tml::ThreadUtil::th_fix_;
 std::unique_ptr<tml::ThreadUtilEngine> tml::ThreadUtil::engine_;
 
 
@@ -16,7 +15,7 @@ std::unique_ptr<tml::ThreadUtilEngine> tml::ThreadUtil::engine_;
  */
 void tml::ThreadUtil::Init(void)
 {
-	if (!tml::ThreadUtil::th_fix_.Check()) {
+	if (!tml::ThreadUtil::CheckFixedThread()) {
 		return;
 	}
 
@@ -34,7 +33,7 @@ void tml::ThreadUtil::Init(void)
  */
 INT tml::ThreadUtil::Create(std::unique_ptr<tml::ThreadUtilEngine> &engine)
 {
-	if (!tml::ThreadUtil::th_fix_.Check()) {
+	if (!tml::ThreadUtil::CheckFixedThread()) {
 		tml::ThreadUtil::Init();
 
 		return (-1);

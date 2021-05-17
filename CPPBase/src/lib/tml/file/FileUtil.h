@@ -6,8 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../thread/MutexThreadLock.h"
-#include "../thread/ThreadFix.h"
+#include "../util/Util.h"
 #include "FileUtilEngine.h"
 
 
@@ -25,7 +24,6 @@ public: FileUtil(const tml::FileUtil &) = delete;
 public: tml::FileUtil &operator =(const tml::FileUtil &) = delete;
 
 private:
-	static tml::ThreadFix th_fix_;
 	static std::unique_ptr<tml::FileUtilEngine> engine_;
 	static tml::MutexThreadLock file_th_lock_;
 	static tml::MutexThreadLock dir_th_lock_;
@@ -34,7 +32,7 @@ public:
 	static void Init(void);
 	static INT Create(std::unique_ptr<tml::FileUtilEngine> &);
 
-	static bool CheckThreadFix(void);
+	static bool CheckFixedThread(void);
 	static tml::MutexThreadLock &GetFileThreadLock(void);
 	static tml::MutexThreadLock &GetDirectoryThreadLock(void);
 };
@@ -42,13 +40,13 @@ public:
 
 
 /**
- * @brief CheckThreadFixä÷êî
+ * @brief CheckFixedThreadä÷êî
  * @return res_flg (result_flag)<br>
  * false=é∏îs,true=ê¨å˜
  */
-inline bool tml::FileUtil::CheckThreadFix(void)
+inline bool tml::FileUtil::CheckFixedThread(void)
 {
-	return (tml::FileUtil::th_fix_.Check());
+	return (tml::Util::CheckFixedThread());
 }
 
 

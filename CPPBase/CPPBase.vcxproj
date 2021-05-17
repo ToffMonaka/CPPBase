@@ -269,12 +269,12 @@
     <ClCompile Include="src\lib\tml\string\StringUtil.cpp" />
     <ClCompile Include="src\lib\tml\string\StringUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\thread\DefaultThreadUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\thread\FixedThread.cpp" />
     <ClCompile Include="src\lib\tml\thread\MainThread.cpp" />
     <ClCompile Include="src\lib\tml\thread\MutexThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\SpinThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\SubThread.cpp" />
     <ClCompile Include="src\lib\tml\thread\Thread.cpp" />
-    <ClCompile Include="src\lib\tml\thread\ThreadFix.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLock.cpp" />
     <ClCompile Include="src\lib\tml\thread\ThreadLockBlock.cpp" />
     <ClCompile Include="src\cpp_base\Main.cpp" />
@@ -287,6 +287,7 @@
     <ClCompile Include="src\lib\tml\time\Timer.cpp" />
     <ClCompile Include="src\lib\tml\time\TimeUtil.cpp" />
     <ClCompile Include="src\lib\tml\time\TimeUtilEngine.cpp" />
+    <ClCompile Include="src\lib\tml\util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cpp_base\constant\ConstantInclude_ConstantUtilBase.h" />
@@ -422,12 +423,12 @@
     <ClInclude Include="src\lib\tml\string\StringUtil.h" />
     <ClInclude Include="src\lib\tml\string\StringUtilEngine.h" />
     <ClInclude Include="src\lib\tml\thread\DefaultThreadUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\thread\FixedThread.h" />
     <ClInclude Include="src\lib\tml\thread\MainThread.h" />
     <ClInclude Include="src\lib\tml\thread\MutexThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\SpinThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\SubThread.h" />
     <ClInclude Include="src\lib\tml\thread\Thread.h" />
-    <ClInclude Include="src\lib\tml\thread\ThreadFix.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLock.h" />
     <ClInclude Include="src\lib\tml\thread\ThreadLockBlock.h" />
     <ClInclude Include="src\cpp_base\Main.h" />
@@ -441,6 +442,7 @@
     <ClInclude Include="src\lib\tml\time\Timer.h" />
     <ClInclude Include="src\lib\tml\time\TimeUtil.h" />
     <ClInclude Include="src\lib\tml\time\TimeUtilEngine.h" />
+    <ClInclude Include="src\lib\tml\util\Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\cpp_base\resource\resource.rc" />
