@@ -94,20 +94,20 @@ public:
 	void Update(void);
 	HWND GetWindowHandle(void) const;
 	HDC GetWindowDeviceContextHandle(void) const;
+	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
+	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *);
 	void SetResourceName(tml::ManagerResource *, const WCHAR *);
-	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
-	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
-	bool CheckFriendResource(const tml::ManagerResource *);
+	bool CheckFriendResource(const tml::ManagerResource *) const;
 	UINT GetEventCount(void) const;
 	const tml::ManagerEvent *GetEvent(const UINT) const;
 	const tml::ManagerEvent *GetEventFast(const UINT) const;
 	template <typename T, typename D>
 	INT AddEvent(const D &);
-	bool CheckFriendEvent(const tml::ManagerEvent *);
+	bool CheckFriendEvent(const tml::ManagerEvent *) const;
 };
 }
 
@@ -129,6 +129,40 @@ inline HWND tml::Manager::GetWindowHandle(void) const
 inline HDC tml::Manager::GetWindowDeviceContextHandle(void) const
 {
 	return (this->wnd_dc_handle_);
+}
+
+
+/**
+ * @brief GetResourceContainerŠÖ”
+ * @param res_main_index (resource_main_index)
+ * @return res_cont (resource_container)<br>
+ * nullptr=Ž¸”s
+ */
+inline const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *tml::Manager::GetResourceContainer(const UINT res_main_index)
+{
+	if (res_main_index >= this->res_cont_.size()) {
+		return (nullptr);
+	}
+
+	return (&this->res_cont_[res_main_index]);
+}
+
+
+/**
+ * @brief GetResourceContainerŠÖ”
+ * @param res_main_index (resource_main_index)
+ * @param res_sub_index (resource_sub_index)
+ * @return res_cont (resource_container)<br>
+ * nullptr=Ž¸”s
+ */
+inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::GetResourceContainer(const UINT res_main_index, const UINT res_sub_index)
+{
+	if ((res_main_index >= this->res_cont_.size())
+	|| (res_sub_index >= this->res_cont_[res_main_index].size())) {
+		return (nullptr);
+	}
+
+	return (&this->res_cont_[res_main_index][res_sub_index]);
 }
 
 
@@ -223,40 +257,6 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 	}
 
 	return (dst_res);
-}
-
-
-/**
- * @brief GetResourceContainerŠÖ”
- * @param res_main_index (resource_main_index)
- * @return res_cont (resource_container)<br>
- * nullptr=Ž¸”s
- */
-inline const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *tml::Manager::GetResourceContainer(const UINT res_main_index)
-{
-	if (res_main_index >= this->res_cont_.size()) {
-		return (nullptr);
-	}
-
-	return (&this->res_cont_[res_main_index]);
-}
-
-
-/**
- * @brief GetResourceContainerŠÖ”
- * @param res_main_index (resource_main_index)
- * @param res_sub_index (resource_sub_index)
- * @return res_cont (resource_container)<br>
- * nullptr=Ž¸”s
- */
-inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::GetResourceContainer(const UINT res_main_index, const UINT res_sub_index)
-{
-	if ((res_main_index >= this->res_cont_.size())
-	|| (res_sub_index >= this->res_cont_[res_main_index].size())) {
-		return (nullptr);
-	}
-
-	return (&this->res_cont_[res_main_index][res_sub_index]);
 }
 
 

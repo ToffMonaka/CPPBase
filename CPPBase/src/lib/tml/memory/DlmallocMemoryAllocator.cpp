@@ -102,7 +102,7 @@ INT tml::DlmallocMemoryAllocator::Create(const size_t size)
  * @brief GetInfoŠÖ”
  * @return info (info)
  */
-tml::MemoryAllocator::INFO tml::DlmallocMemoryAllocator::GetInfo(void)
+tml::MemoryAllocator::INFO tml::DlmallocMemoryAllocator::GetInfo(void) const
 {
 	if (this->ms_ == nullptr) {
 		return (tml::MemoryAllocator::INFO());

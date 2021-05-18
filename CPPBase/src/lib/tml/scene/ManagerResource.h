@@ -88,7 +88,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::scene::Manager *GetManager(void) const;
+	tml::scene::Manager *GetManager(void);
 	tml::ConstantUtil::SCENE::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
@@ -110,7 +110,7 @@ inline void tml::scene::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::scene::Manager *tml::scene::ManagerResource::GetManager(void) const
+inline tml::scene::Manager *tml::scene::ManagerResource::GetManager(void)
 {
 	return (this->mgr_);
 }

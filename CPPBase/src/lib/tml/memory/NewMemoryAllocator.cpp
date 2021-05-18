@@ -99,7 +99,7 @@ INT tml::NewMemoryAllocator::Create(void)
  * @brief GetInfoŠÖ”
  * @return info (info)
  */
-tml::MemoryAllocator::INFO tml::NewMemoryAllocator::GetInfo(void)
+tml::MemoryAllocator::INFO tml::NewMemoryAllocator::GetInfo(void) const
 {
 	if (this->ms_size_ <= 0U) {
 		return (tml::MemoryAllocator::INFO());

@@ -35,7 +35,7 @@ public:
 	virtual void Init(void);
 	INT Create(cpp_base::sound::Manager *);
 
-	cpp_base::sound::Manager *GetManager(void) const;
+	cpp_base::sound::Manager *GetManager(void);
 };
 }
 }
@@ -54,7 +54,7 @@ inline void cpp_base::sound::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline cpp_base::sound::Manager *cpp_base::sound::ManagerCommon::GetManager(void) const
+inline cpp_base::sound::Manager *cpp_base::sound::ManagerCommon::GetManager(void)
 {
 	return (this->mgr_);
 }

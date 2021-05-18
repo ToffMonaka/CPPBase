@@ -86,7 +86,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::input::Manager *GetManager(void) const;
+	tml::input::Manager *GetManager(void);
 	tml::ConstantUtil::INPUT::EVENT_TYPE GetEventType(void) const;
 };
 }
@@ -108,7 +108,7 @@ inline void tml::input::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::input::Manager *tml::input::ManagerEvent::GetManager(void) const
+inline tml::input::Manager *tml::input::ManagerEvent::GetManager(void)
 {
 	return (this->mgr_);
 }

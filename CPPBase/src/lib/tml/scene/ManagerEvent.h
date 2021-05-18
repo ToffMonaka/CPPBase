@@ -86,7 +86,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::scene::Manager *GetManager(void) const;
+	tml::scene::Manager *GetManager(void);
 	tml::ConstantUtil::SCENE::EVENT_TYPE GetEventType(void) const;
 };
 }
@@ -108,7 +108,7 @@ inline void tml::scene::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::scene::Manager *tml::scene::ManagerEvent::GetManager(void) const
+inline tml::scene::Manager *tml::scene::ManagerEvent::GetManager(void)
 {
 	return (this->mgr_);
 }

@@ -59,7 +59,7 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE GetType(void) const;
-	virtual tml::MemoryAllocator::INFO GetInfo(void);
+	virtual tml::MemoryAllocator::INFO GetInfo(void) const;
 };
 }
 

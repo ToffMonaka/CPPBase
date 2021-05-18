@@ -88,7 +88,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::sound::Manager *GetManager(void) const;
+	tml::sound::Manager *GetManager(void);
 	tml::ConstantUtil::SOUND::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
@@ -110,7 +110,7 @@ inline void tml::sound::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::sound::Manager *tml::sound::ManagerResource::GetManager(void) const
+inline tml::sound::Manager *tml::sound::ManagerResource::GetManager(void)
 {
 	return (this->mgr_);
 }

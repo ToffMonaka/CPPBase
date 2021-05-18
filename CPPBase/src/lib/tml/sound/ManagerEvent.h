@@ -86,7 +86,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::sound::Manager *GetManager(void) const;
+	tml::sound::Manager *GetManager(void);
 	tml::ConstantUtil::SOUND::EVENT_TYPE GetEventType(void) const;
 };
 }
@@ -108,7 +108,7 @@ inline void tml::sound::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::sound::Manager *tml::sound::ManagerEvent::GetManager(void) const
+inline tml::sound::Manager *tml::sound::ManagerEvent::GetManager(void)
 {
 	return (this->mgr_);
 }

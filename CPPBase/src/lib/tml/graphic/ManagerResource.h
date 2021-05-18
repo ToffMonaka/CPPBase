@@ -88,7 +88,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::graphic::Manager *GetManager(void) const;
+	tml::graphic::Manager *GetManager(void);
 	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
@@ -110,7 +110,7 @@ inline void tml::graphic::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ManagerResource::GetManager(void) const
+inline tml::graphic::Manager *tml::graphic::ManagerResource::GetManager(void)
 {
 	return (this->mgr_);
 }

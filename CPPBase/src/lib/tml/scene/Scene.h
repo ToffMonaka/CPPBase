@@ -70,11 +70,11 @@ public:
 
 	virtual void Init(void);
 
-	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
-
 	virtual INT Start(void) = 0;
 	virtual void End(void) = 0;
 	virtual void Update(void) = 0;
+
+	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
 };
 }
 }

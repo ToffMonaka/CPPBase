@@ -35,7 +35,7 @@ public:
 	virtual void Init(void);
 	INT Create(cpp_base::input::Manager *);
 
-	cpp_base::input::Manager *GetManager(void) const;
+	cpp_base::input::Manager *GetManager(void);
 };
 }
 }
@@ -54,7 +54,7 @@ inline void cpp_base::input::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline cpp_base::input::Manager *cpp_base::input::ManagerCommon::GetManager(void) const
+inline cpp_base::input::Manager *cpp_base::input::ManagerCommon::GetManager(void)
 {
 	return (this->mgr_);
 }

@@ -92,7 +92,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::Manager *GetManager(void) const;
+	tml::Manager *GetManager(void);
 	UINT GetResourceMainIndex(void) const;
 	UINT GetResourceSubIndex(void) const;
 	const std::wstring &GetResourceName(void) const;
@@ -114,7 +114,7 @@ inline void tml::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::Manager *tml::ManagerResource::GetManager(void) const
+inline tml::Manager *tml::ManagerResource::GetManager(void)
 {
 	return (this->mgr_);
 }

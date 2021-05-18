@@ -46,7 +46,7 @@ public:
 	BYTE *ReleaseDestructorPart(T **);
 	template <typename T>
 	void ReleaseMemorySpacePart(BYTE *, T **);
-	virtual tml::MemoryAllocator::INFO GetInfo(void);
+	virtual tml::MemoryAllocator::INFO GetInfo(void) const;
 };
 }
 

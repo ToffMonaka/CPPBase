@@ -247,44 +247,6 @@ void tml::Manager::Update(void)
 
 
 /**
- * @brief SetResourceNameŠÖ”
- * @param res (resource)
- * @param res_name (resource_name)
- */
-void tml::Manager::SetResourceName(tml::ManagerResource *res, const WCHAR *res_name)
-{
-	if ((res == nullptr)
-	|| (res_name == nullptr)) {
-		return;
-	}
-
-	auto tmp_res_itr = this->res_cont_by_res_.find(res);
-
-	if (tmp_res_itr == this->res_cont_by_res_.end()) {
-		return;
-	}
-
-	auto &tmp_res = tmp_res_itr->second;
-
-	if (!tmp_res->GetResourceName().empty()) {
-		this->res_cont_by_name_.erase(tmp_res->GetResourceName());
-	}
-
-	this->friend_res_ = tmp_res.get();
-
-	tmp_res->SetResourceName(res_name);
-
-	this->friend_res_ = nullptr;
-
-	if (!tmp_res->GetResourceName().empty()) {
-		this->res_cont_by_name_.insert(std::make_pair(tmp_res->GetResourceName(), tmp_res));
-	}
-
-	return;
-}
-
-
-/**
  * @brief CreateResourceContainerŠÖ”
  * @param res_cnt_cont (resource_count_container)
  * @return res (result)<br>
@@ -332,12 +294,50 @@ void tml::Manager::DeleteResourceContainer(void)
 
 
 /**
+ * @brief SetResourceNameŠÖ”
+ * @param res (resource)
+ * @param res_name (resource_name)
+ */
+void tml::Manager::SetResourceName(tml::ManagerResource *res, const WCHAR *res_name)
+{
+	if ((res == nullptr)
+	|| (res_name == nullptr)) {
+		return;
+	}
+
+	auto tmp_res_itr = this->res_cont_by_res_.find(res);
+
+	if (tmp_res_itr == this->res_cont_by_res_.end()) {
+		return;
+	}
+
+	auto &tmp_res = tmp_res_itr->second;
+
+	if (!tmp_res->GetResourceName().empty()) {
+		this->res_cont_by_name_.erase(tmp_res->GetResourceName());
+	}
+
+	this->friend_res_ = tmp_res.get();
+
+	tmp_res->SetResourceName(res_name);
+
+	this->friend_res_ = nullptr;
+
+	if (!tmp_res->GetResourceName().empty()) {
+		this->res_cont_by_name_.insert(std::make_pair(tmp_res->GetResourceName(), tmp_res));
+	}
+
+	return;
+}
+
+
+/**
  * @brief CheckFriendResourceŠÖ”
  * @param res (resource)
  * @return res_flg (result_flag)<br>
  * false=¸”s,true=¬Œ÷
  */
-bool tml::Manager::CheckFriendResource(const tml::ManagerResource *res)
+bool tml::Manager::CheckFriendResource(const tml::ManagerResource *res) const
 {
 	if (res == nullptr) {
 		return (false);
@@ -353,7 +353,7 @@ bool tml::Manager::CheckFriendResource(const tml::ManagerResource *res)
  * @return res_flg (result_flag)<br>
  * false=¸”s,true=¬Œ÷
  */
-bool tml::Manager::CheckFriendEvent(const tml::ManagerEvent *event)
+bool tml::Manager::CheckFriendEvent(const tml::ManagerEvent *event) const
 {
 	if (event == nullptr) {
 		return (false);

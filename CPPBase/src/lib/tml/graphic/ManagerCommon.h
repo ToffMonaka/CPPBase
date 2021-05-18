@@ -61,7 +61,7 @@ public:
 	virtual void Init(void);
 	INT Create(tml::graphic::Manager *);
 
-	tml::graphic::Manager *GetManager(void) const;
+	tml::graphic::Manager *GetManager(void);
 };
 }
 }
@@ -80,7 +80,7 @@ inline void tml::graphic::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ManagerCommon::GetManager(void) const
+inline tml::graphic::Manager *tml::graphic::ManagerCommon::GetManager(void)
 {
 	return (this->mgr_);
 }

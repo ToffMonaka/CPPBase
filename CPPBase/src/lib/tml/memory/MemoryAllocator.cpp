@@ -59,7 +59,7 @@ INT tml::MemoryAllocator::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE
  * @brief GetInfoä÷êî
  * @return info (info)
  */
-tml::MemoryAllocator::INFO tml::MemoryAllocator::GetInfo(void)
+tml::MemoryAllocator::INFO tml::MemoryAllocator::GetInfo(void) const
 {
 	tml::MemoryAllocator::INFO info;
 

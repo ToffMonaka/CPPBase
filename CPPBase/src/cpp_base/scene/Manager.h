@@ -134,9 +134,9 @@ public:
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::ManagerDesc &);
 
-	cpp_base::input::Manager *GetInputManager(void) const;
-	cpp_base::graphic::Manager *GetGraphicManager(void) const;
-	cpp_base::sound::Manager *GetSoundManager(void) const;
+	cpp_base::input::Manager *GetInputManager(void);
+	cpp_base::graphic::Manager *GetGraphicManager(void);
+	cpp_base::sound::Manager *GetSoundManager(void);
 };
 }
 }
@@ -146,7 +146,7 @@ public:
  * @brief GetInputManagerŠÖ”
  * @return input_mgr (input_manager)
  */
-inline cpp_base::input::Manager *cpp_base::scene::Manager::GetInputManager(void) const
+inline cpp_base::input::Manager *cpp_base::scene::Manager::GetInputManager(void)
 {
 	return (this->input_mgr_);
 }
@@ -156,7 +156,7 @@ inline cpp_base::input::Manager *cpp_base::scene::Manager::GetInputManager(void)
  * @brief GetGraphicManagerŠÖ”
  * @return graphic_mgr (graphic_manager)
  */
-inline cpp_base::graphic::Manager *cpp_base::scene::Manager::GetGraphicManager(void) const
+inline cpp_base::graphic::Manager *cpp_base::scene::Manager::GetGraphicManager(void)
 {
 	return (this->graphic_mgr_);
 }
@@ -166,7 +166,7 @@ inline cpp_base::graphic::Manager *cpp_base::scene::Manager::GetGraphicManager(v
  * @brief GetSoundManagerŠÖ”
  * @return sound_mgr (sound_manager)
  */
-inline cpp_base::sound::Manager *cpp_base::scene::Manager::GetSoundManager(void) const
+inline cpp_base::sound::Manager *cpp_base::scene::Manager::GetSoundManager(void)
 {
 	return (this->sound_mgr_);
 }

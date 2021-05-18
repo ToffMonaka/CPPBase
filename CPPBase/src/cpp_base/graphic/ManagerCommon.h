@@ -35,7 +35,7 @@ public:
 	virtual void Init(void);
 	INT Create(cpp_base::graphic::Manager *);
 
-	cpp_base::graphic::Manager *GetManager(void) const;
+	cpp_base::graphic::Manager *GetManager(void);
 };
 }
 }
@@ -54,7 +54,7 @@ inline void cpp_base::graphic::ManagerCommon::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline cpp_base::graphic::Manager *cpp_base::graphic::ManagerCommon::GetManager(void) const
+inline cpp_base::graphic::Manager *cpp_base::graphic::ManagerCommon::GetManager(void)
 {
 	return (this->mgr_);
 }

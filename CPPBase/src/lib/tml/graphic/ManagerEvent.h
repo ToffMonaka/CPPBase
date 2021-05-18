@@ -86,7 +86,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::graphic::Manager *GetManager(void) const;
+	tml::graphic::Manager *GetManager(void);
 	tml::ConstantUtil::GRAPHIC::EVENT_TYPE GetEventType(void) const;
 };
 }
@@ -108,7 +108,7 @@ inline void tml::graphic::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ManagerEvent::GetManager(void) const
+inline tml::graphic::Manager *tml::graphic::ManagerEvent::GetManager(void)
 {
 	return (this->mgr_);
 }

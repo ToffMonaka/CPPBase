@@ -140,14 +140,19 @@ public:
 
 	void Update(void);
 
-	tml::input::Manager *GetInputManager(void) const;
-	tml::graphic::Manager *GetGraphicManager(void) const;
-	tml::sound::Manager *GetSoundManager(void) const;
+	tml::input::Manager *GetInputManager(void);
+	tml::graphic::Manager *GetGraphicManager(void);
+	tml::sound::Manager *GetSoundManager(void);
 	const tml::FrameRate &GetFrameRate(void) const;
 
 	tml::scene::Scene *Get(void);
 	INT Start(tml::shared_ptr<tml::scene::Scene> &);
 	void End(void);
+
+	template <typename T>
+	tml::shared_ptr<T> &GetScene(tml::shared_ptr<T> &, const WCHAR *);
+	template <typename T>
+	tml::shared_ptr<T> &GetNode(tml::shared_ptr<T> &, const WCHAR *);
 };
 }
 }
@@ -157,7 +162,7 @@ public:
  * @brief GetInputManagerä÷êî
  * @return input_mgr (input_manager)
  */
-inline tml::input::Manager *tml::scene::Manager::GetInputManager(void) const
+inline tml::input::Manager *tml::scene::Manager::GetInputManager(void)
 {
 	return (this->input_mgr_);
 }
@@ -167,7 +172,7 @@ inline tml::input::Manager *tml::scene::Manager::GetInputManager(void) const
  * @brief GetGraphicManagerä÷êî
  * @return graphic_mgr (graphic_manager)
  */
-inline tml::graphic::Manager *tml::scene::Manager::GetGraphicManager(void) const
+inline tml::graphic::Manager *tml::scene::Manager::GetGraphicManager(void)
 {
 	return (this->graphic_mgr_);
 }
@@ -177,7 +182,7 @@ inline tml::graphic::Manager *tml::scene::Manager::GetGraphicManager(void) const
  * @brief GetSoundManagerä÷êî
  * @return sound_mgr (sound_manager)
  */
-inline tml::sound::Manager *tml::scene::Manager::GetSoundManager(void) const
+inline tml::sound::Manager *tml::scene::Manager::GetSoundManager(void)
 {
 	return (this->sound_mgr_);
 }
@@ -200,4 +205,42 @@ inline const tml::FrameRate &tml::scene::Manager::GetFrameRate(void) const
 inline tml::scene::Scene *tml::scene::Manager::Get(void)
 {
 	return (this->scene_.get());
+}
+
+
+/**
+ * @brief GetSceneä÷êî
+ * @param dst_scene (dst_scene)
+ * @param class_name (class_name)
+ * @return dst_scene (dst_scene)
+ */
+template <typename T>
+inline tml::shared_ptr<T> &tml::scene::Manager::GetScene(tml::shared_ptr<T> &dst_scene, const WCHAR *class_name)
+{
+	dst_scene.reset();
+
+	if (class_name == nullptr) {
+		return (dst_scene);
+	}
+
+	return (dst_scene);
+}
+
+
+/**
+ * @brief GetNodeä÷êî
+ * @param dst_node (dst_node)
+ * @param class_name (class_name)
+ * @return dst_node (dst_node)
+ */
+template <typename T>
+inline tml::shared_ptr<T> &tml::scene::Manager::GetNode(tml::shared_ptr<T> &dst_node, const WCHAR *class_name)
+{
+	dst_node.reset();
+
+	if (class_name == nullptr) {
+		return (dst_node);
+	}
+
+	return (dst_node);
 }

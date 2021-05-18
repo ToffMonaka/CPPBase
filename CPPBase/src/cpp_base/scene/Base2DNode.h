@@ -85,7 +85,7 @@ public:
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::Base2DNodeDesc &);
 
-	cpp_base::scene::Manager *GetManager(void) const;
+	cpp_base::scene::Manager *GetManager(void);
 };
 }
 }
@@ -95,7 +95,7 @@ public:
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline cpp_base::scene::Manager *cpp_base::scene::Base2DNode::GetManager(void) const
+inline cpp_base::scene::Manager *cpp_base::scene::Base2DNode::GetManager(void)
 {
 	return (this->mgr_);
 }

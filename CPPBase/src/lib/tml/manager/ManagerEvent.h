@@ -84,7 +84,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::Manager *GetManager(void) const;
+	tml::Manager *GetManager(void);
 	UINT GetEventIndex(void) const;
 };
 }
@@ -103,7 +103,7 @@ inline void tml::ManagerEvent::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::Manager *tml::ManagerEvent::GetManager(void) const
+inline tml::Manager *tml::ManagerEvent::GetManager(void)
 {
 	return (this->mgr_);
 }

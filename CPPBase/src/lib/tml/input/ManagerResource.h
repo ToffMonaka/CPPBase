@@ -88,7 +88,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::input::Manager *GetManager(void) const;
+	tml::input::Manager *GetManager(void);
 	tml::ConstantUtil::INPUT::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
@@ -110,7 +110,7 @@ inline void tml::input::ManagerResource::Release(void)
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::input::Manager *tml::input::ManagerResource::GetManager(void) const
+inline tml::input::Manager *tml::input::ManagerResource::GetManager(void)
 {
 	return (this->mgr_);
 }

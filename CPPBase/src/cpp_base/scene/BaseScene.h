@@ -85,11 +85,11 @@ public:
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::BaseSceneDesc &);
 
-	cpp_base::scene::Manager *GetManager(void) const;
-
 	virtual INT Start(void);
 	virtual void End(void);
 	virtual void Update(void);
+
+	cpp_base::scene::Manager *GetManager(void);
 };
 }
 }
@@ -99,7 +99,7 @@ public:
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline cpp_base::scene::Manager *cpp_base::scene::BaseScene::GetManager(void) const
+inline cpp_base::scene::Manager *cpp_base::scene::BaseScene::GetManager(void)
 {
 	return (this->mgr_);
 }

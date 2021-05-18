@@ -39,7 +39,7 @@ public:
 
 	virtual void Init(void);
 
-	tml::graphic::Manager *GetManager(void) const;
+	tml::graphic::Manager *GetManager(void);
 	UINT GetMeshIndex(void) const;
 	void SetMeshIndex(const UINT);
 	UINT GetDiffuseTextureIndex(void) const;
@@ -55,7 +55,7 @@ public:
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ModelLayer::GetManager(void) const
+inline tml::graphic::Manager *tml::graphic::ModelLayer::GetManager(void)
 {
 	return (this->mgr_);
 }
@@ -153,13 +153,17 @@ protected:
 	void Release(void);
 	INT Create(tml::graphic::Manager *);
 
+	tml::graphic::ModelLayer *GetLayer(const UINT);
+	tml::graphic::ModelLayer *GetLayerFast(const UINT);
+	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::ModelLayer> &);
+
 public:
 	ModelStage();
 	virtual ~ModelStage();
 
 	virtual void Init(void);
 
-	tml::graphic::Manager *GetManager(void) const;
+	tml::graphic::Manager *GetManager(void);
 	UINT GetRasterizerStateIndex(void) const;
 	void SetRasterizerStateIndex(const UINT);
 	UINT GetBlendStateIndex(void) const;
@@ -170,9 +174,6 @@ public:
 	void SetShaderIndex(const UINT);
 
 	UINT GetLayerCount(void) const;
-	tml::graphic::ModelLayer *GetLayer(const UINT);
-	tml::graphic::ModelLayer *GetLayerFast(const UINT);
-	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::ModelLayer> &);
 };
 }
 }
@@ -182,7 +183,7 @@ public:
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
-inline tml::graphic::Manager *tml::graphic::ModelStage::GetManager(void) const
+inline tml::graphic::Manager *tml::graphic::ModelStage::GetManager(void)
 {
 	return (this->mgr_);
 }
@@ -374,11 +375,13 @@ private:
 
 	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_cont_;
 
-public:
-
 protected:
 	void Release(void);
 	INT Create(const tml::graphic::ModelDesc &, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE);
+
+	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
+	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
 
 public:
 	Model();
@@ -417,9 +420,6 @@ public:
 	void SetSampler(const UINT, tml::shared_ptr<tml::graphic::Sampler> &);
 
 	UINT GetStageCount(void) const;
-	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
 
 	virtual void DrawStageInit(void);
 	virtual void DrawStageDeferred3D(void);
