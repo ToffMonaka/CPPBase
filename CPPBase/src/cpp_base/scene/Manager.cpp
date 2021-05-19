@@ -8,6 +8,10 @@
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
+#include "BaseScene.h"
+#include "InitScene.h"
+#include "TitleScene.h"
+#include "Base2DNode.h"
 
 
 /**
@@ -201,6 +205,70 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 	this->input_mgr_ = desc.GetInputManager();
 	this->graphic_mgr_ = desc.GetGraphicManager();
 	this->sound_mgr_ = desc.GetSoundManager();
+
+	{// SceneFactory Set
+		this->SetSceneFactory(L"BaseScene",
+			[this] (const tml::INIFileReadDesc &read_desc) -> tml::shared_ptr<tml::scene::Scene> {
+				tml::shared_ptr<tml::scene::Scene> scene;
+
+				cpp_base::scene::BaseSceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(read_desc);
+
+				this->GetResource<cpp_base::scene::BaseScene>(scene, desc);
+
+				if (scene == nullptr) {
+					return (scene);
+				}
+
+				return (scene);
+			}
+		);
+
+		this->SetSceneFactory(L"InitScene",
+			[this] (const tml::INIFileReadDesc &read_desc) -> tml::shared_ptr<tml::scene::Scene> {
+				tml::shared_ptr<tml::scene::Scene> scene;
+
+				cpp_base::scene::InitSceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(read_desc);
+				desc.resource_name = L"INIT_SCENE";
+
+				this->GetResource<cpp_base::scene::InitScene>(scene, desc);
+
+				if (scene == nullptr) {
+					return (scene);
+				}
+
+				return (scene);
+			}
+		);
+
+		this->SetSceneFactory(L"TitleScene",
+			[this] (const tml::INIFileReadDesc &read_desc) -> tml::shared_ptr<tml::scene::Scene> {
+				tml::shared_ptr<tml::scene::Scene> scene;
+
+				cpp_base::scene::TitleSceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(read_desc);
+				desc.resource_name = L"TITLE_SCENE";
+
+				this->GetResource<cpp_base::scene::TitleScene>(scene, desc);
+
+				if (scene == nullptr) {
+					return (scene);
+				}
+
+				return (scene);
+			}
+		);
+	}
+
+	{// NodeFactory Set
+	}
 
 	if (this->CreateCommon2() < 0) {
 		this->Init();

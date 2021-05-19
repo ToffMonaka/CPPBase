@@ -19,7 +19,6 @@
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
-#include "../scene/InitScene.h"
 
 
 /**
@@ -199,12 +198,7 @@ INT cpp_base::MainThread::Start(void)
 	{// InitScene Start
 		tml::shared_ptr<tml::scene::Scene> scene;
 
-		cpp_base::scene::InitSceneDesc desc;
-
-		desc.SetManager(&this->scene_mgr_);
-		desc.resource_name = L"INIT_SCENE";
-
-		this->scene_mgr_.GetResource<cpp_base::scene::InitScene>(scene, desc);
+		this->scene_mgr_.GetScene(scene, L"InitScene", tml::INIFileReadDesc());
 
 		if (scene == nullptr) {
 			return (-1);

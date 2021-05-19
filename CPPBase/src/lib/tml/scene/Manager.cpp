@@ -8,9 +8,7 @@
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
-#include "Scene.h"
 #include "BaseScene.h"
-#include "Node.h"
 #include "Base2DNode.h"
 
 
@@ -183,6 +181,8 @@ void tml::scene::Manager::Init(void)
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
 	this->frame_rate_.Init();
+	this->scene_factory_cont_.clear();
+	this->node_factory_cont_.clear();
 
 	tml::Manager::Init();
 
@@ -217,6 +217,12 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 	this->input_mgr_ = desc.GetInputManager();
 	this->graphic_mgr_ = desc.GetGraphicManager();
 	this->sound_mgr_ = desc.GetSoundManager();
+
+	{// SceneFactory Set
+	}
+
+	{// NodeFactory Set
+	}
 
 	if (this->CreateCommon() < 0) {
 		this->Init();
@@ -298,6 +304,42 @@ INT tml::scene::Manager::CreateCommon(void)
 void tml::scene::Manager::DeleteCommon(void)
 {
 	this->common.Init();
+
+	return;
+}
+
+
+/**
+ * @brief SetSceneFactoryContainerä÷êî
+ * @param class_name (class_name)
+ * @param func (function)
+ */
+void tml::scene::Manager::SetSceneFactory(const WCHAR *class_name, std::function<tml::shared_ptr<tml::scene::Scene>(const tml::INIFileReadDesc &)> func)
+{
+	if ((class_name == nullptr)
+	|| (class_name[0] == 0)) {
+		return;
+	}
+
+	this->scene_factory_cont_[class_name] = func;
+
+	return;
+}
+
+
+/**
+ * @brief SetNodeFactoryContainerä÷êî
+ * @param class_name (class_name)
+ * @param func (function)
+ */
+void tml::scene::Manager::SetNodeFactory(const WCHAR *class_name, std::function<tml::shared_ptr<tml::scene::Node>(const tml::INIFileReadDesc &)> func)
+{
+	if ((class_name == nullptr)
+	|| (class_name[0] == 0)) {
+		return;
+	}
+
+	this->node_factory_cont_[class_name] = func;
 
 	return;
 }

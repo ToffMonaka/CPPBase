@@ -13,7 +13,6 @@
 #include "../../lib/tml/graphic/Font.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
-#include "TitleScene.h"
 
 
 /**
@@ -311,12 +310,7 @@ void cpp_base::scene::InitScene::Update(void)
 		{// TitleScene Start
 			tml::shared_ptr<tml::scene::Scene> scene;
 
-			cpp_base::scene::TitleSceneDesc desc;
-
-			desc.SetManager(this->GetManager());
-			desc.resource_name = L"TITLE_SCENE";
-
-			this->GetManager()->GetResource<cpp_base::scene::TitleScene>(scene, desc);
+			this->GetManager()->GetScene(scene, L"TitleScene", tml::INIFileReadDesc());
 
 			if (scene == nullptr) {
 				this->GetManager()->End();
