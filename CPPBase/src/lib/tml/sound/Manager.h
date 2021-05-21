@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../manager/Manager.h"
+#include "../manager/ManagerResourceFactory.h"
 #include "ManagerCommon.h"
 
 

@@ -155,9 +155,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		desc.near_clip = 0.1f;
 		desc.far_clip = 1000.0f;
 
-		graphic_mgr->GetResource<tml::graphic::Camera>(this->camera_, desc);
-
-		if (this->camera_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Camera>(this->camera_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -171,9 +169,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc);
-
-		if (this->bg_model_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -193,9 +189,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = L"res/bg_img1.png";
 
-			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
-
-			if (tex == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -214,9 +208,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		desc.SetManager(graphic_mgr);
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->wait_model_, desc);
-
-		if (this->wait_model_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->wait_model_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -236,9 +228,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, wait_tex_size);
 			desc.cpu_buffer_flag = true;
 
-			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
-
-			if (tex == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -256,9 +246,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		desc.SetManager(graphic_mgr);
 		desc.SetFontDesc(wait_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-		graphic_mgr->GetResource<tml::graphic::Font>(this->wait_font_, desc);
-
-		if (this->wait_font_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Font>(this->wait_font_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -310,16 +298,14 @@ void cpp_base::scene::InitScene::Update(void)
 		{// TitleScene Start
 			tml::shared_ptr<tml::scene::Scene> scene;
 
-			this->GetManager()->GetScene(scene, L"TitleScene", tml::INIFileReadDesc());
-
-			if (scene == nullptr) {
-				this->GetManager()->End();
+			if (this->GetManager()->scene_factory.Get(scene, L"TitleScene", tml::INIFileReadDesc()) == nullptr) {
+				this->GetManager()->EndScene();
 
 				return;
 			}
 
-			if (this->GetManager()->Start(scene) < 0) {
-				this->GetManager()->End();
+			if (this->GetManager()->StartScene(scene) < 0) {
+				this->GetManager()->EndScene();
 
 				return;
 			}

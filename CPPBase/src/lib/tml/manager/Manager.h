@@ -99,6 +99,8 @@ public:
 	template <typename T1, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
 	template <typename T1, typename T2>
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const tml::shared_ptr<T1> &);
+	template <typename T1, typename T2>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *);
 	void SetResourceName(tml::ManagerResource *, const WCHAR *);
 	bool CheckFriendResource(const tml::ManagerResource *) const;
@@ -232,6 +234,25 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 /**
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
+ * @param res (resource)
+ * @return dst_res (dst_resource)
+ */
+template <typename T1, typename T2>
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const tml::shared_ptr<T1> &res)
+{
+	if (std::is_same<T1, T2>::value) {
+		dst_res = res;
+	} else {
+		dst_res = std::dynamic_pointer_cast<T2>(res);
+	}
+
+	return (dst_res);
+}
+
+
+/**
+ * @brief GetResourceä÷êî
+ * @param dst_res (dst_resource)
  * @param res_name (resource_name)
  * @return dst_res (dst_resource)
  */
@@ -240,7 +261,8 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 {
 	dst_res.reset();
 
-	if (res_name == nullptr) {
+	if ((res_name == nullptr)
+	|| (res_name[0] == 0)) {
 		return (dst_res);
 	}
 

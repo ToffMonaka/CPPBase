@@ -84,7 +84,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 		{// MemoryUtil Create
 			std::unique_ptr<tml::MemoryUtilEngine> engine = std::make_unique<tml::DefaultMemoryUtilEngine>();
 
-			if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NEW, 0U) < 0) {
+			if (reinterpret_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NEW, 0U) < 0) {
 				cpp_base::InitMain();
 
 				return (-1);
@@ -117,7 +117,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// MemoryUtil Create
 		std::unique_ptr<tml::MemoryUtilEngine> engine = std::make_unique<tml::DefaultMemoryUtilEngine>();
 
-		if (dynamic_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC, sys_conf_file.data.application_memory_allocator_size) < 0) {
+		if (reinterpret_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC, sys_conf_file.data.application_memory_allocator_size) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -133,7 +133,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// StringUtil Create
 		std::unique_ptr<tml::StringUtilEngine> engine = std::make_unique<tml::DefaultStringUtilEngine>();
 
-		if (dynamic_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(sys_conf_file.data.application_locale_name.c_str()) < 0) {
+		if (reinterpret_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(sys_conf_file.data.application_locale_name.c_str()) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -149,7 +149,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// TimeUtil Create
 		std::unique_ptr<tml::TimeUtilEngine> engine = std::make_unique<tml::DefaultTimeUtilEngine>();
 
-		if (dynamic_cast<tml::DefaultTimeUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultTimeUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -165,7 +165,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// MathUtil Create
 		std::unique_ptr<tml::MathUtilEngine> engine = std::make_unique<tml::DefaultMathUtilEngine>();
 
-		if (dynamic_cast<tml::DefaultMathUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultMathUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -181,7 +181,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// RandomUtil Create
 		std::unique_ptr<tml::RandomUtilEngine> engine = std::make_unique<tml::DefaultRandomUtilEngine>();
 
-		if (dynamic_cast<tml::DefaultRandomUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultRandomUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -197,7 +197,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// FileUtil Create
 		std::unique_ptr<tml::FileUtilEngine> engine = std::make_unique<tml::DefaultFileUtilEngine>();
 
-		if (dynamic_cast<tml::DefaultFileUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultFileUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -213,7 +213,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// ThreadUtil Create
 		std::unique_ptr<tml::ThreadUtilEngine> engine = std::make_unique<tml::DefaultThreadUtilEngine>();
 
-		if (dynamic_cast<tml::DefaultThreadUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultThreadUtilEngine *>(engine.get())->Create() < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -229,7 +229,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// MainThread Start
 		std::unique_ptr<tml::MainThread> th = std::make_unique<cpp_base::MainThread>();
 
-		if (dynamic_cast<cpp_base::MainThread *>(th.get())->Create(instance_handle, cpp_base::ConstantUtil::WINDOW::NAME, wnd_show_type) < 0) {
+		if (reinterpret_cast<cpp_base::MainThread *>(th.get())->Create(instance_handle, cpp_base::ConstantUtil::WINDOW::NAME, wnd_show_type) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);

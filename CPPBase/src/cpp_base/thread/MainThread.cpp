@@ -198,13 +198,11 @@ INT cpp_base::MainThread::Start(void)
 	{// InitScene Start
 		tml::shared_ptr<tml::scene::Scene> scene;
 
-		this->scene_mgr_.GetScene(scene, L"InitScene", tml::INIFileReadDesc());
-
-		if (scene == nullptr) {
+		if (this->scene_mgr_.scene_factory.Get(scene, L"InitScene", tml::INIFileReadDesc()) == nullptr) {
 			return (-1);
 		}
 
-		if (this->scene_mgr_.Start(scene) < 0) {
+		if (this->scene_mgr_.StartScene(scene) < 0) {
 			return (-1);
 		}
 	}
@@ -212,7 +210,7 @@ INT cpp_base::MainThread::Start(void)
 	{// TestThread Start
 		std::unique_ptr<tml::SubThread> th = std::make_unique<cpp_base::TestThread>();
 
-		if (dynamic_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
+		if (reinterpret_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
 			return (-1);
 		}
 
@@ -241,7 +239,7 @@ void cpp_base::MainThread::Update(void)
 {
 	this->scene_mgr_.Update();
 
-	if (this->scene_mgr_.Get() == nullptr) {
+	if (this->scene_mgr_.GetScene() == nullptr) {
 		this->SetLoopFlag(false);
 	}
 

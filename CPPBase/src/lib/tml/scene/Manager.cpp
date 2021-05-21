@@ -181,8 +181,6 @@ void tml::scene::Manager::Init(void)
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
 	this->frame_rate_.Init();
-	this->scene_factory_cont_.clear();
-	this->node_factory_cont_.clear();
 
 	tml::Manager::Init();
 
@@ -219,9 +217,41 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 	this->sound_mgr_ = desc.GetSoundManager();
 
 	{// SceneFactory Set
+		this->scene_factory.AddFunction(L"BaseScene",
+			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Scene> {
+				tml::shared_ptr<tml::scene::Scene> scene;
+
+				tml::scene::BaseSceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(desc_read_desc);
+
+				if (this->GetResource<tml::scene::BaseScene>(scene, desc) == nullptr) {
+					return (scene);
+				}
+
+				return (scene);
+			}
+		);
 	}
 
 	{// NodeFactory Set
+		this->node_factory.AddFunction(L"Base2DNode",
+			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
+				tml::shared_ptr<tml::scene::Node> node;
+
+				tml::scene::Base2DNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(desc_read_desc);
+
+				if (this->GetResource<tml::scene::Base2DNode>(node, desc) == nullptr) {
+					return (node);
+				}
+
+				return (node);
+			}
+		);
 	}
 
 	if (this->CreateCommon() < 0) {
@@ -310,48 +340,12 @@ void tml::scene::Manager::DeleteCommon(void)
 
 
 /**
- * @brief SetSceneFactoryContainerä÷êî
- * @param class_name (class_name)
- * @param func (function)
- */
-void tml::scene::Manager::SetSceneFactory(const WCHAR *class_name, std::function<tml::shared_ptr<tml::scene::Scene>(const tml::INIFileReadDesc &)> func)
-{
-	if ((class_name == nullptr)
-	|| (class_name[0] == 0)) {
-		return;
-	}
-
-	this->scene_factory_cont_[class_name] = func;
-
-	return;
-}
-
-
-/**
- * @brief SetNodeFactoryContainerä÷êî
- * @param class_name (class_name)
- * @param func (function)
- */
-void tml::scene::Manager::SetNodeFactory(const WCHAR *class_name, std::function<tml::shared_ptr<tml::scene::Node>(const tml::INIFileReadDesc &)> func)
-{
-	if ((class_name == nullptr)
-	|| (class_name[0] == 0)) {
-		return;
-	}
-
-	this->node_factory_cont_[class_name] = func;
-
-	return;
-}
-
-
-/**
- * @brief Startä÷êî
+ * @brief StartSceneä÷êî
  * @param scene (scene)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::scene::Manager::Start(tml::shared_ptr<tml::scene::Scene> &scene)
+INT tml::scene::Manager::StartScene(tml::shared_ptr<tml::scene::Scene> &scene)
 {
 	if (scene == nullptr) {
 		return (-1);
@@ -379,9 +373,9 @@ INT tml::scene::Manager::Start(tml::shared_ptr<tml::scene::Scene> &scene)
 
 
 /**
- * @brief Endä÷êî
+ * @brief EndSceneä÷êî
  */
-void tml::scene::Manager::End(void)
+void tml::scene::Manager::EndScene(void)
 {
 	if (this->scene_ != nullptr) {
 		this->scene_end_flg_ = true;

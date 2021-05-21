@@ -284,9 +284,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// RasterizerState Create
 			tml::shared_ptr<tml::graphic::RasterizerState> rs;
 
-			rs = this->GetManager()->common.back_culling_rasterizer_state;
-
-			if (rs == nullptr) {
+			if (this->GetManager()->GetResource(rs, this->GetManager()->common.back_culling_rasterizer_state) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -298,9 +296,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// BlendState Create
 			tml::shared_ptr<tml::graphic::BlendState> bs;
 
-			bs = this->GetManager()->common.alignment_blend_state_array[1];
-
-			if (bs == nullptr) {
+			if (this->GetManager()->GetResource(bs, this->GetManager()->common.alignment_blend_state_array[1]) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -312,9 +308,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// DepthState Create
 			tml::shared_ptr<tml::graphic::DepthState> ds;
 
-			ds = this->GetManager()->common.reference_depth_state;
-
-			if (ds == nullptr) {
+			if (this->GetManager()->GetResource(ds, this->GetManager()->common.reference_depth_state) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -326,9 +320,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// Shader Create
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
-			shader = this->GetManager()->common.object_2d_model_shader;
-
-			if (shader == nullptr) {
+			if (this->GetManager()->GetResource(shader, this->GetManager()->common.object_2d_model_shader) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -366,9 +358,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 				desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
 				desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 
-				this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, desc);
-
-				if (mesh == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, desc) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -380,9 +370,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 			{// DiffuseSampler Create
 				tml::shared_ptr<tml::graphic::Sampler> samp;
 
-				samp = this->GetManager()->common.cc_sampler;
-
-				if (samp == nullptr) {
+				if (this->GetManager()->GetResource(samp, this->GetManager()->common.cc_sampler) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -403,9 +391,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		desc.SetManager(this->GetManager());
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Object2DModelShaderStructuredBuffer::ELEMENT), 1U);
 
-		this->GetManager()->GetResource<tml::graphic::Object2DModelShaderStructuredBuffer>(this->ssb_, desc);
-
-		if (this->ssb_ == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Object2DModelShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -418,9 +404,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		desc.SetManager(this->GetManager());
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Object2DModelLayerShaderStructuredBuffer::ELEMENT), 1U);
 
-		this->GetManager()->GetResource<tml::graphic::Object2DModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc);
-
-		if (this->layer_ssb_ == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Object2DModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

@@ -85,9 +85,7 @@ INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)
 			desc.SetManager(graphic_mgr);
 			desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-			graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->log_model, desc);
-
-			if (this->log_model == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->log_model, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -107,9 +105,7 @@ INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)
 				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, log_tex_size);
 				desc.cpu_buffer_flag = true;
 
-				graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
-
-				if (tex == nullptr) {
+				if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -127,9 +123,7 @@ INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)
 			desc.SetManager(graphic_mgr);
 			desc.SetFontDesc(log_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-			graphic_mgr->GetResource<tml::graphic::Font>(this->log_font, desc);
-
-			if (this->log_font == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Font>(this->log_font, desc) == nullptr) {
 				this->Init();
 
 				return (-1);

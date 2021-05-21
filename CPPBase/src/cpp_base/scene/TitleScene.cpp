@@ -165,9 +165,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.near_clip = 0.1f;
 		desc.far_clip = 1000.0f;
 
-		graphic_mgr->GetResource<tml::graphic::Camera>(this->camera_, desc);
-
-		if (this->camera_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Camera>(this->camera_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -180,9 +178,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.SetManager(graphic_mgr);
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 
-		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc);
-
-		if (this->bg_model_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -202,9 +198,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = L"res/title_bg_img1.png";
 
-			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
-
-			if (tex == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -220,9 +214,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.SetManager(graphic_mgr);
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
 
-		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->logo_model_, desc);
-
-		if (this->logo_model_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->logo_model_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -242,9 +234,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = L"res/title_logo_img1.png";
 
-			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
-
-			if (tex == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -266,9 +256,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -192.0f));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->start_model_, desc);
-
-		if (this->start_model_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->start_model_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -288,9 +276,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, start_tex_size);
 			desc.cpu_buffer_flag = true;
 
-			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
-
-			if (tex == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -308,9 +294,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.SetManager(graphic_mgr);
 		desc.SetFontDesc(start_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-		graphic_mgr->GetResource<tml::graphic::Font>(this->start_font_, desc);
-
-		if (this->start_font_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Font>(this->start_font_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -331,9 +315,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.SetManager(sound_mgr);
 		desc.file_read_desc.data.file_path = L"res/title_start_se_sound1.mp3";
 
-		sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound_, desc);
-
-		if (this->start_se_sound_ == nullptr) {
+		if (sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -350,9 +332,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(graphic_mgr->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_tex_size.y >> 1)));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->footer_model_, desc);
-
-		if (this->footer_model_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->footer_model_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -372,9 +352,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, footer_tex_size);
 			desc.cpu_buffer_flag = true;
 
-			graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc);
-
-			if (tex == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -392,9 +370,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.SetManager(graphic_mgr);
 		desc.SetFontDesc(footer_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-		graphic_mgr->GetResource<tml::graphic::Font>(this->footer_font_, desc);
-
-		if (this->footer_font_ == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Font>(this->footer_font_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -425,9 +401,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		desc.SetManager(sound_mgr);
 		desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.mp3";
 
-		sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound_, desc);
-
-		if (this->bgm_sound_ == nullptr) {
+		if (sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -482,7 +456,7 @@ void cpp_base::scene::TitleScene::Update(void)
 				if (this->start_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
 					sound_mgr->Play(this->start_se_sound_.get(), false);
 
-					this->GetManager()->End();
+					this->GetManager()->EndScene();
 				}
 			}
 

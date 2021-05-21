@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMathUINT.h"
 #include "../manager/Manager.h"
+#include "../manager/ManagerResourceFactory.h"
 #include "ManagerCommon.h"
 #include "Viewport.h"
 
