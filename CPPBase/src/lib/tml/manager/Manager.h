@@ -65,7 +65,6 @@ private:
 	HWND wnd_handle_;
 	HDC wnd_dc_handle_;
 	std::vector<std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>>> res_cont_;
-	std::unordered_map<tml::ManagerResource *, tml::shared_ptr<tml::ManagerResource>> res_cont_by_res_;
 	std::unordered_map<std::wstring, tml::shared_ptr<tml::ManagerResource>> res_cont_by_name_;
 	std::list<tml::shared_ptr<tml::ManagerResource>> check_res_cont_;
 	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator check_res_itr_;
@@ -102,6 +101,7 @@ public:
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const tml::shared_ptr<T1> &);
 	template <typename T1, typename T2>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *);
+	void SetResourceSharedPointer(tml::ManagerResource *, const tml::shared_ptr<tml::ManagerResource> &);
 	void SetResourceName(tml::ManagerResource *, const WCHAR *);
 	bool CheckFriendResource(const tml::ManagerResource *) const;
 	UINT GetEventCount(void) const;
@@ -197,27 +197,21 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T1>(1U);
 
-	this->friend_res_ = res.get();
-
 	if (reinterpret_cast<T1 *>(res.get())->Create(desc) < 0) {
-		this->friend_res_ = nullptr;
-
 		return (dst_res);
 	}
 
+	if ((res->GetResourceMainIndex() >= this->res_cont_.size())
+	|| (res->GetResourceSubIndex() >= this->res_cont_[res->GetResourceMainIndex()].size())) {
+		return (dst_res);
+	}
+
+	this->friend_res_ = res.get();
+	this->friend_res_->SetResourceSharedPointer(res);
+	this->friend_res_->SetResourceName(desc.resource_name.c_str());
 	this->friend_res_ = nullptr;
 
-	UINT res_main_index = res->GetResourceMainIndex();
-	UINT res_sub_index = res->GetResourceSubIndex();
-
-	if ((res_main_index >= this->res_cont_.size())
-	|| (res_sub_index >= this->res_cont_[res_main_index].size())) {
-		return (dst_res);
-	}
-
-	this->res_cont_[res_main_index][res_sub_index].push_back(res);
-
-	this->res_cont_by_res_.insert(std::make_pair(res.get(), res));
+	this->res_cont_[res->GetResourceMainIndex()][res->GetResourceSubIndex()].push_back(res);
 
 	if (!res->GetResourceName().empty()) {
 		this->res_cont_by_name_.insert(std::make_pair(res->GetResourceName(), res));
@@ -348,15 +342,9 @@ inline INT tml::Manager::AddEvent(const D &desc)
 
 		event = tml::make_unique<T>(1U);
 
-		this->friend_event_ = event.get();
-
 		if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {
-			this->friend_event_ = nullptr;
-
 			return (-1);
 		}
-
-		this->friend_event_ = nullptr;
 	}
 
 	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];

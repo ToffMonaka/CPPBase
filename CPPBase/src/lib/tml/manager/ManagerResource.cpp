@@ -148,17 +148,31 @@ void tml::ManagerResource::Init(void)
  */
 INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc, const UINT res_main_index, const UINT res_sub_index)
 {
-	if ((desc.GetManager() == nullptr)
-	|| (!desc.GetManager()->CheckFriendResource(this))) {
+	if (desc.GetManager() == nullptr) {
 		return (-1);
 	}
 
 	this->mgr_ = desc.GetManager();
 	this->res_main_index_ = res_main_index;
 	this->res_sub_index_ = res_sub_index;
-	this->res_name_ = desc.resource_name;
 
 	return (0);
+}
+
+
+/**
+ * @brief SetResourceSharedPointerŠÖ”
+ * @param res_shared_p (resource_shared_pointer)
+ */
+void tml::ManagerResource::SetResourceSharedPointer(const tml::shared_ptr<tml::ManagerResource> &res_shared_p)
+{
+	if (!this->mgr_->CheckFriendResource(this)) {
+		return;
+	}
+
+	this->res_shared_p_ = res_shared_p;
+
+	return;
 }
 
 

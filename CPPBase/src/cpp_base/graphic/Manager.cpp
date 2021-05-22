@@ -131,6 +131,12 @@ INT cpp_base::graphic::Manager::Create(const cpp_base::graphic::ManagerDesc &des
 		return (-1);
 	}
 
+	{// SceneFactory Set
+	}
+
+	{// NodeFactory Set
+	}
+
 	if (this->CreateCommon2() < 0) {
 		this->Init();
 

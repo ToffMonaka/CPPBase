@@ -92,8 +92,7 @@ void tml::ManagerEvent::Init(void)
  */
 INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc, const UINT event_index)
 {
-	if ((desc.GetManager() == nullptr)
-	|| (!desc.GetManager()->CheckFriendEvent(this))) {
+	if (desc.GetManager() == nullptr) {
 		return (-1);
 	}
 

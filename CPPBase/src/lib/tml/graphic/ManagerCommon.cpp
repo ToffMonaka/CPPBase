@@ -81,6 +81,7 @@ void tml::graphic::ManagerCommon::Init(void)
 	this->screen_model_shader.reset();
 	this->object_2d_model_shader.reset();
 	this->config_shader_constant_buffer.reset();
+	this->header_shader_constant_buffer.reset();
 	this->camera_shader_structured_buffer.reset();
 	this->light_shader_structured_buffer.reset();
 	this->fog_shader_structured_buffer.reset();

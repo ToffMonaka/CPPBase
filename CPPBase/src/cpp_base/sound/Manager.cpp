@@ -131,6 +131,12 @@ INT cpp_base::sound::Manager::Create(const cpp_base::sound::ManagerDesc &desc)
 		return (-1);
 	}
 
+	{// SceneFactory Set
+	}
+
+	{// NodeFactory Set
+	}
+
 	if (this->CreateCommon2() < 0) {
 		this->Init();
 

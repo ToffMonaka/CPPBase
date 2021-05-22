@@ -80,6 +80,7 @@ private:
 	tml::Manager *mgr_;
 	UINT res_main_index_;
 	UINT res_sub_index_;
+	tml::shared_ptr<tml::ManagerResource> res_shared_p_;
 	std::wstring res_name_;
 
 protected:
@@ -95,6 +96,8 @@ public:
 	tml::Manager *GetManager(void);
 	UINT GetResourceMainIndex(void) const;
 	UINT GetResourceSubIndex(void) const;
+	const tml::shared_ptr<tml::ManagerResource> &GetResourceSharedPointer(void) const;
+	void SetResourceSharedPointer(const tml::shared_ptr<tml::ManagerResource> &);
 	const std::wstring &GetResourceName(void) const;
 	void SetResourceName(const WCHAR *);
 };
@@ -137,6 +140,16 @@ inline UINT tml::ManagerResource::GetResourceMainIndex(void) const
 inline UINT tml::ManagerResource::GetResourceSubIndex(void) const
 {
 	return (this->res_sub_index_);
+}
+
+
+/**
+ * @brief GetResourceSharedPointerä÷êî
+ * @return res_shared_p (resource_shared_pointer)
+ */
+inline const tml::shared_ptr<tml::ManagerResource> &tml::ManagerResource::GetResourceSharedPointer(void) const
+{
+	return (this->res_shared_p_);
 }
 
 

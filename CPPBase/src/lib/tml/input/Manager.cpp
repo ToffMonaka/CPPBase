@@ -149,6 +149,12 @@ INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 
 	this->mouse_pos_ = tml::XMINT2EX(mouse_sys_pos.x, mouse_sys_pos.y);
 
+	{// SceneFactory Set
+	}
+
+	{// NodeFactory Set
+	}
+
 	if (this->CreateCommon() < 0) {
 		this->Init();
 

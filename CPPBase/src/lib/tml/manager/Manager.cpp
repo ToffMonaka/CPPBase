@@ -179,21 +179,20 @@ void tml::Manager::Update(void)
 	while (this->check_res_itr_ != this->check_res_cont_.end()) {
 		auto &res = (*this->check_res_itr_);
 
-		use_res_cnt = 2U;
-
-		++use_res_cnt;
+		use_res_cnt = 3U;
 
 		if (!res->GetResourceName().empty()) {
 			++use_res_cnt;
 		}
 
 		if (this->check_res_itr_->use_count() <= static_cast<LONG>(use_res_cnt)) {
-			UINT res_main_index = res->GetResourceMainIndex();
-			UINT res_sub_index = res->GetResourceSubIndex();
+			res->Init();
 
-			this->res_cont_[res_main_index][res_sub_index].remove(res);
+			this->friend_res_ = res.get();
+			this->friend_res_->SetResourceSharedPointer(tml::shared_ptr<tml::ManagerResource>());
+			this->friend_res_ = nullptr;
 
-			this->res_cont_by_res_.erase(res.get());
+			this->res_cont_[res->GetResourceMainIndex()][res->GetResourceSubIndex()].remove(res);
 
 			if (!res->GetResourceName().empty()) {
 				this->res_cont_by_name_.erase(res->GetResourceName());
@@ -275,19 +274,40 @@ void tml::Manager::DeleteResourceContainer(void)
 		for (auto &res_sub_cont : res_main_cont) {
 			for (auto &res : res_sub_cont) {
 				res->Init();
+
+				this->friend_res_ = res.get();
+				this->friend_res_->SetResourceSharedPointer(tml::shared_ptr<tml::ManagerResource>());
+				this->friend_res_ = nullptr;
 			}
-
-			res_sub_cont.clear();
 		}
-
-		res_main_cont.clear();
 	}
 
 	this->res_cont_.clear();
-	this->res_cont_by_res_.clear();
 	this->res_cont_by_name_.clear();
 	this->check_res_cont_.clear();
 	this->check_res_itr_ = this->check_res_cont_.end();
+
+	return;
+}
+
+
+/**
+ * @brief SetResourceSharedPointerä÷êî
+ * @param res (resource)
+ * @param res_shared_p (resource_shared_pointer)
+ */
+void tml::Manager::SetResourceSharedPointer(tml::ManagerResource *res, const tml::shared_ptr<tml::ManagerResource> &res_shared_p)
+{
+	if ((res == nullptr)
+	|| (res_shared_p == nullptr)) {
+		return;
+	}
+
+	auto &tmp_res = res->GetResourceSharedPointer();
+
+	this->friend_res_ = tmp_res.get();
+	this->friend_res_->SetResourceSharedPointer(res_shared_p);
+	this->friend_res_ = nullptr;
 
 	return;
 }
@@ -305,22 +325,14 @@ void tml::Manager::SetResourceName(tml::ManagerResource *res, const WCHAR *res_n
 		return;
 	}
 
-	auto tmp_res_itr = this->res_cont_by_res_.find(res);
-
-	if (tmp_res_itr == this->res_cont_by_res_.end()) {
-		return;
-	}
-
-	auto &tmp_res = tmp_res_itr->second;
+	auto &tmp_res = res->GetResourceSharedPointer();
 
 	if (!tmp_res->GetResourceName().empty()) {
 		this->res_cont_by_name_.erase(tmp_res->GetResourceName());
 	}
 
 	this->friend_res_ = tmp_res.get();
-
-	tmp_res->SetResourceName(res_name);
-
+	this->friend_res_->SetResourceName(res_name);
 	this->friend_res_ = nullptr;
 
 	if (!tmp_res->GetResourceName().empty()) {
