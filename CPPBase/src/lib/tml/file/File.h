@@ -31,6 +31,8 @@ public:
 	virtual ~FileReadDescData();
 
 	virtual void Init(void);
+
+	bool IsEmpty(void) const;
 };
 }
 
@@ -41,6 +43,22 @@ public:
 inline void tml::FileReadDescData::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief IsEmptyä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=îÒãÛ,true=ãÛ
+ */
+inline bool tml::FileReadDescData::IsEmpty(void) const
+{
+	if (!this->file_path.empty()
+	|| (this->file_buffer.GetLength() > 0U)) {
+		return (false);
+	}
+
+	return (true);
 }
 
 
@@ -278,6 +296,8 @@ public:
 	virtual ~FileWriteDescData();
 
 	virtual void Init(void);
+
+	bool IsEmpty(void) const;
 };
 }
 
@@ -288,6 +308,21 @@ public:
 inline void tml::FileWriteDescData::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief IsEmptyä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=îÒãÛ,true=ãÛ
+ */
+inline bool tml::FileWriteDescData::IsEmpty(void) const
+{
+	if (!this->file_path.empty()) {
+		return (false);
+	}
+
+	return (true);
 }
 
 

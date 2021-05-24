@@ -179,9 +179,8 @@ INT tml::TextFile::Read(void)
 	bin_file.data.file_buffer.WriteCHAR(0);
 
 	std::wstring buf_str;
-	CHAR *tmp_buf_str = reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get());
 
-	tml::StringUtil::GetString(buf_str, tmp_buf_str);
+	tml::StringUtil::GetString(buf_str, reinterpret_cast<CHAR *>(bin_file.data.file_buffer.Get()));
 
 	tml::StringUtil::Split(this->data.string_container, buf_str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(read_desc_dat->newline_code_type));
 

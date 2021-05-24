@@ -257,8 +257,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		for (auto &file_read_desc : desc.file_read_desc_container) {
 			auto file_read_desc_dat = file_read_desc.GetDataByParent();
 
-			if (!file_read_desc_dat->file_path.empty()
-			|| (file_read_desc_dat->file_buffer.GetLength() > 0U)) {
+			if (!file_read_desc_dat->IsEmpty()) {
 				tml::BinaryFile bin_file;
 
 				bin_file.read_desc.parent_data = file_read_desc_dat;
@@ -381,8 +380,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 		auto file_read_desc_dat = desc.file_read_desc_container[0].GetDataByParent();
 
-		if (!file_read_desc_dat->file_path.empty()
-		|| (file_read_desc_dat->file_buffer.GetLength() > 0U)) {
+		if (!file_read_desc_dat->IsEmpty()) {
 			tml::BinaryFile bin_file;
 
 			bin_file.read_desc.parent_data = file_read_desc_dat;

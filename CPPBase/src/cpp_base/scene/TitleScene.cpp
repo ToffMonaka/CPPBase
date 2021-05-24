@@ -455,8 +455,6 @@ void cpp_base::scene::TitleScene::Update(void)
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 				if (this->start_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
 					sound_mgr->Play(this->start_se_sound_.get(), false);
-
-					this->GetManager()->EndScene();
 				}
 			}
 

@@ -53,19 +53,23 @@ INT tml::ManagerResourceDesc::Read(const tml::INIFileReadDesc &read_desc)
 {
 	auto read_desc_dat = read_desc.GetDataByParent();
 
-	tml::INIFile ini_file;
+	if (!read_desc_dat->IsEmpty()) {
+		tml::INIFile ini_file;
 
-	ini_file.read_desc.parent_data = read_desc_dat;
+		ini_file.read_desc.parent_data = read_desc_dat;
 
-	if (ini_file.Read() < 0) {
-		return (-1);
+		if (ini_file.Read() < 0) {
+			return (-1);
+		}
+
+		if (ini_file.data.value_container.empty()) {
+			return (0);
+		}
+
+		return (this->ReadValue(ini_file));
 	}
 
-	if (ini_file.data.value_container.empty()) {
-		return (0);
-	}
-
-	return (this->ReadValue(ini_file));
+	return (0);
 }
 
 
