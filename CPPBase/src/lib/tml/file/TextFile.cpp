@@ -171,7 +171,7 @@ INT tml::TextFile::Read(void)
 
 	this->data.Init();
 
-	if (bin_file.data.file_buffer.GetSize() <= 0U) {
+	if (bin_file.data.file_buffer.GetLength() <= 0U) {
 		return (0);
 	}
 
