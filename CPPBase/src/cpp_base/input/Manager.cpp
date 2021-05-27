@@ -131,12 +131,6 @@ INT cpp_base::input::Manager::Create(const cpp_base::input::ManagerDesc &desc)
 		return (-1);
 	}
 
-	{// SceneFactory Set
-	}
-
-	{// NodeFactory Set
-	}
-
 	if (this->CreateCommon2() < 0) {
 		this->Init();
 

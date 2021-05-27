@@ -9,6 +9,7 @@
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
 #include "BaseScene.h"
+#include "BaseNode.h"
 #include "Base2DNode.h"
 
 
@@ -155,10 +156,8 @@ void tml::scene::Manager::Release(void)
 	if (this->scene_ != nullptr) {
 		this->scene_->End();
 
-		this->scene_end_flg_ = false;
-
 		this->scene_.reset();
-		this->next_scene_.reset();
+		this->scene_end_flg_ = false;
 	}
 
 	this->DeleteCommon();
@@ -181,6 +180,9 @@ void tml::scene::Manager::Init(void)
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
 	this->frame_rate_.Init();
+	this->scene_.reset();
+	this->scene_end_flg_ = false;
+	this->next_scene_.reset();
 
 	tml::Manager::Init();
 
@@ -236,6 +238,23 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 	}
 
 	{// NodeFactory Set
+		this->node_factory.AddFunction(L"BaseNode",
+			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
+				tml::shared_ptr<tml::scene::Node> node;
+
+				tml::scene::BaseNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(desc_read_desc);
+
+				if (this->GetResource<tml::scene::BaseNode>(node, desc) == nullptr) {
+					return (node);
+				}
+
+				return (node);
+			}
+		);
+
 		this->node_factory.AddFunction(L"Base2DNode",
 			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
 				tml::shared_ptr<tml::scene::Node> node;
@@ -271,6 +290,26 @@ void tml::scene::Manager::Update(void)
 {
 	tml::Manager::Update();
 
+	if (this->next_scene_ != nullptr) {
+		if (this->scene_ != nullptr) {
+			this->scene_->End();
+
+			this->scene_.reset();
+			this->scene_end_flg_ = false;
+		}
+
+		this->scene_.swap(this->next_scene_);
+
+		if (this->scene_->Start() < 0) {
+			this->scene_.reset();
+			this->scene_end_flg_ = false;
+
+			return;
+		}
+
+		this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
+	}
+
 	if (this->scene_ != nullptr) {
 		this->input_mgr_->Update();
 
@@ -285,27 +324,8 @@ void tml::scene::Manager::Update(void)
 		if (this->scene_end_flg_) {
 			this->scene_->End();
 
-			this->scene_end_flg_ = false;
-
 			this->scene_.reset();
-			this->next_scene_.reset();
-		}
-
-		if (this->next_scene_ != nullptr) {
-			this->scene_->End();
-
 			this->scene_end_flg_ = false;
-
-			this->scene_ = this->next_scene_;
-			this->next_scene_.reset();
-
-			if (this->scene_->Start() < 0) {
-				this->scene_.reset();
-
-				return;
-			}
-
-			this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
 		}
 	}
 
@@ -353,21 +373,6 @@ INT tml::scene::Manager::StartScene(tml::shared_ptr<tml::scene::Scene> &scene)
 
 	this->next_scene_ = scene;
 
-	if (this->scene_ != nullptr) {
-		return (0);
-	}
-
-	this->scene_ = this->next_scene_;
-	this->next_scene_.reset();
-
-	if (this->scene_->Start() < 0) {
-		this->scene_.reset();
-
-		return (-1);
-	}
-
-	this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
-
 	return (0);
 }
 
@@ -377,9 +382,11 @@ INT tml::scene::Manager::StartScene(tml::shared_ptr<tml::scene::Scene> &scene)
  */
 void tml::scene::Manager::EndScene(void)
 {
-	if (this->scene_ != nullptr) {
-		this->scene_end_flg_ = true;
+	if (this->scene_ == nullptr) {
+		return;
 	}
+
+	this->scene_end_flg_ = true;
 
 	return;
 }

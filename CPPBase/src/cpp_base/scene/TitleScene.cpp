@@ -421,7 +421,7 @@ INT cpp_base::scene::TitleScene::Start(void)
 {
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
-	sound_mgr->Play(this->bgm_sound_.get(), true);
+	sound_mgr->PlaySound(this->bgm_sound_.get(), true);
 
 	return (0);
 }
@@ -454,7 +454,7 @@ void cpp_base::scene::TitleScene::Update(void)
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 				if (this->start_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
-					sound_mgr->Play(this->start_se_sound_.get(), false);
+					sound_mgr->PlaySound(this->start_se_sound_.get(), false);
 				}
 			}
 

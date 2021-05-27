@@ -1,21 +1,21 @@
 /**
  * @file
- * @brief Base2DNodeヘッダーファイル
+ * @brief BaseNodeヘッダーファイル
  */
 #pragma once
 
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_SCENE.h"
-#include "../../lib/tml/scene/Base2DNode.h"
+#include "../../lib/tml/scene/BaseNode.h"
 
 
 namespace cpp_base {
 namespace scene {
 /**
- * @brief Base2DNodeDescクラス
+ * @brief BaseNodeDescクラス
  */
-class Base2DNodeDesc : public tml::scene::Base2DNodeDesc
+class BaseNodeDesc : public tml::scene::BaseNodeDesc
 {
 private:
 	cpp_base::scene::Manager *mgr_;
@@ -28,8 +28,8 @@ protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
-	Base2DNodeDesc();
-	virtual ~Base2DNodeDesc();
+	BaseNodeDesc();
+	virtual ~BaseNodeDesc();
 
 	virtual void Init(void);
 
@@ -43,9 +43,9 @@ public:
 /**
  * @brief Release関数
  */
-inline void cpp_base::scene::Base2DNodeDesc::Release(void)
+inline void cpp_base::scene::BaseNodeDesc::Release(void)
 {
-	tml::scene::Base2DNodeDesc::Release();
+	tml::scene::BaseNodeDesc::Release();
 
 	return;
 }
@@ -55,7 +55,7 @@ inline void cpp_base::scene::Base2DNodeDesc::Release(void)
  * @brief GetManager関数
  * @return mgr (manager)
  */
-inline cpp_base::scene::Manager *cpp_base::scene::Base2DNodeDesc::GetManager(void) const
+inline cpp_base::scene::Manager *cpp_base::scene::BaseNodeDesc::GetManager(void) const
 {
 	return (this->mgr_);
 }
@@ -64,28 +64,26 @@ inline cpp_base::scene::Manager *cpp_base::scene::Base2DNodeDesc::GetManager(voi
 namespace cpp_base {
 namespace scene {
 /**
- * @brief Base2DNodeクラス
+ * @brief BaseNodeクラス
  */
-class Base2DNode : public tml::scene::Base2DNode
+class BaseNode : public tml::scene::BaseNode
 {
-public: Base2DNode(const cpp_base::scene::Base2DNode &) = delete;
-public: cpp_base::scene::Base2DNode &operator =(const cpp_base::scene::Base2DNode &) = delete;
+public: BaseNode(const cpp_base::scene::BaseNode &) = delete;
+public: cpp_base::scene::BaseNode &operator =(const cpp_base::scene::BaseNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	cpp_base::scene::Manager *mgr_;
 
-public:
-
 protected:
 	void Release(void);
 
 public:
-	Base2DNode();
-	virtual ~Base2DNode();
+	BaseNode();
+	virtual ~BaseNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::Base2DNodeDesc &);
+	INT Create(const cpp_base::scene::BaseNodeDesc &);
 
 	cpp_base::scene::Manager *GetManager(void);
 };
@@ -97,7 +95,7 @@ public:
  * @brief GetManager関数
  * @return mgr (manager)
  */
-inline cpp_base::scene::Manager *cpp_base::scene::Base2DNode::GetManager(void)
+inline cpp_base::scene::Manager *cpp_base::scene::BaseNode::GetManager(void)
 {
 	return (this->mgr_);
 }

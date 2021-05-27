@@ -144,9 +144,9 @@ public:
 	bool GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
 	void SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE, const bool);
 
-	void Play(tml::sound::Sound *, const bool);
-	void Stop(tml::sound::Sound *);
-	void Pause(tml::sound::Sound *);
+	void PlaySound(tml::sound::Sound *, const bool);
+	void StopSound(tml::sound::Sound *);
+	void PauseSound(tml::sound::Sound *);
 };
 }
 }

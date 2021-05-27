@@ -31,6 +31,7 @@ namespace SCENE {
 	enum class NODE_TYPE : UINT {
 		NONE = 0U,
 		ETC,
+		BASE,
 		BASE_2D,
 		USER,
 		COUNT
@@ -54,6 +55,7 @@ class Manager;
 class Scene;
 class BaseScene;
 class Node;
+class BaseNode;
 class Base2DNode;
 }
 }

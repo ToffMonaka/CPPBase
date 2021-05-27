@@ -11,6 +11,7 @@
 #include "BaseScene.h"
 #include "InitScene.h"
 #include "TitleScene.h"
+#include "BaseNode.h"
 #include "Base2DNode.h"
 
 
@@ -260,6 +261,23 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 	}
 
 	{// NodeFactory Set
+		this->node_factory.AddFunction(L"BaseNode",
+			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
+				tml::shared_ptr<tml::scene::Node> node;
+
+				cpp_base::scene::BaseNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(desc_read_desc);
+
+				if (this->GetResource<cpp_base::scene::BaseNode>(node, desc) == nullptr) {
+					return (node);
+				}
+
+				return (node);
+			}
+		);
+
 		this->node_factory.AddFunction(L"Base2DNode",
 			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
 				tml::shared_ptr<tml::scene::Node> node;

@@ -193,12 +193,6 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 	this->volume_ary_ = desc.volume_array;
 	this->mute_flg_ary_ = desc.mute_flag_array;
 
-	{// SceneFactory Set
-	}
-
-	{// NodeFactory Set
-	}
-
 	if (this->CreateCommon() < 0) {
 		this->Init();
 
@@ -301,11 +295,11 @@ void tml::sound::Manager::SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE
 
 
 /**
- * @brief PlayŠÖ”
+ * @brief PlaySoundŠÖ”
  * @param sound (sound)
  * @param loop_flg (loop_flag)
  */
-void tml::sound::Manager::Play(tml::sound::Sound *sound, const bool loop_flg)
+void tml::sound::Manager::PlaySound(tml::sound::Sound *sound, const bool loop_flg)
 {
 	if ((sound == nullptr)
 	|| (sound->GetSource() == 0U)) {
@@ -322,10 +316,10 @@ void tml::sound::Manager::Play(tml::sound::Sound *sound, const bool loop_flg)
 
 
 /**
- * @brief StopŠÖ”
+ * @brief StopSoundŠÖ”
  * @param sound (sound)
  */
-void tml::sound::Manager::Stop(tml::sound::Sound *sound)
+void tml::sound::Manager::StopSound(tml::sound::Sound *sound)
 {
 	if ((sound == nullptr)
 	|| (sound->GetSource() == 0U)) {
@@ -339,10 +333,10 @@ void tml::sound::Manager::Stop(tml::sound::Sound *sound)
 
 
 /**
- * @brief PauseŠÖ”
+ * @brief PauseSoundŠÖ”
  * @param sound (sound)
  */
-void tml::sound::Manager::Pause(tml::sound::Sound *sound)
+void tml::sound::Manager::PauseSound(tml::sound::Sound *sound)
 {
 	if ((sound == nullptr)
 	|| (sound->GetSource() == 0U)) {

@@ -173,6 +173,7 @@
     <ClCompile Include="src\cpp_base\input\Manager.cpp" />
     <ClCompile Include="src\cpp_base\input\ManagerCommon.cpp" />
     <ClCompile Include="src\cpp_base\scene\Base2DNode.cpp" />
+    <ClCompile Include="src\cpp_base\scene\BaseNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\BaseScene.cpp" />
     <ClCompile Include="src\cpp_base\scene\InitScene.cpp" />
     <ClCompile Include="src\cpp_base\scene\Manager.cpp" />
@@ -252,6 +253,7 @@
     <ClCompile Include="src\lib\tml\random\RandomUtil.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\scene\Base2DNode.cpp" />
+    <ClCompile Include="src\lib\tml\scene\BaseNode.cpp" />
     <ClCompile Include="src\lib\tml\scene\BaseScene.cpp" />
     <ClCompile Include="src\lib\tml\scene\Manager.cpp" />
     <ClCompile Include="src\lib\tml\scene\ManagerCommon.cpp" />
@@ -305,6 +307,7 @@
     <ClInclude Include="src\cpp_base\input\ManagerCommon.h" />
     <ClInclude Include="src\cpp_base\resource\resource.h" />
     <ClInclude Include="src\cpp_base\scene\Base2DNode.h" />
+    <ClInclude Include="src\cpp_base\scene\BaseNode.h" />
     <ClInclude Include="src\cpp_base\scene\BaseScene.h" />
     <ClInclude Include="src\cpp_base\scene\InitScene.h" />
     <ClInclude Include="src\cpp_base\scene\Manager.h" />
@@ -407,6 +410,7 @@
     <ClInclude Include="src\lib\tml\rapidxml\rapidxml_print.hpp" />
     <ClInclude Include="src\lib\tml\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="src\lib\tml\scene\Base2DNode.h" />
+    <ClInclude Include="src\lib\tml\scene\BaseNode.h" />
     <ClInclude Include="src\lib\tml\scene\BaseScene.h" />
     <ClInclude Include="src\lib\tml\scene\Manager.h" />
     <ClInclude Include="src\lib\tml\scene\ManagerCommon.h" />
