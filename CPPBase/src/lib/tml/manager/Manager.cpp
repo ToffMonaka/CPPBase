@@ -299,7 +299,7 @@ void tml::Manager::DeleteResourceContainer(void)
 void tml::Manager::SetResourceSharedPointer(tml::ManagerResource *res, const tml::shared_ptr<tml::ManagerResource> &res_shared_p)
 {
 	if ((res == nullptr)
-	|| (res_shared_p == nullptr)) {
+	|| (res_shared_p.get() != res)) {
 		return;
 	}
 

@@ -134,29 +134,29 @@ INT tml::scene::BaseScene::Create(const tml::scene::BaseSceneDesc &desc)
 
 
 /**
- * @brief Startä÷êî
+ * @brief OnStartä÷êî
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::scene::BaseScene::Start(void)
+INT tml::scene::BaseScene::OnStart(void)
 {
 	return (0);
 }
 
 
 /**
- * @brief Endä÷êî
+ * @brief OnEndä÷êî
  */
-void tml::scene::BaseScene::End(void)
+void tml::scene::BaseScene::OnEnd(void)
 {
 	return;
 }
 
 
 /**
- * @brief Updateä÷êî
+ * @brief OnUpdateä÷êî
  */
-void tml::scene::BaseScene::Update(void)
+void tml::scene::BaseScene::OnUpdate(void)
 {
 	return;
 }

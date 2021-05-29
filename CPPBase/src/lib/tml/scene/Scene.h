@@ -59,6 +59,8 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::ConstantUtil::SCENE::SCENE_TYPE type_;
+	tml::shared_ptr<tml::scene::Node> header_node_;
+	bool started_flg_;
 
 protected:
 	void Release(void);
@@ -70,11 +72,16 @@ public:
 
 	virtual void Init(void);
 
-	virtual INT Start(void) = 0;
-	virtual void End(void) = 0;
-	virtual void Update(void) = 0;
+	INT Start(void);
+	void End(void);
+	void Update(void);
+
+	virtual INT OnStart(void) = 0;
+	virtual void OnEnd(void) = 0;
+	virtual void OnUpdate(void) = 0;
 
 	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
+	const tml::shared_ptr<tml::scene::Node> &GetHeaderNode(void);
 };
 }
 }
@@ -98,4 +105,14 @@ inline void tml::scene::Scene::Release(void)
 inline tml::ConstantUtil::SCENE::SCENE_TYPE tml::scene::Scene::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetHeaderNodeä÷êî
+ * @return header_node (header_node)
+ */
+inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Scene::GetHeaderNode(void)
+{
+	return (this->header_node_);
 }

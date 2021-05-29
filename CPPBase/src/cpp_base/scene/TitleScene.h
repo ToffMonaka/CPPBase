@@ -78,9 +78,9 @@ public:
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::TitleSceneDesc &);
 
-	virtual INT Start(void);
-	virtual void End(void);
-	virtual void Update(void);
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 };
 }
 }

@@ -261,7 +261,7 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 	static cpp_base::MainThread *th = nullptr;
 
 	if (th == nullptr) {
-		th = reinterpret_cast<cpp_base::MainThread *>(tml::ThreadUtil::Get());
+		th = dynamic_cast<cpp_base::MainThread *>(tml::ThreadUtil::Get());
 	}
 
 	switch (msg_type) {

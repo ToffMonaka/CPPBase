@@ -162,29 +162,29 @@ INT cpp_base::scene::BaseScene::Create(const cpp_base::scene::BaseSceneDesc &des
 
 
 /**
- * @brief Startä÷êî
+ * @brief OnStartä÷êî
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::BaseScene::Start(void)
+INT cpp_base::scene::BaseScene::OnStart(void)
 {
 	return (0);
 }
 
 
 /**
- * @brief Endä÷êî
+ * @brief OnEndä÷êî
  */
-void cpp_base::scene::BaseScene::End(void)
+void cpp_base::scene::BaseScene::OnEnd(void)
 {
 	return;
 }
 
 
 /**
- * @brief Updateä÷êî
+ * @brief OnUpdateä÷êî
  */
-void cpp_base::scene::BaseScene::Update(void)
+void cpp_base::scene::BaseScene::OnUpdate(void)
 {
 	return;
 }

@@ -87,6 +87,10 @@ public:
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::Base2DNodeDesc &);
 
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
+
 	cpp_base::scene::Manager *GetManager(void);
 };
 }

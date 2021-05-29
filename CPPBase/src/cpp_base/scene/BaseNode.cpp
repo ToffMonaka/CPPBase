@@ -159,3 +159,32 @@ INT cpp_base::scene::BaseNode::Create(const cpp_base::scene::BaseNodeDesc &desc)
 
 	return (0);
 }
+
+
+/**
+ * @brief OnStartä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::scene::BaseNode::OnStart(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief OnEndä÷êî
+ */
+void cpp_base::scene::BaseNode::OnEnd(void)
+{
+	return;
+}
+
+
+/**
+ * @brief OnUpdateä÷êî
+ */
+void cpp_base::scene::BaseNode::OnUpdate(void)
+{
+	return;
+}

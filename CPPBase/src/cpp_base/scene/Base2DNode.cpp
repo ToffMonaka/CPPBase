@@ -159,3 +159,32 @@ INT cpp_base::scene::Base2DNode::Create(const cpp_base::scene::Base2DNodeDesc &d
 
 	return (0);
 }
+
+
+/**
+ * @brief OnStartä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::scene::Base2DNode::OnStart(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief OnEndä÷êî
+ */
+void cpp_base::scene::Base2DNode::OnEnd(void)
+{
+	return;
+}
+
+
+/**
+ * @brief OnUpdateä÷êî
+ */
+void cpp_base::scene::Base2DNode::OnUpdate(void)
+{
+	return;
+}

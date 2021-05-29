@@ -85,9 +85,9 @@ public:
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::BaseSceneDesc &);
 
-	virtual INT Start(void);
-	virtual void End(void);
-	virtual void Update(void);
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 	cpp_base::scene::Manager *GetManager(void);
 };

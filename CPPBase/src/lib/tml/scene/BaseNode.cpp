@@ -131,3 +131,32 @@ INT tml::scene::BaseNode::Create(const tml::scene::BaseNodeDesc &desc)
 
 	return (0);
 }
+
+
+/**
+ * @brief OnStartä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::scene::BaseNode::OnStart(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief OnEndä÷êî
+ */
+void tml::scene::BaseNode::OnEnd(void)
+{
+	return;
+}
+
+
+/**
+ * @brief OnUpdateä÷êî
+ */
+void tml::scene::BaseNode::OnUpdate(void)
+{
+	return;
+}

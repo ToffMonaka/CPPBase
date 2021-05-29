@@ -77,6 +77,10 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::scene::Base2DNodeDesc &);
+
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 };
 }
 }

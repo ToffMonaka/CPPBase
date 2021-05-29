@@ -6,6 +6,7 @@
 
 #include "Scene.h"
 #include "Manager.h"
+#include "BaseNode.h"
 
 
 /**
@@ -73,7 +74,8 @@ INT tml::scene::SceneDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::scene::Scene::Scene() :
-	type_(tml::ConstantUtil::SCENE::SCENE_TYPE::NONE)
+	type_(tml::ConstantUtil::SCENE::SCENE_TYPE::NONE),
+	started_flg_(false)
 {
 	return;
 }
@@ -94,6 +96,8 @@ tml::scene::Scene::~Scene()
 void tml::scene::Scene::Init(void)
 {
 	this->type_ = tml::ConstantUtil::SCENE::SCENE_TYPE::NONE;
+	this->header_node_.reset();
+	this->started_flg_ = false;
 
 	tml::scene::ManagerResource::Init();
 
@@ -120,5 +124,76 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc, const tml::Cons
 
 	this->type_ = type;
 
+	{// HeaderNode Create
+		tml::scene::BaseNodeDesc desc;
+
+		desc.SetManager(this->GetManager());
+
+		if (this->GetManager()->GetResource<tml::scene::BaseNode>(this->header_node_, desc) == nullptr) {
+			return (-1);
+		}
+	}
+
 	return (0);
+}
+
+
+/**
+ * @brief Start関数
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::scene::Scene::Start(void)
+{
+	if (this->started_flg_) {
+		return (0);
+	}
+
+	if (this->OnStart() < 0) {
+		return (-1);
+	}
+
+	if (this->header_node_->Start() < 0) {
+		return (-1);
+	}
+
+	this->started_flg_ = true;
+
+	return (0);
+}
+
+
+/**
+ * @brief End関数
+ */
+void tml::scene::Scene::End(void)
+{
+	if (!this->started_flg_) {
+		return;
+	}
+
+	this->OnEnd();
+
+	this->header_node_->End();
+
+	this->started_flg_ = false;
+
+	return;
+}
+
+
+/**
+ * @brief Update関数
+ */
+void tml::scene::Scene::Update(void)
+{
+	if (!this->started_flg_) {
+		return;
+	}
+
+	this->OnUpdate();
+
+	this->header_node_->Update();
+
+	return;
 }

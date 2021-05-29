@@ -298,7 +298,7 @@ void tml::scene::Manager::Update(void)
 			this->scene_end_flg_ = false;
 		}
 
-		this->scene_.swap(this->next_scene_);
+		this->scene_ = std::move(this->next_scene_);
 
 		if (this->scene_->Start() < 0) {
 			this->scene_.reset();

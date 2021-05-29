@@ -152,3 +152,32 @@ INT tml::scene::Base2DNode::Create(const tml::scene::Base2DNodeDesc &desc)
 
 	return (0);
 }
+
+
+/**
+ * @brief OnStartä÷êî
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::scene::Base2DNode::OnStart(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief OnEndä÷êî
+ */
+void tml::scene::Base2DNode::OnEnd(void)
+{
+	return;
+}
+
+
+/**
+ * @brief OnUpdateä÷êî
+ */
+void tml::scene::Base2DNode::OnUpdate(void)
+{
+	return;
+}

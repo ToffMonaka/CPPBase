@@ -266,29 +266,29 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 
 
 /**
- * @brief StartŠÖ”
+ * @brief OnStartŠÖ”
  * @return res (result)<br>
  * 0–¢–=¸”s
  */
-INT cpp_base::scene::InitScene::Start(void)
+INT cpp_base::scene::InitScene::OnStart(void)
 {
 	return (0);
 }
 
 
 /**
- * @brief EndŠÖ”
+ * @brief OnEndŠÖ”
  */
-void cpp_base::scene::InitScene::End(void)
+void cpp_base::scene::InitScene::OnEnd(void)
 {
 	return;
 }
 
 
 /**
- * @brief UpdateŠÖ”
+ * @brief OnUpdateŠÖ”
  */
-void cpp_base::scene::InitScene::Update(void)
+void cpp_base::scene::InitScene::OnUpdate(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 

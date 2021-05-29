@@ -413,11 +413,11 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 
 /**
- * @brief StartŠÖ”
+ * @brief OnStartŠÖ”
  * @return res (result)<br>
  * 0–¢–=¸”s
  */
-INT cpp_base::scene::TitleScene::Start(void)
+INT cpp_base::scene::TitleScene::OnStart(void)
 {
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
@@ -428,18 +428,18 @@ INT cpp_base::scene::TitleScene::Start(void)
 
 
 /**
- * @brief EndŠÖ”
+ * @brief OnEndŠÖ”
  */
-void cpp_base::scene::TitleScene::End(void)
+void cpp_base::scene::TitleScene::OnEnd(void)
 {
 	return;
 }
 
 
 /**
- * @brief UpdateŠÖ”
+ * @brief OnUpdateŠÖ”
  */
-void cpp_base::scene::TitleScene::Update(void)
+void cpp_base::scene::TitleScene::OnUpdate(void)
 {
 	auto input_mgr = this->GetManager()->GetInputManager();
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();

@@ -150,7 +150,7 @@ public:
 	tml::sound::Manager *GetSoundManager(void);
 	const tml::FrameRate &GetFrameRate(void) const;
 
-	tml::scene::Scene *GetScene(void);
+	const tml::shared_ptr<tml::scene::Scene> &GetScene(void);
 	INT StartScene(tml::shared_ptr<tml::scene::Scene> &);
 	void EndScene(void);
 };
@@ -202,7 +202,7 @@ inline const tml::FrameRate &tml::scene::Manager::GetFrameRate(void) const
  * @brief GetSceneä÷êî
  * @return scene (scene)
  */
-inline tml::scene::Scene *tml::scene::Manager::GetScene(void)
+inline const tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetScene(void)
 {
-	return (this->scene_.get());
+	return (this->scene_);
 }
