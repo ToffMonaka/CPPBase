@@ -59,8 +59,9 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::ConstantUtil::SCENE::SCENE_TYPE type_;
-	tml::shared_ptr<tml::scene::Node> header_node_;
+	bool start_flg_;
 	bool started_flg_;
+	tml::shared_ptr<tml::scene::Node> header_node_;
 
 protected:
 	void Release(void);
@@ -81,20 +82,12 @@ public:
 	virtual void OnUpdate(void) = 0;
 
 	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
+	bool GetStartFlag(void) const;
+	void SetStartFlag(const bool);
+	bool IsStarted(void) const;
 	const tml::shared_ptr<tml::scene::Node> &GetHeaderNode(void);
 };
 }
-}
-
-
-/**
- * @brief Release関数
- */
-inline void tml::scene::Scene::Release(void)
-{
-	tml::scene::ManagerResource::Release();
-
-	return;
 }
 
 
@@ -105,6 +98,39 @@ inline void tml::scene::Scene::Release(void)
 inline tml::ConstantUtil::SCENE::SCENE_TYPE tml::scene::Scene::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetStartFlag関数
+ * @return start_flg (start_flag)
+ */
+inline bool tml::scene::Scene::GetStartFlag(void) const
+{
+	return (this->start_flg_);
+}
+
+
+/**
+ * @brief SetStartFlag関数
+ * @param start_flg (start_flag)
+ */
+inline void tml::scene::Scene::SetStartFlag(const bool start_flg)
+{
+	this->start_flg_ = start_flg;
+
+	return;
+}
+
+
+/**
+ * @brief IsStarted関数
+ * @return res_flg (result_flag)<br>
+ * false=非開始済み,true=開始済み
+ */
+inline bool tml::scene::Scene::IsStarted(void) const
+{
+	return (this->started_flg_);
 }
 
 

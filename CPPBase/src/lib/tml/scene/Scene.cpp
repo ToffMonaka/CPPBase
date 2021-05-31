@@ -75,6 +75,7 @@ INT tml::scene::SceneDesc::ReadValue(const tml::INIFile &ini_file)
  */
 tml::scene::Scene::Scene() :
 	type_(tml::ConstantUtil::SCENE::SCENE_TYPE::NONE),
+	start_flg_(false),
 	started_flg_(false)
 {
 	return;
@@ -91,12 +92,29 @@ tml::scene::Scene::~Scene()
 
 
 /**
+ * @brief ReleaseŠÖ”
+ */
+void tml::scene::Scene::Release(void)
+{
+	if (this->header_node_ != nullptr) {
+		this->header_node_->End();
+
+		this->header_node_.reset();
+	}
+
+	tml::scene::ManagerResource::Release();
+
+	return;
+}
+
+
+/**
  * @brief InitŠÖ”
  */
 void tml::scene::Scene::Init(void)
 {
 	this->type_ = tml::ConstantUtil::SCENE::SCENE_TYPE::NONE;
-	this->header_node_.reset();
+	this->start_flg_ = false;
 	this->started_flg_ = false;
 
 	tml::scene::ManagerResource::Init();
@@ -123,6 +141,7 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc, const tml::Cons
 	}
 
 	this->type_ = type;
+	this->start_flg_ = true;
 
 	{// HeaderNode Create
 		tml::scene::BaseNodeDesc desc;
@@ -141,23 +160,21 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc, const tml::Cons
 /**
  * @brief StartŠÖ”
  * @return res (result)<br>
- * 0–¢–=¸”s
+ * 0–¢–=¸”s,1=ŠJnÏ‚İ
  */
 INT tml::scene::Scene::Start(void)
 {
 	if (this->started_flg_) {
-		return (0);
+		return (1);
 	}
 
 	if (this->OnStart() < 0) {
 		return (-1);
 	}
 
-	if (this->header_node_->Start() < 0) {
-		return (-1);
-	}
-
 	this->started_flg_ = true;
+
+	this->header_node_->Start();
 
 	return (0);
 }
@@ -172,9 +189,9 @@ void tml::scene::Scene::End(void)
 		return;
 	}
 
-	this->OnEnd();
-
 	this->header_node_->End();
+
+	this->OnEnd();
 
 	this->started_flg_ = false;
 
@@ -193,7 +210,21 @@ void tml::scene::Scene::Update(void)
 
 	this->OnUpdate();
 
-	this->header_node_->Update();
+	if (!this->header_node_->IsStarted()) {
+		if (this->header_node_->GetStartFlag()) {
+			if (this->header_node_->Start() < 0) {
+			} else {
+			}
+		}
+	}
+
+	if (this->header_node_->GetStartFlag()) {
+		this->header_node_->Update();
+	}
+
+	if (!this->header_node_->GetStartFlag()) {
+		this->header_node_->End();
+	}
 
 	return;
 }

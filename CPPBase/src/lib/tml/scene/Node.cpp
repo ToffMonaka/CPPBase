@@ -74,7 +74,9 @@ INT tml::scene::NodeDesc::ReadValue(const tml::INIFile &ini_file)
  */
 tml::scene::Node::Node() :
 	type_(tml::ConstantUtil::SCENE::NODE_TYPE::NONE),
-	started_flg_(false)
+	start_flg_(false),
+	started_flg_(false),
+	parent_node_(nullptr)
 {
 	return;
 }
@@ -90,14 +92,36 @@ tml::scene::Node::~Node()
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+void tml::scene::Node::Release(void)
+{
+	for (auto &child_node : this->child_node_cont_) {
+		child_node->End();
+		child_node->SetParentNode(nullptr);
+
+		child_node.reset();
+	}
+
+	this->child_node_cont_.clear();
+	this->add_child_node_cont_.clear();
+	this->remove_child_node_cont_.clear();
+
+	tml::scene::ManagerResource::Release();
+
+	return;
+}
+
+
+/**
  * @brief Initä÷êî
  */
 void tml::scene::Node::Init(void)
 {
 	this->type_ = tml::ConstantUtil::SCENE::NODE_TYPE::NONE;
-	this->parent_node_.reset();
-	this->child_node_cont_.clear();
+	this->start_flg_ = false;
 	this->started_flg_ = false;
+	this->parent_node_ = nullptr;
 
 	tml::scene::ManagerResource::Init();
 
@@ -123,6 +147,7 @@ INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc, const tml::Consta
 	}
 
 	this->type_ = type;
+	this->start_flg_ = true;
 
 	return (0);
 }
@@ -131,12 +156,12 @@ INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc, const tml::Consta
 /**
  * @brief Startä÷êî
  * @return res (result)<br>
- * 0ñ¢ñû=é∏îs
+ * 0ñ¢ñû=é∏îs,1=äJénçœÇ›
  */
 INT tml::scene::Node::Start(void)
 {
 	if (this->started_flg_) {
-		return (0);
+		return (1);
 	}
 
 	if (this->OnStart() < 0) {
@@ -144,6 +169,10 @@ INT tml::scene::Node::Start(void)
 	}
 
 	this->started_flg_ = true;
+
+	for (auto &child_node : this->child_node_cont_) {
+		child_node->Start();
+	}
 
 	return (0);
 }
@@ -156,6 +185,10 @@ void tml::scene::Node::End(void)
 {
 	if (!this->started_flg_) {
 		return;
+	}
+
+	for (auto &child_node : this->child_node_cont_) {
+		child_node->End();
 	}
 
 	this->OnEnd();
@@ -177,6 +210,59 @@ void tml::scene::Node::Update(void)
 
 	this->OnUpdate();
 
+	if (this->add_child_node_cont_.size() > 0U) {
+		std::list<tml::shared_ptr<tml::scene::Node>> tmp_add_child_node_cont = std::move(this->add_child_node_cont_);
+
+		for (auto &child_node : tmp_add_child_node_cont) {
+			auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
+
+			if (child_node_itr != this->child_node_cont_.end()) {
+				continue;
+			}
+
+			if (!child_node->IsStarted()) {
+				this->child_node_cont_.push_back(child_node);
+
+				child_node->SetParentNode(this);
+			}
+		}
+	}
+
+	if (this->remove_child_node_cont_.size() > 0U) {
+		std::list<tml::shared_ptr<tml::scene::Node>> tmp_remove_child_node_cont = std::move(this->remove_child_node_cont_);
+
+		for (auto &child_node : tmp_remove_child_node_cont) {
+			auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
+
+			if (child_node_itr == this->child_node_cont_.end()) {
+				continue;
+			}
+
+			child_node->End();
+			child_node->SetParentNode(nullptr);
+
+			this->child_node_cont_.erase(child_node_itr);
+		}
+	}
+
+	for (auto &child_node : this->child_node_cont_) {
+		if (!child_node->IsStarted()) {
+			if (child_node->GetStartFlag()) {
+				if (child_node->Start() < 0) {
+				} else {
+				}
+			}
+		}
+
+		if (child_node->GetStartFlag()) {
+			child_node->Update();
+		}
+
+		if (!child_node->GetStartFlag()) {
+			child_node->End();
+		}
+	}
+
 	return;
 }
 
@@ -185,9 +271,9 @@ void tml::scene::Node::Update(void)
  * @brief SetParentNodeä÷êî
  * @param parent_node (parent_node)
  */
-void tml::scene::Node::SetParentNode(const tml::shared_ptr<tml::scene::Node> &parent_node)
+void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
 {
-	if (parent_node.get() == this) {
+	if (parent_node == this) {
 		return;
 	}
 
@@ -203,14 +289,28 @@ void tml::scene::Node::SetParentNode(const tml::shared_ptr<tml::scene::Node> &pa
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &child_node)
+INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
 		return (-1);
 	}
 
-	this->child_node_cont_.push_back(child_node);
+	if (this->started_flg_) {
+		this->add_child_node_cont_.push_back(child_node);
+	} else {
+		auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
+
+		if (child_node_itr != this->child_node_cont_.end()) {
+			return (-1);
+		}
+
+		if (!child_node->IsStarted()) {
+			this->child_node_cont_.push_back(child_node);
+
+			child_node->SetParentNode(this);
+		}
+	}
 
 	return (0);
 }
@@ -220,14 +320,27 @@ INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &chil
  * @brief RemoveChildNodeä÷êî
  * @param child_node (child_node)
  */
-void tml::scene::Node::RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &child_node)
+void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_node)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
 		return;
 	}
 
-	this->child_node_cont_.remove(child_node);
+	if (this->started_flg_) {
+		this->remove_child_node_cont_.push_back(child_node);
+	} else {
+		auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
+
+		if (child_node_itr == this->child_node_cont_.end()) {
+			return;
+		}
+
+		child_node->End();
+		child_node->SetParentNode(nullptr);
+
+		this->child_node_cont_.erase(child_node_itr);
+	}
 
 	return;
 }

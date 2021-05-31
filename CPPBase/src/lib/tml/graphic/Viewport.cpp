@@ -171,7 +171,7 @@ void tml::graphic::Viewport::Init(void)
  * @brief InitŠÖ”
  * @param vp (viewport)
  */
-inline void tml::graphic::Viewport::Init(const D3D11_VIEWPORT &vp)
+void tml::graphic::Viewport::Init(const D3D11_VIEWPORT &vp)
 {
 	this->Release();
 
@@ -186,7 +186,7 @@ inline void tml::graphic::Viewport::Init(const D3D11_VIEWPORT &vp)
  * @param pos (position)
  * @param size (size)
  */
-inline void tml::graphic::Viewport::Init(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size)
+void tml::graphic::Viewport::Init(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size)
 {
 	this->Release();
 
@@ -207,7 +207,7 @@ inline void tml::graphic::Viewport::Init(const tml::XMFLOAT2EX &pos, const tml::
  * @param size (size)
  * @param depth (depth)
  */
-inline void tml::graphic::Viewport::Init(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size, const tml::XMFLOAT2EX &depth)
+void tml::graphic::Viewport::Init(const tml::XMFLOAT2EX &pos, const tml::XMFLOAT2EX &size, const tml::XMFLOAT2EX &depth)
 {
 	this->Release();
 

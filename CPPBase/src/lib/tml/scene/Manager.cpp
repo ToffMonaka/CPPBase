@@ -130,8 +130,7 @@ void tml::scene::ManagerDesc::SetSoundManager(tml::sound::Manager *sound_mgr)
 tml::scene::Manager::Manager() :
 	input_mgr_(nullptr),
 	graphic_mgr_(nullptr),
-	sound_mgr_(nullptr),
-	scene_end_flg_(false)
+	sound_mgr_(nullptr)
 {
 	return;
 }
@@ -157,8 +156,9 @@ void tml::scene::Manager::Release(void)
 		this->scene_->End();
 
 		this->scene_.reset();
-		this->scene_end_flg_ = false;
 	}
+
+	this->start_scene_.reset();
 
 	this->DeleteCommon();
 	this->DeleteResourceContainer();
@@ -180,9 +180,6 @@ void tml::scene::Manager::Init(void)
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
 	this->frame_rate_.Init();
-	this->scene_.reset();
-	this->scene_end_flg_ = false;
-	this->next_scene_.reset();
 
 	tml::Manager::Init();
 
@@ -290,42 +287,53 @@ void tml::scene::Manager::Update(void)
 {
 	tml::Manager::Update();
 
-	if (this->next_scene_ != nullptr) {
+	if (this->start_scene_ != nullptr) {
+		tml::shared_ptr<tml::scene::Scene> tmp_start_scene = std::move(this->start_scene_);
+
 		if (this->scene_ != nullptr) {
 			this->scene_->End();
 
 			this->scene_.reset();
-			this->scene_end_flg_ = false;
 		}
 
-		this->scene_ = std::move(this->next_scene_);
-
-		if (this->scene_->Start() < 0) {
-			this->scene_.reset();
-			this->scene_end_flg_ = false;
-
-			return;
+		if (!tmp_start_scene->IsStarted()) {
+			this->scene_ = tmp_start_scene;
 		}
-
-		this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
 	}
 
 	if (this->scene_ != nullptr) {
-		this->input_mgr_->Update();
+		if (!this->scene_->IsStarted()) {
+			if (this->scene_->GetStartFlag()) {
+				if (this->scene_->Start() < 0) {
+					this->scene_->End();
 
-		this->scene_->Update();
+					this->scene_.reset();
 
-		this->graphic_mgr_->Update();
+					return;
+				} else {
+					this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
+				}
+			}
+		}
 
-		this->sound_mgr_->Update();
+		if (this->scene_->GetStartFlag()) {
+			this->input_mgr_->Update();
 
-		this->frame_rate_.Update();
+			this->scene_->Update();
 
-		if (this->scene_end_flg_) {
+			this->graphic_mgr_->Update();
+
+			this->sound_mgr_->Update();
+
+			this->frame_rate_.Update();
+		}
+
+		if (!this->scene_->GetStartFlag()) {
 			this->scene_->End();
 
 			this->scene_.reset();
-			this->scene_end_flg_ = false;
+
+			return;
 		}
 	}
 
@@ -371,7 +379,7 @@ INT tml::scene::Manager::StartScene(tml::shared_ptr<tml::scene::Scene> &scene)
 		return (-1);
 	}
 
-	this->next_scene_ = scene;
+	this->start_scene_ = scene;
 
 	return (0);
 }
@@ -386,7 +394,7 @@ void tml::scene::Manager::EndScene(void)
 		return;
 	}
 
-	this->scene_end_flg_ = true;
+	this->scene_->SetStartFlag(false);
 
 	return;
 }
