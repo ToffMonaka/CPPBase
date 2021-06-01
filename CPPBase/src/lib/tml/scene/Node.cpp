@@ -99,8 +99,6 @@ void tml::scene::Node::Release(void)
 	for (auto &child_node : this->child_node_cont_) {
 		child_node->End();
 		child_node->SetParentNode(nullptr);
-
-		child_node.reset();
 	}
 
 	this->child_node_cont_.clear();
@@ -156,19 +154,21 @@ INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc, const tml::Consta
 /**
  * @brief Startä÷êî
  * @return res (result)<br>
- * 0ñ¢ñû=é∏îs,1=äJénçœÇ›
+ * 0ñ¢ñû=é∏îs
  */
 INT tml::scene::Node::Start(void)
 {
-	if (this->started_flg_) {
-		return (1);
-	}
-
-	if (this->OnStart() < 0) {
+	if (!this->start_flg_) {
 		return (-1);
 	}
 
-	this->started_flg_ = true;
+	if (!this->started_flg_) {
+		if (this->OnStart() < 0) {
+			return (-1);
+		}
+
+		this->started_flg_ = true;
+	}
 
 	for (auto &child_node : this->child_node_cont_) {
 		child_node->Start();
@@ -183,17 +183,15 @@ INT tml::scene::Node::Start(void)
  */
 void tml::scene::Node::End(void)
 {
-	if (!this->started_flg_) {
-		return;
-	}
-
 	for (auto &child_node : this->child_node_cont_) {
 		child_node->End();
 	}
 
-	this->OnEnd();
+	if (this->started_flg_) {
+		this->OnEnd();
 
-	this->started_flg_ = false;
+		this->started_flg_ = false;
+	}
 
 	return;
 }
@@ -211,37 +209,18 @@ void tml::scene::Node::Update(void)
 	this->OnUpdate();
 
 	if (this->add_child_node_cont_.size() > 0U) {
-		std::list<tml::shared_ptr<tml::scene::Node>> tmp_add_child_node_cont = std::move(this->add_child_node_cont_);
+		std::list<tml::shared_ptr<tml::scene::Node>> tmp_child_node_cont = std::move(this->add_child_node_cont_);
 
-		for (auto &child_node : tmp_add_child_node_cont) {
-			auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
-
-			if (child_node_itr != this->child_node_cont_.end()) {
-				continue;
-			}
-
-			if (!child_node->IsStarted()) {
-				this->child_node_cont_.push_back(child_node);
-
-				child_node->SetParentNode(this);
-			}
+		for (auto &tmp_child_node : tmp_child_node_cont) {
+			this->AddChildNode(tmp_child_node, true);
 		}
 	}
 
 	if (this->remove_child_node_cont_.size() > 0U) {
-		std::list<tml::shared_ptr<tml::scene::Node>> tmp_remove_child_node_cont = std::move(this->remove_child_node_cont_);
+		std::list<tml::shared_ptr<tml::scene::Node>> tmp_child_node_cont = std::move(this->remove_child_node_cont_);
 
-		for (auto &child_node : tmp_remove_child_node_cont) {
-			auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
-
-			if (child_node_itr == this->child_node_cont_.end()) {
-				continue;
-			}
-
-			child_node->End();
-			child_node->SetParentNode(nullptr);
-
-			this->child_node_cont_.erase(child_node_itr);
+		for (auto &tmp_child_node : tmp_child_node_cont) {
+			this->RemoveChildNode(tmp_child_node, true);
 		}
 	}
 
@@ -289,27 +268,30 @@ void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node)
+INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool immediate_flg)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
 		return (-1);
 	}
 
-	if (this->started_flg_) {
-		this->add_child_node_cont_.push_back(child_node);
-	} else {
+	if (immediate_flg) {
+		if (child_node->GetParentNode() != nullptr) {
+			return (-1);
+		}
+
 		auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
 
 		if (child_node_itr != this->child_node_cont_.end()) {
 			return (-1);
 		}
 
-		if (!child_node->IsStarted()) {
-			this->child_node_cont_.push_back(child_node);
+		child_node->End();
+		child_node->SetParentNode(this);
 
-			child_node->SetParentNode(this);
-		}
+		this->child_node_cont_.push_back(child_node);
+	} else {
+		this->add_child_node_cont_.push_back(child_node);
 	}
 
 	return (0);
@@ -320,16 +302,18 @@ INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node
  * @brief RemoveChildNodeä÷êî
  * @param child_node (child_node)
  */
-void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_node)
+void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool immediate_flg)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
 		return;
 	}
 
-	if (this->started_flg_) {
-		this->remove_child_node_cont_.push_back(child_node);
-	} else {
+	if (immediate_flg) {
+		if (child_node->GetParentNode() == nullptr) {
+			return;
+		}
+
 		auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
 
 		if (child_node_itr == this->child_node_cont_.end()) {
@@ -340,6 +324,8 @@ void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_
 		child_node->SetParentNode(nullptr);
 
 		this->child_node_cont_.erase(child_node_itr);
+	} else {
+		this->remove_child_node_cont_.push_back(child_node);
 	}
 
 	return;

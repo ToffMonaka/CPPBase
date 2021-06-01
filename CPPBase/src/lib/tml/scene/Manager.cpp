@@ -154,10 +154,9 @@ void tml::scene::Manager::Release(void)
 {
 	if (this->scene_ != nullptr) {
 		this->scene_->End();
-
-		this->scene_.reset();
 	}
 
+	this->scene_.reset();
 	this->start_scene_.reset();
 
 	this->DeleteCommon();
@@ -288,17 +287,15 @@ void tml::scene::Manager::Update(void)
 	tml::Manager::Update();
 
 	if (this->start_scene_ != nullptr) {
-		tml::shared_ptr<tml::scene::Scene> tmp_start_scene = std::move(this->start_scene_);
+		tml::shared_ptr<tml::scene::Scene> tmp_scene = std::move(this->start_scene_);
 
 		if (this->scene_ != nullptr) {
 			this->scene_->End();
-
-			this->scene_.reset();
 		}
 
-		if (!tmp_start_scene->IsStarted()) {
-			this->scene_ = tmp_start_scene;
-		}
+		tmp_scene->End();
+
+		this->scene_ = tmp_scene;
 	}
 
 	if (this->scene_ != nullptr) {
@@ -375,7 +372,8 @@ void tml::scene::Manager::DeleteCommon(void)
  */
 INT tml::scene::Manager::StartScene(tml::shared_ptr<tml::scene::Scene> &scene)
 {
-	if (scene == nullptr) {
+	if ((scene == nullptr)
+	|| (scene == this->scene_)) {
 		return (-1);
 	}
 
@@ -390,11 +388,9 @@ INT tml::scene::Manager::StartScene(tml::shared_ptr<tml::scene::Scene> &scene)
  */
 void tml::scene::Manager::EndScene(void)
 {
-	if (this->scene_ == nullptr) {
-		return;
+	if (this->scene_ != nullptr) {
+		this->scene_->SetStartFlag(false);
 	}
-
-	this->scene_->SetStartFlag(false);
 
 	return;
 }

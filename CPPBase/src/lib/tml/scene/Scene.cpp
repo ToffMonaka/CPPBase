@@ -98,9 +98,9 @@ void tml::scene::Scene::Release(void)
 {
 	if (this->header_node_ != nullptr) {
 		this->header_node_->End();
-
-		this->header_node_.reset();
 	}
+
+	this->header_node_.reset();
 
 	tml::scene::ManagerResource::Release();
 
@@ -160,19 +160,21 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc, const tml::Cons
 /**
  * @brief StartŠÖ”
  * @return res (result)<br>
- * 0–¢–=¸”s,1=ŠJnÏ‚İ
+ * 0–¢–=¸”s
  */
 INT tml::scene::Scene::Start(void)
 {
-	if (this->started_flg_) {
-		return (1);
-	}
-
-	if (this->OnStart() < 0) {
+	if (!this->start_flg_) {
 		return (-1);
 	}
 
-	this->started_flg_ = true;
+	if (!this->started_flg_) {
+		if (this->OnStart() < 0) {
+			return (-1);
+		}
+
+		this->started_flg_ = true;
+	}
 
 	this->header_node_->Start();
 
@@ -185,15 +187,13 @@ INT tml::scene::Scene::Start(void)
  */
 void tml::scene::Scene::End(void)
 {
-	if (!this->started_flg_) {
-		return;
-	}
-
 	this->header_node_->End();
 
-	this->OnEnd();
+	if (this->started_flg_) {
+		this->OnEnd();
 
-	this->started_flg_ = false;
+		this->started_flg_ = false;
+	}
 
 	return;
 }

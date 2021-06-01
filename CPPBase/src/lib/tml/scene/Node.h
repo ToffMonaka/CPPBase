@@ -91,8 +91,8 @@ public:
 	tml::scene::Node *GetParentNode(void);
 	void SetParentNode(tml::scene::Node *);
 	const std::list<tml::shared_ptr<tml::scene::Node>> &GetChildNodeContainer(void);
-	INT AddChildNode(tml::shared_ptr<tml::scene::Node> &);
-	void RemoveChildNode(tml::shared_ptr<tml::scene::Node> &);
+	INT AddChildNode(tml::shared_ptr<tml::scene::Node> &, const bool immediate_flg = false);
+	void RemoveChildNode(tml::shared_ptr<tml::scene::Node> &, const bool immediate_flg = false);
 };
 }
 }
