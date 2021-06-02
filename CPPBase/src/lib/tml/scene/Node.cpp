@@ -74,6 +74,7 @@ INT tml::scene::NodeDesc::ReadValue(const tml::INIFile &ini_file)
  */
 tml::scene::Node::Node() :
 	type_(tml::ConstantUtil::SCENE::NODE_TYPE::NONE),
+	run_flg_(false),
 	start_flg_(false),
 	started_flg_(false),
 	parent_node_(nullptr)
@@ -98,12 +99,11 @@ void tml::scene::Node::Release(void)
 {
 	for (auto &child_node : this->child_node_cont_) {
 		child_node->End();
+		child_node->SetRunFlag(false);
 		child_node->SetParentNode(nullptr);
 	}
 
 	this->child_node_cont_.clear();
-	this->add_child_node_cont_.clear();
-	this->remove_child_node_cont_.clear();
 
 	tml::scene::ManagerResource::Release();
 
@@ -117,6 +117,7 @@ void tml::scene::Node::Release(void)
 void tml::scene::Node::Init(void)
 {
 	this->type_ = tml::ConstantUtil::SCENE::NODE_TYPE::NONE;
+	this->run_flg_ = false;
 	this->start_flg_ = false;
 	this->started_flg_ = false;
 	this->parent_node_ = nullptr;
@@ -162,7 +163,7 @@ INT tml::scene::Node::Start(void)
 		return (-1);
 	}
 
-	if (!this->started_flg_) {
+	if ((this->run_flg_) && (!this->started_flg_)) {
 		if (this->OnStart() < 0) {
 			return (-1);
 		}
@@ -187,7 +188,7 @@ void tml::scene::Node::End(void)
 		child_node->End();
 	}
 
-	if (this->started_flg_) {
+	if ((this->run_flg_) && (this->started_flg_)) {
 		this->OnEnd();
 
 		this->started_flg_ = false;
@@ -202,34 +203,16 @@ void tml::scene::Node::End(void)
  */
 void tml::scene::Node::Update(void)
 {
-	if (!this->started_flg_) {
+	if ((this->run_flg_) && (!this->started_flg_)) {
 		return;
 	}
 
 	this->OnUpdate();
 
-	if (this->add_child_node_cont_.size() > 0U) {
-		std::list<tml::shared_ptr<tml::scene::Node>> tmp_child_node_cont = std::move(this->add_child_node_cont_);
-
-		for (auto &tmp_child_node : tmp_child_node_cont) {
-			this->AddChildNode(tmp_child_node, true);
-		}
-	}
-
-	if (this->remove_child_node_cont_.size() > 0U) {
-		std::list<tml::shared_ptr<tml::scene::Node>> tmp_child_node_cont = std::move(this->remove_child_node_cont_);
-
-		for (auto &tmp_child_node : tmp_child_node_cont) {
-			this->RemoveChildNode(tmp_child_node, true);
-		}
-	}
-
 	for (auto &child_node : this->child_node_cont_) {
 		if (!child_node->IsStarted()) {
 			if (child_node->GetStartFlag()) {
-				if (child_node->Start() < 0) {
-				} else {
-				}
+				child_node->Start();
 			}
 		}
 
@@ -240,6 +223,22 @@ void tml::scene::Node::Update(void)
 		if (!child_node->GetStartFlag()) {
 			child_node->End();
 		}
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetRunFlagä÷êî
+ * @param run_flg (run_flag)
+ */
+void tml::scene::Node::SetRunFlag(const bool run_flg)
+{
+	this->run_flg_ = run_flg;
+
+	for (auto &child_node : this->child_node_cont_) {
+		child_node->SetRunFlag(run_flg);
 	}
 
 	return;
@@ -265,6 +264,7 @@ void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
 /**
  * @brief AddChildNodeä÷êî
  * @param child_node (child_node)
+ * @param immediate_flg (immediate_flag)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
@@ -287,11 +287,16 @@ INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node
 		}
 
 		child_node->End();
+		child_node->SetRunFlag(this->run_flg_);
 		child_node->SetParentNode(this);
 
 		this->child_node_cont_.push_back(child_node);
 	} else {
-		this->add_child_node_cont_.push_back(child_node);
+		tml::shared_ptr<tml::scene::Node> parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+
+		if (this->GetManager()->AddNode(parent_node, child_node) < 0) {
+			return (-1);
+		}
 	}
 
 	return (0);
@@ -301,6 +306,7 @@ INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node
 /**
  * @brief RemoveChildNodeä÷êî
  * @param child_node (child_node)
+ * @param immediate_flg (immediate_flag)
  */
 void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool immediate_flg)
 {
@@ -321,11 +327,14 @@ void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_
 		}
 
 		child_node->End();
+		child_node->SetRunFlag(false);
 		child_node->SetParentNode(nullptr);
 
 		this->child_node_cont_.erase(child_node_itr);
 	} else {
-		this->remove_child_node_cont_.push_back(child_node);
+		tml::shared_ptr<tml::scene::Node> parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+
+		this->GetManager()->RemoveNode(parent_node, child_node);
 	}
 
 	return;

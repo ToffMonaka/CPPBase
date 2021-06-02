@@ -131,6 +131,9 @@ INT cpp_base::sound::Manager::Create(const cpp_base::sound::ManagerDesc &desc)
 		return (-1);
 	}
 
+	{// Factory Set
+	}
+
 	if (this->CreateCommon2() < 0) {
 		this->Init();
 

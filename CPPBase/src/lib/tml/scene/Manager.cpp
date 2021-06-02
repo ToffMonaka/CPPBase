@@ -154,10 +154,13 @@ void tml::scene::Manager::Release(void)
 {
 	if (this->scene_ != nullptr) {
 		this->scene_->End();
+		this->scene_->SetRunFlag(false);
 	}
 
 	this->scene_.reset();
 	this->start_scene_.reset();
+	this->add_node_cont_.clear();
+	this->remove_node_cont_.clear();
 
 	this->DeleteCommon();
 	this->DeleteResourceContainer();
@@ -214,7 +217,7 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 	this->graphic_mgr_ = desc.GetGraphicManager();
 	this->sound_mgr_ = desc.GetSoundManager();
 
-	{// SceneFactory Set
+	{// Factory Set
 		this->scene_factory.AddFunction(L"BaseScene",
 			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Scene> {
 				tml::shared_ptr<tml::scene::Scene> scene;
@@ -231,9 +234,7 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 				return (scene);
 			}
 		);
-	}
 
-	{// NodeFactory Set
 		this->node_factory.AddFunction(L"BaseNode",
 			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
 				tml::shared_ptr<tml::scene::Node> node;
@@ -291,9 +292,11 @@ void tml::scene::Manager::Update(void)
 
 		if (this->scene_ != nullptr) {
 			this->scene_->End();
+			this->scene_->SetRunFlag(false);
 		}
 
 		tmp_scene->End();
+		tmp_scene->SetRunFlag(true);
 
 		this->scene_ = tmp_scene;
 	}
@@ -303,6 +306,7 @@ void tml::scene::Manager::Update(void)
 			if (this->scene_->GetStartFlag()) {
 				if (this->scene_->Start() < 0) {
 					this->scene_->End();
+					this->scene_->SetRunFlag(false);
 
 					this->scene_.reset();
 
@@ -327,10 +331,27 @@ void tml::scene::Manager::Update(void)
 
 		if (!this->scene_->GetStartFlag()) {
 			this->scene_->End();
+			this->scene_->SetRunFlag(false);
 
 			this->scene_.reset();
 
 			return;
+		}
+	}
+
+	if (this->add_node_cont_.size() > 0U) {
+		std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> tmp_node_cont = std::move(this->add_node_cont_);
+
+		for (auto &tmp_node : tmp_node_cont) {
+			tmp_node.first->AddChildNode(tmp_node.second, true);
+		}
+	}
+
+	if (this->remove_node_cont_.size() > 0U) {
+		std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> tmp_node_cont = std::move(this->remove_node_cont_);
+
+		for (auto &tmp_node : tmp_node_cont) {
+			tmp_node.first->RemoveChildNode(tmp_node.second, true);
 		}
 	}
 
@@ -391,6 +412,46 @@ void tml::scene::Manager::EndScene(void)
 	if (this->scene_ != nullptr) {
 		this->scene_->SetStartFlag(false);
 	}
+
+	return;
+}
+
+
+/**
+ * @brief AddNodeä÷êî
+ * @param parent_node (parent_node)
+ * @param child_node (child_node)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::scene::Manager::AddNode(tml::shared_ptr<tml::scene::Node> &parent_node, tml::shared_ptr<tml::scene::Node> &child_node)
+{
+	if ((parent_node == nullptr)
+	|| (child_node == nullptr)
+	|| (child_node == parent_node)) {
+		return (-1);
+	}
+
+	this->add_node_cont_.push_back(std::make_pair(parent_node, child_node));
+
+	return (0);
+}
+
+
+/**
+ * @brief RemoveNodeä÷êî
+ * @param parent_node (parent_node)
+ * @param child_node (child_node)
+ */
+void tml::scene::Manager::RemoveNode(tml::shared_ptr<tml::scene::Node> &parent_node, tml::shared_ptr<tml::scene::Node> &child_node)
+{
+	if ((parent_node == nullptr)
+	|| (child_node == nullptr)
+	|| (child_node == parent_node)) {
+		return;
+	}
+
+	this->remove_node_cont_.push_back(std::make_pair(parent_node, child_node));
 
 	return;
 }

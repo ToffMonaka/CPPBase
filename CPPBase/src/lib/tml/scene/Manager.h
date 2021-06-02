@@ -123,6 +123,8 @@ private:
 	tml::FrameRate frame_rate_;
 	tml::shared_ptr<tml::scene::Scene> scene_;
 	tml::shared_ptr<tml::scene::Scene> start_scene_;
+	std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> add_node_cont_;
+	std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> remove_node_cont_;
 
 public:
 	tml::ManagerResourceFactory<tml::scene::Scene> scene_factory;
@@ -152,6 +154,8 @@ public:
 	const tml::shared_ptr<tml::scene::Scene> &GetScene(void);
 	INT StartScene(tml::shared_ptr<tml::scene::Scene> &);
 	void EndScene(void);
+	INT AddNode(tml::shared_ptr<tml::scene::Node> &, tml::shared_ptr<tml::scene::Node> &);
+	void RemoveNode(tml::shared_ptr<tml::scene::Node> &, tml::shared_ptr<tml::scene::Node> &);
 };
 }
 }

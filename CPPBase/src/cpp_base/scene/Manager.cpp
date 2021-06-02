@@ -207,7 +207,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 	this->graphic_mgr_ = desc.GetGraphicManager();
 	this->sound_mgr_ = desc.GetSoundManager();
 
-	{// SceneFactory Set
+	{// Factory Set
 		this->scene_factory.AddFunction(L"BaseScene",
 			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Scene> {
 				tml::shared_ptr<tml::scene::Scene> scene;
@@ -258,9 +258,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 				return (scene);
 			}
 		);
-	}
 
-	{// NodeFactory Set
 		this->node_factory.AddFunction(L"BaseNode",
 			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
 				tml::shared_ptr<tml::scene::Node> node;

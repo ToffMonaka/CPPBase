@@ -131,6 +131,9 @@ INT cpp_base::input::Manager::Create(const cpp_base::input::ManagerDesc &desc)
 		return (-1);
 	}
 
+	{// Factory Set
+	}
+
 	if (this->CreateCommon2() < 0) {
 		this->Init();
 

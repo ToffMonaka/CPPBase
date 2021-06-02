@@ -59,12 +59,11 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::ConstantUtil::SCENE::NODE_TYPE type_;
+	bool run_flg_;
 	bool start_flg_;
 	bool started_flg_;
 	tml::scene::Node *parent_node_;
 	std::list<tml::shared_ptr<tml::scene::Node>> child_node_cont_;
-	std::list<tml::shared_ptr<tml::scene::Node>> add_child_node_cont_;
-	std::list<tml::shared_ptr<tml::scene::Node>> remove_child_node_cont_;
 
 protected:
 	void Release(void);
@@ -85,6 +84,8 @@ public:
 	virtual void OnUpdate(void) = 0;
 
 	tml::ConstantUtil::SCENE::NODE_TYPE GetType(void) const;
+	bool GetRunFlag(void) const;
+	void SetRunFlag(const bool);
 	bool GetStartFlag(void) const;
 	void SetStartFlag(const bool);
 	bool IsStarted(void) const;
@@ -105,6 +106,16 @@ public:
 inline tml::ConstantUtil::SCENE::NODE_TYPE tml::scene::Node::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetRunFlagŠÖ”
+ * @return run_flg (run_flag)
+ */
+inline bool tml::scene::Node::GetRunFlag(void) const
+{
+	return (this->run_flg_);
 }
 
 

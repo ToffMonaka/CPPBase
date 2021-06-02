@@ -59,6 +59,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::ConstantUtil::SCENE::SCENE_TYPE type_;
+	bool run_flg_;
 	bool start_flg_;
 	bool started_flg_;
 	tml::shared_ptr<tml::scene::Node> header_node_;
@@ -82,6 +83,8 @@ public:
 	virtual void OnUpdate(void) = 0;
 
 	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
+	bool GetRunFlag(void) const;
+	void SetRunFlag(const bool);
 	bool GetStartFlag(void) const;
 	void SetStartFlag(const bool);
 	bool IsStarted(void) const;
@@ -98,6 +101,16 @@ public:
 inline tml::ConstantUtil::SCENE::SCENE_TYPE tml::scene::Scene::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetRunFlagŠÖ”
+ * @return run_flg (run_flag)
+ */
+inline bool tml::scene::Scene::GetRunFlag(void) const
+{
+	return (this->run_flg_);
 }
 
 

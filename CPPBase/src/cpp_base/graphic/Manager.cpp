@@ -131,6 +131,9 @@ INT cpp_base::graphic::Manager::Create(const cpp_base::graphic::ManagerDesc &des
 		return (-1);
 	}
 
+	{// Factory Set
+	}
+
 	if (this->CreateCommon2() < 0) {
 		this->Init();
 

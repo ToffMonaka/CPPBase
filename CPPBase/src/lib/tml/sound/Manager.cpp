@@ -193,6 +193,9 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 	this->volume_ary_ = desc.volume_array;
 	this->mute_flg_ary_ = desc.mute_flag_array;
 
+	{// Factory Set
+	}
+
 	if (this->CreateCommon() < 0) {
 		this->Init();
 
