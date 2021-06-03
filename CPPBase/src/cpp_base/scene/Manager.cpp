@@ -12,7 +12,8 @@
 #include "InitScene.h"
 #include "TitleScene.h"
 #include "BaseNode.h"
-#include "Base2DNode.h"
+#include "InitSceneNode.h"
+#include "TitleSceneNode.h"
 
 
 /**
@@ -276,16 +277,33 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->node_factory.AddFunction(L"Base2DNode",
+		this->node_factory.AddFunction(L"InitSceneNode",
 			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
 				tml::shared_ptr<tml::scene::Node> node;
 
-				cpp_base::scene::Base2DNodeDesc desc;
+				cpp_base::scene::InitSceneNodeDesc desc;
 
 				desc.SetManager(this);
 				desc.Read(desc_read_desc);
 
-				if (this->GetResource<cpp_base::scene::Base2DNode>(node, desc) == nullptr) {
+				if (this->GetResource<cpp_base::scene::InitSceneNode>(node, desc) == nullptr) {
+					return (node);
+				}
+
+				return (node);
+			}
+		);
+
+		this->node_factory.AddFunction(L"TitleSceneNode",
+			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
+				tml::shared_ptr<tml::scene::Node> node;
+
+				cpp_base::scene::TitleSceneNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(desc_read_desc);
+
+				if (this->GetResource<cpp_base::scene::TitleSceneNode>(node, desc) == nullptr) {
 					return (node);
 				}
 

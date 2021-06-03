@@ -10,7 +10,6 @@
 #include "../sound/Manager.h"
 #include "BaseScene.h"
 #include "BaseNode.h"
-#include "Base2DNode.h"
 
 
 /**
@@ -251,23 +250,6 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 				return (node);
 			}
 		);
-
-		this->node_factory.AddFunction(L"Base2DNode",
-			[this] (const tml::INIFileReadDesc &desc_read_desc) -> tml::shared_ptr<tml::scene::Node> {
-				tml::shared_ptr<tml::scene::Node> node;
-
-				tml::scene::Base2DNodeDesc desc;
-
-				desc.SetManager(this);
-				desc.Read(desc_read_desc);
-
-				if (this->GetResource<tml::scene::Base2DNode>(node, desc) == nullptr) {
-					return (node);
-				}
-
-				return (node);
-			}
-		);
 	}
 
 	if (this->CreateCommon() < 0) {
@@ -288,7 +270,9 @@ void tml::scene::Manager::Update(void)
 	tml::Manager::Update();
 
 	if (this->start_scene_ != nullptr) {
-		tml::shared_ptr<tml::scene::Scene> tmp_scene = std::move(this->start_scene_);
+		tml::shared_ptr<tml::scene::Scene> tmp_scene;
+
+		tmp_scene = std::move(this->start_scene_);
 
 		if (this->scene_ != nullptr) {
 			this->scene_->End();
@@ -340,7 +324,9 @@ void tml::scene::Manager::Update(void)
 	}
 
 	if (this->add_node_cont_.size() > 0U) {
-		std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> tmp_node_cont = std::move(this->add_node_cont_);
+		std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> tmp_node_cont;
+
+		tmp_node_cont.swap(this->add_node_cont_);
 
 		for (auto &tmp_node : tmp_node_cont) {
 			tmp_node.first->AddChildNode(tmp_node.second, true);
@@ -348,7 +334,9 @@ void tml::scene::Manager::Update(void)
 	}
 
 	if (this->remove_node_cont_.size() > 0U) {
-		std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> tmp_node_cont = std::move(this->remove_node_cont_);
+		std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> tmp_node_cont;
+
+		tmp_node_cont.swap(this->remove_node_cont_);
 
 		for (auto &tmp_node : tmp_node_cont) {
 			tmp_node.first->RemoveChildNode(tmp_node.second, true);

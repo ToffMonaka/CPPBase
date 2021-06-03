@@ -10,7 +10,6 @@
 #include "BaseScene.h"
 #include "Node.h"
 #include "BaseNode.h"
-#include "Base2DNode.h"
 
 
 /**

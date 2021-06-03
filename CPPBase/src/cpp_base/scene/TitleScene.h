@@ -6,8 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_GRAPHIC.h"
-#include "../constant/ConstantUtil_SOUND.h"
 #include "BaseScene.h"
 
 
@@ -58,15 +56,6 @@ public: cpp_base::scene::TitleScene &operator =(const cpp_base::scene::TitleScen
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::shared_ptr<tml::graphic::Camera> camera_;
-	tml::shared_ptr<tml::graphic::Object2DModel> bg_model_;
-	tml::shared_ptr<tml::graphic::Object2DModel> logo_model_;
-	tml::shared_ptr<tml::graphic::Object2DModel> start_model_;
-	tml::shared_ptr<tml::graphic::Font> start_font_;
-	tml::shared_ptr<tml::sound::SESound> start_se_sound_;
-	tml::shared_ptr<tml::graphic::Object2DModel> footer_model_;
-	tml::shared_ptr<tml::graphic::Font> footer_font_;
-	tml::shared_ptr<tml::sound::BGMSound> bgm_sound_;
 
 protected:
 	void Release(void);

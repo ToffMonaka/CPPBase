@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../constant/ConstantUtil_GRAPHIC.h"
 #include "BaseScene.h"
 
 
@@ -57,11 +56,6 @@ public: cpp_base::scene::InitScene &operator =(const cpp_base::scene::InitScene 
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::shared_ptr<tml::graphic::Camera> camera_;
-	tml::shared_ptr<tml::graphic::Object2DModel> bg_model_;
-	tml::TIME_REAL wait_update_time_;
-	tml::shared_ptr<tml::graphic::Object2DModel> wait_model_;
-	tml::shared_ptr<tml::graphic::Font> wait_font_;
 
 protected:
 	void Release(void);
