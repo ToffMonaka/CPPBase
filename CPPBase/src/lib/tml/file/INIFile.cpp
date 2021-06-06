@@ -174,6 +174,7 @@ INT tml::INIFile::Read(void)
 	const std::wstring equal_str = L"=";
 	const std::wstring comment_str = L";";
 	const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
+	std::wstring line_str;
 	size_t section_start_str_index = 0U;
 	size_t section_end_str_index = 0U;
 	size_t equal_str_index = 0U;
@@ -183,40 +184,42 @@ INT tml::INIFile::Read(void)
 	std::wstring val_name;
 	std::wstring val;
 
-	for (auto txt_str : txt_file.data.string_container) {
-		if (txt_str.empty()) {
+	for (auto &txt_file_str : txt_file.data.string_container) {
+		if (txt_file_str.empty()) {
 			continue;
 		}
 
+		line_str = txt_file_str;
+
 		{// コメントを削除
-			comment_str_index = txt_str.find(comment_str);
+			comment_str_index = line_str.find(comment_str);
 
 			if (comment_str_index != std::wstring::npos) {
-				txt_str.erase(comment_str_index);
+				line_str.erase(comment_str_index);
 			}
 		}
 
-		if (txt_str.empty()) {
+		if (line_str.empty()) {
 			continue;
 		}
 
 		{// ｢=｣を確認
-			equal_str_index = txt_str.find(equal_str);
+			equal_str_index = line_str.find(equal_str);
 
 			if (equal_str_index == std::wstring::npos) {
-				section_start_str_index = txt_str.find(section_start_str);
+				section_start_str_index = line_str.find(section_start_str);
 
 				if (section_start_str_index == std::wstring::npos) {
 					continue;
 				}
 
-				section_end_str_index = txt_str.find(section_end_str, section_start_str_index + section_start_str.length());
+				section_end_str_index = line_str.find(section_end_str, section_start_str_index + section_start_str.length());
 
 				if (section_end_str_index == std::wstring::npos) {
 					continue;
 				}
 
-				tmp_section_name = txt_str.substr(section_start_str_index + section_start_str.length(), section_end_str_index - (section_start_str_index + section_start_str.length()));
+				tmp_section_name = line_str.substr(section_start_str_index + section_start_str.length(), section_end_str_index - (section_start_str_index + section_start_str.length()));
 
 				if (!tmp_section_name.empty()) {
 					section_name = tmp_section_name;
@@ -240,14 +243,14 @@ INT tml::INIFile::Read(void)
 			continue;
 		}
 
-		val_name = txt_str.substr(0U, equal_str_index);
+		val_name = line_str.substr(0U, equal_str_index);
 		val_name = std::regex_replace(val_name.c_str(), needless_pattern, empty_str);
 
 		if (val_name.empty()) {
 			continue;
 		}
 
-		val = txt_str.substr(equal_str_index + equal_str.length());
+		val = line_str.substr(equal_str_index + equal_str.length());
 		val = std::regex_replace(val.c_str(), needless_pattern, empty_str);
 
 		val_name_itr->second.insert(std::make_pair(val_name, val));
@@ -277,17 +280,17 @@ INT tml::INIFile::Write(void)
 		const std::wstring section_start_str = L"[";
 		const std::wstring section_end_str = L"]";
 		const std::wstring equal_str = L"=";
-		std::wstring str;
+		std::wstring line_str;
 
 		for (auto &val_name_cont : this->data.value_container) {
-			str = section_start_str + val_name_cont.first + section_end_str;
+			line_str = section_start_str + val_name_cont.first + section_end_str;
 
-			txt_file.data.string_container.push_back(str);
+			txt_file.data.string_container.push_back(line_str);
 
 			for (auto &val : val_name_cont.second) {
-				str = val.first + equal_str + val.second;
+				line_str = val.first + equal_str + val.second;
 
-				txt_file.data.string_container.push_back(str);
+				txt_file.data.string_container.push_back(line_str);
 			}
 
 			txt_file.data.string_container.push_back(empty_str);

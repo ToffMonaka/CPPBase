@@ -166,7 +166,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		return (-1);
 	}
 
-	auto &file_buf = bin_file.data.file_buffer;
+	auto &file_buf = bin_file.data.buffer;
 
 	if (file_buf.GetLength() <= 0U) {
 		return (-1);

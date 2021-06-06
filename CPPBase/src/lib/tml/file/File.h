@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../memory/DynamicBuffer.h"
 
 
 namespace tml {
@@ -21,7 +20,6 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 public:
 	std::wstring file_path;
-	tml::DynamicBuffer file_buffer;
 
 protected:
 	void Release(void);
@@ -53,12 +51,7 @@ inline void tml::FileReadDescData::Release(void)
  */
 inline bool tml::FileReadDescData::IsEmpty(void) const
 {
-	if (!this->file_path.empty()
-	|| (this->file_buffer.GetLength() > 0U)) {
-		return (false);
-	}
-
-	return (true);
+	return (this->file_path.empty());
 }
 
 
@@ -79,16 +72,10 @@ protected:
 public:
 	FileReadDesc();
 	FileReadDesc(const WCHAR *);
-	FileReadDesc(const tml::DynamicBuffer &);
-	FileReadDesc(tml::DynamicBuffer &&);
-	FileReadDesc(const T *);
 	virtual ~FileReadDesc();
 
 	virtual void Init(void);
 	virtual void Init(const WCHAR *);
-	virtual void Init(const tml::DynamicBuffer &);
-	virtual void Init(tml::DynamicBuffer &&);
-	virtual void Init(const T *);
 
 	const T *GetDataByParent(void) const;
 };
@@ -116,46 +103,6 @@ inline tml::FileReadDesc<T>::FileReadDesc(const WCHAR *file_path) :
 {
 	this->data.file_path = file_path;
 
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- * @param file_buf (file_buffer)
- */
-template <typename T>
-inline tml::FileReadDesc<T>::FileReadDesc(const tml::DynamicBuffer &file_buf) :
-	parent_data(nullptr)
-{
-	this->data.file_buffer = file_buf;
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- * @param file_buf (file_buf)
- */
-template <typename T>
-inline tml::FileReadDesc<T>::FileReadDesc(tml::DynamicBuffer &&file_buf) :
-	parent_data(nullptr)
-{
-	this->data.file_buffer = std::move(file_buf);
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- * @param parent_dat (parent_data)
- */
-template <typename T>
-inline tml::FileReadDesc<T>::FileReadDesc(const T *parent_dat) :
-	parent_data(parent_dat)
-{
 	return;
 }
 
@@ -215,56 +162,6 @@ inline void tml::FileReadDesc<T>::Init(const WCHAR *file_path)
 
 
 /**
- * @brief Init関数
- * @param file_buf (file_buffer)
- */
-template <typename T>
-inline void tml::FileReadDesc<T>::Init(const tml::DynamicBuffer &file_buf)
-{
-	this->Release();
-
-	this->data.Init();
-	this->data.file_buffer = file_buf;
-	this->parent_data = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- * @param file_buf (file_buf)
- */
-template <typename T>
-inline void tml::FileReadDesc<T>::Init(tml::DynamicBuffer &&file_buf)
-{
-	this->Release();
-
-	this->data.Init();
-	this->data.file_buffer = std::move(file_buf);
-	this->parent_data = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- * @param parent_dat (parent_data)
- */
-template <typename T>
-inline void tml::FileReadDesc<T>::Init(const T *parent_dat)
-{
-	this->Release();
-
-	this->data.Init();
-	this->parent_data = parent_dat;
-
-	return;
-}
-
-
-/**
  * @brief GetDataByParent関数
  * @return dat (data)
  */
@@ -318,11 +215,7 @@ inline void tml::FileWriteDescData::Release(void)
  */
 inline bool tml::FileWriteDescData::IsEmpty(void) const
 {
-	if (!this->file_path.empty()) {
-		return (false);
-	}
-
-	return (true);
+	return (this->file_path.empty());
 }
 
 
@@ -343,12 +236,10 @@ protected:
 public:
 	FileWriteDesc();
 	FileWriteDesc(const WCHAR *);
-	FileWriteDesc(const T *);
 	virtual ~FileWriteDesc();
 
 	virtual void Init(void);
 	virtual void Init(const WCHAR *);
-	virtual void Init(const T *);
 
 	const T *GetDataByParent(void) const;
 };
@@ -376,18 +267,6 @@ inline tml::FileWriteDesc<T>::FileWriteDesc(const WCHAR *file_path) :
 {
 	this->data.file_path = file_path;
 
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- * @param parent_dat (parent_data)
- */
-template <typename T>
-inline tml::FileWriteDesc<T>::FileWriteDesc(const T *parent_dat) :
-	parent_data(parent_dat)
-{
 	return;
 }
 
@@ -441,22 +320,6 @@ inline void tml::FileWriteDesc<T>::Init(const WCHAR *file_path)
 	this->data.Init();
 	this->data.file_path = file_path;
 	this->parent_data = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- * @param parent_dat (parent_data)
- */
-template <typename T>
-inline void tml::FileWriteDesc<T>::Init(const T *parent_dat)
-{
-	this->Release();
-
-	this->data.Init();
-	this->parent_data = parent_dat;
 
 	return;
 }

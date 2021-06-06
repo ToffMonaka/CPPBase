@@ -268,7 +268,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 					return (-1);
 				}
 
-				auto &file_buf = bin_file.data.file_buffer;
+				auto &file_buf = bin_file.data.buffer;
 
 				if (file_buf.GetLength() <= 0U) {
 					this->Init();
@@ -391,7 +391,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				return (-1);
 			}
 
-			auto &file_buf = bin_file.data.file_buffer;
+			auto &file_buf = bin_file.data.buffer;
 
 			if (file_buf.GetLength() <= 0U) {
 				this->Init();

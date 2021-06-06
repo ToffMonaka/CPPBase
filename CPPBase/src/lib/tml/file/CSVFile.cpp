@@ -174,6 +174,7 @@ INT tml::CSVFile::Read(void)
 	const std::wstring double_dq_str = L"\"\"";
 	const std::wstring comment_str = L"#";
 	const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
+	std::wstring line_str;
 	size_t comma_str_index = 0U;
 	size_t dq_str_index = 0U;
 	size_t dq_str_sub_index = 0U;
@@ -184,20 +185,22 @@ INT tml::CSVFile::Read(void)
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
 
-	for (auto txt_str : txt_file.data.string_container) {
-		if (txt_str.empty()) {
+	for (auto &txt_file_str : txt_file.data.string_container) {
+		if (txt_file_str.empty()) {
 			continue;
 		}
+
+		line_str = txt_file_str;
 
 		{// コメントを削除
 			dq_str_index = 0U;
 			dq_str_sub_index = 0U;
 			dq_str_cnt = 0U;
 
-			comment_str_index = txt_str.find(comment_str);
+			comment_str_index = line_str.find(comment_str);
 
 			while (comment_str_index != std::wstring::npos) {
-				dq_str_index = txt_str.find(dq_str, dq_str_sub_index);
+				dq_str_index = line_str.find(dq_str, dq_str_sub_index);
 
 				while (dq_str_index != std::wstring::npos) {
 					if (dq_str_index >= comment_str_index) {
@@ -208,22 +211,22 @@ INT tml::CSVFile::Read(void)
 
 					dq_str_sub_index = dq_str_index + dq_str.length();
 
-					dq_str_index = txt_str.find(dq_str, dq_str_index + dq_str.length());
+					dq_str_index = line_str.find(dq_str, dq_str_index + dq_str.length());
 				}
 
 				if ((dq_str_cnt & 1U) == 0U) {
-					txt_str.erase(comment_str_index);
+					line_str.erase(comment_str_index);
 
 					break;
 				} else {
 					dq_str_sub_index = comment_str_index + comment_str.length();
 
-					comment_str_index = txt_str.find(comment_str, comment_str_index + comment_str.length());
+					comment_str_index = line_str.find(comment_str, comment_str_index + comment_str.length());
 				}
 			}
 		}
 
-		if (txt_str.empty()) {
+		if (line_str.empty()) {
 			continue;
 		}
 
@@ -232,10 +235,10 @@ INT tml::CSVFile::Read(void)
 			dq_str_sub_index = 0U;
 			dq_str_cnt = 0U;
 
-			comma_str_index = txt_str.find(comma_str);
+			comma_str_index = line_str.find(comma_str);
 
 			while (comma_str_index != std::wstring::npos) {
-				dq_str_index = txt_str.find(dq_str, dq_str_sub_index);
+				dq_str_index = line_str.find(dq_str, dq_str_sub_index);
 
 				while (dq_str_index != std::wstring::npos) {
 					if (dq_str_index >= comma_str_index) {
@@ -244,24 +247,24 @@ INT tml::CSVFile::Read(void)
 
 					++dq_str_cnt;
 
-					dq_str_index = txt_str.find(dq_str, dq_str_index + dq_str.length());
+					dq_str_index = line_str.find(dq_str, dq_str_index + dq_str.length());
 				}
 
 				if ((dq_str_cnt & 1U) == 0U) {
-					txt_str.replace(comma_str_index, comma_str.length(), newline_code_str);
+					line_str.replace(comma_str_index, comma_str.length(), newline_code_str);
 
 					dq_str_sub_index = comma_str_index + newline_code_str.length();
 
-					comma_str_index = txt_str.find(comma_str, comma_str_index + newline_code_str.length());
+					comma_str_index = line_str.find(comma_str, comma_str_index + newline_code_str.length());
 				} else {
 					dq_str_sub_index = comma_str_index + comma_str.length();
 
-					comma_str_index = txt_str.find(comma_str, comma_str_index + comma_str.length());
+					comma_str_index = line_str.find(comma_str, comma_str_index + comma_str.length());
 				}
 			}
 		}
 
-		tml::StringUtil::Split(column_val_cont, txt_str.c_str(), newline_code_str.c_str());
+		tml::StringUtil::Split(column_val_cont, line_str.c_str(), newline_code_str.c_str());
 
 		for (auto &column_val : column_val_cont) {
 			{// ｢""｣を｢"｣に変換
@@ -328,12 +331,12 @@ INT tml::CSVFile::Write(void)
 	if (!this->data.value_container.empty()) {
 		const std::wstring empty_str = L"";
 		const std::wstring comma_str = L",";
-		std::wstring str;
+		std::wstring line_str;
 
 		for (auto &val_cont : this->data.value_container) {
-			tml::StringUtil::Join(str, val_cont, comma_str.c_str());
+			tml::StringUtil::Join(line_str, val_cont, comma_str.c_str());
 
-			txt_file.data.string_container.push_back(str);
+			txt_file.data.string_container.push_back(line_str);
 		}
 
 		txt_file.data.string_container.push_back(empty_str);

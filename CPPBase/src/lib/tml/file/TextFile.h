@@ -48,6 +48,7 @@ namespace tml {
 class TextFileReadDescData : public tml::BinaryFileReadDescData
 {
 public:
+	std::wstring string;
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
 protected:
@@ -58,6 +59,8 @@ public:
 	virtual ~TextFileReadDescData();
 
 	virtual void Init(void);
+
+	bool IsEmpty(void) const;
 };
 
 using TextFileReadDesc = tml::FileReadDesc<tml::TextFileReadDescData>;
@@ -72,6 +75,21 @@ inline void tml::TextFileReadDescData::Release(void)
 	tml::BinaryFileReadDescData::Release();
 
 	return;
+}
+
+
+/**
+ * @brief IsEmptyä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=îÒãÛ,true=ãÛ
+ */
+inline bool tml::TextFileReadDescData::IsEmpty(void) const
+{
+	if (!this->string.empty()) {
+		return (false);
+	}
+
+	return (tml::BinaryFileReadDescData::IsEmpty());
 }
 
 
@@ -93,6 +111,8 @@ public:
 	virtual ~TextFileWriteDescData();
 
 	virtual void Init(void);
+
+	bool IsEmpty(void) const;
 };
 
 using TextFileWriteDesc = tml::FileWriteDesc<tml::TextFileWriteDescData>;
@@ -107,6 +127,17 @@ inline void tml::TextFileWriteDescData::Release(void)
 	tml::BinaryFileWriteDescData::Release();
 
 	return;
+}
+
+
+/**
+ * @brief IsEmptyä÷êî
+ * @return res_flg (result_flag)<br>
+ * false=îÒãÛ,true=ãÛ
+ */
+inline bool tml::TextFileWriteDescData::IsEmpty(void) const
+{
+	return (tml::BinaryFileWriteDescData::IsEmpty());
 }
 
 

@@ -172,44 +172,47 @@ INT tml::ConfigFile::Read(void)
 	const std::wstring equal_str = L"=";
 	const std::wstring comment_str = L"#";
 	const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
+	std::wstring line_str;
 	size_t equal_str_index = 0U;
 	size_t comment_str_index = 0U;
 	std::wstring val_name;
 	std::wstring val;
 
-	for (auto txt_str : txt_file.data.string_container) {
-		if (txt_str.empty()) {
+	for (auto &txt_file_str : txt_file.data.string_container) {
+		if (txt_file_str.empty()) {
 			continue;
 		}
 
+		line_str = txt_file_str;
+
 		{// コメントを削除
-			comment_str_index = txt_str.find(comment_str);
+			comment_str_index = line_str.find(comment_str);
 
 			if (comment_str_index != std::wstring::npos) {
-				txt_str.erase(comment_str_index);
+				line_str.erase(comment_str_index);
 			}
 		}
 
-		if (txt_str.empty()) {
+		if (line_str.empty()) {
 			continue;
 		}
 
 		{// ｢=｣を確認
-			equal_str_index = txt_str.find(equal_str);
+			equal_str_index = line_str.find(equal_str);
 
 			if (equal_str_index == std::wstring::npos) {
 				continue;
 			}
 		}
 
-		val_name = txt_str.substr(0U, equal_str_index);
+		val_name = line_str.substr(0U, equal_str_index);
 		val_name = std::regex_replace(val_name.c_str(), needless_pattern, empty_str);
 
 		if (val_name.empty()) {
 			continue;
 		}
 
-		val = txt_str.substr(equal_str_index + equal_str.length());
+		val = line_str.substr(equal_str_index + equal_str.length());
 		val = std::regex_replace(val.c_str(), needless_pattern, empty_str);
 
 		this->data.value_container.insert(std::make_pair(val_name, val));
@@ -237,12 +240,12 @@ INT tml::ConfigFile::Write(void)
 	if (!this->data.value_container.empty()) {
 		const std::wstring empty_str = L"";
 		const std::wstring equal_str = L"=";
-		std::wstring str;
+		std::wstring line_str;
 
 		for (auto &val : this->data.value_container) {
-			str = val.first + equal_str + val.second;
+			line_str = val.first + equal_str + val.second;
 
-			txt_file.data.string_container.push_back(str);
+			txt_file.data.string_container.push_back(line_str);
 		}
 
 		txt_file.data.string_container.push_back(empty_str);

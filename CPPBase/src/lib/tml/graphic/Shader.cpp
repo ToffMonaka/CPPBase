@@ -81,10 +81,10 @@ HRESULT __stdcall tml::graphic::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, L
 		return (E_FAIL);
 	}
 
-	(*dst_dat) = bin_file.data.file_buffer.Get();
-	(*dst_dat_len) = bin_file.data.file_buffer.GetLength();
+	(*dst_dat) = bin_file.data.buffer.Get();
+	(*dst_dat_len) = bin_file.data.buffer.GetLength();
 
-	bin_file.data.file_buffer.Clear();
+	bin_file.data.buffer.Clear();
 
 	return (S_OK);
 }
@@ -389,7 +389,7 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 		return (-1);
 	}
 
-	auto &file_buf = bin_file.data.file_buffer;
+	auto &file_buf = bin_file.data.buffer;
 
 	if (file_buf.GetLength() <= 0U) {
 		this->Init();
