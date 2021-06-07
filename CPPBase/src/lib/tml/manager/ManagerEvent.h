@@ -72,11 +72,12 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::Manager *mgr_;
-	UINT event_index_;
+	UINT event_main_index_;
+	UINT event_sub_index_;
 
 protected:
 	void Release(void);
-	INT Create(const tml::ManagerEventDesc &, const UINT);
+	INT Create(const tml::ManagerEventDesc &, const UINT, const UINT);
 
 public:
 	ManagerEvent();
@@ -85,7 +86,8 @@ public:
 	virtual void Init(void);
 
 	tml::Manager *GetManager(void);
-	UINT GetEventIndex(void) const;
+	UINT GetEventMainIndex(void) const;
+	UINT GetEventSubIndex(void) const;
 };
 }
 
@@ -110,10 +112,20 @@ inline tml::Manager *tml::ManagerEvent::GetManager(void)
 
 
 /**
- * @brief GetEventIndexŠÖ”
- * @return event_index (event_index)
+ * @brief GetEventMainIndexŠÖ”
+ * @return event_main_index (event_main_index)
  */
-inline UINT tml::ManagerEvent::GetEventIndex(void) const
+inline UINT tml::ManagerEvent::GetEventMainIndex(void) const
 {
-	return (this->event_index_);
+	return (this->event_main_index_);
+}
+
+
+/**
+ * @brief GetEventSubIndexŠÖ”
+ * @return event_sub_index (event_sub_index)
+ */
+inline UINT tml::ManagerEvent::GetEventSubIndex(void) const
+{
+	return (this->event_sub_index_);
 }

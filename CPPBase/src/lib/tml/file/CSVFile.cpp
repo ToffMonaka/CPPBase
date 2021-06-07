@@ -164,7 +164,7 @@ INT tml::CSVFile::Read(void)
 
 	this->data.Init();
 
-	if (txt_file.data.string_container.empty()) {
+	if (txt_file.data.line_string_container.empty()) {
 		return (0);
 	}
 
@@ -185,12 +185,12 @@ INT tml::CSVFile::Read(void)
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
 
-	for (auto &txt_file_str : txt_file.data.string_container) {
-		if (txt_file_str.empty()) {
+	for (auto &txt_file_line_str : txt_file.data.line_string_container) {
+		if (txt_file_line_str.empty()) {
 			continue;
 		}
 
-		line_str = txt_file_str;
+		line_str = txt_file_line_str;
 
 		{// ƒRƒƒ“ƒg‚ðíœ
 			dq_str_index = 0U;
@@ -336,10 +336,10 @@ INT tml::CSVFile::Write(void)
 		for (auto &val_cont : this->data.value_container) {
 			tml::StringUtil::Join(line_str, val_cont, comma_str.c_str());
 
-			txt_file.data.string_container.push_back(line_str);
+			txt_file.data.line_string_container.push_back(line_str);
 		}
 
-		txt_file.data.string_container.push_back(empty_str);
+		txt_file.data.line_string_container.push_back(empty_str);
 	}
 
 	txt_file.write_desc.parent_data = write_desc_dat;

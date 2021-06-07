@@ -445,12 +445,12 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
-	for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(); ++event_i) {
-		auto event = reinterpret_cast<const tml::input::ManagerEvent *>(input_mgr->GetEventFast(event_i));
+	for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE)); ++event_i) {
+		auto event = reinterpret_cast<tml::input::ManagerEvent *>(input_mgr->GetEventFast(static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE), event_i));
 
-		switch (event->GetEventType()) {
-		case tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE: {
-			auto &event_dat = reinterpret_cast<const tml::input::MouseEvent *>(event)->GetData();
+		switch (event->GetEventSubIndex()) {
+		case tml::input::MouseEvent::EVENT_SUB_INDEX: {
+			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event)->GetData();
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 				if (this->start_model_->IsHitByMouse(input_mgr->GetMousePosition())) {

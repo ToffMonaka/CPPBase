@@ -78,7 +78,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::input::ManagerEventDesc &, const tml::ConstantUtil::INPUT::EVENT_TYPE);
+	INT Create(const tml::input::ManagerEventDesc &, const tml::ConstantUtil::INPUT::EVENT_TYPE, const UINT);
 
 public:
 	ManagerEvent();

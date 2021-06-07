@@ -59,7 +59,8 @@ void tml::ManagerEventDesc::SetManager(tml::Manager *mgr)
  */
 tml::ManagerEvent::ManagerEvent() :
 	mgr_(nullptr),
-	event_index_(0U)
+	event_main_index_(0U),
+	event_sub_index_(0U)
 {
 	return;
 }
@@ -86,18 +87,20 @@ void tml::ManagerEvent::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @param event_index (event_index)
+ * @param event_main_index (event_main_index)
+ * @param event_sub_index (event_sub_index)
  * @return res (result)<br>
  * 0–¢–=¸”s
  */
-INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc, const UINT event_index)
+INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc, const UINT event_main_index, const UINT event_sub_index)
 {
 	if (desc.GetManager() == nullptr) {
 		return (-1);
 	}
 
 	this->mgr_ = desc.GetManager();
-	this->event_index_ = event_index;
+	this->event_main_index_ = event_main_index;
+	this->event_sub_index_ = event_sub_index;
 
 	return (0);
 }

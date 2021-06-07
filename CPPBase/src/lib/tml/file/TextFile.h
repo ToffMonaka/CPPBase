@@ -18,7 +18,7 @@ namespace tml {
 class TextFileData
 {
 public:
-	std::list<std::wstring> string_container;
+	std::list<std::wstring> line_string_container;
 
 protected:
 	void Release(void);

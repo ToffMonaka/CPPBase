@@ -136,7 +136,7 @@ INT tml::input::KeyboardEvent::Create(const tml::input::KeyboardEventDesc &desc)
 {
 	this->Init();
 
-	if (tml::input::ManagerEvent::Create(desc, tml::input::KeyboardEvent::EVENT_TYPE) < 0) {
+	if (tml::input::ManagerEvent::Create(desc, tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE, static_cast<UINT>(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::KEYBOARD)) < 0) {
 		this->Init();
 
 		return (-1);

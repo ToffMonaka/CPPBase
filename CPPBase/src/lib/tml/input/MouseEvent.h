@@ -94,7 +94,8 @@ public: tml::input::MouseEvent &operator =(const tml::input::MouseEvent &) = del
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const tml::ConstantUtil::INPUT::EVENT_TYPE EVENT_TYPE = tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE;
+	static const UINT EVENT_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE);
+	static const UINT EVENT_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::MOUSE);
 
 private:
 	tml::input::MouseEventData dat_;
@@ -109,7 +110,7 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::input::MouseEventDesc &);
 
-	const tml::input::MouseEventData &GetData(void) const;
+	tml::input::MouseEventData &GetData(void);
 	void SetData(const tml::input::MouseEventData &);
 };
 }
@@ -131,7 +132,7 @@ inline void tml::input::MouseEvent::Release(void)
  * @brief GetDataŠÖ”
  * @return dat (data)
  */
-inline const tml::input::MouseEventData &tml::input::MouseEvent::GetData(void) const
+inline tml::input::MouseEventData &tml::input::MouseEvent::GetData(void)
 {
 	return (this->dat_);
 }

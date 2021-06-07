@@ -66,7 +66,8 @@ void tml::input::ManagerDesc::InitEventCount(void)
 {
 	tml::ManagerDesc::InitEventCount();
 
-	this->event_count = tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT;
+	this->event_count_container.resize(tml::ConstantUtil::INPUT::EVENT_TYPE_COUNT);
+	this->event_count_container[static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE)] = tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE_COUNT;
 
 	return;
 }

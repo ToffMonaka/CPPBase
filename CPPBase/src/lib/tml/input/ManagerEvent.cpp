@@ -96,17 +96,18 @@ void tml::input::ManagerEvent::Init(void)
  * @brief Createä÷êî
  * @param desc (desc)
  * @param event_type (event_type)
+ * @param event_sub_index (event_sub_index)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::input::ManagerEvent::Create(const tml::input::ManagerEventDesc &desc, const tml::ConstantUtil::INPUT::EVENT_TYPE event_type)
+INT tml::input::ManagerEvent::Create(const tml::input::ManagerEventDesc &desc, const tml::ConstantUtil::INPUT::EVENT_TYPE event_type, const UINT event_sub_index)
 {
 	if ((desc.GetManager() == nullptr)
 	|| (event_type == tml::ConstantUtil::INPUT::EVENT_TYPE::NONE)) {
 		return (-1);
 	}
 
-	if (tml::ManagerEvent::Create(desc, static_cast<UINT>(event_type)) < 0) {
+	if (tml::ManagerEvent::Create(desc, static_cast<UINT>(event_type), event_sub_index) < 0) {
 		return (-1);
 	}
 

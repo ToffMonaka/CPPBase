@@ -35,7 +35,7 @@ void tml::TextFileData::Init(void)
 {
 	this->Release();
 
-	this->string_container.clear();
+	this->line_string_container.clear();
 
 	return;
 }
@@ -167,7 +167,7 @@ INT tml::TextFile::Read(void)
 			if (!read_desc_dat->string.empty()) {
 				this->data.Init();
 
-				tml::StringUtil::Split(this->data.string_container, read_desc_dat->string.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(read_desc_dat->newline_code_type));
+				tml::StringUtil::Split(this->data.line_string_container, read_desc_dat->string.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(read_desc_dat->newline_code_type));
 
 				return (0);
 			}
@@ -199,7 +199,7 @@ INT tml::TextFile::Read(void)
 
 	tml::StringUtil::GetString(file_str, reinterpret_cast<CHAR *>(bin_file.data.buffer.Get()));
 
-	tml::StringUtil::Split(this->data.string_container, file_str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(read_desc_dat->newline_code_type));
+	tml::StringUtil::Split(this->data.line_string_container, file_str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetString(read_desc_dat->newline_code_type));
 
 	return (0);
 }
@@ -221,7 +221,7 @@ INT tml::TextFile::Write(void)
 	std::wstring file_str;
 	std::string tmp_file_str;
 
-	tml::StringUtil::Join(file_str, this->data.string_container, tml::ConstantUtil::NEWLINE_CODE::GetString(write_desc_dat->newline_code_type));
+	tml::StringUtil::Join(file_str, this->data.line_string_container, tml::ConstantUtil::NEWLINE_CODE::GetString(write_desc_dat->newline_code_type));
 
 	if (!file_str.empty()) {
 		if ((write_desc_dat->add_flag)

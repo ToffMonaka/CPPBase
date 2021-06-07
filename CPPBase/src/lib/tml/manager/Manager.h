@@ -23,7 +23,7 @@ public:
 	HWND window_handle;
 	HDC window_device_context_handle;
 	std::vector<UINT> resource_count_container;
-	UINT event_count;
+	std::vector<UINT> event_count_container;
 
 protected:
 	void Release(void);
@@ -69,12 +69,12 @@ private:
 	std::list<tml::shared_ptr<tml::ManagerResource>> check_res_cont_;
 	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator check_res_itr_;
 	tml::ManagerResource *friend_res_;
-	std::array<UINT, 2U> event_cnt_ary_;
-	std::array<std::vector<tml::unique_ptr<tml::ManagerEvent>>, 2U> event_cont_ary_;
+	std::array<std::vector<UINT>, 2U> event_cnt_cont_ary_;
+	std::array<std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>>, 2U> event_cont_ary_;
 	UINT front_event_index_;
 	UINT back_event_index_;
-	std::vector<UINT> stock_event_cnt_cont_;
-	std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>> stock_event_cont_cont_;
+	std::vector<std::vector<UINT>> stock_event_cnt_cont_cont_;
+	std::vector<std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>>> stock_event_cont_cont_;
 	tml::ManagerEvent *friend_event_;
 
 protected:
@@ -83,6 +83,8 @@ protected:
 
 	INT CreateResourceContainer(const std::vector<UINT> &);
 	void DeleteResourceContainer(void);
+	INT CreateEventContainer(const std::vector<UINT> &);
+	void DeleteEventContainer(void);
 
 public:
 	Manager();
@@ -104,9 +106,9 @@ public:
 	void SetResourceSharedPointer(tml::ManagerResource *, const tml::shared_ptr<tml::ManagerResource> &);
 	void SetResourceName(tml::ManagerResource *, const WCHAR *);
 	bool CheckFriendResource(const tml::ManagerResource *) const;
-	UINT GetEventCount(void) const;
-	const tml::ManagerEvent *GetEvent(const UINT) const;
-	const tml::ManagerEvent *GetEventFast(const UINT) const;
+	UINT GetEventCount(const UINT) const;
+	tml::ManagerEvent *GetEvent(const UINT, const UINT);
+	tml::ManagerEvent *GetEventFast(const UINT, const UINT);
 	template <typename T, typename D>
 	INT AddEvent(const D &);
 	bool CheckFriendEvent(const tml::ManagerEvent *) const;
@@ -278,39 +280,41 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 /**
  * @brief GetEventCountä÷êî
- * @return event_cnt (event_count)
+ * @return event_main_index (event_main_index)
  */
-inline UINT tml::Manager::GetEventCount(void) const
+inline UINT tml::Manager::GetEventCount(const UINT event_main_index) const
 {
-	return (this->event_cnt_ary_[this->front_event_index_]);
+	return (this->event_cnt_cont_ary_[this->front_event_index_][event_main_index]);
 }
 
 
 /**
  * @brief GetEventä÷êî
+ * @return event_main_index (event_main_index)
  * @param index (index)
  * @return event (event)<br>
  * nullptr=é∏îs
  */
-inline const tml::ManagerEvent *tml::Manager::GetEvent(const UINT index) const
+inline tml::ManagerEvent *tml::Manager::GetEvent(const UINT event_main_index, const UINT index)
 {
-	if (index >= this->event_cont_ary_[this->front_event_index_].size()) {
+	if (index >= this->event_cont_ary_[this->front_event_index_][event_main_index].size()) {
 		return (nullptr);
 	}
 
-	return (this->event_cont_ary_[this->front_event_index_][index].get());
+	return (this->event_cont_ary_[this->front_event_index_][event_main_index][index].get());
 }
 
 
 /**
  * @brief GetEventFastä÷êî
+ * @return event_main_index (event_main_index)
  * @param index (index)
  * @return event (event)<br>
  * nullptr=é∏îs
  */
-inline const tml::ManagerEvent *tml::Manager::GetEventFast(const UINT index) const
+inline tml::ManagerEvent *tml::Manager::GetEventFast(const UINT event_main_index, const UINT index)
 {
-	return (this->event_cont_ary_[this->front_event_index_][index].get());
+	return (this->event_cont_ary_[this->front_event_index_][event_main_index][index].get());
 }
 
 
@@ -324,10 +328,11 @@ template <typename T, typename D>
 inline INT tml::Manager::AddEvent(const D &desc)
 {
 	tml::unique_ptr<tml::ManagerEvent> event;
-	UINT event_index = static_cast<UINT>(T::EVENT_TYPE);
+	UINT event_main_index = T::EVENT_MAIN_INDEX;
+	UINT event_sub_index = T::EVENT_SUB_INDEX;
 
-	auto &stock_event_cnt = this->stock_event_cnt_cont_[event_index];
-	auto &stock_event_cont = this->stock_event_cont_cont_[event_index];
+	auto &stock_event_cnt = this->stock_event_cnt_cont_cont_[event_main_index][event_sub_index];
+	auto &stock_event_cont = this->stock_event_cont_cont_[event_main_index][event_sub_index];
 
 	if (stock_event_cnt > 0U) {
 		--stock_event_cnt;
@@ -347,16 +352,19 @@ inline INT tml::Manager::AddEvent(const D &desc)
 		}
 	}
 
-	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];
-	auto &back_event_cont = this->event_cont_ary_[this->back_event_index_];
+	auto &event_cnt_cont = this->event_cnt_cont_ary_[this->back_event_index_];
+	auto &event_cont_cont = this->event_cont_ary_[this->back_event_index_];
 
-	if (back_event_cnt >= back_event_cont.size()) {
-		back_event_cont.resize(back_event_cnt + 128U);
+	auto &event_cnt = event_cnt_cont[event_main_index];
+	auto &event_cont = event_cont_cont[event_main_index];
+
+	if (event_cnt >= event_cont.size()) {
+		event_cont.resize(event_cnt + 128U);
 	}
 
-	back_event_cont[back_event_cnt] = std::move(event);
+	event_cont[event_cnt] = std::move(event);
 
-	++back_event_cnt;
+	++event_cnt;
 
 	return (0);
 }

@@ -81,7 +81,7 @@ void tml::scene::ManagerDesc::InitEventCount(void)
 {
 	tml::ManagerDesc::InitEventCount();
 
-	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
+	this->event_count_container.resize(tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT);
 
 	return;
 }

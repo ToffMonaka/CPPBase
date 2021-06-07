@@ -164,7 +164,7 @@ INT tml::ConfigFile::Read(void)
 
 	this->data.Init();
 
-	if (txt_file.data.string_container.empty()) {
+	if (txt_file.data.line_string_container.empty()) {
 		return (0);
 	}
 
@@ -178,12 +178,12 @@ INT tml::ConfigFile::Read(void)
 	std::wstring val_name;
 	std::wstring val;
 
-	for (auto &txt_file_str : txt_file.data.string_container) {
-		if (txt_file_str.empty()) {
+	for (auto &txt_file_line_str : txt_file.data.line_string_container) {
+		if (txt_file_line_str.empty()) {
 			continue;
 		}
 
-		line_str = txt_file_str;
+		line_str = txt_file_line_str;
 
 		{// ƒRƒƒ“ƒg‚ðíœ
 			comment_str_index = line_str.find(comment_str);
@@ -245,10 +245,10 @@ INT tml::ConfigFile::Write(void)
 		for (auto &val : this->data.value_container) {
 			line_str = val.first + equal_str + val.second;
 
-			txt_file.data.string_container.push_back(line_str);
+			txt_file.data.line_string_container.push_back(line_str);
 		}
 
-		txt_file.data.string_container.push_back(empty_str);
+		txt_file.data.line_string_container.push_back(empty_str);
 	}
 
 	txt_file.write_desc.parent_data = write_desc_dat;

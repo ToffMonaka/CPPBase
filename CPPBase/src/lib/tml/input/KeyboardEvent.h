@@ -90,7 +90,8 @@ public: tml::input::KeyboardEvent &operator =(const tml::input::KeyboardEvent &)
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const tml::ConstantUtil::INPUT::EVENT_TYPE EVENT_TYPE = tml::ConstantUtil::INPUT::EVENT_TYPE::KEYBOARD;
+	static const UINT EVENT_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE);
+	static const UINT EVENT_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::KEYBOARD);
 
 private:
 	tml::input::KeyboardEventData dat_;
@@ -105,7 +106,7 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::input::KeyboardEventDesc &);
 
-	const tml::input::KeyboardEventData &GetData(void) const;
+	tml::input::KeyboardEventData &GetData(void);
 	void SetData(const tml::input::KeyboardEventData &);
 };
 }
@@ -127,7 +128,7 @@ inline void tml::input::KeyboardEvent::Release(void)
  * @brief GetDataŠÖ”
  * @return dat (data)
  */
-inline const tml::input::KeyboardEventData &tml::input::KeyboardEvent::GetData(void) const
+inline tml::input::KeyboardEventData &tml::input::KeyboardEvent::GetData(void)
 {
 	return (this->dat_);
 }

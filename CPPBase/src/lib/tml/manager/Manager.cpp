@@ -65,7 +65,7 @@ void tml::ManagerDesc::InitResourceCount(void)
  */
 void tml::ManagerDesc::InitEventCount(void)
 {
-	this->event_count = 0U;
+	this->event_count_container.clear();
 
 	return;
 }
@@ -78,7 +78,6 @@ tml::Manager::Manager() :
 	wnd_handle_(nullptr),
 	wnd_dc_handle_(nullptr),
 	friend_res_(nullptr),
-	event_cnt_ary_{},
 	front_event_index_(0U),
 	back_event_index_(0U),
 	friend_event_(nullptr)
@@ -105,6 +104,7 @@ tml::Manager::~Manager()
 void tml::Manager::Release(void)
 {
 	this->DeleteResourceContainer();
+	this->DeleteEventContainer();
 
 	return;
 }
@@ -118,17 +118,6 @@ void tml::Manager::Init(void)
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
 	this->friend_res_ = nullptr;
-
-	this->event_cnt_ary_.fill(0U);
-
-	for (auto &event_cont : this->event_cont_ary_) {
-		event_cont.clear();
-	}
-
-	this->front_event_index_ = 0U;
-	this->back_event_index_ = 0U;
-	this->stock_event_cnt_cont_.clear();
-	this->stock_event_cont_cont_.clear();
 	this->friend_event_ = nullptr;
 
 	return;
@@ -155,10 +144,9 @@ INT tml::Manager::Create(const tml::ManagerDesc &desc)
 		return (-1);
 	}
 
-	this->front_event_index_ = 0U;
-	this->back_event_index_ = 0U;
-	this->stock_event_cnt_cont_.resize(desc.event_count);
-	this->stock_event_cont_cont_.resize(desc.event_count);
+	if (this->CreateEventContainer(desc.event_count_container) < 0) {
+		return (-1);
+	}
 
 	return (0);
 }
@@ -220,26 +208,32 @@ void tml::Manager::Update(void)
 		this->back_event_index_ = tmp_event_index;
 	}
 
-	auto &back_event_cnt = this->event_cnt_ary_[this->back_event_index_];
-	auto &back_event_cont = this->event_cont_ary_[this->back_event_index_];
+	auto &event_cnt_cont = this->event_cnt_cont_ary_[this->back_event_index_];
+	auto &event_cont_cont = this->event_cont_ary_[this->back_event_index_];
 
-	for (UINT back_event_i = 0U; back_event_i < back_event_cnt; ++back_event_i) {
-		tml::unique_ptr<tml::ManagerEvent> &event = back_event_cont[back_event_i];
-		UINT event_index = event->GetEventIndex();
+	for (UINT event_main_i = 0U; event_main_i < event_cnt_cont.size(); ++event_main_i) {
+		auto &event_cnt = event_cnt_cont[event_main_i];
+		auto &event_cont = event_cont_cont[event_main_i];
 
-		auto &stock_event_cnt = this->stock_event_cnt_cont_[event_index];
-		auto &stock_event_cont = this->stock_event_cont_cont_[event_index];
+		for (UINT event_i = 0U; event_i < event_cnt; ++event_i) {
+			tml::unique_ptr<tml::ManagerEvent> &event = event_cont[event_i];
+			UINT event_main_index = event->GetEventMainIndex();
+			UINT event_sub_index = event->GetEventSubIndex();
 
-		if (stock_event_cnt >= stock_event_cont.size()) {
-			stock_event_cont.resize(stock_event_cnt + 128U);
+			auto &stock_event_cnt = this->stock_event_cnt_cont_cont_[event_main_index][event_sub_index];
+			auto &stock_event_cont = this->stock_event_cont_cont_[event_main_index][event_sub_index];
+
+			if (stock_event_cnt >= stock_event_cont.size()) {
+				stock_event_cont.resize(stock_event_cnt + 128U);
+			}
+
+			stock_event_cont[stock_event_cnt] = std::move(event);
+
+			++stock_event_cnt;
 		}
 
-		stock_event_cont[stock_event_cnt] = std::move(event);
-
-		++stock_event_cnt;
+		event_cnt = 0U;
 	}
-
-	back_event_cnt = 0U;
 
 	return;
 }
@@ -356,6 +350,56 @@ bool tml::Manager::CheckFriendResource(const tml::ManagerResource *res) const
 	}
 
 	return (res == this->friend_res_);
+}
+
+
+/**
+ * @brief CreateEventContainerŠÖ”
+ * @param event_cnt_cont (event_count_container)
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::Manager::CreateEventContainer(const std::vector<UINT> &event_cnt_cont)
+{
+	this->DeleteEventContainer();
+
+	for (size_t event_cnt_cont_i = 0U; event_cnt_cont_i < this->event_cnt_cont_ary_.size(); ++event_cnt_cont_i) {
+		this->event_cnt_cont_ary_[event_cnt_cont_i].resize(event_cnt_cont.size());
+		this->event_cont_ary_[event_cnt_cont_i].resize(event_cnt_cont.size());
+	}
+
+	this->stock_event_cnt_cont_cont_.resize(event_cnt_cont.size());
+
+	for (size_t stock_event_cnt_cont_i = 0U; stock_event_cnt_cont_i < this->stock_event_cnt_cont_cont_.size(); ++stock_event_cnt_cont_i) {
+		this->stock_event_cnt_cont_cont_[stock_event_cnt_cont_i].resize(event_cnt_cont[stock_event_cnt_cont_i]);
+	}
+
+	this->stock_event_cont_cont_.resize(event_cnt_cont.size());
+
+	for (size_t stock_event_cont_i = 0U; stock_event_cont_i < this->stock_event_cont_cont_.size(); ++stock_event_cont_i) {
+		this->stock_event_cont_cont_[stock_event_cont_i].resize(event_cnt_cont[stock_event_cont_i]);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteEventContainerŠÖ”
+ */
+void tml::Manager::DeleteEventContainer(void)
+{
+	for (size_t event_cnt_cont_i = 0U; event_cnt_cont_i < this->event_cnt_cont_ary_.size(); ++event_cnt_cont_i) {
+		this->event_cnt_cont_ary_[event_cnt_cont_i].clear();
+		this->event_cont_ary_[event_cnt_cont_i].clear();
+	}
+
+	this->front_event_index_ = 0U;
+	this->back_event_index_ = 0U;
+	this->stock_event_cnt_cont_cont_.clear();
+	this->stock_event_cont_cont_.clear();
+
+	return;
 }
 
 

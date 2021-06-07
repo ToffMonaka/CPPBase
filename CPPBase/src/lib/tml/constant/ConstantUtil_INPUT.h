@@ -21,12 +21,20 @@ namespace INPUT {
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
 		ETC,
+		DEVICE,
+		USER,
+		COUNT
+	};
+	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::COUNT);
+	enum class DEVICE_EVENT_TYPE : UINT {
+		NONE = 0U,
+		ETC,
 		MOUSE,
 		KEYBOARD,
 		USER,
 		COUNT
 	};
-	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::COUNT);
+	const UINT DEVICE_EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::COUNT);
 	enum class MOUSE_EVENT_DATA_TYPE : UINT {
 		NONE = 0U,
 		LEFT_BUTTON_DOWN = RI_MOUSE_LEFT_BUTTON_DOWN,
