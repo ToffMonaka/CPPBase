@@ -467,21 +467,21 @@ void tml::graphic::Object2DModel::DrawStageForward2D(void)
 
 
 /**
- * @brief IsHitByMouseä÷êî
- * @param pos (position)
+ * @brief IsHitByMouseDeviceä÷êî
+ * @param mouse_device_pos (mouse_device_position)
  * @return hit_flg (hit_flag)
  */
-bool tml::graphic::Object2DModel::IsHitByMouse(const tml::XMINT2EX &pos)
+bool tml::graphic::Object2DModel::IsHitByMouseDevice(const tml::XMINT2EX &mouse_device_pos)
 {
-	tml::XMFLOAT2EX tmp_pos;
+	tml::XMFLOAT2EX tmp_mouse_device_pos;
 
-	tmp_pos.x = static_cast<FLOAT>(pos.x - static_cast<INT>(this->GetManager()->GetSize().GetHalfX()));
-	tmp_pos.y = static_cast<FLOAT>(-pos.y + static_cast<INT>(this->GetManager()->GetSize().GetHalfY()));
+	tmp_mouse_device_pos.x = static_cast<FLOAT>(mouse_device_pos.x - static_cast<INT>(this->GetManager()->GetSize().GetHalfX()));
+	tmp_mouse_device_pos.y = static_cast<FLOAT>(-mouse_device_pos.y + static_cast<INT>(this->GetManager()->GetSize().GetHalfY()));
 
-	if ((tmp_pos.x >= (this->position.GetX() - (this->size.GetHalfX() * this->scale.x)))
-	&& (tmp_pos.x <= (this->position.GetX() + (this->size.GetHalfX() * this->scale.x)))
-	&& (tmp_pos.y >= (this->position.GetY() - (this->size.GetHalfY() * this->scale.y)))
-	&& (tmp_pos.y <= (this->position.GetY() + (this->size.GetHalfY() * this->scale.y)))
+	if ((tmp_mouse_device_pos.x >= (this->position.GetX() - (this->size.GetHalfX() * this->scale.x)))
+	&& (tmp_mouse_device_pos.x <= (this->position.GetX() + (this->size.GetHalfX() * this->scale.x)))
+	&& (tmp_mouse_device_pos.y >= (this->position.GetY() - (this->size.GetHalfY() * this->scale.y)))
+	&& (tmp_mouse_device_pos.y <= (this->position.GetY() + (this->size.GetHalfY() * this->scale.y)))
 	) {
 		return (true);
 	}

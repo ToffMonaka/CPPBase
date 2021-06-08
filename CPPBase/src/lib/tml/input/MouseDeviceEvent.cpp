@@ -1,17 +1,18 @@
 /**
  * @file
- * @brief MouseEventコードファイル
+ * @brief MouseDeviceEventコードファイル
  */
 
 
-#include "MouseEvent.h"
+#include "MouseDeviceEvent.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::input::MouseEventData::MouseEventData() :
-	type_flag(tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::NONE),
+tml::input::MouseDeviceEventData::MouseDeviceEventData() :
+	type_flag(tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::NONE),
 	position(0),
 	move_value(0),
 	wheel_value(0.0f)
@@ -23,7 +24,7 @@ tml::input::MouseEventData::MouseEventData() :
 /**
  * @brief デストラクタ
  */
-tml::input::MouseEventData::~MouseEventData()
+tml::input::MouseDeviceEventData::~MouseDeviceEventData()
 {
 	this->Release();
 
@@ -34,11 +35,11 @@ tml::input::MouseEventData::~MouseEventData()
 /**
  * @brief Init関数
  */
-void tml::input::MouseEventData::Init(void)
+void tml::input::MouseDeviceEventData::Init(void)
 {
 	this->Release();
 
-	this->type_flag = tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::NONE;
+	this->type_flag = tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::NONE;
 	this->position = 0;
 	this->move_value = 0;
 	this->wheel_value = 0.0f;
@@ -52,13 +53,13 @@ void tml::input::MouseEventData::Init(void)
  * @param rm (raw_input)
  * @param pos (position)
  */
-void tml::input::MouseEventData::SetRawInput(const RAWMOUSE &rm, const tml::XMINT2EX &pos)
+void tml::input::MouseDeviceEventData::SetRawInput(const RAWMOUSE &rm, const tml::XMINT2EX &pos)
 {
-	this->type_flag = static_cast<tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE>(rm.usButtonFlags);
+	this->type_flag = static_cast<tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE>(rm.usButtonFlags);
 	this->position = pos;
 
 	if ((rm.lLastX != 0L) || (rm.lLastY != 0L)) {
-		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MOVE;
+		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::MOVE;
 		this->move_value.x = rm.lLastX;
 		this->move_value.y = rm.lLastY;
 	} else {
@@ -66,7 +67,7 @@ void tml::input::MouseEventData::SetRawInput(const RAWMOUSE &rm, const tml::XMIN
 	}
 
 	if (rm.usButtonFlags & (RI_MOUSE_HWHEEL | RI_MOUSE_WHEEL)) {
-		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::WHEEL;
+		this->type_flag |= tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::WHEEL;
 		this->wheel_value.x = (rm.usButtonFlags & RI_MOUSE_HWHEEL) ? static_cast<FLOAT>(static_cast<SHORT>(rm.usButtonData)) / WHEEL_DELTA : 0.0f;
 		this->wheel_value.y = (rm.usButtonFlags & RI_MOUSE_WHEEL) ? static_cast<FLOAT>(static_cast<SHORT>(rm.usButtonData)) / WHEEL_DELTA : 0.0f;
 	} else {
@@ -80,7 +81,7 @@ void tml::input::MouseEventData::SetRawInput(const RAWMOUSE &rm, const tml::XMIN
 /**
  * @brief コンストラクタ
  */
-tml::input::MouseEventDesc::MouseEventDesc()
+tml::input::MouseDeviceEventDesc::MouseDeviceEventDesc()
 {
 	return;
 }
@@ -89,7 +90,7 @@ tml::input::MouseEventDesc::MouseEventDesc()
 /**
  * @brief デストラクタ
  */
-tml::input::MouseEventDesc::~MouseEventDesc()
+tml::input::MouseDeviceEventDesc::~MouseDeviceEventDesc()
 {
 	this->Release();
 
@@ -100,13 +101,13 @@ tml::input::MouseEventDesc::~MouseEventDesc()
 /**
  * @brief Init関数
  */
-void tml::input::MouseEventDesc::Init(void)
+void tml::input::MouseDeviceEventDesc::Init(void)
 {
 	this->Release();
 
 	this->data.Init();
 
-	tml::input::ManagerEventDesc::Init();
+	tml::input::DeviceEventDesc::Init();
 
 	return;
 }
@@ -115,7 +116,7 @@ void tml::input::MouseEventDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::input::MouseEvent::MouseEvent()
+tml::input::MouseDeviceEvent::MouseDeviceEvent()
 {
 	return;
 }
@@ -124,7 +125,7 @@ tml::input::MouseEvent::MouseEvent()
 /**
  * @brief デストラクタ
  */
-tml::input::MouseEvent::~MouseEvent()
+tml::input::MouseDeviceEvent::~MouseDeviceEvent()
 {
 	this->Release();
 
@@ -135,13 +136,13 @@ tml::input::MouseEvent::~MouseEvent()
 /**
  * @brief Init関数
  */
-void tml::input::MouseEvent::Init(void)
+void tml::input::MouseDeviceEvent::Init(void)
 {
 	this->Release();
 
-	this->dat_.Init();
+	this->data.Init();
 
-	tml::input::ManagerEvent::Init();
+	tml::input::DeviceEvent::Init();
 
 	return;
 }
@@ -153,17 +154,17 @@ void tml::input::MouseEvent::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::input::MouseEvent::Create(const tml::input::MouseEventDesc &desc)
+INT tml::input::MouseDeviceEvent::Create(const tml::input::MouseDeviceEventDesc &desc)
 {
 	this->Init();
 
-	if (tml::input::ManagerEvent::Create(desc, tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE, static_cast<UINT>(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::MOUSE)) < 0) {
+	if (tml::input::DeviceEvent::Create(desc, tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::MOUSE) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
-	this->SetData(desc.data);
+	this->data = desc.data;
 
 	return (0);
 }

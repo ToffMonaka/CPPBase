@@ -6,8 +6,8 @@
 
 #include "TitleSceneNode.h"
 #include "../../lib/tml/math/MathUtil.h"
-#include "../../lib/tml/input/MouseEvent.h"
-#include "../../lib/tml/input/KeyboardEvent.h"
+#include "../../lib/tml/input/MouseDeviceEvent.h"
+#include "../../lib/tml/input/KeyboardDeviceEvent.h"
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
@@ -445,15 +445,15 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
-	for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE)); ++event_i) {
-		auto event = reinterpret_cast<tml::input::ManagerEvent *>(input_mgr->GetEventFast(static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE), event_i));
+	for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
+		auto event = reinterpret_cast<tml::input::ManagerEvent *>(input_mgr->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
 
 		switch (event->GetEventSubIndex()) {
-		case tml::input::MouseEvent::EVENT_SUB_INDEX: {
-			auto &event_dat = reinterpret_cast<tml::input::MouseEvent *>(event)->GetData();
+		case tml::input::MouseDeviceEvent::EVENT_SUB_INDEX: {
+			auto &event_dat = reinterpret_cast<tml::input::MouseDeviceEvent *>(event)->data;
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-				if (this->start_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+				if (this->start_model_->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {
 					sound_mgr->PlaySound(this->start_se_sound_.get(), false);
 				}
 			}
@@ -463,7 +463,7 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 		}
 	}
 
-	if (this->start_model_->IsHitByMouse(input_mgr->GetMousePosition())) {
+	if (this->start_model_->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {
 		this->start_model_->scale = tml::XMFLOAT2EX(1.2f, 1.2f);
 		this->start_model_->color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), 1.0f);
 	} else {

@@ -77,9 +77,9 @@ void tml::input::ManagerDesc::InitEventCount(void)
  * @brief コンストラクタ
  */
 tml::input::Manager::Manager() :
-	mouse_pos_(0),
-	mouse_code_stat_ary_{},
-	keyboard_code_stat_ary_{}
+	mouse_device_pos_(0),
+	mouse_device_code_stat_ary_{},
+	keyboard_device_code_stat_ary_{}
 {
 	return;
 }
@@ -117,9 +117,9 @@ void tml::input::Manager::Init(void)
 {
 	this->Release();
 
-	this->mouse_pos_ = 0;
-	this->mouse_code_stat_ary_.fill(false);
-	this->keyboard_code_stat_ary_.fill(false);
+	this->mouse_device_pos_ = 0;
+	this->mouse_device_code_stat_ary_.fill(false);
+	this->keyboard_device_code_stat_ary_.fill(false);
 
 	tml::Manager::Init();
 
@@ -143,12 +143,12 @@ INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 		return (-1);
 	}
 
-	POINT mouse_sys_pos;
+	POINT mouse_device_sys_pos;
 
-	GetCursorPos(&mouse_sys_pos);
-	ScreenToClient(this->GetWindowHandle(), &mouse_sys_pos);
+	GetCursorPos(&mouse_device_sys_pos);
+	ScreenToClient(this->GetWindowHandle(), &mouse_device_sys_pos);
 
-	this->mouse_pos_ = tml::XMINT2EX(mouse_sys_pos.x, mouse_sys_pos.y);
+	this->mouse_device_pos_ = tml::XMINT2EX(mouse_device_sys_pos.x, mouse_device_sys_pos.y);
 
 	{// Factory Set
 	}

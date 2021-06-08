@@ -241,7 +241,7 @@ public:
 	virtual void DrawStageInit(void);
 	virtual void DrawStageForward2D(void);
 
-	bool IsHitByMouse(const tml::XMINT2EX &);
+	bool IsHitByMouseDevice(const tml::XMINT2EX &);
 };
 }
 }

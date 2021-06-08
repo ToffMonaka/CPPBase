@@ -339,7 +339,7 @@ inline INT tml::Manager::AddEvent(const D &desc)
 
 		event = std::move(stock_event_cont[stock_event_cnt]);
 
-		reinterpret_cast<T *>(event.get())->SetData(desc.data);
+		reinterpret_cast<T *>(event.get())->data = desc.data;
 	} else {
 		if (desc.GetManager() != this) {
 			return (-1);

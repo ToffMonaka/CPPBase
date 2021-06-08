@@ -13,8 +13,8 @@
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
-#include "../../lib/tml/input/MouseEvent.h"
-#include "../../lib/tml/input/KeyboardEvent.h"
+#include "../../lib/tml/input/MouseDeviceEvent.h"
+#include "../../lib/tml/input/KeyboardDeviceEvent.h"
 #include "../constant/ConstantUtil_FILE.h"
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../resource/resource.h"
@@ -268,13 +268,13 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 	case WM_CREATE: {
 		std::array<RAWINPUTDEVICE, 2U> rid_ary;
 
-		// Mouse Set
+		// MouseDevice Set
 		rid_ary[0].usUsagePage = 0x01;
 		rid_ary[0].usUsage = 0x02;
 		rid_ary[0].dwFlags = 0UL;
 		rid_ary[0].hwndTarget = wnd_handle;
  
-		// Keyboard Set
+		// KeyboardDevice Set
 		rid_ary[1].usUsagePage = 0x01;
 		rid_ary[1].usUsage = 0x06;
 		rid_ary[1].dwFlags = 0UL;
@@ -293,8 +293,8 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 		return (0);
 	}
 	case WM_KILLFOCUS: {
-		th->GetInputManager().SetMouseCodeState(false);
-		th->GetInputManager().SetKeyboardCodeState(false);
+		th->GetInputManager().ClearMouseDeviceCodeState();
+		th->GetInputManager().ClearKeyboardDeviceCodeState();
 
 		return (0);
 	}
@@ -314,69 +314,69 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 		switch (ri.header.dwType) {
 		case RIM_TYPEMOUSE: {
-			tml::input::MouseEventDesc event_desc;
+			tml::input::MouseDeviceEventDesc event_desc;
 
 			event_desc.SetManager(&th->GetInputManager());
-			event_desc.data.SetRawInput(ri.data.mouse, th->GetInputManager().GetMousePosition());
+			event_desc.data.SetRawInput(ri.data.mouse, th->GetInputManager().GetMouseDevicePosition());
 
-			th->GetInputManager().AddEvent<tml::input::MouseEvent>(event_desc);
+			th->GetInputManager().AddEvent<tml::input::MouseDeviceEvent>(event_desc);
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::LEFT, true);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::LEFT, true);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::LEFT_BUTTON_UP)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::LEFT, false);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_UP)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::LEFT, false);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::RIGHT, true);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::RIGHT, true);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::RIGHT_BUTTON_UP)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::RIGHT, false);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::RIGHT_BUTTON_UP)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::RIGHT, false);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MIDDLE_BUTTON_DOWN)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::MIDDLE, true);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::MIDDLE_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::MIDDLE, true);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::MIDDLE_BUTTON_UP)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::MIDDLE, false);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::MIDDLE_BUTTON_UP)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::MIDDLE, false);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE1_BUTTON_DOWN)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE1, true);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::SIDE1_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::SIDE1, true);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE1_BUTTON_UP)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE1, false);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::SIDE1_BUTTON_UP)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::SIDE1, false);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE2_BUTTON_DOWN)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE2, true);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::SIDE2_BUTTON_DOWN)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::SIDE2, true);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_EVENT_DATA_TYPE::SIDE2_BUTTON_UP)) {
-				th->GetInputManager().SetMouseCodeState(tml::ConstantUtil::INPUT::MOUSE_CODE::SIDE2, false);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::SIDE2_BUTTON_UP)) {
+				th->GetInputManager().SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::SIDE2, false);
 			}
 
 			break;
 		}
 		case RIM_TYPEKEYBOARD: {
-			tml::input::KeyboardEventDesc event_desc;
+			tml::input::KeyboardDeviceEventDesc event_desc;
 
 			event_desc.SetManager(&th->GetInputManager());
 			event_desc.data.SetRawInput(ri.data.keyboard);
 
-			th->GetInputManager().AddEvent<tml::input::KeyboardEvent>(event_desc);
+			th->GetInputManager().AddEvent<tml::input::KeyboardDeviceEvent>(event_desc);
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_DOWN)) {
-				th->GetInputManager().SetKeyboardCodeState(event_desc.data.code, true);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE::BUTTON_DOWN)) {
+				th->GetInputManager().SetKeyboardDeviceCodeState(event_desc.data.code, true);
 			}
 
-			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_EVENT_DATA_TYPE::BUTTON_UP)) {
-				th->GetInputManager().SetKeyboardCodeState(event_desc.data.code, false);
+			if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE::BUTTON_UP)) {
+				th->GetInputManager().SetKeyboardDeviceCodeState(event_desc.data.code, false);
 			}
 
 			break;
@@ -386,7 +386,7 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 		return (0);
 	}
 	case WM_MOUSEMOVE: {
-		th->GetInputManager().SetMousePosition(tml::XMINT2EX(GET_X_LPARAM(msg_lp), GET_Y_LPARAM(msg_lp)));
+		th->GetInputManager().SetMouseDevicePosition(tml::XMINT2EX(GET_X_LPARAM(msg_lp), GET_Y_LPARAM(msg_lp)));
 
 		return (0);
 	}
