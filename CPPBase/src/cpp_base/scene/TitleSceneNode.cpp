@@ -446,7 +446,7 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
 	for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
-		auto event = reinterpret_cast<tml::input::ManagerEvent *>(input_mgr->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
+		auto event = reinterpret_cast<tml::input::DeviceEvent *>(input_mgr->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
 
 		switch (event->GetEventSubIndex()) {
 		case tml::input::MouseDeviceEvent::EVENT_SUB_INDEX: {

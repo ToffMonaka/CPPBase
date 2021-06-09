@@ -261,7 +261,9 @@
     <ClCompile Include="src\lib\tml\scene\ManagerEvent.cpp" />
     <ClCompile Include="src\lib\tml\scene\ManagerResource.cpp" />
     <ClCompile Include="src\lib\tml\scene\Node.cpp" />
+    <ClCompile Include="src\lib\tml\scene\NodeEvent.cpp" />
     <ClCompile Include="src\lib\tml\scene\Scene.cpp" />
+    <ClCompile Include="src\lib\tml\scene\SceneEvent.cpp" />
     <ClCompile Include="src\lib\tml\sound\BGMSound.cpp" />
     <ClCompile Include="src\lib\tml\sound\Manager.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerCommon.cpp" />
@@ -419,7 +421,9 @@
     <ClInclude Include="src\lib\tml\scene\ManagerEvent.h" />
     <ClInclude Include="src\lib\tml\scene\ManagerResource.h" />
     <ClInclude Include="src\lib\tml\scene\Node.h" />
+    <ClInclude Include="src\lib\tml\scene\NodeEvent.h" />
     <ClInclude Include="src\lib\tml\scene\Scene.h" />
+    <ClInclude Include="src\lib\tml\scene\SceneEvent.h" />
     <ClInclude Include="src\lib\tml\sound\BGMSound.h" />
     <ClInclude Include="src\lib\tml\sound\Manager.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerCommon.h" />

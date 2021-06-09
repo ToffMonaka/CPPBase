@@ -139,7 +139,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			return (-1);
 		}
 
-		if (this->GetHeaderNode()->AddChildNode(node, true) < 0) {
+		if (this->GetHeaderNode()->AddChildNode(node, false) < 0) {
 			this->Init();
 
 			return (-1);

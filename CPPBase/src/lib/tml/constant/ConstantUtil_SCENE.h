@@ -39,10 +39,34 @@ namespace SCENE {
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
 		ETC,
+		SCENE,
+		NODE,
 		USER,
 		COUNT
 	};
 	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::COUNT);
+	enum class SCENE_EVENT_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT SCENE_EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_EVENT_TYPE::COUNT);
+	enum class NODE_EVENT_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT NODE_EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_EVENT_TYPE::COUNT);
+	enum class SCENE_EVENT_DATA_TYPE : UINT {
+		NONE = 0U
+	};
+	enum class NODE_EVENT_DATA_TYPE : UINT {
+		NONE = 0U,
+		ADD,
+		REMOVE
+	};
 }
 }
 }

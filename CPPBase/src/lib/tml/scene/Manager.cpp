@@ -10,6 +10,8 @@
 #include "../sound/Manager.h"
 #include "BaseScene.h"
 #include "BaseNode.h"
+#include "SceneEvent.h"
+#include "NodeEvent.h"
 
 
 /**
@@ -82,6 +84,8 @@ void tml::scene::ManagerDesc::InitEventCount(void)
 	tml::ManagerDesc::InitEventCount();
 
 	this->event_count_container.resize(tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT);
+	this->event_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_EVENT_TYPE_COUNT;
+	this->event_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_EVENT_TYPE_COUNT;
 
 	return;
 }
@@ -158,8 +162,6 @@ void tml::scene::Manager::Release(void)
 
 	this->scene_.reset();
 	this->start_scene_.reset();
-	this->add_node_cont_.clear();
-	this->remove_node_cont_.clear();
 
 	this->DeleteCommon();
 	this->DeleteResourceContainer();
@@ -323,24 +325,31 @@ void tml::scene::Manager::Update(void)
 		}
 	}
 
-	if (this->add_node_cont_.size() > 0U) {
-		std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> tmp_node_cont;
+	for (UINT event_i = 0U; event_i < this->GetEventCount(tml::scene::SceneEvent::EVENT_MAIN_INDEX); ++event_i) {
+		auto event = reinterpret_cast<tml::scene::SceneEvent *>(this->GetEventFast(tml::scene::SceneEvent::EVENT_MAIN_INDEX, event_i));
+		auto &event_dat = event->data;
 
-		tmp_node_cont.swap(this->add_node_cont_);
-
-		for (auto &tmp_node : tmp_node_cont) {
-			tmp_node.first->AddChildNode(tmp_node.second, true);
-		}
+		event_dat.Init();
 	}
 
-	if (this->remove_node_cont_.size() > 0U) {
-		std::list<std::pair<tml::shared_ptr<tml::scene::Node>, tml::shared_ptr<tml::scene::Node>>> tmp_node_cont;
+	for (UINT event_i = 0U; event_i < this->GetEventCount(tml::scene::NodeEvent::EVENT_MAIN_INDEX); ++event_i) {
+		auto event = reinterpret_cast<tml::scene::NodeEvent *>(this->GetEventFast(tml::scene::NodeEvent::EVENT_MAIN_INDEX, event_i));
+		auto &event_dat = event->data;
 
-		tmp_node_cont.swap(this->remove_node_cont_);
+		switch (event_dat.type) {
+		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD: {
+			event_dat.parent_node->AddChildNode(event_dat.child_node, true);
 
-		for (auto &tmp_node : tmp_node_cont) {
-			tmp_node.first->RemoveChildNode(tmp_node.second, true);
+			break;
 		}
+		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE: {
+			event_dat.parent_node->RemoveChildNode(event_dat.child_node, true);
+
+			break;
+		}
+		}
+
+		event_dat.Init();
 	}
 
 	return;
@@ -420,7 +429,16 @@ INT tml::scene::Manager::AddNode(tml::shared_ptr<tml::scene::Node> &parent_node,
 		return (-1);
 	}
 
-	this->add_node_cont_.push_back(std::make_pair(parent_node, child_node));
+	tml::scene::NodeEventDesc event_desc;
+
+	event_desc.SetManager(this);
+	event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD;
+	event_desc.data.parent_node = parent_node;
+	event_desc.data.child_node = child_node;
+
+	if (this->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
+		return (-1);
+	}
 
 	return (0);
 }
@@ -439,7 +457,16 @@ void tml::scene::Manager::RemoveNode(tml::shared_ptr<tml::scene::Node> &parent_n
 		return;
 	}
 
-	this->remove_node_cont_.push_back(std::make_pair(parent_node, child_node));
+	tml::scene::NodeEventDesc event_desc;
+
+	event_desc.SetManager(this);
+	event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE;
+	event_desc.data.parent_node = parent_node;
+	event_desc.data.child_node = child_node;
+
+	if (this->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
+		return;
+	}
 
 	return;
 }
