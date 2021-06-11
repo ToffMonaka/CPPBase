@@ -38,6 +38,7 @@ void tml::scene::SceneEventData::Init(void)
 	this->Release();
 
 	this->type = tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::NONE;
+	this->scene.reset();
 
 	return;
 }

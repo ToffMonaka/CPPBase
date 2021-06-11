@@ -90,10 +90,12 @@ public:
 	bool GetMouseDeviceCodeState(const tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE, const bool);
 	void SetMouseDeviceCodeState(const tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE, const bool);
 	void ClearMouseDeviceCodeState(void);
+	INT AddMouseDeviceRawInput(const RAWMOUSE &, const tml::XMINT2EX &);
 	bool GetKeyboardDeviceCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE) const;
 	bool GetKeyboardDeviceCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE, const bool);
 	void SetKeyboardDeviceCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE, const bool);
 	void ClearKeyboardDeviceCodeState(void);
+	INT AddKeyboardDeviceRawInput(const RAWKEYBOARD &);
 };
 }
 }

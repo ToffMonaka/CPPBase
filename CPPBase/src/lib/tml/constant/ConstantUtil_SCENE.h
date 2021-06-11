@@ -60,7 +60,9 @@ namespace SCENE {
 	};
 	const UINT NODE_EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_EVENT_TYPE::COUNT);
 	enum class SCENE_EVENT_DATA_TYPE : UINT {
-		NONE = 0U
+		NONE = 0U,
+		START,
+		END
 	};
 	enum class NODE_EVENT_DATA_TYPE : UINT {
 		NONE = 0U,

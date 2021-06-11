@@ -194,6 +194,7 @@
     <ClCompile Include="src\lib\tml\file\FileUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\file\INIFile.cpp" />
     <ClCompile Include="src\lib\tml\file\TextFile.cpp" />
+    <ClCompile Include="src\lib\tml\file\XMLFile.cpp" />
     <ClCompile Include="src\lib\tml\graphic\BlendState.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Camera.cpp" />
     <ClCompile Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.cpp" />
@@ -350,6 +351,7 @@
     <ClInclude Include="src\lib\tml\file\FileUtilEngine.h" />
     <ClInclude Include="src\lib\tml\file\INIFile.h" />
     <ClInclude Include="src\lib\tml\file\TextFile.h" />
+    <ClInclude Include="src\lib\tml\file\XMLFile.h" />
     <ClInclude Include="src\lib\tml\graphic\BlendState.h" />
     <ClInclude Include="src\lib\tml\graphic\Camera.h" />
     <ClInclude Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.h" />

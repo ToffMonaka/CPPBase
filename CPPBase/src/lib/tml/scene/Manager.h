@@ -122,7 +122,6 @@ private:
 	tml::sound::Manager *sound_mgr_;
 	tml::FrameRate frame_rate_;
 	tml::shared_ptr<tml::scene::Scene> scene_;
-	tml::shared_ptr<tml::scene::Scene> start_scene_;
 
 public:
 	tml::ManagerResourceFactory<tml::scene::Scene> scene_factory;

@@ -50,7 +50,7 @@ void tml::input::MouseDeviceEventData::Init(void)
 
 /**
  * @brief SetRawInputä÷êî
- * @param rm (raw_input)
+ * @param rm (raw_mouse)
  * @param pos (position)
  */
 void tml::input::MouseDeviceEventData::SetRawInput(const RAWMOUSE &rm, const tml::XMINT2EX &pos)

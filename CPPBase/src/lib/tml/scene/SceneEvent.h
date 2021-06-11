@@ -19,6 +19,7 @@ class SceneEventData
 {
 public:
 	tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE type;
+	tml::shared_ptr<tml::scene::Scene> scene;
 
 protected:
 	void Release(void);

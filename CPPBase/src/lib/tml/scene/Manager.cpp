@@ -161,7 +161,6 @@ void tml::scene::Manager::Release(void)
 	}
 
 	this->scene_.reset();
-	this->start_scene_.reset();
 
 	this->DeleteCommon();
 	this->DeleteResourceContainer();
@@ -271,20 +270,63 @@ void tml::scene::Manager::Update(void)
 {
 	tml::Manager::Update();
 
-	if (this->start_scene_ != nullptr) {
-		tml::shared_ptr<tml::scene::Scene> tmp_scene;
+	for (UINT event_i = 0U; event_i < this->GetEventCount(tml::scene::SceneEvent::EVENT_MAIN_INDEX); ++event_i) {
+		auto event = reinterpret_cast<tml::scene::SceneEvent *>(this->GetEventFast(tml::scene::SceneEvent::EVENT_MAIN_INDEX, event_i));
+		auto &event_dat = event->data;
 
-		tmp_scene = std::move(this->start_scene_);
+		switch (event_dat.type) {
+		case tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::START: {
+			if (this->scene_ == event_dat.scene) {
+				break;
+			}
 
-		if (this->scene_ != nullptr) {
+			if (this->scene_ != nullptr) {
+				this->scene_->End();
+				this->scene_->SetRunFlag(false);
+			}
+
+			event_dat.scene->End();
+			event_dat.scene->SetRunFlag(true);
+
+			this->scene_ = event_dat.scene;
+
+			break;
+		}
+		case tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::END: {
+			if (this->scene_ == nullptr) {
+				return;
+			}
+
 			this->scene_->End();
 			this->scene_->SetRunFlag(false);
+
+			this->scene_.reset();
+
+			return;
+		}
 		}
 
-		tmp_scene->End();
-		tmp_scene->SetRunFlag(true);
+		event_dat.Init();
+	}
 
-		this->scene_ = tmp_scene;
+	for (UINT event_i = 0U; event_i < this->GetEventCount(tml::scene::NodeEvent::EVENT_MAIN_INDEX); ++event_i) {
+		auto event = reinterpret_cast<tml::scene::NodeEvent *>(this->GetEventFast(tml::scene::NodeEvent::EVENT_MAIN_INDEX, event_i));
+		auto &event_dat = event->data;
+
+		switch (event_dat.type) {
+		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD: {
+			event_dat.parent_node->AddChildNode(event_dat.child_node, true);
+
+			break;
+		}
+		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE: {
+			event_dat.parent_node->RemoveChildNode(event_dat.child_node, true);
+
+			break;
+		}
+		}
+
+		event_dat.Init();
 	}
 
 	if (this->scene_ != nullptr) {
@@ -325,33 +367,6 @@ void tml::scene::Manager::Update(void)
 		}
 	}
 
-	for (UINT event_i = 0U; event_i < this->GetEventCount(tml::scene::SceneEvent::EVENT_MAIN_INDEX); ++event_i) {
-		auto event = reinterpret_cast<tml::scene::SceneEvent *>(this->GetEventFast(tml::scene::SceneEvent::EVENT_MAIN_INDEX, event_i));
-		auto &event_dat = event->data;
-
-		event_dat.Init();
-	}
-
-	for (UINT event_i = 0U; event_i < this->GetEventCount(tml::scene::NodeEvent::EVENT_MAIN_INDEX); ++event_i) {
-		auto event = reinterpret_cast<tml::scene::NodeEvent *>(this->GetEventFast(tml::scene::NodeEvent::EVENT_MAIN_INDEX, event_i));
-		auto &event_dat = event->data;
-
-		switch (event_dat.type) {
-		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD: {
-			event_dat.parent_node->AddChildNode(event_dat.child_node, true);
-
-			break;
-		}
-		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE: {
-			event_dat.parent_node->RemoveChildNode(event_dat.child_node, true);
-
-			break;
-		}
-		}
-
-		event_dat.Init();
-	}
-
 	return;
 }
 
@@ -390,12 +405,19 @@ void tml::scene::Manager::DeleteCommon(void)
  */
 INT tml::scene::Manager::StartScene(tml::shared_ptr<tml::scene::Scene> &scene)
 {
-	if ((scene == nullptr)
-	|| (scene == this->scene_)) {
+	if (scene == nullptr) {
 		return (-1);
 	}
 
-	this->start_scene_ = scene;
+	tml::scene::SceneEventDesc event_desc;
+
+	event_desc.SetManager(this);
+	event_desc.data.type = tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::START;
+	event_desc.data.scene = scene;
+
+	if (this->AddEvent<tml::scene::SceneEvent>(event_desc) < 0) {
+		return (-1);
+	}
 
 	return (0);
 }
@@ -406,8 +428,13 @@ INT tml::scene::Manager::StartScene(tml::shared_ptr<tml::scene::Scene> &scene)
  */
 void tml::scene::Manager::EndScene(void)
 {
-	if (this->scene_ != nullptr) {
-		this->scene_->SetStartFlag(false);
+	tml::scene::SceneEventDesc event_desc;
+
+	event_desc.SetManager(this);
+	event_desc.data.type = tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::END;
+
+	if (this->AddEvent<tml::scene::SceneEvent>(event_desc) < 0) {
+		return;
 	}
 
 	return;

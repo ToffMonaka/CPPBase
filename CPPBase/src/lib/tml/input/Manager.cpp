@@ -5,6 +5,8 @@
 
 
 #include "Manager.h"
+#include "MouseDeviceEvent.h"
+#include "KeyboardDeviceEvent.h"
 
 
 /**
@@ -197,4 +199,91 @@ void tml::input::Manager::DeleteCommon(void)
 	this->common.Init();
 
 	return;
+}
+
+
+/**
+ * @brief AddMouseDeviceRawInputä÷êî
+ * @param rm (raw_mouse)
+ * @param pos (position)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::input::Manager::AddMouseDeviceRawInput(const RAWMOUSE &rm, const tml::XMINT2EX &pos)
+{
+	tml::input::MouseDeviceEventDesc event_desc;
+
+	event_desc.SetManager(this);
+	event_desc.data.SetRawInput(rm, pos);
+
+	this->AddEvent<tml::input::MouseDeviceEvent>(event_desc);
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::LEFT, true);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_UP)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::LEFT, false);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::RIGHT_BUTTON_DOWN)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::RIGHT, true);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::RIGHT_BUTTON_UP)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::RIGHT, false);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::MIDDLE_BUTTON_DOWN)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::MIDDLE, true);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::MIDDLE_BUTTON_UP)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::MIDDLE, false);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::SIDE1_BUTTON_DOWN)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::SIDE1, true);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::SIDE1_BUTTON_UP)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::SIDE1, false);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::SIDE2_BUTTON_DOWN)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::SIDE2, true);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::SIDE2_BUTTON_UP)) {
+		this->SetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::SIDE2, false);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief AddKeyboardDeviceRawInputä÷êî
+ * @param rk (raw_keyboard)
+ * @return res (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::input::Manager::AddKeyboardDeviceRawInput(const RAWKEYBOARD &rk)
+{
+	tml::input::KeyboardDeviceEventDesc event_desc;
+
+	event_desc.SetManager(this);
+	event_desc.data.SetRawInput(rk);
+
+	this->AddEvent<tml::input::KeyboardDeviceEvent>(event_desc);
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE::BUTTON_DOWN)) {
+		this->SetKeyboardDeviceCodeState(event_desc.data.code, true);
+	}
+
+	if (static_cast<bool>(event_desc.data.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE::BUTTON_UP)) {
+		this->SetKeyboardDeviceCodeState(event_desc.data.code, false);
+	}
+
+	return (0);
 }
