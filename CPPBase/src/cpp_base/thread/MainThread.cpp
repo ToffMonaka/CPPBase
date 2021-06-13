@@ -19,6 +19,9 @@
 #include "../thread/TestThread.h"
 
 
+#include "../../lib/tml/file/XMLFile.h"
+
+
 /**
  * @brief コンストラクタ
  */
@@ -215,6 +218,16 @@ INT cpp_base::MainThread::Start(void)
 		if (tml::ThreadUtil::Start(th) < 0) {
 			return (-1);
 		}
+	}
+
+	tml::XMLFile xml_file;
+
+	xml_file.read_desc.data.file_path = L"res/title_scene.xml";
+
+	if (xml_file.Read() < 0) {
+		int a = 0;
+	} else {
+		int a = 0;
 	}
 
 	return (0);

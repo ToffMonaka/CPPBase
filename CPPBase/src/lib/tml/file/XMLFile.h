@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../constant/ConstantInclude_RapidXMLBase.h"
 #include "TextFile.h"
 
 

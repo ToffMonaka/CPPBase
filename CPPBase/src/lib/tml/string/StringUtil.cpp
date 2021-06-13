@@ -26,8 +26,8 @@ void tml::StringUtil::Init(void)
 	if (tml::StringUtil::old_locale_flg_) {
 		try {
 			std::locale::global(std::locale(tml::StringUtil::old_locale_name_));
-		} catch (std::runtime_error &e) {
-			std::cout << e.what() << std::endl;
+		} catch (std::runtime_error &err) {
+			std::cout << err.what() << std::endl;
 		}
 
 		tml::StringUtil::old_locale_name_.clear();
@@ -63,8 +63,8 @@ INT tml::StringUtil::Create(std::unique_ptr<tml::StringUtilEngine> &engine)
 
 		tml::StringUtil::old_locale_name_ = old_locale.name();
 		tml::StringUtil::old_locale_flg_ = true;
-	} catch (std::runtime_error &e) {
-		std::cout << e.what() << std::endl;
+	} catch (std::runtime_error &err) {
+		std::cout << err.what() << std::endl;
 
 		tml::StringUtil::Init();
 

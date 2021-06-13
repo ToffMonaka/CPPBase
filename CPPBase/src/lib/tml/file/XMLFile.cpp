@@ -5,6 +5,7 @@
 
 
 #include "XMLFile.h"
+#include "../string/StringUtil.h"
 
 
 /**
@@ -163,6 +164,33 @@ INT tml::XMLFile::Read(void)
 	if (txt_file.data.line_string_container.empty()) {
 		return (0);
 	}
+
+	std::wstring file_str;
+	std::string tmp_file_str;
+
+	tml::StringUtil::Join(file_str, txt_file.data.line_string_container, L"");
+
+	tml::StringUtil::GetString(tmp_file_str, file_str.c_str());
+
+	tml::DynamicBuffer xml_buf;
+
+	xml_buf.SetSize(tmp_file_str.size() + sizeof(CHAR));
+	xml_buf.WriteArray(reinterpret_cast<const BYTE *>(tmp_file_str.c_str()), tmp_file_str.size(), tmp_file_str.size());
+	xml_buf.WriteCHAR(0);
+
+	CHAR *xml_str = reinterpret_cast<CHAR *>(xml_buf.Get());
+
+	tml::unique_ptr<rapidxml::xml_document<>> xml_doc = tml::make_unique<rapidxml::xml_document<>>(1U);
+
+	try {
+		xml_doc->parse<rapidxml::parse_default>(xml_str);
+	} catch (rapidxml::parse_error &err) {
+		std::cout << err.what() << std::endl;
+
+		return (-1);
+	}
+
+	int a = 0;
 
 	return (0);
 }

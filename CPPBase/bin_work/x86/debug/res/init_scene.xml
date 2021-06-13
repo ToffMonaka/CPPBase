@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="shift_jis"?>
+<scene class_name="InitScene">
+	<node class_name="InitSceneNode">
+	</node>
+</scene>
