@@ -17,20 +17,33 @@ namespace NEWLINE_CODE {
 		CR,
 		LF
 	};
-	const WCHAR *const STRING_ARRAY[] = {L"", L"\r\n", L"\r", L"\n"};
+	const CHAR *const STRING_ARRAY_MB[] = {"", "\r\n", "\r", "\n"};
+	const WCHAR *const STRING_ARRAY_W[] = {L"", L"\r\n", L"\r", L"\n"};
 
-	const WCHAR *GetString(const tml::ConstantUtil::NEWLINE_CODE::TYPE);
+	const CHAR *GetStringMB(const tml::ConstantUtil::NEWLINE_CODE::TYPE);
+	const WCHAR *GetStringW(const tml::ConstantUtil::NEWLINE_CODE::TYPE);
 }
 }
 }
 
 
 /**
- * @brief GetNewlineCodeStringä÷êî
+ * @brief GetStringMBä÷êî
  * @param type (type)
- * @return newline_code_str (newline_code_string)
+ * @return str (string)
  */
-inline const WCHAR *tml::ConstantUtil::NEWLINE_CODE::GetString(const tml::ConstantUtil::NEWLINE_CODE::TYPE type)
+inline const CHAR *tml::ConstantUtil::NEWLINE_CODE::GetStringMB(const tml::ConstantUtil::NEWLINE_CODE::TYPE type)
 {
-	return (tml::ConstantUtil::NEWLINE_CODE::STRING_ARRAY[static_cast<size_t>(type)]);
+	return (tml::ConstantUtil::NEWLINE_CODE::STRING_ARRAY_MB[static_cast<size_t>(type)]);
+}
+
+
+/**
+ * @brief GetStringWä÷êî
+ * @param type (type)
+ * @return str (string)
+ */
+inline const WCHAR *tml::ConstantUtil::NEWLINE_CODE::GetStringW(const tml::ConstantUtil::NEWLINE_CODE::TYPE type)
+{
+	return (tml::ConstantUtil::NEWLINE_CODE::STRING_ARRAY_W[static_cast<size_t>(type)]);
 }

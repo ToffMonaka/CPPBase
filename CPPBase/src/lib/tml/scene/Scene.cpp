@@ -97,12 +97,12 @@ tml::scene::Scene::~Scene()
  */
 void tml::scene::Scene::Release(void)
 {
-	if (this->header_node_ != nullptr) {
-		this->header_node_->End();
-		this->header_node_->SetRunFlag(false);
+	if (this->root_node_ != nullptr) {
+		this->root_node_->End();
+		this->root_node_->SetRunFlag(false);
 	}
 
-	this->header_node_.reset();
+	this->root_node_.reset();
 
 	tml::scene::ManagerResource::Release();
 
@@ -146,12 +146,12 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc, const tml::Cons
 	this->type_ = type;
 	this->start_flg_ = true;
 
-	{// HeaderNode Create
+	{// RootNode Create
 		tml::scene::BaseNodeDesc desc;
 
 		desc.SetManager(this->GetManager());
 
-		if (this->GetManager()->GetResource<tml::scene::BaseNode>(this->header_node_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::scene::BaseNode>(this->root_node_, desc) == nullptr) {
 			return (-1);
 		}
 	}
@@ -179,8 +179,8 @@ INT tml::scene::Scene::Start(void)
 		this->started_flg_ = true;
 	}
 
-	if (this->header_node_ != nullptr) {
-		this->header_node_->Start();
+	if (this->root_node_ != nullptr) {
+		this->root_node_->Start();
 	}
 
 	return (0);
@@ -192,8 +192,8 @@ INT tml::scene::Scene::Start(void)
  */
 void tml::scene::Scene::End(void)
 {
-	if (this->header_node_ != nullptr) {
-		this->header_node_->End();
+	if (this->root_node_ != nullptr) {
+		this->root_node_->End();
 	}
 
 	if ((this->run_flg_) && (this->started_flg_)) {
@@ -217,19 +217,19 @@ void tml::scene::Scene::Update(void)
 
 	this->OnUpdate();
 
-	if (this->header_node_ != nullptr) {
-		if (!this->header_node_->IsStarted()) {
-			if (this->header_node_->GetStartFlag()) {
-				this->header_node_->Start();
+	if (this->root_node_ != nullptr) {
+		if (!this->root_node_->IsStarted()) {
+			if (this->root_node_->GetStartFlag()) {
+				this->root_node_->Start();
 			}
 		}
 
-		if (this->header_node_->GetStartFlag()) {
-			this->header_node_->Update();
+		if (this->root_node_->GetStartFlag()) {
+			this->root_node_->Update();
 		}
 
-		if (!this->header_node_->GetStartFlag()) {
-			this->header_node_->End();
+		if (!this->root_node_->GetStartFlag()) {
+			this->root_node_->End();
 		}
 	}
 
@@ -245,8 +245,8 @@ void tml::scene::Scene::SetRunFlag(const bool run_flg)
 {
 	this->run_flg_ = run_flg;
 
-	if (this->header_node_ != nullptr) {
-		this->header_node_->SetRunFlag(run_flg);
+	if (this->root_node_ != nullptr) {
+		this->root_node_->SetRunFlag(run_flg);
 	}
 
 	return;

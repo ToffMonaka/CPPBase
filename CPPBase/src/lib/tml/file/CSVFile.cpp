@@ -181,7 +181,7 @@ INT tml::CSVFile::Read(void)
 	size_t dq_str_cnt = 0U;
 	size_t double_dq_str_index = 0U;
 	size_t comment_str_index = 0U;
-	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetString(read_desc_dat->newline_code_type);
+	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetStringW(read_desc_dat->newline_code_type);
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
 

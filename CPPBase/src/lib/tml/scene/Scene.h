@@ -62,7 +62,7 @@ private:
 	bool run_flg_;
 	bool start_flg_;
 	bool started_flg_;
-	tml::shared_ptr<tml::scene::Node> header_node_;
+	tml::shared_ptr<tml::scene::Node> root_node_;
 
 protected:
 	void Release(void);
@@ -88,7 +88,7 @@ public:
 	bool GetStartFlag(void) const;
 	void SetStartFlag(const bool);
 	bool IsStarted(void) const;
-	const tml::shared_ptr<tml::scene::Node> &GetHeaderNode(void);
+	const tml::shared_ptr<tml::scene::Node> &GetRootrNode(void);
 };
 }
 }
@@ -148,10 +148,10 @@ inline bool tml::scene::Scene::IsStarted(void) const
 
 
 /**
- * @brief GetHeaderNodeä÷êî
- * @return header_node (header_node)
+ * @brief GetRootrNodeä÷êî
+ * @return root_node (root_node)
  */
-inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Scene::GetHeaderNode(void)
+inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Scene::GetRootrNode(void)
 {
-	return (this->header_node_);
+	return (this->root_node_);
 }

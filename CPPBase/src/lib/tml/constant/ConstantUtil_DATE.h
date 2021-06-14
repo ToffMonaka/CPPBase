@@ -23,7 +23,6 @@ namespace DATE {
 	const size_t STRING_LENGTH = 19U;
 	const CHAR ZERO_STRING_MB[] = "0000-00-00 00:00:00";
 	const WCHAR ZERO_STRING_W[] = L"0000-00-00 00:00:00";
-	const WCHAR *const ZERO_STRING = tml::ConstantUtil::DATE::ZERO_STRING_W;
 }
 }
 }

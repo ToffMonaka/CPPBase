@@ -222,13 +222,11 @@ INT cpp_base::MainThread::Start(void)
 
 	tml::XMLFile xml_file;
 
-	xml_file.read_desc.data.file_path = L"res/title_scene.xml";
+	xml_file.read_desc.data.file_path = L"res/init_scene.xml";
 
-	if (xml_file.Read() < 0) {
-		int a = 0;
-	} else {
-		int a = 0;
-	}
+	xml_file.Read();
+
+	int a = 0;
 
 	return (0);
 }
