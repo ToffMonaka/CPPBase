@@ -224,7 +224,9 @@ INT cpp_base::MainThread::Start(void)
 
 	xml_file.read_desc.data.file_path = L"res/init_scene.xml";
 
-	xml_file.Read();
+	if (xml_file.Read() < 0) {
+		int a = 0;
+	}
 
 	int a = 0;
 

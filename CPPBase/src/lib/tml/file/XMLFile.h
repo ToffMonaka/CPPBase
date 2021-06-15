@@ -38,12 +38,32 @@ public:
 
 	virtual void Init(void);
 
+	const std::wstring *GetValue(const WCHAR *) const;
+
 	tml::XMLFileDataNode *GetParentNode(void);
 	void SetParentNode(tml::XMLFileDataNode *);
 	const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &GetChildNodeContainer(void);
 	INT AddChildNode(tml::shared_ptr<tml::XMLFileDataNode> &);
 	void RemoveChildNode(tml::shared_ptr<tml::XMLFileDataNode> &);
 };
+}
+
+
+/**
+ * @brief GetValueä÷êî
+ * @param val_name (value_name)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::XMLFileDataNode::GetValue(const WCHAR *val_name) const
+{
+	auto val_itr = this->value_container.find(val_name);
+
+	if (val_itr == this->value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&val_itr->second);
 }
 
 
@@ -73,14 +93,19 @@ namespace tml {
  */
 class XMLFileData
 {
+public: XMLFileData(const tml::XMLFileData &) = delete;
+public: tml::XMLFileData &operator =(const tml::XMLFileData &) = delete;
+
+private:
+	tml::shared_ptr<tml::XMLFileDataNode> root_node_;
+
 public:
-	tml::shared_ptr<tml::XMLFileDataNode> root_node;
 
 protected:
 	void Release(void);
 
 private:
-	void SetRootNodeRecursivePart(tml::shared_ptr<tml::XMLFileDataNode> &, rapidxml::xml_node<> *);
+	void SetRootNodeRecursivePart(tml::shared_ptr<tml::XMLFileDataNode> &, const rapidxml::xml_node<> *);
 
 public:
 	XMLFileData();
@@ -88,8 +113,19 @@ public:
 
 	virtual void Init(void);
 
-	void SetRootNode(const rapidxml::xml_document<> &);
+	const tml::shared_ptr<tml::XMLFileDataNode> &GetRootrNode(void);
+	void SetRootNode(const rapidxml::xml_document<> *);
 };
+}
+
+
+/**
+ * @brief GetRootrNodeä÷êî
+ * @return root_node (root_node)
+ */
+inline const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileData::GetRootrNode(void)
+{
+	return (this->root_node_);
 }
 
 

@@ -161,7 +161,7 @@ tml::XMLFileData::~XMLFileData()
  */
 void tml::XMLFileData::Release(void)
 {
-	this->root_node.reset();
+	this->root_node_.reset();
 
 	return;
 }
@@ -182,13 +182,15 @@ void tml::XMLFileData::Init(void)
  * @brief SetRootNodeä÷êî
  * @param xml_doc (xml_document)
  */
-void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> &xml_doc)
+void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
 {
-	this->root_node = tml::make_shared<tml::XMLFileDataNode>(1U);
+	this->root_node_ = tml::make_shared<tml::XMLFileDataNode>(1U);
 
-	this->root_node->name = L"root";
+	this->root_node_->name = L"root";
 
-	this->SetRootNodeRecursivePart(this->root_node, xml_doc.first_node());
+	if (xml_doc != nullptr) {
+		this->SetRootNodeRecursivePart(this->root_node_, xml_doc->first_node());
+	}
 
 	return;
 }
@@ -199,7 +201,7 @@ void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> &xml_doc)
  * @param parent_node (parent_node)
  * @param xml_doc (xml_document)
  */
-void tml::XMLFileData::SetRootNodeRecursivePart(tml::shared_ptr<tml::XMLFileDataNode> &parent_node, rapidxml::xml_node<> *xml_node)
+void tml::XMLFileData::SetRootNodeRecursivePart(tml::shared_ptr<tml::XMLFileDataNode> &parent_node, const rapidxml::xml_node<> *xml_node)
 {
 	if (xml_node == nullptr) {
 		return;
@@ -208,12 +210,21 @@ void tml::XMLFileData::SetRootNodeRecursivePart(tml::shared_ptr<tml::XMLFileData
 	tml::shared_ptr<tml::XMLFileDataNode> child_node = tml::make_shared<tml::XMLFileDataNode>(1U);
 
 	tml::StringUtil::GetString(child_node->name, xml_node->name());
+
+	for (rapidxml::xml_attribute<> *xml_node_attr = xml_node->first_attribute(); xml_node_attr; xml_node_attr = xml_node_attr->next_attribute()) {
+		std::pair<std::wstring, std::wstring> val;
+
+		tml::StringUtil::GetString(val.first, xml_node_attr->name());
+		tml::StringUtil::GetString(val.second, xml_node_attr->value());
+
+		child_node->value_container.insert(val);
+	}
+
 	tml::StringUtil::GetString(child_node->string, xml_node->value());
 
 	parent_node->AddChildNode(child_node);
 
 	this->SetRootNodeRecursivePart(child_node, xml_node->first_node());
-
 	this->SetRootNodeRecursivePart(parent_node, xml_node->next_sibling());
 
 	return;
@@ -362,18 +373,21 @@ INT tml::XMLFile::Read(void)
 
 	CHAR *xml_str = reinterpret_cast<CHAR *>(xml_buf.Get());
 
-	tml::unique_ptr<rapidxml::xml_document<>> xml_doc_unique_p = tml::make_unique<rapidxml::xml_document<>>(1U);
-	rapidxml::xml_document<> &xml_doc = *xml_doc_unique_p.get();
+	tml::unique_ptr<rapidxml::xml_document<>> xml_doc = tml::make_unique<rapidxml::xml_document<>>(1U);
 
 	try {
-		xml_doc.parse<rapidxml::parse_default>(xml_str);
+		xml_doc->parse<rapidxml::parse_no_data_nodes | rapidxml::parse_trim_whitespace>(xml_str);
 	} catch (rapidxml::parse_error &err) {
 		std::cout << err.what() << std::endl;
 
 		return (-1);
 	}
 
-	this->data.SetRootNode(xml_doc);
+	this->data.SetRootNode(xml_doc.get());
+
+	if (this->data.GetRootrNode() == nullptr) {
+		return (-1);
+	}
 
 	return (0);
 }
@@ -393,6 +407,9 @@ INT tml::XMLFile::Write(void)
 	}
 
 	tml::TextFile txt_file;
+
+	if (!this->data.GetRootrNode()->GetChildNodeContainer().empty()) {
+	}
 
 	txt_file.write_desc.parent_data = write_desc_dat;
 
