@@ -88,7 +88,8 @@ public:
 	bool GetStartFlag(void) const;
 	void SetStartFlag(const bool);
 	bool IsStarted(void) const;
-	const tml::shared_ptr<tml::scene::Node> &GetRootrNode(void);
+	const tml::shared_ptr<tml::scene::Node> &GetRootNode(void);
+	void SetRootNode(void);
 };
 }
 }
@@ -148,10 +149,10 @@ inline bool tml::scene::Scene::IsStarted(void) const
 
 
 /**
- * @brief GetRootrNodeä÷êî
+ * @brief GetRootNodeä÷êî
  * @return root_node (root_node)
  */
-inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Scene::GetRootrNode(void)
+inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Scene::GetRootNode(void)
 {
 	return (this->root_node_);
 }

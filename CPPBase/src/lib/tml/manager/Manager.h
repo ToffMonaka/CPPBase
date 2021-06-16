@@ -290,7 +290,7 @@ inline UINT tml::Manager::GetEventCount(const UINT event_main_index) const
 
 /**
  * @brief GetEventŠÖ”
- * @return event_main_index (event_main_index)
+ * @param event_main_index (event_main_index)
  * @param index (index)
  * @return event (event)<br>
  * nullptr=¸”s
@@ -307,7 +307,7 @@ inline tml::ManagerEvent *tml::Manager::GetEvent(const UINT event_main_index, co
 
 /**
  * @brief GetEventFastŠÖ”
- * @return event_main_index (event_main_index)
+ * @param event_main_index (event_main_index)
  * @param index (index)
  * @return event (event)<br>
  * nullptr=¸”s

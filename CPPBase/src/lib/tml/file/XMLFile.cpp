@@ -51,10 +51,11 @@ void tml::XMLFileDataNode::Init(void)
 {
 	this->Release();
 
+	this->parent_node_ = nullptr;
+
 	this->name.clear();
 	this->value_container.clear();
 	this->string.clear();
-	this->parent_node_ = nullptr;
 
 	return;
 }
@@ -161,7 +162,9 @@ tml::XMLFileData::~XMLFileData()
  */
 void tml::XMLFileData::Release(void)
 {
-	this->root_node_.reset();
+	if (this->root_node_ != nullptr) {
+		this->root_node_.reset();
+	}
 
 	return;
 }
@@ -184,12 +187,18 @@ void tml::XMLFileData::Init(void)
  */
 void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
 {
+	if (this->root_node_ != nullptr) {
+		this->root_node_.reset();
+	}
+
 	this->root_node_ = tml::make_shared<tml::XMLFileDataNode>(1U);
 
-	this->root_node_->name = L"root";
+	if (this->root_node_ != nullptr) {
+		this->root_node_->name = L"root";
 
-	if (xml_doc != nullptr) {
-		this->SetRootNodeRecursivePart(this->root_node_, xml_doc->first_node());
+		if (xml_doc != nullptr) {
+			this->SetRootNodeRecursivePart(this->root_node_, xml_doc->first_node());
+		}
 	}
 
 	return;
@@ -354,6 +363,12 @@ INT tml::XMLFile::Read(void)
 	this->data.Init();
 
 	if (txt_file.data.line_string_container.empty()) {
+		this->data.SetRootNode(nullptr);
+
+		if (this->data.GetRootNode() == nullptr) {
+			return (-1);
+		}
+
 		return (0);
 	}
 
@@ -385,7 +400,7 @@ INT tml::XMLFile::Read(void)
 
 	this->data.SetRootNode(xml_doc.get());
 
-	if (this->data.GetRootrNode() == nullptr) {
+	if (this->data.GetRootNode() == nullptr) {
 		return (-1);
 	}
 
@@ -400,6 +415,9 @@ INT tml::XMLFile::Read(void)
  */
 INT tml::XMLFile::Write(void)
 {
+	static const std::wstring empty_str = L"";
+	static const std::wstring header_str = L"<?xml version=\"1.0\" encoding=\"shift_jis\" ?>";
+
 	auto write_desc_dat = this->write_desc.GetDataByParent();
 
 	if (write_desc_dat->file_path.empty()) {
@@ -408,7 +426,16 @@ INT tml::XMLFile::Write(void)
 
 	tml::TextFile txt_file;
 
-	if (!this->data.GetRootrNode()->GetChildNodeContainer().empty()) {
+	if (this->data.GetRootNode() == nullptr) {
+		return (-1);
+	} else if (!this->data.GetRootNode()->GetChildNodeContainer().empty()) {
+		txt_file.data.line_string_container.push_back(header_str);
+
+		for (auto &child_node : this->data.GetRootNode()->GetChildNodeContainer()) {
+			this->WriteRecursivePart(txt_file, child_node, 0U);
+		}
+
+		txt_file.data.line_string_container.push_back(empty_str);
 	}
 
 	txt_file.write_desc.parent_data = write_desc_dat;
@@ -418,4 +445,72 @@ INT tml::XMLFile::Write(void)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief WriteRecursivePartä÷êî
+ * @param txt_file (text_file)
+ * @param node (node)
+ * @param tab_cnt (tab_count)
+ */
+void tml::XMLFile::WriteRecursivePart(tml::TextFile &txt_file, const tml::shared_ptr<tml::XMLFileDataNode> &node, const size_t tab_cnt)
+{
+	static const std::wstring tab_str = L"\t";
+	static const std::wstring node_start_start_str = L"<";
+	static const std::wstring node_end_start_str = L"</";
+	static const std::wstring node_end_str = L">";
+	static const std::wstring space_str = L" ";
+	static const std::wstring equal_str = L"=";
+	static const std::wstring dq_str = L"\"";
+
+	std::wstring total_tab_str;
+
+	for (size_t tab_i = 0U; tab_i < tab_cnt; ++tab_i) {
+		total_tab_str += tab_str;
+	}
+
+	std::wstring start_line_str;
+	
+	start_line_str = total_tab_str;
+	start_line_str += node_start_start_str;
+	start_line_str += node->name;
+
+	for (auto &val : node->value_container) {
+		start_line_str += space_str;
+		start_line_str += val.first;
+		start_line_str += equal_str;
+		start_line_str += dq_str;
+		start_line_str += val.second;
+		start_line_str += dq_str;
+	}
+
+	start_line_str += node_end_str;
+
+	txt_file.data.line_string_container.push_back(start_line_str);
+
+	if (!node->string.empty()) {
+		std::wstring middle_line_str;
+	
+		middle_line_str = total_tab_str;
+		middle_line_str += tab_str;
+		middle_line_str += node->string;
+
+		txt_file.data.line_string_container.push_back(middle_line_str);
+	}
+
+	for (auto &child_node : node->GetChildNodeContainer()) {
+		this->WriteRecursivePart(txt_file, child_node, tab_cnt + 1U);
+	}
+
+	std::wstring end_line_str;
+
+	end_line_str = total_tab_str;
+	end_line_str += node_end_start_str;
+	end_line_str += node->name;
+	end_line_str += node_end_str;
+
+	txt_file.data.line_string_container.push_back(end_line_str);
+
+	return;
 }

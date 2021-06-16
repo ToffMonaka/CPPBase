@@ -158,9 +158,9 @@ void tml::scene::Manager::Release(void)
 	if (this->scene_ != nullptr) {
 		this->scene_->End();
 		this->scene_->SetRunFlag(false);
-	}
 
-	this->scene_.reset();
+		this->scene_.reset();
+	}
 
 	this->DeleteCommon();
 	this->DeleteResourceContainer();
@@ -315,12 +315,12 @@ void tml::scene::Manager::Update(void)
 
 		switch (event_dat.type) {
 		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD: {
-			event_dat.parent_node->AddChildNode(event_dat.child_node, true);
+			event_dat.parent_node->AddChildNode(event_dat.child_node, false);
 
 			break;
 		}
 		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE: {
-			event_dat.parent_node->RemoveChildNode(event_dat.child_node, true);
+			event_dat.parent_node->RemoveChildNode(event_dat.child_node, false);
 
 			break;
 		}

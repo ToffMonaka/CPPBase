@@ -230,6 +230,11 @@ INT cpp_base::SystemConfigFile::Read(void)
  */
 INT cpp_base::SystemConfigFile::Write(void)
 {
+	static const std::wstring empty_str = L"";
+	static const std::wstring section_start_str = L"[";
+	static const std::wstring section_end_str = L"]";
+	static const std::wstring equal_str = L"=";
+
 	auto write_desc_dat = this->write_desc.GetDataByParent();
 
 	if (write_desc_dat->file_path.empty()) {
@@ -238,10 +243,6 @@ INT cpp_base::SystemConfigFile::Write(void)
 
 	tml::TextFile txt_file;
 
-	const std::wstring empty_str = L"";
-	const std::wstring section_start_str = L"[";
-	const std::wstring section_end_str = L"]";
-	const std::wstring equal_str = L"=";
 	std::wstring val;
 
 	{// APPLICATION Section Write

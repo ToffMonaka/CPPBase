@@ -100,9 +100,9 @@ void tml::scene::Scene::Release(void)
 	if (this->root_node_ != nullptr) {
 		this->root_node_->End();
 		this->root_node_->SetRunFlag(false);
-	}
 
-	this->root_node_.reset();
+		this->root_node_.reset();
+	}
 
 	tml::scene::ManagerResource::Release();
 
@@ -146,14 +146,10 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc, const tml::Cons
 	this->type_ = type;
 	this->start_flg_ = true;
 
-	{// RootNode Create
-		tml::scene::BaseNodeDesc desc;
+	this->SetRootNode();
 
-		desc.SetManager(this->GetManager());
-
-		if (this->GetManager()->GetResource<tml::scene::BaseNode>(this->root_node_, desc) == nullptr) {
-			return (-1);
-		}
+	if (this->root_node_ == nullptr) {
+		return (-1);
 	}
 
 	return (0);
@@ -247,6 +243,32 @@ void tml::scene::Scene::SetRunFlag(const bool run_flg)
 
 	if (this->root_node_ != nullptr) {
 		this->root_node_->SetRunFlag(run_flg);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetRootNodeŠÖ”
+ */
+void tml::scene::Scene::SetRootNode(void)
+{
+	if (this->root_node_ != nullptr) {
+		this->root_node_->End();
+		this->root_node_->SetRunFlag(false);
+
+		this->root_node_.reset();
+	}
+
+	tml::scene::BaseNodeDesc desc;
+
+	desc.SetManager(this->GetManager());
+
+	this->GetManager()->GetResource<tml::scene::BaseNode>(this->root_node_, desc);
+
+	if (this->root_node_ != nullptr) {
+		this->root_node_->name = L"root";
 	}
 
 	return;

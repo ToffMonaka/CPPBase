@@ -152,6 +152,13 @@ void tml::INIFile::Init(void)
  */
 INT tml::INIFile::Read(void)
 {
+	static const std::wstring empty_str = L"";
+	static const std::wstring section_start_str = L"[";
+	static const std::wstring section_end_str = L"]";
+	static const std::wstring equal_str = L"=";
+	static const std::wstring comment_str = L";";
+	static const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
+
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::TextFile txt_file;
@@ -168,12 +175,6 @@ INT tml::INIFile::Read(void)
 		return (0);
 	}
 
-	const std::wstring empty_str = L"";
-	const std::wstring section_start_str = L"[";
-	const std::wstring section_end_str = L"]";
-	const std::wstring equal_str = L"=";
-	const std::wstring comment_str = L";";
-	const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	std::wstring line_str;
 	size_t section_start_str_index = 0U;
 	size_t section_end_str_index = 0U;
@@ -267,6 +268,11 @@ INT tml::INIFile::Read(void)
  */
 INT tml::INIFile::Write(void)
 {
+	static const std::wstring empty_str = L"";
+	static const std::wstring section_start_str = L"[";
+	static const std::wstring section_end_str = L"]";
+	static const std::wstring equal_str = L"=";
+
 	auto write_desc_dat = this->write_desc.GetDataByParent();
 
 	if (write_desc_dat->file_path.empty()) {
@@ -276,19 +282,19 @@ INT tml::INIFile::Write(void)
 	tml::TextFile txt_file;
 
 	if (!this->data.value_container.empty()) {
-		const std::wstring empty_str = L"";
-		const std::wstring section_start_str = L"[";
-		const std::wstring section_end_str = L"]";
-		const std::wstring equal_str = L"=";
 		std::wstring line_str;
 
 		for (auto &val_name_cont : this->data.value_container) {
-			line_str = section_start_str + val_name_cont.first + section_end_str;
+			line_str = section_start_str;
+			line_str += val_name_cont.first;
+			line_str += section_end_str;
 
 			txt_file.data.line_string_container.push_back(line_str);
 
 			for (auto &val : val_name_cont.second) {
-				line_str = val.first + equal_str + val.second;
+				line_str = val.first;
+				line_str += equal_str;
+				line_str += val.second;
 
 				txt_file.data.line_string_container.push_back(line_str);
 			}

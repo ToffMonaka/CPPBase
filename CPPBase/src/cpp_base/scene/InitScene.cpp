@@ -139,7 +139,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 			return (-1);
 		}
 
-		if (this->GetRootrNode()->AddChildNode(node, true) < 0) {
+		if (this->GetRootNode()->AddChildNode(node, false) < 0) {
 			this->Init();
 
 			return (-1);

@@ -152,6 +152,13 @@ void tml::CSVFile::Init(void)
  */
 INT tml::CSVFile::Read(void)
 {
+	static const std::wstring empty_str = L"";
+	static const std::wstring comma_str = L",";
+	static const std::wstring dq_str = L"\"";
+	static const std::wstring ddq_str = L"\"\"";
+	static const std::wstring comment_str = L"#";
+	static const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
+
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::TextFile txt_file;
@@ -168,18 +175,12 @@ INT tml::CSVFile::Read(void)
 		return (0);
 	}
 
-	const std::wstring empty_str = L"";
-	const std::wstring comma_str = L",";
-	const std::wstring dq_str = L"\"";
-	const std::wstring double_dq_str = L"\"\"";
-	const std::wstring comment_str = L"#";
-	const std::wregex needless_pattern(L"^[\\s|　]+|[\\s|　]+$");
 	std::wstring line_str;
 	size_t comma_str_index = 0U;
 	size_t dq_str_index = 0U;
 	size_t dq_str_sub_index = 0U;
 	size_t dq_str_cnt = 0U;
-	size_t double_dq_str_index = 0U;
+	size_t ddq_str_index = 0U;
 	size_t comment_str_index = 0U;
 	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetStringW(read_desc_dat->newline_code_type);
 	std::vector<std::wstring> column_val_cont;
@@ -268,12 +269,12 @@ INT tml::CSVFile::Read(void)
 
 		for (auto &column_val : column_val_cont) {
 			{// ｢""｣を｢"｣に変換
-				double_dq_str_index = column_val.find(double_dq_str);
+				ddq_str_index = column_val.find(ddq_str);
 
-				while (double_dq_str_index != std::wstring::npos) {
-					column_val.replace(double_dq_str_index, double_dq_str.length(), dq_str);
+				while (ddq_str_index != std::wstring::npos) {
+					column_val.replace(ddq_str_index, ddq_str.length(), dq_str);
 
-					double_dq_str_index = column_val.find(double_dq_str, double_dq_str_index + dq_str.length());
+					ddq_str_index = column_val.find(ddq_str, ddq_str_index + dq_str.length());
 				}
 			}
 
@@ -320,6 +321,9 @@ INT tml::CSVFile::Read(void)
  */
 INT tml::CSVFile::Write(void)
 {
+	static const std::wstring empty_str = L"";
+	static const std::wstring comma_str = L",";
+
 	auto write_desc_dat = this->write_desc.GetDataByParent();
 
 	if (write_desc_dat->file_path.empty()) {
@@ -329,8 +333,6 @@ INT tml::CSVFile::Write(void)
 	tml::TextFile txt_file;
 
 	if (!this->data.value_container.empty()) {
-		const std::wstring empty_str = L"";
-		const std::wstring comma_str = L",";
 		std::wstring line_str;
 
 		for (auto &val_cont : this->data.value_container) {

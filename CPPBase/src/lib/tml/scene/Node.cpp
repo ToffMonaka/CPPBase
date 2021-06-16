@@ -122,6 +122,8 @@ void tml::scene::Node::Init(void)
 	this->started_flg_ = false;
 	this->parent_node_ = nullptr;
 
+	this->name.clear();
+
 	tml::scene::ManagerResource::Init();
 
 	return;
@@ -264,18 +266,24 @@ void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
 /**
  * @brief AddChildNodeä÷êî
  * @param child_node (child_node)
- * @param immediate_flg (immediate_flag)
+ * @param event_flg (event_flag)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool immediate_flg)
+INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
 		return (-1);
 	}
 
-	if (immediate_flg) {
+	if (event_flg) {
+		tml::shared_ptr<tml::scene::Node> parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+
+		if (this->GetManager()->AddNode(parent_node, child_node) < 0) {
+			return (-1);
+		}
+	} else {
 		if (child_node->GetParentNode() != nullptr) {
 			return (-1);
 		}
@@ -291,12 +299,6 @@ INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node
 		child_node->SetParentNode(this);
 
 		this->child_node_cont_.push_back(child_node);
-	} else {
-		tml::shared_ptr<tml::scene::Node> parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
-
-		if (this->GetManager()->AddNode(parent_node, child_node) < 0) {
-			return (-1);
-		}
 	}
 
 	return (0);
@@ -306,16 +308,20 @@ INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node
 /**
  * @brief RemoveChildNodeä÷êî
  * @param child_node (child_node)
- * @param immediate_flg (immediate_flag)
+ * @param event_flg (event_flag)
  */
-void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool immediate_flg)
+void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
 		return;
 	}
 
-	if (immediate_flg) {
+	if (event_flg) {
+		tml::shared_ptr<tml::scene::Node> parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+
+		this->GetManager()->RemoveNode(parent_node, child_node);
+	} else {
 		if (child_node->GetParentNode() == nullptr) {
 			return;
 		}
@@ -331,10 +337,6 @@ void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_
 		child_node->SetParentNode(nullptr);
 
 		this->child_node_cont_.erase(child_node_itr);
-	} else {
-		tml::shared_ptr<tml::scene::Node> parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
-
-		this->GetManager()->RemoveNode(parent_node, child_node);
 	}
 
 	return;

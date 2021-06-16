@@ -38,32 +38,14 @@ public:
 
 	virtual void Init(void);
 
-	const std::wstring *GetValue(const WCHAR *) const;
-
 	tml::XMLFileDataNode *GetParentNode(void);
 	void SetParentNode(tml::XMLFileDataNode *);
 	const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &GetChildNodeContainer(void);
 	INT AddChildNode(tml::shared_ptr<tml::XMLFileDataNode> &);
 	void RemoveChildNode(tml::shared_ptr<tml::XMLFileDataNode> &);
+
+	const std::wstring *GetValue(const WCHAR *) const;
 };
-}
-
-
-/**
- * @brief GetValueä÷êî
- * @param val_name (value_name)
- * @return val (value)<br>
- * nullptr=é∏îs
- */
-inline const std::wstring *tml::XMLFileDataNode::GetValue(const WCHAR *val_name) const
-{
-	auto val_itr = this->value_container.find(val_name);
-
-	if (val_itr == this->value_container.end()) {
-		return (nullptr);
-	}
-
-	return (&val_itr->second);
 }
 
 
@@ -84,6 +66,24 @@ inline tml::XMLFileDataNode *tml::XMLFileDataNode::GetParentNode(void)
 inline const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &tml::XMLFileDataNode::GetChildNodeContainer(void)
 {
 	return (this->child_node_cont_);
+}
+
+
+/**
+ * @brief GetValueä÷êî
+ * @param val_name (value_name)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::XMLFileDataNode::GetValue(const WCHAR *val_name) const
+{
+	auto val_itr = this->value_container.find(val_name);
+
+	if (val_itr == this->value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&val_itr->second);
 }
 
 
@@ -113,17 +113,17 @@ public:
 
 	virtual void Init(void);
 
-	const tml::shared_ptr<tml::XMLFileDataNode> &GetRootrNode(void);
+	const tml::shared_ptr<tml::XMLFileDataNode> &GetRootNode(void);
 	void SetRootNode(const rapidxml::xml_document<> *);
 };
 }
 
 
 /**
- * @brief GetRootrNodeä÷êî
+ * @brief GetRootNodeä÷êî
  * @return root_node (root_node)
  */
-inline const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileData::GetRootrNode(void)
+inline const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileData::GetRootNode(void)
 {
 	return (this->root_node_);
 }
@@ -209,6 +209,9 @@ public:
 	tml::XMLFileData data;
 	tml::XMLFileReadDesc read_desc;
 	tml::XMLFileWriteDesc write_desc;
+
+private:
+	void WriteRecursivePart(tml::TextFile &, const tml::shared_ptr<tml::XMLFileDataNode> &, const size_t);
 
 protected:
 	void Release(void);
