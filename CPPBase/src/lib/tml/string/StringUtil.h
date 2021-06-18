@@ -28,7 +28,11 @@ public: tml::StringUtil &operator =(const tml::StringUtil &) = delete;
 private:
 	static std::unique_ptr<tml::StringUtilEngine> engine_;
 	static std::string old_locale_name_;
-	static bool old_locale_flg_;
+	static bool locale_created_flg_;
+
+private:
+	static INT CreateLocale(const CHAR *);
+	static void DeleteLocale(void);
 
 public:
 	static void Init(void);

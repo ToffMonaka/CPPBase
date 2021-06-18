@@ -11,7 +11,7 @@
 
 std::unique_ptr<tml::StringUtilEngine> tml::StringUtil::engine_;
 std::string tml::StringUtil::old_locale_name_;
-bool tml::StringUtil::old_locale_flg_ = false;
+bool tml::StringUtil::locale_created_flg_ = false;
 
 
 /**
@@ -23,16 +23,7 @@ void tml::StringUtil::Init(void)
 		return;
 	}
 
-	if (tml::StringUtil::old_locale_flg_) {
-		try {
-			std::locale::global(std::locale(tml::StringUtil::old_locale_name_));
-		} catch (std::runtime_error &err) {
-			std::cout << err.what() << std::endl;
-		}
-
-		tml::StringUtil::old_locale_name_.clear();
-		tml::StringUtil::old_locale_flg_ = false;
-	}
+	tml::StringUtil::DeleteLocale();
 
 	tml::StringUtil::engine_.reset();
 
@@ -58,20 +49,62 @@ INT tml::StringUtil::Create(std::unique_ptr<tml::StringUtilEngine> &engine)
 
 	tml::StringUtil::engine_ = std::move(engine);
 
-	try {
-		std::locale old_locale = std::locale::global(std::locale(tml::StringUtil::engine_->GetLocaleName()));
-
-		tml::StringUtil::old_locale_name_ = old_locale.name();
-		tml::StringUtil::old_locale_flg_ = true;
-	} catch (std::runtime_error &err) {
-		std::cout << err.what() << std::endl;
-
+	if (tml::StringUtil::CreateLocale(tml::StringUtil::engine_->GetLocaleName().c_str()) < 0) {
 		tml::StringUtil::Init();
 
 		return (-1);
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief CreateLocaleŠÖ”
+ * @param locale_name (locale_name)
+ * @return res (result)<br>
+ * 0–¢–ž=Ž¸”s
+ */
+INT tml::StringUtil::CreateLocale(const CHAR *locale_name)
+{
+	tml::StringUtil::DeleteLocale();
+
+	try {
+		std::locale old_locale = std::locale::global(std::locale(locale_name));
+
+		tml::StringUtil::old_locale_name_ = old_locale.name();
+	} catch (std::runtime_error &err) {
+		std::cout << err.what() << std::endl;
+
+		return (-1);
+	}
+
+	tml::StringUtil::locale_created_flg_ = true;
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteLocaleŠÖ”
+ */
+void tml::StringUtil::DeleteLocale(void)
+{
+	if (!tml::StringUtil::locale_created_flg_) {
+		return;
+	}
+
+	try {
+		std::locale::global(std::locale(tml::StringUtil::old_locale_name_));
+
+		tml::StringUtil::old_locale_name_.clear();
+	} catch (std::runtime_error &err) {
+		std::cout << err.what() << std::endl;
+	}
+
+	tml::StringUtil::locale_created_flg_ = false;
+
+	return;
 }
 
 
