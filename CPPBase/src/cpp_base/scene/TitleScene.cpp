@@ -133,7 +133,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// TitleSceneNode Add
 		tml::shared_ptr<tml::scene::Node> node;
 
-		if (this->GetManager()->node_factory.Get(node, L"TitleSceneNode", tml::INIFileReadDesc()) == nullptr) {
+		if (this->GetManager()->node_factory_by_ini_file.Get(node, L"TitleSceneNode", tml::INIFileReadDesc()) == nullptr) {
 			this->Init();
 
 			return (-1);

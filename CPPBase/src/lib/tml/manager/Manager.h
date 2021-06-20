@@ -10,6 +10,7 @@
 #include <list>
 #include <unordered_map>
 #include "ManagerResource.h"
+#include "ManagerResourceFactory.h"
 #include "ManagerEvent.h"
 
 
@@ -97,11 +98,11 @@ public:
 	HDC GetWindowDeviceContextHandle(void) const;
 	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
 	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
-	template <typename T1, typename T2, typename D>
+	template <typename T, typename T2, typename D>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
-	template <typename T1, typename T2>
-	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const tml::shared_ptr<T1> &);
-	template <typename T1, typename T2>
+	template <typename T, typename T2>
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const tml::shared_ptr<T> &);
+	template <typename T, typename T2>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *);
 	void SetResourceSharedPointer(tml::ManagerResource *, const tml::shared_ptr<tml::ManagerResource> &);
 	void SetResourceName(tml::ManagerResource *, const WCHAR *);
@@ -176,7 +177,7 @@ inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::Get
  * @param desc (desc)
  * @return dst_res (dst_resource)
  */
-template <typename T1, typename T2, typename D>
+template <typename T, typename T2, typename D>
 inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const D &desc)
 {
 	dst_res.reset();
@@ -197,9 +198,9 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		return (dst_res);
 	}
 
-	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T1>(1U);
+	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T>(1U);
 
-	if (reinterpret_cast<T1 *>(res.get())->Create(desc) < 0) {
+	if (reinterpret_cast<T *>(res.get())->Create(desc) < 0) {
 		return (dst_res);
 	}
 
@@ -233,10 +234,10 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
  * @param res (resource)
  * @return dst_res (dst_resource)
  */
-template <typename T1, typename T2>
-inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const tml::shared_ptr<T1> &res)
+template <typename T, typename T2>
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const tml::shared_ptr<T> &res)
 {
-	if (std::is_same<T1, T2>::value) {
+	if (std::is_same<T, T2>::value) {
 		dst_res = res;
 	} else {
 		dst_res = std::dynamic_pointer_cast<T2>(res);
@@ -252,7 +253,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
  * @param res_name (resource_name)
  * @return dst_res (dst_resource)
  */
-template <typename T1, typename T2>
+template <typename T, typename T2>
 inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const WCHAR *res_name)
 {
 	dst_res.reset();

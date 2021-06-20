@@ -8,7 +8,6 @@
 #include "../constant/ConstantUtil.h"
 #include "../time/FrameRate.h"
 #include "../manager/Manager.h"
-#include "../manager/ManagerResourceFactory.h"
 #include "ManagerCommon.h"
 #include "Scene.h"
 #include "Node.h"
@@ -124,8 +123,10 @@ private:
 	tml::shared_ptr<tml::scene::Scene> scene_;
 
 public:
-	tml::ManagerResourceFactory<tml::scene::Scene> scene_factory;
-	tml::ManagerResourceFactory<tml::scene::Node> node_factory;
+	tml::ManagerResourceFactory<tml::scene::Scene, tml::INIFileReadDesc> scene_factory_by_ini_file;
+	tml::ManagerResourceFactory<tml::scene::Scene, tml::XMLFileReadDesc> scene_factory_by_xml_file;
+	tml::ManagerResourceFactory<tml::scene::Node, tml::INIFileReadDesc> node_factory_by_ini_file;
+	tml::ManagerResourceFactory<tml::scene::Node, tml::XMLFileReadDesc> node_factory_by_xml_file;
 	tml::scene::ManagerCommon common;
 
 protected:

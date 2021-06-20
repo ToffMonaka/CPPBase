@@ -9,20 +9,21 @@
 #include <functional>
 #include <unordered_map>
 #include "../file/INIFile.h"
+#include "../file/XMLFile.h"
 
 
 namespace tml {
 /**
  * @brief ManagerResourceFactoryクラス
  */
-template <typename T>
+template <typename T, typename D>
 class ManagerResourceFactory
 {
-public: ManagerResourceFactory(const tml::ManagerResourceFactory<T> &) = delete;
-public: tml::ManagerResourceFactory<T> &operator =(const tml::ManagerResourceFactory<T> &) = delete;
+public: ManagerResourceFactory(const tml::ManagerResourceFactory<T, D> &) = delete;
+public: tml::ManagerResourceFactory<T, D> &operator =(const tml::ManagerResourceFactory<T, D> &) = delete;
 
 private:
-	std::unordered_map<std::wstring, std::function<tml::shared_ptr<T>(const tml::INIFileReadDesc &)>> func_cont_;
+	std::unordered_map<std::wstring, std::function<tml::shared_ptr<T>(const D &)>> func_cont_;
 
 protected:
 	void Release(void);
@@ -33,9 +34,9 @@ public:
 
 	virtual void Init(void);
 
-	template <typename T_T>
-	tml::shared_ptr<T_T> &Get(tml::shared_ptr<T_T> &, const WCHAR *, const tml::INIFileReadDesc &);
-	INT AddFunction(const WCHAR *, std::function<tml::shared_ptr<T>(const tml::INIFileReadDesc &)>);
+	template <typename T2>
+	tml::shared_ptr<T2> &Get(tml::shared_ptr<T2> &, const WCHAR *, const D &);
+	INT AddFunction(const WCHAR *, std::function<tml::shared_ptr<T>(const D &)>);
 	void RemoveFunction(const WCHAR *);
 };
 }
@@ -44,8 +45,8 @@ public:
 /**
  * @brief コンストラクタ
  */
-template <typename T>
-inline tml::ManagerResourceFactory<T>::ManagerResourceFactory()
+template <typename T, typename D>
+inline tml::ManagerResourceFactory<T, D>::ManagerResourceFactory()
 {
 	return;
 }
@@ -54,8 +55,8 @@ inline tml::ManagerResourceFactory<T>::ManagerResourceFactory()
 /**
  * @brief デストラクタ
  */
-template <typename T>
-inline tml::ManagerResourceFactory<T>::~ManagerResourceFactory()
+template <typename T, typename D>
+inline tml::ManagerResourceFactory<T, D>::~ManagerResourceFactory()
 {
 	this->Release();
 
@@ -66,8 +67,8 @@ inline tml::ManagerResourceFactory<T>::~ManagerResourceFactory()
 /**
  * @brief Release関数
  */
-template <typename T>
-inline void tml::ManagerResourceFactory<T>::Release(void)
+template <typename T, typename D>
+inline void tml::ManagerResourceFactory<T, D>::Release(void)
 {
 	return;
 }
@@ -76,8 +77,8 @@ inline void tml::ManagerResourceFactory<T>::Release(void)
 /**
  * @brief Init関数
  */
-template <typename T>
-inline void tml::ManagerResourceFactory<T>::Init(void)
+template <typename T, typename D>
+inline void tml::ManagerResourceFactory<T, D>::Init(void)
 {
 	this->Release();
 
@@ -91,12 +92,12 @@ inline void tml::ManagerResourceFactory<T>::Init(void)
  * @brief Get関数
  * @param dst_res (dst_resource)
  * @param class_name (class_name)
- * @param desc_read_desc (desc_read_desc)
+ * @param read_desc (read_desc)
  * @return dst_res (dst_resource)
  */
-template <typename T>
-template <typename T_T>
-inline tml::shared_ptr<T_T> &tml::ManagerResourceFactory<T>::Get(tml::shared_ptr<T_T> &dst_res, const WCHAR *class_name, const tml::INIFileReadDesc &desc_read_desc)
+template <typename T, typename D>
+template <typename T2>
+inline tml::shared_ptr<T2> &tml::ManagerResourceFactory<T, D>::Get(tml::shared_ptr<T2> &dst_res, const WCHAR *class_name, const D &read_desc)
 {
 	dst_res.reset();
 
@@ -105,17 +106,19 @@ inline tml::shared_ptr<T_T> &tml::ManagerResourceFactory<T>::Get(tml::shared_ptr
 		return (dst_res);
 	}
 
-	tml::shared_ptr<T> res;
-
 	auto func_itr = this->func_cont_.find(class_name);
 
 	if (func_itr == this->func_cont_.end()) {
 		return (dst_res);
 	}
 
-	res = func_itr->second(desc_read_desc);
+	tml::shared_ptr<T> res = func_itr->second(read_desc);
 
-	dst_res = std::dynamic_pointer_cast<T_T>(res);
+	if (std::is_same<T, T2>::value) {
+		dst_res = res;
+	} else {
+		dst_res = std::dynamic_pointer_cast<T2>(res);
+	}
 
 	return (dst_res);
 }
@@ -128,8 +131,8 @@ inline tml::shared_ptr<T_T> &tml::ManagerResourceFactory<T>::Get(tml::shared_ptr
  * @return res (result)<br>
  * 0未満=失敗
  */
-template <typename T>
-inline INT tml::ManagerResourceFactory<T>::AddFunction(const WCHAR *class_name, std::function<tml::shared_ptr<T>(const tml::INIFileReadDesc &)> func)
+template <typename T, typename D>
+inline INT tml::ManagerResourceFactory<T, D>::AddFunction(const WCHAR *class_name, std::function<tml::shared_ptr<T>(const D &)> func)
 {
 	if ((class_name == nullptr)
 	|| (class_name[0] == 0)) {
@@ -146,8 +149,8 @@ inline INT tml::ManagerResourceFactory<T>::AddFunction(const WCHAR *class_name, 
  * @brief RemoveFunction関数
  * @param class_name (class_name)
  */
-template <typename T>
-inline void tml::ManagerResourceFactory<T>::RemoveFunction(const WCHAR *class_name)
+template <typename T, typename D>
+inline void tml::ManagerResourceFactory<T, D>::RemoveFunction(const WCHAR *class_name)
 {
 	if ((class_name == nullptr)
 	|| (class_name[0] == 0)) {
