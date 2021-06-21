@@ -6,7 +6,6 @@
 
 #include "TitleScene.h"
 #include "Manager.h"
-#include "TitleSceneNode.h"
 
 
 /**
@@ -128,22 +127,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		this->Init();
 
 		return (-1);
-	}
-
-	{// TitleSceneNode Add
-		tml::shared_ptr<tml::scene::Node> node;
-
-		if (this->GetManager()->node_factory_by_ini_file.Get(node, L"TitleSceneNode", tml::INIFileReadDesc()) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-
-		if (this->GetRootNode()->AddChildNode(node, false) < 0) {
-			this->Init();
-
-			return (-1);
-		}
 	}
 
 	return (0);

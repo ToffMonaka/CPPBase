@@ -47,18 +47,18 @@ public:
 	static std::wstring &Join(std::wstring &, const std::vector<std::wstring> &, const WCHAR *);
 	static std::string &Join(std::string &, const std::list<std::string> &, const CHAR *);
 	static std::wstring &Join(std::wstring &, const std::list<std::wstring> &, const WCHAR *);
-	static INT GetINT(const CHAR *, const INT radix = 10);
-	static INT GetINT(const WCHAR *, const INT radix = 10);
-	static UINT GetUINT(const CHAR *, const INT radix = 10);
-	static UINT GetUINT(const WCHAR *, const INT radix = 10);
-	static LONGLONG GetLONGLONG(const CHAR *, const INT radix = 10);
-	static LONGLONG GetLONGLONG(const WCHAR *, const INT radix = 10);
-	static ULONGLONG GetULONGLONG(const CHAR *, const INT radix = 10);
-	static ULONGLONG GetULONGLONG(const WCHAR *, const INT radix = 10);
-	static FLOAT GetFLOAT(const CHAR *);
-	static FLOAT GetFLOAT(const WCHAR *);
-	static DOUBLE GetDOUBLE(const CHAR *);
-	static DOUBLE GetDOUBLE(const WCHAR *);
+	static INT GetInt(const CHAR *, const INT radix = 10);
+	static INT GetInt(const WCHAR *, const INT radix = 10);
+	static UINT GetUInt(const CHAR *, const INT radix = 10);
+	static UINT GetUInt(const WCHAR *, const INT radix = 10);
+	static LONGLONG GetLongLong(const CHAR *, const INT radix = 10);
+	static LONGLONG GetLongLong(const WCHAR *, const INT radix = 10);
+	static ULONGLONG GetULongLong(const CHAR *, const INT radix = 10);
+	static ULONGLONG GetULongLong(const WCHAR *, const INT radix = 10);
+	static FLOAT GetFloat(const CHAR *);
+	static FLOAT GetFloat(const WCHAR *);
+	static DOUBLE GetDouble(const CHAR *);
+	static DOUBLE GetDouble(const WCHAR *);
 	static bool GetBool(const CHAR *);
 	static bool GetBool(const WCHAR *);
 	static INT &GetValue(INT &, const CHAR *, const INT radix = 10);
@@ -109,7 +109,7 @@ inline bool tml::StringUtil::CheckFixedThread(void)
 
 
 /**
- * @brief GetINT関数
+ * @brief GetInt関数
  *
  * Create関数不要
  *
@@ -117,7 +117,7 @@ inline bool tml::StringUtil::CheckFixedThread(void)
  * @param radix (radix)
  * @return val (value)
  */
-inline INT tml::StringUtil::GetINT(const CHAR *str, const INT radix)
+inline INT tml::StringUtil::GetInt(const CHAR *str, const INT radix)
 {
 	INT val = 0;
 
@@ -134,7 +134,7 @@ inline INT tml::StringUtil::GetINT(const CHAR *str, const INT radix)
 
 
 /**
- * @brief GetINT関数
+ * @brief GetInt関数
  *
  * Create関数不要
  *
@@ -142,7 +142,7 @@ inline INT tml::StringUtil::GetINT(const CHAR *str, const INT radix)
  * @param radix (radix)
  * @return val (value)
  */
-inline INT tml::StringUtil::GetINT(const WCHAR *str, const INT radix)
+inline INT tml::StringUtil::GetInt(const WCHAR *str, const INT radix)
 {
 	INT val = 0;
 
@@ -159,7 +159,7 @@ inline INT tml::StringUtil::GetINT(const WCHAR *str, const INT radix)
 
 
 /**
- * @brief GetUINT関数
+ * @brief GetUInt関数
  *
  * Create関数不要
  *
@@ -167,7 +167,7 @@ inline INT tml::StringUtil::GetINT(const WCHAR *str, const INT radix)
  * @param radix (radix)
  * @return val (value)
  */
-inline UINT tml::StringUtil::GetUINT(const CHAR *str, const INT radix)
+inline UINT tml::StringUtil::GetUInt(const CHAR *str, const INT radix)
 {
 	UINT val = 0U;
 
@@ -184,7 +184,7 @@ inline UINT tml::StringUtil::GetUINT(const CHAR *str, const INT radix)
 
 
 /**
- * @brief GetUINT関数
+ * @brief GetUInt関数
  *
  * Create関数不要
  *
@@ -192,7 +192,7 @@ inline UINT tml::StringUtil::GetUINT(const CHAR *str, const INT radix)
  * @param radix (radix)
  * @return val (value)
  */
-inline UINT tml::StringUtil::GetUINT(const WCHAR *str, const INT radix)
+inline UINT tml::StringUtil::GetUInt(const WCHAR *str, const INT radix)
 {
 	UINT val = 0U;
 
@@ -209,7 +209,7 @@ inline UINT tml::StringUtil::GetUINT(const WCHAR *str, const INT radix)
 
 
 /**
- * @brief GetLONGLONG関数
+ * @brief GetLongLong関数
  *
  * Create関数不要
  *
@@ -217,7 +217,7 @@ inline UINT tml::StringUtil::GetUINT(const WCHAR *str, const INT radix)
  * @param radix (radix)
  * @return val (value)
  */
-inline LONGLONG tml::StringUtil::GetLONGLONG(const CHAR *str, const INT radix)
+inline LONGLONG tml::StringUtil::GetLongLong(const CHAR *str, const INT radix)
 {
 	LONGLONG val = 0LL;
 
@@ -234,7 +234,7 @@ inline LONGLONG tml::StringUtil::GetLONGLONG(const CHAR *str, const INT radix)
 
 
 /**
- * @brief GetLONGLONG関数
+ * @brief GetLongLong関数
  *
  * Create関数不要
  *
@@ -242,7 +242,7 @@ inline LONGLONG tml::StringUtil::GetLONGLONG(const CHAR *str, const INT radix)
  * @param radix (radix)
  * @return val (value)
  */
-inline LONGLONG tml::StringUtil::GetLONGLONG(const WCHAR *str, const INT radix)
+inline LONGLONG tml::StringUtil::GetLongLong(const WCHAR *str, const INT radix)
 {
 	LONGLONG val = 0LL;
 
@@ -259,7 +259,7 @@ inline LONGLONG tml::StringUtil::GetLONGLONG(const WCHAR *str, const INT radix)
 
 
 /**
- * @brief GetULONGLONG関数
+ * @brief GetULongLong関数
  *
  * Create関数不要
  *
@@ -267,7 +267,7 @@ inline LONGLONG tml::StringUtil::GetLONGLONG(const WCHAR *str, const INT radix)
  * @param radix (radix)
  * @return val (value)
  */
-inline ULONGLONG tml::StringUtil::GetULONGLONG(const CHAR *str, const INT radix)
+inline ULONGLONG tml::StringUtil::GetULongLong(const CHAR *str, const INT radix)
 {
 	ULONGLONG val = 0ULL;
 
@@ -284,7 +284,7 @@ inline ULONGLONG tml::StringUtil::GetULONGLONG(const CHAR *str, const INT radix)
 
 
 /**
- * @brief GetULONGLONG関数
+ * @brief GetULongLong関数
  *
  * Create関数不要
  *
@@ -292,7 +292,7 @@ inline ULONGLONG tml::StringUtil::GetULONGLONG(const CHAR *str, const INT radix)
  * @param radix (radix)
  * @return val (value)
  */
-inline ULONGLONG tml::StringUtil::GetULONGLONG(const WCHAR *str, const INT radix)
+inline ULONGLONG tml::StringUtil::GetULongLong(const WCHAR *str, const INT radix)
 {
 	ULONGLONG val = 0ULL;
 
@@ -309,14 +309,14 @@ inline ULONGLONG tml::StringUtil::GetULONGLONG(const WCHAR *str, const INT radix
 
 
 /**
- * @brief GetFLOAT関数
+ * @brief GetFloat関数
  *
  * Create関数不要
  *
  * @param str (string)
  * @return val (value)
  */
-inline FLOAT tml::StringUtil::GetFLOAT(const CHAR *str)
+inline FLOAT tml::StringUtil::GetFloat(const CHAR *str)
 {
 	FLOAT val = 0.0f;
 
@@ -333,14 +333,14 @@ inline FLOAT tml::StringUtil::GetFLOAT(const CHAR *str)
 
 
 /**
- * @brief GetFLOAT関数
+ * @brief GetFloat関数
  *
  * Create関数不要
  *
  * @param str (string)
  * @return val (value)
  */
-inline FLOAT tml::StringUtil::GetFLOAT(const WCHAR *str)
+inline FLOAT tml::StringUtil::GetFloat(const WCHAR *str)
 {
 	FLOAT val = 0.0f;
 
@@ -357,14 +357,14 @@ inline FLOAT tml::StringUtil::GetFLOAT(const WCHAR *str)
 
 
 /**
- * @brief GetDOUBLE関数
+ * @brief GetDouble関数
  *
  * Create関数不要
  *
  * @param str (string)
  * @return val (value)
  */
-inline DOUBLE tml::StringUtil::GetDOUBLE(const CHAR *str)
+inline DOUBLE tml::StringUtil::GetDouble(const CHAR *str)
 {
 	DOUBLE val = 0.0;
 
@@ -381,14 +381,14 @@ inline DOUBLE tml::StringUtil::GetDOUBLE(const CHAR *str)
 
 
 /**
- * @brief GetDOUBLE関数
+ * @brief GetDouble関数
  *
  * Create関数不要
  *
  * @param str (string)
  * @return val (value)
  */
-inline DOUBLE tml::StringUtil::GetDOUBLE(const WCHAR *str)
+inline DOUBLE tml::StringUtil::GetDouble(const WCHAR *str)
 {
 	DOUBLE val = 0.0;
 
@@ -414,7 +414,7 @@ inline DOUBLE tml::StringUtil::GetDOUBLE(const WCHAR *str)
  */
 inline bool tml::StringUtil::GetBool(const CHAR *str)
 {
-	return (tml::StringUtil::GetINT(str));
+	return (tml::StringUtil::GetInt(str));
 }
 
 
@@ -428,7 +428,7 @@ inline bool tml::StringUtil::GetBool(const CHAR *str)
  */
 inline bool tml::StringUtil::GetBool(const WCHAR *str)
 {
-	return (tml::StringUtil::GetINT(str));
+	return (tml::StringUtil::GetInt(str));
 }
 
 
@@ -444,7 +444,7 @@ inline bool tml::StringUtil::GetBool(const WCHAR *str)
  */
 inline INT &tml::StringUtil::GetValue(INT &dst_val, const CHAR *str, const INT radix)
 {
-	dst_val = tml::StringUtil::GetINT(str, radix);
+	dst_val = tml::StringUtil::GetInt(str, radix);
 
 	return (dst_val);
 }
@@ -462,7 +462,7 @@ inline INT &tml::StringUtil::GetValue(INT &dst_val, const CHAR *str, const INT r
  */
 inline INT &tml::StringUtil::GetValue(INT &dst_val, const WCHAR *str, const INT radix)
 {
-	dst_val = tml::StringUtil::GetINT(str, radix);
+	dst_val = tml::StringUtil::GetInt(str, radix);
 
 	return (dst_val);
 }
@@ -480,7 +480,7 @@ inline INT &tml::StringUtil::GetValue(INT &dst_val, const WCHAR *str, const INT 
  */
 inline UINT &tml::StringUtil::GetValue(UINT &dst_val, const CHAR *str, const INT radix)
 {
-	dst_val = tml::StringUtil::GetUINT(str, radix);
+	dst_val = tml::StringUtil::GetUInt(str, radix);
 
 	return (dst_val);
 }
@@ -498,7 +498,7 @@ inline UINT &tml::StringUtil::GetValue(UINT &dst_val, const CHAR *str, const INT
  */
 inline UINT &tml::StringUtil::GetValue(UINT &dst_val, const WCHAR *str, const INT radix)
 {
-	dst_val = tml::StringUtil::GetUINT(str, radix);
+	dst_val = tml::StringUtil::GetUInt(str, radix);
 
 	return (dst_val);
 }
@@ -516,7 +516,7 @@ inline UINT &tml::StringUtil::GetValue(UINT &dst_val, const WCHAR *str, const IN
  */
 inline LONGLONG &tml::StringUtil::GetValue(LONGLONG &dst_val, const CHAR *str, const INT radix)
 {
-	dst_val = tml::StringUtil::GetLONGLONG(str, radix);
+	dst_val = tml::StringUtil::GetLongLong(str, radix);
 
 	return (dst_val);
 }
@@ -534,7 +534,7 @@ inline LONGLONG &tml::StringUtil::GetValue(LONGLONG &dst_val, const CHAR *str, c
  */
 inline LONGLONG &tml::StringUtil::GetValue(LONGLONG &dst_val, const WCHAR *str, const INT radix)
 {
-	dst_val = tml::StringUtil::GetLONGLONG(str, radix);
+	dst_val = tml::StringUtil::GetLongLong(str, radix);
 
 	return (dst_val);
 }
@@ -552,7 +552,7 @@ inline LONGLONG &tml::StringUtil::GetValue(LONGLONG &dst_val, const WCHAR *str, 
  */
 inline ULONGLONG &tml::StringUtil::GetValue(ULONGLONG &dst_val, const CHAR *str, const INT radix)
 {
-	dst_val = tml::StringUtil::GetULONGLONG(str, radix);
+	dst_val = tml::StringUtil::GetULongLong(str, radix);
 
 	return (dst_val);
 }
@@ -570,7 +570,7 @@ inline ULONGLONG &tml::StringUtil::GetValue(ULONGLONG &dst_val, const CHAR *str,
  */
 inline ULONGLONG &tml::StringUtil::GetValue(ULONGLONG &dst_val, const WCHAR *str, const INT radix)
 {
-	dst_val = tml::StringUtil::GetULONGLONG(str, radix);
+	dst_val = tml::StringUtil::GetULongLong(str, radix);
 
 	return (dst_val);
 }
@@ -587,7 +587,7 @@ inline ULONGLONG &tml::StringUtil::GetValue(ULONGLONG &dst_val, const WCHAR *str
  */
 inline FLOAT &tml::StringUtil::GetValue(FLOAT &dst_val, const CHAR *str)
 {
-	dst_val = tml::StringUtil::GetFLOAT(str);
+	dst_val = tml::StringUtil::GetFloat(str);
 
 	return (dst_val);
 }
@@ -604,7 +604,7 @@ inline FLOAT &tml::StringUtil::GetValue(FLOAT &dst_val, const CHAR *str)
  */
 inline FLOAT &tml::StringUtil::GetValue(FLOAT &dst_val, const WCHAR *str)
 {
-	dst_val = tml::StringUtil::GetFLOAT(str);
+	dst_val = tml::StringUtil::GetFloat(str);
 
 	return (dst_val);
 }
@@ -621,7 +621,7 @@ inline FLOAT &tml::StringUtil::GetValue(FLOAT &dst_val, const WCHAR *str)
  */
 inline DOUBLE &tml::StringUtil::GetValue(DOUBLE &dst_val, const CHAR *str)
 {
-	dst_val = tml::StringUtil::GetDOUBLE(str);
+	dst_val = tml::StringUtil::GetDouble(str);
 
 	return (dst_val);
 }
@@ -638,7 +638,7 @@ inline DOUBLE &tml::StringUtil::GetValue(DOUBLE &dst_val, const CHAR *str)
  */
 inline DOUBLE &tml::StringUtil::GetValue(DOUBLE &dst_val, const WCHAR *str)
 {
-	dst_val = tml::StringUtil::GetDOUBLE(str);
+	dst_val = tml::StringUtil::GetDouble(str);
 
 	return (dst_val);
 }

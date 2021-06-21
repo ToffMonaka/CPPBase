@@ -270,7 +270,7 @@ void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
  * @return res (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)
+INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
@@ -310,7 +310,7 @@ INT tml::scene::Node::AddChildNode(tml::shared_ptr<tml::scene::Node> &child_node
  * @param child_node (child_node)
  * @param event_flg (event_flag)
  */
-void tml::scene::Node::RemoveChildNode(tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)
+void tml::scene::Node::RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {

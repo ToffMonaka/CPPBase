@@ -41,8 +41,8 @@ public:
 	tml::XMLFileDataNode *GetParentNode(void);
 	void SetParentNode(tml::XMLFileDataNode *);
 	const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &GetChildNodeContainer(void);
-	INT AddChildNode(tml::shared_ptr<tml::XMLFileDataNode> &);
-	void RemoveChildNode(tml::shared_ptr<tml::XMLFileDataNode> &);
+	INT AddChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &);
+	void RemoveChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &);
 
 	const std::wstring *GetValue(const WCHAR *) const;
 };
@@ -105,7 +105,7 @@ protected:
 	void Release(void);
 
 private:
-	void SetRootNodeRecursivePart(tml::shared_ptr<tml::XMLFileDataNode> &, const rapidxml::xml_node<> *);
+	void SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFileDataNode> &, const rapidxml::xml_node<> *);
 
 public:
 	XMLFileData();

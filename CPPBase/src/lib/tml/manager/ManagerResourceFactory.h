@@ -92,12 +92,12 @@ inline void tml::ManagerResourceFactory<T, D>::Init(void)
  * @brief Getä÷êî
  * @param dst_res (dst_resource)
  * @param class_name (class_name)
- * @param read_desc (read_desc)
+ * @param file_read_desc (file_read_desc)
  * @return dst_res (dst_resource)
  */
 template <typename T, typename D>
 template <typename T2>
-inline tml::shared_ptr<T2> &tml::ManagerResourceFactory<T, D>::Get(tml::shared_ptr<T2> &dst_res, const WCHAR *class_name, const D &read_desc)
+inline tml::shared_ptr<T2> &tml::ManagerResourceFactory<T, D>::Get(tml::shared_ptr<T2> &dst_res, const WCHAR *class_name, const D &file_read_desc)
 {
 	dst_res.reset();
 
@@ -112,7 +112,7 @@ inline tml::shared_ptr<T2> &tml::ManagerResourceFactory<T, D>::Get(tml::shared_p
 		return (dst_res);
 	}
 
-	tml::shared_ptr<T> res = func_itr->second(read_desc);
+	tml::shared_ptr<T> res = func_itr->second(file_read_desc);
 
 	if (std::is_same<T, T2>::value) {
 		dst_res = res;

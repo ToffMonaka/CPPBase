@@ -129,6 +129,9 @@ public:
 	tml::ManagerResourceFactory<tml::scene::Node, tml::XMLFileReadDesc> node_factory_by_xml_file;
 	tml::scene::ManagerCommon common;
 
+private:
+	void GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
+
 protected:
 	void Release(void);
 
@@ -150,10 +153,10 @@ public:
 	const tml::FrameRate &GetFrameRate(void) const;
 
 	const tml::shared_ptr<tml::scene::Scene> &GetScene(void);
-	INT StartScene(tml::shared_ptr<tml::scene::Scene> &);
+	INT StartScene(const tml::shared_ptr<tml::scene::Scene> &);
 	void EndScene(void);
-	INT AddNode(tml::shared_ptr<tml::scene::Node> &, tml::shared_ptr<tml::scene::Node> &);
-	void RemoveNode(tml::shared_ptr<tml::scene::Node> &, tml::shared_ptr<tml::scene::Node> &);
+	INT AddNode(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::scene::Node> &);
+	void RemoveNode(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::scene::Node> &);
 };
 }
 }

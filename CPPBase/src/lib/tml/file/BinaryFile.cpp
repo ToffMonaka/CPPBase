@@ -161,13 +161,13 @@ void tml::BinaryFile::Init(void)
  */
 INT tml::BinaryFile::Read(void)
 {
-	auto read_desc_dat = this->read_desc.GetDataByParent();
+	auto file_read_desc_dat = this->read_desc.GetDataByParent();
 
-	if (read_desc_dat->file_path.empty()) {
-		if (read_desc_dat->buffer.GetLength() > 0U) {
+	if (file_read_desc_dat->file_path.empty()) {
+		if (file_read_desc_dat->buffer.GetLength() > 0U) {
 			this->data.Init();
 
-			this->data.buffer = read_desc_dat->buffer;
+			this->data.buffer = file_read_desc_dat->buffer;
 
 			return (0);
 		}
@@ -177,7 +177,7 @@ INT tml::BinaryFile::Read(void)
 		return (0);
 	}
 
-	tml::DynamicBuffer file_buf;
+	tml::DynamicBuffer buf;
 	CHAR *read_buf = nullptr;
 	size_t read_buf_size = 0U;
 	size_t read_size = 0U;
@@ -185,13 +185,13 @@ INT tml::BinaryFile::Read(void)
 	{tml::ThreadLockBlock th_lock_block(tml::FileUtil::GetFileThreadLock());
 		std::ifstream ifs;
 
-		ifs.open(read_desc_dat->file_path.c_str(), std::ios_base::in | std::ios_base::binary);
+		ifs.open(file_read_desc_dat->file_path.c_str(), std::ios_base::in | std::ios_base::binary);
 
 		if (!ifs) {
 			return (-1);
 		}
 
-		read_buf_size = tml::Max(read_desc_dat->one_buffer_size, sizeof(size_t));
+		read_buf_size = tml::Max(file_read_desc_dat->one_buffer_size, sizeof(size_t));
 		read_buf = tml::MemoryUtil::Get<CHAR>(read_buf_size);
 
 		while (1) {
@@ -200,8 +200,8 @@ INT tml::BinaryFile::Read(void)
 			read_size = static_cast<size_t>(ifs.gcount());
 
 			if (read_size > 0U) {
-				file_buf.SetSize(file_buf.GetSize() + read_size);
-				file_buf.WriteArray(reinterpret_cast<BYTE *>(read_buf), read_size, read_size);
+				buf.SetSize(buf.GetSize() + read_size);
+				buf.WriteArray(reinterpret_cast<BYTE *>(read_buf), read_size, read_size);
 			}
 
 			if (ifs.eof()) {
@@ -217,7 +217,7 @@ INT tml::BinaryFile::Read(void)
 
 	this->data.Init();
 
-	this->data.buffer = std::move(file_buf);
+	this->data.buffer = std::move(buf);
 
 	return (0);
 }
@@ -230,13 +230,13 @@ INT tml::BinaryFile::Read(void)
  */
 INT tml::BinaryFile::Write(void)
 {
-	auto write_desc_dat = this->write_desc.GetDataByParent();
+	auto file_write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (write_desc_dat->file_path.empty()) {
+	if (file_write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
-	size_t file_buf_index = 0U;
+	size_t buf_index = 0U;
 	CHAR *write_buf = nullptr;
 	size_t write_buf_size = 0U;
 	size_t write_size = 0U;
@@ -244,10 +244,10 @@ INT tml::BinaryFile::Write(void)
 	{tml::ThreadLockBlock th_lock_block(tml::FileUtil::GetFileThreadLock());
 		std::ofstream ofs;
 
-		if (write_desc_dat->add_flag) {
-			ofs.open(write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::app);
+		if (file_write_desc_dat->add_flag) {
+			ofs.open(file_write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::app);
 		} else {
-			ofs.open(write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary);
+			ofs.open(file_write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary);
 		}
 
 		if (!ofs) {
@@ -260,19 +260,19 @@ INT tml::BinaryFile::Write(void)
 			return (0);
 		}
 
-		write_buf_size = tml::Max(write_desc_dat->one_buffer_size, sizeof(size_t));
+		write_buf_size = tml::Max(file_write_desc_dat->one_buffer_size, sizeof(size_t));
 		write_buf = tml::MemoryUtil::Get<CHAR>(write_buf_size);
 
 		while (1) {
-			write_size = tml::Min(this->data.buffer.GetLength() - file_buf_index, write_buf_size);
+			write_size = tml::Min(this->data.buffer.GetLength() - buf_index, write_buf_size);
 
-			tml::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.buffer.Get()[file_buf_index]), write_size);
+			tml::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.buffer.Get()[buf_index]), write_size);
 
 			ofs.write(write_buf, write_size);
 
-			file_buf_index += write_size;
+			buf_index += write_size;
 
-			if (file_buf_index >= this->data.buffer.GetLength()) {
+			if (buf_index >= this->data.buffer.GetLength()) {
 				break;
 			}
 		}

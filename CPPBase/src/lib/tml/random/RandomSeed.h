@@ -32,18 +32,18 @@ public:
 
 	std::vector<tml::RandomSeed::SEED_VALUE_TYPE> GetSeedValueContainer(void) const;
 	void SetSeedValueContainer(const std::vector<tml::RandomSeed::SEED_VALUE_TYPE> &);
-	INT GetINT(void);
-	INT GetINT(const INT, const INT);
-	UINT GetUINT(void);
-	UINT GetUINT(const UINT, const UINT);
-	LONGLONG GetLONGLONG(void);
-	LONGLONG GetLONGLONG(const LONGLONG, const LONGLONG);
-	ULONGLONG GetULONGLONG(void);
-	ULONGLONG GetULONGLONG(const ULONGLONG, const ULONGLONG);
-	FLOAT GetFLOAT(void);
-	FLOAT GetFLOAT(const FLOAT, const FLOAT);
-	DOUBLE GetDOUBLE(void);
-	DOUBLE GetDOUBLE(const DOUBLE, const DOUBLE);
+	INT GetInt(void);
+	INT GetInt(const INT, const INT);
+	UINT GetUInt(void);
+	UINT GetUInt(const UINT, const UINT);
+	LONGLONG GetLongLong(void);
+	LONGLONG GetLongLong(const LONGLONG, const LONGLONG);
+	ULONGLONG GetULongLong(void);
+	ULONGLONG GetULongLong(const ULONGLONG, const ULONGLONG);
+	FLOAT GetFloat(void);
+	FLOAT GetFloat(const FLOAT, const FLOAT);
+	DOUBLE GetDouble(void);
+	DOUBLE GetDouble(const DOUBLE, const DOUBLE);
 	bool GetBool(void);
 	INT &GetValue(INT &);
 	INT &GetValue(INT &, const INT, const INT);
@@ -89,10 +89,10 @@ inline void tml::RandomSeed::SetSeedValueContainer(const std::vector<tml::Random
 
 
 /**
- * @brief GetINTä÷êî
+ * @brief GetIntä÷êî
  * @return val (value)
  */
-inline INT tml::RandomSeed::GetINT(void)
+inline INT tml::RandomSeed::GetInt(void)
 {
 	std::uniform_int_distribution<INT> rng(std::numeric_limits<INT>::min(), std::numeric_limits<INT>::max());
 
@@ -101,12 +101,12 @@ inline INT tml::RandomSeed::GetINT(void)
 
 
 /**
- * @brief GetINTä÷êî
+ * @brief GetIntä÷êî
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
-inline INT tml::RandomSeed::GetINT(const INT min_val, const INT max_val)
+inline INT tml::RandomSeed::GetInt(const INT min_val, const INT max_val)
 {
 	std::uniform_int_distribution<INT> rng(min_val, max_val);
 
@@ -115,10 +115,10 @@ inline INT tml::RandomSeed::GetINT(const INT min_val, const INT max_val)
 
 
 /**
- * @brief GetUINTä÷êî
+ * @brief GetUIntä÷êî
  * @return val (value)
  */
-inline UINT tml::RandomSeed::GetUINT(void)
+inline UINT tml::RandomSeed::GetUInt(void)
 {
 	std::uniform_int_distribution<UINT> rng(std::numeric_limits<UINT>::min(), std::numeric_limits<UINT>::max());
 
@@ -127,12 +127,12 @@ inline UINT tml::RandomSeed::GetUINT(void)
 
 
 /**
- * @brief GetUINTä÷êî
+ * @brief GetUIntä÷êî
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
-inline UINT tml::RandomSeed::GetUINT(const UINT min_val, const UINT max_val)
+inline UINT tml::RandomSeed::GetUInt(const UINT min_val, const UINT max_val)
 {
 	std::uniform_int_distribution<UINT> rng(min_val, max_val);
 
@@ -141,10 +141,10 @@ inline UINT tml::RandomSeed::GetUINT(const UINT min_val, const UINT max_val)
 
 
 /**
- * @brief GetLONGLONGä÷êî
+ * @brief GetLongLongä÷êî
  * @return val (value)
  */
-inline LONGLONG tml::RandomSeed::GetLONGLONG(void)
+inline LONGLONG tml::RandomSeed::GetLongLong(void)
 {
 	std::uniform_int_distribution<LONGLONG> rng(std::numeric_limits<LONGLONG>::min(), std::numeric_limits<LONGLONG>::max());
 
@@ -153,12 +153,12 @@ inline LONGLONG tml::RandomSeed::GetLONGLONG(void)
 
 
 /**
- * @brief GetLONGLONGä÷êî
+ * @brief GetLongLongä÷êî
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
-inline LONGLONG tml::RandomSeed::GetLONGLONG(const LONGLONG min_val, const LONGLONG max_val)
+inline LONGLONG tml::RandomSeed::GetLongLong(const LONGLONG min_val, const LONGLONG max_val)
 {
 	std::uniform_int_distribution<LONGLONG> rng(min_val, max_val);
 
@@ -167,10 +167,10 @@ inline LONGLONG tml::RandomSeed::GetLONGLONG(const LONGLONG min_val, const LONGL
 
 
 /**
- * @brief GetULONGLONGä÷êî
+ * @brief GetULongLongä÷êî
  * @return val (value)
  */
-inline ULONGLONG tml::RandomSeed::GetULONGLONG(void)
+inline ULONGLONG tml::RandomSeed::GetULongLong(void)
 {
 	std::uniform_int_distribution<ULONGLONG> rng(std::numeric_limits<ULONGLONG>::min(), std::numeric_limits<ULONGLONG>::max());
 
@@ -179,12 +179,12 @@ inline ULONGLONG tml::RandomSeed::GetULONGLONG(void)
 
 
 /**
- * @brief GetULONGLONGä÷êî
+ * @brief GetULongLongä÷êî
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
-inline ULONGLONG tml::RandomSeed::GetULONGLONG(const ULONGLONG min_val, const ULONGLONG max_val)
+inline ULONGLONG tml::RandomSeed::GetULongLong(const ULONGLONG min_val, const ULONGLONG max_val)
 {
 	std::uniform_int_distribution<ULONGLONG> rng(min_val, max_val);
 
@@ -193,10 +193,10 @@ inline ULONGLONG tml::RandomSeed::GetULONGLONG(const ULONGLONG min_val, const UL
 
 
 /**
- * @brief GetFLOATä÷êî
+ * @brief GetFloatä÷êî
  * @return val (value)
  */
-inline FLOAT tml::RandomSeed::GetFLOAT(void)
+inline FLOAT tml::RandomSeed::GetFloat(void)
 {
 	std::uniform_real_distribution<FLOAT> rng(std::numeric_limits<FLOAT>::min(), std::numeric_limits<FLOAT>::max());
 
@@ -205,12 +205,12 @@ inline FLOAT tml::RandomSeed::GetFLOAT(void)
 
 
 /**
- * @brief GetFLOATä÷êî
+ * @brief GetFloatä÷êî
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
-inline FLOAT tml::RandomSeed::GetFLOAT(const FLOAT min_val, const FLOAT max_val)
+inline FLOAT tml::RandomSeed::GetFloat(const FLOAT min_val, const FLOAT max_val)
 {
 	std::uniform_real_distribution<FLOAT> rng(min_val, max_val);
 
@@ -219,10 +219,10 @@ inline FLOAT tml::RandomSeed::GetFLOAT(const FLOAT min_val, const FLOAT max_val)
 
 
 /**
- * @brief GetDOUBLEä÷êî
+ * @brief GetDoubleä÷êî
  * @return val (value)
  */
-inline DOUBLE tml::RandomSeed::GetDOUBLE(void)
+inline DOUBLE tml::RandomSeed::GetDouble(void)
 {
 	std::uniform_real_distribution<DOUBLE> rng(std::numeric_limits<DOUBLE>::min(), std::numeric_limits<DOUBLE>::max());
 
@@ -231,12 +231,12 @@ inline DOUBLE tml::RandomSeed::GetDOUBLE(void)
 
 
 /**
- * @brief GetDOUBLEä÷êî
+ * @brief GetDoubleä÷êî
  * @param min_val (min_value)
  * @param max_val (max_value)
  * @return val (value)
  */
-inline DOUBLE tml::RandomSeed::GetDOUBLE(const DOUBLE min_val, const DOUBLE max_val)
+inline DOUBLE tml::RandomSeed::GetDouble(const DOUBLE min_val, const DOUBLE max_val)
 {
 	std::uniform_real_distribution<DOUBLE> rng(min_val, max_val);
 
@@ -250,7 +250,7 @@ inline DOUBLE tml::RandomSeed::GetDOUBLE(const DOUBLE min_val, const DOUBLE max_
  */
 inline bool tml::RandomSeed::GetBool(void)
 {
-	return (this->GetINT() & 1);
+	return (this->GetInt() & 1);
 }
 
 
@@ -261,7 +261,7 @@ inline bool tml::RandomSeed::GetBool(void)
  */
 inline INT &tml::RandomSeed::GetValue(INT &dst_val)
 {
-	dst_val = this->GetINT();
+	dst_val = this->GetInt();
 
 	return (dst_val);
 }
@@ -276,7 +276,7 @@ inline INT &tml::RandomSeed::GetValue(INT &dst_val)
  */
 inline INT &tml::RandomSeed::GetValue(INT &dst_val, const INT min_val, const INT max_val)
 {
-	dst_val = this->GetINT(min_val, max_val);
+	dst_val = this->GetInt(min_val, max_val);
 
 	return (dst_val);
 }
@@ -289,7 +289,7 @@ inline INT &tml::RandomSeed::GetValue(INT &dst_val, const INT min_val, const INT
  */
 inline UINT &tml::RandomSeed::GetValue(UINT &dst_val)
 {
-	dst_val = this->GetUINT();
+	dst_val = this->GetUInt();
 
 	return (dst_val);
 }
@@ -304,7 +304,7 @@ inline UINT &tml::RandomSeed::GetValue(UINT &dst_val)
  */
 inline UINT &tml::RandomSeed::GetValue(UINT &dst_val, const UINT min_val, const UINT max_val)
 {
-	dst_val = this->GetUINT(min_val, max_val);
+	dst_val = this->GetUInt(min_val, max_val);
 
 	return (dst_val);
 }
@@ -317,7 +317,7 @@ inline UINT &tml::RandomSeed::GetValue(UINT &dst_val, const UINT min_val, const 
  */
 inline LONGLONG &tml::RandomSeed::GetValue(LONGLONG &dst_val)
 {
-	dst_val = this->GetLONGLONG();
+	dst_val = this->GetLongLong();
 
 	return (dst_val);
 }
@@ -332,7 +332,7 @@ inline LONGLONG &tml::RandomSeed::GetValue(LONGLONG &dst_val)
  */
 inline LONGLONG &tml::RandomSeed::GetValue(LONGLONG &dst_val, const LONGLONG min_val, const LONGLONG max_val)
 {
-	dst_val = this->GetLONGLONG(min_val, max_val);
+	dst_val = this->GetLongLong(min_val, max_val);
 
 	return (dst_val);
 }
@@ -345,7 +345,7 @@ inline LONGLONG &tml::RandomSeed::GetValue(LONGLONG &dst_val, const LONGLONG min
  */
 inline ULONGLONG &tml::RandomSeed::GetValue(ULONGLONG &dst_val)
 {
-	dst_val = this->GetULONGLONG();
+	dst_val = this->GetULongLong();
 
 	return (dst_val);
 }
@@ -360,7 +360,7 @@ inline ULONGLONG &tml::RandomSeed::GetValue(ULONGLONG &dst_val)
  */
 inline ULONGLONG &tml::RandomSeed::GetValue(ULONGLONG &dst_val, const ULONGLONG min_val, const ULONGLONG max_val)
 {
-	dst_val = this->GetULONGLONG(min_val, max_val);
+	dst_val = this->GetULongLong(min_val, max_val);
 
 	return (dst_val);
 }
@@ -373,7 +373,7 @@ inline ULONGLONG &tml::RandomSeed::GetValue(ULONGLONG &dst_val, const ULONGLONG 
  */
 inline FLOAT &tml::RandomSeed::GetValue(FLOAT &dst_val)
 {
-	dst_val = this->GetFLOAT();
+	dst_val = this->GetFloat();
 
 	return (dst_val);
 }
@@ -388,7 +388,7 @@ inline FLOAT &tml::RandomSeed::GetValue(FLOAT &dst_val)
  */
 inline FLOAT &tml::RandomSeed::GetValue(FLOAT &dst_val, const FLOAT min_val, const FLOAT max_val)
 {
-	dst_val = this->GetFLOAT(min_val, max_val);
+	dst_val = this->GetFloat(min_val, max_val);
 
 	return (dst_val);
 }
@@ -401,7 +401,7 @@ inline FLOAT &tml::RandomSeed::GetValue(FLOAT &dst_val, const FLOAT min_val, con
  */
 inline DOUBLE &tml::RandomSeed::GetValue(DOUBLE &dst_val)
 {
-	dst_val = this->GetDOUBLE();
+	dst_val = this->GetDouble();
 
 	return (dst_val);
 }
@@ -416,7 +416,7 @@ inline DOUBLE &tml::RandomSeed::GetValue(DOUBLE &dst_val)
  */
 inline DOUBLE &tml::RandomSeed::GetValue(DOUBLE &dst_val, const DOUBLE min_val, const DOUBLE max_val)
 {
-	dst_val = this->GetDOUBLE(min_val, max_val);
+	dst_val = this->GetDouble(min_val, max_val);
 
 	return (dst_val);
 }

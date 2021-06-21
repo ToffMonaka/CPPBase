@@ -83,7 +83,7 @@ void tml::XMLFileDataNode::SetParentNode(tml::XMLFileDataNode *parent_node)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::XMLFileDataNode::AddChildNode(tml::shared_ptr<tml::XMLFileDataNode> &child_node)
+INT tml::XMLFileDataNode::AddChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &child_node)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
@@ -112,7 +112,7 @@ INT tml::XMLFileDataNode::AddChildNode(tml::shared_ptr<tml::XMLFileDataNode> &ch
  * @brief RemoveChildNodeä÷êî
  * @param child_node (child_node)
  */
-void tml::XMLFileDataNode::RemoveChildNode(tml::shared_ptr<tml::XMLFileDataNode> &child_node)
+void tml::XMLFileDataNode::RemoveChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &child_node)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
@@ -208,9 +208,9 @@ void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
 /**
  * @brief SetRootNodeRecursivePartä÷êî
  * @param parent_node (parent_node)
- * @param xml_doc (xml_document)
+ * @param xml_node (xml_node)
  */
-void tml::XMLFileData::SetRootNodeRecursivePart(tml::shared_ptr<tml::XMLFileDataNode> &parent_node, const rapidxml::xml_node<> *xml_node)
+void tml::XMLFileData::SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFileDataNode> &parent_node, const rapidxml::xml_node<> *xml_node)
 {
 	if (xml_node == nullptr) {
 		return;
@@ -350,11 +350,11 @@ void tml::XMLFile::Init(void)
  */
 INT tml::XMLFile::Read(void)
 {
-	auto read_desc_dat = this->read_desc.GetDataByParent();
+	auto file_read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::TextFile txt_file;
 
-	txt_file.read_desc.parent_data = read_desc_dat;
+	txt_file.read_desc.parent_data = file_read_desc_dat;
 
 	if (txt_file.Read() < 0) {
 		return (-1);
@@ -372,19 +372,19 @@ INT tml::XMLFile::Read(void)
 		return (0);
 	}
 
-	std::wstring tmp_file_str;
+	std::wstring tmp_str;
 
-	tml::StringUtil::Join(tmp_file_str, txt_file.data.line_string_container, L"");
+	tml::StringUtil::Join(tmp_str, txt_file.data.line_string_container, L"");
 
-	std::string file_str;
+	std::string str;
 
-	tml::StringUtil::GetString(file_str, tmp_file_str.c_str());
+	tml::StringUtil::GetString(str, tmp_str.c_str());
 
 	tml::DynamicBuffer xml_buf;
 
-	xml_buf.SetSize(file_str.length() + sizeof(CHAR));
-	xml_buf.WriteArray(reinterpret_cast<const BYTE *>(file_str.c_str()), file_str.length(), file_str.length());
-	xml_buf.WriteCHAR(0);
+	xml_buf.SetSize(str.length() + sizeof(CHAR));
+	xml_buf.WriteArray(reinterpret_cast<const BYTE *>(str.c_str()), str.length(), str.length());
+	xml_buf.WriteChar(0);
 
 	CHAR *xml_str = reinterpret_cast<CHAR *>(xml_buf.Get());
 
@@ -418,9 +418,9 @@ INT tml::XMLFile::Write(void)
 	static const std::wstring empty_str = L"";
 	static const std::wstring header_str = L"<?xml version=\"1.0\" encoding=\"shift_jis\" ?>";
 
-	auto write_desc_dat = this->write_desc.GetDataByParent();
+	auto file_write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (write_desc_dat->file_path.empty()) {
+	if (file_write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -438,7 +438,7 @@ INT tml::XMLFile::Write(void)
 		txt_file.data.line_string_container.push_back(empty_str);
 	}
 
-	txt_file.write_desc.parent_data = write_desc_dat;
+	txt_file.write_desc.parent_data = file_write_desc_dat;
 
 	if (txt_file.Write() < 0) {
 		return (-1);

@@ -159,11 +159,11 @@ INT tml::CSVFile::Read(void)
 	static const std::wstring comment_str = L"#";
 	static const std::wregex needless_pattern(L"^[\\s|@]+|[\\s|@]+$");
 
-	auto read_desc_dat = this->read_desc.GetDataByParent();
+	auto file_read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::TextFile txt_file;
 
-	txt_file.read_desc.parent_data = read_desc_dat;
+	txt_file.read_desc.parent_data = file_read_desc_dat;
 
 	if (txt_file.Read() < 0) {
 		return (-1);
@@ -182,7 +182,7 @@ INT tml::CSVFile::Read(void)
 	size_t dq_str_cnt = 0U;
 	size_t ddq_str_index = 0U;
 	size_t comment_str_index = 0U;
-	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetStringW(read_desc_dat->newline_code_type);
+	std::wstring newline_code_str = tml::ConstantUtil::NEWLINE_CODE::GetStringW(file_read_desc_dat->newline_code_type);
 	std::vector<std::wstring> column_val_cont;
 	size_t column_cnt = 0U;
 
@@ -324,9 +324,9 @@ INT tml::CSVFile::Write(void)
 	static const std::wstring empty_str = L"";
 	static const std::wstring comma_str = L",";
 
-	auto write_desc_dat = this->write_desc.GetDataByParent();
+	auto file_write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (write_desc_dat->file_path.empty()) {
+	if (file_write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -344,7 +344,7 @@ INT tml::CSVFile::Write(void)
 		txt_file.data.line_string_container.push_back(empty_str);
 	}
 
-	txt_file.write_desc.parent_data = write_desc_dat;
+	txt_file.write_desc.parent_data = file_write_desc_dat;
 
 	if (txt_file.Write() < 0) {
 		return (-1);

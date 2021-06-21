@@ -45,31 +45,31 @@ void tml::ManagerResourceDesc::Init(void)
 
 /**
  * @brief Readä÷êî
- * @param read_desc (read_desc)
+ * @param file_read_desc (file_read_desc)
  * @return res (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::ManagerResourceDesc::Read(const tml::INIFileReadDesc &read_desc)
+INT tml::ManagerResourceDesc::Read(const tml::INIFileReadDesc &file_read_desc)
 {
-	auto read_desc_dat = read_desc.GetDataByParent();
+	auto file_read_desc_dat = file_read_desc.GetDataByParent();
 
-	if (!read_desc_dat->IsEmpty()) {
-		tml::INIFile ini_file;
-
-		ini_file.read_desc.parent_data = read_desc_dat;
-
-		if (ini_file.Read() < 0) {
-			return (-1);
-		}
-
-		if (ini_file.data.value_container.empty()) {
-			return (0);
-		}
-
-		return (this->ReadValue(ini_file));
+	if (file_read_desc_dat->IsEmpty()) {
+		return (0);
 	}
 
-	return (0);
+	tml::INIFile ini_file;
+
+	ini_file.read_desc.parent_data = file_read_desc_dat;
+
+	if (ini_file.Read() < 0) {
+		return (-1);
+	}
+
+	if (ini_file.data.value_container.empty()) {
+		return (0);
+	}
+
+	return (this->ReadValue(ini_file));
 }
 
 

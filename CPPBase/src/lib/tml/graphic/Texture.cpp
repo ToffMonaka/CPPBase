@@ -268,9 +268,9 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 					return (-1);
 				}
 
-				auto &file_buf = bin_file.data.buffer;
+				auto &bin_file_buf = bin_file.data.buffer;
 
-				if (file_buf.GetLength() <= 0U) {
+				if (bin_file_buf.GetLength() <= 0U) {
 					this->Init();
 
 					return (-1);
@@ -287,7 +287,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				img_load_info.CpuAccessFlags = D3DX11_DEFAULT;
 				img_load_info.Format = (tmp_tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : tmp_tex_desc.Format;
 
-				if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(file_buf.Get()), file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) {
+				if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(bin_file_buf.Get()), bin_file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) {
 					this->Init();
 
 					return (-1);
@@ -391,9 +391,9 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				return (-1);
 			}
 
-			auto &file_buf = bin_file.data.buffer;
+			auto &bin_file_buf = bin_file.data.buffer;
 
-			if (file_buf.GetLength() <= 0U) {
+			if (bin_file_buf.GetLength() <= 0U) {
 				this->Init();
 
 				return (-1);
@@ -410,7 +410,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			img_load_info.CpuAccessFlags = tmp_tex_desc.CPUAccessFlags;
 			img_load_info.Format = (tmp_tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : tmp_tex_desc.Format;
 
-			if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(file_buf.Get()), file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&this->tex_), nullptr))) {
+			if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(bin_file_buf.Get()), bin_file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&this->tex_), nullptr))) {
 				this->Init();
 
 				return (-1);
