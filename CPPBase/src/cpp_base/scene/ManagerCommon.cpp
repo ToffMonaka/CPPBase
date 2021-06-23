@@ -12,6 +12,12 @@
 #include "../../lib/tml/graphic/Font.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
+#include "BaseScene.h"
+#include "InitScene.h"
+#include "TitleScene.h"
+#include "BaseNode.h"
+#include "InitSceneNode.h"
+#include "TitleSceneNode.h"
 
 
 /**

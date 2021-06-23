@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../time/FrameRate.h"
 #include "../manager/Manager.h"
+#include "ManagerFactory.h"
 #include "ManagerCommon.h"
 #include "Scene.h"
 #include "Node.h"
@@ -123,20 +124,11 @@ private:
 	tml::shared_ptr<tml::scene::Scene> scene_;
 
 public:
-	tml::ManagerResourceFactory<tml::scene::Scene, tml::INIFileReadDesc> scene_factory_by_ini_file;
-	tml::ManagerResourceFactory<tml::scene::Scene, tml::XMLFileReadDesc> scene_factory_by_xml_file;
-	tml::ManagerResourceFactory<tml::scene::Node, tml::INIFileReadDesc> node_factory_by_ini_file;
-	tml::ManagerResourceFactory<tml::scene::Node, tml::XMLFileReadDesc> node_factory_by_xml_file;
+	tml::scene::ManagerFactory factory;
 	tml::scene::ManagerCommon common;
-
-private:
-	void GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
 
 protected:
 	void Release(void);
-
-	INT CreateCommon(void);
-	void DeleteCommon(void);
 
 public:
 	Manager();

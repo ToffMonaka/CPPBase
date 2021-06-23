@@ -178,6 +178,7 @@
     <ClCompile Include="src\cpp_base\scene\InitSceneNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\Manager.cpp" />
     <ClCompile Include="src\cpp_base\scene\ManagerCommon.cpp" />
+    <ClCompile Include="src\cpp_base\scene\ManagerFactory.cpp" />
     <ClCompile Include="src\cpp_base\scene\TitleScene.cpp" />
     <ClCompile Include="src\cpp_base\scene\TitleSceneNode.cpp" />
     <ClCompile Include="src\cpp_base\sound\Manager.cpp" />
@@ -260,6 +261,7 @@
     <ClCompile Include="src\lib\tml\scene\Manager.cpp" />
     <ClCompile Include="src\lib\tml\scene\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\scene\ManagerEvent.cpp" />
+    <ClCompile Include="src\lib\tml\scene\ManagerFactory.cpp" />
     <ClCompile Include="src\lib\tml\scene\ManagerResource.cpp" />
     <ClCompile Include="src\lib\tml\scene\Node.cpp" />
     <ClCompile Include="src\lib\tml\scene\NodeEvent.cpp" />
@@ -316,6 +318,7 @@
     <ClInclude Include="src\cpp_base\scene\InitSceneNode.h" />
     <ClInclude Include="src\cpp_base\scene\Manager.h" />
     <ClInclude Include="src\cpp_base\scene\ManagerCommon.h" />
+    <ClInclude Include="src\cpp_base\scene\ManagerFactory.h" />
     <ClInclude Include="src\cpp_base\scene\TitleScene.h" />
     <ClInclude Include="src\cpp_base\scene\TitleSceneNode.h" />
     <ClInclude Include="src\cpp_base\sound\Manager.h" />
@@ -421,6 +424,7 @@
     <ClInclude Include="src\lib\tml\scene\Manager.h" />
     <ClInclude Include="src\lib\tml\scene\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\scene\ManagerEvent.h" />
+    <ClInclude Include="src\lib\tml\scene\ManagerFactory.h" />
     <ClInclude Include="src\lib\tml\scene\ManagerResource.h" />
     <ClInclude Include="src\lib\tml\scene\Node.h" />
     <ClInclude Include="src\lib\tml\scene\NodeEvent.h" />

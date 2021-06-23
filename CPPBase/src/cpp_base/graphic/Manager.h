@@ -66,9 +66,6 @@ public:
 protected:
 	void Release(void);
 
-	INT CreateCommon2(void);
-	void DeleteCommon2(void);
-
 public:
 	Manager();
 	virtual ~Manager();

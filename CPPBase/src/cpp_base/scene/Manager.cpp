@@ -155,7 +155,8 @@ cpp_base::scene::Manager::~Manager()
  */
 void cpp_base::scene::Manager::Release(void)
 {
-	this->DeleteCommon2();
+	this->factory2.Init();
+	this->common2.Init();
 
 	tml::scene::Manager::Release();
 
@@ -208,141 +209,17 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 	this->graphic_mgr_ = desc.GetGraphicManager();
 	this->sound_mgr_ = desc.GetSoundManager();
 
-	{// Factory Set
-		this->scene_factory_by_ini_file.AddFunction(L"BaseScene",
-			[this] (const tml::INIFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Scene> {
-				tml::shared_ptr<tml::scene::Scene> scene;
+	if (this->factory2.Create(this) < 0) {
+		this->Init();
 
-				cpp_base::scene::BaseSceneDesc desc;
-
-				desc.SetManager(this);
-				desc.Read(file_read_desc);
-
-				if (this->GetResource<cpp_base::scene::BaseScene>(scene, desc) == nullptr) {
-					return (scene);
-				}
-
-				return (scene);
-			}
-		);
-
-		this->scene_factory_by_ini_file.AddFunction(L"InitScene",
-			[this] (const tml::INIFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Scene> {
-				tml::shared_ptr<tml::scene::Scene> scene;
-
-				cpp_base::scene::InitSceneDesc desc;
-
-				desc.SetManager(this);
-				desc.Read(file_read_desc);
-
-				if (this->GetResource<cpp_base::scene::InitScene>(scene, desc) == nullptr) {
-					return (scene);
-				}
-
-				return (scene);
-			}
-		);
-
-		this->scene_factory_by_ini_file.AddFunction(L"TitleScene",
-			[this] (const tml::INIFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Scene> {
-				tml::shared_ptr<tml::scene::Scene> scene;
-
-				cpp_base::scene::TitleSceneDesc desc;
-
-				desc.SetManager(this);
-				desc.Read(file_read_desc);
-
-				if (this->GetResource<cpp_base::scene::TitleScene>(scene, desc) == nullptr) {
-					return (scene);
-				}
-
-				return (scene);
-			}
-		);
-
-		this->node_factory_by_ini_file.AddFunction(L"BaseNode",
-			[this] (const tml::INIFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Node> {
-				tml::shared_ptr<tml::scene::Node> node;
-
-				cpp_base::scene::BaseNodeDesc desc;
-
-				desc.SetManager(this);
-				desc.Read(file_read_desc);
-
-				if (this->GetResource<cpp_base::scene::BaseNode>(node, desc) == nullptr) {
-					return (node);
-				}
-
-				return (node);
-			}
-		);
-
-		this->node_factory_by_ini_file.AddFunction(L"InitSceneNode",
-			[this] (const tml::INIFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Node> {
-				tml::shared_ptr<tml::scene::Node> node;
-
-				cpp_base::scene::InitSceneNodeDesc desc;
-
-				desc.SetManager(this);
-				desc.Read(file_read_desc);
-
-				if (this->GetResource<cpp_base::scene::InitSceneNode>(node, desc) == nullptr) {
-					return (node);
-				}
-
-				return (node);
-			}
-		);
-
-		this->node_factory_by_ini_file.AddFunction(L"TitleSceneNode",
-			[this] (const tml::INIFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Node> {
-				tml::shared_ptr<tml::scene::Node> node;
-
-				cpp_base::scene::TitleSceneNodeDesc desc;
-
-				desc.SetManager(this);
-				desc.Read(file_read_desc);
-
-				if (this->GetResource<cpp_base::scene::TitleSceneNode>(node, desc) == nullptr) {
-					return (node);
-				}
-
-				return (node);
-			}
-		);
+		return (-1);
 	}
 
-	if (this->CreateCommon2() < 0) {
+	if (this->common2.Create(this) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
 	return (0);
-}
-
-
-/**
- * @brief CreateCommon2ä÷êî
- * @return res (result)<br>
- * 0ñ¢ñû=é∏îs
- */
-INT cpp_base::scene::Manager::CreateCommon2(void)
-{
-	if (this->common2.Create(this) < 0) {
-		return (-1);
-	}
-
-	return (0);
-}
-
-
-/**
- * @brief DeleteCommon2ä÷êî
- */
-void cpp_base::scene::Manager::DeleteCommon2(void)
-{
-	this->common2.Init();
-
-	return;
 }

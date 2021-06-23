@@ -10,7 +10,6 @@
 #include <list>
 #include <unordered_map>
 #include "ManagerResource.h"
-#include "ManagerResourceFactory.h"
 #include "ManagerEvent.h"
 
 

@@ -94,7 +94,7 @@ cpp_base::graphic::Manager::~Manager()
  */
 void cpp_base::graphic::Manager::Release(void)
 {
-	this->DeleteCommon2();
+	this->common2.Init();
 
 	tml::graphic::Manager::Release();
 
@@ -131,40 +131,11 @@ INT cpp_base::graphic::Manager::Create(const cpp_base::graphic::ManagerDesc &des
 		return (-1);
 	}
 
-	{// Factory Set
-	}
-
-	if (this->CreateCommon2() < 0) {
+	if (this->common.Create(this) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
 	return (0);
-}
-
-
-/**
- * @brief CreateCommon2ŠÖ”
- * @return res (result)<br>
- * 0–¢–=¸”s
- */
-INT cpp_base::graphic::Manager::CreateCommon2(void)
-{
-	if (this->common2.Create(this) < 0) {
-		return (-1);
-	}
-
-	return (0);
-}
-
-
-/**
- * @brief DeleteCommon2ŠÖ”
- */
-void cpp_base::graphic::Manager::DeleteCommon2(void)
-{
-	this->common2.Init();
-
-	return;
 }

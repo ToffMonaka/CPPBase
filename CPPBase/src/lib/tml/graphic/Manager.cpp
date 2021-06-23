@@ -237,7 +237,8 @@ tml::graphic::Manager::~Manager()
  */
 void tml::graphic::Manager::Release(void)
 {
-	this->DeleteCommon();
+	this->common.Init();
+
 	this->DeleteResourceContainer();
 
 	if (this->swap_chain_ != nullptr) {
@@ -591,10 +592,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	this->device_context_->CSSetUnorderedAccessViews(0U, this->null_tex_uasr_ary_.size(), this->null_tex_uasr_ary_.data(), this->null_tex_uasr_init_cnt_ary_.data());
 	this->device_context_->CSSetSamplers(0U, this->null_samp_sr_ary_.size(), this->null_samp_sr_ary_.data());
 
-	{// Factory Set
-	}
-
-	if (this->CreateCommon() < 0) {
+	if (this->common.Create(this) < 0) {
 		this->Init();
 
 		return (-1);
@@ -732,32 +730,6 @@ void tml::graphic::Manager::Update(void)
 	this->ClearDrawFog();
 	this->ClearDrawMesh();
 	this->ClearDrawModel();
-
-	return;
-}
-
-
-/**
- * @brief CreateCommonä÷êî
- * @return res (result)<br>
- * 0ñ¢ñû=é∏îs
- */
-INT tml::graphic::Manager::CreateCommon(void)
-{
-	if (this->common.Create(this) < 0) {
-		return (-1);
-	}
-
-	return (0);
-}
-
-
-/**
- * @brief DeleteCommonä÷êî
- */
-void tml::graphic::Manager::DeleteCommon(void)
-{
-	this->common.Init();
 
 	return;
 }

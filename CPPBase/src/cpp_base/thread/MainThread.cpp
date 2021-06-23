@@ -196,7 +196,7 @@ INT cpp_base::MainThread::Start(void)
 	{// InitScene Start
 		tml::shared_ptr<tml::scene::Scene> scene;
 
-		if (this->scene_mgr_.scene_factory_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/init_scene.xml")) == nullptr) {
+		if (this->scene_mgr_.factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/init_scene.xml")) == nullptr) {
 			return (-1);
 		}
 

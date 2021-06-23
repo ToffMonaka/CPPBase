@@ -298,7 +298,7 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 		{// TitleScene Start
 			tml::shared_ptr<tml::scene::Scene> scene;
 
-			if (this->GetManager()->scene_factory_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/title_scene.xml")) == nullptr) {
+			if (this->GetManager()->factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/title_scene.xml")) == nullptr) {
 				this->GetManager()->EndScene();
 
 				return;
