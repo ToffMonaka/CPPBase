@@ -170,8 +170,10 @@
     <ClCompile Include="src\cpp_base\data\SystemConfigFile.cpp" />
     <ClCompile Include="src\cpp_base\graphic\Manager.cpp" />
     <ClCompile Include="src\cpp_base\graphic\ManagerCommon.cpp" />
+    <ClCompile Include="src\cpp_base\graphic\ManagerFactory.cpp" />
     <ClCompile Include="src\cpp_base\input\Manager.cpp" />
     <ClCompile Include="src\cpp_base\input\ManagerCommon.cpp" />
+    <ClCompile Include="src\cpp_base\input\ManagerFactory.cpp" />
     <ClCompile Include="src\cpp_base\scene\BaseNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\BaseScene.cpp" />
     <ClCompile Include="src\cpp_base\scene\InitScene.cpp" />
@@ -183,6 +185,7 @@
     <ClCompile Include="src\cpp_base\scene\TitleSceneNode.cpp" />
     <ClCompile Include="src\cpp_base\sound\Manager.cpp" />
     <ClCompile Include="src\cpp_base\sound\ManagerCommon.cpp" />
+    <ClCompile Include="src\cpp_base\sound\ManagerFactory.cpp" />
     <ClCompile Include="src\cpp_base\thread\MainThread.cpp" />
     <ClCompile Include="src\cpp_base\thread\TestThread.cpp" />
     <ClCompile Include="src\lib\tml\dlmalloc\malloc.c" />
@@ -209,6 +212,7 @@
     <ClCompile Include="src\lib\tml\graphic\Manager.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ManagerEvent.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\ManagerFactory.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ManagerResource.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Light.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Mesh.cpp" />
@@ -229,6 +233,7 @@
     <ClCompile Include="src\lib\tml\input\Manager.cpp" />
     <ClCompile Include="src\lib\tml\input\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\input\ManagerEvent.cpp" />
+    <ClCompile Include="src\lib\tml\input\ManagerFactory.cpp" />
     <ClCompile Include="src\lib\tml\input\ManagerResource.cpp" />
     <ClCompile Include="src\lib\tml\input\MouseDeviceEvent.cpp" />
     <ClCompile Include="src\lib\tml\manager\Manager.cpp" />
@@ -271,6 +276,7 @@
     <ClCompile Include="src\lib\tml\sound\Manager.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerEvent.cpp" />
+    <ClCompile Include="src\lib\tml\sound\ManagerFactory.cpp" />
     <ClCompile Include="src\lib\tml\sound\ManagerResource.cpp" />
     <ClCompile Include="src\lib\tml\sound\SESound.cpp" />
     <ClCompile Include="src\lib\tml\sound\Sound.cpp" />
@@ -309,8 +315,10 @@
     <ClInclude Include="src\cpp_base\data\SystemConfigFile.h" />
     <ClInclude Include="src\cpp_base\graphic\Manager.h" />
     <ClInclude Include="src\cpp_base\graphic\ManagerCommon.h" />
+    <ClInclude Include="src\cpp_base\graphic\ManagerFactory.h" />
     <ClInclude Include="src\cpp_base\input\Manager.h" />
     <ClInclude Include="src\cpp_base\input\ManagerCommon.h" />
+    <ClInclude Include="src\cpp_base\input\ManagerFactory.h" />
     <ClInclude Include="src\cpp_base\resource\resource.h" />
     <ClInclude Include="src\cpp_base\scene\BaseNode.h" />
     <ClInclude Include="src\cpp_base\scene\BaseScene.h" />
@@ -323,6 +331,7 @@
     <ClInclude Include="src\cpp_base\scene\TitleSceneNode.h" />
     <ClInclude Include="src\cpp_base\sound\Manager.h" />
     <ClInclude Include="src\cpp_base\sound\ManagerCommon.h" />
+    <ClInclude Include="src\cpp_base\sound\ManagerFactory.h" />
     <ClInclude Include="src\cpp_base\thread\MainThread.h" />
     <ClInclude Include="src\cpp_base\thread\TestThread.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantInclude_ConstantUtilBase.h" />
@@ -368,6 +377,7 @@
     <ClInclude Include="src\lib\tml\graphic\Manager.h" />
     <ClInclude Include="src\lib\tml\graphic\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\graphic\ManagerEvent.h" />
+    <ClInclude Include="src\lib\tml\graphic\ManagerFactory.h" />
     <ClInclude Include="src\lib\tml\graphic\ManagerResource.h" />
     <ClInclude Include="src\lib\tml\graphic\Light.h" />
     <ClInclude Include="src\lib\tml\graphic\Mesh.h" />
@@ -388,6 +398,7 @@
     <ClInclude Include="src\lib\tml\input\Manager.h" />
     <ClInclude Include="src\lib\tml\input\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\input\ManagerEvent.h" />
+    <ClInclude Include="src\lib\tml\input\ManagerFactory.h" />
     <ClInclude Include="src\lib\tml\input\ManagerResource.h" />
     <ClInclude Include="src\lib\tml\input\MouseDeviceEvent.h" />
     <ClInclude Include="src\lib\tml\manager\Manager.h" />
@@ -434,6 +445,7 @@
     <ClInclude Include="src\lib\tml\sound\Manager.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerEvent.h" />
+    <ClInclude Include="src\lib\tml\sound\ManagerFactory.h" />
     <ClInclude Include="src\lib\tml\sound\ManagerResource.h" />
     <ClInclude Include="src\lib\tml\sound\SESound.h" />
     <ClInclude Include="src\lib\tml\sound\Sound.h" />

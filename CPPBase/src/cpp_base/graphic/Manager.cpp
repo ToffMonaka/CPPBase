@@ -94,6 +94,7 @@ cpp_base::graphic::Manager::~Manager()
  */
 void cpp_base::graphic::Manager::Release(void)
 {
+	this->factory2.Init();
 	this->common2.Init();
 
 	tml::graphic::Manager::Release();
@@ -126,6 +127,12 @@ INT cpp_base::graphic::Manager::Create(const cpp_base::graphic::ManagerDesc &des
 	this->Init();
 
 	if (tml::graphic::Manager::Create(desc) < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	if (this->factory2.Create(this) < 0) {
 		this->Init();
 
 		return (-1);

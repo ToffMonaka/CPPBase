@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMathINT.h"
 #include "../manager/Manager.h"
+#include "ManagerFactory.h"
 #include "ManagerCommon.h"
 
 
@@ -64,6 +65,7 @@ private:
 	std::array<bool, tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE_COUNT> keyboard_device_code_stat_ary_;
 
 public:
+	tml::input::ManagerFactory factory;
 	tml::input::ManagerCommon common;
 
 protected:

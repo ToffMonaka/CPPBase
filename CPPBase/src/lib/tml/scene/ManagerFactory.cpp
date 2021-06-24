@@ -42,6 +42,11 @@ void tml::scene::ManagerFactory::Init(void)
 
 	this->mgr_ = nullptr;
 
+	this->scene_by_ini_file.Init();
+	this->scene_by_xml_file.Init();
+	this->node_by_ini_file.Init();
+	this->node_by_xml_file.Init();
+
 	return;
 }
 

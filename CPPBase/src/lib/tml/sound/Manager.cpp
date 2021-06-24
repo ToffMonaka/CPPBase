@@ -112,6 +112,7 @@ tml::sound::Manager::~Manager()
  */
 void tml::sound::Manager::Release(void)
 {
+	this->factory.Init();
 	this->common.Init();
 
 	this->DeleteResourceContainer();
@@ -193,6 +194,12 @@ INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)
 
 	this->volume_ary_ = desc.volume_array;
 	this->mute_flg_ary_ = desc.mute_flag_array;
+
+	if (this->factory.Create(this) < 0) {
+		this->Init();
+
+		return (-1);
+	}
 
 	if (this->common.Create(this) < 0) {
 		this->Init();

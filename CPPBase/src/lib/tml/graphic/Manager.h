@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../math/XNAMathUINT.h"
 #include "../manager/Manager.h"
+#include "ManagerFactory.h"
 #include "ManagerCommon.h"
 #include "Viewport.h"
 
@@ -197,6 +198,7 @@ private:
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> cmp_samp_sr_ary_;
 
 public:
+	tml::graphic::ManagerFactory factory;
 	tml::graphic::ManagerCommon common;
 
 protected:

@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../manager/Manager.h"
+#include "ManagerFactory.h"
 #include "ManagerCommon.h"
 
 
@@ -119,6 +120,7 @@ private:
 	std::array<bool, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> mute_flg_ary_;
 
 public:
+	tml::sound::ManagerFactory factory;
 	tml::sound::ManagerCommon common;
 
 protected:

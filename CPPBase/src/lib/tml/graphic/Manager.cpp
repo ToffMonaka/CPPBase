@@ -237,6 +237,7 @@ tml::graphic::Manager::~Manager()
  */
 void tml::graphic::Manager::Release(void)
 {
+	this->factory.Init();
 	this->common.Init();
 
 	this->DeleteResourceContainer();
@@ -591,6 +592,12 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	this->device_context_->CSSetShaderResources(0U, this->null_tex_sr_ary_.size(), this->null_tex_sr_ary_.data());
 	this->device_context_->CSSetUnorderedAccessViews(0U, this->null_tex_uasr_ary_.size(), this->null_tex_uasr_ary_.data(), this->null_tex_uasr_init_cnt_ary_.data());
 	this->device_context_->CSSetSamplers(0U, this->null_samp_sr_ary_.size(), this->null_samp_sr_ary_.data());
+
+	if (this->factory.Create(this) < 0) {
+		this->Init();
+
+		return (-1);
+	}
 
 	if (this->common.Create(this) < 0) {
 		this->Init();

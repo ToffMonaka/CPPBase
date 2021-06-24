@@ -94,6 +94,7 @@ cpp_base::input::Manager::~Manager()
  */
 void cpp_base::input::Manager::Release(void)
 {
+	this->factory2.Init();
 	this->common2.Init();
 
 	tml::input::Manager::Release();
@@ -126,6 +127,12 @@ INT cpp_base::input::Manager::Create(const cpp_base::input::ManagerDesc &desc)
 	this->Init();
 
 	if (tml::input::Manager::Create(desc) < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	if (this->factory2.Create(this) < 0) {
 		this->Init();
 
 		return (-1);

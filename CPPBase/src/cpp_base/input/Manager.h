@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../../lib/tml/input/Manager.h"
+#include "ManagerFactory.h"
 #include "ManagerCommon.h"
 
 
@@ -61,6 +62,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 
 public:
+	cpp_base::input::ManagerFactory factory2;
 	cpp_base::input::ManagerCommon common2;
 
 protected:
