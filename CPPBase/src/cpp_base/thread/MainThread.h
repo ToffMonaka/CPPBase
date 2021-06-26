@@ -44,9 +44,9 @@ public:
 	virtual void Init(void);
 	INT Create(const HINSTANCE, const WCHAR *, const INT);
 
-	virtual INT Start(void);
-	virtual void End(void);
-	virtual void Update(void);
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 	cpp_base::SystemConfigFile &GetSystemConfigFile(void);
 	cpp_base::input::Manager &GetInputManager(void);

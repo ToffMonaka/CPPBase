@@ -87,6 +87,8 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
 		if (this->stat_.all_started_flg) {
 			return (-1);
 		} else {
+			tmp_th->CreateCore();
+
 			this->start_th_cont_.push_back(tmp_th);
 			this->start_th_cont_by_th_id_.insert(std::make_pair(tmp_th->GetID(), tmp_th));
 		}
@@ -182,7 +184,7 @@ INT tml::ThreadUtilEngine::StartAll(void)
 					{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 						this->stat_.exit_code = static_cast<INT>(msg.wParam);
 
-						main_th->SetLoopFlag(false);
+						main_th->SetStartFlag(false);
 					}
 
 					break;
@@ -192,14 +194,16 @@ INT tml::ThreadUtilEngine::StartAll(void)
 				DispatchMessage(&msg);
 			}
 
-			if (main_th->GetLoopFlag()) {
+			if (main_th->GetStartFlag()) {
 				main_th->Update();
 			}
-		} while (main_th->GetLoopFlag());
+		} while (main_th->GetStartFlag());
 	} else {
 		do {
-			main_th->Update();
-		} while (main_th->GetLoopFlag());
+			if (main_th->GetStartFlag()) {
+				main_th->Update();
+			}
+		} while (main_th->GetStartFlag());
 	}
 
 	return (0);
@@ -223,7 +227,7 @@ void tml::ThreadUtilEngine::End(const bool finish_flg)
 
 		auto th = th_itr->second;
 
-		th->SetLoopFlag(false);
+		th->SetStartFlag(false);
 
 		if (finish_flg) {
 			this->start_th_cont_.remove(th);
@@ -251,7 +255,7 @@ void tml::ThreadUtilEngine::EndAll(const bool finish_flg)
 		this->ready_th_cont_.clear();
 
 		for (auto th : this->start_th_cont_) {
-			th->SetLoopFlag(false);
+			th->SetStartFlag(false);
 		}
 
 		if (finish_flg) {

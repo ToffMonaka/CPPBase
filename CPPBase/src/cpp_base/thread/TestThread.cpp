@@ -74,11 +74,11 @@ INT cpp_base::TestThread::Create(void)
 
 
 /**
- * @brief StartŠÖ”
+ * @brief OnStartŠÖ”
  * @return res (result)<br>
  * 0–¢–=¸”s
  */
-INT cpp_base::TestThread::Start(void)
+INT cpp_base::TestThread::OnStart(void)
 {
 	{// COM Create
 		if (this->CreateCOM() < 0) {
@@ -91,18 +91,18 @@ INT cpp_base::TestThread::Start(void)
 
 
 /**
- * @brief EndŠÖ”
+ * @brief OnEndŠÖ”
  */
-void cpp_base::TestThread::End(void)
+void cpp_base::TestThread::OnEnd(void)
 {
 	return;
 }
 
 
 /**
- * @brief UpdateŠÖ”
+ * @brief OnUpdateŠÖ”
  */
-void cpp_base::TestThread::Update(void)
+void cpp_base::TestThread::OnUpdate(void)
 {
 	tml::TimeUtil::Sleep(tml::TIME_REAL(0.1));
 

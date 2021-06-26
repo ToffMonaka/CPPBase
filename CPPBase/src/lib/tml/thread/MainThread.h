@@ -47,9 +47,9 @@ public:
 
 	virtual void Init(void);
 
-	virtual INT Start(void) = 0;
-	virtual void End(void) = 0;
-	virtual void Update(void) = 0;
+	virtual INT OnStart(void) = 0;
+	virtual void OnEnd(void) = 0;
+	virtual void OnUpdate(void) = 0;
 
 	HINSTANCE GetInstanceHandle(void) const;
 	HWND GetWindowHandle(void) const;

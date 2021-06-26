@@ -26,7 +26,9 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	std::thread::id id_;
 	tml::ConstantUtil::THREAD::TYPE type_;
-	std::atomic<bool> loop_flg_;
+	std::atomic<bool> run_flg_;
+	std::atomic<bool> start_flg_;
+	std::atomic<bool> started_flg_;
 	std::thread core_;
 	std::atomic<bool> core_created_flg_;
 	tml::MutexThreadLock core_th_lock_;
@@ -41,14 +43,21 @@ public:
 
 	virtual void Init(void);
 
-	virtual INT Start(void) = 0;
-	virtual void End(void) = 0;
-	virtual void Update(void) = 0;
+	INT Start(void);
+	void End(void);
+	void Update(void);
+
+	virtual INT OnStart(void) = 0;
+	virtual void OnEnd(void) = 0;
+	virtual void OnUpdate(void) = 0;
 
 	const std::thread::id &GetID(void) const;
 	tml::ConstantUtil::THREAD::TYPE GetType(void) const;
-	bool GetLoopFlag(void) const;
-	void SetLoopFlag(const bool);
+	bool GetRunFlag(void) const;
+	void SetRunFlag(const bool);
+	bool GetStartFlag(void) const;
+	void SetStartFlag(const bool);
+	bool IsStarted(void) const;
 	INT CreateCore(void);
 	void DeleteCore(void);
 	void RunCore(void);
@@ -77,22 +86,43 @@ inline tml::ConstantUtil::THREAD::TYPE tml::Thread::GetType(void) const
 
 
 /**
- * @brief GetLoopFlag関数
- * @return loop_flg (loop_flag)
+ * @brief GetRunFlag関数
+ * @return run_flg (run_flag)
  */
-inline bool tml::Thread::GetLoopFlag(void) const
+inline bool tml::Thread::GetRunFlag(void) const
 {
-	return (this->loop_flg_);
+	return (this->run_flg_);
 }
 
 
 /**
- * @brief SetLoopFlag関数
- * @param loop_flg (loop_flag)
+ * @brief GetStartFlag関数
+ * @return start_flg (start_flag)
  */
-inline void tml::Thread::SetLoopFlag(const bool loop_flg)
+inline bool tml::Thread::GetStartFlag(void) const
 {
-	this->loop_flg_ = loop_flg;
+	return (this->start_flg_);
+}
+
+
+/**
+ * @brief SetStartFlag関数
+ * @param start_flg (start_flag)
+ */
+inline void tml::Thread::SetStartFlag(const bool start_flg)
+{
+	this->start_flg_ = start_flg;
 
 	return;
+}
+
+
+/**
+ * @brief IsStarted関数
+ * @return res_flg (result_flag)<br>
+ * false=非開始済み,true=開始済み
+ */
+inline bool tml::Thread::IsStarted(void) const
+{
+	return (this->started_flg_);
 }

@@ -13,7 +13,9 @@
  */
 tml::Thread::Thread() :
 	type_(tml::ConstantUtil::THREAD::TYPE::NONE),
-	loop_flg_(true),
+	run_flg_(false),
+	start_flg_(false),
+	started_flg_(false),
 	core_created_flg_(false)
 {
 	return;
@@ -45,12 +47,10 @@ void tml::Thread::Release(void)
  */
 void tml::Thread::Init(void)
 {
-	if (this->type_ == tml::ConstantUtil::THREAD::TYPE::MAIN) {
-		this->id_ = std::thread::id();
-	}
-
 	this->type_ = tml::ConstantUtil::THREAD::TYPE::NONE;
-	this->loop_flg_ = true;
+	this->run_flg_ = false;
+	this->start_flg_ = false;
+	this->started_flg_ = false;
 
 	return;
 }
@@ -68,14 +68,79 @@ INT tml::Thread::Create(const tml::ConstantUtil::THREAD::TYPE type)
 		return (-1);
 	}
 
-	if (type == tml::ConstantUtil::THREAD::TYPE::MAIN) {
-		this->id_ = std::this_thread::get_id();
-	}
-
 	this->type_ = type;
-	this->loop_flg_ = true;
+	this->start_flg_ = true;
 
 	return (0);
+}
+
+
+/**
+ * @brief StartŠÖ”
+ * @return res (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::Thread::Start(void)
+{
+	if ((!this->run_flg_) || (!this->start_flg_)) {
+		return (-1);
+	}
+
+	if (!this->started_flg_) {
+		if (this->OnStart() < 0) {
+			return (-1);
+		}
+
+		this->started_flg_ = true;
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief EndŠÖ”
+ */
+void tml::Thread::End(void)
+{
+	if (!this->run_flg_) {
+		return;
+	}
+
+	if (this->started_flg_) {
+		this->OnEnd();
+
+		this->started_flg_ = false;
+	}
+
+	return;
+}
+
+
+/**
+ * @brief UpdateŠÖ”
+ */
+void tml::Thread::Update(void)
+{
+	if ((!this->run_flg_) || (!this->started_flg_)) {
+		return;
+	}
+
+	this->OnUpdate();
+
+	return;
+}
+
+
+/**
+ * @brief SetRunFlagŠÖ”
+ * @param run_flg (run_flag)
+ */
+void tml::Thread::SetRunFlag(const bool run_flg)
+{
+	this->run_flg_ = run_flg;
+
+	return;
 }
 
 
@@ -86,20 +151,24 @@ INT tml::Thread::Create(const tml::ConstantUtil::THREAD::TYPE type)
  */
 INT tml::Thread::CreateCore(void)
 {
-	if (this->type_ != tml::ConstantUtil::THREAD::TYPE::SUB) {
-		return (-1);
-	}
+	if (this->type_ == tml::ConstantUtil::THREAD::TYPE::MAIN) {
+		this->id_ = std::this_thread::get_id();
+		this->run_flg_ = true;
+	} else if (this->type_ == tml::ConstantUtil::THREAD::TYPE::SUB) {
+		{tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
+			if (this->core_created_flg_) {
+				return (0);
+			}
 
-	{tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
-		if (this->core_created_flg_) {
-			return (0);
+			this->core_ = std::thread(&tml::Thread::RunCore, this);
+
+			this->id_ = this->core_.get_id();
+			this->run_flg_ = true;
+
+			this->core_created_flg_ = true;
 		}
-
-		this->core_ = std::thread(&tml::Thread::RunCore, this);
-
-		this->id_ = this->core_.get_id();
-
-		this->core_created_flg_ = true;
+	} else {
+		return (-1);
 	}
 
 	return (0);
@@ -111,22 +180,26 @@ INT tml::Thread::CreateCore(void)
  */
 void tml::Thread::DeleteCore(void)
 {
-	if (this->type_ != tml::ConstantUtil::THREAD::TYPE::SUB) {
-		return;
-	}
-
-	{tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
-		if (!this->core_created_flg_) {
-			return;
-		}
-
-		if (this->core_.joinable()) {
-			this->core_.join();
-		}
-
+	if (this->type_ == tml::ConstantUtil::THREAD::TYPE::MAIN) {
 		this->id_ = std::thread::id();
+		this->run_flg_ = false;
+	} else if (this->type_ == tml::ConstantUtil::THREAD::TYPE::SUB) {
+		{tml::ThreadLockBlock th_lock_block(this->core_th_lock_);
+			if (!this->core_created_flg_) {
+				return;
+			}
 
-		this->core_created_flg_ = false;
+			if (this->core_.joinable()) {
+				this->core_.join();
+			}
+
+			this->id_ = std::thread::id();
+			this->run_flg_ = false;
+
+			this->core_created_flg_ = false;
+		}
+	} else {
+		return;
 	}
 
 	return;
@@ -148,8 +221,10 @@ void tml::Thread::RunCore(void)
 	}
 
 	do {
-		this->Update();
-	} while (this->loop_flg_);
+		if (this->start_flg_) {
+			this->Update();
+		}
+	} while (this->start_flg_);
 
 	this->End();
 

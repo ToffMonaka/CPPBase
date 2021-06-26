@@ -106,11 +106,11 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
 
 
 /**
- * @brief StartŠÖ”
+ * @brief OnStartŠÖ”
  * @return res (result)<br>
  * 0–¢–=¸”s
  */
-INT cpp_base::MainThread::Start(void)
+INT cpp_base::MainThread::OnStart(void)
 {
 	{// COM Create
 		if (this->CreateCOM() < 0) {
@@ -222,23 +222,23 @@ INT cpp_base::MainThread::Start(void)
 
 
 /**
- * @brief EndŠÖ”
+ * @brief OnEndŠÖ”
  */
-void cpp_base::MainThread::End(void)
+void cpp_base::MainThread::OnEnd(void)
 {
 	return;
 }
 
 
 /**
- * @brief UpdateŠÖ”
+ * @brief OnUpdateŠÖ”
  */
-void cpp_base::MainThread::Update(void)
+void cpp_base::MainThread::OnUpdate(void)
 {
 	this->scene_mgr_.Update();
 
 	if (this->scene_mgr_.GetScene() == nullptr) {
-		this->SetLoopFlag(false);
+		this->SetStartFlag(false);
 	}
 
 	return;

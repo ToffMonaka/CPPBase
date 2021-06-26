@@ -163,11 +163,11 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc, const tml::Cons
  */
 INT tml::scene::Scene::Start(void)
 {
-	if (!this->start_flg_) {
+	if ((!this->run_flg_) || (!this->start_flg_)) {
 		return (-1);
 	}
 
-	if ((this->run_flg_) && (!this->started_flg_)) {
+	if (!this->started_flg_) {
 		if (this->OnStart() < 0) {
 			return (-1);
 		}
@@ -188,11 +188,15 @@ INT tml::scene::Scene::Start(void)
  */
 void tml::scene::Scene::End(void)
 {
+	if (!this->run_flg_) {
+		return;
+	}
+
 	if (this->root_node_ != nullptr) {
 		this->root_node_->End();
 	}
 
-	if ((this->run_flg_) && (this->started_flg_)) {
+	if (this->started_flg_) {
 		this->OnEnd();
 
 		this->started_flg_ = false;
@@ -207,7 +211,7 @@ void tml::scene::Scene::End(void)
  */
 void tml::scene::Scene::Update(void)
 {
-	if ((this->run_flg_) && (!this->started_flg_)) {
+	if ((!this->run_flg_) || (!this->started_flg_)) {
 		return;
 	}
 
