@@ -45,8 +45,7 @@ void tml::BinaryFileData::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::BinaryFileReadDescData::BinaryFileReadDescData() :
-	one_buffer_size(2048U)
+tml::BinaryFileReadDescData::BinaryFileReadDescData()
 {
 	return;
 }
@@ -71,7 +70,6 @@ void tml::BinaryFileReadDescData::Init(void)
 	this->Release();
 
 	this->buffer.Init();
-	this->one_buffer_size = 2048U;
 
 	tml::FileReadDescData::Init();
 
@@ -83,7 +81,6 @@ void tml::BinaryFileReadDescData::Init(void)
  * @brief コンストラクタ
  */
 tml::BinaryFileWriteDescData::BinaryFileWriteDescData() :
-	one_buffer_size(2048U),
 	add_flag(false)
 {
 	return;
@@ -108,7 +105,6 @@ void tml::BinaryFileWriteDescData::Init(void)
 {
 	this->Release();
 
-	this->one_buffer_size = 2048U;
 	this->add_flag = false;
 
 	tml::FileWriteDescData::Init();
@@ -178,7 +174,7 @@ INT tml::BinaryFile::Read(void)
 	}
 
 	tml::DynamicBuffer buf;
-	CHAR *read_buf = nullptr;
+	BYTE *read_buf = nullptr;
 	size_t read_buf_size = 0U;
 	size_t read_size = 0U;
 
@@ -191,17 +187,16 @@ INT tml::BinaryFile::Read(void)
 			return (-1);
 		}
 
-		read_buf_size = tml::Max(file_read_desc_dat->one_buffer_size, sizeof(size_t));
-		read_buf = tml::MemoryUtil::Get<CHAR>(read_buf_size);
+		tml::FileUtil::GetReadBuffer(read_buf, read_buf_size);
 
 		while (1) {
-			ifs.read(read_buf, read_buf_size);
+			ifs.read(reinterpret_cast<CHAR *>(read_buf), read_buf_size);
 
 			read_size = static_cast<size_t>(ifs.gcount());
 
 			if (read_size > 0U) {
 				buf.SetSize(buf.GetSize() + read_size);
-				buf.WriteArray(reinterpret_cast<BYTE *>(read_buf), read_size, read_size);
+				buf.WriteArray(read_buf, read_size, read_size);
 			}
 
 			if (ifs.eof()) {
@@ -211,9 +206,6 @@ INT tml::BinaryFile::Read(void)
 
 		ifs.close();
 	}
-
-	tml::MemoryUtil::Release(&read_buf);
-	read_buf_size = 0U;
 
 	this->data.Init();
 
@@ -237,7 +229,7 @@ INT tml::BinaryFile::Write(void)
 	}
 
 	size_t buf_index = 0U;
-	CHAR *write_buf = nullptr;
+	BYTE *write_buf = nullptr;
 	size_t write_buf_size = 0U;
 	size_t write_size = 0U;
 
@@ -260,15 +252,14 @@ INT tml::BinaryFile::Write(void)
 			return (0);
 		}
 
-		write_buf_size = tml::Max(file_write_desc_dat->one_buffer_size, sizeof(size_t));
-		write_buf = tml::MemoryUtil::Get<CHAR>(write_buf_size);
+		tml::FileUtil::GetWriteBuffer(write_buf, write_buf_size);
 
 		while (1) {
 			write_size = tml::Min(this->data.buffer.GetLength() - buf_index, write_buf_size);
 
-			tml::Copy(write_buf, reinterpret_cast<CHAR *>(&this->data.buffer.Get()[buf_index]), write_size);
+			tml::Copy(write_buf, &this->data.buffer.Get()[buf_index], write_size);
 
-			ofs.write(write_buf, write_size);
+			ofs.write(reinterpret_cast<CHAR *>(write_buf), write_size);
 
 			buf_index += write_size;
 
@@ -279,9 +270,6 @@ INT tml::BinaryFile::Write(void)
 
 		ofs.close();
 	}
-
-	tml::MemoryUtil::Release(&write_buf);
-	write_buf_size = 0U;
 
 	return (0);
 }

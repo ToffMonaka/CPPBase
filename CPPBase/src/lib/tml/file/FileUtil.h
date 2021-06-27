@@ -25,6 +25,10 @@ public: tml::FileUtil &operator =(const tml::FileUtil &) = delete;
 
 private:
 	static std::unique_ptr<tml::FileUtilEngine> engine_;
+	static BYTE *read_buf_;
+	static size_t read_buf_size_;
+	static BYTE *write_buf_;
+	static size_t write_buf_size_;
 	static tml::MutexThreadLock file_th_lock_;
 	static tml::MutexThreadLock dir_th_lock_;
 
@@ -33,6 +37,8 @@ public:
 	static INT Create(std::unique_ptr<tml::FileUtilEngine> &);
 
 	static bool CheckFixedThread(void);
+	static BYTE *&GetReadBuffer(BYTE *&, size_t &);
+	static BYTE *&GetWriteBuffer(BYTE *&, size_t &);
 	static tml::MutexThreadLock &GetFileThreadLock(void);
 	static tml::MutexThreadLock &GetDirectoryThreadLock(void);
 };

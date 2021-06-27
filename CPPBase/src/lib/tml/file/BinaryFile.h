@@ -50,7 +50,6 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::DynamicBuffer buffer;
-	size_t one_buffer_size;
 
 protected:
 	void Release(void);
@@ -103,7 +102,6 @@ class BinaryFileWriteDescData : public tml::FileWriteDescData
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	size_t one_buffer_size;
 	bool add_flag;
 
 protected:

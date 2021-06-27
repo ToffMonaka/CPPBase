@@ -16,7 +16,7 @@ namespace tml {
 class DynamicBuffer
 {
 private:
-	BYTE *ary_;
+	BYTE *p_;
 	size_t size_;
 	size_t len_;
 	size_t read_index_;
@@ -43,6 +43,7 @@ public:
 
 	BYTE *Get(void);
 	const BYTE *Get(void) const;
+	void Set(const size_t);
 	void Set(const BYTE *, const size_t);
 	void Clear(void);
 	size_t GetSize(void) const;
@@ -111,44 +112,86 @@ public:
 
 /**
  * @brief GetŠÖ”
- * @return ary (array)
+ * @return p (pointer)
  */
 inline BYTE *tml::DynamicBuffer::Get(void)
 {
-	return (this->ary_);
+	return (this->p_);
 }
 
 
 /**
  * @brief GetŠÖ”
- * @return ary (array)
+ * @return p (pointer)
  */
 inline const BYTE *tml::DynamicBuffer::Get(void) const
 {
-	return (this->ary_);
+	return (this->p_);
 }
 
 
 /**
  * @brief SetŠÖ”
- * @param ary (array)
  * @param size (size)
  */
-inline void tml::DynamicBuffer::Set(const BYTE *ary, const size_t size)
+inline void tml::DynamicBuffer::Set(const size_t size)
 {
 	if (size > this->size_) {
-		auto ary = tml::MemoryUtil::Get<BYTE>(size);
+		auto new_p = tml::MemoryUtil::Get<BYTE>(size);
 
-		tml::MemoryUtil::Release(&this->ary_);
+		tml::Copy(new_p, this->p_, this->size_);
 
-		this->ary_ = ary;
+		tml::MemoryUtil::Release(&this->p_);
+
+		this->p_ = new_p;
 	}
 
-	tml::Copy(this->ary_, ary, size);
+	this->size_ = size;
+	this->len_ = tml::Min(this->len_, this->size_);
+	this->read_index_ = tml::Min(this->read_index_, this->len_);
+	this->write_index_ = tml::Min(this->write_index_, this->len_);
+
+	return;
+}
+
+
+/**
+ * @brief SetŠÖ”
+ * @param p (pointer)
+ * @param size (size)
+ */
+inline void tml::DynamicBuffer::Set(const BYTE *p, const size_t size)
+{
+	if (size > this->size_) {
+		auto new_p = tml::MemoryUtil::Get<BYTE>(size);
+
+		tml::MemoryUtil::Release(&this->p_);
+
+		this->p_ = new_p;
+	}
+
+	tml::Copy(this->p_, p, size);
 	this->size_ = size;
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
 	this->write_index_ = this->size_;
+
+	return;
+}
+
+
+/**
+ * @brief ClearŠÖ”
+ */
+inline void tml::DynamicBuffer::Clear(void)
+{
+	this->p_ = nullptr;
+	this->size_ = 0U;
+	this->len_ = 0U;
+	this->read_index_ = 0U;
+	this->read_res_ = 0;
+	this->write_index_ = 0U;
+	this->write_res_ = 0;
 
 	return;
 }
@@ -170,20 +213,7 @@ inline size_t tml::DynamicBuffer::GetSize(void) const
  */
 inline void tml::DynamicBuffer::SetSize(const size_t size)
 {
-	if (size > this->size_) {
-		auto ary = tml::MemoryUtil::Get<BYTE>(size);
-
-		tml::Copy(ary, this->ary_, this->size_);
-
-		tml::MemoryUtil::Release(&this->ary_);
-
-		this->ary_ = ary;
-	}
-
-	this->size_ = size;
-	this->len_ = tml::Min(this->len_, this->size_);
-	this->read_index_ = tml::Min(this->read_index_, this->len_);
-	this->write_index_ = tml::Min(this->write_index_, this->len_);
+	this->Set(size);
 
 	return;
 }
@@ -333,7 +363,7 @@ inline void tml::DynamicBuffer::InitWriteResult(void)
  */
 inline CHAR tml::DynamicBuffer::ReadChar(void)
 {
-	return (tml::MemoryUtil::ReadBufferChar(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferChar(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -343,7 +373,7 @@ inline CHAR tml::DynamicBuffer::ReadChar(void)
  */
 inline UCHAR tml::DynamicBuffer::ReadUChar(void)
 {
-	return (tml::MemoryUtil::ReadBufferUChar(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferUChar(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -353,7 +383,7 @@ inline UCHAR tml::DynamicBuffer::ReadUChar(void)
  */
 inline SHORT tml::DynamicBuffer::ReadShortB(void)
 {
-	return (tml::MemoryUtil::ReadBufferShortB(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferShortB(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -363,7 +393,7 @@ inline SHORT tml::DynamicBuffer::ReadShortB(void)
  */
 inline SHORT tml::DynamicBuffer::ReadShortL(void)
 {
-	return (tml::MemoryUtil::ReadBufferShortL(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferShortL(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -373,7 +403,7 @@ inline SHORT tml::DynamicBuffer::ReadShortL(void)
  */
 inline USHORT tml::DynamicBuffer::ReadUShortB(void)
 {
-	return (tml::MemoryUtil::ReadBufferUShortB(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferUShortB(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -383,7 +413,7 @@ inline USHORT tml::DynamicBuffer::ReadUShortB(void)
  */
 inline USHORT tml::DynamicBuffer::ReadUShortL(void)
 {
-	return (tml::MemoryUtil::ReadBufferUShortL(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferUShortL(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -393,7 +423,7 @@ inline USHORT tml::DynamicBuffer::ReadUShortL(void)
  */
 inline INT tml::DynamicBuffer::ReadIntB(void)
 {
-	return (tml::MemoryUtil::ReadBufferIntB(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferIntB(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -403,7 +433,7 @@ inline INT tml::DynamicBuffer::ReadIntB(void)
  */
 inline INT tml::DynamicBuffer::ReadIntL(void)
 {
-	return (tml::MemoryUtil::ReadBufferIntL(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferIntL(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -413,7 +443,7 @@ inline INT tml::DynamicBuffer::ReadIntL(void)
  */
 inline UINT tml::DynamicBuffer::ReadUIntB(void)
 {
-	return (tml::MemoryUtil::ReadBufferUIntB(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferUIntB(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -423,7 +453,7 @@ inline UINT tml::DynamicBuffer::ReadUIntB(void)
  */
 inline UINT tml::DynamicBuffer::ReadUIntL(void)
 {
-	return (tml::MemoryUtil::ReadBufferUIntL(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferUIntL(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -433,7 +463,7 @@ inline UINT tml::DynamicBuffer::ReadUIntL(void)
  */
 inline LONGLONG tml::DynamicBuffer::ReadLongLongB(void)
 {
-	return (tml::MemoryUtil::ReadBufferLongLongB(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferLongLongB(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -443,7 +473,7 @@ inline LONGLONG tml::DynamicBuffer::ReadLongLongB(void)
  */
 inline LONGLONG tml::DynamicBuffer::ReadLongLongL(void)
 {
-	return (tml::MemoryUtil::ReadBufferLongLongL(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferLongLongL(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -453,7 +483,7 @@ inline LONGLONG tml::DynamicBuffer::ReadLongLongL(void)
  */
 inline ULONGLONG tml::DynamicBuffer::ReadULongLongB(void)
 {
-	return (tml::MemoryUtil::ReadBufferULongLongB(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferULongLongB(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -463,7 +493,7 @@ inline ULONGLONG tml::DynamicBuffer::ReadULongLongB(void)
  */
 inline ULONGLONG tml::DynamicBuffer::ReadULongLongL(void)
 {
-	return (tml::MemoryUtil::ReadBufferULongLongL(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferULongLongL(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -473,7 +503,7 @@ inline ULONGLONG tml::DynamicBuffer::ReadULongLongL(void)
  */
 inline FLOAT tml::DynamicBuffer::ReadFloatB(void)
 {
-	return (tml::MemoryUtil::ReadBufferFloatB(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferFloatB(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -483,7 +513,7 @@ inline FLOAT tml::DynamicBuffer::ReadFloatB(void)
  */
 inline FLOAT tml::DynamicBuffer::ReadFloatL(void)
 {
-	return (tml::MemoryUtil::ReadBufferFloatL(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferFloatL(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -493,7 +523,7 @@ inline FLOAT tml::DynamicBuffer::ReadFloatL(void)
  */
 inline DOUBLE tml::DynamicBuffer::ReadDoubleB(void)
 {
-	return (tml::MemoryUtil::ReadBufferDoubleB(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferDoubleB(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -503,7 +533,7 @@ inline DOUBLE tml::DynamicBuffer::ReadDoubleB(void)
  */
 inline DOUBLE tml::DynamicBuffer::ReadDoubleL(void)
 {
-	return (tml::MemoryUtil::ReadBufferDoubleL(this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferDoubleL(this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -516,7 +546,7 @@ inline DOUBLE tml::DynamicBuffer::ReadDoubleL(void)
  */
 inline BYTE *tml::DynamicBuffer::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const size_t read_size)
 {
-	return (tml::MemoryUtil::ReadBufferArray(dst_ary, dst_ary_size, this->ary_, this->len_, this->read_index_, read_size, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferArray(dst_ary, dst_ary_size, this->p_, this->len_, this->read_index_, read_size, &this->read_res_));
 }
 
 
@@ -528,7 +558,7 @@ inline BYTE *tml::DynamicBuffer::ReadArray(BYTE *dst_ary, const size_t dst_ary_s
  */
 inline CHAR *tml::DynamicBuffer::ReadStringB(CHAR *dst_str, const size_t dst_str_size)
 {
-	return (tml::MemoryUtil::ReadBufferStringB(dst_str, dst_str_size, this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferStringB(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -540,7 +570,7 @@ inline CHAR *tml::DynamicBuffer::ReadStringB(CHAR *dst_str, const size_t dst_str
  */
 inline CHAR *tml::DynamicBuffer::ReadStringL(CHAR *dst_str, const size_t dst_str_size)
 {
-	return (tml::MemoryUtil::ReadBufferStringL(dst_str, dst_str_size, this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferStringL(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -552,7 +582,7 @@ inline CHAR *tml::DynamicBuffer::ReadStringL(CHAR *dst_str, const size_t dst_str
  */
 inline WCHAR *tml::DynamicBuffer::ReadStringB(WCHAR *dst_str, const size_t dst_str_size)
 {
-	return (tml::MemoryUtil::ReadBufferStringB(dst_str, dst_str_size, this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferStringB(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -564,7 +594,7 @@ inline WCHAR *tml::DynamicBuffer::ReadStringB(WCHAR *dst_str, const size_t dst_s
  */
 inline WCHAR *tml::DynamicBuffer::ReadStringL(WCHAR *dst_str, const size_t dst_str_size)
 {
-	return (tml::MemoryUtil::ReadBufferStringL(dst_str, dst_str_size, this->ary_, this->len_, this->read_index_, &this->read_res_));
+	return (tml::MemoryUtil::ReadBufferStringL(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_res_));
 }
 
 
@@ -574,7 +604,7 @@ inline WCHAR *tml::DynamicBuffer::ReadStringL(WCHAR *dst_str, const size_t dst_s
  */
 inline void tml::DynamicBuffer::WriteChar(const CHAR val)
 {
-	tml::MemoryUtil::WriteBufferChar(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferChar(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -587,7 +617,7 @@ inline void tml::DynamicBuffer::WriteChar(const CHAR val)
  */
 inline void tml::DynamicBuffer::WriteUChar(const UCHAR val)
 {
-	tml::MemoryUtil::WriteBufferUChar(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferUChar(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -600,7 +630,7 @@ inline void tml::DynamicBuffer::WriteUChar(const UCHAR val)
  */
 inline void tml::DynamicBuffer::WriteShortB(const SHORT val)
 {
-	tml::MemoryUtil::WriteBufferShortB(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferShortB(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -613,7 +643,7 @@ inline void tml::DynamicBuffer::WriteShortB(const SHORT val)
  */
 inline void tml::DynamicBuffer::WriteShortL(const SHORT val)
 {
-	tml::MemoryUtil::WriteBufferShortL(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferShortL(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -626,7 +656,7 @@ inline void tml::DynamicBuffer::WriteShortL(const SHORT val)
  */
 inline void tml::DynamicBuffer::WriteUShortB(const USHORT val)
 {
-	tml::MemoryUtil::WriteBufferUShortB(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferUShortB(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -639,7 +669,7 @@ inline void tml::DynamicBuffer::WriteUShortB(const USHORT val)
  */
 inline void tml::DynamicBuffer::WriteUShortL(const USHORT val)
 {
-	tml::MemoryUtil::WriteBufferUShortL(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferUShortL(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -652,7 +682,7 @@ inline void tml::DynamicBuffer::WriteUShortL(const USHORT val)
  */
 inline void tml::DynamicBuffer::WriteIntB(const INT val)
 {
-	tml::MemoryUtil::WriteBufferIntB(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferIntB(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -665,7 +695,7 @@ inline void tml::DynamicBuffer::WriteIntB(const INT val)
  */
 inline void tml::DynamicBuffer::WriteIntL(const INT val)
 {
-	tml::MemoryUtil::WriteBufferIntL(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferIntL(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -678,7 +708,7 @@ inline void tml::DynamicBuffer::WriteIntL(const INT val)
  */
 inline void tml::DynamicBuffer::WriteUIntB(const UINT val)
 {
-	tml::MemoryUtil::WriteBufferUIntB(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferUIntB(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -691,7 +721,7 @@ inline void tml::DynamicBuffer::WriteUIntB(const UINT val)
  */
 inline void tml::DynamicBuffer::WriteUIntL(const UINT val)
 {
-	tml::MemoryUtil::WriteBufferUIntL(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferUIntL(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -704,7 +734,7 @@ inline void tml::DynamicBuffer::WriteUIntL(const UINT val)
  */
 inline void tml::DynamicBuffer::WriteLongLongB(const LONGLONG val)
 {
-	tml::MemoryUtil::WriteBufferLongLongB(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferLongLongB(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -717,7 +747,7 @@ inline void tml::DynamicBuffer::WriteLongLongB(const LONGLONG val)
  */
 inline void tml::DynamicBuffer::WriteLongLongL(const LONGLONG val)
 {
-	tml::MemoryUtil::WriteBufferLongLongL(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferLongLongL(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -730,7 +760,7 @@ inline void tml::DynamicBuffer::WriteLongLongL(const LONGLONG val)
  */
 inline void tml::DynamicBuffer::WriteULongLongB(const ULONGLONG val)
 {
-	tml::MemoryUtil::WriteBufferULongLongB(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferULongLongB(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -743,7 +773,7 @@ inline void tml::DynamicBuffer::WriteULongLongB(const ULONGLONG val)
  */
 inline void tml::DynamicBuffer::WriteULongLongL(const ULONGLONG val)
 {
-	tml::MemoryUtil::WriteBufferULongLongL(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferULongLongL(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -756,7 +786,7 @@ inline void tml::DynamicBuffer::WriteULongLongL(const ULONGLONG val)
  */
 inline void tml::DynamicBuffer::WriteFloatB(const FLOAT val)
 {
-	tml::MemoryUtil::WriteBufferFloatB(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferFloatB(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -769,7 +799,7 @@ inline void tml::DynamicBuffer::WriteFloatB(const FLOAT val)
  */
 inline void tml::DynamicBuffer::WriteFloatL(const FLOAT val)
 {
-	tml::MemoryUtil::WriteBufferFloatL(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferFloatL(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -782,7 +812,7 @@ inline void tml::DynamicBuffer::WriteFloatL(const FLOAT val)
  */
 inline void tml::DynamicBuffer::WriteDoubleB(const DOUBLE val)
 {
-	tml::MemoryUtil::WriteBufferDoubleB(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferDoubleB(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -795,7 +825,7 @@ inline void tml::DynamicBuffer::WriteDoubleB(const DOUBLE val)
  */
 inline void tml::DynamicBuffer::WriteDoubleL(const DOUBLE val)
 {
-	tml::MemoryUtil::WriteBufferDoubleL(this->ary_, this->size_, this->write_index_, val, &this->write_res_);
+	tml::MemoryUtil::WriteBufferDoubleL(this->p_, this->size_, this->write_index_, val, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -810,7 +840,7 @@ inline void tml::DynamicBuffer::WriteDoubleL(const DOUBLE val)
  */
 inline void tml::DynamicBuffer::WriteArray(const BYTE *ary, const size_t ary_size, const size_t write_size)
 {
-	tml::MemoryUtil::WriteBufferArray(this->ary_, this->size_, this->write_index_, ary, ary_size, write_size, &this->write_res_);
+	tml::MemoryUtil::WriteBufferArray(this->p_, this->size_, this->write_index_, ary, ary_size, write_size, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -823,7 +853,7 @@ inline void tml::DynamicBuffer::WriteArray(const BYTE *ary, const size_t ary_siz
  */
 inline void tml::DynamicBuffer::WriteStringB(const CHAR *str)
 {
-	tml::MemoryUtil::WriteBufferStringB(this->ary_, this->size_, this->write_index_, str, &this->write_res_);
+	tml::MemoryUtil::WriteBufferStringB(this->p_, this->size_, this->write_index_, str, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -836,7 +866,7 @@ inline void tml::DynamicBuffer::WriteStringB(const CHAR *str)
  */
 inline void tml::DynamicBuffer::WriteStringL(const CHAR *str)
 {
-	tml::MemoryUtil::WriteBufferStringL(this->ary_, this->size_, this->write_index_, str, &this->write_res_);
+	tml::MemoryUtil::WriteBufferStringL(this->p_, this->size_, this->write_index_, str, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -849,7 +879,7 @@ inline void tml::DynamicBuffer::WriteStringL(const CHAR *str)
  */
 inline void tml::DynamicBuffer::WriteStringB(const WCHAR *str)
 {
-	tml::MemoryUtil::WriteBufferStringB(this->ary_, this->size_, this->write_index_, str, &this->write_res_);
+	tml::MemoryUtil::WriteBufferStringB(this->p_, this->size_, this->write_index_, str, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;
@@ -862,7 +892,7 @@ inline void tml::DynamicBuffer::WriteStringB(const WCHAR *str)
  */
 inline void tml::DynamicBuffer::WriteStringL(const WCHAR *str)
 {
-	tml::MemoryUtil::WriteBufferStringL(this->ary_, this->size_, this->write_index_, str, &this->write_res_);
+	tml::MemoryUtil::WriteBufferStringL(this->p_, this->size_, this->write_index_, str, &this->write_res_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
 
 	return;

@@ -11,7 +11,7 @@
  * @brief コンストラクタ
  */
 tml::DynamicBuffer::DynamicBuffer() :
-	ary_(nullptr),
+	p_(nullptr),
 	size_(0U),
 	len_(0U),
 	read_index_(0U),
@@ -28,11 +28,11 @@ tml::DynamicBuffer::DynamicBuffer() :
  * @param size (size)
  */
 tml::DynamicBuffer::DynamicBuffer(const size_t size) :
-	ary_(nullptr),
+	p_(nullptr),
 	read_res_(0),
 	write_res_(0)
 {
-	this->ary_ = tml::MemoryUtil::Get<BYTE>(size);
+	this->p_ = tml::MemoryUtil::Get<BYTE>(size);
 	this->size_ = size;
 	this->len_ = 0U;
 	this->read_index_ = 0U;
@@ -44,16 +44,16 @@ tml::DynamicBuffer::DynamicBuffer(const size_t size) :
 
 /**
  * @brief コンストラクタ
- * @param ary (array)
+ * @param p (pointer)
  * @param size (size)
  */
-tml::DynamicBuffer::DynamicBuffer(const BYTE *ary, const size_t size) :
-	ary_(nullptr),
+tml::DynamicBuffer::DynamicBuffer(const BYTE *p, const size_t size) :
+	p_(nullptr),
 	read_res_(0),
 	write_res_(0)
 {
-	this->ary_ = tml::MemoryUtil::Get<BYTE>(size);
-	tml::Copy(this->ary_, ary, size);
+	this->p_ = tml::MemoryUtil::Get<BYTE>(size);
+	tml::Copy(this->p_, p, size);
 	this->size_ = size;
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
@@ -69,8 +69,8 @@ tml::DynamicBuffer::DynamicBuffer(const BYTE *ary, const size_t size) :
  */
 tml::DynamicBuffer::DynamicBuffer(const tml::DynamicBuffer &src)
 {
-	this->ary_ = tml::MemoryUtil::Get<BYTE>(src.size_);
-	tml::Copy(this->ary_, src.ary_, src.len_);
+	this->p_ = tml::MemoryUtil::Get<BYTE>(src.size_);
+	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -95,8 +95,8 @@ tml::DynamicBuffer &tml::DynamicBuffer::operator =(const tml::DynamicBuffer &src
 
 	this->Release();
 
-	this->ary_ = tml::MemoryUtil::Get<BYTE>(src.size_);
-	tml::Copy(this->ary_, src.ary_, src.len_);
+	this->p_ = tml::MemoryUtil::Get<BYTE>(src.size_);
+	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -114,7 +114,7 @@ tml::DynamicBuffer &tml::DynamicBuffer::operator =(const tml::DynamicBuffer &src
  */
 tml::DynamicBuffer::DynamicBuffer(tml::DynamicBuffer &&src) noexcept
 {
-	this->ary_ = src.ary_;
+	this->p_ = src.p_;
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -122,7 +122,7 @@ tml::DynamicBuffer::DynamicBuffer(tml::DynamicBuffer &&src) noexcept
 	this->write_index_ = src.write_index_;
 	this->write_res_ = src.write_res_;
 
-	src.ary_ = nullptr;
+	src.p_ = nullptr;
 	src.Init();
 
 	return;
@@ -142,7 +142,7 @@ tml::DynamicBuffer &tml::DynamicBuffer::operator =(tml::DynamicBuffer &&src) noe
 
 	this->Release();
 
-	this->ary_ = src.ary_;
+	this->p_ = src.p_;
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -150,7 +150,7 @@ tml::DynamicBuffer &tml::DynamicBuffer::operator =(tml::DynamicBuffer &&src) noe
 	this->write_index_ = src.write_index_;
 	this->write_res_ = src.write_res_;
 
-	src.ary_ = nullptr;
+	src.p_ = nullptr;
 	src.Init();
 
 	return ((*this));
@@ -173,7 +173,7 @@ tml::DynamicBuffer::~DynamicBuffer()
  */
 void tml::DynamicBuffer::Release(void)
 {
-	tml::MemoryUtil::Release(&this->ary_);
+	tml::MemoryUtil::Release(&this->p_);
 
 	return;
 }
@@ -208,7 +208,7 @@ void tml::DynamicBuffer::Init(const size_t size)
 	this->read_res_ = 0;
 	this->write_res_ = 0;
 
-	this->ary_ = tml::MemoryUtil::Get<BYTE>(size);
+	this->p_ = tml::MemoryUtil::Get<BYTE>(size);
 	this->size_ = size;
 	this->len_ = 0U;
 	this->read_index_ = 0U;
@@ -220,39 +220,22 @@ void tml::DynamicBuffer::Init(const size_t size)
 
 /**
  * @brief Init関数
- * @param ary (array)
+ * @param p (pointer)
  * @param size (size)
  */
-void tml::DynamicBuffer::Init(const BYTE *ary, const size_t size)
+void tml::DynamicBuffer::Init(const BYTE *p, const size_t size)
 {
 	this->Release();
 
 	this->read_res_ = 0;
 	this->write_res_ = 0;
 
-	this->ary_ = tml::MemoryUtil::Get<BYTE>(size);
-	tml::Copy(this->ary_, ary, size);
+	this->p_ = tml::MemoryUtil::Get<BYTE>(size);
+	tml::Copy(this->p_, p, size);
 	this->size_ = size;
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
 	this->write_index_ = this->size_;
-
-	return;
-}
-
-
-/**
- * @brief Clear関数
- */
-void tml::DynamicBuffer::Clear(void)
-{
-	this->ary_ = nullptr;
-	this->size_ = 0U;
-	this->len_ = 0U;
-	this->read_index_ = 0U;
-	this->read_res_ = 0;
-	this->write_index_ = 0U;
-	this->write_res_ = 0;
 
 	return;
 }
