@@ -20,5 +20,12 @@ namespace SCENE {
 namespace cpp_base {
 namespace scene {
 class Manager;
+class BaseScene;
+class InitScene;
+class TitleScene;
+class BaseNode;
+class InitSceneNode;
+class TitleSceneNode;
+class DebugNode;
 }
 }

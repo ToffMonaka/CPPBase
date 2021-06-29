@@ -57,6 +57,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 
+public:
+
 protected:
 	void Release(void);
 

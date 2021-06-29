@@ -147,8 +147,6 @@ public:
 	const tml::shared_ptr<tml::scene::Scene> &GetScene(void);
 	INT StartScene(const tml::shared_ptr<tml::scene::Scene> &);
 	void EndScene(void);
-	INT AddNode(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::scene::Node> &);
-	void RemoveNode(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::scene::Node> &);
 };
 }
 }

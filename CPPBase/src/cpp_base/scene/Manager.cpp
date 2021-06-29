@@ -14,6 +14,7 @@
 #include "BaseNode.h"
 #include "InitSceneNode.h"
 #include "TitleSceneNode.h"
+#include "DebugNode.h"
 
 
 /**

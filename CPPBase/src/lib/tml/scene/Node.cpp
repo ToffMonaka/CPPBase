@@ -6,6 +6,7 @@
 
 #include "Node.h"
 #include "Manager.h"
+#include "NodeEvent.h"
 
 
 /**
@@ -282,9 +283,14 @@ INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &chil
 	}
 
 	if (event_flg) {
-		tml::shared_ptr<tml::scene::Node> parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+		tml::scene::NodeEventDesc event_desc;
 
-		if (this->GetManager()->AddNode(parent_node, child_node) < 0) {
+		event_desc.SetManager(this->GetManager());
+		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD;
+		event_desc.data.parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+		event_desc.data.child_node = child_node;
+
+		if (this->GetManager()->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
 			return (-1);
 		}
 	} else {
@@ -322,9 +328,16 @@ void tml::scene::Node::RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &
 	}
 
 	if (event_flg) {
-		tml::shared_ptr<tml::scene::Node> parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+		tml::scene::NodeEventDesc event_desc;
 
-		this->GetManager()->RemoveNode(parent_node, child_node);
+		event_desc.SetManager(this->GetManager());
+		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE;
+		event_desc.data.parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+		event_desc.data.child_node = child_node;
+
+		if (this->GetManager()->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
+			return;
+		}
 	} else {
 		if (child_node->GetParentNode() == nullptr) {
 			return;

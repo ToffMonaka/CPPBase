@@ -13,6 +13,7 @@
 #include "../../lib/tml/graphic/Font.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
+#include "DebugNode.h"
 
 
 /**
@@ -80,7 +81,7 @@ INT cpp_base::scene::InitSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 cpp_base::scene::InitSceneNode::InitSceneNode() :
-	wait_update_time_(0.0)
+	wait_update_time(0.0)
 {
 	return;
 }
@@ -115,11 +116,11 @@ void cpp_base::scene::InitSceneNode::Init(void)
 {
 	this->Release();
 
-	this->camera_.reset();
-	this->bg_model_.reset();
-	this->wait_update_time_ = tml::TIME_REAL(0.0);
-	this->wait_model_.reset();
-	this->wait_font_.reset();
+	this->camera.reset();
+	this->bg_model.reset();
+	this->wait_update_time = tml::TIME_REAL(0.0);
+	this->wait_model.reset();
+	this->wait_font.reset();
 
 	cpp_base::scene::BaseNode::Init();
 
@@ -155,7 +156,7 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 		desc.near_clip = 0.1f;
 		desc.far_clip = 1000.0f;
 
-		if (graphic_mgr->GetResource<tml::graphic::Camera>(this->camera_, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Camera>(this->camera, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -169,13 +170,13 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model_, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->bg_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->bg_model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -195,11 +196,11 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 				return (-1);
 			}
 
-			this->bg_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->bg_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 		}
 	}
 
-	tml::XMUINT2EX wait_tex_size = tml::XMUINT2EX(320U, 32U);
+	tml::XMUINT2EX wait_model_size = tml::XMUINT2EX(320U, 32U);
 	tml::XMUINT2EX wait_font_size = tml::XMUINT2EX(0U, 24U);
 
 	{// WaitModel Create
@@ -208,13 +209,13 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 		desc.SetManager(graphic_mgr);
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->wait_model_, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->wait_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->wait_model_->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->wait_model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -225,7 +226,7 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 			tml::graphic::TextureDesc desc;
 
 			desc.SetManager(graphic_mgr);
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, wait_tex_size);
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, wait_model_size);
 			desc.cpu_buffer_flag = true;
 
 			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
@@ -234,9 +235,9 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 				return (-1);
 			}
 
-			this->wait_model_->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->wait_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->wait_model_->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y));
+			this->wait_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y));
 		}
 	}
 
@@ -246,18 +247,18 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 		desc.SetManager(graphic_mgr);
 		desc.SetFontDesc(wait_font_size, L"ＭＳ ゴシック");
 
-		if (graphic_mgr->GetResource<tml::graphic::Font>(this->wait_font_, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Font>(this->wait_font, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// WaitTexture Update
-		auto tex = this->wait_model_->GetTexture(this->wait_model_->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+	{// WaitModelTexture Update
+		auto tex = this->wait_model->GetTexture(this->wait_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
-		tex->DrawCPUBufferString(L"ちょっと待ってね。", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->wait_font_.get());
+		tex->DrawCPUBufferString(L"ちょっと待ってね。", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->wait_font.get());
 		tex->UploadCPUBuffer();
 	}
 
@@ -292,9 +293,9 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
-	this->wait_update_time_ += this->GetManager()->GetFrameRate().GetElapsedTime();
+	this->wait_update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
 
-	if (this->wait_update_time_.count() >= 3.0) {
+	if (this->wait_update_time.count() >= 3.0) {
 		{// TitleScene Start
 			tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -304,6 +305,12 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 				return;
 			}
 
+			if (this->GetManager()->common2.debug_node->GetParentNode() != nullptr) {
+				this->GetManager()->common2.debug_node->GetParentNode()->RemoveChildNode(this->GetManager()->common2.debug_node);
+			}
+
+			scene->GetRootNode()->AddChildNode(this->GetManager()->common2.debug_node);
+
 			if (this->GetManager()->StartScene(scene) < 0) {
 				this->GetManager()->EndScene();
 
@@ -312,15 +319,9 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 		}
 	}
 
-	graphic_mgr->SetDrawCamera(this->camera_.get());
-	graphic_mgr->SetDrawModel(this->bg_model_.get());
-	graphic_mgr->SetDrawModel(this->wait_model_.get());
-
-	if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-		this->GetManager()->common2.UpdateLog(this->GetManager()->GetFrameRate().GetElapsedTime());
-
-		graphic_mgr->SetDrawModel(this->GetManager()->common2.log_model.get());
-	}
+	graphic_mgr->SetDrawCamera(this->camera.get());
+	graphic_mgr->SetDrawModel(this->bg_model.get());
+	graphic_mgr->SetDrawModel(this->wait_model.get());
 
 	return;
 }
