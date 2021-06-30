@@ -96,7 +96,9 @@ public:
 	void SetParentNode(tml::scene::Node *);
 	const std::list<tml::shared_ptr<tml::scene::Node>> &GetChildNodeContainer(void);
 	INT AddChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
+	void RemoveChildNode(const bool event_flg = true);
 	void RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
+	void RemoveChildNodeFromParentNode(const bool event_flg = true);
 };
 }
 }

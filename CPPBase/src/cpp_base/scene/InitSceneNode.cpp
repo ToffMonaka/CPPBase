@@ -305,9 +305,7 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 				return;
 			}
 
-			if (this->GetManager()->common2.debug_node->GetParentNode() != nullptr) {
-				this->GetManager()->common2.debug_node->GetParentNode()->RemoveChildNode(this->GetManager()->common2.debug_node);
-			}
+			this->GetManager()->common2.debug_node->RemoveChildNodeFromParentNode();
 
 			scene->GetRootNode()->AddChildNode(this->GetManager()->common2.debug_node);
 

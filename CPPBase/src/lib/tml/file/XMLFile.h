@@ -42,7 +42,9 @@ public:
 	void SetParentNode(tml::XMLFileDataNode *);
 	const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &GetChildNodeContainer(void);
 	INT AddChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &);
+	void RemoveChildNode(void);
 	void RemoveChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &);
+	void RemoveChildNodeFromParentNode(void);
 
 	const std::wstring *GetValue(const WCHAR *) const;
 };

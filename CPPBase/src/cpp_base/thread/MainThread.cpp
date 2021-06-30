@@ -202,9 +202,7 @@ INT cpp_base::MainThread::OnStart(void)
 			return (-1);
 		}
 
-		if (this->scene_mgr_.common2.debug_node->GetParentNode() != nullptr) {
-			this->scene_mgr_.common2.debug_node->GetParentNode()->RemoveChildNode(this->scene_mgr_.common2.debug_node);
-		}
+		this->scene_mgr_.common2.debug_node->RemoveChildNodeFromParentNode();
 
 		scene->GetRootNode()->AddChildNode(this->scene_mgr_.common2.debug_node);
 

@@ -110,6 +110,21 @@ INT tml::XMLFileDataNode::AddChildNode(const tml::shared_ptr<tml::XMLFileDataNod
 
 /**
  * @brief RemoveChildNodeä÷êî
+ */
+void tml::XMLFileDataNode::RemoveChildNode(void)
+{
+	std::list<tml::shared_ptr<tml::XMLFileDataNode>> child_node_cont = this->child_node_cont_;
+
+	for (auto &child_node : child_node_cont) {
+		this->RemoveChildNode(child_node);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief RemoveChildNodeä÷êî
  * @param child_node (child_node)
  */
 void tml::XMLFileDataNode::RemoveChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &child_node)
@@ -132,6 +147,35 @@ void tml::XMLFileDataNode::RemoveChildNode(const tml::shared_ptr<tml::XMLFileDat
 	child_node->SetParentNode(nullptr);
 
 	this->child_node_cont_.erase(child_node_itr);
+
+	return;
+}
+
+
+/**
+ * @brief RemoveChildNodeFromParentNodeä÷êî
+ */
+void tml::XMLFileDataNode::RemoveChildNodeFromParentNode(void)
+{
+	if (this->parent_node_ == nullptr) {
+		return;
+	}
+
+	tml::shared_ptr<tml::XMLFileDataNode> tmp_child_node;
+
+	for (auto &child_node : this->parent_node_->child_node_cont_) {
+		if (child_node.get() == this) {
+			tmp_child_node = child_node;
+
+			break;
+		}
+	}
+
+	if (tmp_child_node == nullptr) {
+		return;
+	}
+
+	this->parent_node_->RemoveChildNode(tmp_child_node);
 
 	return;
 }
