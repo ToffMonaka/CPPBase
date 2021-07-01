@@ -289,12 +289,24 @@ void tml::scene::Manager::Update(void)
 
 		switch (event_dat.type) {
 		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD: {
-			event_dat.parent_node->AddChildNode(event_dat.child_node, false);
+			if (event_dat.parent_node != nullptr) {
+				if (event_dat.child_node != nullptr) {
+					event_dat.parent_node->AddChildNode(event_dat.child_node, false);
+				}
+			}
 
 			break;
 		}
 		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE: {
-			event_dat.parent_node->RemoveChildNode(event_dat.child_node, false);
+			if (event_dat.parent_node != nullptr) {
+				if (event_dat.child_node != nullptr) {
+					event_dat.parent_node->RemoveChildNode(event_dat.child_node, false);
+				} else {
+					event_dat.parent_node->RemoveChildNode(false);
+				}
+			} else {
+				event_dat.child_node->RemoveChildNodeFromParentNode(false);
+			}
 
 			break;
 		}

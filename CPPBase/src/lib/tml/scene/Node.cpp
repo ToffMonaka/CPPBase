@@ -321,10 +321,22 @@ INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &chil
  */
 void tml::scene::Node::RemoveChildNode(const bool event_flg)
 {
-	std::list<tml::shared_ptr<tml::scene::Node>> child_node_cont = this->child_node_cont_;
+	if (event_flg) {
+		tml::scene::NodeEventDesc event_desc;
 
-	for (auto &child_node : child_node_cont) {
-		this->RemoveChildNode(child_node, event_flg);
+		event_desc.SetManager(this->GetManager());
+		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE;
+		event_desc.data.parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+
+		if (this->GetManager()->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
+			return;
+		}
+	} else {
+		std::list<tml::shared_ptr<tml::scene::Node>> child_node_cont = this->child_node_cont_;
+
+		for (auto &child_node : child_node_cont) {
+			this->RemoveChildNode(child_node, false);
+		}
 	}
 
 	return;
@@ -382,25 +394,37 @@ void tml::scene::Node::RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &
  */
 void tml::scene::Node::RemoveChildNodeFromParentNode(const bool event_flg)
 {
-	if (this->parent_node_ == nullptr) {
-		return;
-	}
+	if (event_flg) {
+		tml::scene::NodeEventDesc event_desc;
 
-	tml::shared_ptr<tml::scene::Node> tmp_child_node;
+		event_desc.SetManager(this->GetManager());
+		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE;
+		event_desc.data.child_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
 
-	for (auto &child_node : this->parent_node_->child_node_cont_) {
-		if (child_node.get() == this) {
-			tmp_child_node = child_node;
-
-			break;
+		if (this->GetManager()->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
+			return;
 		}
-	}
+	} else {
+		if (this->parent_node_ == nullptr) {
+			return;
+		}
 
-	if (tmp_child_node == nullptr) {
-		return;
-	}
+		tml::shared_ptr<tml::scene::Node> tmp_child_node;
 
-	this->parent_node_->RemoveChildNode(tmp_child_node, event_flg);
+		for (auto &child_node : this->parent_node_->child_node_cont_) {
+			if (child_node.get() == this) {
+				tmp_child_node = child_node;
+
+				break;
+			}
+		}
+
+		if (tmp_child_node == nullptr) {
+			return;
+		}
+
+		this->parent_node_->RemoveChildNode(tmp_child_node, false);
+	}
 
 	return;
 }

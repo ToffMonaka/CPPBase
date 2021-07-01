@@ -2,4 +2,6 @@
 <scene class_name="TitleScene">
 	<node class_name="TitleSceneNode">
 	</node>
+	<node res_name="debug_node">
+	</node>
 </scene>

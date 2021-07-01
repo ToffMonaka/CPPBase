@@ -98,11 +98,11 @@ public:
 	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
 	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
 	template <typename T, typename T2, typename D>
-	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &);
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &, INT *dst_get_res = nullptr);
 	template <typename T, typename T2>
-	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const tml::shared_ptr<T> &);
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const tml::shared_ptr<T> &, INT *dst_get_res = nullptr);
 	template <typename T, typename T2>
-	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *);
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *, INT *dst_get_res = nullptr);
 	void SetResourceSharedPointer(tml::ManagerResource *, const tml::shared_ptr<tml::ManagerResource> &);
 	void SetResourceName(tml::ManagerResource *, const WCHAR *);
 	bool CheckFriendResource(const tml::ManagerResource *) const;
@@ -174,12 +174,15 @@ inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::Get
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param desc (desc)
+ * @param dst_get_res (dst_get_result)
  * @return dst_res (dst_resource)
  */
 template <typename T, typename T2, typename D>
-inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const D &desc)
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const D &desc, INT *dst_get_res)
 {
 	dst_res.reset();
+
+	tml::SetResult(dst_get_res, -1);
 
 	const std::wstring &tmp_res_name = desc.resource_name;
 
@@ -188,6 +191,8 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 		if (res_itr != this->res_cont_by_name_.end()) {
 			dst_res = std::dynamic_pointer_cast<T2>(res_itr->second);
+
+			tml::SetResult(dst_get_res, 1);
 
 			return (dst_res);
 		}
@@ -223,6 +228,8 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 	dst_res = std::dynamic_pointer_cast<T2>(res);
 
+	tml::SetResult(dst_get_res, 0);
+
 	return (dst_res);
 }
 
@@ -231,16 +238,19 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param res (resource)
+ * @param dst_get_res (dst_get_result)
  * @return dst_res (dst_resource)
  */
 template <typename T, typename T2>
-inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const tml::shared_ptr<T> &res)
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const tml::shared_ptr<T> &res, INT *dst_get_res)
 {
 	if (std::is_same<T, T2>::value) {
 		dst_res = res;
 	} else {
 		dst_res = std::dynamic_pointer_cast<T2>(res);
 	}
+
+	tml::SetResult(dst_get_res, 1);
 
 	return (dst_res);
 }
@@ -250,25 +260,30 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param res_name (resource_name)
+ * @param dst_get_res (dst_get_result)
  * @return dst_res (dst_resource)
  */
 template <typename T, typename T2>
-inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const WCHAR *res_name)
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const WCHAR *res_name, INT *dst_get_res)
 {
 	dst_res.reset();
+
+	tml::SetResult(dst_get_res, -1);
 
 	if ((res_name == nullptr)
 	|| (res_name[0] == 0)) {
 		return (dst_res);
 	}
 
-	std::wstring tmp_res_name = res_name;
+	const std::wstring tmp_res_name = res_name;
 
 	if (!tmp_res_name.empty()) {
 		auto res_itr = this->res_cont_by_name_.find(tmp_res_name);
 
 		if (res_itr != this->res_cont_by_name_.end()) {
 			dst_res = std::dynamic_pointer_cast<T2>(res_itr->second);
+
+			tml::SetResult(dst_get_res, 1);
 
 			return (dst_res);
 		}

@@ -73,6 +73,7 @@ INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)
 		cpp_base::scene::DebugNodeDesc desc;
 
 		desc.SetManager(this->mgr_);
+		desc.resource_name = L"debug_node";
 
 		if (this->mgr_->GetResource<cpp_base::scene::DebugNode>(this->debug_node, desc) == nullptr) {
 			this->Init();

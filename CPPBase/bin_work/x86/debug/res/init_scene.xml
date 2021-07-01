@@ -2,4 +2,6 @@
 <scene class_name="InitScene">
 	<node class_name="InitSceneNode">
 	</node>
+	<node res_name="debug_node">
+	</node>
 </scene>

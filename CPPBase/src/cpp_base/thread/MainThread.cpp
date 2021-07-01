@@ -17,7 +17,6 @@
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
-#include "../scene/DebugNode.h"
 
 
 
@@ -201,10 +200,6 @@ INT cpp_base::MainThread::OnStart(void)
 		if (this->scene_mgr_.factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/init_scene.xml")) == nullptr) {
 			return (-1);
 		}
-
-		this->scene_mgr_.common2.debug_node->RemoveChildNodeFromParentNode();
-
-		scene->GetRootNode()->AddChildNode(this->scene_mgr_.common2.debug_node);
 
 		if (this->scene_mgr_.StartScene(scene) < 0) {
 			return (-1);

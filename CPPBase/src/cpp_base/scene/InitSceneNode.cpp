@@ -13,7 +13,6 @@
 #include "../../lib/tml/graphic/Font.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
-#include "DebugNode.h"
 
 
 /**
@@ -304,10 +303,6 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 
 				return;
 			}
-
-			this->GetManager()->common2.debug_node->RemoveChildNodeFromParentNode();
-
-			scene->GetRootNode()->AddChildNode(this->GetManager()->common2.debug_node);
 
 			if (this->GetManager()->StartScene(scene) < 0) {
 				this->GetManager()->EndScene();

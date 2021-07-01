@@ -70,7 +70,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 	this->mgr_ = mgr;
 
 	this->scene_by_ini_file.AddFunction(L"BaseScene",
-		[this] (const tml::INIFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Scene> {
+		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
 			tml::scene::BaseSceneDesc desc;
@@ -78,7 +78,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 			desc.SetManager(this->mgr_);
 			desc.Read(file_read_desc);
 
-			if (this->mgr_->GetResource<tml::scene::BaseScene>(scene, desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::scene::BaseScene>(scene, desc, dst_get_res) == nullptr) {
 				return (scene);
 			}
 
@@ -87,7 +87,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 	);
 
 	this->scene_by_xml_file.AddFunction(L"Scene",
-		[this] (const tml::XMLFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Scene> {
+		[this] (const tml::XMLFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
 			auto file_read_desc_dat = file_read_desc.GetDataByParent();
@@ -111,25 +111,33 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 			}
 
 			auto scene_class_name = xml_file_node->GetValue(L"class_name");
+			auto scene_res_name = xml_file_node->GetValue(L"res_name");
+			INT scene_get_res = -1;
 
-			if (scene_class_name == nullptr) {
-				return (scene);
+			if (scene_class_name != nullptr) {
+				if (this->scene_by_ini_file.Get(scene, scene_class_name->c_str(), tml::INIFileReadDesc(), &scene_get_res) == nullptr) {
+					return (scene);
+				}
+			} else if (scene_res_name != nullptr) {
+				if (this->mgr_->GetResource<tml::scene::Scene>(scene, scene_res_name->c_str(), &scene_get_res) == nullptr) {
+					return (scene);
+				}
 			}
 
-			if (this->scene_by_ini_file.Get(scene, scene_class_name->c_str(), tml::INIFileReadDesc()) == nullptr) {
-				return (scene);
+			if (scene_get_res == 0) {
+				for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
+					this->SetNodeRecursivePart(scene->GetRootNode(), xml_file_child_node);
+				}
 			}
 
-			for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
-				this->SetNodeRecursivePart(scene->GetRootNode(), xml_file_child_node);
-			}
+			tml::SetResult(dst_get_res, scene_get_res);
 
 			return (scene);
 		}
 	);
 
 	this->node_by_ini_file.AddFunction(L"BaseNode",
-		[this] (const tml::INIFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Node> {
+		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 
 			tml::scene::BaseNodeDesc desc;
@@ -137,7 +145,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 			desc.SetManager(this->mgr_);
 			desc.Read(file_read_desc);
 
-			if (this->mgr_->GetResource<tml::scene::BaseNode>(node, desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::scene::BaseNode>(node, desc, dst_get_res) == nullptr) {
 				return (node);
 			}
 
@@ -146,7 +154,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 	);
 
 	this->node_by_xml_file.AddFunction(L"Node",
-		[this] (const tml::XMLFileReadDesc &file_read_desc) -> tml::shared_ptr<tml::scene::Node> {
+		[this] (const tml::XMLFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 
 			auto file_read_desc_dat = file_read_desc.GetDataByParent();
@@ -170,18 +178,26 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 			}
 
 			auto node_class_name = xml_file_node->GetValue(L"class_name");
+			auto node_res_name = xml_file_node->GetValue(L"res_name");
+			INT node_get_res = -1;
 
-			if (node_class_name == nullptr) {
-				return (node);
+			if (node_class_name != nullptr) {
+				if (this->node_by_ini_file.Get(node, node_class_name->c_str(), tml::INIFileReadDesc(), &node_get_res) == nullptr) {
+					return (node);
+				}
+			} else if (node_res_name != nullptr) {
+				if (this->mgr_->GetResource<tml::scene::Node>(node, node_res_name->c_str(), &node_get_res) == nullptr) {
+					return (node);
+				}
 			}
 
-			if (this->node_by_ini_file.Get(node, node_class_name->c_str(), tml::INIFileReadDesc()) == nullptr) {
-				return (node);
+			if (node_get_res == 0) {
+				for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
+					this->SetNodeRecursivePart(node, xml_file_child_node);
+				}
 			}
 
-			for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
-				this->SetNodeRecursivePart(node, xml_file_child_node);
-			}
+			tml::SetResult(dst_get_res, node_get_res);
 
 			return (node);
 		}
@@ -205,19 +221,28 @@ void tml::scene::ManagerFactory::SetNodeRecursivePart(const tml::shared_ptr<tml:
 	}
 
 	auto child_node_class_name = xml_file_node->GetValue(L"class_name");
+	auto child_node_res_name = xml_file_node->GetValue(L"res_name");
+	INT child_node_get_res = -1;
 
-	if (child_node_class_name == nullptr) {
-		return;
+	if (child_node_class_name != nullptr) {
+		if (this->node_by_ini_file.Get(child_node, child_node_class_name->c_str(), tml::INIFileReadDesc(), &child_node_get_res) == nullptr) {
+			return;
+		}
+
+	} else if (child_node_res_name != nullptr) {
+		if (this->mgr_->GetResource<tml::scene::Node>(child_node, child_node_res_name->c_str(), &child_node_get_res) == nullptr) {
+			return;
+		}
 	}
 
-	if (this->node_by_ini_file.Get(child_node, child_node_class_name->c_str(), tml::INIFileReadDesc()) == nullptr) {
-		return;
-	}
+	child_node->RemoveChildNodeFromParentNode();
 
-	parent_node->AddChildNode(child_node, false);
+	parent_node->AddChildNode(child_node);
 
-	for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
-		this->SetNodeRecursivePart(child_node, xml_file_child_node);
+	if (child_node_get_res == 0) {
+		for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
+			this->SetNodeRecursivePart(child_node, xml_file_child_node);
+		}
 	}
 
 	return;
