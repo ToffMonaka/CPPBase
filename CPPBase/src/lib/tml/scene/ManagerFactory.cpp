@@ -122,6 +122,8 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 				if (this->mgr_->GetResource<tml::scene::Scene>(scene, scene_res_name->c_str(), &scene_get_res) == nullptr) {
 					return (scene);
 				}
+			} else {
+				return (scene);
 			}
 
 			if (scene_get_res == 0) {
@@ -189,6 +191,8 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 				if (this->mgr_->GetResource<tml::scene::Node>(node, node_res_name->c_str(), &node_get_res) == nullptr) {
 					return (node);
 				}
+			} else {
+				return (node);
 			}
 
 			if (node_get_res == 0) {
@@ -228,11 +232,12 @@ void tml::scene::ManagerFactory::SetNodeRecursivePart(const tml::shared_ptr<tml:
 		if (this->node_by_ini_file.Get(child_node, child_node_class_name->c_str(), tml::INIFileReadDesc(), &child_node_get_res) == nullptr) {
 			return;
 		}
-
 	} else if (child_node_res_name != nullptr) {
 		if (this->mgr_->GetResource<tml::scene::Node>(child_node, child_node_res_name->c_str(), &child_node_get_res) == nullptr) {
 			return;
 		}
+	} else {
+		return;
 	}
 
 	child_node->RemoveChildNodeFromParentNode();
