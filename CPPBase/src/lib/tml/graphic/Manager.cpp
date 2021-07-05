@@ -5,6 +5,8 @@
 
 
 #include "Manager.h"
+#include "Canvas.h"
+#include "Canvas2D.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
 #include "DepthState.h"
@@ -16,8 +18,8 @@
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
-#include "Object2DModelShaderStructuredBuffer.h"
-#include "Object2DModelLayerShaderStructuredBuffer.h"
+#include "Model2DShaderStructuredBuffer.h"
+#include "Model2DLayerShaderStructuredBuffer.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Fog.h"
@@ -25,8 +27,7 @@
 #include "Texture.h"
 #include "Sampler.h"
 #include "Model.h"
-#include "ScreenModel.h"
-#include "Object2DModel.h"
+#include "Model2D.h"
 #include "Font.h"
 
 
@@ -84,6 +85,7 @@ void tml::graphic::ManagerDesc::InitResourceCount(void)
 	tml::ManagerDesc::InitResourceCount();
 
 	this->resource_count_container.resize(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT);
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CANVAS)] = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE)] = tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE)] = tml::ConstantUtil::GRAPHIC::BLEND_STATE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE)] = tml::ConstantUtil::GRAPHIC::DEPTH_STATE_TYPE_COUNT;

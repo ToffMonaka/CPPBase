@@ -62,12 +62,12 @@ private:
 
 public:
 	tml::shared_ptr<tml::graphic::Camera> camera;
-	tml::shared_ptr<tml::graphic::Object2DModel> bg_model;
-	tml::shared_ptr<tml::graphic::Object2DModel> logo_model;
-	tml::shared_ptr<tml::graphic::Object2DModel> start_model;
+	tml::shared_ptr<tml::graphic::Model2D> bg_model;
+	tml::shared_ptr<tml::graphic::Model2D> logo_model;
+	tml::shared_ptr<tml::graphic::Model2D> start_model;
 	tml::shared_ptr<tml::graphic::Font> start_font;
 	tml::shared_ptr<tml::sound::SESound> start_se_sound;
-	tml::shared_ptr<tml::graphic::Object2DModel> footer_model;
+	tml::shared_ptr<tml::graphic::Model2D> footer_model;
 	tml::shared_ptr<tml::graphic::Font> footer_font;
 	tml::shared_ptr<tml::sound::BGMSound> bgm_sound;
 

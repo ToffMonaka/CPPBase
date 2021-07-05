@@ -6,6 +6,8 @@
 
 #include "ManagerCommon.h"
 #include "Manager.h"
+#include "Canvas.h"
+#include "Canvas2D.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
 #include "DepthState.h"
@@ -17,8 +19,8 @@
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
-#include "Object2DModelShaderStructuredBuffer.h"
-#include "Object2DModelLayerShaderStructuredBuffer.h"
+#include "Model2DShaderStructuredBuffer.h"
+#include "Model2DLayerShaderStructuredBuffer.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Fog.h"
@@ -26,8 +28,7 @@
 #include "Texture.h"
 #include "Sampler.h"
 #include "Model.h"
-#include "ScreenModel.h"
-#include "Object2DModel.h"
+#include "Model2D.h"
 #include "Font.h"
 
 
@@ -78,8 +79,7 @@ void tml::graphic::ManagerCommon::Init(void)
 
 	this->default_depth_state.reset();
 	this->reference_depth_state.reset();
-	this->screen_model_shader.reset();
-	this->object_2d_model_shader.reset();
+	this->model_2d_shader.reset();
 	this->config_shader_constant_buffer.reset();
 	this->header_shader_constant_buffer.reset();
 	this->camera_shader_structured_buffer.reset();
@@ -316,30 +316,15 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// ScreenModelShader Create
+	{// Model2DShader Create
 		tml::graphic::ShaderDesc desc;
 
 		desc.SetManager(this->mgr_);
-		desc.Read(tml::INIFileReadDesc(L"res/screen_model_shader.ini"));
-		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_COUNT;
-		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_ARRAY;
+		desc.Read(tml::INIFileReadDesc(L"res/model_2d_shader.ini"));
+		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT;
+		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_ARRAY;
 
-		if (this->mgr_->GetResource<tml::graphic::Shader>(this->screen_model_shader, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
-	{// Object2DModelShader Create
-		tml::graphic::ShaderDesc desc;
-
-		desc.SetManager(this->mgr_);
-		desc.Read(tml::INIFileReadDesc(L"res/obj_2d_model_shader.ini"));
-		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_COUNT;
-		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_ARRAY;
-
-		if (this->mgr_->GetResource<tml::graphic::Shader>(this->object_2d_model_shader, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Shader>(this->model_2d_shader, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

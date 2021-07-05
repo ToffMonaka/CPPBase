@@ -15,6 +15,7 @@ namespace GRAPHIC {
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
 		ETC,
+		CANVAS,
 		RASTERIZER_STATE,
 		BLEND_STATE,
 		DEPTH_STATE,
@@ -33,6 +34,14 @@ namespace GRAPHIC {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::COUNT);
+	enum class CANVAS_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		_2D,
+		USER,
+		COUNT
+	};
+	const UINT CANVAS_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::COUNT);
 	enum class RASTERIZER_STATE_TYPE : UINT {
 		NONE = 0U,
 		ETC,
@@ -128,8 +137,7 @@ namespace GRAPHIC {
 	enum class MODEL_TYPE : UINT {
 		NONE = 0U,
 		ETC,
-		SCREEN,
-		OBJECT_2D,
+		_2D,
 		USER,
 		COUNT
 	};
@@ -277,14 +285,8 @@ namespace GRAPHIC {
 		WC,
 		WW
 	};
-	const UINT SCREEN_MODEL_INPUT_ELEMENT_DESC_COUNT = 3U;
-	const D3D11_INPUT_ELEMENT_DESC SCREEN_MODEL_INPUT_ELEMENT_DESC_ARRAY[tml::ConstantUtil::GRAPHIC::SCREEN_MODEL_INPUT_ELEMENT_DESC_COUNT] = {
-		{"POSITION", 0U, DXGI_FORMAT_R32G32B32A32_FLOAT, 0U, 0U, D3D11_INPUT_PER_VERTEX_DATA, 0U},
-		{"TEXCOORD", 0U, DXGI_FORMAT_R32G32_FLOAT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U},
-		{"LAYER_INDEX", 0U, DXGI_FORMAT_R32_UINT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U}
-	};
-	const UINT OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_COUNT = 3U;
-	const D3D11_INPUT_ELEMENT_DESC OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_ARRAY[tml::ConstantUtil::GRAPHIC::OBJECT_2D_MODEL_INPUT_ELEMENT_DESC_COUNT] = {
+	const UINT MODEL_2D_INPUT_ELEMENT_DESC_COUNT = 3U;
+	const D3D11_INPUT_ELEMENT_DESC MODEL_2D_INPUT_ELEMENT_DESC_ARRAY[tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT] = {
 		{"POSITION", 0U, DXGI_FORMAT_R32G32B32A32_FLOAT, 0U, 0U, D3D11_INPUT_PER_VERTEX_DATA, 0U},
 		{"TEXCOORD", 0U, DXGI_FORMAT_R32G32_FLOAT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U},
 		{"LAYER_INDEX", 0U, DXGI_FORMAT_R32_UINT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U}
@@ -321,6 +323,8 @@ TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG,
 namespace tml {
 namespace graphic {
 class Manager;
+class Canvas;
+class Canvas2D;
 class RasterizerState;
 class BlendState;
 class DepthState;
@@ -332,8 +336,8 @@ class ShaderStructuredBuffer;
 class CameraShaderStructuredBuffer;
 class LightShaderStructuredBuffer;
 class FogShaderStructuredBuffer;
-class Object2DModelShaderStructuredBuffer;
-class Object2DModelLayerShaderStructuredBuffer;
+class Model2DShaderStructuredBuffer;
+class Model2DLayerShaderStructuredBuffer;
 class Camera;
 class Light;
 class Fog;
@@ -341,8 +345,7 @@ class Mesh;
 class Texture;
 class Sampler;
 class Model;
-class ScreenModel;
-class Object2DModel;
+class Model2D;
 class Font;
 }
 }

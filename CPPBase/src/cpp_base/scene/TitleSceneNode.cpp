@@ -11,7 +11,7 @@
 #include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/Object2DModel.h"
+#include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/graphic/Font.h"
 #include "../../lib/tml/sound/BGMSound.h"
 #include "../../lib/tml/sound/SESound.h"
@@ -173,12 +173,12 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	}
 
 	{// BackgroundModel Create
-		tml::graphic::Object2DModelDesc desc;
+		tml::graphic::Model2DDesc desc;
 
 		desc.SetManager(graphic_mgr);
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
 
-		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->bg_model, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->bg_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -209,12 +209,12 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	}
 
 	{// LogoModel Create
-		tml::graphic::Object2DModelDesc desc;
+		tml::graphic::Model2DDesc desc;
 
 		desc.SetManager(graphic_mgr);
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
 
-		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->logo_model, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->logo_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -250,13 +250,13 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	tml::XMUINT2EX start_font_size = tml::XMUINT2EX(0U, 24U);
 
 	{// StartModel Create
-		tml::graphic::Object2DModelDesc desc;
+		tml::graphic::Model2DDesc desc;
 
 		desc.SetManager(graphic_mgr);
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -192.0f));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->start_model, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->start_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -326,13 +326,13 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	tml::XMUINT2EX footer_font_size = tml::XMUINT2EX(0U, 16U);
 
 	{// FooterModel Create
-		tml::graphic::Object2DModelDesc desc;
+		tml::graphic::Model2DDesc desc;
 
 		desc.SetManager(graphic_mgr);
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(graphic_mgr->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_model_size.y >> 1)));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->footer_model, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->footer_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

@@ -8,7 +8,7 @@
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/Object2DModel.h"
+#include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/graphic/Font.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
@@ -148,12 +148,12 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 	tml::XMUINT2EX font_size = tml::XMUINT2EX(0U, 16U);
 
 	{// Model Create
-		tml::graphic::Object2DModelDesc desc;
+		tml::graphic::Model2DDesc desc;
 
 		desc.SetManager(graphic_mgr);
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Object2DModel>(this->model, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

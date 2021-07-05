@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
+#include "../math/XNAMathINT.h"
 #include "ManagerResource.h"
 
 
@@ -366,12 +367,19 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE type_;
 	std::vector<tml::shared_ptr<tml::graphic::RasterizerState>> rs_cont_;
+	tml::shared_ptr<tml::graphic::RasterizerState> empty_rs_;
 	std::vector<tml::shared_ptr<tml::graphic::BlendState>> bs_cont_;
+	tml::shared_ptr<tml::graphic::BlendState> empty_bs_;
 	std::vector<tml::shared_ptr<tml::graphic::DepthState>> ds_cont_;
+	tml::shared_ptr<tml::graphic::DepthState> empty_ds_;
 	std::vector<tml::shared_ptr<tml::graphic::Shader>> shader_cont_;
+	tml::shared_ptr<tml::graphic::Shader> empty_shader_;
 	std::vector<tml::shared_ptr<tml::graphic::Mesh>> mesh_cont_;
+	tml::shared_ptr<tml::graphic::Mesh> empty_mesh_;
 	std::vector<tml::shared_ptr<tml::graphic::Texture>> tex_cont_;
+	tml::shared_ptr<tml::graphic::Texture> empty_tex_;
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
+	tml::shared_ptr<tml::graphic::Sampler> empty_samp_;
 
 	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_cont_;
 
@@ -391,36 +399,37 @@ public:
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
 	UINT GetRasterizerStateCount(void) const;
-	tml::graphic::RasterizerState *GetRasterizerState(const UINT);
-	tml::graphic::RasterizerState *GetRasterizerStateFast(const UINT);
-	void SetRasterizerState(const UINT, tml::shared_ptr<tml::graphic::RasterizerState> &);
+	const tml::shared_ptr<tml::graphic::RasterizerState> &GetRasterizerState(const UINT);
+	const tml::shared_ptr<tml::graphic::RasterizerState> &GetRasterizerStateFast(const UINT);
+	void SetRasterizerState(const UINT, const tml::shared_ptr<tml::graphic::RasterizerState> &);
 	UINT GetBlendStateCount(void) const;
-	tml::graphic::BlendState *GetBlendState(const UINT);
-	tml::graphic::BlendState *GetBlendStateFast(const UINT);
-	void SetBlendState(const UINT, tml::shared_ptr<tml::graphic::BlendState> &);
+	const tml::shared_ptr<tml::graphic::BlendState> &GetBlendState(const UINT);
+	const tml::shared_ptr<tml::graphic::BlendState> &GetBlendStateFast(const UINT);
+	void SetBlendState(const UINT, const tml::shared_ptr<tml::graphic::BlendState> &);
 	UINT GetDepthStateCount(void) const;
-	tml::graphic::DepthState *GetDepthState(const UINT);
-	tml::graphic::DepthState *GetDepthStateFast(const UINT);
-	void SetDepthState(const UINT, tml::shared_ptr<tml::graphic::DepthState> &);
+	const tml::shared_ptr<tml::graphic::DepthState> &GetDepthState(const UINT);
+	const tml::shared_ptr<tml::graphic::DepthState> &GetDepthStateFast(const UINT);
+	void SetDepthState(const UINT, const tml::shared_ptr<tml::graphic::DepthState> &);
 	UINT GetShaderCount(void) const;
-	tml::graphic::Shader *GetShader(const UINT);
-	tml::graphic::Shader *GetShaderFast(const UINT);
-	void SetShader(const UINT, tml::shared_ptr<tml::graphic::Shader> &);
+	const tml::shared_ptr<tml::graphic::Shader> &GetShader(const UINT);
+	const tml::shared_ptr<tml::graphic::Shader> &GetShaderFast(const UINT);
+	void SetShader(const UINT, const tml::shared_ptr<tml::graphic::Shader> &);
 	UINT GetMeshCount(void) const;
-	tml::graphic::Mesh *GetMesh(const UINT);
-	tml::graphic::Mesh *GetMeshFast(const UINT);
-	void SetMesh(const UINT, tml::shared_ptr<tml::graphic::Mesh> &);
+	const tml::shared_ptr<tml::graphic::Mesh> &GetMesh(const UINT);
+	const tml::shared_ptr<tml::graphic::Mesh> &GetMeshFast(const UINT);
+	void SetMesh(const UINT, const tml::shared_ptr<tml::graphic::Mesh> &);
 	UINT GetTextureCount(void) const;
-	tml::graphic::Texture *GetTexture(const UINT);
-	tml::graphic::Texture *GetTextureFast(const UINT);
-	void SetTexture(const UINT, tml::shared_ptr<tml::graphic::Texture> &);
+	const tml::shared_ptr<tml::graphic::Texture> &GetTexture(const UINT);
+	const tml::shared_ptr<tml::graphic::Texture> &GetTextureFast(const UINT);
+	void SetTexture(const UINT, const tml::shared_ptr<tml::graphic::Texture> &);
 	UINT GetSamplerCount(void) const;
-	tml::graphic::Sampler *GetSampler(const UINT);
-	tml::graphic::Sampler *GetSamplerFast(const UINT);
-	void SetSampler(const UINT, tml::shared_ptr<tml::graphic::Sampler> &);
+	const tml::shared_ptr<tml::graphic::Sampler> &GetSampler(const UINT);
+	const tml::shared_ptr<tml::graphic::Sampler> &GetSamplerFast(const UINT);
+	void SetSampler(const UINT, const tml::shared_ptr<tml::graphic::Sampler> &);
 
 	UINT GetStageCount(void) const;
 
+	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
 	virtual void DrawStageInit(void);
 	virtual void DrawStageDeferred3D(void);
 	virtual void DrawStageDeferredShadow3D(void);
@@ -457,13 +466,13 @@ inline UINT tml::graphic::Model::GetRasterizerStateCount(void) const
  * @return rs (rasterizer_state)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::RasterizerState *tml::graphic::Model::GetRasterizerState(const UINT index)
+inline const tml::shared_ptr<tml::graphic::RasterizerState> &tml::graphic::Model::GetRasterizerState(const UINT index)
 {
 	if (index >= this->rs_cont_.size()) {
-		return (nullptr);
+		return (this->empty_rs_);
 	}
 
-	return (this->rs_cont_[index].get());
+	return (this->rs_cont_[index]);
 }
 
 
@@ -473,9 +482,9 @@ inline tml::graphic::RasterizerState *tml::graphic::Model::GetRasterizerState(co
  * @return rs (rasterizer_state)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::RasterizerState *tml::graphic::Model::GetRasterizerStateFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::RasterizerState> &tml::graphic::Model::GetRasterizerStateFast(const UINT index)
 {
-	return (this->rs_cont_[index].get());
+	return (this->rs_cont_[index]);
 }
 
 
@@ -495,13 +504,13 @@ inline UINT tml::graphic::Model::GetBlendStateCount(void) const
  * @return bs (blend_state)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::BlendState *tml::graphic::Model::GetBlendState(const UINT index)
+inline const tml::shared_ptr<tml::graphic::BlendState> &tml::graphic::Model::GetBlendState(const UINT index)
 {
 	if (index >= this->bs_cont_.size()) {
-		return (nullptr);
+		return (this->empty_bs_);
 	}
 
-	return (this->bs_cont_[index].get());
+	return (this->bs_cont_[index]);
 }
 
 
@@ -511,9 +520,9 @@ inline tml::graphic::BlendState *tml::graphic::Model::GetBlendState(const UINT i
  * @return bs (blend_state)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::BlendState *tml::graphic::Model::GetBlendStateFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::BlendState> &tml::graphic::Model::GetBlendStateFast(const UINT index)
 {
-	return (this->bs_cont_[index].get());
+	return (this->bs_cont_[index]);
 }
 
 
@@ -533,13 +542,13 @@ inline UINT tml::graphic::Model::GetDepthStateCount(void) const
  * @return ds (depth_state)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::DepthState *tml::graphic::Model::GetDepthState(const UINT index)
+inline const tml::shared_ptr<tml::graphic::DepthState> &tml::graphic::Model::GetDepthState(const UINT index)
 {
 	if (index >= this->ds_cont_.size()) {
-		return (nullptr);
+		return (this->empty_ds_);
 	}
 
-	return (this->ds_cont_[index].get());
+	return (this->ds_cont_[index]);
 }
 
 
@@ -549,9 +558,9 @@ inline tml::graphic::DepthState *tml::graphic::Model::GetDepthState(const UINT i
  * @return ds (depth_state)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::DepthState *tml::graphic::Model::GetDepthStateFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::DepthState> &tml::graphic::Model::GetDepthStateFast(const UINT index)
 {
-	return (this->ds_cont_[index].get());
+	return (this->ds_cont_[index]);
 }
 
 
@@ -571,13 +580,13 @@ inline UINT tml::graphic::Model::GetShaderCount(void) const
  * @return shader (shader)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::Shader *tml::graphic::Model::GetShader(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Shader> &tml::graphic::Model::GetShader(const UINT index)
 {
 	if (index >= this->shader_cont_.size()) {
-		return (nullptr);
+		return (this->empty_shader_);
 	}
 
-	return (this->shader_cont_[index].get());
+	return (this->shader_cont_[index]);
 }
 
 
@@ -587,9 +596,9 @@ inline tml::graphic::Shader *tml::graphic::Model::GetShader(const UINT index)
  * @return shader (shader)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::Shader *tml::graphic::Model::GetShaderFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Shader> &tml::graphic::Model::GetShaderFast(const UINT index)
 {
-	return (this->shader_cont_[index].get());
+	return (this->shader_cont_[index]);
 }
 
 
@@ -609,13 +618,13 @@ inline UINT tml::graphic::Model::GetMeshCount(void) const
  * @return mesh (mesh)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::Mesh *tml::graphic::Model::GetMesh(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Mesh> &tml::graphic::Model::GetMesh(const UINT index)
 {
 	if (index >= this->mesh_cont_.size()) {
-		return (nullptr);
+		return (this->empty_mesh_);
 	}
 
-	return (this->mesh_cont_[index].get());
+	return (this->mesh_cont_[index]);
 }
 
 
@@ -625,9 +634,9 @@ inline tml::graphic::Mesh *tml::graphic::Model::GetMesh(const UINT index)
  * @return mesh (mesh)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::Mesh *tml::graphic::Model::GetMeshFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Mesh> &tml::graphic::Model::GetMeshFast(const UINT index)
 {
-	return (this->mesh_cont_[index].get());
+	return (this->mesh_cont_[index]);
 }
 
 
@@ -647,13 +656,13 @@ inline UINT tml::graphic::Model::GetTextureCount(void) const
  * @return tex (texture)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::Texture *tml::graphic::Model::GetTexture(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Texture> &tml::graphic::Model::GetTexture(const UINT index)
 {
 	if (index >= this->tex_cont_.size()) {
-		return (nullptr);
+		return (this->empty_tex_);
 	}
 
-	return (this->tex_cont_[index].get());
+	return (this->tex_cont_[index]);
 }
 
 
@@ -663,9 +672,9 @@ inline tml::graphic::Texture *tml::graphic::Model::GetTexture(const UINT index)
  * @return tex (texture)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::Texture *tml::graphic::Model::GetTextureFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Texture> &tml::graphic::Model::GetTextureFast(const UINT index)
 {
-	return (this->tex_cont_[index].get());
+	return (this->tex_cont_[index]);
 }
 
 
@@ -685,13 +694,13 @@ inline UINT tml::graphic::Model::GetSamplerCount(void) const
  * @return samp (sampler)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::Sampler *tml::graphic::Model::GetSampler(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Sampler> &tml::graphic::Model::GetSampler(const UINT index)
 {
 	if (index >= this->samp_cont_.size()) {
-		return (nullptr);
+		return (this->empty_samp_);
 	}
 
-	return (this->samp_cont_[index].get());
+	return (this->samp_cont_[index]);
 }
 
 
@@ -701,9 +710,9 @@ inline tml::graphic::Sampler *tml::graphic::Model::GetSampler(const UINT index)
  * @return samp (sampler)<br>
  * nullptr=Ž¸”s
  */
-inline tml::graphic::Sampler *tml::graphic::Model::GetSamplerFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Sampler> &tml::graphic::Model::GetSamplerFast(const UINT index)
 {
-	return (this->samp_cont_[index].get());
+	return (this->samp_cont_[index]);
 }
 
 

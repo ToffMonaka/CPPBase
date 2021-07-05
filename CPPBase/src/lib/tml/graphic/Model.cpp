@@ -307,7 +307,7 @@ INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::
  * @param index (index)
  * @param rs (rasterizer_state)
  */
-void tml::graphic::Model::SetRasterizerState(const UINT index, tml::shared_ptr<tml::graphic::RasterizerState> &rs)
+void tml::graphic::Model::SetRasterizerState(const UINT index, const tml::shared_ptr<tml::graphic::RasterizerState> &rs)
 {
 	if (index >= this->rs_cont_.size()) {
 		this->rs_cont_.resize(index + 1U);
@@ -324,7 +324,7 @@ void tml::graphic::Model::SetRasterizerState(const UINT index, tml::shared_ptr<t
  * @param index (index)
  * @param bs (blend_state)
  */
-void tml::graphic::Model::SetBlendState(const UINT index, tml::shared_ptr<tml::graphic::BlendState> &bs)
+void tml::graphic::Model::SetBlendState(const UINT index, const tml::shared_ptr<tml::graphic::BlendState> &bs)
 {
 	if (index >= this->bs_cont_.size()) {
 		this->bs_cont_.resize(index + 1U);
@@ -341,7 +341,7 @@ void tml::graphic::Model::SetBlendState(const UINT index, tml::shared_ptr<tml::g
  * @param index (index)
  * @param ds (depth_state)
  */
-void tml::graphic::Model::SetDepthState(const UINT index, tml::shared_ptr<tml::graphic::DepthState> &ds)
+void tml::graphic::Model::SetDepthState(const UINT index, const tml::shared_ptr<tml::graphic::DepthState> &ds)
 {
 	if (index >= this->ds_cont_.size()) {
 		this->ds_cont_.resize(index + 1U);
@@ -358,7 +358,7 @@ void tml::graphic::Model::SetDepthState(const UINT index, tml::shared_ptr<tml::g
  * @param index (index)
  * @param shader (shader)
  */
-void tml::graphic::Model::SetShader(const UINT index, tml::shared_ptr<tml::graphic::Shader> &shader)
+void tml::graphic::Model::SetShader(const UINT index, const tml::shared_ptr<tml::graphic::Shader> &shader)
 {
 	if (index >= this->shader_cont_.size()) {
 		this->shader_cont_.resize(index + 1U);
@@ -375,7 +375,7 @@ void tml::graphic::Model::SetShader(const UINT index, tml::shared_ptr<tml::graph
  * @param index (index)
  * @param mesh (mesh)
  */
-void tml::graphic::Model::SetMesh(const UINT index, tml::shared_ptr<tml::graphic::Mesh> &mesh)
+void tml::graphic::Model::SetMesh(const UINT index, const tml::shared_ptr<tml::graphic::Mesh> &mesh)
 {
 	if (index >= this->mesh_cont_.size()) {
 		this->mesh_cont_.resize(index + 1U);
@@ -392,7 +392,7 @@ void tml::graphic::Model::SetMesh(const UINT index, tml::shared_ptr<tml::graphic
  * @param index (index)
  * @param tex (texture)
  */
-void tml::graphic::Model::SetTexture(const UINT index, tml::shared_ptr<tml::graphic::Texture> &tex)
+void tml::graphic::Model::SetTexture(const UINT index, const tml::shared_ptr<tml::graphic::Texture> &tex)
 {
 	if (index >= this->tex_cont_.size()) {
 		this->tex_cont_.resize(index + 1U);
@@ -409,7 +409,7 @@ void tml::graphic::Model::SetTexture(const UINT index, tml::shared_ptr<tml::grap
  * @param index (index)
  * @param samp (sampler)
  */
-void tml::graphic::Model::SetSampler(const UINT index, tml::shared_ptr<tml::graphic::Sampler> &samp)
+void tml::graphic::Model::SetSampler(const UINT index, const tml::shared_ptr<tml::graphic::Sampler> &samp)
 {
 	if (index >= this->samp_cont_.size()) {
 		this->samp_cont_.resize(index + 1U);
@@ -431,6 +431,17 @@ void tml::graphic::Model::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_
 	this->stage_cont_[static_cast<UINT>(type)] = std::move(stage);
 
 	return;
+}
+
+
+/**
+ * @brief IsHitByMouseDeviceä÷êî
+ * @param mouse_device_pos (mouse_device_position)
+ * @return hit_flg (hit_flag)
+ */
+bool tml::graphic::Model::IsHitByMouseDevice(const tml::XMINT2EX &mouse_device_pos)
+{
+	return (false);
 }
 
 

@@ -60,7 +60,7 @@ private:
 
 public:
 	tml::TIME_REAL update_time;
-	tml::shared_ptr<tml::graphic::Object2DModel> model;
+	tml::shared_ptr<tml::graphic::Model2D> model;
 	tml::shared_ptr<tml::graphic::Font> font;
 
 protected:

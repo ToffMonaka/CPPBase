@@ -60,9 +60,9 @@ private:
 
 public:
 	tml::shared_ptr<tml::graphic::Camera> camera;
-	tml::shared_ptr<tml::graphic::Object2DModel> bg_model;
+	tml::shared_ptr<tml::graphic::Model2D> bg_model;
 	tml::TIME_REAL wait_update_time;
-	tml::shared_ptr<tml::graphic::Object2DModel> wait_model;
+	tml::shared_ptr<tml::graphic::Model2D> wait_model;
 	tml::shared_ptr<tml::graphic::Font> wait_font;
 
 protected:

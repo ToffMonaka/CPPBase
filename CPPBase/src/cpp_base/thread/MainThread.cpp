@@ -19,7 +19,6 @@
 #include "../thread/TestThread.h"
 
 
-
 /**
  * @brief コンストラクタ
  */

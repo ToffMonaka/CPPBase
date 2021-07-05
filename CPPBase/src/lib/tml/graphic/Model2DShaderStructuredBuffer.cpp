@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief Object2DModelShaderStructuredBufferコードファイル
+ * @brief Model2DShaderStructuredBufferコードファイル
  */
 
 
-#include "Object2DModelShaderStructuredBuffer.h"
+#include "Model2DShaderStructuredBuffer.h"
 #include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Object2DModelShaderStructuredBufferDesc::Object2DModelShaderStructuredBufferDesc()
+tml::graphic::Model2DShaderStructuredBufferDesc::Model2DShaderStructuredBufferDesc()
 {
 	return;
 }
@@ -20,7 +20,7 @@ tml::graphic::Object2DModelShaderStructuredBufferDesc::Object2DModelShaderStruct
 /**
  * @brief デストラクタ
  */
-tml::graphic::Object2DModelShaderStructuredBufferDesc::~Object2DModelShaderStructuredBufferDesc()
+tml::graphic::Model2DShaderStructuredBufferDesc::~Model2DShaderStructuredBufferDesc()
 {
 	this->Release();
 
@@ -31,7 +31,7 @@ tml::graphic::Object2DModelShaderStructuredBufferDesc::~Object2DModelShaderStruc
 /**
  * @brief Init関数
  */
-void tml::graphic::Object2DModelShaderStructuredBufferDesc::Init(void)
+void tml::graphic::Model2DShaderStructuredBufferDesc::Init(void)
 {
 	this->Release();
 
@@ -44,7 +44,7 @@ void tml::graphic::Object2DModelShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Object2DModelShaderStructuredBuffer::Object2DModelShaderStructuredBuffer()
+tml::graphic::Model2DShaderStructuredBuffer::Model2DShaderStructuredBuffer()
 {
 	return;
 }
@@ -53,7 +53,7 @@ tml::graphic::Object2DModelShaderStructuredBuffer::Object2DModelShaderStructured
 /**
  * @brief デストラクタ
  */
-tml::graphic::Object2DModelShaderStructuredBuffer::~Object2DModelShaderStructuredBuffer()
+tml::graphic::Model2DShaderStructuredBuffer::~Model2DShaderStructuredBuffer()
 {
 	this->Release();
 
@@ -64,7 +64,7 @@ tml::graphic::Object2DModelShaderStructuredBuffer::~Object2DModelShaderStructure
 /**
  * @brief Init関数
  */
-void tml::graphic::Object2DModelShaderStructuredBuffer::Init(void)
+void tml::graphic::Model2DShaderStructuredBuffer::Init(void)
 {
 	this->Release();
 
@@ -80,7 +80,7 @@ void tml::graphic::Object2DModelShaderStructuredBuffer::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Object2DModelShaderStructuredBuffer::Create(const tml::graphic::Object2DModelShaderStructuredBufferDesc &desc)
+INT tml::graphic::Model2DShaderStructuredBuffer::Create(const tml::graphic::Model2DShaderStructuredBufferDesc &desc)
 {
 	this->Init();
 
@@ -101,7 +101,7 @@ INT tml::graphic::Object2DModelShaderStructuredBuffer::Create(const tml::graphic
  * @param p_mat (projection_matrix)
  * @param col (color)
  */
-void tml::graphic::Object2DModelShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
+void tml::graphic::Model2DShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
 {
 	auto element = this->GetElement(index);
 

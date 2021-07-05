@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief Object2DModelコードファイル
+ * @brief Model2Dコードファイル
  */
 
 
-#include "Object2DModel.h"
+#include "Model2D.h"
 #include "Manager.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
-#include "Object2DModelShaderStructuredBuffer.h"
-#include "Object2DModelLayerShaderStructuredBuffer.h"
+#include "Model2DShaderStructuredBuffer.h"
+#include "Model2DLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
@@ -20,7 +20,7 @@
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Object2DModelLayer::Object2DModelLayer()
+tml::graphic::Model2DLayer::Model2DLayer()
 {
 	return;
 }
@@ -29,7 +29,7 @@ tml::graphic::Object2DModelLayer::Object2DModelLayer()
 /**
  * @brief デストラクタ
  */
-tml::graphic::Object2DModelLayer::~Object2DModelLayer()
+tml::graphic::Model2DLayer::~Model2DLayer()
 {
 	this->Release();
 
@@ -38,9 +38,20 @@ tml::graphic::Object2DModelLayer::~Object2DModelLayer()
 
 
 /**
+ * @brief Release関数
+ */
+void tml::graphic::Model2DLayer::Release(void)
+{
+	tml::graphic::ModelLayer::Release();
+
+	return;
+}
+
+
+/**
  * @brief Init関数
  */
-void tml::graphic::Object2DModelLayer::Init(void)
+void tml::graphic::Model2DLayer::Init(void)
 {
 	this->Release();
 
@@ -56,7 +67,7 @@ void tml::graphic::Object2DModelLayer::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Object2DModelLayer::Create(tml::graphic::Manager *mgr)
+INT tml::graphic::Model2DLayer::Create(tml::graphic::Manager *mgr)
 {
 	this->Init();
 
@@ -73,7 +84,7 @@ INT tml::graphic::Object2DModelLayer::Create(tml::graphic::Manager *mgr)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Object2DModelStage::Object2DModelStage()
+tml::graphic::Model2DStage::Model2DStage()
 {
 	return;
 }
@@ -82,7 +93,7 @@ tml::graphic::Object2DModelStage::Object2DModelStage()
 /**
  * @brief デストラクタ
  */
-tml::graphic::Object2DModelStage::~Object2DModelStage()
+tml::graphic::Model2DStage::~Model2DStage()
 {
 	this->Release();
 
@@ -91,9 +102,20 @@ tml::graphic::Object2DModelStage::~Object2DModelStage()
 
 
 /**
+ * @brief Release関数
+ */
+void tml::graphic::Model2DStage::Release(void)
+{
+	tml::graphic::ModelStage::Release();
+
+	return;
+}
+
+
+/**
  * @brief Init関数
  */
-void tml::graphic::Object2DModelStage::Init(void)
+void tml::graphic::Model2DStage::Init(void)
 {
 	this->Release();
 
@@ -109,7 +131,7 @@ void tml::graphic::Object2DModelStage::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Object2DModelStage::Create(tml::graphic::Manager *mgr)
+INT tml::graphic::Model2DStage::Create(tml::graphic::Manager *mgr)
 {
 	this->Init();
 
@@ -126,7 +148,7 @@ INT tml::graphic::Object2DModelStage::Create(tml::graphic::Manager *mgr)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Object2DModelDesc::Object2DModelDesc() :
+tml::graphic::Model2DDesc::Model2DDesc() :
 	size(0.0f),
 	scale(1.0f),
 	color(1.0f)
@@ -138,7 +160,7 @@ tml::graphic::Object2DModelDesc::Object2DModelDesc() :
 /**
  * @brief デストラクタ
  */
-tml::graphic::Object2DModelDesc::~Object2DModelDesc()
+tml::graphic::Model2DDesc::~Model2DDesc()
 {
 	this->Release();
 
@@ -149,7 +171,7 @@ tml::graphic::Object2DModelDesc::~Object2DModelDesc()
 /**
  * @brief Init関数
  */
-void tml::graphic::Object2DModelDesc::Init(void)
+void tml::graphic::Model2DDesc::Init(void)
 {
 	this->Release();
 
@@ -170,7 +192,7 @@ void tml::graphic::Object2DModelDesc::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Object2DModelDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::graphic::Model2DDesc::ReadValue(const tml::INIFile &ini_file)
 {
 	if (tml::graphic::ModelDesc::ReadValue(ini_file) < 0) {
 		return (-1);
@@ -180,8 +202,8 @@ INT tml::graphic::Object2DModelDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// Object2DModel Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"OBJ_2D_MODEL");
+	{// Model2D Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"MODEL_2D");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -195,7 +217,7 @@ INT tml::graphic::Object2DModelDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Object2DModel::Object2DModel() :
+tml::graphic::Model2D::Model2D() :
 	size(0.0f),
 	scale(1.0f),
 	color(1.0f)
@@ -207,7 +229,7 @@ tml::graphic::Object2DModel::Object2DModel() :
 /**
  * @brief デストラクタ
  */
-tml::graphic::Object2DModel::~Object2DModel()
+tml::graphic::Model2D::~Model2D()
 {
 	this->Release();
 
@@ -218,7 +240,7 @@ tml::graphic::Object2DModel::~Object2DModel()
 /**
  * @brief Release関数
  */
-void tml::graphic::Object2DModel::Release(void)
+void tml::graphic::Model2D::Release(void)
 {
 	tml::graphic::Model::Release();
 
@@ -229,7 +251,7 @@ void tml::graphic::Object2DModel::Release(void)
 /**
  * @brief Init関数
  */
-void tml::graphic::Object2DModel::Init(void)
+void tml::graphic::Model2D::Init(void)
 {
 	this->Release();
 
@@ -252,11 +274,11 @@ void tml::graphic::Object2DModel::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &desc)
+INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::MODEL_TYPE::OBJECT_2D) < 0) {
+	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D) < 0) {
 		this->Init();
 
 		return (-1);
@@ -268,7 +290,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 	this->color = desc.color;
 
 	{// Forward2DStage Create
-		auto stage = tml::make_unique<tml::graphic::Object2DModelStage>(1U);
+		auto stage = tml::make_unique<tml::graphic::Model2DStage>(1U);
 
 		if (stage->Create(this->GetManager()) < 0) {
 			this->Init();
@@ -320,7 +342,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		{// Shader Create
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
-			if (this->GetManager()->GetResource(shader, this->GetManager()->common.object_2d_model_shader) == nullptr) {
+			if (this->GetManager()->GetResource(shader, this->GetManager()->common.model_2d_shader) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -330,7 +352,7 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 		}
 
 		{// Layer0 Create
-			auto layer = tml::make_unique<tml::graphic::Object2DModelLayer>(1U);
+			auto layer = tml::make_unique<tml::graphic::Model2DLayer>(1U);
 
 			if (layer->Create(this->GetManager()) < 0) {
 				this->Init();
@@ -345,16 +367,16 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
 
 				tml::graphic::MeshDesc desc;
-				std::array<tml::graphic::Object2DModel::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
-					tml::graphic::Object2DModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
-					tml::graphic::Object2DModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
-					tml::graphic::Object2DModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
-					tml::graphic::Object2DModel::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
+				std::array<tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
+					tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
+					tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
+					tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
+					tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
 				};
 				std::array<UINT, 4U> ib_element_ary = {0U, 1U, 2U, 3U};
 
 				desc.SetManager(this->GetManager());
-				desc.SetVertexBufferDesc(sizeof(tml::graphic::Object2DModel::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
+				desc.SetVertexBufferDesc(sizeof(tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
 				desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
 				desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 
@@ -386,12 +408,12 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 	}
 
 	{// ShaderStructuredBuffer Create
-		tml::graphic::Object2DModelShaderStructuredBufferDesc desc;
+		tml::graphic::Model2DShaderStructuredBufferDesc desc;
 
 		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Object2DModelShaderStructuredBuffer::ELEMENT), 1U);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Model2DShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::Object2DModelShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Model2DShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -399,12 +421,12 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 	}
 
 	{// LayerShaderStructuredBuffer Create
-		tml::graphic::Object2DModelLayerShaderStructuredBufferDesc desc;
+		tml::graphic::Model2DLayerShaderStructuredBufferDesc desc;
 
 		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Object2DModelLayerShaderStructuredBuffer::ELEMENT), 1U);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Model2DLayerShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::Object2DModelLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Model2DLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -416,62 +438,11 @@ INT tml::graphic::Object2DModel::Create(const tml::graphic::Object2DModelDesc &d
 
 
 /**
- * @brief DrawStageInit関数
- */
-void tml::graphic::Object2DModel::DrawStageInit(void)
-{
-	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayerFast(0U);
-
-	DirectX::XMMATRIX w_mat;
-
-	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size * this->scale);
-
-	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->projection_matrix_2d, this->color);
-	this->ssb_->UploadCPUBuffer();
-
-	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()));
-	this->layer_ssb_->UploadCPUBuffer();
-
-	return;
-}
-
-
-/**
- * @brief DrawStageForward2D関数
- */
-void tml::graphic::Object2DModel::DrawStageForward2D(void)
-{
-	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayerFast(0U);
-
-	std::array<tml::graphic::ShaderStructuredBuffer *, 2U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get()};
-
-	this->GetManager()->SetDrawRasterizerState(this->GetRasterizerState(stage->GetRasterizerStateIndex()));
-	this->GetManager()->SetDrawBlendState(this->GetBlendState(stage->GetBlendStateIndex()));
-	this->GetManager()->SetDrawDepthState(this->GetDepthState(stage->GetDepthStateIndex()));
-	this->GetManager()->SetDrawShader(this->GetShader(stage->GetShaderIndex()));
-	this->GetManager()->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::MODEL, ssb_ary.size(), ssb_ary.data());
-
-	this->GetManager()->SetDrawMesh(this->GetMesh(layer->GetMeshIndex()));
-	this->GetManager()->SetDrawTextureSR(0U, this->GetTexture(layer->GetDiffuseTextureIndex()));
-	this->GetManager()->SetDrawSamplerSR(0U, this->GetSampler(layer->GetDiffuseSamplerIndex()));
-
-	this->GetManager()->Draw(1U);
-
-	this->GetManager()->ClearDrawTextureSR(0U);
-	this->GetManager()->ClearDrawSamplerSR(0U);
-
-	return;
-}
-
-
-/**
  * @brief IsHitByMouseDevice関数
  * @param mouse_device_pos (mouse_device_position)
  * @return hit_flg (hit_flag)
  */
-bool tml::graphic::Object2DModel::IsHitByMouseDevice(const tml::XMINT2EX &mouse_device_pos)
+bool tml::graphic::Model2D::IsHitByMouseDevice(const tml::XMINT2EX &mouse_device_pos)
 {
 	tml::XMFLOAT2EX tmp_mouse_device_pos;
 
@@ -487,4 +458,55 @@ bool tml::graphic::Object2DModel::IsHitByMouseDevice(const tml::XMINT2EX &mouse_
 	}
 
 	return (false);
+}
+
+
+/**
+ * @brief DrawStageInit関数
+ */
+void tml::graphic::Model2D::DrawStageInit(void)
+{
+	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	auto layer = stage->GetLayerFast(0U);
+
+	DirectX::XMMATRIX w_mat;
+
+	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size * this->scale);
+
+	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->projection_matrix_2d, this->color);
+	this->ssb_->UploadCPUBuffer();
+
+	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
+	this->layer_ssb_->UploadCPUBuffer();
+
+	return;
+}
+
+
+/**
+ * @brief DrawStageForward2D関数
+ */
+void tml::graphic::Model2D::DrawStageForward2D(void)
+{
+	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	auto layer = stage->GetLayerFast(0U);
+
+	std::array<tml::graphic::ShaderStructuredBuffer *, 2U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get()};
+
+	this->GetManager()->SetDrawRasterizerState(this->GetRasterizerState(stage->GetRasterizerStateIndex()).get());
+	this->GetManager()->SetDrawBlendState(this->GetBlendState(stage->GetBlendStateIndex()).get());
+	this->GetManager()->SetDrawDepthState(this->GetDepthState(stage->GetDepthStateIndex()).get());
+	this->GetManager()->SetDrawShader(this->GetShader(stage->GetShaderIndex()).get());
+	this->GetManager()->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::MODEL, ssb_ary.size(), ssb_ary.data());
+
+	this->GetManager()->SetDrawMesh(this->GetMesh(layer->GetMeshIndex()).get());
+	this->GetManager()->SetDrawTextureSR(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
+	this->GetManager()->SetDrawSamplerSR(0U, this->GetSampler(layer->GetDiffuseSamplerIndex()).get());
+
+	this->GetManager()->Draw(1U);
+
+	this->GetManager()->ClearDrawTextureSR(0U);
+	this->GetManager()->ClearDrawSamplerSR(0U);
+
+	return;
 }
