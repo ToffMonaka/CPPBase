@@ -618,8 +618,6 @@ void tml::graphic::Manager::Update(void)
 {
 	tml::Manager::Update();
 
-	DirectX::XMVECTOR determinant;
-
 	DirectX::XMMATRIX v_mat_3d;
 	DirectX::XMMATRIX inv_v_mat_3d;
 	DirectX::XMMATRIX p_mat_3d;
@@ -634,11 +632,11 @@ void tml::graphic::Manager::Update(void)
 
 	if (this->draw_camera_ != nullptr) {
 		this->GetViewMatrix3D(this->draw_stage_dat_->view_matrix_3d, this->draw_camera_);
-		this->draw_stage_dat_->inverse_view_matrix_3d = DirectX::XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_3d);
+		this->draw_stage_dat_->inverse_view_matrix_3d = DirectX::XMMatrixInverse(nullptr, this->draw_stage_dat_->view_matrix_3d);
 		this->GetProjectionMatrix3D(this->draw_stage_dat_->projection_matrix_3d, this->draw_camera_);
 
 		this->GetViewMatrix2D(this->draw_stage_dat_->view_matrix_2d, this->draw_camera_);
-		this->draw_stage_dat_->inverse_view_matrix_2d = DirectX::XMMatrixInverse(&determinant, this->draw_stage_dat_->view_matrix_2d);
+		this->draw_stage_dat_->inverse_view_matrix_2d = DirectX::XMMatrixInverse(nullptr, this->draw_stage_dat_->view_matrix_2d);
 		this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
 	} else {
 		return;
@@ -814,7 +812,7 @@ DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix3D(DirectX::XMMATRIX &dst
  */
 DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix2D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
 {
-	dst_mat = DirectX::XMMatrixIdentity();
+	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&camera->position.Get()), DirectX::XMLoadFloat3(&camera->position.GetZAxisVector()), DirectX::XMLoadFloat3(&camera->position.GetYAxisVector()));
 
 	return (dst_mat);
 }

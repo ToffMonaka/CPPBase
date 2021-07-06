@@ -252,8 +252,6 @@ inline void tml::XMPosition3D::Rotation(const tml::XMFLOAT3EX &axis_vec, const F
  */
 inline void tml::XMPosition3D::Look(const tml::XMFLOAT3EX &pos)
 {
-	DirectX::XMVECTOR determinant;
-
 	DirectX::XMVECTOR tmp_pos = DirectX::XMLoadFloat3(&this->pos_);
 	DirectX::XMVECTOR tmp_vec = DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&pos), tmp_pos);
 
@@ -261,11 +259,11 @@ inline void tml::XMPosition3D::Look(const tml::XMFLOAT3EX &pos)
 		tmp_vec = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	}
 
-	DirectX::XMMATRIX rot_mat = DirectX::XMMatrixInverse(&determinant, DirectX::XMMatrixLookToLH(tmp_pos, tmp_vec, DirectX::XMLoadFloat3(&this->y_axis_vec_)));
+	DirectX::XMMATRIX rot_mat = DirectX::XMMatrixInverse(nullptr, DirectX::XMMatrixLookToLH(tmp_pos, tmp_vec, DirectX::XMLoadFloat3(&this->y_axis_vec_)));
 
 	if (DirectX::XMMatrixIsNaN(rot_mat)) {
 		tmp_vec = DirectX::XMVectorAdd(tmp_vec, DirectX::XMVectorSet(0.0f, 0.0f, 0.0001f, 0.0f));
-		rot_mat = DirectX::XMMatrixInverse(&determinant, DirectX::XMMatrixLookToLH(tmp_pos, tmp_vec, DirectX::XMLoadFloat3(&this->y_axis_vec_)));
+		rot_mat = DirectX::XMMatrixInverse(nullptr, DirectX::XMMatrixLookToLH(tmp_pos, tmp_vec, DirectX::XMLoadFloat3(&this->y_axis_vec_)));
 	}
 
 	DirectX::XMStoreFloat4(&this->quat_, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionRotationMatrix(rot_mat)));

@@ -473,7 +473,7 @@ void tml::graphic::Model2D::DrawStageInit(void)
 
 	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size * this->scale);
 
-	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->projection_matrix_2d, this->color);
+	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix_2d, this->GetManager()->GetDrawStageData()->projection_matrix_2d, this->color);
 	this->ssb_->UploadCPUBuffer();
 
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());

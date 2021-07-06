@@ -98,10 +98,11 @@ INT tml::graphic::Model2DShaderStructuredBuffer::Create(const tml::graphic::Mode
  * @brief SetElementŠÖ”
  * @param index (index)
  * @param w_mat (world_matrix)
+ * @param v_mat (view_matrix)
  * @param p_mat (projection_matrix)
  * @param col (color)
  */
-void tml::graphic::Model2DShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
+void tml::graphic::Model2DShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
 {
 	auto element = this->GetElement(index);
 
@@ -109,9 +110,12 @@ void tml::graphic::Model2DShaderStructuredBuffer::SetElement(const UINT index, c
 		return;
 	}
 
-	DirectX::XMMATRIX wp_mat = w_mat * p_mat;
+	DirectX::XMMATRIX wvp_mat = w_mat;
 
-	DirectX::XMStoreFloat4x4(&element->world_projection_matrix, DirectX::XMMatrixTranspose(wp_mat));
+	wvp_mat *= v_mat;
+	wvp_mat *= p_mat;
+
+	DirectX::XMStoreFloat4x4(&element->world_view_projection_matrix, DirectX::XMMatrixTranspose(wvp_mat));
 	element->color = col;
 
 	return;

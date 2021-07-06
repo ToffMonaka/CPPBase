@@ -460,6 +460,39 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 
 			break;
 		}
+		case tml::input::KeyboardDeviceEvent::EVENT_SUB_INDEX: {
+			auto &event_dat = reinterpret_cast<tml::input::KeyboardDeviceEvent *>(event)->data;
+
+			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE::BUTTON_DOWN)) {
+				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W) {
+					this->camera->position.SetY(this->camera->position.GetY() + 2.0f);
+				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S) {
+					this->camera->position.SetY(this->camera->position.GetY() - 2.0f);
+				}
+
+				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A) {
+					this->camera->position.SetX(this->camera->position.GetX() + 2.0f);
+				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D) {
+					this->camera->position.SetX(this->camera->position.GetX() - 2.0f);
+				}
+
+				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Q) {
+					auto angle = this->camera->position.GetAngle();
+
+					angle.z -= tml::MathUtil::GetAngleRadian(2.0f);
+
+					this->camera->position.SetAngle(angle);
+				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::E) {
+					auto angle = this->camera->position.GetAngle();
+
+					angle.z += tml::MathUtil::GetAngleRadian(2.0f);
+
+					this->camera->position.SetAngle(angle);
+				}
+			}
+
+			break;
+		}
 		}
 	}
 

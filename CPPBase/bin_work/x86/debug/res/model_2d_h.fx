@@ -7,7 +7,7 @@
 
 struct MODEL_SSB_ELEMENT
 {
-	matrix wp_mat;
+	matrix wvp_mat;
 	float4 col;
 };
 

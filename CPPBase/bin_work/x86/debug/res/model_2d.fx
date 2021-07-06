@@ -19,7 +19,7 @@ VS_OUTPUT RunVS(VS_INPUT input)
 {
 	VS_OUTPUT output;
 
-	output.pos = mul(input.pos, model_ssb[0].wp_mat);
+	output.pos = mul(input.pos, model_ssb[0].wvp_mat);
 	output.tex_pos = input.tex_pos;
 	output.layer_index = input.layer_index;
 
