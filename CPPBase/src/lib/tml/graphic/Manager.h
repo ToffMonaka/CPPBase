@@ -20,29 +20,29 @@ namespace graphic {
  */
 typedef struct DRAW_STAGE_DATA_
 {
-	DirectX::XMMATRIX &view_matrix_3d;
-	DirectX::XMMATRIX &inverse_view_matrix_3d;
-	DirectX::XMMATRIX &projection_matrix_3d;
 	DirectX::XMMATRIX &view_matrix_2d;
 	DirectX::XMMATRIX &inverse_view_matrix_2d;
 	DirectX::XMMATRIX &projection_matrix_2d;
+	DirectX::XMMATRIX &view_matrix_3d;
+	DirectX::XMMATRIX &inverse_view_matrix_3d;
+	DirectX::XMMATRIX &projection_matrix_3d;
 
 	/**
 	 * @brief コンストラクタ
-	 * @param v_mat_3d (view_matrix_3d)
-	 * @param inv_v_mat_3d (inverse_view_matrix_3d)
-	 * @param p_mat_3d (projection_matrix_3d)
 	 * @param v_mat_2d (view_matrix_2d)
 	 * @param inv_v_mat_2d (inverse_view_matrix_2d)
 	 * @param p_mat_2d (projection_matrix_2d)
+	 * @param v_mat_3d (view_matrix_3d)
+	 * @param inv_v_mat_3d (inverse_view_matrix_3d)
+	 * @param p_mat_3d (projection_matrix_3d)
 	 */
-	DRAW_STAGE_DATA_(DirectX::XMMATRIX &v_mat_3d, DirectX::XMMATRIX &inv_v_mat_3d, DirectX::XMMATRIX &p_mat_3d, DirectX::XMMATRIX &v_mat_2d, DirectX::XMMATRIX &inv_v_mat_2d, DirectX::XMMATRIX &p_mat_2d) :
-		view_matrix_3d(v_mat_3d),
-		inverse_view_matrix_3d(inv_v_mat_3d),
-		projection_matrix_3d(p_mat_3d),
+	DRAW_STAGE_DATA_(DirectX::XMMATRIX &v_mat_2d, DirectX::XMMATRIX &inv_v_mat_2d, DirectX::XMMATRIX &p_mat_2d, DirectX::XMMATRIX &v_mat_3d, DirectX::XMMATRIX &inv_v_mat_3d, DirectX::XMMATRIX &p_mat_3d) :
 		view_matrix_2d(v_mat_2d),
 		inverse_view_matrix_2d(inv_v_mat_2d),
-		projection_matrix_2d(p_mat_2d)
+		projection_matrix_2d(p_mat_2d),
+		view_matrix_3d(v_mat_3d),
+		inverse_view_matrix_3d(inv_v_mat_3d),
+		projection_matrix_3d(p_mat_3d)
 	{
 		return;
 	};
@@ -171,11 +171,6 @@ private:
 	ID3D11PixelShader *draw_shader_ps_;
 	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> draw_scb_sr_ary_;
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_SR_LIMIT> draw_ssb_sr_ary_;
-	tml::graphic::Camera *draw_camera_;
-	UINT draw_light_cnt_;
-	std::array<tml::graphic::Light *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
-	UINT draw_fog_cnt_;
-	std::array<tml::graphic::Fog *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
 	ID3D11Buffer *draw_mesh_vb_;
 	UINT draw_mesh_vb_element_size_;
 	UINT draw_mesh_vb_element_cnt_;
@@ -186,6 +181,12 @@ private:
 	D3D11_PRIMITIVE_TOPOLOGY draw_mesh_pt_;
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT> draw_tex_sr_ary_;
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> draw_samp_sr_ary_;
+	tml::graphic::Camera2D *draw_camera_2d_;
+	tml::graphic::Camera3D *draw_camera_3d_;
+	UINT draw_light_cnt_;
+	std::array<tml::graphic::Light *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
+	UINT draw_fog_cnt_;
+	std::array<tml::graphic::Fog *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
 	UINT draw_model_cnt_;
 	std::array<tml::graphic::Model *, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_ary_;
 
@@ -230,13 +231,11 @@ public:
 	tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE GetAOQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE GetBloomQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE GetAAQualityType(void) const;
-	DirectX::XMMATRIX &GetWorldMatrix3D(DirectX::XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &, const tml::XMFLOAT3EX &);
-	DirectX::XMMATRIX &GetWorldMatrix3D(DirectX::XMMATRIX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &, const tml::XMFLOAT3EX &);
-	DirectX::XMMATRIX &GetWorldMatrix2D(DirectX::XMMATRIX &, const tml::XMFLOAT2EX &, const FLOAT, const tml::XMFLOAT2EX &);
-	DirectX::XMMATRIX &GetViewMatrix3D(DirectX::XMMATRIX &, const tml::graphic::Camera *);
-	DirectX::XMMATRIX &GetViewMatrix2D(DirectX::XMMATRIX &, const tml::graphic::Camera *);
-	DirectX::XMMATRIX &GetProjectionMatrix3D(DirectX::XMMATRIX &, const tml::graphic::Camera *);
-	DirectX::XMMATRIX &GetProjectionMatrix2D(DirectX::XMMATRIX &, const tml::graphic::Camera *);
+	DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &, const tml::graphic::Model2D &);
+	DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera2D &);
+	DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera3D &);
+	DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera2D &);
+	DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera3D &);
 	tml::DynamicBuffer &GetCPUBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_res = nullptr);
 	std::vector<tml::DynamicBuffer> &GetCPUBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
 
@@ -265,12 +264,6 @@ public:
 	void SetDrawShaderStructuredBufferSR(const UINT, const UINT, tml::graphic::ShaderStructuredBuffer **);
 	void ClearDrawShaderStructuredBufferSR(const UINT);
 	void ClearDrawShaderStructuredBufferSR(const UINT, const UINT);
-	void SetDrawCamera(tml::graphic::Camera *);
-	void ClearDrawCamera(void);
-	void SetDrawLight(tml::graphic::Light *);
-	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog *);
-	void ClearDrawFog(void);
 	void SetDrawMesh(tml::graphic::Mesh *);
 	void ClearDrawMesh(void);
 	void SetDrawTextureSR(const UINT, tml::graphic::Texture *);
@@ -281,6 +274,13 @@ public:
 	void SetDrawSamplerSR(const UINT, const UINT, tml::graphic::Sampler **);
 	void ClearDrawSamplerSR(const UINT);
 	void ClearDrawSamplerSR(const UINT, const UINT);
+	void SetDrawCamera(tml::graphic::Camera2D *);
+	void SetDrawCamera(tml::graphic::Camera3D *);
+	void ClearDrawCamera(void);
+	void SetDrawLight(tml::graphic::Light *);
+	void ClearDrawLight(void);
+	void SetDrawFog(tml::graphic::Fog *);
+	void ClearDrawFog(void);
 	void SetDrawModel(tml::graphic::Model *);
 	void ClearDrawModel(void);
 
@@ -509,9 +509,21 @@ inline tml::graphic::DRAW_STAGE_DATA *tml::graphic::Manager::GetDrawStageData(vo
  * @brief SetDrawCamera関数
  * @param camera (camera)
  */
-inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera *camera)
+inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera2D *camera)
 {
-	this->draw_camera_ = camera;
+	this->draw_camera_2d_ = camera;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawCamera関数
+ * @param camera (camera)
+ */
+inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera3D *camera)
+{
+	this->draw_camera_3d_ = camera;
 
 	return;
 }
@@ -522,7 +534,8 @@ inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera *camera)
  */
 inline void tml::graphic::Manager::ClearDrawCamera(void)
 {
-	this->draw_camera_ = nullptr;
+	this->draw_camera_2d_ = nullptr;
+	this->draw_camera_3d_ = nullptr;
 
 	return;
 }

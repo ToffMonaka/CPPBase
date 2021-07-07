@@ -8,11 +8,12 @@
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/input/MouseDeviceEvent.h"
 #include "../../lib/tml/input/KeyboardDeviceEvent.h"
-#include "../../lib/tml/graphic/Camera.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/graphic/Font.h"
+#include "../../lib/tml/graphic/Camera2D.h"
+#include "../../lib/tml/graphic/Camera3D.h"
+#include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/sound/BGMSound.h"
 #include "../../lib/tml/sound/SESound.h"
 #include "../input/Manager.h"
@@ -120,7 +121,8 @@ void cpp_base::scene::TitleSceneNode::Init(void)
 {
 	this->Release();
 
-	this->camera.reset();
+	this->camera_2d.reset();
+	this->camera_3d.reset();
 	this->bg_model.reset();
 	this->logo_model.reset();
 	this->start_model.reset();
@@ -155,17 +157,31 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
-	{// Camera Create
-		tml::graphic::CameraDesc desc;
+	{// Camera2D Create
+		tml::graphic::Camera2DDesc desc;
 
 		desc.SetManager(graphic_mgr);
-		desc.type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE;
-		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
+		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::ORTHOGRAPHIC;
 		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+
+		if (graphic_mgr->GetResource<tml::graphic::Camera2D>(this->camera_2d, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// Camera3D Create
+		tml::graphic::Camera3DDesc desc;
+
+		desc.SetManager(graphic_mgr);
+		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::PERSPECTIVE;
+		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
 		desc.near_clip = 0.1f;
 		desc.far_clip = 1000.0f;
 
-		if (graphic_mgr->GetResource<tml::graphic::Camera>(this->camera, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Camera3D>(this->camera_3d, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -465,29 +481,29 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE::BUTTON_DOWN)) {
 				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W) {
-					this->camera->position.SetY(this->camera->position.GetY() + 2.0f);
+					this->camera_2d->position.SetY(this->camera_2d->position.GetY() + 2.0f);
 				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S) {
-					this->camera->position.SetY(this->camera->position.GetY() - 2.0f);
+					this->camera_2d->position.SetY(this->camera_2d->position.GetY() - 2.0f);
 				}
 
 				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A) {
-					this->camera->position.SetX(this->camera->position.GetX() + 2.0f);
+					this->camera_2d->position.SetX(this->camera_2d->position.GetX() + 2.0f);
 				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D) {
-					this->camera->position.SetX(this->camera->position.GetX() - 2.0f);
+					this->camera_2d->position.SetX(this->camera_2d->position.GetX() - 2.0f);
 				}
 
 				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Q) {
-					auto angle = this->camera->position.GetAngle();
+					auto angle = this->camera_2d->position.GetAngle();
 
-					angle.z -= tml::MathUtil::GetAngleRadian(2.0f);
+					angle -= tml::MathUtil::GetAngleRadian(2.0f);
 
-					this->camera->position.SetAngle(angle);
+					this->camera_2d->position.SetAngle(angle);
 				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::E) {
-					auto angle = this->camera->position.GetAngle();
+					auto angle = this->camera_2d->position.GetAngle();
 
-					angle.z += tml::MathUtil::GetAngleRadian(2.0f);
+					angle += tml::MathUtil::GetAngleRadian(2.0f);
 
-					this->camera->position.SetAngle(angle);
+					this->camera_2d->position.SetAngle(angle);
 				}
 			}
 
@@ -504,7 +520,8 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 		this->start_model->color = tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	graphic_mgr->SetDrawCamera(this->camera.get());
+	graphic_mgr->SetDrawCamera(this->camera_2d.get());
+	graphic_mgr->SetDrawCamera(this->camera_3d.get());
 	graphic_mgr->SetDrawModel(this->bg_model.get());
 	graphic_mgr->SetDrawModel(this->logo_model.get());
 	graphic_mgr->SetDrawModel(this->start_model.get());

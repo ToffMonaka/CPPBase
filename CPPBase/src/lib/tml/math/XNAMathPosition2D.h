@@ -53,7 +53,8 @@ public:
 	void SetY(const FLOAT);
 	void Move(const tml::XMFLOAT2EX &);
 	void Move(const tml::XMFLOAT2EX &, const FLOAT);
-	void Rotation(const FLOAT );
+	void Rotation(const FLOAT);
+	void Look(const tml::XMFLOAT2EX &);
 	FLOAT GetAngle(void) const;
 	void SetAngle(const FLOAT);
 	const tml::XMFLOAT2EX &GetXAxisVector(void) const;

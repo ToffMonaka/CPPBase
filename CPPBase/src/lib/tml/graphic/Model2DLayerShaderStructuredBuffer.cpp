@@ -6,6 +6,7 @@
 
 #include "Model2DLayerShaderStructuredBuffer.h"
 #include "Manager.h"
+#include "Model2D.h"
 
 
 /**

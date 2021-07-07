@@ -6,6 +6,7 @@
 
 #include "FogShaderStructuredBuffer.h"
 #include "Manager.h"
+#include "Fog.h"
 
 
 /**

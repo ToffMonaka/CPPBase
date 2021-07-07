@@ -6,6 +6,8 @@
 
 #include "CameraShaderStructuredBuffer.h"
 #include "Manager.h"
+#include "Camera2D.h"
+#include "Camera3D.h"
 
 
 /**
@@ -97,12 +99,11 @@ INT tml::graphic::CameraShaderStructuredBuffer::Create(const tml::graphic::Camer
 /**
  * @brief SetElementŠÖ”
  * @param index (index)
- * @param camera (camera)
  * @param v_mat (view_matrix)
  * @param inv_v_mat (inverse_view_matrix)
  * @param p_mat (projection_matrix)
  */
-void tml::graphic::CameraShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Camera *camera, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &inv_v_mat, const DirectX::XMMATRIX &p_mat)
+void tml::graphic::CameraShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &inv_v_mat, const DirectX::XMMATRIX &p_mat)
 {
 	auto element = this->GetElement(index);
 

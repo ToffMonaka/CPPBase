@@ -311,7 +311,38 @@ void tml::XMPosition3D::Init(const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &
 
 
 /**
+ * @brief Look関数
+ * @param pos (position)
+ */
+void tml::XMPosition3D::Look(const tml::XMFLOAT3EX &pos)
+{
+	DirectX::XMVECTOR tmp_pos = DirectX::XMLoadFloat3(&this->pos_);
+	DirectX::XMVECTOR tmp_vec = DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&pos), tmp_pos);
+
+	if (DirectX::XMVectorGetX(DirectX::XMVector3LengthSq(tmp_vec)) <= 0.0f) {
+		return;
+	}
+
+	DirectX::XMMATRIX rot_mat = DirectX::XMMatrixInverse(nullptr, DirectX::XMMatrixLookToLH(tmp_pos, tmp_vec, DirectX::XMLoadFloat3(&this->y_axis_vec_)));
+
+	if (DirectX::XMMatrixIsNaN(rot_mat)) {
+		tmp_vec = DirectX::XMVectorAdd(tmp_vec, DirectX::XMVectorSet(0.0f, 0.0f, 0.0001f, 0.0f));
+		rot_mat = DirectX::XMMatrixInverse(nullptr, DirectX::XMMatrixLookToLH(tmp_pos, tmp_vec, DirectX::XMLoadFloat3(&this->y_axis_vec_)));
+	}
+
+	DirectX::XMStoreFloat4(&this->quat_, DirectX::XMQuaternionNormalize(DirectX::XMQuaternionRotationMatrix(rot_mat)));
+
+	this->UpdateAngleFromQuaternion();
+	this->UpdateAxisVectorFromQuaternion();
+
+	return;
+}
+
+
+/**
  * @brief UpdateQuaternionFromAngle関数
+ *
+ * three.jsを参考
  */
 void tml::XMPosition3D::UpdateQuaternionFromAngle(void)
 {
@@ -323,6 +354,8 @@ void tml::XMPosition3D::UpdateQuaternionFromAngle(void)
 
 /**
  * @brief UpdateAngleFromQuaternion関数
+ *
+ * three.jsを参考
  */
 void tml::XMPosition3D::UpdateAngleFromQuaternion(void)
 {

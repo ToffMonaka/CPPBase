@@ -334,3 +334,7 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 	return (DefWindowProc(wnd_handle, msg_type, msg_wp, msg_lp));
 }
+
+
+#if 0
+#endif

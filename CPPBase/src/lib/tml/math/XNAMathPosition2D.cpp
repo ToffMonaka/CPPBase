@@ -256,6 +256,23 @@ void tml::XMPosition2D::Init(const tml::XMFLOAT2EX &pos, const FLOAT angle)
 
 
 /**
+ * @brief LookŠÖ”
+ * @param pos (position)
+ */
+void tml::XMPosition2D::Look(const tml::XMFLOAT2EX &pos)
+{
+	DirectX::XMVECTOR tmp_pos = DirectX::XMLoadFloat2(&this->pos_);
+	DirectX::XMVECTOR tmp_vec = DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&pos), tmp_pos);
+
+	if (DirectX::XMVectorGetX(DirectX::XMVector2LengthSq(tmp_vec)) <= 0.0f) {
+		return;
+	}
+
+	return;
+}
+
+
+/**
  * @brief UpdateAxisVectorFromAngleŠÖ”
  */
 void tml::XMPosition2D::UpdateAxisVectorFromAngle(void)

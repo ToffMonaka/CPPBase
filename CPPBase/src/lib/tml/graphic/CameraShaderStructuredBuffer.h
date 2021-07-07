@@ -6,8 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMathFLOAT.h"
 #include "ShaderStructuredBuffer.h"
-#include "Camera.h"
 
 
 namespace tml {
@@ -88,7 +88,7 @@ public:
 
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
-	void SetElement(const UINT, const tml::graphic::Camera *, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &);
+	void SetElement(const UINT, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &);
 };
 }
 }

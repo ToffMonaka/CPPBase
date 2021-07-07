@@ -11,12 +11,7 @@
 /**
  * @brief コンストラクタ
  */
-tml::graphic::CameraDesc::CameraDesc() :
-	type(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE),
-	fov_angle(0.0f),
-	fov_size(0.0f),
-	near_clip(0.0f),
-	far_clip(0.0f)
+tml::graphic::CameraDesc::CameraDesc()
 {
 	return;
 }
@@ -39,13 +34,6 @@ tml::graphic::CameraDesc::~CameraDesc()
 void tml::graphic::CameraDesc::Init(void)
 {
 	this->Release();
-
-	this->type = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
-	this->position.Init();
-	this->fov_angle = 0.0f;
-	this->fov_size = 0.0f;
-	this->near_clip = 0.0f;
-	this->far_clip = 0.0f;
 
 	tml::graphic::ManagerResourceDesc::Init();
 
@@ -85,11 +73,7 @@ INT tml::graphic::CameraDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Camera::Camera() :
-	type_(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE),
-	fov_angle_(0.0f),
-	fov_size_(0.0f),
-	near_clip_(0.0f),
-	far_clip_(0.0f)
+	type_(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE)
 {
 	return;
 }
@@ -100,8 +84,6 @@ tml::graphic::Camera::Camera() :
  */
 tml::graphic::Camera::~Camera()
 {
-	this->Release();
-
 	return;
 }
 
@@ -111,14 +93,7 @@ tml::graphic::Camera::~Camera()
  */
 void tml::graphic::Camera::Init(void)
 {
-	this->Release();
-
 	this->type_ = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
-	this->position.Init();
-	this->fov_angle_ = 0.0f;
-	this->fov_size_ = 0.0f;
-	this->near_clip_ = 0.0f;
-	this->far_clip_ = 0.0f;
 
 	tml::graphic::ManagerResource::Init();
 
@@ -129,31 +104,21 @@ void tml::graphic::Camera::Init(void)
 /**
  * @brief Create関数
  * @param desc (desc)
+ * @param type (type)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc)
+INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc, const tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type)
 {
-	if (desc.type == tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE) {
-		this->Init();
-
+	if (type == tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE) {
 		return (-1);
 	}
 
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA, static_cast<UINT>(desc.type)) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA, static_cast<UINT>(type)) < 0) {
 		return (-1);
 	}
 
-	this->type_ = desc.type;
-	this->position = desc.position;
-	this->fov_angle_ = desc.fov_angle;
-	this->fov_size_ = desc.fov_size;
-	this->near_clip_ = desc.near_clip;
-	this->far_clip_ = desc.far_clip;
+	this->type_ = type;
 
 	return (0);
 }

@@ -471,7 +471,7 @@ void tml::graphic::Model2D::DrawStageInit(void)
 
 	DirectX::XMMATRIX w_mat;
 
-	this->GetManager()->GetWorldMatrix2D(w_mat, this->position.Get(), this->position.GetAngle(), this->size * this->scale);
+	this->GetManager()->GetWorldMatrix(w_mat, (*this));
 
 	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix_2d, this->GetManager()->GetDrawStageData()->projection_matrix_2d, this->color);
 	this->ssb_->UploadCPUBuffer();
@@ -498,8 +498,8 @@ void tml::graphic::Model2D::DrawStageForward2D(void)
 	this->GetManager()->SetDrawDepthState(this->GetDepthState(stage->GetDepthStateIndex()).get());
 	this->GetManager()->SetDrawShader(this->GetShader(stage->GetShaderIndex()).get());
 	this->GetManager()->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::MODEL, ssb_ary.size(), ssb_ary.data());
-
 	this->GetManager()->SetDrawMesh(this->GetMesh(layer->GetMeshIndex()).get());
+
 	this->GetManager()->SetDrawTextureSR(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
 	this->GetManager()->SetDrawSamplerSR(0U, this->GetSampler(layer->GetDiffuseSamplerIndex()).get());
 

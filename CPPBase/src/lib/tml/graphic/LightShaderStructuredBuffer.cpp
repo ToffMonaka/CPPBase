@@ -6,6 +6,7 @@
 
 #include "LightShaderStructuredBuffer.h"
 #include "Manager.h"
+#include "Light.h"
 
 
 /**

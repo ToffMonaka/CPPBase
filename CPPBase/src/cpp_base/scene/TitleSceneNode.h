@@ -61,7 +61,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 
 public:
-	tml::shared_ptr<tml::graphic::Camera> camera;
+	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
+	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
 	tml::shared_ptr<tml::graphic::Model2D> bg_model;
 	tml::shared_ptr<tml::graphic::Model2D> logo_model;
 	tml::shared_ptr<tml::graphic::Model2D> start_model;

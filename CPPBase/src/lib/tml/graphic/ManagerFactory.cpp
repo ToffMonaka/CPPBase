@@ -6,8 +6,6 @@
 
 #include "ManagerFactory.h"
 #include "Manager.h"
-#include "Canvas.h"
-#include "Canvas2D.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
 #include "DepthState.h"
@@ -21,15 +19,19 @@
 #include "FogShaderStructuredBuffer.h"
 #include "Model2DShaderStructuredBuffer.h"
 #include "Model2DLayerShaderStructuredBuffer.h"
-#include "Camera.h"
-#include "Light.h"
-#include "Fog.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
+#include "Font.h"
+#include "Canvas.h"
+#include "Canvas2D.h"
+#include "Camera.h"
+#include "Camera2D.h"
+#include "Camera3D.h"
+#include "Light.h"
+#include "Fog.h"
 #include "Model.h"
 #include "Model2D.h"
-#include "Font.h"
 
 
 /**

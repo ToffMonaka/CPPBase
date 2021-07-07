@@ -5,8 +5,6 @@
 
 
 #include "Manager.h"
-#include "Canvas.h"
-#include "Canvas2D.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
 #include "DepthState.h"
@@ -20,15 +18,19 @@
 #include "FogShaderStructuredBuffer.h"
 #include "Model2DShaderStructuredBuffer.h"
 #include "Model2DLayerShaderStructuredBuffer.h"
-#include "Camera.h"
-#include "Light.h"
-#include "Fog.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
+#include "Font.h"
+#include "Canvas.h"
+#include "Canvas2D.h"
+#include "Camera.h"
+#include "Camera2D.h"
+#include "Camera3D.h"
+#include "Light.h"
+#include "Fog.h"
 #include "Model.h"
 #include "Model2D.h"
-#include "Font.h"
 
 
 /**
@@ -85,21 +87,21 @@ void tml::graphic::ManagerDesc::InitResourceCount(void)
 	tml::ManagerDesc::InitResourceCount();
 
 	this->resource_count_container.resize(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT);
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CANVAS)] = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE)] = tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE)] = tml::ConstantUtil::GRAPHIC::BLEND_STATE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE)] = tml::ConstantUtil::GRAPHIC::DEPTH_STATE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER)] = tml::ConstantUtil::GRAPHIC::SHADER_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER)] = tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER)] = tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA)] = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT)] = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG)] = tml::ConstantUtil::GRAPHIC::FOG_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH)] = tml::ConstantUtil::GRAPHIC::MESH_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE)] = tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER)] = tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL)] = tml::ConstantUtil::GRAPHIC::MODEL_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT)] = tml::ConstantUtil::GRAPHIC::FONT_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CANVAS)] = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA)] = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT)] = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG)] = tml::ConstantUtil::GRAPHIC::FOG_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL)] = tml::ConstantUtil::GRAPHIC::MODEL_TYPE_COUNT;
 
 	return;
 }
@@ -177,11 +179,6 @@ tml::graphic::Manager::Manager() :
 	draw_shader_ps_(nullptr),
 	draw_scb_sr_ary_{},
 	draw_ssb_sr_ary_{},
-	draw_camera_(nullptr),
-	draw_light_cnt_(0U),
-	draw_light_ary_{},
-	draw_fog_cnt_(0U),
-	draw_fog_ary_{},
 	draw_mesh_vb_(nullptr),
 	draw_mesh_vb_element_size_(0U),
 	draw_mesh_vb_element_cnt_(0U),
@@ -192,6 +189,12 @@ tml::graphic::Manager::Manager() :
 	draw_mesh_pt_(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST),
 	draw_tex_sr_ary_{},
 	draw_samp_sr_ary_{},
+	draw_camera_2d_(nullptr),
+	draw_camera_3d_(nullptr),
+	draw_light_cnt_(0U),
+	draw_light_ary_{},
+	draw_fog_cnt_(0U),
+	draw_fog_ary_{},
 	draw_model_cnt_(0U),
 	draw_model_ary_{},
 	cmp_shader_cs_(nullptr),
@@ -337,9 +340,6 @@ void tml::graphic::Manager::Init(void)
 	this->draw_shader_ps_ = nullptr;
 	this->draw_scb_sr_ary_.fill(nullptr);
 	this->draw_ssb_sr_ary_.fill(nullptr);
-	this->draw_camera_ = nullptr;
-	this->draw_light_cnt_ = 0U;
-	this->draw_fog_cnt_ = 0U;
 	this->draw_mesh_vb_ = nullptr;
 	this->draw_mesh_vb_element_size_ = 0U;
 	this->draw_mesh_vb_element_cnt_ = 0U;
@@ -350,6 +350,10 @@ void tml::graphic::Manager::Init(void)
 	this->draw_mesh_pt_ = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	this->draw_tex_sr_ary_.fill(nullptr);
 	this->draw_samp_sr_ary_.fill(nullptr);
+	this->draw_camera_2d_ = nullptr;
+	this->draw_camera_3d_ = nullptr;
+	this->draw_light_cnt_ = 0U;
+	this->draw_fog_cnt_ = 0U;
 	this->draw_model_cnt_ = 0U;
 	this->cmp_shader_cs_ = nullptr;
 	this->cmp_scb_sr_ary_.fill(nullptr);
@@ -618,26 +622,27 @@ void tml::graphic::Manager::Update(void)
 {
 	tml::Manager::Update();
 
-	DirectX::XMMATRIX v_mat_3d;
-	DirectX::XMMATRIX inv_v_mat_3d;
-	DirectX::XMMATRIX p_mat_3d;
 	DirectX::XMMATRIX v_mat_2d;
 	DirectX::XMMATRIX inv_v_mat_2d;
 	DirectX::XMMATRIX p_mat_2d;
+	DirectX::XMMATRIX v_mat_3d;
+	DirectX::XMMATRIX inv_v_mat_3d;
+	DirectX::XMMATRIX p_mat_3d;
 
-	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(v_mat_3d, inv_v_mat_3d, p_mat_3d, v_mat_2d, inv_v_mat_2d, p_mat_2d);
+	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(v_mat_2d, inv_v_mat_2d, p_mat_2d, v_mat_3d, inv_v_mat_3d, p_mat_3d);
 
 	this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT;
 	this->draw_stage_dat_ = &draw_stage_dat;
 
-	if (this->draw_camera_ != nullptr) {
-		this->GetViewMatrix3D(this->draw_stage_dat_->view_matrix_3d, this->draw_camera_);
-		this->draw_stage_dat_->inverse_view_matrix_3d = DirectX::XMMatrixInverse(nullptr, this->draw_stage_dat_->view_matrix_3d);
-		this->GetProjectionMatrix3D(this->draw_stage_dat_->projection_matrix_3d, this->draw_camera_);
-
-		this->GetViewMatrix2D(this->draw_stage_dat_->view_matrix_2d, this->draw_camera_);
+	if ((this->draw_camera_2d_ != nullptr)
+	&& (this->draw_camera_3d_ != nullptr)) {
+		this->GetViewMatrix(this->draw_stage_dat_->view_matrix_2d, (*this->draw_camera_2d_));
 		this->draw_stage_dat_->inverse_view_matrix_2d = DirectX::XMMatrixInverse(nullptr, this->draw_stage_dat_->view_matrix_2d);
-		this->GetProjectionMatrix2D(this->draw_stage_dat_->projection_matrix_2d, this->draw_camera_);
+		this->GetProjectionMatrix(this->draw_stage_dat_->projection_matrix_2d, (*this->draw_camera_2d_));
+
+		this->GetViewMatrix(this->draw_stage_dat_->view_matrix_3d, (*this->draw_camera_3d_));
+		this->draw_stage_dat_->inverse_view_matrix_3d = DirectX::XMMatrixInverse(nullptr, this->draw_stage_dat_->view_matrix_3d);
+		this->GetProjectionMatrix(this->draw_stage_dat_->projection_matrix_3d, (*this->draw_camera_3d_));
 	} else {
 		return;
 	}
@@ -655,8 +660,8 @@ void tml::graphic::Manager::Update(void)
 			this->common.header_shader_constant_buffer->UploadCPUBuffer();
 
 			this->common.camera_shader_structured_buffer->SetElementCount(0U);
-			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_camera_, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d, this->draw_stage_dat_->projection_matrix_3d);
-			this->common.camera_shader_structured_buffer->SetElement(1U, this->draw_camera_,this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d, this->draw_stage_dat_->projection_matrix_2d);
+			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d, this->draw_stage_dat_->projection_matrix_2d);
+			this->common.camera_shader_structured_buffer->SetElement(1U, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d, this->draw_stage_dat_->projection_matrix_3d);
 			this->common.camera_shader_structured_buffer->UploadCPUBuffer();
 
 			this->common.light_shader_structured_buffer->SetElementCount(0U);
@@ -732,10 +737,10 @@ void tml::graphic::Manager::Update(void)
 	this->ClearDrawShader();
 	this->ClearDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM, sys_scb_ary.size());
 	this->ClearDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::SYSTEM, sys_ssb_ary.size());
+	this->ClearDrawMesh();
 	this->ClearDrawCamera();
 	this->ClearDrawLight();
 	this->ClearDrawFog();
-	this->ClearDrawMesh();
 	this->ClearDrawModel();
 
 	return;
@@ -743,97 +748,61 @@ void tml::graphic::Manager::Update(void)
 
 
 /**
- * @brief GetWorldMatrix3DŠÖ”
+ * @brief GetWorldMatrixŠÖ”
  * @param dst_mat (dst_matrix)
- * @param pos (position)
- * @param quat (quaternion)
- * @param scale (scale)
+ * @param model (model)
  * @return dst_mat (dst_matrix)
  */
-DirectX::XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(DirectX::XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT4EX &quat, const tml::XMFLOAT3EX &scale)
+DirectX::XMMATRIX &tml::graphic::Manager::GetWorldMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Model2D &model)
 {
-	dst_mat = DirectX::XMMatrixTransformation(DirectX::g_XMZero, DirectX::g_XMIdentityR3, DirectX::XMLoadFloat3(&scale), DirectX::g_XMZero, DirectX::XMLoadFloat4(&quat), DirectX::XMLoadFloat3(&pos));
+	auto w = model.size.x * model.scale.x;
+	auto h = model.size.y * model.scale.y;
+
+	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(w, h, 0.0f, 0.0f), DirectX::g_XMZero, model.position.GetAngle(), DirectX::XMVectorSet(model.position.GetX(), model.position.GetY(), 0.0f, 0.0f));
 
 	return (dst_mat);
 }
 
 
 /**
- * @brief GetWorldMatrix3DŠÖ”
- * @param dst_mat (dst_matrix)
- * @param pos (position)
- * @param angle (angle)
- * @param scale (scale)
- * @return dst_mat (dst_matrix)
- */
-DirectX::XMMATRIX &tml::graphic::Manager::GetWorldMatrix3D(DirectX::XMMATRIX &dst_mat, const tml::XMFLOAT3EX &pos, const tml::XMFLOAT3EX &angle, const tml::XMFLOAT3EX &scale)
-{
-	dst_mat = DirectX::XMMatrixTransformation(DirectX::g_XMZero, DirectX::g_XMIdentityR3, DirectX::XMLoadFloat3(&scale), DirectX::g_XMZero, DirectX::XMQuaternionRotationRollPitchYaw(angle.x, angle.y, angle.z), DirectX::XMLoadFloat3(&pos));
-
-	return (dst_mat);
-}
-
-
-/**
- * @brief GetWorldMatrix2DŠÖ”
- * @param dst_mat (dst_matrix)
- * @param pos (position)
- * @param angle (angle)
- * @param scale (scale)
- * @return dst_mat (dst_matrix)
- */
-DirectX::XMMATRIX &tml::graphic::Manager::GetWorldMatrix2D(DirectX::XMMATRIX &dst_mat, const tml::XMFLOAT2EX &pos, const FLOAT angle, const tml::XMFLOAT2EX &scale)
-{
-	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale.x, scale.y, 0.0f, 0.0f), DirectX::g_XMZero, angle, DirectX::XMVectorSet(pos.x, pos.y, 0.0f, 0.0f));
-
-	return (dst_mat);
-}
-
-
-/**
- * @brief GetViewMatrix3DŠÖ”
+ * @brief GetViewMatrixŠÖ”
  * @param dst_mat (dst_matrix)
  * @param camera (camera)
  * @return dst_mat (dst_matrix)
  */
-DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix3D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera2D &camera)
 {
-	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&camera->position.Get()), DirectX::XMLoadFloat3(&camera->position.GetZAxisVector()), DirectX::XMLoadFloat3(&camera->position.GetYAxisVector()));
+	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat2(&camera.position.Get()), DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), DirectX::XMLoadFloat2(&camera.position.GetYAxisVector()));
 
 	return (dst_mat);
 }
 
 
 /**
- * @brief GetViewMatrix2DŠÖ”
+ * @brief GetViewMatrixŠÖ”
  * @param dst_mat (dst_matrix)
  * @param camera (camera)
  * @return dst_mat (dst_matrix)
  */
-DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix2D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera3D &camera)
 {
-	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&camera->position.Get()), DirectX::XMLoadFloat3(&camera->position.GetZAxisVector()), DirectX::XMLoadFloat3(&camera->position.GetYAxisVector()));
+	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&camera.position.Get()), DirectX::XMLoadFloat3(&camera.position.GetZAxisVector()), DirectX::XMLoadFloat3(&camera.position.GetYAxisVector()));
 
 	return (dst_mat);
 }
 
 
 /**
- * @brief GetProjectionMatrix3DŠÖ”
+ * @brief GetProjectionMatrixŠÖ”
  * @param dst_mat (dst_matrix)
  * @param camera (camera)
  * @return dst_mat (dst_matrix)
  */
-DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix3D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera2D &camera)
 {
-	switch (camera->GetType()) {
-	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE: {
-		dst_mat = DirectX::XMMatrixPerspectiveFovLH(camera->GetFOVAngle(), camera->GetFOVSize().x / camera->GetFOVSize().y, camera->GetNearClip(), camera->GetFarClip());
-
-		break;
-	}
-	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::ORTHOGRAPHIC: {
-		dst_mat = DirectX::XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, camera->GetNearClip(), camera->GetFarClip());
+	switch (camera.GetProjectionType()) {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::ORTHOGRAPHIC: {
+		dst_mat = DirectX::XMMatrixOrthographicLH(camera.GetFOVSize().x, camera.GetFOVSize().y, 0.0f, 1.0f);
 
 		break;
 	}
@@ -849,21 +818,21 @@ DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix3D(DirectX::XMMATRI
 
 
 /**
- * @brief GetProjectionMatrix2DŠÖ”
+ * @brief GetProjectionMatrixŠÖ”
  * @param dst_mat (dst_matrix)
  * @param camera (camera)
  * @return dst_mat (dst_matrix)
  */
-DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix2D(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera *camera)
+DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera3D &camera)
 {
-	switch (camera->GetType()) {
-	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::PERSPECTIVE: {
-		dst_mat = DirectX::XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, 0.0f, 1.0f);
+	switch (camera.GetProjectionType()) {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::PERSPECTIVE: {
+		dst_mat = DirectX::XMMatrixPerspectiveFovLH(camera.GetFOVAngle(), camera.GetFOVSize().x / camera.GetFOVSize().y, camera.GetNearClip(), camera.GetFarClip());
 
 		break;
 	}
-	case tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::ORTHOGRAPHIC: {
-		dst_mat = DirectX::XMMatrixOrthographicLH(camera->GetFOVSize().x, camera->GetFOVSize().y, 0.0f, 1.0f);
+	case tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::ORTHOGRAPHIC: {
+		dst_mat = DirectX::XMMatrixOrthographicLH(camera.GetFOVSize().x, camera.GetFOVSize().y, camera.GetNearClip(), camera.GetFarClip());
 
 		break;
 	}

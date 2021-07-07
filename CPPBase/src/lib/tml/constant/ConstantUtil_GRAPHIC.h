@@ -15,33 +15,25 @@ namespace GRAPHIC {
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
 		ETC,
-		CANVAS,
 		RASTERIZER_STATE,
 		BLEND_STATE,
 		DEPTH_STATE,
 		SHADER,
 		SHADER_CONSTANT_BUFFER,
 		SHADER_STRUCTURED_BUFFER,
-		CAMERA,
-		LIGHT,
-		FOG,
 		MESH,
 		TEXTURE,
 		SAMPLER,
-		MODEL,
 		FONT,
+		CANVAS,
+		CAMERA,
+		LIGHT,
+		FOG,
+		MODEL,
 		USER,
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::COUNT);
-	enum class CANVAS_TYPE : UINT {
-		NONE = 0U,
-		ETC,
-		_2D,
-		USER,
-		COUNT
-	};
-	const UINT CANVAS_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::COUNT);
 	enum class RASTERIZER_STATE_TYPE : UINT {
 		NONE = 0U,
 		ETC,
@@ -84,11 +76,48 @@ namespace GRAPHIC {
 		COUNT
 	};
 	const UINT SHADER_STRUCTURED_BUFFER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_TYPE::COUNT);
+	enum class MESH_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT MESH_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MESH_TYPE::COUNT);
+	enum class TEXTURE_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT TEXTURE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::COUNT);
+	enum class SAMPLER_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT SAMPLER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE::COUNT);
+	enum class FONT_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		USER,
+		COUNT
+	};
+	const UINT FONT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FONT_TYPE::COUNT);
+	enum class CANVAS_TYPE : UINT {
+		NONE = 0U,
+		ETC,
+		_2D,
+		_3D,
+		USER,
+		COUNT
+	};
+	const UINT CANVAS_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::COUNT);
 	enum class CAMERA_TYPE : UINT {
 		NONE = 0U,
 		ETC,
-		PERSPECTIVE,
-		ORTHOGRAPHIC,
+		_2D,
+		_3D,
 		USER,
 		COUNT
 	};
@@ -113,42 +142,15 @@ namespace GRAPHIC {
 		COUNT
 	};
 	const UINT FOG_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::COUNT);
-	enum class MESH_TYPE : UINT {
-		NONE = 0U,
-		ETC,
-		USER,
-		COUNT
-	};
-	const UINT MESH_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MESH_TYPE::COUNT);
-	enum class TEXTURE_TYPE : UINT {
-		NONE = 0U,
-		ETC,
-		USER,
-		COUNT
-	};
-	const UINT TEXTURE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::COUNT);
-	enum class SAMPLER_TYPE : UINT {
-		NONE = 0U,
-		ETC,
-		USER,
-		COUNT
-	};
-	const UINT SAMPLER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE::COUNT);
 	enum class MODEL_TYPE : UINT {
 		NONE = 0U,
 		ETC,
 		_2D,
+		_3D,
 		USER,
 		COUNT
 	};
 	const UINT MODEL_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::COUNT);
-	enum class FONT_TYPE : UINT {
-		NONE = 0U,
-		ETC,
-		USER,
-		COUNT
-	};
-	const UINT FONT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FONT_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
 		ETC,
@@ -192,12 +194,12 @@ namespace GRAPHIC {
 	const UINT SHADER_CONSTANT_BUFFER_SR_LIMIT = D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT;
 	const UINT SHADER_STRUCTURED_BUFFER_SR_LIMIT = 16U;
 	const UINT SHADER_STRUCTURED_BUFFER_UASR_LIMIT = 4U;
-	const UINT CAMERA_LIMIT = 2U;
-	const UINT LIGHT_LIMIT = 128U;
-	const UINT FOG_LIMIT = 16U;
 	const UINT TEXTURE_SR_LIMIT = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT - 16U;
 	const UINT TEXTURE_UASR_LIMIT = D3D11_PS_CS_UAV_REGISTER_COUNT - 4U;
 	const UINT SAMPLER_SR_LIMIT = D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT;
+	const UINT CAMERA_LIMIT = 2U;
+	const UINT LIGHT_LIMIT = 128U;
+	const UINT FOG_LIMIT = 16U;
 	const UINT MODEL_LIMIT = 256U;
 	enum class DRAW_STAGE_TYPE : UINT {
 		NONE = 0U,
@@ -285,6 +287,11 @@ namespace GRAPHIC {
 		WC,
 		WW
 	};
+	enum class CAMERA_PROJECTION_TYPE : UINT {
+		NONE = 0U,
+		PERSPECTIVE,
+		ORTHOGRAPHIC
+	};
 	const UINT MODEL_2D_INPUT_ELEMENT_DESC_COUNT = 3U;
 	const D3D11_INPUT_ELEMENT_DESC MODEL_2D_INPUT_ELEMENT_DESC_ARRAY[tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT] = {
 		{"POSITION", 0U, DXGI_FORMAT_R32G32B32A32_FLOAT, 0U, 0U, D3D11_INPUT_PER_VERTEX_DATA, 0U},
@@ -323,8 +330,6 @@ TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG,
 namespace tml {
 namespace graphic {
 class Manager;
-class Canvas;
-class Canvas2D;
 class RasterizerState;
 class BlendState;
 class DepthState;
@@ -338,14 +343,18 @@ class LightShaderStructuredBuffer;
 class FogShaderStructuredBuffer;
 class Model2DShaderStructuredBuffer;
 class Model2DLayerShaderStructuredBuffer;
-class Camera;
-class Light;
-class Fog;
 class Mesh;
 class Texture;
 class Sampler;
+class Font;
+class Canvas;
+class Canvas2D;
+class Camera;
+class Camera2D;
+class Camera3D;
+class Light;
+class Fog;
 class Model;
 class Model2D;
-class Font;
 }
 }
