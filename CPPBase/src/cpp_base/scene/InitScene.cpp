@@ -5,6 +5,11 @@
 
 
 #include "InitScene.h"
+#include "../../lib/tml/math/MathUtil.h"
+#include "../../lib/tml/graphic/Canvas2D.h"
+#include "../../lib/tml/graphic/Camera2D.h"
+#include "../../lib/tml/graphic/Camera3D.h"
+#include "../graphic/Manager.h"
 #include "Manager.h"
 
 
@@ -107,6 +112,10 @@ void cpp_base::scene::InitScene::Init(void)
 {
 	this->Release();
 
+	this->canvas_2d.reset();
+	this->camera_2d.reset();
+	this->camera_3d.reset();
+
 	cpp_base::scene::BaseScene::Init();
 
 	return;
@@ -127,6 +136,52 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		this->Init();
 
 		return (-1);
+	}
+
+	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+
+	{// Canvas2D Create
+		tml::graphic::Canvas2DDesc desc;
+
+		desc.SetManager(graphic_mgr);
+		desc.resource_name = L"canvas_2d";
+
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// Camera2D Create
+		tml::graphic::Camera2DDesc desc;
+
+		desc.SetManager(graphic_mgr);
+		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::ORTHOGRAPHIC;
+		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+
+		if (graphic_mgr->GetResource<tml::graphic::Camera2D>(this->camera_2d, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// Camera3D Create
+		tml::graphic::Camera3DDesc desc;
+
+		desc.SetManager(graphic_mgr);
+		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::PERSPECTIVE;
+		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
+		desc.near_clip = 0.1f;
+		desc.far_clip = 1000.0f;
+
+		if (graphic_mgr->GetResource<tml::graphic::Camera3D>(this->camera_3d, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
 	}
 
 	return (0);
@@ -158,5 +213,11 @@ void cpp_base::scene::InitScene::OnEnd(void)
  */
 void cpp_base::scene::InitScene::OnUpdate(void)
 {
+	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+
+	this->canvas_2d->SetDrawCamera(this->camera_2d.get());
+
+	graphic_mgr->SetDrawCanvas(this->canvas_2d.get());
+
 	return;
 }

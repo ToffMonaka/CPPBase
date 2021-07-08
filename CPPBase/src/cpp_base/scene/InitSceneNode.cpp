@@ -9,8 +9,7 @@
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Font.h"
-#include "../../lib/tml/graphic/Camera2D.h"
-#include "../../lib/tml/graphic/Camera3D.h"
+#include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/Model2D.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
@@ -116,12 +115,11 @@ void cpp_base::scene::InitSceneNode::Init(void)
 {
 	this->Release();
 
-	this->camera_2d.reset();
-	this->camera_3d.reset();
+	this->canvas_2d.reset();
 	this->bg_model.reset();
 	this->wait_update_time = tml::TIME_REAL(0.0);
-	this->wait_model.reset();
 	this->wait_font.reset();
+	this->wait_model.reset();
 
 	cpp_base::scene::BaseNode::Init();
 
@@ -146,37 +144,6 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 	}
 
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
-	{// Camera2D Create
-		tml::graphic::Camera2DDesc desc;
-
-		desc.SetManager(graphic_mgr);
-		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::ORTHOGRAPHIC;
-		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
-
-		if (graphic_mgr->GetResource<tml::graphic::Camera2D>(this->camera_2d, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
-	{// Camera3D Create
-		tml::graphic::Camera3DDesc desc;
-
-		desc.SetManager(graphic_mgr);
-		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::PERSPECTIVE;
-		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
-		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
-		desc.near_clip = 0.1f;
-		desc.far_clip = 1000.0f;
-
-		if (graphic_mgr->GetResource<tml::graphic::Camera3D>(this->camera_3d, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
 
 	{// BackgroundModel Create
 		tml::graphic::Model2DDesc desc;
@@ -215,8 +182,21 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 		}
 	}
 
-	tml::XMUINT2EX wait_model_size = tml::XMUINT2EX(320U, 32U);
 	tml::XMUINT2EX wait_font_size = tml::XMUINT2EX(0U, 24U);
+	tml::XMUINT2EX wait_model_size = tml::XMUINT2EX(320U, 32U);
+
+	{// WaitFont Create
+		tml::graphic::FontDesc desc;
+
+		desc.SetManager(graphic_mgr);
+		desc.SetFontDesc(wait_font_size, L"‚l‚r ƒSƒVƒbƒN");
+
+		if (graphic_mgr->GetResource<tml::graphic::Font>(this->wait_font, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
 
 	{// WaitModel Create
 		tml::graphic::Model2DDesc desc;
@@ -256,19 +236,6 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 		}
 	}
 
-	{// WaitFont Create
-		tml::graphic::FontDesc desc;
-
-		desc.SetManager(graphic_mgr);
-		desc.SetFontDesc(wait_font_size, L"‚l‚r ƒSƒVƒbƒN");
-
-		if (graphic_mgr->GetResource<tml::graphic::Font>(this->wait_font, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
 	{// WaitModelTexture Update
 		auto tex = this->wait_model->GetTexture(this->wait_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
@@ -288,6 +255,12 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
  */
 INT cpp_base::scene::InitSceneNode::OnStart(void)
 {
+	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+
+	if (this->canvas_2d == nullptr) {
+		graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d");
+	}
+
 	return (0);
 }
 
@@ -328,10 +301,10 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 		}
 	}
 
-	graphic_mgr->SetDrawCamera(this->camera_2d.get());
-	graphic_mgr->SetDrawCamera(this->camera_3d.get());
-	graphic_mgr->SetDrawModel(this->bg_model.get());
-	graphic_mgr->SetDrawModel(this->wait_model.get());
+	if (this->canvas_2d != nullptr) {
+		this->canvas_2d->SetDrawModel(this->bg_model.get());
+		this->canvas_2d->SetDrawModel(this->wait_model.get());
+	}
 
 	return;
 }

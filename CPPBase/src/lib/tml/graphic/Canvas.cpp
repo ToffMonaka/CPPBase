@@ -89,17 +89,6 @@ tml::graphic::Canvas::~Canvas()
 
 
 /**
- * @brief ReleaseŠÖ”
- */
-void tml::graphic::Canvas::Release(void)
-{
-	tml::graphic::ManagerResource::Release();
-
-	return;
-}
-
-
-/**
  * @brief InitŠÖ”
  */
 void tml::graphic::Canvas::Init(void)
@@ -132,4 +121,13 @@ INT tml::graphic::Canvas::Create(const tml::graphic::CanvasDesc &desc, const tml
 	this->type_ = type;
 
 	return (0);
+}
+
+
+/**
+ * @brief DrawŠÖ”
+ */
+void tml::graphic::Canvas::Draw(void)
+{
+	return;
 }

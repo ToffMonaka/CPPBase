@@ -56,6 +56,13 @@ public: tml::graphic::Canvas2D &operator =(const tml::graphic::Canvas2D &) = del
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	tml::graphic::Camera *draw_camera_;
+	UINT draw_light_cnt_;
+	std::array<tml::graphic::Light *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
+	UINT draw_fog_cnt_;
+	std::array<tml::graphic::Fog *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
+	UINT draw_model_cnt_;
+	std::array<tml::graphic::Model *, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_ary_;
 
 protected:
 	void Release(void);
@@ -66,6 +73,72 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::graphic::Canvas2DDesc &);
+
+	void SetDrawCamera(tml::graphic::Camera2D *);
+	void ClearDrawCamera(void);
+	void SetDrawLight(tml::graphic::Light *);
+	void ClearDrawLight(void);
+	void SetDrawFog(tml::graphic::Fog *);
+	void ClearDrawFog(void);
+	void SetDrawModel(tml::graphic::Model2D *);
+	void ClearDrawModel(void);
+
+	virtual void Draw(void);
 };
 }
+}
+
+
+/**
+ * @brief ReleaseŠÖ”
+ */
+inline void tml::graphic::Canvas2D::Release(void)
+{
+	tml::graphic::Canvas::Release();
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawCameraŠÖ”
+ */
+inline void tml::graphic::Canvas2D::ClearDrawCamera(void)
+{
+	this->draw_camera_ = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawLightŠÖ”
+ */
+inline void tml::graphic::Canvas2D::ClearDrawLight(void)
+{
+	this->draw_light_cnt_ = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawFogŠÖ”
+ */
+inline void tml::graphic::Canvas2D::ClearDrawFog(void)
+{
+	this->draw_fog_cnt_ = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawModelŠÖ”
+ */
+inline void tml::graphic::Canvas2D::ClearDrawModel(void)
+{
+	this->draw_model_cnt_ = 0U;
+
+	return;
 }

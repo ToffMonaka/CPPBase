@@ -71,8 +71,21 @@ public:
 	virtual void Init(void);
 
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE GetType(void) const;
+
+	virtual void Draw(void);
 };
 }
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::Canvas::Release(void)
+{
+	tml::graphic::ManagerResource::Release();
+
+	return;
 }
 
 

@@ -8,8 +8,9 @@
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/graphic/Font.h"
+#include "../../lib/tml/graphic/Canvas2D.h"
+#include "../../lib/tml/graphic/Model2D.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
 
@@ -114,9 +115,10 @@ void cpp_base::scene::DebugNode::Init(void)
 {
 	this->Release();
 
+	this->canvas_2d.reset();
 	this->update_time = tml::TIME_REAL(0.0);
-	this->model.reset();
 	this->font.reset();
+	this->model.reset();
 
 	cpp_base::scene::BaseNode::Init();
 
@@ -144,8 +146,21 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 
 	this->update_time = tml::TIME_REAL(1.0);
 
-	tml::XMUINT2EX model_size = graphic_mgr->GetSize();
 	tml::XMUINT2EX font_size = tml::XMUINT2EX(0U, 16U);
+	tml::XMUINT2EX model_size = graphic_mgr->GetSize();
+
+	{// Font Create
+		tml::graphic::FontDesc desc;
+
+		desc.SetManager(graphic_mgr);
+		desc.SetFontDesc(font_size, L"‚l‚r ƒSƒVƒbƒN");
+
+		if (graphic_mgr->GetResource<tml::graphic::Font>(this->font, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
 
 	{// Model Create
 		tml::graphic::Model2DDesc desc;
@@ -185,19 +200,6 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 		}
 	}
 
-	{// Font Create
-		tml::graphic::FontDesc desc;
-
-		desc.SetManager(graphic_mgr);
-		desc.SetFontDesc(font_size, L"‚l‚r ƒSƒVƒbƒN");
-
-		if (graphic_mgr->GetResource<tml::graphic::Font>(this->font, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
 	return (0);
 }
 
@@ -209,6 +211,12 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
  */
 INT cpp_base::scene::DebugNode::OnStart(void)
 {
+	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+
+	if (this->canvas_2d == nullptr) {
+		graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d");
+	}
+
 	return (0);
 }
 
@@ -250,7 +258,9 @@ void cpp_base::scene::DebugNode::OnUpdate(void)
 		this->update_time = tml::TIME_REAL(0.0);
 	}
 
-	graphic_mgr->SetDrawModel(this->model.get());
+	if (this->canvas_2d != nullptr) {
+		this->canvas_2d->SetDrawModel(this->model.get());
+	}
 
 	return;
 }

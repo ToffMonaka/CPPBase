@@ -20,29 +20,22 @@ namespace graphic {
  */
 typedef struct DRAW_STAGE_DATA_
 {
-	DirectX::XMMATRIX &view_matrix_2d;
-	DirectX::XMMATRIX &inverse_view_matrix_2d;
-	DirectX::XMMATRIX &projection_matrix_2d;
-	DirectX::XMMATRIX &view_matrix_3d;
-	DirectX::XMMATRIX &inverse_view_matrix_3d;
-	DirectX::XMMATRIX &projection_matrix_3d;
+	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type;
+	DirectX::XMMATRIX &view_matrix;
+	DirectX::XMMATRIX &inverse_view_matrix;
+	DirectX::XMMATRIX &projection_matrix;
 
 	/**
 	 * @brief コンストラクタ
-	 * @param v_mat_2d (view_matrix_2d)
-	 * @param inv_v_mat_2d (inverse_view_matrix_2d)
-	 * @param p_mat_2d (projection_matrix_2d)
-	 * @param v_mat_3d (view_matrix_3d)
-	 * @param inv_v_mat_3d (inverse_view_matrix_3d)
-	 * @param p_mat_3d (projection_matrix_3d)
+	 * @param v_mat (view_matrix_2d)
+	 * @param inv_v_mat (inverse_view_matrix)
+	 * @param p_mat (projection_matrix)
 	 */
-	DRAW_STAGE_DATA_(DirectX::XMMATRIX &v_mat_2d, DirectX::XMMATRIX &inv_v_mat_2d, DirectX::XMMATRIX &p_mat_2d, DirectX::XMMATRIX &v_mat_3d, DirectX::XMMATRIX &inv_v_mat_3d, DirectX::XMMATRIX &p_mat_3d) :
-		view_matrix_2d(v_mat_2d),
-		inverse_view_matrix_2d(inv_v_mat_2d),
-		projection_matrix_2d(p_mat_2d),
-		view_matrix_3d(v_mat_3d),
-		inverse_view_matrix_3d(inv_v_mat_3d),
-		projection_matrix_3d(p_mat_3d)
+	DRAW_STAGE_DATA_(DirectX::XMMATRIX &v_mat, DirectX::XMMATRIX &inv_v_mat, DirectX::XMMATRIX &p_mat) :
+		type(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT),
+		view_matrix(v_mat),
+		inverse_view_matrix(inv_v_mat),
+		projection_matrix(p_mat)
 	{
 		return;
 	};
@@ -153,7 +146,6 @@ private:
 	std::array<UINT, tml::ConstantUtil::GRAPHIC::TEXTURE_UASR_LIMIT> null_tex_uasr_init_cnt_ary_;
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> null_samp_sr_ary_;
 
-	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE draw_stage_type_;
 	tml::graphic::DRAW_STAGE_DATA *draw_stage_dat_;
 	UINT draw_vp_cnt_;
 	std::array<D3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> draw_vp_ary_;
@@ -181,14 +173,8 @@ private:
 	D3D11_PRIMITIVE_TOPOLOGY draw_mesh_pt_;
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::TEXTURE_SR_LIMIT> draw_tex_sr_ary_;
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> draw_samp_sr_ary_;
-	tml::graphic::Camera2D *draw_camera_2d_;
-	tml::graphic::Camera3D *draw_camera_3d_;
-	UINT draw_light_cnt_;
-	std::array<tml::graphic::Light *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
-	UINT draw_fog_cnt_;
-	std::array<tml::graphic::Fog *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
-	UINT draw_model_cnt_;
-	std::array<tml::graphic::Model *, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_ary_;
+	UINT draw_canvas_cnt_;
+	std::array<tml::graphic::Canvas *, tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT> draw_canvas_ary_;
 
 	ID3D11ComputeShader *cmp_shader_cs_;
 	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> cmp_scb_sr_ary_;
@@ -225,6 +211,7 @@ public:
 	const tml::XMUINT2EX &GetSize(void) const;
 	bool GetVsyncFlag(void) const;
 	UINT GetFrameRateLimit(void) const;
+	tml::graphic::Viewport *GetViewport(void);
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE GetSamplerQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE GetMotionQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE GetShadowQualityType(void) const;
@@ -240,8 +227,9 @@ public:
 	std::vector<tml::DynamicBuffer> &GetCPUBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
 
 	void Draw(const UINT);
-	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE GetDrawStageType(void) const;
 	tml::graphic::DRAW_STAGE_DATA *GetDrawStageData(void);
+	void SetDrawStageData(tml::graphic::DRAW_STAGE_DATA *);
+	void ClearDrawStageData(void);
 	void SetDrawViewport(tml::graphic::Viewport *);
 	void SetDrawViewport(const UINT, tml::graphic::Viewport *);
 	void ClearDrawViewport(void);
@@ -274,15 +262,8 @@ public:
 	void SetDrawSamplerSR(const UINT, const UINT, tml::graphic::Sampler **);
 	void ClearDrawSamplerSR(const UINT);
 	void ClearDrawSamplerSR(const UINT, const UINT);
-	void SetDrawCamera(tml::graphic::Camera2D *);
-	void SetDrawCamera(tml::graphic::Camera3D *);
-	void ClearDrawCamera(void);
-	void SetDrawLight(tml::graphic::Light *);
-	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog *);
-	void ClearDrawFog(void);
-	void SetDrawModel(tml::graphic::Model *);
-	void ClearDrawModel(void);
+	void SetDrawCanvas(tml::graphic::Canvas *);
+	void ClearDrawCanvas(void);
 
 	void SetComputeShader(tml::graphic::Shader *);
 	void ClearComputeShader(void);
@@ -426,6 +407,16 @@ inline UINT tml::graphic::Manager::GetFrameRateLimit(void) const
 
 
 /**
+ * @brief GetViewport関数
+ * @return vp (viewport)
+ */
+inline tml::graphic::Viewport *tml::graphic::Manager::GetViewport(void)
+{
+	return (&this->vp_);
+}
+
+
+/**
  * @brief GetSamplerQualityType関数
  * @return samp_quality_type (sampler_quality_type)
  */
@@ -486,16 +477,6 @@ inline tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE tml::graphic::Manager::GetAAQ
 
 
 /**
- * @brief GetDrawStageType関数
- * @return draw_stage_type (draw_stage_type)
- */
-inline tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE tml::graphic::Manager::GetDrawStageType(void) const
-{
-	return (this->draw_stage_type_);
-}
-
-
-/**
  * @brief GetDrawStageData関数
  * @return draw_stage_dat (draw_stage_data)
  */
@@ -506,120 +487,34 @@ inline tml::graphic::DRAW_STAGE_DATA *tml::graphic::Manager::GetDrawStageData(vo
 
 
 /**
- * @brief SetDrawCamera関数
- * @param camera (camera)
+ * @brief SetDrawStageData関数
+ * @param draw_stage_dat (draw_stage_data)
  */
-inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera2D *camera)
+inline void tml::graphic::Manager::SetDrawStageData(tml::graphic::DRAW_STAGE_DATA *draw_stage_dat)
 {
-	this->draw_camera_2d_ = camera;
+	this->draw_stage_dat_ = draw_stage_dat;
 
 	return;
 }
 
 
 /**
- * @brief SetDrawCamera関数
- * @param camera (camera)
+ * @brief ClearDrawStageData関数
  */
-inline void tml::graphic::Manager::SetDrawCamera(tml::graphic::Camera3D *camera)
+inline void tml::graphic::Manager::ClearDrawStageData(void)
 {
-	this->draw_camera_3d_ = camera;
+	this->draw_stage_dat_ = nullptr;
 
 	return;
 }
 
 
 /**
- * @brief ClearDrawCamera関数
+ * @brief ClearDrawCanvas関数
  */
-inline void tml::graphic::Manager::ClearDrawCamera(void)
+inline void tml::graphic::Manager::ClearDrawCanvas(void)
 {
-	this->draw_camera_2d_ = nullptr;
-	this->draw_camera_3d_ = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief SetDrawLight関数
- * @param light (light)
- */
-inline void tml::graphic::Manager::SetDrawLight(tml::graphic::Light *light)
-{
-	if ((light == nullptr)
-	|| (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT)) {
-		return;
-	}
-
-	this->draw_light_ary_[this->draw_light_cnt_++] = light;
-
-	return;
-}
-
-
-/**
- * @brief ClearDrawLight関数
- */
-inline void tml::graphic::Manager::ClearDrawLight(void)
-{
-	this->draw_light_cnt_ = 0U;
-
-	return;
-}
-
-
-/**
- * @brief SetDrawFog関数
- * @param fog (fog)
- */
-inline void tml::graphic::Manager::SetDrawFog(tml::graphic::Fog *fog)
-{
-	if ((fog == nullptr)
-	|| (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::FOG_LIMIT)) {
-		return;
-	}
-
-	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
-
-	return;
-}
-
-
-/**
- * @brief ClearDrawFog関数
- */
-inline void tml::graphic::Manager::ClearDrawFog(void)
-{
-	this->draw_fog_cnt_ = 0U;
-
-	return;
-}
-
-
-/**
- * @brief SetDrawModel関数
- * @param model (model)
- */
-inline void tml::graphic::Manager::SetDrawModel(tml::graphic::Model *model)
-{
-	if ((model == nullptr)
-	|| (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::MODEL_LIMIT)) {
-		return;
-	}
-
-	this->draw_model_ary_[this->draw_model_cnt_++] = model;
-
-	return;
-}
-
-
-/**
- * @brief ClearDrawModel関数
- */
-inline void tml::graphic::Manager::ClearDrawModel(void)
-{
-	this->draw_model_cnt_ = 0U;
+	this->draw_canvas_cnt_ = 0U;
 
 	return;
 }

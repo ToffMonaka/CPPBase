@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../constant/ConstantUtil_GRAPHIC.h"
 #include "BaseScene.h"
 
 
@@ -58,6 +59,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 
 public:
+	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
+	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
+	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
 
 protected:
 	void Release(void);

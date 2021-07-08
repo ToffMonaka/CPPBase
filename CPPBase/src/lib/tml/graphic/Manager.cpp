@@ -161,7 +161,6 @@ tml::graphic::Manager::Manager() :
 	bloom_blur_weight_cnt_(0U),
 	bloom_blur_dispersion_val_(0.0f),
 	aa_quality_type_(tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE),
-	draw_stage_type_(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE),
 	draw_stage_dat_(nullptr),
 	draw_vp_cnt_(0U),
 	draw_vp_ary_{},
@@ -189,14 +188,8 @@ tml::graphic::Manager::Manager() :
 	draw_mesh_pt_(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST),
 	draw_tex_sr_ary_{},
 	draw_samp_sr_ary_{},
-	draw_camera_2d_(nullptr),
-	draw_camera_3d_(nullptr),
-	draw_light_cnt_(0U),
-	draw_light_ary_{},
-	draw_fog_cnt_(0U),
-	draw_fog_ary_{},
-	draw_model_cnt_(0U),
-	draw_model_ary_{},
+	draw_canvas_cnt_(0U),
+	draw_canvas_ary_{},
 	cmp_shader_cs_(nullptr),
 	cmp_scb_sr_ary_{},
 	cmp_ssb_sr_ary_{},
@@ -324,7 +317,6 @@ void tml::graphic::Manager::Init(void)
 	this->bloom_blur_weight_cnt_ = 0U;
 	this->bloom_blur_dispersion_val_ = 0.0f;
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE;
-	this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE;
 	this->draw_stage_dat_ = nullptr;
 	this->draw_vp_cnt_ = 0U;
 	this->draw_rt_cnt_ = 0U;
@@ -350,11 +342,7 @@ void tml::graphic::Manager::Init(void)
 	this->draw_mesh_pt_ = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	this->draw_tex_sr_ary_.fill(nullptr);
 	this->draw_samp_sr_ary_.fill(nullptr);
-	this->draw_camera_2d_ = nullptr;
-	this->draw_camera_3d_ = nullptr;
-	this->draw_light_cnt_ = 0U;
-	this->draw_fog_cnt_ = 0U;
-	this->draw_model_cnt_ = 0U;
+	this->draw_canvas_cnt_ = 0U;
 	this->cmp_shader_cs_ = nullptr;
 	this->cmp_scb_sr_ary_.fill(nullptr);
 	this->cmp_ssb_sr_ary_.fill(nullptr);
@@ -622,126 +610,19 @@ void tml::graphic::Manager::Update(void)
 {
 	tml::Manager::Update();
 
-	DirectX::XMMATRIX v_mat_2d;
-	DirectX::XMMATRIX inv_v_mat_2d;
-	DirectX::XMMATRIX p_mat_2d;
-	DirectX::XMMATRIX v_mat_3d;
-	DirectX::XMMATRIX inv_v_mat_3d;
-	DirectX::XMMATRIX p_mat_3d;
-
-	tml::graphic::DRAW_STAGE_DATA draw_stage_dat(v_mat_2d, inv_v_mat_2d, p_mat_2d, v_mat_3d, inv_v_mat_3d, p_mat_3d);
-
-	this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT;
-	this->draw_stage_dat_ = &draw_stage_dat;
-
-	if ((this->draw_camera_2d_ != nullptr)
-	&& (this->draw_camera_3d_ != nullptr)) {
-		this->GetViewMatrix(this->draw_stage_dat_->view_matrix_2d, (*this->draw_camera_2d_));
-		this->draw_stage_dat_->inverse_view_matrix_2d = DirectX::XMMatrixInverse(nullptr, this->draw_stage_dat_->view_matrix_2d);
-		this->GetProjectionMatrix(this->draw_stage_dat_->projection_matrix_2d, (*this->draw_camera_2d_));
-
-		this->GetViewMatrix(this->draw_stage_dat_->view_matrix_3d, (*this->draw_camera_3d_));
-		this->draw_stage_dat_->inverse_view_matrix_3d = DirectX::XMMatrixInverse(nullptr, this->draw_stage_dat_->view_matrix_3d);
-		this->GetProjectionMatrix(this->draw_stage_dat_->projection_matrix_3d, (*this->draw_camera_3d_));
-	} else {
-		return;
+	for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
+		this->draw_canvas_ary_[draw_canvas_i]->Draw();
 	}
 
-	std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->common.config_shader_constant_buffer.get(), this->common.header_shader_constant_buffer.get()};
-	std::array<tml::graphic::ShaderStructuredBuffer *, 5U> sys_ssb_ary = {this->common.camera_shader_structured_buffer.get(), this->common.light_shader_structured_buffer.get(), this->common.fog_shader_structured_buffer.get(), nullptr, nullptr};
-
-	while (this->draw_stage_type_ != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
-		switch (this->draw_stage_type_) {
-		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT: {
-			this->common.main_render_target_texture->ClearRenderTarget(tml::XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
-			this->common.main_depth_target_texture->ClearDepthTarget();
-
-			this->common.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);
-			this->common.header_shader_constant_buffer->UploadCPUBuffer();
-
-			this->common.camera_shader_structured_buffer->SetElementCount(0U);
-			this->common.camera_shader_structured_buffer->SetElement(0U, this->draw_stage_dat_->view_matrix_2d, this->draw_stage_dat_->inverse_view_matrix_2d, this->draw_stage_dat_->projection_matrix_2d);
-			this->common.camera_shader_structured_buffer->SetElement(1U, this->draw_stage_dat_->view_matrix_3d, this->draw_stage_dat_->inverse_view_matrix_3d, this->draw_stage_dat_->projection_matrix_3d);
-			this->common.camera_shader_structured_buffer->UploadCPUBuffer();
-
-			this->common.light_shader_structured_buffer->SetElementCount(0U);
-			this->common.light_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
-			this->common.light_shader_structured_buffer->UploadCPUBuffer();
-
-			this->common.fog_shader_structured_buffer->SetElementCount(0U);
-			this->common.fog_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
-			this->common.fog_shader_structured_buffer->UploadCPUBuffer();
-
-			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_ary_[draw_model_i]->DrawStageInit();
-			}
-
-			this->SetDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM, sys_scb_ary.size(), sys_scb_ary.data());
-			this->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::SYSTEM, sys_ssb_ary.size(), sys_ssb_ary.data());
-
-			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_3D;
-
-			break;
-		}
-		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_3D: {
-			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_ary_[draw_model_i]->DrawStageDeferred3D();
-			}
-
-			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_SHADOW_3D;
-
-			break;
-		}
-		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::DEFERRED_SHADOW_3D: {
-			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_ary_[draw_model_i]->DrawStageDeferredShadow3D();
-			}
-
-			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_3D;
-
-			break;
-		}
-		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_3D: {
-			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_ary_[draw_model_i]->DrawStageForward3D();
-			}
-
-			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D;
-
-			break;
-		}
-		case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
-			this->SetDrawViewport(&this->vp_);
-			this->SetDrawTarget(this->common.main_render_target_texture.get(), nullptr);
-
-			for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-				this->draw_model_ary_[draw_model_i]->DrawStageForward2D();
-			}
-
-			this->draw_stage_type_ = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE;
-			this->draw_stage_dat_ = nullptr;
-
-			break;
-		}
-		}
-
-		this->ClearDrawViewport();
-		this->ClearDrawTarget();
-	}
-
-	this->swap_chain_->Present(this->vsync_flg_, 0U);
+	this->ClearDrawCanvas();
 
 	this->ClearDrawRasterizerState();
 	this->ClearDrawBlendState();
 	this->ClearDrawDepthState();
 	this->ClearDrawShader();
-	this->ClearDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM, sys_scb_ary.size());
-	this->ClearDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::SYSTEM, sys_ssb_ary.size());
 	this->ClearDrawMesh();
-	this->ClearDrawCamera();
-	this->ClearDrawLight();
-	this->ClearDrawFog();
-	this->ClearDrawModel();
+
+	this->swap_chain_->Present(this->vsync_flg_, 0U);
 
 	return;
 }
@@ -1778,6 +1659,23 @@ void tml::graphic::Manager::ClearDrawSamplerSR(const UINT index, const UINT samp
 	}
 
 	this->device_context_->PSSetSamplers(index, samp_cnt, &this->draw_samp_sr_ary_[index]);
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawCanvasŠÖ”
+ * @param canvas (canvas)
+ */
+void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
+{
+	if ((canvas == nullptr)
+	|| (this->draw_canvas_cnt_ >= tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT)) {
+		return;
+	}
+
+	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 
 	return;
 }
