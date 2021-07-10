@@ -6,6 +6,8 @@
 
 #include "InitScene.h"
 #include "../../lib/tml/math/MathUtil.h"
+#include "../../lib/tml/graphic/Texture.h"
+#include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/Camera2D.h"
 #include "../../lib/tml/graphic/Camera3D.h"
@@ -151,6 +153,8 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 
 			return (-1);
 		}
+
+		this->canvas_2d->SetRenderTargetTexture(graphic_mgr->common.main_render_target_texture);
 	}
 
 	{// Camera2D Create
@@ -215,6 +219,7 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
+	this->canvas_2d->GetRenderTargetTexture()->ClearRenderTarget(tml::XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
 	this->canvas_2d->SetDrawCamera(this->camera_2d.get());
 
 	graphic_mgr->SetDrawCanvas(this->canvas_2d.get());

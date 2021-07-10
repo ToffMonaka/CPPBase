@@ -162,11 +162,11 @@ tml::graphic::Manager::Manager() :
 	bloom_blur_dispersion_val_(0.0f),
 	aa_quality_type_(tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE),
 	draw_stage_dat_(nullptr),
-	draw_vp_cnt_(0U),
-	draw_vp_ary_{},
 	draw_rt_cnt_(0U),
 	draw_rt_ary_{},
 	draw_dt_(nullptr),
+	draw_vp_cnt_(0U),
+	draw_vp_ary_{},
 	draw_rs_(nullptr),
 	draw_bs_(nullptr),
 	draw_ds_(nullptr),
@@ -198,14 +198,6 @@ tml::graphic::Manager::Manager() :
 	cmp_tex_uasr_ary_{},
 	cmp_samp_sr_ary_{}
 {
-	this->null_vp_.TopLeftX = 0.0f;
-	this->null_vp_.TopLeftY = 0.0f;
-	this->null_vp_.Width = 0.0f;
-	this->null_vp_.Height = 0.0f;
-	this->null_vp_.MinDepth = D3D11_MIN_DEPTH;
-	this->null_vp_.MaxDepth = D3D11_MAX_DEPTH;
-	this->null_vp_ary_.fill(this->null_vp_);
-	this->null_rt_ary_.fill(nullptr);
 	this->null_scb_sr_ary_.fill(nullptr);
 	this->null_ssb_sr_ary_.fill(nullptr);
 	this->null_ssb_uasr_ary_.fill(nullptr);
@@ -289,7 +281,6 @@ void tml::graphic::Manager::Init(void)
 	this->size_ = 0U;
 	this->vsync_flg_ = true;
 	this->frame_rate_limit_ = 60U;
-	this->vp_.Init();
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE;
 	this->motion_quality_type_ = tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE;
 	this->motion_frame_rate_limit_ = 0U;
@@ -318,9 +309,9 @@ void tml::graphic::Manager::Init(void)
 	this->bloom_blur_dispersion_val_ = 0.0f;
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE;
 	this->draw_stage_dat_ = nullptr;
-	this->draw_vp_cnt_ = 0U;
 	this->draw_rt_cnt_ = 0U;
 	this->draw_dt_ = nullptr;
+	this->draw_vp_cnt_ = 0U;
 	this->draw_rs_ = nullptr;
 	this->draw_bs_ = nullptr;
 	this->draw_ds_ = nullptr;
@@ -476,7 +467,6 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	this->size_ = tml::XMUINT2EX(this->swap_chain_desc_.BufferDesc.Width, this->swap_chain_desc_.BufferDesc.Height);
 	this->vsync_flg_ = desc.vsync_flag;
 	this->frame_rate_limit_ = desc.frame_rate_limit;
-	this->vp_.Init(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(static_cast<FLOAT>(this->swap_chain_desc_.BufferDesc.Width), static_cast<FLOAT>(this->swap_chain_desc_.BufferDesc.Height)));
 
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC4;
 
@@ -517,7 +507,7 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	}
 
 	if (this->shadow_per_ > 0.0f) {
-		this->shadow_vp_.Init(tml::XMFLOAT2EX(0.0f), tml::XMFLOAT2EX(this->shadow_size_));
+		this->shadow_vp_.Init(0.0f, 0.0f, this->shadow_size_, this->shadow_size_);
 	}
 
 	this->ao_quality_type_ = tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE::MEDIUM;
@@ -552,8 +542,8 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::FXAA;
 
-	this->device_context_->RSSetViewports(0U, nullptr);
 	this->device_context_->OMSetRenderTargets(0U, nullptr, nullptr);
+	this->device_context_->RSSetViewports(0U, nullptr);
 	this->device_context_->RSSetState(nullptr);
 	this->device_context_->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFU);
 	this->device_context_->OMSetDepthStencilState(nullptr, 0U);
@@ -866,56 +856,6 @@ void tml::graphic::Manager::Draw(const UINT instance_cnt)
 
 
 /**
- * @brief SetDrawViewportŠÖ”
- * @param vp (viewport)
- */
-void tml::graphic::Manager::SetDrawViewport(tml::graphic::Viewport *vp)
-{
-	this->draw_vp_cnt_ = 1U;
-
-	this->draw_vp_ary_[0] = vp->Get();
-
-	this->device_context_->RSSetViewports(this->draw_vp_cnt_, this->draw_vp_ary_.data());
-
-	return;
-}
-
-
-/**
- * @brief SetDrawViewportŠÖ”
- * @param vp_cnt (viewport_count)
- * @param vp_ary (viewport_array)
- */
-void tml::graphic::Manager::SetDrawViewport(const UINT vp_cnt, tml::graphic::Viewport *vp_ary)
-{
-	this->draw_vp_cnt_ = vp_cnt;
-
-	for (UINT vp_i = 0U; vp_i < vp_cnt; ++vp_i) {
-		this->draw_vp_ary_[vp_i] = vp_ary[vp_i].Get();
-	}
-
-	this->device_context_->RSSetViewports(this->draw_vp_cnt_, (this->draw_vp_cnt_ > 0U) ? this->draw_vp_ary_.data() : nullptr);
-
-	return;
-}
-
-
-/**
- * @brief ClearDrawViewportŠÖ”
- */
-void tml::graphic::Manager::ClearDrawViewport(void)
-{
-	if (this->draw_vp_cnt_ > 0U) {
-		this->draw_vp_cnt_ = 0U;
-
-		this->device_context_->RSSetViewports(this->draw_vp_cnt_, nullptr);
-	}
-
-	return;
-}
-
-
-/**
  * @brief SetDrawTargetŠÖ”
  * @param rt_tex (render_target_texture)
  * @param dt_tex (depth_target_texture)
@@ -967,6 +907,56 @@ void tml::graphic::Manager::ClearDrawTarget(void)
 		this->draw_dt_ = nullptr;
 
 		this->device_context_->OMSetRenderTargets(this->draw_rt_cnt_, nullptr, this->draw_dt_);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawViewportŠÖ”
+ * @param vp (viewport)
+ */
+void tml::graphic::Manager::SetDrawViewport(tml::graphic::Viewport *vp)
+{
+	this->draw_vp_cnt_ = 1U;
+
+	this->draw_vp_ary_[0] = vp->Get();
+
+	this->device_context_->RSSetViewports(this->draw_vp_cnt_, this->draw_vp_ary_.data());
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawViewportŠÖ”
+ * @param vp_cnt (viewport_count)
+ * @param vp_ary (viewport_array)
+ */
+void tml::graphic::Manager::SetDrawViewport(const UINT vp_cnt, tml::graphic::Viewport *vp_ary)
+{
+	this->draw_vp_cnt_ = vp_cnt;
+
+	for (UINT vp_i = 0U; vp_i < vp_cnt; ++vp_i) {
+		this->draw_vp_ary_[vp_i] = vp_ary[vp_i].Get();
+	}
+
+	this->device_context_->RSSetViewports(this->draw_vp_cnt_, (this->draw_vp_cnt_ > 0U) ? this->draw_vp_ary_.data() : nullptr);
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawViewportŠÖ”
+ */
+void tml::graphic::Manager::ClearDrawViewport(void)
+{
+	if (this->draw_vp_cnt_ > 0U) {
+		this->draw_vp_cnt_ = 0U;
+
+		this->device_context_->RSSetViewports(this->draw_vp_cnt_, nullptr);
 	}
 
 	return;
@@ -1659,23 +1649,6 @@ void tml::graphic::Manager::ClearDrawSamplerSR(const UINT index, const UINT samp
 	}
 
 	this->device_context_->PSSetSamplers(index, samp_cnt, &this->draw_samp_sr_ary_[index]);
-
-	return;
-}
-
-
-/**
- * @brief SetDrawCanvasŠÖ”
- * @param canvas (canvas)
- */
-void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
-{
-	if ((canvas == nullptr)
-	|| (this->draw_canvas_cnt_ >= tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT)) {
-		return;
-	}
-
-	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 
 	return;
 }

@@ -106,7 +106,6 @@ private:
 	tml::XMUINT2EX size_;
 	bool vsync_flg_;
 	UINT frame_rate_limit_;
-	tml::graphic::Viewport vp_;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE samp_quality_type_;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE motion_quality_type_;
 	UINT motion_frame_rate_limit_;
@@ -134,9 +133,6 @@ private:
 	UINT bloom_blur_weight_cnt_;
 	FLOAT bloom_blur_dispersion_val_;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE aa_quality_type_;
-	D3D11_VIEWPORT null_vp_;
-	std::array<D3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> null_vp_ary_;
-	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> null_rt_ary_;
 	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> null_scb_sr_ary_;
 	std::array<ID3D11ShaderResourceView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_SR_LIMIT> null_ssb_sr_ary_;
 	std::array<ID3D11UnorderedAccessView *, tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_UASR_LIMIT> null_ssb_uasr_ary_;
@@ -147,11 +143,11 @@ private:
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> null_samp_sr_ary_;
 
 	tml::graphic::DRAW_STAGE_DATA *draw_stage_dat_;
-	UINT draw_vp_cnt_;
-	std::array<D3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> draw_vp_ary_;
 	UINT draw_rt_cnt_;
 	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> draw_rt_ary_;
 	ID3D11DepthStencilView *draw_dt_;
+	UINT draw_vp_cnt_;
+	std::array<D3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> draw_vp_ary_;
 	ID3D11RasterizerState *draw_rs_;
 	ID3D11BlendState *draw_bs_;
 	ID3D11DepthStencilState *draw_ds_;
@@ -211,7 +207,6 @@ public:
 	const tml::XMUINT2EX &GetSize(void) const;
 	bool GetVsyncFlag(void) const;
 	UINT GetFrameRateLimit(void) const;
-	tml::graphic::Viewport *GetViewport(void);
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE GetSamplerQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE GetMotionQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE GetShadowQualityType(void) const;
@@ -230,12 +225,12 @@ public:
 	tml::graphic::DRAW_STAGE_DATA *GetDrawStageData(void);
 	void SetDrawStageData(tml::graphic::DRAW_STAGE_DATA *);
 	void ClearDrawStageData(void);
-	void SetDrawViewport(tml::graphic::Viewport *);
-	void SetDrawViewport(const UINT, tml::graphic::Viewport *);
-	void ClearDrawViewport(void);
 	void SetDrawTarget(tml::graphic::Texture *, tml::graphic::Texture *);
 	void SetDrawTarget(const UINT, tml::graphic::Texture **, tml::graphic::Texture *);
 	void ClearDrawTarget(void);
+	void SetDrawViewport(tml::graphic::Viewport *);
+	void SetDrawViewport(const UINT, tml::graphic::Viewport *);
+	void ClearDrawViewport(void);
 	void SetDrawRasterizerState(tml::graphic::RasterizerState *);
 	void ClearDrawRasterizerState(void);
 	void SetDrawBlendState(tml::graphic::BlendState *);
@@ -407,16 +402,6 @@ inline UINT tml::graphic::Manager::GetFrameRateLimit(void) const
 
 
 /**
- * @brief GetViewportŠÖ”
- * @return vp (viewport)
- */
-inline tml::graphic::Viewport *tml::graphic::Manager::GetViewport(void)
-{
-	return (&this->vp_);
-}
-
-
-/**
  * @brief GetSamplerQualityTypeŠÖ”
  * @return samp_quality_type (sampler_quality_type)
  */
@@ -504,6 +489,23 @@ inline void tml::graphic::Manager::SetDrawStageData(tml::graphic::DRAW_STAGE_DAT
 inline void tml::graphic::Manager::ClearDrawStageData(void)
 {
 	this->draw_stage_dat_ = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawCanvasŠÖ”
+ * @param canvas (canvas)
+ */
+inline void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
+{
+	if ((canvas == nullptr)
+	|| (this->draw_canvas_cnt_ >= tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT)) {
+		return;
+	}
+
+	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 
 	return;
 }

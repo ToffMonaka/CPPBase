@@ -146,83 +146,27 @@ INT tml::graphic::Canvas2D::Create(const tml::graphic::Canvas2DDesc &desc)
 
 
 /**
- * @brief SetDrawCameraŠÖ”
- * @param camera (camera)
- */
-void tml::graphic::Canvas2D::SetDrawCamera(tml::graphic::Camera2D *camera)
-{
-	this->draw_camera_ = camera;
-
-	return;
-}
-
-
-/**
- * @brief SetDrawLightŠÖ”
- * @param light (light)
- */
-void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light *light)
-{
-	if ((light == nullptr)
-	|| (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT)) {
-		return;
-	}
-
-	this->draw_light_ary_[this->draw_light_cnt_++] = light;
-
-	return;
-}
-
-
-/**
- * @brief SetDrawFogŠÖ”
- * @param fog (fog)
- */
-void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog *fog)
-{
-	if ((fog == nullptr)
-	|| (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::FOG_LIMIT)) {
-		return;
-	}
-
-	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
-
-	return;
-}
-
-
-/**
- * @brief SetDrawModelŠÖ”
- * @param model (model)
- */
-void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model)
-{
-	if ((model == nullptr)
-	|| (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::MODEL_LIMIT)) {
-		return;
-	}
-
-	this->draw_model_ary_[this->draw_model_cnt_++] = model;
-
-	return;
-}
-
-
-/**
  * @brief DrawŠÖ”
  */
 void tml::graphic::Canvas2D::Draw(void)
 {
 	if (this->draw_camera_ != nullptr) {
-		auto draw_camera = reinterpret_cast<tml::graphic::Camera2D *>(this->draw_camera_);
+		auto rt_tex = this->GetRenderTargetTexture().get();
+		auto rt_tex_size = rt_tex->GetSizeFast(0U);
+		auto vp = &this->vp_;
+
+		vp->SetX(static_cast<FLOAT>(rt_tex_size->x) * this->GetViewportX());
+		vp->SetY(static_cast<FLOAT>(rt_tex_size->y) * this->GetViewportY());
+		vp->SetWidth(static_cast<FLOAT>(rt_tex_size->x) * this->GetViewportWidth());
+		vp->SetHeight(static_cast<FLOAT>(rt_tex_size->y) * this->GetViewportHeight());
 
 		DirectX::XMMATRIX v_mat;
 		DirectX::XMMATRIX inv_v_mat;
 		DirectX::XMMATRIX p_mat;
 
-		this->GetManager()->GetViewMatrix(v_mat, (*draw_camera));
+		this->GetManager()->GetViewMatrix(v_mat, (*this->draw_camera_));
 		inv_v_mat = DirectX::XMMatrixInverse(nullptr, v_mat);
-		this->GetManager()->GetProjectionMatrix(p_mat, (*draw_camera));
+		this->GetManager()->GetProjectionMatrix(p_mat, (*this->draw_camera_));
 
 		tml::graphic::DRAW_STAGE_DATA draw_stage_dat(v_mat, inv_v_mat, p_mat);
 
@@ -234,9 +178,6 @@ void tml::graphic::Canvas2D::Draw(void)
 		while (draw_stage_dat.type != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
 			switch (draw_stage_dat.type) {
 			case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT: {
-				this->GetManager()->common.main_render_target_texture->ClearRenderTarget(tml::XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
-				this->GetManager()->common.main_depth_target_texture->ClearDepthTarget();
-
 				this->GetManager()->common.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);
 				this->GetManager()->common.header_shader_constant_buffer->UploadCPUBuffer();
 
@@ -264,8 +205,8 @@ void tml::graphic::Canvas2D::Draw(void)
 				break;
 			}
 			case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
-				this->GetManager()->SetDrawViewport(this->GetManager()->GetViewport());
-				this->GetManager()->SetDrawTarget(this->GetManager()->common.main_render_target_texture.get(), nullptr);
+				this->GetManager()->SetDrawTarget(rt_tex, nullptr);
+				this->GetManager()->SetDrawViewport(vp);
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 					this->draw_model_ary_[draw_model_i]->DrawStageForward2D();

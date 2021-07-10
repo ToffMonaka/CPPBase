@@ -26,8 +26,8 @@ protected:
 public:
 	Viewport();
 	Viewport(const D3D11_VIEWPORT &);
-	Viewport(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
-	Viewport(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
+	Viewport(const FLOAT, const FLOAT, const FLOAT, const FLOAT);
+	Viewport(const FLOAT, const FLOAT, const FLOAT, const FLOAT, const FLOAT, const FLOAT);
 	Viewport(const tml::graphic::Viewport &);
 	tml::graphic::Viewport &operator =(const tml::graphic::Viewport &);
 	Viewport(tml::graphic::Viewport &&) noexcept;
@@ -36,8 +36,8 @@ public:
 
 	virtual void Init(void);
 	virtual void Init(const D3D11_VIEWPORT &);
-	virtual void Init(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
-	virtual void Init(const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &, const tml::XMFLOAT2EX &);
+	virtual void Init(const FLOAT, const FLOAT, const FLOAT, const FLOAT);
+	virtual void Init(const FLOAT, const FLOAT, const FLOAT, const FLOAT, const FLOAT, const FLOAT);
 
 	const D3D11_VIEWPORT &Get(void) const;
 	void Set(const D3D11_VIEWPORT &);

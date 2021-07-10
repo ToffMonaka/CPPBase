@@ -73,7 +73,11 @@ INT tml::graphic::CanvasDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Canvas::Canvas() :
-	type_(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE)
+	type_(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE),
+	vp_x_(0.0f),
+	vp_y_(0.0f),
+	vp_w_(1.0f),
+	vp_h_(1.0f)
 {
 	return;
 }
@@ -94,6 +98,12 @@ tml::graphic::Canvas::~Canvas()
 void tml::graphic::Canvas::Init(void)
 {
 	this->type_ = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE;
+	this->rt_tex_.reset();
+	this->vp_.Init();
+	this->vp_x_ = 0.0f;
+	this->vp_y_ = 0.0f;
+	this->vp_w_ = 1.0f;
+	this->vp_h_ = 1.0f;
 
 	tml::graphic::ManagerResource::Init();
 
@@ -121,6 +131,18 @@ INT tml::graphic::Canvas::Create(const tml::graphic::CanvasDesc &desc, const tml
 	this->type_ = type;
 
 	return (0);
+}
+
+
+/**
+ * @brief SetRenderTargetTexture関数
+ * @param rt_tex (render_target_texture)
+ */
+void tml::graphic::Canvas::SetRenderTargetTexture(const tml::shared_ptr<tml::graphic::Texture> &rt_tex)
+{
+	this->rt_tex_ = rt_tex;
+
+	return;
 }
 
 
