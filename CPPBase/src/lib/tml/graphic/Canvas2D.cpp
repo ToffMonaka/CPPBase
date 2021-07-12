@@ -152,6 +152,7 @@ void tml::graphic::Canvas2D::Draw(void)
 {
 	if (this->draw_camera_ != nullptr) {
 		auto rt_tex = this->GetRenderTargetTexture().get();
+		auto rt_tex_clear_flg = this->GetRenderTargetTextureClearFlag();
 		auto rt_tex_size = rt_tex->GetSizeFast(0U);
 		auto vp = &this->vp_;
 
@@ -178,6 +179,10 @@ void tml::graphic::Canvas2D::Draw(void)
 		while (draw_stage_dat.type != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
 			switch (draw_stage_dat.type) {
 			case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT: {
+				if (rt_tex_clear_flg) {
+					rt_tex->ClearRenderTarget(tml::XMFLOAT4EX(0.0f, 0.0f, 0.0f, 1.0f));
+				}
+
 				this->GetManager()->common.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);
 				this->GetManager()->common.header_shader_constant_buffer->UploadCPUBuffer();
 
@@ -205,12 +210,15 @@ void tml::graphic::Canvas2D::Draw(void)
 				break;
 			}
 			case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
-				this->GetManager()->SetDrawTarget(rt_tex, nullptr);
+				this->GetManager()->SetDrawTargetTexture(rt_tex, nullptr);
 				this->GetManager()->SetDrawViewport(vp);
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 					this->draw_model_ary_[draw_model_i]->DrawStageForward2D();
 				}
+
+				this->GetManager()->ClearDrawTargetTexture();
+				this->GetManager()->ClearDrawViewport();
 
 				this->GetManager()->ClearDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM, sys_scb_ary.size());
 				this->GetManager()->ClearDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::SYSTEM, sys_ssb_ary.size());
@@ -220,9 +228,6 @@ void tml::graphic::Canvas2D::Draw(void)
 				break;
 			}
 			}
-
-			this->GetManager()->ClearDrawViewport();
-			this->GetManager()->ClearDrawTarget();
 		}
 
 		this->GetManager()->ClearDrawStageData();

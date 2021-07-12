@@ -74,6 +74,8 @@ INT tml::graphic::CanvasDesc::ReadValue(const tml::INIFile &ini_file)
  */
 tml::graphic::Canvas::Canvas() :
 	type_(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE),
+	rt_tex_clear_flg_(false),
+	dt_tex_clear_flg_(false),
 	vp_x_(0.0f),
 	vp_y_(0.0f),
 	vp_w_(1.0f),
@@ -99,6 +101,9 @@ void tml::graphic::Canvas::Init(void)
 {
 	this->type_ = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE;
 	this->rt_tex_.reset();
+	this->rt_tex_clear_flg_ = false;
+	this->dt_tex_.reset();
+	this->dt_tex_clear_flg_ = false;
 	this->vp_.Init();
 	this->vp_x_ = 0.0f;
 	this->vp_y_ = 0.0f;
@@ -141,6 +146,18 @@ INT tml::graphic::Canvas::Create(const tml::graphic::CanvasDesc &desc, const tml
 void tml::graphic::Canvas::SetRenderTargetTexture(const tml::shared_ptr<tml::graphic::Texture> &rt_tex)
 {
 	this->rt_tex_ = rt_tex;
+
+	return;
+}
+
+
+/**
+ * @brief SetDepthTargetTextureä÷êî
+ * @param dt_tex (depth_target_texture)
+ */
+void tml::graphic::Canvas::SetDepthTargetTexture(const tml::shared_ptr<tml::graphic::Texture> &dt_tex)
+{
+	this->dt_tex_ = dt_tex;
 
 	return;
 }

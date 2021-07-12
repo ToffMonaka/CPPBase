@@ -24,6 +24,8 @@ private:
 	tml::graphic::Manager *mgr_;
 
 public:
+	tml::shared_ptr<tml::graphic::Texture> main_render_target_texture;
+	tml::shared_ptr<tml::graphic::Texture> main_depth_target_texture;
 	tml::shared_ptr<tml::graphic::RasterizerState> default_rasterizer_state;
 	tml::shared_ptr<tml::graphic::RasterizerState> wireframe_rasterizer_state;
 	tml::shared_ptr<tml::graphic::RasterizerState> front_culling_rasterizer_state;
@@ -43,8 +45,7 @@ public:
 	tml::shared_ptr<tml::graphic::CameraShaderStructuredBuffer> camera_shader_structured_buffer;
 	tml::shared_ptr<tml::graphic::LightShaderStructuredBuffer> light_shader_structured_buffer;
 	tml::shared_ptr<tml::graphic::FogShaderStructuredBuffer> fog_shader_structured_buffer;
-	tml::shared_ptr<tml::graphic::Texture> main_render_target_texture;
-	tml::shared_ptr<tml::graphic::Texture> main_depth_target_texture;
+	tml::shared_ptr<tml::graphic::Mesh> model_2d_mesh;
 	tml::shared_ptr<tml::graphic::Sampler> cc_sampler;
 	tml::shared_ptr<tml::graphic::Sampler> cw_sampler;
 	tml::shared_ptr<tml::graphic::Sampler> wc_sampler;

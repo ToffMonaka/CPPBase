@@ -19,7 +19,7 @@ class Camera2DDesc : public tml::graphic::CameraDesc
 {
 public:
 	tml::XMPosition2D position;
-	tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE projection_type;
+	tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE projection_type;
 	tml::XMFLOAT2EX fov_size;
 
 protected:
@@ -60,7 +60,7 @@ public: tml::graphic::Camera2D &operator =(const tml::graphic::Camera2D &) = del
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE proj_type_;
+	tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE proj_type_;
 	tml::XMFLOAT2EX fov_size_;
 
 public:
@@ -76,7 +76,7 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::Camera2DDesc &);
 
-	tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE GetProjectionType(void) const;
+	tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE GetProjectionType(void) const;
 	const tml::XMFLOAT2EX &GetFOVSize(void) const;
 	void SetFOVSize(const tml::XMFLOAT2EX &);
 };
@@ -99,7 +99,7 @@ inline void tml::graphic::Camera2D::Release(void)
  * @brief GetProjectionTypeŠÖ”
  * @return proj_type (projection_type)
  */
-inline tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE tml::graphic::Camera2D::GetProjectionType(void) const
+inline tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE tml::graphic::Camera2D::GetProjectionType(void) const
 {
 	return (this->proj_type_);
 }

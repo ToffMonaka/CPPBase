@@ -19,7 +19,7 @@ class Camera3DDesc : public tml::graphic::CameraDesc
 {
 public:
 	tml::XMPosition3D position;
-	tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE projection_type;
+	tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE projection_type;
 	tml::XMFLOAT2EX fov_size;
 	FLOAT fov_angle;
 	FLOAT near_clip;
@@ -63,7 +63,7 @@ public: tml::graphic::Camera3D &operator =(const tml::graphic::Camera3D &) = del
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE proj_type_;
+	tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE proj_type_;
 	tml::XMFLOAT2EX fov_size_;
 	FLOAT fov_angle_;
 	FLOAT near_clip_;
@@ -82,7 +82,7 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::Camera3DDesc &);
 
-	tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE GetProjectionType(void) const;
+	tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE GetProjectionType(void) const;
 	const tml::XMFLOAT2EX &GetFOVSize(void) const;
 	void SetFOVSize(const tml::XMFLOAT2EX &);
 	FLOAT GetFOVAngle(void) const;
@@ -111,7 +111,7 @@ inline void tml::graphic::Camera3D::Release(void)
  * @brief GetProjectionTypeŠÖ”
  * @return proj_type (projection_type)
  */
-inline tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE tml::graphic::Camera3D::GetProjectionType(void) const
+inline tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE tml::graphic::Camera3D::GetProjectionType(void) const
 {
 	return (this->proj_type_);
 }

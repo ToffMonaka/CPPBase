@@ -232,7 +232,7 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 
 			this->wait_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->wait_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize(0U)->x), static_cast<FLOAT>(tex->GetSize(0U)->y));
+			this->wait_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
 		}
 	}
 

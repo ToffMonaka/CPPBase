@@ -672,7 +672,7 @@ DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix(DirectX::XMMATRIX &dst_m
 DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera2D &camera)
 {
 	switch (camera.GetProjectionType()) {
-	case tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::ORTHOGRAPHIC: {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::ORTHOGRAPHIC: {
 		dst_mat = DirectX::XMMatrixOrthographicLH(camera.GetFOVSize().x, camera.GetFOVSize().y, 0.0f, 1.0f);
 
 		break;
@@ -697,12 +697,12 @@ DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix(DirectX::XMMATRIX 
 DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera3D &camera)
 {
 	switch (camera.GetProjectionType()) {
-	case tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::PERSPECTIVE: {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::PERSPECTIVE: {
 		dst_mat = DirectX::XMMatrixPerspectiveFovLH(camera.GetFOVAngle(), camera.GetFOVSize().x / camera.GetFOVSize().y, camera.GetNearClip(), camera.GetFarClip());
 
 		break;
 	}
-	case tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::ORTHOGRAPHIC: {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::ORTHOGRAPHIC: {
 		dst_mat = DirectX::XMMatrixOrthographicLH(camera.GetFOVSize().x, camera.GetFOVSize().y, camera.GetNearClip(), camera.GetFarClip());
 
 		break;
@@ -856,11 +856,11 @@ void tml::graphic::Manager::Draw(const UINT instance_cnt)
 
 
 /**
- * @brief SetDrawTargetŠÖ”
+ * @brief SetDrawTargetTextureŠÖ”
  * @param rt_tex (render_target_texture)
  * @param dt_tex (depth_target_texture)
  */
-void tml::graphic::Manager::SetDrawTarget(tml::graphic::Texture *rt_tex, tml::graphic::Texture *dt_tex)
+void tml::graphic::Manager::SetDrawTargetTexture(tml::graphic::Texture *rt_tex, tml::graphic::Texture *dt_tex)
 {
 	this->draw_rt_cnt_ = 1U;
 
@@ -875,12 +875,12 @@ void tml::graphic::Manager::SetDrawTarget(tml::graphic::Texture *rt_tex, tml::gr
 
 
 /**
- * @brief SetDrawTargetŠÖ”
+ * @brief SetDrawTargetTextureŠÖ”
  * @param rt_tex_cnt (render_target_texture_count)
  * @param rt_tex_ary (render_target_texture_array)
  * @param dt_tex (depth_target_texture)
  */
-void tml::graphic::Manager::SetDrawTarget(const UINT rt_tex_cnt, tml::graphic::Texture **rt_tex_ary, tml::graphic::Texture *dt_tex)
+void tml::graphic::Manager::SetDrawTargetTexture(const UINT rt_tex_cnt, tml::graphic::Texture **rt_tex_ary, tml::graphic::Texture *dt_tex)
 {
 	this->draw_rt_cnt_ = rt_tex_cnt;
 
@@ -897,9 +897,9 @@ void tml::graphic::Manager::SetDrawTarget(const UINT rt_tex_cnt, tml::graphic::T
 
 
 /**
- * @brief ClearDrawTargetŠÖ”
+ * @brief ClearDrawTargetTextureŠÖ”
  */
-void tml::graphic::Manager::ClearDrawTarget(void)
+void tml::graphic::Manager::ClearDrawTargetTexture(void)
 {
 	if ((this->draw_rt_cnt_ > 0U)
 	|| (this->draw_dt_ != nullptr)) {
@@ -1206,13 +1206,7 @@ void tml::graphic::Manager::SetDrawShaderConstantBufferSR(const UINT index, tml:
  */
 void tml::graphic::Manager::SetDrawShaderConstantBufferSR(const UINT index, const UINT scb_cnt, tml::graphic::ShaderConstantBuffer **scb_ary)
 {
-	if (scb_cnt <= 1U) {
-		if (scb_cnt <= 0U) {
-			return;
-		}
-
-		this->SetDrawShaderConstantBufferSR(index, scb_ary[0]);
-
+	if (scb_cnt <= 0U) {
 		return;
 	}
 
@@ -1257,13 +1251,7 @@ void tml::graphic::Manager::ClearDrawShaderConstantBufferSR(const UINT index)
  */
 void tml::graphic::Manager::ClearDrawShaderConstantBufferSR(const UINT index, const UINT scb_cnt)
 {
-	if (scb_cnt <= 1U) {
-		if (scb_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearDrawShaderConstantBufferSR(index);
-
+	if (scb_cnt <= 0U) {
 		return;
 	}
 
@@ -1316,13 +1304,7 @@ void tml::graphic::Manager::SetDrawShaderStructuredBufferSR(const UINT index, tm
  */
 void tml::graphic::Manager::SetDrawShaderStructuredBufferSR(const UINT index, const UINT ssb_cnt, tml::graphic::ShaderStructuredBuffer **ssb_ary)
 {
-	if (ssb_cnt <= 1U) {
-		if (ssb_cnt <= 0U) {
-			return;
-		}
-
-		this->SetDrawShaderStructuredBufferSR(index, ssb_ary[0]);
-
+	if (ssb_cnt <= 0U) {
 		return;
 	}
 
@@ -1367,13 +1349,7 @@ void tml::graphic::Manager::ClearDrawShaderStructuredBufferSR(const UINT index)
  */
 void tml::graphic::Manager::ClearDrawShaderStructuredBufferSR(const UINT index, const UINT ssb_cnt)
 {
-	if (ssb_cnt <= 1U) {
-		if (ssb_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearDrawShaderStructuredBufferSR(index);
-
+	if (ssb_cnt <= 0U) {
 		return;
 	}
 
@@ -1497,13 +1473,7 @@ void tml::graphic::Manager::SetDrawTextureSR(const UINT index, tml::graphic::Tex
  */
 void tml::graphic::Manager::SetDrawTextureSR(const UINT index, const UINT tex_cnt, tml::graphic::Texture **tex_ary)
 {
-	if (tex_cnt <= 1U) {
-		if (tex_cnt <= 0U) {
-			return;
-		}
-
-		this->SetDrawTextureSR(index, tex_ary[0]);
-
+	if (tex_cnt <= 0U) {
 		return;
 	}
 
@@ -1540,13 +1510,7 @@ void tml::graphic::Manager::ClearDrawTextureSR(const UINT index)
  */
 void tml::graphic::Manager::ClearDrawTextureSR(const UINT index, const UINT tex_cnt)
 {
-	if (tex_cnt <= 1U) {
-		if (tex_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearDrawTextureSR(index);
-
+	if (tex_cnt <= 0U) {
 		return;
 	}
 
@@ -1591,13 +1555,7 @@ void tml::graphic::Manager::SetDrawSamplerSR(const UINT index, tml::graphic::Sam
  */
 void tml::graphic::Manager::SetDrawSamplerSR(const UINT index, const UINT samp_cnt, tml::graphic::Sampler **samp_ary)
 {
-	if (samp_cnt <= 1U) {
-		if (samp_cnt <= 0U) {
-			return;
-		}
-
-		this->SetDrawSamplerSR(index, samp_ary[0]);
-
+	if (samp_cnt <= 0U) {
 		return;
 	}
 
@@ -1634,13 +1592,7 @@ void tml::graphic::Manager::ClearDrawSamplerSR(const UINT index)
  */
 void tml::graphic::Manager::ClearDrawSamplerSR(const UINT index, const UINT samp_cnt)
 {
-	if (samp_cnt <= 1U) {
-		if (samp_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearDrawSamplerSR(index);
-
+	if (samp_cnt <= 0U) {
 		return;
 	}
 
@@ -1722,13 +1674,7 @@ void tml::graphic::Manager::SetComputeShaderConstantBufferSR(const UINT index, t
  */
 void tml::graphic::Manager::SetComputeShaderConstantBufferSR(const UINT index, const UINT scb_cnt, tml::graphic::ShaderConstantBuffer **scb_ary)
 {
-	if (scb_cnt <= 1U) {
-		if (scb_cnt <= 0U) {
-			return;
-		}
-
-		this->SetComputeShaderConstantBufferSR(index, scb_ary[0]);
-
+	if (scb_cnt <= 0U) {
 		return;
 	}
 
@@ -1765,13 +1711,7 @@ void tml::graphic::Manager::ClearComputeShaderConstantBufferSR(const UINT index)
  */
 void tml::graphic::Manager::ClearComputeShaderConstantBufferSR(const UINT index, const UINT scb_cnt)
 {
-	if (scb_cnt <= 1U) {
-		if (scb_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearComputeShaderConstantBufferSR(index);
-
+	if (scb_cnt <= 0U) {
 		return;
 	}
 
@@ -1816,13 +1756,7 @@ void tml::graphic::Manager::SetComputeShaderStructuredBufferSR(const UINT index,
  */
 void tml::graphic::Manager::SetComputeShaderStructuredBufferSR(const UINT index, const UINT ssb_cnt, tml::graphic::ShaderStructuredBuffer **ssb_ary)
 {
-	if (ssb_cnt <= 1U) {
-		if (ssb_cnt <= 0U) {
-			return;
-		}
-
-		this->SetComputeShaderStructuredBufferSR(index, ssb_ary[0]);
-
+	if (ssb_cnt <= 0U) {
 		return;
 	}
 
@@ -1859,13 +1793,7 @@ void tml::graphic::Manager::ClearComputeShaderStructuredBufferSR(const UINT inde
  */
 void tml::graphic::Manager::ClearComputeShaderStructuredBufferSR(const UINT index, const UINT ssb_cnt)
 {
-	if (ssb_cnt <= 1U) {
-		if (ssb_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearComputeShaderStructuredBufferSR(index);
-
+	if (ssb_cnt <= 0U) {
 		return;
 	}
 
@@ -1910,13 +1838,7 @@ void tml::graphic::Manager::SetComputeShaderStructuredBufferUASR(const UINT inde
  */
 void tml::graphic::Manager::SetComputeShaderStructuredBufferUASR(const UINT index, const UINT ssb_cnt, tml::graphic::ShaderStructuredBuffer **ssb_ary)
 {
-	if (ssb_cnt <= 1U) {
-		if (ssb_cnt <= 0U) {
-			return;
-		}
-
-		this->SetComputeShaderStructuredBufferUASR(index, ssb_ary[0]);
-
+	if (ssb_cnt <= 0U) {
 		return;
 	}
 
@@ -1953,13 +1875,7 @@ void tml::graphic::Manager::ClearComputeShaderStructuredBufferUASR(const UINT in
  */
 void tml::graphic::Manager::ClearComputeShaderStructuredBufferUASR(const UINT index, const UINT ssb_cnt)
 {
-	if (ssb_cnt <= 1U) {
-		if (ssb_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearComputeShaderStructuredBufferUASR(index);
-
+	if (ssb_cnt <= 0U) {
 		return;
 	}
 
@@ -2004,13 +1920,7 @@ void tml::graphic::Manager::SetComputeTextureSR(const UINT index, tml::graphic::
  */
 void tml::graphic::Manager::SetComputeTextureSR(const UINT index, const UINT tex_cnt, tml::graphic::Texture **tex_ary)
 {
-	if (tex_cnt <= 1U) {
-		if (tex_cnt <= 0U) {
-			return;
-		}
-
-		this->SetComputeTextureSR(index, tex_ary[0]);
-
+	if (tex_cnt <= 0U) {
 		return;
 	}
 
@@ -2047,13 +1957,7 @@ void tml::graphic::Manager::ClearComputeTextureSR(const UINT index)
  */
 void tml::graphic::Manager::ClearComputeTextureSR(const UINT index, const UINT tex_cnt)
 {
-	if (tex_cnt <= 1U) {
-		if (tex_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearComputeTextureSR(index);
-
+	if (tex_cnt <= 0U) {
 		return;
 	}
 
@@ -2098,13 +2002,7 @@ void tml::graphic::Manager::SetComputeTextureUASR(const UINT index, tml::graphic
  */
 void tml::graphic::Manager::SetComputeTextureUASR(const UINT index, const UINT tex_cnt, tml::graphic::Texture **tex_ary)
 {
-	if (tex_cnt <= 1U) {
-		if (tex_cnt <= 0U) {
-			return;
-		}
-
-		this->SetComputeTextureUASR(index, tex_ary[0]);
-
+	if (tex_cnt <= 0U) {
 		return;
 	}
 
@@ -2141,13 +2039,7 @@ void tml::graphic::Manager::ClearComputeTextureUASR(const UINT index)
  */
 void tml::graphic::Manager::ClearComputeTextureUASR(const UINT index, const UINT tex_cnt)
 {
-	if (tex_cnt <= 1U) {
-		if (tex_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearComputeTextureUASR(index);
-
+	if (tex_cnt <= 0U) {
 		return;
 	}
 
@@ -2192,13 +2084,7 @@ void tml::graphic::Manager::SetComputeSamplerSR(const UINT index, tml::graphic::
  */
 void tml::graphic::Manager::SetComputeSamplerSR(const UINT index, const UINT samp_cnt, tml::graphic::Sampler **samp_ary)
 {
-	if (samp_cnt <= 1U) {
-		if (samp_cnt <= 0U) {
-			return;
-		}
-
-		this->SetComputeSamplerSR(index, samp_ary[0]);
-
+	if (samp_cnt <= 0U) {
 		return;
 	}
 
@@ -2235,13 +2121,7 @@ void tml::graphic::Manager::ClearComputeSamplerSR(const UINT index)
  */
 void tml::graphic::Manager::ClearComputeSamplerSR(const UINT index, const UINT samp_cnt)
 {
-	if (samp_cnt <= 1U) {
-		if (samp_cnt <= 0U) {
-			return;
-		}
-
-		this->ClearComputeSamplerSR(index);
-
+	if (samp_cnt <= 0U) {
 		return;
 	}
 

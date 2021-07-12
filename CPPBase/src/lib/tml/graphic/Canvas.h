@@ -61,6 +61,9 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE type_;
 	tml::shared_ptr<tml::graphic::Texture> rt_tex_;
+	bool rt_tex_clear_flg_;
+	tml::shared_ptr<tml::graphic::Texture> dt_tex_;
+	bool dt_tex_clear_flg_;
 	FLOAT vp_x_;
 	FLOAT vp_y_;
 	FLOAT vp_w_;
@@ -82,6 +85,12 @@ public:
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE GetType(void) const;
 	const tml::shared_ptr<tml::graphic::Texture> &GetRenderTargetTexture(void);
 	void SetRenderTargetTexture(const tml::shared_ptr<tml::graphic::Texture> &);
+	bool GetRenderTargetTextureClearFlag(void) const;
+	void SetRenderTargetTextureClearFlag(const bool);
+	const tml::shared_ptr<tml::graphic::Texture> &GetDepthTargetTexture(void);
+	void SetDepthTargetTexture(const tml::shared_ptr<tml::graphic::Texture> &);
+	bool GetDepthTargetTextureClearFlag(void) const;
+	void SetDepthTargetTextureClearFlag(const bool);
 	FLOAT GetViewportX(void) const;
 	void SetViewportX(const FLOAT);
 	FLOAT GetViewportY(void) const;
@@ -120,12 +129,65 @@ inline tml::ConstantUtil::GRAPHIC::CANVAS_TYPE tml::graphic::Canvas::GetType(voi
 
 /**
  * @brief GetRenderTargetTextureä÷êî
- * @return rt_tex (render_target_texture)<br>
- * nullptr=é∏îs
+ * @return rt_tex (render_target_texture)
  */
 inline const tml::shared_ptr<tml::graphic::Texture> &tml::graphic::Canvas::GetRenderTargetTexture(void)
 {
 	return (this->rt_tex_);
+}
+
+
+/**
+ * @brief GetRenderTargetTextureClearFlagä÷êî
+ * @return rt_tex_clear_flg (render_target_texture_clear_flag)
+ */
+inline bool tml::graphic::Canvas::GetRenderTargetTextureClearFlag(void) const
+{
+	return (this->rt_tex_clear_flg_);
+}
+
+
+/**
+ * @brief SetRenderTargetTextureClearFlagä÷êî
+ * @param rt_tex_clear_flg (render_target_texture_clear_flag)
+ */
+inline void tml::graphic::Canvas::SetRenderTargetTextureClearFlag(const bool rt_tex_clear_flg)
+{
+	this->rt_tex_clear_flg_ = rt_tex_clear_flg;
+
+	return;
+}
+
+
+/**
+ * @brief GetDepthTargetTextureä÷êî
+ * @return dt_tex (depth_target_texture)
+ */
+inline const tml::shared_ptr<tml::graphic::Texture> &tml::graphic::Canvas::GetDepthTargetTexture(void)
+{
+	return (this->dt_tex_);
+}
+
+
+/**
+ * @brief GetDepthTargetTextureClearFlagä÷êî
+ * @return dt_tex_clear_flg (depth_target_texture_clear_flag)
+ */
+inline bool tml::graphic::Canvas::GetDepthTargetTextureClearFlag(void) const
+{
+	return (this->dt_tex_clear_flg_);
+}
+
+
+/**
+ * @brief SetDepthTargetTextureClearFlagä÷êî
+ * @param dt_tex_clear_flg (depth_target_texture_clear_flag)
+ */
+inline void tml::graphic::Canvas::SetDepthTargetTextureClearFlag(const bool dt_tex_clear_flg)
+{
+	this->dt_tex_clear_flg_ = dt_tex_clear_flg;
+
+	return;
 }
 
 

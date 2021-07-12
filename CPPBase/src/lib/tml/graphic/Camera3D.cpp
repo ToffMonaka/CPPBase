@@ -12,7 +12,7 @@
  * @brief コンストラクタ
  */
 tml::graphic::Camera3DDesc::Camera3DDesc() :
-	projection_type(tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::NONE),
+	projection_type(tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE),
 	fov_angle(0.0f),
 	fov_size(0.0f),
 	near_clip(0.0f),
@@ -41,7 +41,7 @@ void tml::graphic::Camera3DDesc::Init(void)
 	this->Release();
 
 	this->position.Init();
-	this->projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::NONE;
+	this->projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE;
 	this->fov_angle = 0.0f;
 	this->fov_size = 0.0f;
 	this->near_clip = 0.0f;
@@ -85,7 +85,7 @@ INT tml::graphic::Camera3DDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Camera3D::Camera3D() :
-	proj_type_(tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::NONE),
+	proj_type_(tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE),
 	fov_angle_(0.0f),
 	fov_size_(0.0f),
 	near_clip_(0.0f),
@@ -114,7 +114,7 @@ void tml::graphic::Camera3D::Init(void)
 	this->Release();
 
 	this->position.Init();
-	this->proj_type_ = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::NONE;
+	this->proj_type_ = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE;
 	this->fov_angle_ = 0.0f;
 	this->fov_size_ = 0.0f;
 	this->near_clip_ = 0.0f;

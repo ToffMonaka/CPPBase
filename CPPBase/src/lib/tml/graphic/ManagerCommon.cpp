@@ -64,6 +64,8 @@ void tml::graphic::ManagerCommon::Init(void)
 
 	this->mgr_ = nullptr;
 
+	this->main_render_target_texture.reset();
+	this->main_depth_target_texture.reset();
 	this->default_rasterizer_state.reset();
 	this->wireframe_rasterizer_state.reset();
 	this->front_culling_rasterizer_state.reset();
@@ -87,8 +89,7 @@ void tml::graphic::ManagerCommon::Init(void)
 	this->camera_shader_structured_buffer.reset();
 	this->light_shader_structured_buffer.reset();
 	this->fog_shader_structured_buffer.reset();
-	this->main_render_target_texture.reset();
-	this->main_depth_target_texture.reset();
+	this->model_2d_mesh.reset();
 	this->cc_sampler.reset();
 	this->cw_sampler.reset();
 	this->wc_sampler.reset();
@@ -115,6 +116,37 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	this->Init();
 
 	this->mgr_ = mgr;
+
+	{// MainRenderTargetTexture Create
+		tml::graphic::TextureDesc desc;
+
+		desc.SetManager(this->mgr_);
+		desc.swap_chain = this->mgr_->GetSwapChain();
+		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::UASR);
+		desc.render_target_desc_null_flag = true;
+		desc.sr_desc_null_flag = true;
+		desc.uasr_desc_null_flag = true;
+
+		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_render_target_texture, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// MainDepthTargetTexture Create
+		tml::graphic::TextureDesc desc;
+
+		desc.SetManager(this->mgr_);
+		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::DEPTH_TARGET, DXGI_FORMAT_R24G8_TYPELESS, this->mgr_->GetSize());
+		desc.depth_target_format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_depth_target_texture, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
 
 	{// DefaultRasterizerState Create
 		tml::graphic::RasterizerStateDesc desc;
@@ -287,37 +319,6 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// MainRenderTargetTexture Create
-		tml::graphic::TextureDesc desc;
-
-		desc.SetManager(this->mgr_);
-		desc.swap_chain = this->mgr_->GetSwapChain();
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::UASR);
-		desc.render_target_desc_null_flag = true;
-		desc.sr_desc_null_flag = true;
-		desc.uasr_desc_null_flag = true;
-
-		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_render_target_texture, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
-	{// MainDepthTargetTexture Create
-		tml::graphic::TextureDesc desc;
-
-		desc.SetManager(this->mgr_);
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::DEPTH_TARGET, DXGI_FORMAT_R24G8_TYPELESS, this->mgr_->GetSize());
-		desc.depth_target_format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_depth_target_texture, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
 	{// Model2DShader Create
 		tml::graphic::ShaderDesc desc;
 
@@ -392,6 +393,28 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FogShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT);
 
 		if (this->mgr_->GetResource<tml::graphic::FogShaderStructuredBuffer>(this->fog_shader_structured_buffer, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// Model2DMesh Create
+		tml::graphic::MeshDesc desc;
+		std::array<tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
+			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
+			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
+			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
+			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
+		};
+		std::array<UINT, 4U> ib_element_ary = {0U, 1U, 2U, 3U};
+
+		desc.SetManager(this->mgr_);
+		desc.SetVertexBufferDesc(sizeof(tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
+		desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
+		desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+
+		if (this->mgr_->GetResource<tml::graphic::Mesh>(model_2d_mesh, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

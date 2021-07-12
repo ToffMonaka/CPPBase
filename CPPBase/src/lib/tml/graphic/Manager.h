@@ -225,9 +225,9 @@ public:
 	tml::graphic::DRAW_STAGE_DATA *GetDrawStageData(void);
 	void SetDrawStageData(tml::graphic::DRAW_STAGE_DATA *);
 	void ClearDrawStageData(void);
-	void SetDrawTarget(tml::graphic::Texture *, tml::graphic::Texture *);
-	void SetDrawTarget(const UINT, tml::graphic::Texture **, tml::graphic::Texture *);
-	void ClearDrawTarget(void);
+	void SetDrawTargetTexture(tml::graphic::Texture *, tml::graphic::Texture *);
+	void SetDrawTargetTexture(const UINT, tml::graphic::Texture **, tml::graphic::Texture *);
+	void ClearDrawTargetTexture(void);
 	void SetDrawViewport(tml::graphic::Viewport *);
 	void SetDrawViewport(const UINT, tml::graphic::Viewport *);
 	void ClearDrawViewport(void);

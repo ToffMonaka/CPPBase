@@ -12,7 +12,7 @@
  * @brief コンストラクタ
  */
 tml::graphic::Camera2DDesc::Camera2DDesc() :
-	projection_type(tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::NONE),
+	projection_type(tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::NONE),
 	fov_size(0.0f)
 {
 	return;
@@ -38,7 +38,7 @@ void tml::graphic::Camera2DDesc::Init(void)
 	this->Release();
 
 	this->position.Init();
-	this->projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::NONE;
+	this->projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::NONE;
 	this->fov_size = 0.0f;
 
 	tml::graphic::CameraDesc::Init();
@@ -79,7 +79,7 @@ INT tml::graphic::Camera2DDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Camera2D::Camera2D() :
-	proj_type_(tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::NONE),
+	proj_type_(tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::NONE),
 	fov_size_(0.0f)
 {
 	return;
@@ -105,7 +105,7 @@ void tml::graphic::Camera2D::Init(void)
 	this->Release();
 
 	this->position.Init();
-	this->proj_type_ = tml::ConstantUtil::GRAPHIC::CAMERA_PROJECTION_TYPE::NONE;
+	this->proj_type_ = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::NONE;
 	this->fov_size_ = 0.0f;
 
 	tml::graphic::Camera::Init();
