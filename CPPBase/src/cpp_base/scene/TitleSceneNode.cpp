@@ -297,7 +297,7 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	}
 
 	{// StartModelTexture Update
-		auto tex = this->start_model->GetTexture(this->start_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+		auto &tex = this->start_model->GetTexture(this->start_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
 		tex->DrawCPUBufferString(L"スタート", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->start_font.get());
@@ -382,7 +382,7 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 		version_name = L"Version ";
 		version_name += cpp_base::ConstantUtil::APPLICATION::VERSION_NAME;
 
-		auto tex = this->footer_model->GetTexture(this->footer_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+		auto &tex = this->footer_model->GetTexture(this->footer_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
 		tex->DrawCPUBufferString(company_name.c_str(), tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(4, -4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_LEFT, this->footer_font.get());
@@ -404,8 +404,8 @@ INT cpp_base::scene::TitleSceneNode::OnStart(void)
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
-	if (this->canvas_2d == nullptr) {
-		graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d");
+	if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
+		return (-1);
 	}
 
 	sound_mgr->PlaySound(this->bgm_sound.get(), true);
@@ -441,6 +441,22 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 
 			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 				if (this->start_model->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {
+					{// SelectScene Start
+						tml::shared_ptr<tml::scene::Scene> scene;
+
+						if (this->GetManager()->factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/select_scene.xml")) == nullptr) {
+							this->GetManager()->EndScene();
+
+							return;
+						}
+
+						if (this->GetManager()->StartScene(scene) < 0) {
+							this->GetManager()->EndScene();
+
+							return;
+						}
+					}
+
 					sound_mgr->PlaySound(this->start_se_sound.get(), false);
 				}
 			}
@@ -458,12 +474,10 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 		this->start_model->color = tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	if (this->canvas_2d != nullptr) {
-		this->canvas_2d->SetDrawModel(this->bg_model.get());
-		this->canvas_2d->SetDrawModel(this->logo_model.get());
-		this->canvas_2d->SetDrawModel(this->start_model.get());
-		this->canvas_2d->SetDrawModel(this->footer_model.get());
-	}
+	this->canvas_2d->SetDrawModel(this->bg_model.get());
+	this->canvas_2d->SetDrawModel(this->logo_model.get());
+	this->canvas_2d->SetDrawModel(this->start_model.get());
+	this->canvas_2d->SetDrawModel(this->footer_model.get());
 
 	return;
 }

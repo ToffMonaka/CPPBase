@@ -182,6 +182,10 @@
     <ClCompile Include="src\cpp_base\scene\Manager.cpp" />
     <ClCompile Include="src\cpp_base\scene\ManagerCommon.cpp" />
     <ClCompile Include="src\cpp_base\scene\ManagerFactory.cpp" />
+    <ClCompile Include="src\cpp_base\scene\SelectScene.cpp" />
+    <ClCompile Include="src\cpp_base\scene\SelectSceneNode.cpp" />
+    <ClCompile Include="src\cpp_base\scene\StageScene.cpp" />
+    <ClCompile Include="src\cpp_base\scene\StageSceneNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\TitleScene.cpp" />
     <ClCompile Include="src\cpp_base\scene\TitleSceneNode.cpp" />
     <ClCompile Include="src\cpp_base\sound\Manager.cpp" />
@@ -332,6 +336,10 @@
     <ClInclude Include="src\cpp_base\scene\Manager.h" />
     <ClInclude Include="src\cpp_base\scene\ManagerCommon.h" />
     <ClInclude Include="src\cpp_base\scene\ManagerFactory.h" />
+    <ClInclude Include="src\cpp_base\scene\SelectScene.h" />
+    <ClInclude Include="src\cpp_base\scene\SelectSceneNode.h" />
+    <ClInclude Include="src\cpp_base\scene\StageScene.h" />
+    <ClInclude Include="src\cpp_base\scene\StageSceneNode.h" />
     <ClInclude Include="src\cpp_base\scene\TitleScene.h" />
     <ClInclude Include="src\cpp_base\scene\TitleSceneNode.h" />
     <ClInclude Include="src\cpp_base\sound\Manager.h" />

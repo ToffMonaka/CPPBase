@@ -23,9 +23,13 @@ class Manager;
 class BaseScene;
 class InitScene;
 class TitleScene;
+class SelectScene;
+class StageScene;
 class BaseNode;
 class InitSceneNode;
 class TitleSceneNode;
+class SelectSceneNode;
+class StageSceneNode;
 class DebugNode;
 }
 }

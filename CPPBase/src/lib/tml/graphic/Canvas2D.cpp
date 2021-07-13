@@ -84,6 +84,11 @@ INT tml::graphic::Canvas2DDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Canvas2D::Canvas2D() :
+	rt_tex_clear_flg_(false),
+	vp_x_(0.0f),
+	vp_y_(0.0f),
+	vp_w_(1.0f),
+	vp_h_(1.0f),
 	draw_camera_(nullptr),
 	draw_light_cnt_(0U),
 	draw_light_ary_{},
@@ -114,6 +119,13 @@ void tml::graphic::Canvas2D::Init(void)
 {
 	this->Release();
 
+	this->rt_tex_.reset();
+	this->rt_tex_clear_flg_ = false;
+	this->vp_.Init();
+	this->vp_x_ = 0.0f;
+	this->vp_y_ = 0.0f;
+	this->vp_w_ = 1.0f;
+	this->vp_h_ = 1.0f;
 	this->draw_camera_ = nullptr;
 	this->draw_light_cnt_ = 0U;
 	this->draw_fog_cnt_ = 0U;
@@ -142,6 +154,18 @@ INT tml::graphic::Canvas2D::Create(const tml::graphic::Canvas2DDesc &desc)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief SetRenderTargetTexture関数
+ * @param rt_tex (render_target_texture)
+ */
+void tml::graphic::Canvas2D::SetRenderTargetTexture(const tml::shared_ptr<tml::graphic::Texture> &rt_tex)
+{
+	this->rt_tex_ = rt_tex;
+
+	return;
 }
 
 

@@ -216,6 +216,7 @@ public:
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::Model2DStage> &);
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
+
 	virtual void DrawStageInit(void);
 	virtual void DrawStageForward2D(void);
 };

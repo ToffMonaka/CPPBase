@@ -1,10 +1,10 @@
 /**
  * @file
- * @brief InitSceneNodeコードファイル
+ * @brief StageSceneNodeコードファイル
  */
 
 
-#include "InitSceneNode.h"
+#include "StageSceneNode.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
@@ -18,7 +18,7 @@
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::InitSceneNodeDesc::InitSceneNodeDesc()
+cpp_base::scene::StageSceneNodeDesc::StageSceneNodeDesc()
 {
 	return;
 }
@@ -27,7 +27,7 @@ cpp_base::scene::InitSceneNodeDesc::InitSceneNodeDesc()
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::InitSceneNodeDesc::~InitSceneNodeDesc()
+cpp_base::scene::StageSceneNodeDesc::~StageSceneNodeDesc()
 {
 	this->Release();
 
@@ -38,7 +38,7 @@ cpp_base::scene::InitSceneNodeDesc::~InitSceneNodeDesc()
 /**
  * @brief Init関数
  */
-void cpp_base::scene::InitSceneNodeDesc::Init(void)
+void cpp_base::scene::StageSceneNodeDesc::Init(void)
 {
 	this->Release();
 
@@ -54,7 +54,7 @@ void cpp_base::scene::InitSceneNodeDesc::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::InitSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::StageSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
 	if (cpp_base::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
@@ -64,8 +64,8 @@ INT cpp_base::scene::InitSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// InitSceneNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"INIT_SCENE_NODE");
+	{// StageSceneNode Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"STAGE_SCENE_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -79,8 +79,7 @@ INT cpp_base::scene::InitSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::InitSceneNode::InitSceneNode() :
-	wait_update_time(0.0)
+cpp_base::scene::StageSceneNode::StageSceneNode()
 {
 	return;
 }
@@ -89,7 +88,7 @@ cpp_base::scene::InitSceneNode::InitSceneNode() :
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::InitSceneNode::~InitSceneNode()
+cpp_base::scene::StageSceneNode::~StageSceneNode()
 {
 	this->Release();
 
@@ -100,7 +99,7 @@ cpp_base::scene::InitSceneNode::~InitSceneNode()
 /**
  * @brief Release関数
  */
-void cpp_base::scene::InitSceneNode::Release(void)
+void cpp_base::scene::StageSceneNode::Release(void)
 {
 	cpp_base::scene::BaseNode::Release();
 
@@ -111,15 +110,14 @@ void cpp_base::scene::InitSceneNode::Release(void)
 /**
  * @brief Init関数
  */
-void cpp_base::scene::InitSceneNode::Init(void)
+void cpp_base::scene::StageSceneNode::Init(void)
 {
 	this->Release();
 
 	this->canvas_2d.reset();
 	this->bg_model.reset();
-	this->wait_update_time = tml::TIME_REAL(0.0);
-	this->wait_font.reset();
-	this->wait_model.reset();
+	this->name_font.reset();
+	this->name_model.reset();
 
 	cpp_base::scene::BaseNode::Init();
 
@@ -133,7 +131,7 @@ void cpp_base::scene::InitSceneNode::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeDesc &desc)
+INT cpp_base::scene::StageSceneNode::Create(const cpp_base::scene::StageSceneNodeDesc &desc)
 {
 	this->Init();
 
@@ -181,36 +179,36 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 			this->bg_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 		}
 	}
+	tml::XMUINT2EX name_font_size = tml::XMUINT2EX(0U, 24U);
+	tml::XMUINT2EX name_model_size = tml::XMUINT2EX(128U, 64U);
 
-	tml::XMUINT2EX wait_font_size = tml::XMUINT2EX(0U, 24U);
-	tml::XMUINT2EX wait_model_size = tml::XMUINT2EX(320U, 32U);
-
-	{// WaitFont Create
+	{// StartFont Create
 		tml::graphic::FontDesc desc;
 
 		desc.SetManager(graphic_mgr);
-		desc.SetFontDesc(wait_font_size, L"ＭＳ ゴシック");
+		desc.SetFontDesc(name_font_size, L"ＭＳ ゴシック");
 
-		if (graphic_mgr->GetResource<tml::graphic::Font>(this->wait_font, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Font>(this->name_font, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// WaitModel Create
+	{// StartModel Create
 		tml::graphic::Model2DDesc desc;
 
 		desc.SetManager(graphic_mgr);
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, 0.0f));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->wait_model, desc) == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->name_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->wait_model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->name_model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -221,7 +219,7 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 			tml::graphic::TextureDesc desc;
 
 			desc.SetManager(graphic_mgr);
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, wait_model_size);
+			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, name_model_size);
 			desc.cpu_buffer_flag = true;
 
 			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
@@ -230,17 +228,17 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 				return (-1);
 			}
 
-			this->wait_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->name_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->wait_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
+			this->name_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
 		}
 	}
 
-	{// WaitModelTexture Update
-		auto &tex = this->wait_model->GetTexture(this->wait_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
+	{// StartModelTexture Update
+		auto &tex = this->name_model->GetTexture(this->name_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
-		tex->DrawCPUBufferString(L"ちょっと待ってね。", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->wait_font.get());
+		tex->DrawCPUBufferString(L"ステージ\nテスト2D", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->name_font.get());
 		tex->UploadCPUBuffer();
 	}
 
@@ -253,7 +251,7 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::InitSceneNode::OnStart(void)
+INT cpp_base::scene::StageSceneNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
@@ -268,7 +266,7 @@ INT cpp_base::scene::InitSceneNode::OnStart(void)
 /**
  * @brief OnEnd関数
  */
-void cpp_base::scene::InitSceneNode::OnEnd(void)
+void cpp_base::scene::StageSceneNode::OnEnd(void)
 {
 	return;
 }
@@ -277,32 +275,12 @@ void cpp_base::scene::InitSceneNode::OnEnd(void)
 /**
  * @brief OnUpdate関数
  */
-void cpp_base::scene::InitSceneNode::OnUpdate(void)
+void cpp_base::scene::StageSceneNode::OnUpdate(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
-	this->wait_update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
-
-	if (this->wait_update_time.count() >= 3.0) {
-		{// TitleScene Start
-			tml::shared_ptr<tml::scene::Scene> scene;
-
-			if (this->GetManager()->factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/title_scene.xml")) == nullptr) {
-				this->GetManager()->EndScene();
-
-				return;
-			}
-
-			if (this->GetManager()->StartScene(scene) < 0) {
-				this->GetManager()->EndScene();
-
-				return;
-			}
-		}
-	}
-
 	this->canvas_2d->SetDrawModel(this->bg_model.get());
-	this->canvas_2d->SetDrawModel(this->wait_model.get());
+	this->canvas_2d->SetDrawModel(this->name_model.get());
 
 	return;
 }

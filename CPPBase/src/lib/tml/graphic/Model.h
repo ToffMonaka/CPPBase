@@ -430,6 +430,7 @@ public:
 	UINT GetStageCount(void) const;
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
+
 	virtual void DrawStageInit(void);
 	virtual void DrawStageDeferred3D(void);
 	virtual void DrawStageDeferredShadow3D(void);
