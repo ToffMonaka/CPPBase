@@ -11,6 +11,10 @@
 namespace tml {
 namespace ConstantUtil {
 namespace INPUT {
+	namespace CLASS_NAME {
+	}
+	namespace RESOURCE_NAME {
+	}
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
 		ETC,

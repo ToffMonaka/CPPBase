@@ -12,8 +12,12 @@
 #include "../../lib/tml/graphic/Font.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/Model2D.h"
+#include "../../lib/tml/sound/BGMSound.h"
+#include "../../lib/tml/sound/SESound.h"
+#include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
+#include "../sound/Manager.h"
 #include "Manager.h"
 
 
@@ -118,8 +122,10 @@ void cpp_base::scene::SelectSceneNode::Init(void)
 
 	this->canvas_2d.reset();
 	this->bg_model.reset();
+	this->bgm_sound.reset();
 	this->stage_font.reset();
 	this->stage_model.reset();
+	this->stage_se_sound.reset();
 
 	cpp_base::scene::BaseNode::Init();
 
@@ -144,6 +150,7 @@ INT cpp_base::scene::SelectSceneNode::Create(const cpp_base::scene::SelectSceneN
 	}
 
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+	auto sound_mgr = this->GetManager()->GetSoundManager();
 
 	{// BackgroundModel Create
 		tml::graphic::Model2DDesc desc;
@@ -181,6 +188,15 @@ INT cpp_base::scene::SelectSceneNode::Create(const cpp_base::scene::SelectSceneN
 			this->bg_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 		}
 	}
+
+	{// BGMSound Create
+		if (sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound, sound_mgr->common2.select_bgm_sound1) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
 	tml::XMUINT2EX stage_font_size = tml::XMUINT2EX(0U, 24U);
 	tml::XMUINT2EX stage_model_size = tml::XMUINT2EX(128U, 32U);
 
@@ -244,6 +260,14 @@ INT cpp_base::scene::SelectSceneNode::Create(const cpp_base::scene::SelectSceneN
 		tex->UploadCPUBuffer();
 	}
 
+	{// StageSESound Create
+		if (sound_mgr->GetResource<tml::sound::SESound>(this->stage_se_sound, sound_mgr->common2.start_se_sound1) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
 	return (0);
 }
 
@@ -256,10 +280,15 @@ INT cpp_base::scene::SelectSceneNode::Create(const cpp_base::scene::SelectSceneN
 INT cpp_base::scene::SelectSceneNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+	auto sound_mgr = this->GetManager()->GetSoundManager();
 
-	if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
-		return (-1);
+	{// Canvas2D Create
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
+			return (-1);
+		}
 	}
+
+	sound_mgr->PlaySound(this->bgm_sound.get(), true);
 
 	return (0);
 }
@@ -270,6 +299,10 @@ INT cpp_base::scene::SelectSceneNode::OnStart(void)
  */
 void cpp_base::scene::SelectSceneNode::OnEnd(void)
 {
+	auto sound_mgr = this->GetManager()->GetSoundManager();
+
+	sound_mgr->StopSound(this->bgm_sound.get());
+
 	return;
 }
 
@@ -294,7 +327,7 @@ void cpp_base::scene::SelectSceneNode::OnUpdate(void)
 					{// StageScene Start
 						tml::shared_ptr<tml::scene::Scene> scene;
 
-						if (this->GetManager()->factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/stage_scene.xml")) == nullptr) {
+						if (this->GetManager()->factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::STAGE_SCENE)) == nullptr) {
 							this->GetManager()->EndScene();
 
 							return;

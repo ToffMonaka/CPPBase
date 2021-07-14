@@ -13,7 +13,7 @@
 #include "../../lib/tml/random/RandomUtil.h"
 #include "../../lib/tml/file/FileUtil.h"
 #include "../../lib/tml/thread/ThreadUtil.h"
-#include "../constant/ConstantUtil_FILE.h"
+#include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
@@ -92,7 +92,7 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
 	}
 
 	{// SystemConfigFile Read
-		this->sys_conf_file_.read_desc.data.file_path = cpp_base::ConstantUtil::FILE::SYSTEM_CONFIG_FILE_PATH;
+		this->sys_conf_file_.read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SYSTEM_CONFIG;
 
 		if (this->sys_conf_file_.Read() < 0) {
 			this->Init();
@@ -196,7 +196,7 @@ INT cpp_base::MainThread::OnStart(void)
 	{// InitScene Start
 		tml::shared_ptr<tml::scene::Scene> scene;
 
-		if (this->scene_mgr_.factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/init_scene.xml")) == nullptr) {
+		if (this->scene_mgr_.factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::INIT_SCENE)) == nullptr) {
 			return (-1);
 		}
 

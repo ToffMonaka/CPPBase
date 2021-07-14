@@ -5,6 +5,7 @@
 
 
 #include "ManagerCommon.h"
+#include "../constant/ConstantUtil_FILE_PATH.h"
 #include "Manager.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
@@ -323,7 +324,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::ShaderDesc desc;
 
 		desc.SetManager(this->mgr_);
-		desc.Read(tml::INIFileReadDesc(L"res/model_2d_shader.ini"));
+		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::MODEL_2D_SHADER));
 		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT;
 		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_ARRAY;
 

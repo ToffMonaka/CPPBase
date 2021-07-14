@@ -54,6 +54,8 @@ void cpp_base::sound::ManagerDesc::InitResourceCount(void)
 {
 	tml::sound::ManagerDesc::InitResourceCount();
 
+	this->resource_count_container.resize(cpp_base::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT);
+
 	return;
 }
 
@@ -64,6 +66,8 @@ void cpp_base::sound::ManagerDesc::InitResourceCount(void)
 void cpp_base::sound::ManagerDesc::InitEventCount(void)
 {
 	tml::sound::ManagerDesc::InitEventCount();
+
+	this->event_count_container.resize(cpp_base::ConstantUtil::SOUND::EVENT_TYPE_COUNT);
 
 	return;
 }
@@ -138,7 +142,7 @@ INT cpp_base::sound::Manager::Create(const cpp_base::sound::ManagerDesc &desc)
 		return (-1);
 	}
 
-	if (this->common.Create(this) < 0) {
+	if (this->common2.Create(this) < 0) {
 		this->Init();
 
 		return (-1);

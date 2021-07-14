@@ -69,7 +69,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 
 	this->mgr_ = mgr;
 
-	this->scene_by_ini_file.AddFunction(L"BaseScene",
+	this->scene_by_ini_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::BASE_SCENE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -86,7 +86,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 		}
 	);
 
-	this->scene_by_xml_file.AddFunction(L"Scene",
+	this->scene_by_xml_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
 		[this] (const tml::XMLFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -138,7 +138,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 		}
 	);
 
-	this->node_by_ini_file.AddFunction(L"BaseNode",
+	this->node_by_ini_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::BASE_NODE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 
@@ -155,7 +155,7 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 		}
 	);
 
-	this->node_by_xml_file.AddFunction(L"Node",
+	this->node_by_xml_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
 		[this] (const tml::XMLFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 

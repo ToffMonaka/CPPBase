@@ -614,9 +614,6 @@
     <ClInclude Include="src\cpp_base\thread\TestThread.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\cpp_base\constant\ConstantUtil_FILE.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_THREAD.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -975,6 +972,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\cpp_base\scene\StageSceneNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\constant\ConstantUtil_FILE_PATH.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_FILE_PATH.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

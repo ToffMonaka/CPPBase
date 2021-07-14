@@ -54,6 +54,8 @@ void cpp_base::graphic::ManagerDesc::InitResourceCount(void)
 {
 	tml::graphic::ManagerDesc::InitResourceCount();
 
+	this->resource_count_container.resize(cpp_base::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT);
+
 	return;
 }
 
@@ -64,6 +66,8 @@ void cpp_base::graphic::ManagerDesc::InitResourceCount(void)
 void cpp_base::graphic::ManagerDesc::InitEventCount(void)
 {
 	tml::graphic::ManagerDesc::InitEventCount();
+
+	this->event_count_container.resize(cpp_base::ConstantUtil::GRAPHIC::EVENT_TYPE_COUNT);
 
 	return;
 }
@@ -138,7 +142,7 @@ INT cpp_base::graphic::Manager::Create(const cpp_base::graphic::ManagerDesc &des
 		return (-1);
 	}
 
-	if (this->common.Create(this) < 0) {
+	if (this->common2.Create(this) < 0) {
 		this->Init();
 
 		return (-1);

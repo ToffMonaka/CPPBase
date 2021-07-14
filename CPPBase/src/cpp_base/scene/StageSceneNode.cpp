@@ -180,7 +180,7 @@ INT cpp_base::scene::StageSceneNode::Create(const cpp_base::scene::StageSceneNod
 		}
 	}
 	tml::XMUINT2EX name_font_size = tml::XMUINT2EX(0U, 24U);
-	tml::XMUINT2EX name_model_size = tml::XMUINT2EX(128U, 64U);
+	tml::XMUINT2EX name_model_size = tml::XMUINT2EX(128U, 92U);
 
 	{// StartFont Create
 		tml::graphic::FontDesc desc;
@@ -238,7 +238,7 @@ INT cpp_base::scene::StageSceneNode::Create(const cpp_base::scene::StageSceneNod
 		auto &tex = this->name_model->GetTexture(this->name_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
 		tex->ClearCPUBuffer();
-		tex->DrawCPUBufferString(L"ステージ\nテスト2D", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->name_font.get());
+		tex->DrawCPUBufferString(L"ステージ\n\nテスト2D", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->name_font.get());
 		tex->UploadCPUBuffer();
 	}
 
@@ -255,8 +255,10 @@ INT cpp_base::scene::StageSceneNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
-	if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
-		return (-1);
+	{// Canvas2D Create
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
+			return (-1);
+		}
 	}
 
 	return (0);

@@ -14,6 +14,7 @@
 #include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/sound/BGMSound.h"
 #include "../../lib/tml/sound/SESound.h"
+#include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
@@ -191,12 +192,7 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	}
 
 	{// BGMSound Create
-		tml::sound::BGMSoundDesc desc;
-
-		desc.SetManager(sound_mgr);
-		desc.file_read_desc.data.file_path = L"res/title_bgm_sound1.mp3";
-
-		if (sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound, desc) == nullptr) {
+		if (sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound, sound_mgr->common2.title_bgm_sound1) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -305,12 +301,7 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	}
 
 	{// StartSESound Create
-		tml::sound::SESoundDesc desc;
-
-		desc.SetManager(sound_mgr);
-		desc.file_read_desc.data.file_path = L"res/title_start_se_sound1.mp3";
-
-		if (sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound, desc) == nullptr) {
+		if (sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound, sound_mgr->common2.start_se_sound1) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -404,8 +395,10 @@ INT cpp_base::scene::TitleSceneNode::OnStart(void)
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
-	if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
-		return (-1);
+	{// Canvas2D Create
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
+			return (-1);
+		}
 	}
 
 	sound_mgr->PlaySound(this->bgm_sound.get(), true);
@@ -419,6 +412,10 @@ INT cpp_base::scene::TitleSceneNode::OnStart(void)
  */
 void cpp_base::scene::TitleSceneNode::OnEnd(void)
 {
+	auto sound_mgr = this->GetManager()->GetSoundManager();
+
+	sound_mgr->StopSound(this->bgm_sound.get());
+
 	return;
 }
 
@@ -444,7 +441,7 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 					{// SelectScene Start
 						tml::shared_ptr<tml::scene::Scene> scene;
 
-						if (this->GetManager()->factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/select_scene.xml")) == nullptr) {
+						if (this->GetManager()->factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::SELECT_SCENE)) == nullptr) {
 							this->GetManager()->EndScene();
 
 							return;

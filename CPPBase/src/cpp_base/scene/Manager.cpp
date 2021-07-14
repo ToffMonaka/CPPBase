@@ -75,6 +75,8 @@ void cpp_base::scene::ManagerDesc::InitResourceCount(void)
 {
 	tml::scene::ManagerDesc::InitResourceCount();
 
+	this->resource_count_container.resize(cpp_base::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
+
 	return;
 }
 
@@ -85,6 +87,8 @@ void cpp_base::scene::ManagerDesc::InitResourceCount(void)
 void cpp_base::scene::ManagerDesc::InitEventCount(void)
 {
 	tml::scene::ManagerDesc::InitEventCount();
+
+	this->event_count_container.resize(cpp_base::ConstantUtil::SCENE::EVENT_TYPE_COUNT);
 
 	return;
 }

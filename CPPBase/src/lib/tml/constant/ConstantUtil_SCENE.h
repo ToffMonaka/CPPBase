@@ -11,6 +11,14 @@
 namespace tml {
 namespace ConstantUtil {
 namespace SCENE {
+	namespace CLASS_NAME {
+		const WCHAR SCENE[] = L"Scene";
+		const WCHAR BASE_SCENE[] = L"BaseScene";
+		const WCHAR NODE[] = L"Node";
+		const WCHAR BASE_NODE[] = L"BaseNode";
+	}
+	namespace RESOURCE_NAME {
+	}
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
 		ETC,

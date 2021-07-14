@@ -314,7 +314,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cpp_base\constant\ConstantInclude_ConstantUtilBase.h" />
-    <ClInclude Include="src\cpp_base\constant\ConstantUtil_FILE.h" />
+    <ClInclude Include="src\cpp_base\constant\ConstantUtil_FILE_PATH.h" />
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_GRAPHIC.h" />
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_INPUT.h" />
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_SCENE.h" />
@@ -357,6 +357,7 @@
     <ClInclude Include="src\lib\tml\constant\ConstantInclude_XNAMathBase.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_DATE.h" />
+    <ClInclude Include="src\lib\tml\constant\ConstantUtil_FILE_PATH.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_GRAPHIC.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_INPUT.h" />
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_MATH.h" />

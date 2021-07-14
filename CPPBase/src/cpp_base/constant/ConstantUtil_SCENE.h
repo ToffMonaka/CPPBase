@@ -12,6 +12,29 @@
 namespace cpp_base {
 namespace ConstantUtil {
 namespace SCENE {
+	namespace CLASS_NAME {
+		const WCHAR INIT_SCENE[] = L"InitScene";
+		const WCHAR TITLE_SCENE[] = L"TitleScene";
+		const WCHAR SELECT_SCENE[] = L"SelectScene";
+		const WCHAR STAGE_SCENE[] = L"StageScene";
+		const WCHAR INIT_SCENE_NODE[] = L"InitSceneNode";
+		const WCHAR TITLE_SCENE_NODE[] = L"TitleSceneNode";
+		const WCHAR SELECT_SCENE_NODE[] = L"SelectSceneNode";
+		const WCHAR STAGE_SCENE_NODE[] = L"StageSceneNode";
+	}
+	namespace RESOURCE_NAME {
+		const WCHAR DEBUG_NODE[] = L"debug_node";
+	}
+	enum class RESOURCE_TYPE : UINT {
+		USER = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::USER),
+		COUNT
+	};
+	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::SCENE::RESOURCE_TYPE::COUNT);
+	enum class EVENT_TYPE : UINT {
+		USER = static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::USER),
+		COUNT
+	};
+	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::SCENE::EVENT_TYPE::COUNT);
 }
 }
 }

@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_GRAPHIC.h"
+#include "../constant/ConstantUtil_SOUND.h"
 #include "BaseNode.h"
 
 
@@ -61,8 +62,10 @@ private:
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::Model2D> bg_model;
+	tml::shared_ptr<tml::sound::BGMSound> bgm_sound;
 	tml::shared_ptr<tml::graphic::Font> stage_font;
 	tml::shared_ptr<tml::graphic::Model2D> stage_model;
+	tml::shared_ptr<tml::sound::SESound> stage_se_sound;
 
 protected:
 	void Release(void);

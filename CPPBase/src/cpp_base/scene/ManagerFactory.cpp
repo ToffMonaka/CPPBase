@@ -71,7 +71,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 
 	this->mgr_ = mgr;
 
-	this->mgr_->factory.scene_by_ini_file.AddFunction(L"BaseScene",
+	this->mgr_->factory.scene_by_ini_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::BASE_SCENE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -88,7 +88,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.scene_by_ini_file.AddFunction(L"InitScene",
+	this->mgr_->factory.scene_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::INIT_SCENE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -105,7 +105,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.scene_by_ini_file.AddFunction(L"TitleScene",
+	this->mgr_->factory.scene_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TITLE_SCENE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -122,7 +122,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.scene_by_ini_file.AddFunction(L"SelectScene",
+	this->mgr_->factory.scene_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::SELECT_SCENE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -139,7 +139,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.scene_by_ini_file.AddFunction(L"StageScene",
+	this->mgr_->factory.scene_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::STAGE_SCENE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -156,7 +156,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.node_by_ini_file.AddFunction(L"BaseNode",
+	this->mgr_->factory.node_by_ini_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::BASE_NODE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 
@@ -173,7 +173,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.node_by_ini_file.AddFunction(L"InitSceneNode",
+	this->mgr_->factory.node_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::INIT_SCENE_NODE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 
@@ -190,7 +190,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.node_by_ini_file.AddFunction(L"TitleSceneNode",
+	this->mgr_->factory.node_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TITLE_SCENE_NODE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 
@@ -207,7 +207,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.node_by_ini_file.AddFunction(L"SelectSceneNode",
+	this->mgr_->factory.node_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::SELECT_SCENE_NODE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 
@@ -224,7 +224,7 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 		}
 	);
 
-	this->mgr_->factory.node_by_ini_file.AddFunction(L"StageSceneNode",
+	this->mgr_->factory.node_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::STAGE_SCENE_NODE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 

@@ -11,6 +11,7 @@
 #include "../../lib/tml/graphic/Font.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/Model2D.h"
+#include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
 
@@ -257,8 +258,10 @@ INT cpp_base::scene::InitSceneNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
-	if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
-		return (-1);
+	{// Canvas2D Create
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
+			return (-1);
+		}
 	}
 
 	return (0);
@@ -287,7 +290,7 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 		{// TitleScene Start
 			tml::shared_ptr<tml::scene::Scene> scene;
 
-			if (this->GetManager()->factory.scene_by_xml_file.Get(scene, L"Scene", tml::XMLFileReadDesc(L"res/title_scene.xml")) == nullptr) {
+			if (this->GetManager()->factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TITLE_SCENE)) == nullptr) {
 				this->GetManager()->EndScene();
 
 				return;
