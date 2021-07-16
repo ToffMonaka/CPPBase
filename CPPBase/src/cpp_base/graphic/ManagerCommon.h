@@ -24,6 +24,8 @@ private:
 	cpp_base::graphic::Manager *mgr_;
 
 public:
+	tml::shared_ptr<tml::graphic::Texture> bg_tex1;
+	tml::shared_ptr<tml::graphic::Texture> empty_bg_tex1;
 
 protected:
 	void Release(void);

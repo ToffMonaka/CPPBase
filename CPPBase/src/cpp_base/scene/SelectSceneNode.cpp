@@ -85,7 +85,8 @@ INT cpp_base::scene::SelectSceneNodeDesc::ReadValue(const tml::INIFile &ini_file
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::SelectSceneNode::SelectSceneNode()
+cpp_base::scene::SelectSceneNode::SelectSceneNode() :
+	progress_type_(0U)
 {
 	return;
 }
@@ -120,6 +121,7 @@ void cpp_base::scene::SelectSceneNode::Init(void)
 {
 	this->Release();
 
+	this->progress_type_ = 0U;
 	this->canvas_2d.reset();
 	this->bg_model.reset();
 	this->bgm_sound.reset();
@@ -282,6 +284,8 @@ INT cpp_base::scene::SelectSceneNode::OnStart(void)
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
+	this->progress_type_ = 1U;
+
 	{// Canvas2D Create
 		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
 			return (-1);
@@ -314,37 +318,51 @@ void cpp_base::scene::SelectSceneNode::OnUpdate(void)
 {
 	auto input_mgr = this->GetManager()->GetInputManager();
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+	auto sound_mgr = this->GetManager()->GetSoundManager();
 
-	for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
-		auto event = reinterpret_cast<tml::input::DeviceEvent *>(input_mgr->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
+	switch (this->progress_type_) {
+	case 1U: {
+		for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
+			auto event = reinterpret_cast<tml::input::DeviceEvent *>(input_mgr->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
 
-		switch (event->GetEventSubIndex()) {
-		case tml::input::MouseDeviceEvent::EVENT_SUB_INDEX: {
-			auto &event_dat = reinterpret_cast<tml::input::MouseDeviceEvent *>(event)->data;
+			switch (event->GetEventSubIndex()) {
+			case tml::input::MouseDeviceEvent::EVENT_SUB_INDEX: {
+				auto &event_dat = reinterpret_cast<tml::input::MouseDeviceEvent *>(event)->data;
 
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-				if (this->stage_model->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {
-					{// StageScene Start
-						tml::shared_ptr<tml::scene::Scene> scene;
+				if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
+					if (this->stage_model->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {
+						{// StageScene Start
+							tml::shared_ptr<tml::scene::Scene> scene;
 
-						if (this->GetManager()->factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::STAGE_SCENE)) == nullptr) {
-							this->GetManager()->EndScene();
+							if (this->GetManager()->factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::STAGE_SCENE)) == nullptr) {
+								this->GetManager()->EndScene();
 
-							return;
+								return;
+							}
+
+							if (this->GetManager()->StartScene(scene) < 0) {
+								this->GetManager()->EndScene();
+
+								return;
+							}
 						}
 
-						if (this->GetManager()->StartScene(scene) < 0) {
-							this->GetManager()->EndScene();
+						sound_mgr->PlaySound(this->stage_se_sound.get(), false);
 
-							return;
-						}
+						this->progress_type_ = 2U;
 					}
 				}
-			}
 
-			break;
+				break;
+			}
+			}
 		}
-		}
+
+		break;
+	}
+	case 2U: {
+		break;
+	}
 	}
 
 	if (this->stage_model->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {

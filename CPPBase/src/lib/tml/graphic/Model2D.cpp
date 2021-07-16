@@ -306,7 +306,7 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 		{// RasterizerState Create
 			tml::shared_ptr<tml::graphic::RasterizerState> rs;
 
-			if (this->GetManager()->GetResource(rs, this->GetManager()->common.back_culling_rasterizer_state) == nullptr) {
+			if (this->GetManager()->GetResource<tml::graphic::RasterizerState>(rs, this->GetManager()->common.back_culling_rasterizer_state) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -318,7 +318,7 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 		{// BlendState Create
 			tml::shared_ptr<tml::graphic::BlendState> bs;
 
-			if (this->GetManager()->GetResource(bs, this->GetManager()->common.alignment_blend_state_array[1]) == nullptr) {
+			if (this->GetManager()->GetResource<tml::graphic::BlendState>(bs, this->GetManager()->common.alignment_blend_state_array[1]) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -330,7 +330,7 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 		{// DepthState Create
 			tml::shared_ptr<tml::graphic::DepthState> ds;
 
-			if (this->GetManager()->GetResource(ds, this->GetManager()->common.reference_depth_state) == nullptr) {
+			if (this->GetManager()->GetResource<tml::graphic::DepthState>(ds, this->GetManager()->common.reference_depth_state) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -342,7 +342,7 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 		{// Shader Create
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
-			if (this->GetManager()->GetResource(shader, this->GetManager()->common.model_2d_shader) == nullptr) {
+			if (this->GetManager()->GetResource<tml::graphic::Shader>(shader, this->GetManager()->common.model_2d_shader) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -366,7 +366,7 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 			{// Mesh Create
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
 
-				if (this->GetManager()->GetResource(mesh, this->GetManager()->common.model_2d_mesh) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.model_2d_mesh) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -378,7 +378,7 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 			{// DiffuseSampler Create
 				tml::shared_ptr<tml::graphic::Sampler> samp;
 
-				if (this->GetManager()->GetResource(samp, this->GetManager()->common.cc_sampler) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Sampler>(samp, this->GetManager()->common.cc_sampler) == nullptr) {
 					this->Init();
 
 					return (-1);

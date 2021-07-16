@@ -57,6 +57,7 @@ public: cpp_base::scene::InitSceneNode &operator =(const cpp_base::scene::InitSc
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	UINT progress_type_;
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;

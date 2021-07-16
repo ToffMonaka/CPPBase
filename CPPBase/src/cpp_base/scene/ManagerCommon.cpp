@@ -74,7 +74,7 @@ INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)
 
 	this->mgr_ = mgr;
 
-	if (tml::ConstantUtil::LIBRARY::DEBUG_FLAG) {
+	if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
 		{// DebugNode Create
 			cpp_base::scene::DebugNodeDesc desc;
 

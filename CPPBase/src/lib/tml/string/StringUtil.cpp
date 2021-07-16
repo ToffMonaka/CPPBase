@@ -74,7 +74,11 @@ INT tml::StringUtil::CreateLocale(const CHAR *locale_name)
 
 		tml::StringUtil::old_locale_name_ = old_locale.name();
 	} catch (std::runtime_error &err) {
-		std::cout << err.what() << std::endl;
+		if (tml::ConstantUtil::LIBRARY::DEBUG_FLAG) {
+			OutputDebugString(L"Error: Locale Create\n");
+
+			std::cout << err.what() << std::endl;
+		}
 
 		return (-1);
 	}

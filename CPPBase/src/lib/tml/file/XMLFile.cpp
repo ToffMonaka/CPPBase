@@ -437,7 +437,11 @@ INT tml::XMLFile::Read(void)
 	try {
 		xml_doc->parse<rapidxml::parse_no_data_nodes | rapidxml::parse_trim_whitespace>(xml_str);
 	} catch (rapidxml::parse_error &err) {
-		std::cout << err.what() << std::endl;
+		if (tml::ConstantUtil::LIBRARY::DEBUG_FLAG) {
+			OutputDebugString(L"Error: XML Read\n");
+
+			std::cout << err.what() << std::endl;
+		}
 
 		return (-1);
 	}

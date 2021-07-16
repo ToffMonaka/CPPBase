@@ -209,10 +209,18 @@ INT cpp_base::MainThread::OnStart(void)
 		std::unique_ptr<tml::SubThread> th = std::make_unique<cpp_base::TestThread>();
 
 		if (reinterpret_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
+			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+				OutputDebugString(L"Error: TestThread Start\n");
+			}
+
 			return (-1);
 		}
 
 		if (tml::ThreadUtil::Start(th) < 0) {
+			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+				OutputDebugString(L"Error: TestThread Start\n");
+			}
+
 			return (-1);
 		}
 	}

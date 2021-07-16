@@ -58,6 +58,7 @@ public: cpp_base::scene::TitleSceneNode &operator =(const cpp_base::scene::Title
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	UINT progress_type_;
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;

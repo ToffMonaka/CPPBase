@@ -79,7 +79,8 @@ INT cpp_base::scene::StageSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::StageSceneNode::StageSceneNode()
+cpp_base::scene::StageSceneNode::StageSceneNode() :
+	progress_type_(0U)
 {
 	return;
 }
@@ -114,6 +115,7 @@ void cpp_base::scene::StageSceneNode::Init(void)
 {
 	this->Release();
 
+	this->progress_type_ = 0U;
 	this->canvas_2d.reset();
 	this->bg_model.reset();
 	this->name_font.reset();
@@ -164,13 +166,7 @@ INT cpp_base::scene::StageSceneNode::Create(const cpp_base::scene::StageSceneNod
 		{// DiffuseTexture Create
 			tml::shared_ptr<tml::graphic::Texture> tex;
 
-			tml::graphic::TextureDesc desc;
-
-			desc.SetManager(graphic_mgr);
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = L"res/bg_img1.png";
-
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, graphic_mgr->common2.bg_tex1) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -255,6 +251,8 @@ INT cpp_base::scene::StageSceneNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
+	this->progress_type_ = 1U;
+
 	{// Canvas2D Create
 		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
 			return (-1);
@@ -280,6 +278,12 @@ void cpp_base::scene::StageSceneNode::OnEnd(void)
 void cpp_base::scene::StageSceneNode::OnUpdate(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+
+	switch (this->progress_type_) {
+	case 1U: {
+		break;
+	}
+	}
 
 	this->canvas_2d->SetDrawModel(this->bg_model.get());
 	this->canvas_2d->SetDrawModel(this->name_model.get());
