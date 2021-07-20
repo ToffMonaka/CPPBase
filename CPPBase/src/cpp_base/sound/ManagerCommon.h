@@ -24,9 +24,9 @@ private:
 	cpp_base::sound::Manager *mgr_;
 
 public:
-	tml::shared_ptr<tml::sound::BGMSound> title_bgm_sound1;
-	tml::shared_ptr<tml::sound::BGMSound> select_bgm_sound1;
-	tml::shared_ptr<tml::sound::SESound> start_se_sound1;
+	tml::shared_ptr<tml::sound::BGMSound> title_bgm_sound;
+	tml::shared_ptr<tml::sound::BGMSound> select_bgm_sound;
+	tml::shared_ptr<tml::sound::SESound> start_se_sound;
 
 protected:
 	void Release(void);

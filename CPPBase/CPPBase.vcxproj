@@ -495,7 +495,7 @@
     <ResourceCompile Include="src\cpp_base\resource\resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="src\cpp_base\resource\app_icon1.ico" />
+    <Image Include="src\cpp_base\resource\app_icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

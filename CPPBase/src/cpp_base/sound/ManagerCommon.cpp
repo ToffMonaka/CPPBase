@@ -41,9 +41,9 @@ void cpp_base::sound::ManagerCommon::Init(void)
 
 	this->mgr_ = nullptr;
 
-	this->title_bgm_sound1.reset();
-	this->select_bgm_sound1.reset();
-	this->start_se_sound1.reset();
+	this->title_bgm_sound.reset();
+	this->select_bgm_sound.reset();
+	this->start_se_sound.reset();
 
 	return;
 }

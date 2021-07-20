@@ -2,7 +2,7 @@
 // Microsoft Visual C++ で生成されたインクルード ファイル。
 // resource.rc で使用
 //
-#define IDI_APPLICATION_ICON1           101
+#define IDI_APPLICATION_ICON            101
 
 // Next default values for new objects
 // 

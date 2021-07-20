@@ -194,7 +194,7 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	}
 
 	{// BGMSound Create
-		if (sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound, sound_mgr->common2.title_bgm_sound1) == nullptr) {
+		if (sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound, sound_mgr->common2.title_bgm_sound) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -303,7 +303,7 @@ INT cpp_base::scene::TitleSceneNode::Create(const cpp_base::scene::TitleSceneNod
 	}
 
 	{// StartSESound Create
-		if (sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound, sound_mgr->common2.start_se_sound1) == nullptr) {
+		if (sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound, sound_mgr->common2.start_se_sound) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -448,12 +448,20 @@ void cpp_base::scene::TitleSceneNode::OnUpdate(void)
 							tml::shared_ptr<tml::scene::Scene> scene;
 
 							if (this->GetManager()->factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::SELECT_SCENE)) == nullptr) {
+								if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+									OutputDebugString(L"Error: SelectScene Create\n");
+								}
+
 								this->GetManager()->EndScene();
 
 								return;
 							}
 
 							if (this->GetManager()->StartScene(scene) < 0) {
+								if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+									OutputDebugString(L"Error: SelectScene Start\n");
+								}
+
 								this->GetManager()->EndScene();
 
 								return;

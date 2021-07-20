@@ -290,13 +290,13 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 
 	switch (this->progress_type_) {
 	case 1U: {
-		{// TitleBGMSound1 Create
+		{// TitleBGMSound Create
 			tml::sound::BGMSoundDesc desc;
 
 			desc.SetManager(sound_mgr);
-			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BGM_SOUND1;
+			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BGM_SOUND;
 
-			if (sound_mgr->GetResource<tml::sound::BGMSound>(sound_mgr->common2.title_bgm_sound1, desc) == nullptr) {
+			if (sound_mgr->GetResource<tml::sound::BGMSound>(sound_mgr->common2.title_bgm_sound, desc) == nullptr) {
 				this->GetManager()->EndScene();
 
 				return;
@@ -310,13 +310,13 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 		break;
 	}
 	case 2U: {
-		{// SelectBGMSound1 Create
+		{// SelectBGMSound Create
 			tml::sound::BGMSoundDesc desc;
 
 			desc.SetManager(sound_mgr);
-			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SELECT_BGM_SOUND1;
+			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SELECT_BGM_SOUND;
 
-			if (sound_mgr->GetResource<tml::sound::BGMSound>(sound_mgr->common2.select_bgm_sound1, desc) == nullptr) {
+			if (sound_mgr->GetResource<tml::sound::BGMSound>(sound_mgr->common2.select_bgm_sound, desc) == nullptr) {
 				this->GetManager()->EndScene();
 
 				return;
@@ -330,13 +330,13 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 		break;
 	}
 	case 3U: {
-		{// StartSESound1 Create
+		{// StartSESound Create
 			tml::sound::SESoundDesc desc;
 
 			desc.SetManager(sound_mgr);
-			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::START_SE_SOUND1;
+			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::START_SE_SOUND;
 
-			if (sound_mgr->GetResource<tml::sound::SESound>(sound_mgr->common2.start_se_sound1, desc) == nullptr) {
+			if (sound_mgr->GetResource<tml::sound::SESound>(sound_mgr->common2.start_se_sound, desc) == nullptr) {
 				this->GetManager()->EndScene();
 
 				return;
@@ -357,12 +357,20 @@ void cpp_base::scene::InitSceneNode::OnUpdate(void)
 				tml::shared_ptr<tml::scene::Scene> scene;
 
 				if (this->GetManager()->factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TITLE_SCENE)) == nullptr) {
+					if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+						OutputDebugString(L"Error: TitleScene Create\n");
+					}
+
 					this->GetManager()->EndScene();
 
 					return;
 				}
 
 				if (this->GetManager()->StartScene(scene) < 0) {
+					if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+						OutputDebugString(L"Error: TitleScene Start\n");
+					}
+
 					this->GetManager()->EndScene();
 
 					return;

@@ -127,7 +127,7 @@ INT cpp_base::MainThread::OnStart(void)
 		wnd_class.cbClsExtra = 0;
 		wnd_class.cbWndExtra = 0;
 		wnd_class.hInstance = this->GetInstanceHandle();
-		wnd_class.hIcon = LoadIcon(this->GetInstanceHandle(), MAKEINTRESOURCE(IDI_APPLICATION_ICON1));
+		wnd_class.hIcon = LoadIcon(this->GetInstanceHandle(), MAKEINTRESOURCE(IDI_APPLICATION_ICON));
 		wnd_class.hCursor = LoadCursor(nullptr, IDC_ARROW);
 		wnd_class.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
 		wnd_class.lpszMenuName = nullptr;
@@ -197,10 +197,18 @@ INT cpp_base::MainThread::OnStart(void)
 		tml::shared_ptr<tml::scene::Scene> scene;
 
 		if (this->scene_mgr_.factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::INIT_SCENE)) == nullptr) {
+			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+				OutputDebugString(L"Error: InitScene Create\n");
+			}
+
 			return (-1);
 		}
 
 		if (this->scene_mgr_.StartScene(scene) < 0) {
+			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+				OutputDebugString(L"Error: InitScene Start\n");
+			}
+
 			return (-1);
 		}
 	}
@@ -210,7 +218,7 @@ INT cpp_base::MainThread::OnStart(void)
 
 		if (reinterpret_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
 			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-				OutputDebugString(L"Error: TestThread Start\n");
+				OutputDebugString(L"Error: TestThread Create\n");
 			}
 
 			return (-1);
