@@ -1,10 +1,10 @@
 /**
  * @file
- * @brief SelectSceneNodeコードファイル
+ * @brief SelectSceneMainNodeコードファイル
  */
 
 
-#include "SelectSceneNode.h"
+#include "SelectSceneMainNode.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/input/MouseDeviceEvent.h"
 #include "../../lib/tml/graphic/Texture.h"
@@ -24,7 +24,7 @@
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::SelectSceneNodeDesc::SelectSceneNodeDesc()
+cpp_base::scene::SelectSceneMainNodeDesc::SelectSceneMainNodeDesc()
 {
 	return;
 }
@@ -33,7 +33,7 @@ cpp_base::scene::SelectSceneNodeDesc::SelectSceneNodeDesc()
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::SelectSceneNodeDesc::~SelectSceneNodeDesc()
+cpp_base::scene::SelectSceneMainNodeDesc::~SelectSceneMainNodeDesc()
 {
 	this->Release();
 
@@ -44,7 +44,7 @@ cpp_base::scene::SelectSceneNodeDesc::~SelectSceneNodeDesc()
 /**
  * @brief Init関数
  */
-void cpp_base::scene::SelectSceneNodeDesc::Init(void)
+void cpp_base::scene::SelectSceneMainNodeDesc::Init(void)
 {
 	this->Release();
 
@@ -60,7 +60,7 @@ void cpp_base::scene::SelectSceneNodeDesc::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::SelectSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::SelectSceneMainNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
 	if (cpp_base::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
@@ -70,8 +70,8 @@ INT cpp_base::scene::SelectSceneNodeDesc::ReadValue(const tml::INIFile &ini_file
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// SelectSceneNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"SELECT_SCENE_NODE");
+	{// SelectSceneMainNode Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"SELECT_SCENE_MAIN_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -85,7 +85,7 @@ INT cpp_base::scene::SelectSceneNodeDesc::ReadValue(const tml::INIFile &ini_file
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::SelectSceneNode::SelectSceneNode() :
+cpp_base::scene::SelectSceneMainNode::SelectSceneMainNode() :
 	progress_type_(0U)
 {
 	return;
@@ -95,7 +95,7 @@ cpp_base::scene::SelectSceneNode::SelectSceneNode() :
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::SelectSceneNode::~SelectSceneNode()
+cpp_base::scene::SelectSceneMainNode::~SelectSceneMainNode()
 {
 	this->Release();
 
@@ -106,7 +106,7 @@ cpp_base::scene::SelectSceneNode::~SelectSceneNode()
 /**
  * @brief Release関数
  */
-void cpp_base::scene::SelectSceneNode::Release(void)
+void cpp_base::scene::SelectSceneMainNode::Release(void)
 {
 	cpp_base::scene::BaseNode::Release();
 
@@ -117,7 +117,7 @@ void cpp_base::scene::SelectSceneNode::Release(void)
 /**
  * @brief Init関数
  */
-void cpp_base::scene::SelectSceneNode::Init(void)
+void cpp_base::scene::SelectSceneMainNode::Init(void)
 {
 	this->Release();
 
@@ -141,7 +141,7 @@ void cpp_base::scene::SelectSceneNode::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::SelectSceneNode::Create(const cpp_base::scene::SelectSceneNodeDesc &desc)
+INT cpp_base::scene::SelectSceneMainNode::Create(const cpp_base::scene::SelectSceneMainNodeDesc &desc)
 {
 	this->Init();
 
@@ -175,13 +175,7 @@ INT cpp_base::scene::SelectSceneNode::Create(const cpp_base::scene::SelectSceneN
 		{// DiffuseTexture Create
 			tml::shared_ptr<tml::graphic::Texture> tex;
 
-			tml::graphic::TextureDesc desc;
-
-			desc.SetManager(graphic_mgr);
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = L"res/bg_img1.png";
-
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, graphic_mgr->common2.bg_tex) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -279,7 +273,7 @@ INT cpp_base::scene::SelectSceneNode::Create(const cpp_base::scene::SelectSceneN
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::SelectSceneNode::OnStart(void)
+INT cpp_base::scene::SelectSceneMainNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 	auto sound_mgr = this->GetManager()->GetSoundManager();
@@ -287,7 +281,7 @@ INT cpp_base::scene::SelectSceneNode::OnStart(void)
 	this->progress_type_ = 1U;
 
 	{// Canvas2D Create
-		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
 			return (-1);
 		}
 	}
@@ -301,7 +295,7 @@ INT cpp_base::scene::SelectSceneNode::OnStart(void)
 /**
  * @brief OnEnd関数
  */
-void cpp_base::scene::SelectSceneNode::OnEnd(void)
+void cpp_base::scene::SelectSceneMainNode::OnEnd(void)
 {
 	auto sound_mgr = this->GetManager()->GetSoundManager();
 
@@ -314,7 +308,7 @@ void cpp_base::scene::SelectSceneNode::OnEnd(void)
 /**
  * @brief OnUpdate関数
  */
-void cpp_base::scene::SelectSceneNode::OnUpdate(void)
+void cpp_base::scene::SelectSceneMainNode::OnUpdate(void)
 {
 	auto input_mgr = this->GetManager()->GetInputManager();
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();

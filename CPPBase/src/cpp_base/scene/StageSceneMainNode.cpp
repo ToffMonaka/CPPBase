@@ -1,10 +1,10 @@
 /**
  * @file
- * @brief StageSceneNodeコードファイル
+ * @brief StageSceneMainNodeコードファイル
  */
 
 
-#include "StageSceneNode.h"
+#include "StageSceneMainNode.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
@@ -18,7 +18,7 @@
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::StageSceneNodeDesc::StageSceneNodeDesc()
+cpp_base::scene::StageSceneMainNodeDesc::StageSceneMainNodeDesc()
 {
 	return;
 }
@@ -27,7 +27,7 @@ cpp_base::scene::StageSceneNodeDesc::StageSceneNodeDesc()
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::StageSceneNodeDesc::~StageSceneNodeDesc()
+cpp_base::scene::StageSceneMainNodeDesc::~StageSceneMainNodeDesc()
 {
 	this->Release();
 
@@ -38,7 +38,7 @@ cpp_base::scene::StageSceneNodeDesc::~StageSceneNodeDesc()
 /**
  * @brief Init関数
  */
-void cpp_base::scene::StageSceneNodeDesc::Init(void)
+void cpp_base::scene::StageSceneMainNodeDesc::Init(void)
 {
 	this->Release();
 
@@ -54,7 +54,7 @@ void cpp_base::scene::StageSceneNodeDesc::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::StageSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::StageSceneMainNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
 	if (cpp_base::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
@@ -64,8 +64,8 @@ INT cpp_base::scene::StageSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// StageSceneNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"STAGE_SCENE_NODE");
+	{// StageSceneMainNode Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"STAGE_SCENE_MAIN_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -79,7 +79,7 @@ INT cpp_base::scene::StageSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::StageSceneNode::StageSceneNode() :
+cpp_base::scene::StageSceneMainNode::StageSceneMainNode() :
 	progress_type_(0U)
 {
 	return;
@@ -89,7 +89,7 @@ cpp_base::scene::StageSceneNode::StageSceneNode() :
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::StageSceneNode::~StageSceneNode()
+cpp_base::scene::StageSceneMainNode::~StageSceneMainNode()
 {
 	this->Release();
 
@@ -100,7 +100,7 @@ cpp_base::scene::StageSceneNode::~StageSceneNode()
 /**
  * @brief Release関数
  */
-void cpp_base::scene::StageSceneNode::Release(void)
+void cpp_base::scene::StageSceneMainNode::Release(void)
 {
 	cpp_base::scene::BaseNode::Release();
 
@@ -111,7 +111,7 @@ void cpp_base::scene::StageSceneNode::Release(void)
 /**
  * @brief Init関数
  */
-void cpp_base::scene::StageSceneNode::Init(void)
+void cpp_base::scene::StageSceneMainNode::Init(void)
 {
 	this->Release();
 
@@ -133,7 +133,7 @@ void cpp_base::scene::StageSceneNode::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::StageSceneNode::Create(const cpp_base::scene::StageSceneNodeDesc &desc)
+INT cpp_base::scene::StageSceneMainNode::Create(const cpp_base::scene::StageSceneMainNodeDesc &desc)
 {
 	this->Init();
 
@@ -166,7 +166,7 @@ INT cpp_base::scene::StageSceneNode::Create(const cpp_base::scene::StageSceneNod
 		{// DiffuseTexture Create
 			tml::shared_ptr<tml::graphic::Texture> tex;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, graphic_mgr->common2.bg_tex1) == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, graphic_mgr->common2.bg_tex) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -247,14 +247,14 @@ INT cpp_base::scene::StageSceneNode::Create(const cpp_base::scene::StageSceneNod
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::StageSceneNode::OnStart(void)
+INT cpp_base::scene::StageSceneMainNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
 	this->progress_type_ = 1U;
 
 	{// Canvas2D Create
-		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
 			return (-1);
 		}
 	}
@@ -266,7 +266,7 @@ INT cpp_base::scene::StageSceneNode::OnStart(void)
 /**
  * @brief OnEnd関数
  */
-void cpp_base::scene::StageSceneNode::OnEnd(void)
+void cpp_base::scene::StageSceneMainNode::OnEnd(void)
 {
 	return;
 }
@@ -275,7 +275,7 @@ void cpp_base::scene::StageSceneNode::OnEnd(void)
 /**
  * @brief OnUpdate関数
  */
-void cpp_base::scene::StageSceneNode::OnUpdate(void)
+void cpp_base::scene::StageSceneMainNode::OnUpdate(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 

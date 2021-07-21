@@ -214,7 +214,7 @@ INT cpp_base::scene::DebugNode::OnStart(void)
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
 	if (this->canvas_2d == nullptr) {
-		graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d");
+		graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D");
 	}
 
 	return (0);

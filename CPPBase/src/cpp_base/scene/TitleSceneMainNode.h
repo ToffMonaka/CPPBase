@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief TitleSceneNodeヘッダーファイル
+ * @brief TitleSceneMainNodeヘッダーファイル
  */
 #pragma once
 
@@ -14,9 +14,9 @@
 namespace cpp_base {
 namespace scene {
 /**
- * @brief TitleSceneNodeDescクラス
+ * @brief TitleSceneMainNodeDescクラス
  */
-class TitleSceneNodeDesc : public cpp_base::scene::BaseNodeDesc
+class TitleSceneMainNodeDesc : public cpp_base::scene::BaseNodeDesc
 {
 public:
 
@@ -26,8 +26,8 @@ protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
-	TitleSceneNodeDesc();
-	virtual ~TitleSceneNodeDesc();
+	TitleSceneMainNodeDesc();
+	virtual ~TitleSceneMainNodeDesc();
 
 	virtual void Init(void);
 };
@@ -38,7 +38,7 @@ public:
 /**
  * @brief Release関数
  */
-inline void cpp_base::scene::TitleSceneNodeDesc::Release(void)
+inline void cpp_base::scene::TitleSceneMainNodeDesc::Release(void)
 {
 	cpp_base::scene::BaseNodeDesc::Release();
 
@@ -49,12 +49,12 @@ inline void cpp_base::scene::TitleSceneNodeDesc::Release(void)
 namespace cpp_base {
 namespace scene {
 /**
- * @brief TitleSceneNodeクラス
+ * @brief TitleSceneMainNodeクラス
  */
-class TitleSceneNode : public cpp_base::scene::BaseNode
+class TitleSceneMainNode : public cpp_base::scene::BaseNode
 {
-public: TitleSceneNode(const cpp_base::scene::TitleSceneNode &) = delete;
-public: cpp_base::scene::TitleSceneNode &operator =(const cpp_base::scene::TitleSceneNode &) = delete;
+public: TitleSceneMainNode(const cpp_base::scene::TitleSceneMainNode &) = delete;
+public: cpp_base::scene::TitleSceneMainNode &operator =(const cpp_base::scene::TitleSceneMainNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -75,11 +75,11 @@ protected:
 	void Release(void);
 
 public:
-	TitleSceneNode();
-	virtual ~TitleSceneNode();
+	TitleSceneMainNode();
+	virtual ~TitleSceneMainNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::TitleSceneNodeDesc &);
+	INT Create(const cpp_base::scene::TitleSceneMainNodeDesc &);
 
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);

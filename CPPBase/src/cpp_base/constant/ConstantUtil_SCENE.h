@@ -17,13 +17,13 @@ namespace SCENE {
 		const WCHAR TITLE_SCENE[] = L"TitleScene";
 		const WCHAR SELECT_SCENE[] = L"SelectScene";
 		const WCHAR STAGE_SCENE[] = L"StageScene";
-		const WCHAR INIT_SCENE_NODE[] = L"InitSceneNode";
-		const WCHAR TITLE_SCENE_NODE[] = L"TitleSceneNode";
-		const WCHAR SELECT_SCENE_NODE[] = L"SelectSceneNode";
-		const WCHAR STAGE_SCENE_NODE[] = L"StageSceneNode";
+		const WCHAR INIT_SCENE_MAIN_NODE[] = L"InitSceneMainNode";
+		const WCHAR TITLE_SCENE_MAIN_NODE[] = L"TitleSceneMainNode";
+		const WCHAR SELECT_SCENE_MAIN_NODE[] = L"SelectSceneMainNode";
+		const WCHAR STAGE_SCENE_MAIN_NODE[] = L"StageSceneMainNode";
 	}
 	namespace RESOURCE_NAME {
-		const WCHAR DEBUG_NODE[] = L"debug_node";
+		const WCHAR DEBUG_NODE[] = L"DebugNode";
 	}
 	enum class RESOURCE_TYPE : UINT {
 		USER = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::USER),
@@ -49,10 +49,10 @@ class TitleScene;
 class SelectScene;
 class StageScene;
 class BaseNode;
-class InitSceneNode;
-class TitleSceneNode;
-class SelectSceneNode;
-class StageSceneNode;
 class DebugNode;
+class InitSceneMainNode;
+class TitleSceneMainNode;
+class SelectSceneMainNode;
+class StageSceneMainNode;
 }
 }

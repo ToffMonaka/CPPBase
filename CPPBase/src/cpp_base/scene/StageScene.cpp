@@ -146,7 +146,7 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		tml::graphic::Canvas2DDesc desc;
 
 		desc.SetManager(graphic_mgr);
-		desc.resource_name = L"canvas_2d";
+		desc.resource_name = L"Canvas2D";
 
 		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, desc) == nullptr) {
 			this->Init();

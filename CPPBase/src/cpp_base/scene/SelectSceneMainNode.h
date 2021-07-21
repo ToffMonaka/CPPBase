@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief SelectSceneNodeヘッダーファイル
+ * @brief SelectSceneMainNodeヘッダーファイル
  */
 #pragma once
 
@@ -14,9 +14,9 @@
 namespace cpp_base {
 namespace scene {
 /**
- * @brief SelectSceneNodeDescクラス
+ * @brief SelectSceneMainNodeDescクラス
  */
-class SelectSceneNodeDesc : public cpp_base::scene::BaseNodeDesc
+class SelectSceneMainNodeDesc : public cpp_base::scene::BaseNodeDesc
 {
 public:
 
@@ -26,8 +26,8 @@ protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
-	SelectSceneNodeDesc();
-	virtual ~SelectSceneNodeDesc();
+	SelectSceneMainNodeDesc();
+	virtual ~SelectSceneMainNodeDesc();
 
 	virtual void Init(void);
 };
@@ -38,7 +38,7 @@ public:
 /**
  * @brief Release関数
  */
-inline void cpp_base::scene::SelectSceneNodeDesc::Release(void)
+inline void cpp_base::scene::SelectSceneMainNodeDesc::Release(void)
 {
 	cpp_base::scene::BaseNodeDesc::Release();
 
@@ -49,12 +49,12 @@ inline void cpp_base::scene::SelectSceneNodeDesc::Release(void)
 namespace cpp_base {
 namespace scene {
 /**
- * @brief SelectSceneNodeクラス
+ * @brief SelectSceneMainNodeクラス
  */
-class SelectSceneNode : public cpp_base::scene::BaseNode
+class SelectSceneMainNode : public cpp_base::scene::BaseNode
 {
-public: SelectSceneNode(const cpp_base::scene::SelectSceneNode &) = delete;
-public: cpp_base::scene::SelectSceneNode &operator =(const cpp_base::scene::SelectSceneNode &) = delete;
+public: SelectSceneMainNode(const cpp_base::scene::SelectSceneMainNode &) = delete;
+public: cpp_base::scene::SelectSceneMainNode &operator =(const cpp_base::scene::SelectSceneMainNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -72,11 +72,11 @@ protected:
 	void Release(void);
 
 public:
-	SelectSceneNode();
-	virtual ~SelectSceneNode();
+	SelectSceneMainNode();
+	virtual ~SelectSceneMainNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::SelectSceneNodeDesc &);
+	INT Create(const cpp_base::scene::SelectSceneMainNodeDesc &);
 
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);

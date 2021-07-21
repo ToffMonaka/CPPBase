@@ -1,10 +1,10 @@
 /**
  * @file
- * @brief InitSceneNodeコードファイル
+ * @brief InitSceneMainNodeコードファイル
  */
 
 
-#include "InitSceneNode.h"
+#include "InitSceneMainNode.h"
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
@@ -22,7 +22,7 @@
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::InitSceneNodeDesc::InitSceneNodeDesc()
+cpp_base::scene::InitSceneMainNodeDesc::InitSceneMainNodeDesc()
 {
 	return;
 }
@@ -31,7 +31,7 @@ cpp_base::scene::InitSceneNodeDesc::InitSceneNodeDesc()
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::InitSceneNodeDesc::~InitSceneNodeDesc()
+cpp_base::scene::InitSceneMainNodeDesc::~InitSceneMainNodeDesc()
 {
 	this->Release();
 
@@ -42,7 +42,7 @@ cpp_base::scene::InitSceneNodeDesc::~InitSceneNodeDesc()
 /**
  * @brief Init関数
  */
-void cpp_base::scene::InitSceneNodeDesc::Init(void)
+void cpp_base::scene::InitSceneMainNodeDesc::Init(void)
 {
 	this->Release();
 
@@ -58,7 +58,7 @@ void cpp_base::scene::InitSceneNodeDesc::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::InitSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::InitSceneMainNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
 	if (cpp_base::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
@@ -68,8 +68,8 @@ INT cpp_base::scene::InitSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// InitSceneNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"INIT_SCENE_NODE");
+	{// InitSceneMainNode Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"INIT_SCENE_MAIN_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -83,7 +83,7 @@ INT cpp_base::scene::InitSceneNodeDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::InitSceneNode::InitSceneNode() :
+cpp_base::scene::InitSceneMainNode::InitSceneMainNode() :
 	progress_type_(0U),
 	wait_update_time(0.0)
 {
@@ -94,7 +94,7 @@ cpp_base::scene::InitSceneNode::InitSceneNode() :
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::InitSceneNode::~InitSceneNode()
+cpp_base::scene::InitSceneMainNode::~InitSceneMainNode()
 {
 	this->Release();
 
@@ -105,7 +105,7 @@ cpp_base::scene::InitSceneNode::~InitSceneNode()
 /**
  * @brief Release関数
  */
-void cpp_base::scene::InitSceneNode::Release(void)
+void cpp_base::scene::InitSceneMainNode::Release(void)
 {
 	cpp_base::scene::BaseNode::Release();
 
@@ -116,7 +116,7 @@ void cpp_base::scene::InitSceneNode::Release(void)
 /**
  * @brief Init関数
  */
-void cpp_base::scene::InitSceneNode::Init(void)
+void cpp_base::scene::InitSceneMainNode::Init(void)
 {
 	this->Release();
 
@@ -139,7 +139,7 @@ void cpp_base::scene::InitSceneNode::Init(void)
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeDesc &desc)
+INT cpp_base::scene::InitSceneMainNode::Create(const cpp_base::scene::InitSceneMainNodeDesc &desc)
 {
 	this->Init();
 
@@ -172,7 +172,7 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
 		{// DiffuseTexture Create
 			tml::shared_ptr<tml::graphic::Texture> tex;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, graphic_mgr->common2.bg_tex1) == nullptr) {
+			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, graphic_mgr->common2.bg_tex) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -253,14 +253,14 @@ INT cpp_base::scene::InitSceneNode::Create(const cpp_base::scene::InitSceneNodeD
  * @return res (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::InitSceneNode::OnStart(void)
+INT cpp_base::scene::InitSceneMainNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
 	this->progress_type_ = 1U;
 
 	{// Canvas2D Create
-		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"canvas_2d") == nullptr) {
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
 			return (-1);
 		}
 	}
@@ -274,7 +274,7 @@ INT cpp_base::scene::InitSceneNode::OnStart(void)
 /**
  * @brief OnEnd関数
  */
-void cpp_base::scene::InitSceneNode::OnEnd(void)
+void cpp_base::scene::InitSceneMainNode::OnEnd(void)
 {
 	return;
 }
@@ -283,7 +283,7 @@ void cpp_base::scene::InitSceneNode::OnEnd(void)
 /**
  * @brief OnUpdate関数
  */
-void cpp_base::scene::InitSceneNode::OnUpdate(void)
+void cpp_base::scene::InitSceneMainNode::OnUpdate(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 	auto sound_mgr = this->GetManager()->GetSoundManager();

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief InitSceneNodeヘッダーファイル
+ * @brief StageSceneMainNodeヘッダーファイル
  */
 #pragma once
 
@@ -13,9 +13,9 @@
 namespace cpp_base {
 namespace scene {
 /**
- * @brief InitSceneNodeDescクラス
+ * @brief StageSceneMainNodeDescクラス
  */
-class InitSceneNodeDesc : public cpp_base::scene::BaseNodeDesc
+class StageSceneMainNodeDesc : public cpp_base::scene::BaseNodeDesc
 {
 public:
 
@@ -25,8 +25,8 @@ protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
-	InitSceneNodeDesc();
-	virtual ~InitSceneNodeDesc();
+	StageSceneMainNodeDesc();
+	virtual ~StageSceneMainNodeDesc();
 
 	virtual void Init(void);
 };
@@ -37,7 +37,7 @@ public:
 /**
  * @brief Release関数
  */
-inline void cpp_base::scene::InitSceneNodeDesc::Release(void)
+inline void cpp_base::scene::StageSceneMainNodeDesc::Release(void)
 {
 	cpp_base::scene::BaseNodeDesc::Release();
 
@@ -48,12 +48,12 @@ inline void cpp_base::scene::InitSceneNodeDesc::Release(void)
 namespace cpp_base {
 namespace scene {
 /**
- * @brief InitSceneNodeクラス
+ * @brief StageSceneMainNodeクラス
  */
-class InitSceneNode : public cpp_base::scene::BaseNode
+class StageSceneMainNode : public cpp_base::scene::BaseNode
 {
-public: InitSceneNode(const cpp_base::scene::InitSceneNode &) = delete;
-public: cpp_base::scene::InitSceneNode &operator =(const cpp_base::scene::InitSceneNode &) = delete;
+public: StageSceneMainNode(const cpp_base::scene::StageSceneMainNode &) = delete;
+public: cpp_base::scene::StageSceneMainNode &operator =(const cpp_base::scene::StageSceneMainNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -62,19 +62,18 @@ private:
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::Model2D> bg_model;
-	tml::TIME_REAL wait_update_time;
-	tml::shared_ptr<tml::graphic::Font> wait_font;
-	tml::shared_ptr<tml::graphic::Model2D> wait_model;
+	tml::shared_ptr<tml::graphic::Font> name_font;
+	tml::shared_ptr<tml::graphic::Model2D> name_model;
 
 protected:
 	void Release(void);
 
 public:
-	InitSceneNode();
-	virtual ~InitSceneNode();
+	StageSceneMainNode();
+	virtual ~StageSceneMainNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::InitSceneNodeDesc &);
+	INT Create(const cpp_base::scene::StageSceneMainNodeDesc &);
 
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);

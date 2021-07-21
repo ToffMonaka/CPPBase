@@ -13,11 +13,11 @@
 #include "SelectScene.h"
 #include "StageScene.h"
 #include "BaseNode.h"
-#include "InitSceneNode.h"
-#include "TitleSceneNode.h"
-#include "SelectSceneNode.h"
-#include "StageSceneNode.h"
 #include "DebugNode.h"
+#include "InitSceneMainNode.h"
+#include "TitleSceneMainNode.h"
+#include "SelectSceneMainNode.h"
+#include "StageSceneMainNode.h"
 
 
 /**
@@ -79,7 +79,7 @@ INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)
 			cpp_base::scene::DebugNodeDesc desc;
 
 			desc.SetManager(this->mgr_);
-			desc.resource_name = L"debug_node";
+			desc.resource_name = cpp_base::ConstantUtil::SCENE::RESOURCE_NAME::DEBUG_NODE;
 
 			if (this->mgr_->GetResource<cpp_base::scene::DebugNode>(this->debug_node, desc) == nullptr) {
 				this->Init();

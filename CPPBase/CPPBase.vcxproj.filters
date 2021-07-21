@@ -363,12 +363,6 @@
     <ClCompile Include="src\cpp_base\scene\BaseNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp_base\scene\InitSceneNode.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cpp_base\scene\TitleSceneNode.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\lib\tml\input\DeviceEvent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -438,13 +432,19 @@
     <ClCompile Include="src\cpp_base\scene\SelectScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp_base\scene\SelectSceneNode.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\cpp_base\scene\StageScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp_base\scene\StageSceneNode.cpp">
+    <ClCompile Include="src\cpp_base\scene\InitSceneMainNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp_base\scene\TitleSceneMainNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp_base\scene\SelectSceneMainNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp_base\scene\StageSceneMainNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -890,12 +890,6 @@
     <ClInclude Include="src\cpp_base\scene\BaseNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\cpp_base\scene\InitSceneNode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cpp_base\scene\TitleSceneNode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\lib\tml\input\DeviceEvent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -965,19 +959,25 @@
     <ClInclude Include="src\cpp_base\scene\SelectScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\cpp_base\scene\SelectSceneNode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\cpp_base\scene\StageScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cpp_base\scene\StageSceneNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_FILE_PATH.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\tml\constant\ConstantUtil_FILE_PATH.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\scene\InitSceneMainNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\scene\TitleSceneMainNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\scene\SelectSceneMainNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\scene\StageSceneMainNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

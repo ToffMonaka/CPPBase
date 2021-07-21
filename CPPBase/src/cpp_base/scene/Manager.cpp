@@ -14,11 +14,11 @@
 #include "SelectScene.h"
 #include "StageScene.h"
 #include "BaseNode.h"
-#include "InitSceneNode.h"
-#include "TitleSceneNode.h"
-#include "SelectSceneNode.h"
-#include "StageSceneNode.h"
 #include "DebugNode.h"
+#include "InitSceneMainNode.h"
+#include "TitleSceneMainNode.h"
+#include "SelectSceneMainNode.h"
+#include "StageSceneMainNode.h"
 
 
 /**

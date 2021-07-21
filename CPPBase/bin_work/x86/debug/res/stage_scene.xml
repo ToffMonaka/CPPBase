@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="shift_jis" ?>
 <scene class_name="StageScene">
-	<node class_name="StageSceneNode">
+	<node class_name="StageSceneMainNode">
 	</node>
-	<node res_name="debug_node">
+	<node res_name="DebugNode">
 	</node>
 </scene>
