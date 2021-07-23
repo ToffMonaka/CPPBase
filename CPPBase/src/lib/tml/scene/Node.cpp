@@ -36,6 +36,8 @@ void tml::scene::NodeDesc::Init(void)
 {
 	this->Release();
 
+	this->name.clear();
+
 	tml::scene::ManagerResourceDesc::Init();
 
 	return;
@@ -54,7 +56,6 @@ INT tml::scene::NodeDesc::ReadValue(const tml::INIFile &ini_file)
 		return (-1);
 	}
 
-	/*
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
@@ -62,9 +63,13 @@ INT tml::scene::NodeDesc::ReadValue(const tml::INIFile &ini_file)
 		val_name_cont = ini_file.data.GetValueNameContainer(L"NODE");
 
 		if (val_name_cont != nullptr) {
+			val = ini_file.data.GetValue((*val_name_cont), L"NAME");
+
+			if (val != nullptr) {
+				this->name = (*val);
+			}
 		}
 	}
-	*/
 
 	return (0);
 }
@@ -117,13 +122,12 @@ void tml::scene::Node::Release(void)
  */
 void tml::scene::Node::Init(void)
 {
+	this->name_.clear();
 	this->type_ = tml::ConstantUtil::SCENE::NODE_TYPE::NONE;
 	this->run_flg_ = false;
 	this->start_flg_ = false;
 	this->started_flg_ = false;
 	this->parent_node_ = nullptr;
-
-	this->name.clear();
 
 	tml::scene::ManagerResource::Init();
 
@@ -148,6 +152,7 @@ INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc, const tml::Consta
 		return (-1);
 	}
 
+	this->name_ = desc.name;
 	this->type_ = type;
 	this->start_flg_ = true;
 

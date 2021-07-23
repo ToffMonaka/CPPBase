@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="shift_jis" ?>
 <scene class_name="StageScene">
+	[SCENE]
+	NAME=stage
 	<node class_name="StageSceneMainNode">
+		[NODE]
+		NAME=main
 	</node>
 	<node res_name="DebugNode">
 	</node>

@@ -17,6 +17,7 @@ namespace scene {
 class NodeDesc : public tml::scene::ManagerResourceDesc
 {
 public:
+	std::wstring name;
 
 protected:
 	void Release(void);
@@ -58,15 +59,13 @@ public: tml::scene::Node &operator =(const tml::scene::Node &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	std::wstring name_;
 	tml::ConstantUtil::SCENE::NODE_TYPE type_;
 	bool run_flg_;
 	bool start_flg_;
 	bool started_flg_;
 	tml::scene::Node *parent_node_;
 	std::list<tml::shared_ptr<tml::scene::Node>> child_node_cont_;
-
-public:
-	std::wstring name;
 
 protected:
 	void Release(void);
@@ -86,6 +85,8 @@ public:
 	virtual void OnEnd(void) = 0;
 	virtual void OnUpdate(void) = 0;
 
+	const std::wstring &GetName(void) const;
+	void SetName(const WCHAR *);
 	tml::ConstantUtil::SCENE::NODE_TYPE GetType(void) const;
 	bool GetRunFlag(void) const;
 	void SetRunFlag(const bool);
@@ -101,6 +102,28 @@ public:
 	void RemoveChildNodeFromParentNode(const bool event_flg = true);
 };
 }
+}
+
+
+/**
+ * @brief GetNameŠÖ”
+ * @return name (name)
+ */
+inline const std::wstring &tml::scene::Node::GetName(void) const
+{
+	return (this->name_);
+}
+
+
+/**
+ * @brief SetNameŠÖ”
+ * @param name (name)
+ */
+inline void tml::scene::Node::SetName(const WCHAR *name)
+{
+	this->name_ = name;
+
+	return;
 }
 
 

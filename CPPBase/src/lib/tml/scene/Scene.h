@@ -17,6 +17,7 @@ namespace scene {
 class SceneDesc : public tml::scene::ManagerResourceDesc
 {
 public:
+	std::wstring name;
 
 protected:
 	void Release(void);
@@ -58,6 +59,7 @@ public: tml::scene::Scene &operator =(const tml::scene::Scene &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	std::wstring name_;
 	tml::ConstantUtil::SCENE::SCENE_TYPE type_;
 	bool run_flg_;
 	bool start_flg_;
@@ -82,6 +84,8 @@ public:
 	virtual void OnEnd(void) = 0;
 	virtual void OnUpdate(void) = 0;
 
+	const std::wstring &GetName(void) const;
+	void SetName(const WCHAR *);
 	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
 	bool GetRunFlag(void) const;
 	void SetRunFlag(const bool);
@@ -92,6 +96,28 @@ public:
 	void SetRootNode(void);
 };
 }
+}
+
+
+/**
+ * @brief GetNameŠÖ”
+ * @return name (name)
+ */
+inline const std::wstring &tml::scene::Scene::GetName(void) const
+{
+	return (this->name_);
+}
+
+
+/**
+ * @brief SetNameŠÖ”
+ * @param name (name)
+ */
+inline void tml::scene::Scene::SetName(const WCHAR *name)
+{
+	this->name_ = name;
+
+	return;
 }
 
 

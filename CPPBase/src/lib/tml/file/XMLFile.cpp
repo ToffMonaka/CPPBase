@@ -51,11 +51,10 @@ void tml::XMLFileDataNode::Init(void)
 {
 	this->Release();
 
-	this->parent_node_ = nullptr;
-
 	this->name.clear();
 	this->value_container.clear();
 	this->string.clear();
+	this->parent_node_ = nullptr;
 
 	return;
 }
@@ -237,12 +236,10 @@ void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
 
 	this->root_node_ = tml::make_shared<tml::XMLFileDataNode>(1U);
 
-	if (this->root_node_ != nullptr) {
-		this->root_node_->name = L"root";
+	this->root_node_->name = L"root";
 
-		if (xml_doc != nullptr) {
-			this->SetRootNodeRecursivePart(this->root_node_, xml_doc->first_node());
-		}
+	if (xml_doc != nullptr) {
+		this->SetRootNodeRecursivePart(this->root_node_, xml_doc->first_node());
 	}
 
 	return;
@@ -256,6 +253,9 @@ void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
  */
 void tml::XMLFileData::SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFileDataNode> &parent_node, const rapidxml::xml_node<> *xml_node)
 {
+	static const std::wstring newline_code_str = L"\r\n";
+	static const std::wstring old_newline_code_str = L"\t";
+
 	if (xml_node == nullptr) {
 		return;
 	}
@@ -274,6 +274,14 @@ void tml::XMLFileData::SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFi
 	}
 
 	tml::StringUtil::GetString(child_node->string, xml_node->value());
+
+	size_t child_node_str_index = child_node->string.find(old_newline_code_str);
+
+	while (child_node_str_index != std::wstring::npos) {
+		child_node->string.replace(child_node_str_index, old_newline_code_str.length(), newline_code_str);
+
+		child_node_str_index = child_node->string.find(old_newline_code_str, child_node_str_index + newline_code_str.length());
+	}
 
 	parent_node->AddChildNode(child_node);
 

@@ -115,7 +115,11 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 			INT scene_get_res = -1;
 
 			if (scene_class_name != nullptr) {
-				if (this->scene_by_ini_file.Get(scene, scene_class_name->c_str(), tml::INIFileReadDesc(), &scene_get_res) == nullptr) {
+				tml::INIFileReadDesc scene_desc;
+
+				scene_desc.data.string = xml_file_node->string;
+
+				if (this->scene_by_ini_file.Get(scene, scene_class_name->c_str(), scene_desc, &scene_get_res) == nullptr) {
 					return (scene);
 				}
 			} else if (scene_res_name != nullptr) {
@@ -184,7 +188,11 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 			INT node_get_res = -1;
 
 			if (node_class_name != nullptr) {
-				if (this->node_by_ini_file.Get(node, node_class_name->c_str(), tml::INIFileReadDesc(), &node_get_res) == nullptr) {
+				tml::INIFileReadDesc node_desc;
+
+				node_desc.data.string = xml_file_node->string;
+
+				if (this->node_by_ini_file.Get(node, node_class_name->c_str(), node_desc, &node_get_res) == nullptr) {
 					return (node);
 				}
 			} else if (node_res_name != nullptr) {
@@ -229,7 +237,11 @@ void tml::scene::ManagerFactory::SetNodeRecursivePart(const tml::shared_ptr<tml:
 	INT child_node_get_res = -1;
 
 	if (child_node_class_name != nullptr) {
-		if (this->node_by_ini_file.Get(child_node, child_node_class_name->c_str(), tml::INIFileReadDesc(), &child_node_get_res) == nullptr) {
+		tml::INIFileReadDesc child_node_desc;
+
+		child_node_desc.data.string = xml_file_node->string;
+
+		if (this->node_by_ini_file.Get(child_node, child_node_class_name->c_str(), child_node_desc, &child_node_get_res) == nullptr) {
 			return;
 		}
 	} else if (child_node_res_name != nullptr) {

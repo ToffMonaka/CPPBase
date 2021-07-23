@@ -38,6 +38,7 @@ public:
 
 	virtual void Init(void);
 
+	const std::wstring *GetValue(const WCHAR *) const;
 	tml::XMLFileDataNode *GetParentNode(void);
 	void SetParentNode(tml::XMLFileDataNode *);
 	const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &GetChildNodeContainer(void);
@@ -45,9 +46,25 @@ public:
 	void RemoveChildNode(void);
 	void RemoveChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &);
 	void RemoveChildNodeFromParentNode(void);
-
-	const std::wstring *GetValue(const WCHAR *) const;
 };
+}
+
+
+/**
+ * @brief GetValueä÷êî
+ * @param val_name (value_name)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::XMLFileDataNode::GetValue(const WCHAR *val_name) const
+{
+	auto val_itr = this->value_container.find(val_name);
+
+	if (val_itr == this->value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&val_itr->second);
 }
 
 
@@ -68,24 +85,6 @@ inline tml::XMLFileDataNode *tml::XMLFileDataNode::GetParentNode(void)
 inline const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &tml::XMLFileDataNode::GetChildNodeContainer(void)
 {
 	return (this->child_node_cont_);
-}
-
-
-/**
- * @brief GetValueä÷êî
- * @param val_name (value_name)
- * @return val (value)<br>
- * nullptr=é∏îs
- */
-inline const std::wstring *tml::XMLFileDataNode::GetValue(const WCHAR *val_name) const
-{
-	auto val_itr = this->value_container.find(val_name);
-
-	if (val_itr == this->value_container.end()) {
-		return (nullptr);
-	}
-
-	return (&val_itr->second);
 }
 
 

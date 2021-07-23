@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="shift_jis" ?>
 <scene class_name="SelectScene">
+	[SCENE]
+	NAME=select
 	<node class_name="SelectSceneMainNode">
+		[NODE]
+		NAME=main
 	</node>
 	<node res_name="DebugNode">
 	</node>
