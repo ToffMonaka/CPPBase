@@ -181,7 +181,7 @@ INT cpp_base::scene::TitleSceneMainNode::Create(const cpp_base::scene::TitleScen
 
 			desc.SetManager(graphic_mgr);
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = L"res/title_bg_img.png";
+			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BACKGROUND_TEXTURE;
 
 			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
@@ -225,7 +225,7 @@ INT cpp_base::scene::TitleSceneMainNode::Create(const cpp_base::scene::TitleScen
 
 			desc.SetManager(graphic_mgr);
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = L"res/title_logo_img.png";
+			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_LOGO_TEXTURE;
 
 			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();

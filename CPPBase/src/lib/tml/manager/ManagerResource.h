@@ -97,9 +97,9 @@ public:
 	UINT GetResourceMainIndex(void) const;
 	UINT GetResourceSubIndex(void) const;
 	const tml::shared_ptr<tml::ManagerResource> &GetResourceSharedPointer(void) const;
-	void SetResourceSharedPointer(const tml::shared_ptr<tml::ManagerResource> &);
+	void SetResourceSharedPointer(tml::Manager *, const tml::shared_ptr<tml::ManagerResource> &);
 	const std::wstring &GetResourceName(void) const;
-	void SetResourceName(const WCHAR *);
+	void SetResourceName(tml::Manager *, const WCHAR *);
 };
 }
 

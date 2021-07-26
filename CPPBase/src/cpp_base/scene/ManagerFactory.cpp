@@ -17,6 +17,7 @@
 #include "TitleSceneMainNode.h"
 #include "SelectSceneMainNode.h"
 #include "StageSceneMainNode.h"
+#include "Test2DStageNode.h"
 
 
 /**
@@ -234,6 +235,23 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 			desc.Read(file_read_desc);
 
 			if (this->mgr_->GetResource<cpp_base::scene::StageSceneMainNode>(node, desc, dst_get_res) == nullptr) {
+				return (node);
+			}
+
+			return (node);
+		}
+	);
+
+	this->mgr_->factory.node_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TEST_2D_STAGE_NODE,
+		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_get_res) -> tml::shared_ptr<tml::scene::Node> {
+			tml::shared_ptr<tml::scene::Node> node;
+
+			cpp_base::scene::Test2DStageNodeDesc desc;
+
+			desc.SetManager(this->mgr_);
+			desc.Read(file_read_desc);
+
+			if (this->mgr_->GetResource<cpp_base::scene::Test2DStageNode>(node, desc, dst_get_res) == nullptr) {
 				return (node);
 			}
 

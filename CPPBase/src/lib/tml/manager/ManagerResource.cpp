@@ -166,11 +166,12 @@ INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc, const UIN
 
 /**
  * @brief SetResourceSharedPointerä÷êî
+ * @param mgr (manager)
  * @param res_shared_p (resource_shared_pointer)
  */
-void tml::ManagerResource::SetResourceSharedPointer(const tml::shared_ptr<tml::ManagerResource> &res_shared_p)
+void tml::ManagerResource::SetResourceSharedPointer(tml::Manager *mgr, const tml::shared_ptr<tml::ManagerResource> &res_shared_p)
 {
-	if (!this->mgr_->CheckFriendResource(this)) {
+	if (!mgr->CheckFriendResource(this)) {
 		return;
 	}
 
@@ -182,11 +183,12 @@ void tml::ManagerResource::SetResourceSharedPointer(const tml::shared_ptr<tml::M
 
 /**
  * @brief SetResourceNameä÷êî
+ * @param mgr (manager)
  * @param res_name (resource_name)
  */
-void tml::ManagerResource::SetResourceName(const WCHAR *res_name)
+void tml::ManagerResource::SetResourceName(tml::Manager *mgr, const WCHAR *res_name)
 {
-	if (!this->mgr_->CheckFriendResource(this)) {
+	if (!mgr->CheckFriendResource(this)) {
 		return;
 	}
 

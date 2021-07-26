@@ -186,6 +186,7 @@
     <ClCompile Include="src\cpp_base\scene\SelectSceneMainNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\StageScene.cpp" />
     <ClCompile Include="src\cpp_base\scene\StageSceneMainNode.cpp" />
+    <ClCompile Include="src\cpp_base\scene\Test2DStageNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\TitleScene.cpp" />
     <ClCompile Include="src\cpp_base\scene\TitleSceneMainNode.cpp" />
     <ClCompile Include="src\cpp_base\sound\Manager.cpp" />
@@ -340,6 +341,7 @@
     <ClInclude Include="src\cpp_base\scene\SelectSceneMainNode.h" />
     <ClInclude Include="src\cpp_base\scene\StageScene.h" />
     <ClInclude Include="src\cpp_base\scene\StageSceneMainNode.h" />
+    <ClInclude Include="src\cpp_base\scene\Test2DStageNode.h" />
     <ClInclude Include="src\cpp_base\scene\TitleScene.h" />
     <ClInclude Include="src\cpp_base\scene\TitleSceneMainNode.h" />
     <ClInclude Include="src\cpp_base\sound\Manager.h" />

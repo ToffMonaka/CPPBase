@@ -18,6 +18,7 @@
 #include "TitleSceneMainNode.h"
 #include "SelectSceneMainNode.h"
 #include "StageSceneMainNode.h"
+#include "Test2DStageNode.h"
 
 
 /**

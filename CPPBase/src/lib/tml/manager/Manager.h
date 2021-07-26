@@ -204,19 +204,21 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T>(1U);
 
-	if (reinterpret_cast<T *>(res.get())->Create(desc) < 0) {
-		return (dst_res);
-	}
-
-	if ((res->GetResourceMainIndex() >= this->res_cont_.size())
-	|| (res->GetResourceSubIndex() >= this->res_cont_[res->GetResourceMainIndex()].size())) {
-		return (dst_res);
-	}
-
 	this->friend_res_ = res.get();
-	this->friend_res_->SetResourceSharedPointer(res);
-	this->friend_res_->SetResourceName(desc.resource_name.c_str());
+	this->friend_res_->SetResourceSharedPointer(this, res);
+	this->friend_res_->SetResourceName(this, desc.resource_name.c_str());
 	this->friend_res_ = nullptr;
+
+	if (reinterpret_cast<T *>(res.get())->Create(desc) < 0) {
+		this->friend_res_ = res.get();
+		this->friend_res_->SetResourceSharedPointer(this, tml::shared_ptr<tml::ManagerResource>());
+		this->friend_res_->SetResourceName(this, L"");
+		this->friend_res_ = nullptr;
+
+		res.reset();
+
+		return (dst_res);
+	}
 
 	this->res_cont_[res->GetResourceMainIndex()][res->GetResourceSubIndex()].push_back(res);
 

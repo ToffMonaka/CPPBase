@@ -21,6 +21,7 @@ namespace SCENE {
 		const WCHAR TITLE_SCENE_MAIN_NODE[] = L"TitleSceneMainNode";
 		const WCHAR SELECT_SCENE_MAIN_NODE[] = L"SelectSceneMainNode";
 		const WCHAR STAGE_SCENE_MAIN_NODE[] = L"StageSceneMainNode";
+		const WCHAR TEST_2D_STAGE_NODE[] = L"Test2DStageNode";
 	}
 	namespace RESOURCE_NAME {
 		const WCHAR DEBUG_NODE[] = L"DebugNode";
@@ -54,5 +55,6 @@ class InitSceneMainNode;
 class TitleSceneMainNode;
 class SelectSceneMainNode;
 class StageSceneMainNode;
+class Test2DStageNode;
 }
 }

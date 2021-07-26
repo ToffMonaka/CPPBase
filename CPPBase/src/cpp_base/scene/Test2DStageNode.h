@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief StageSceneMainNodeヘッダーファイル
+ * @brief Test2DStageNodeヘッダーファイル
  */
 #pragma once
 
@@ -13,9 +13,9 @@
 namespace cpp_base {
 namespace scene {
 /**
- * @brief StageSceneMainNodeDescクラス
+ * @brief Test2DStageNodeDescクラス
  */
-class StageSceneMainNodeDesc : public cpp_base::scene::BaseNodeDesc
+class Test2DStageNodeDesc : public cpp_base::scene::BaseNodeDesc
 {
 public:
 
@@ -25,8 +25,8 @@ protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
-	StageSceneMainNodeDesc();
-	virtual ~StageSceneMainNodeDesc();
+	Test2DStageNodeDesc();
+	virtual ~Test2DStageNodeDesc();
 
 	virtual void Init(void);
 };
@@ -37,7 +37,7 @@ public:
 /**
  * @brief Release関数
  */
-inline void cpp_base::scene::StageSceneMainNodeDesc::Release(void)
+inline void cpp_base::scene::Test2DStageNodeDesc::Release(void)
 {
 	cpp_base::scene::BaseNodeDesc::Release();
 
@@ -48,29 +48,28 @@ inline void cpp_base::scene::StageSceneMainNodeDesc::Release(void)
 namespace cpp_base {
 namespace scene {
 /**
- * @brief StageSceneMainNodeクラス
+ * @brief Test2DStageNodeクラス
  */
-class StageSceneMainNode : public cpp_base::scene::BaseNode
+class Test2DStageNode : public cpp_base::scene::BaseNode
 {
-public: StageSceneMainNode(const cpp_base::scene::StageSceneMainNode &) = delete;
-public: cpp_base::scene::StageSceneMainNode &operator =(const cpp_base::scene::StageSceneMainNode &) = delete;
+public: Test2DStageNode(const cpp_base::scene::Test2DStageNode &) = delete;
+public: cpp_base::scene::Test2DStageNode &operator =(const cpp_base::scene::Test2DStageNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
-
-private:
-	UINT progress_type_;
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
+	tml::shared_ptr<tml::graphic::Model2D> ground_model;
+	tml::shared_ptr<tml::graphic::Model2D> pl_model;
 
 protected:
 	void Release(void);
 
 public:
-	StageSceneMainNode();
-	virtual ~StageSceneMainNode();
+	Test2DStageNode();
+	virtual ~Test2DStageNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::StageSceneMainNodeDesc &);
+	INT Create(const cpp_base::scene::Test2DStageNodeDesc &);
 
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);

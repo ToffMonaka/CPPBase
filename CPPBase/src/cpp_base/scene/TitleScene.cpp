@@ -6,13 +6,11 @@
 
 #include "TitleScene.h"
 #include "../../lib/tml/math/MathUtil.h"
-#include "../../lib/tml/input/KeyboardDeviceEvent.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/Camera2D.h"
 #include "../../lib/tml/graphic/Camera3D.h"
-#include "../input/Manager.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
 
@@ -220,53 +218,11 @@ void cpp_base::scene::TitleScene::OnEnd(void)
  */
 void cpp_base::scene::TitleScene::OnUpdate(void)
 {
-	auto input_mgr = this->GetManager()->GetInputManager();
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
-	for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
-		auto event = reinterpret_cast<tml::input::DeviceEvent *>(input_mgr->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
-
-		switch (event->GetEventSubIndex()) {
-		case tml::input::KeyboardDeviceEvent::EVENT_SUB_INDEX: {
-			auto &event_dat = reinterpret_cast<tml::input::KeyboardDeviceEvent *>(event)->data;
-
-			if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE::BUTTON_DOWN)) {
-				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W) {
-					this->camera_2d->position.SetY(this->camera_2d->position.GetY() + 2.0f);
-				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S) {
-					this->camera_2d->position.SetY(this->camera_2d->position.GetY() - 2.0f);
-				}
-
-				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A) {
-					this->camera_2d->position.SetX(this->camera_2d->position.GetX() + 2.0f);
-				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D) {
-					this->camera_2d->position.SetX(this->camera_2d->position.GetX() - 2.0f);
-				}
-
-				if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Q) {
-					auto angle = this->camera_2d->position.GetAngle();
-
-					angle -= tml::MathUtil::GetAngleRadian(2.0f);
-
-					this->camera_2d->position.SetAngle(angle);
-				} else if (event_dat.code == tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::E) {
-					auto angle = this->camera_2d->position.GetAngle();
-
-					angle += tml::MathUtil::GetAngleRadian(2.0f);
-
-					this->camera_2d->position.SetAngle(angle);
-				}
-			}
-
-			break;
-		}
-		}
-	}
 
 	this->canvas_2d->SetDrawCamera(this->camera_2d.get());
 
 	graphic_mgr->SetDrawCanvas(this->canvas_2d.get());
-
 
 	return;
 }

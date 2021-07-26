@@ -165,20 +165,16 @@ void tml::Manager::Update(void)
 	UINT use_res_cnt = 0U;
 
 	while (this->check_res_itr_ != this->check_res_cont_.end()) {
-		auto &res = (*this->check_res_itr_);
-
 		use_res_cnt = 3U;
 
-		if (!res->GetResourceName().empty()) {
+		if (!(*this->check_res_itr_)->GetResourceName().empty()) {
 			++use_res_cnt;
 		}
 
 		if (this->check_res_itr_->use_count() <= static_cast<LONG>(use_res_cnt)) {
-			res->Init();
+			tml::shared_ptr<tml::ManagerResource> res = (*this->check_res_itr_);
 
-			this->friend_res_ = res.get();
-			this->friend_res_->SetResourceSharedPointer(tml::shared_ptr<tml::ManagerResource>());
-			this->friend_res_ = nullptr;
+			res->Init();
 
 			this->res_cont_[res->GetResourceMainIndex()][res->GetResourceSubIndex()].remove(res);
 
@@ -187,6 +183,13 @@ void tml::Manager::Update(void)
 			}
 
 			this->check_res_itr_ = this->check_res_cont_.erase(this->check_res_itr_);
+
+			this->friend_res_ = res.get();
+			this->friend_res_->SetResourceSharedPointer(this, tml::shared_ptr<tml::ManagerResource>());
+			this->friend_res_->SetResourceName(this, L"");
+			this->friend_res_ = nullptr;
+
+			res.reset();
 		} else {
 			++this->check_res_itr_;
 		}
@@ -270,7 +273,8 @@ void tml::Manager::DeleteResourceContainer(void)
 				res->Init();
 
 				this->friend_res_ = res.get();
-				this->friend_res_->SetResourceSharedPointer(tml::shared_ptr<tml::ManagerResource>());
+				this->friend_res_->SetResourceSharedPointer(this, tml::shared_ptr<tml::ManagerResource>());
+				this->friend_res_->SetResourceName(this, L"");
 				this->friend_res_ = nullptr;
 			}
 		}
@@ -300,7 +304,7 @@ void tml::Manager::SetResourceSharedPointer(tml::ManagerResource *res, const tml
 	auto &tmp_res = res->GetResourceSharedPointer();
 
 	this->friend_res_ = tmp_res.get();
-	this->friend_res_->SetResourceSharedPointer(res_shared_p);
+	this->friend_res_->SetResourceSharedPointer(this, res_shared_p);
 	this->friend_res_ = nullptr;
 
 	return;
@@ -326,7 +330,7 @@ void tml::Manager::SetResourceName(tml::ManagerResource *res, const WCHAR *res_n
 	}
 
 	this->friend_res_ = tmp_res.get();
-	this->friend_res_->SetResourceName(res_name);
+	this->friend_res_->SetResourceName(this, res_name);
 	this->friend_res_ = nullptr;
 
 	if (!tmp_res->GetResourceName().empty()) {
