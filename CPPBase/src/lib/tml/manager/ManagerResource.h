@@ -25,6 +25,7 @@ private:
 
 public:
 	std::wstring resource_name;
+	bool deferred_load_flag;
 
 protected:
 	void Release(void);
@@ -84,6 +85,11 @@ private:
 	std::wstring res_name_;
 
 protected:
+	tml::unique_ptr<tml::ManagerResourceDesc> load_desc_unique_p_;
+	const tml::ManagerResourceDesc *load_desc_;
+	bool loaded_flg_;
+
+protected:
 	void Release(void);
 	INT Create(const tml::ManagerResourceDesc &, const UINT, const UINT);
 
@@ -92,6 +98,7 @@ public:
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
+	virtual INT Load(void);
 
 	tml::Manager *GetManager(void);
 	UINT GetResourceMainIndex(void) const;
@@ -100,6 +107,9 @@ public:
 	void SetResourceSharedPointer(tml::Manager *, const tml::shared_ptr<tml::ManagerResource> &);
 	const std::wstring &GetResourceName(void) const;
 	void SetResourceName(tml::Manager *, const WCHAR *);
+	const tml::ManagerResourceDesc *GetLoadDesc(void) const;
+	void SetLoadDesc(tml::unique_ptr<tml::ManagerResourceDesc> &);
+	void SetLoadDesc(const tml::ManagerResourceDesc *);
 };
 }
 
@@ -160,4 +170,40 @@ inline const tml::shared_ptr<tml::ManagerResource> &tml::ManagerResource::GetRes
 inline const std::wstring &tml::ManagerResource::GetResourceName(void) const
 {
 	return (this->res_name_);
+}
+
+
+/**
+ * @brief GetLoadDescä÷êî
+ * @return load_desc (load_desc)
+ */
+inline const tml::ManagerResourceDesc *tml::ManagerResource::GetLoadDesc(void) const
+{
+	return (this->load_desc_);
+}
+
+
+/**
+ * @brief SetLoadDescä÷êî
+ * @return load_desc (load_desc)
+ */
+inline void tml::ManagerResource::SetLoadDesc(tml::unique_ptr<tml::ManagerResourceDesc> &load_desc)
+{
+	this->load_desc_unique_p_ = std::move(load_desc);
+	this->load_desc_ = this->load_desc_unique_p_.get();
+
+	return;
+}
+
+
+/**
+ * @brief SetLoadDescä÷êî
+ * @return load_desc (load_desc)
+ */
+inline void tml::ManagerResource::SetLoadDesc(const tml::ManagerResourceDesc *load_desc)
+{
+	this->load_desc_unique_p_.reset();
+	this->load_desc_ = load_desc;
+
+	return;
 }

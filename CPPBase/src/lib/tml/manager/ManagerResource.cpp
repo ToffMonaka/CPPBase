@@ -12,7 +12,8 @@
  * @brief コンストラクタ
  */
 tml::ManagerResourceDesc::ManagerResourceDesc() :
-	mgr_(nullptr)
+	mgr_(nullptr),
+	deferred_load_flag(false)
 {
 	return;
 }
@@ -38,6 +39,7 @@ void tml::ManagerResourceDesc::Init(void)
 
 	this->mgr_ = nullptr;
 	this->resource_name.clear();
+	this->deferred_load_flag = false;
 
 	return;
 }
@@ -118,7 +120,9 @@ void tml::ManagerResourceDesc::SetManager(tml::Manager *mgr)
 tml::ManagerResource::ManagerResource() :
 	mgr_(nullptr),
 	res_main_index_(0U),
-	res_sub_index_(0U)
+	res_sub_index_(0U),
+	load_desc_(nullptr),
+	loaded_flg_(false)
 {
 	return;
 }
@@ -138,7 +142,22 @@ tml::ManagerResource::~ManagerResource()
  */
 void tml::ManagerResource::Init(void)
 {
+	this->load_desc_unique_p_.reset();
+	this->load_desc_ = nullptr;
+	this->loaded_flg_ = false;
+
 	return;
+}
+
+
+/**
+ * @brief Load関数
+ * @return res (result)<br>
+ * 0未満=失敗
+ */
+INT tml::ManagerResource::Load(void)
+{
+	return (0);
 }
 
 

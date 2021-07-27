@@ -186,10 +186,7 @@ void tml::Manager::Update(void)
 
 			this->friend_res_ = res.get();
 			this->friend_res_->SetResourceSharedPointer(this, tml::shared_ptr<tml::ManagerResource>());
-			this->friend_res_->SetResourceName(this, L"");
 			this->friend_res_ = nullptr;
-
-			res.reset();
 		} else {
 			++this->check_res_itr_;
 		}
@@ -274,7 +271,6 @@ void tml::Manager::DeleteResourceContainer(void)
 
 				this->friend_res_ = res.get();
 				this->friend_res_->SetResourceSharedPointer(this, tml::shared_ptr<tml::ManagerResource>());
-				this->friend_res_->SetResourceName(this, L"");
 				this->friend_res_ = nullptr;
 			}
 		}
@@ -284,6 +280,22 @@ void tml::Manager::DeleteResourceContainer(void)
 	this->res_cont_by_name_.clear();
 	this->check_res_cont_.clear();
 	this->check_res_itr_ = this->check_res_cont_.end();
+
+	return;
+}
+
+
+/**
+ * @brief GetResourceInitResourcePartä÷êî
+ * @param res (resource)
+ */
+void tml::Manager::GetResourceInitResourcePart(tml::shared_ptr<tml::ManagerResource> &res)
+{
+	res->SetLoadDesc(nullptr);
+
+	this->friend_res_ = res.get();
+	this->friend_res_->SetResourceSharedPointer(this, tml::shared_ptr<tml::ManagerResource>());
+	this->friend_res_ = nullptr;
 
 	return;
 }
@@ -403,6 +415,16 @@ void tml::Manager::DeleteEventContainer(void)
 	this->stock_event_cnt_cont_cont_.clear();
 	this->stock_event_cont_cont_.clear();
 
+	return;
+}
+
+
+/**
+ * @brief AddEventInitEventPartä÷êî
+ * @param event (event)
+ */
+void tml::Manager::AddEventInitEventPart(tml::unique_ptr<tml::ManagerEvent> &event)
+{
 	return;
 }
 

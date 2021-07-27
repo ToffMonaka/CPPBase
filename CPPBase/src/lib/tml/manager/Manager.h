@@ -77,6 +77,10 @@ private:
 	std::vector<std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>>> stock_event_cont_cont_;
 	tml::ManagerEvent *friend_event_;
 
+private:
+	void GetResourceInitResourcePart(tml::shared_ptr<tml::ManagerResource> &);
+	void AddEventInitEventPart(tml::unique_ptr<tml::ManagerEvent> &);
+
 protected:
 	void Release(void);
 	INT Create(const tml::ManagerDesc &);
@@ -210,14 +214,29 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 	this->friend_res_ = nullptr;
 
 	if (reinterpret_cast<T *>(res.get())->Create(desc) < 0) {
-		this->friend_res_ = res.get();
-		this->friend_res_->SetResourceSharedPointer(this, tml::shared_ptr<tml::ManagerResource>());
-		this->friend_res_->SetResourceName(this, L"");
-		this->friend_res_ = nullptr;
-
-		res.reset();
+		this->GetResourceInitResourcePart(res);
 
 		return (dst_res);
+	}
+
+	if (desc.deferred_load_flag) {
+		tml::unique_ptr<tml::ManagerResourceDesc> load_desc = tml::make_unique<D>(1U);
+
+		(*reinterpret_cast<D *>(load_desc.get())) = desc;
+
+		res->SetLoadDesc(load_desc);
+	} else {
+		const tml::ManagerResourceDesc *load_desc = &desc;
+
+		res->SetLoadDesc(load_desc);
+
+		if (res->Load() < 0) {
+			this->GetResourceInitResourcePart(res);
+
+			return (dst_res);
+		}
+
+		res->SetLoadDesc(nullptr);
 	}
 
 	this->res_cont_[res->GetResourceMainIndex()][res->GetResourceSubIndex()].push_back(res);
@@ -365,6 +384,8 @@ inline INT tml::Manager::AddEvent(const D &desc)
 		event = tml::make_unique<T>(1U);
 
 		if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {
+			this->AddEventInitEventPart(event);
+
 			return (-1);
 		}
 	}
