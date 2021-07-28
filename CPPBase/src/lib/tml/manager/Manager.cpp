@@ -127,7 +127,7 @@ void tml::Manager::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::Manager::Create(const tml::ManagerDesc &desc)
@@ -217,11 +217,9 @@ void tml::Manager::Update(void)
 
 		for (UINT event_i = 0U; event_i < event_cnt; ++event_i) {
 			tml::unique_ptr<tml::ManagerEvent> &event = event_cont[event_i];
-			UINT event_main_index = event->GetEventMainIndex();
-			UINT event_sub_index = event->GetEventSubIndex();
 
-			auto &stock_event_cnt = this->stock_event_cnt_cont_cont_[event_main_index][event_sub_index];
-			auto &stock_event_cont = this->stock_event_cont_cont_[event_main_index][event_sub_index];
+			auto &stock_event_cnt = this->stock_event_cnt_cont_cont_[event->GetEventMainIndex()][event->GetEventSubIndex()];
+			auto &stock_event_cont = this->stock_event_cont_cont_[event->GetEventMainIndex()][event->GetEventSubIndex()];
 
 			if (stock_event_cnt >= stock_event_cont.size()) {
 				stock_event_cont.resize(stock_event_cnt + 128U);
@@ -242,7 +240,7 @@ void tml::Manager::Update(void)
 /**
  * @brief CreateResourceContainerŠÖ”
  * @param res_cnt_cont (resource_count_container)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::Manager::CreateResourceContainer(const std::vector<UINT> &res_cnt_cont)
@@ -302,28 +300,6 @@ void tml::Manager::GetResourceInitResourcePart(tml::shared_ptr<tml::ManagerResou
 
 
 /**
- * @brief SetResourceSharedPointerŠÖ”
- * @param res (resource)
- * @param res_shared_p (resource_shared_pointer)
- */
-void tml::Manager::SetResourceSharedPointer(tml::ManagerResource *res, const tml::shared_ptr<tml::ManagerResource> &res_shared_p)
-{
-	if ((res == nullptr)
-	|| (res_shared_p.get() != res)) {
-		return;
-	}
-
-	auto &tmp_res = res->GetResourceSharedPointer();
-
-	this->friend_res_ = tmp_res.get();
-	this->friend_res_->SetResourceSharedPointer(this, res_shared_p);
-	this->friend_res_ = nullptr;
-
-	return;
-}
-
-
-/**
  * @brief SetResourceNameŠÖ”
  * @param res (resource)
  * @param res_name (resource_name)
@@ -356,7 +332,7 @@ void tml::Manager::SetResourceName(tml::ManagerResource *res, const WCHAR *res_n
 /**
  * @brief CheckFriendResourceŠÖ”
  * @param res (resource)
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=¸”s,true=¬Œ÷
  */
 bool tml::Manager::CheckFriendResource(const tml::ManagerResource *res) const
@@ -372,7 +348,7 @@ bool tml::Manager::CheckFriendResource(const tml::ManagerResource *res) const
 /**
  * @brief CreateEventContainerŠÖ”
  * @param event_cnt_cont (event_count_container)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::Manager::CreateEventContainer(const std::vector<UINT> &event_cnt_cont)
@@ -432,7 +408,7 @@ void tml::Manager::AddEventInitEventPart(tml::unique_ptr<tml::ManagerEvent> &eve
 /**
  * @brief CheckFriendEventŠÖ”
  * @param event (event)
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=¸”s,true=¬Œ÷
  */
 bool tml::Manager::CheckFriendEvent(const tml::ManagerEvent *event) const

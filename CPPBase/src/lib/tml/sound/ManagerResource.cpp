@@ -47,7 +47,7 @@ void tml::sound::ManagerResourceDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::sound::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
@@ -126,7 +126,7 @@ void tml::sound::ManagerResource::Init(void)
  * @param desc (desc)
  * @param res_type (resource_type)
  * @param res_sub_index (resource_sub_index)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::sound::ManagerResource::Create(const tml::sound::ManagerResourceDesc &desc, const tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type, const UINT res_sub_index)

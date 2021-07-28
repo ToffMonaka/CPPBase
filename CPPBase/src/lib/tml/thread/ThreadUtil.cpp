@@ -28,7 +28,7 @@ void tml::ThreadUtil::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param engine (engine)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::ThreadUtil::Create(std::unique_ptr<tml::ThreadUtilEngine> &engine)

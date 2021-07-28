@@ -103,7 +103,7 @@ void tml::graphic::ManagerCommon::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)

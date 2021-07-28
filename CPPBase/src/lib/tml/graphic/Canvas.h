@@ -57,6 +57,9 @@ public: Canvas(const tml::graphic::Canvas &) = delete;
 public: tml::graphic::Canvas &operator =(const tml::graphic::Canvas &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CANVAS);
+
 private:
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE type_;
 

@@ -77,7 +77,7 @@ void tml::input::DeviceEvent::Init(void)
  * @brief Createä÷êî
  * @param desc (desc)
  * @param type (type)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::input::DeviceEvent::Create(const tml::input::DeviceEventDesc &desc, const tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE type)

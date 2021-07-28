@@ -155,7 +155,7 @@ void tml::sound::Manager::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::sound::Manager::Create(const tml::sound::ManagerDesc &desc)

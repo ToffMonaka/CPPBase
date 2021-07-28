@@ -51,7 +51,7 @@ void tml::ThreadUtilEngine::Init(void)
 
 /**
  * @brief CreateŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ThreadUtilEngine::Create(void)
@@ -67,7 +67,7 @@ INT tml::ThreadUtilEngine::Create(void)
 /**
  * @brief StartŠÖ”
  * @param th (thread)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
@@ -111,7 +111,7 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
 /**
  * @brief StartŠÖ”
  * @param th (thread)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::SubThread> &th)
@@ -146,7 +146,7 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::SubThread> &th)
 
 /**
  * @brief StartAllŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ThreadUtilEngine::StartAll(void)
@@ -292,7 +292,7 @@ void tml::ThreadUtilEngine::EndAll(const bool finish_flg)
 /**
  * @brief CreateCOMŠÖ”
  * @param init_flg (init_flag)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ThreadUtilEngine::CreateCOM(const DWORD init_flg)

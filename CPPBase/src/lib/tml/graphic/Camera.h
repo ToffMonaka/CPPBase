@@ -57,6 +57,9 @@ public: Camera(const tml::graphic::Camera &) = delete;
 public: tml::graphic::Camera &operator =(const tml::graphic::Camera &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA);
+
 private:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type_;
 

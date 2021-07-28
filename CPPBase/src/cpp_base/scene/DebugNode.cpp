@@ -51,7 +51,7 @@ void cpp_base::scene::DebugNodeDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::DebugNodeDesc::ReadValue(const tml::INIFile &ini_file)
@@ -129,7 +129,7 @@ void cpp_base::scene::DebugNode::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &desc)
@@ -206,7 +206,7 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 
 /**
  * @brief OnStartä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::DebugNode::OnStart(void)

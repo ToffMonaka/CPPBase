@@ -42,7 +42,7 @@ void tml::DefaultMathUtilEngine::Init(void)
 
 /**
  * @brief CreateŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::DefaultMathUtilEngine::Create(void)

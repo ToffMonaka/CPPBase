@@ -60,7 +60,7 @@ void cpp_base::scene::ManagerCommon::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)

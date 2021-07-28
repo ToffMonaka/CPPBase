@@ -45,7 +45,7 @@ void tml::graphic::ShaderInclude::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param dir_path (directory_path)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::ShaderInclude::Create(const WCHAR *dir_path)
@@ -65,7 +65,7 @@ INT tml::graphic::ShaderInclude::Create(const WCHAR *dir_path)
  * @param parent_dat (parent_data)
  * @param dst_dat (dst_data)
  * @param dst_dat_len (dst_data_length)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 HRESULT __stdcall tml::graphic::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, LPCSTR file_name, LPCVOID parent_dat, LPCVOID *dst_dat, UINT *dst_dat_len)
@@ -93,7 +93,7 @@ HRESULT __stdcall tml::graphic::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, L
 /**
  * @brief CloseŠÖ”
  * @param dat (data)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 HRESULT __stdcall tml::graphic::ShaderInclude::Close(LPCVOID dat)
@@ -162,7 +162,7 @@ void tml::graphic::ShaderDesc::Init(void)
 /**
  * @brief ReadValueŠÖ”
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::ShaderDesc::ReadValue(const tml::INIFile &ini_file)
@@ -364,7 +364,7 @@ void tml::graphic::Shader::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)

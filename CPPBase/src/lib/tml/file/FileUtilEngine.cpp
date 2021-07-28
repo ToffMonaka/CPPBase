@@ -36,7 +36,7 @@ void tml::FileUtilEngine::Init(void)
 
 /**
  * @brief Createä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::FileUtilEngine::Create(void)

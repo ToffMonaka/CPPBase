@@ -27,7 +27,7 @@ tml::MutexThreadLock::~MutexThreadLock()
 
 /**
  * @brief Lock関数
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0未満=失敗
  */
 INT tml::MutexThreadLock::Lock(void)
@@ -41,7 +41,7 @@ INT tml::MutexThreadLock::Lock(void)
 /**
  * @brief Lock関数
  * @param timeout_time (timeout_time)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0未満=失敗,-2=タイムアウト
  */
 INT tml::MutexThreadLock::Lock(const tml::TIME_MILLI &timeout_time)

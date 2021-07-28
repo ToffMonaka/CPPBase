@@ -55,6 +55,9 @@ public: BGMSound(const tml::sound::BGMSound &) = delete;
 public: tml::sound::BGMSound &operator =(const tml::sound::BGMSound &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM);
+
 private:
 
 protected:

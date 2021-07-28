@@ -79,7 +79,7 @@ void tml::XMLFileDataNode::SetParentNode(tml::XMLFileDataNode *parent_node)
 /**
  * @brief AddChildNodeä÷êî
  * @param child_node (child_node)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::XMLFileDataNode::AddChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &child_node)
@@ -397,7 +397,7 @@ void tml::XMLFile::Init(void)
 
 /**
  * @brief Readä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::XMLFile::Read(void)
@@ -466,7 +466,7 @@ INT tml::XMLFile::Read(void)
 
 /**
  * @brief Writeä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::XMLFile::Write(void)

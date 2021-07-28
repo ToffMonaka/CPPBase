@@ -62,6 +62,10 @@ public: Fog(const tml::graphic::Fog &) = delete;
 public: tml::graphic::Fog &operator =(const tml::graphic::Fog &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::ETC);
+
 private:
 	tml::ConstantUtil::GRAPHIC::FOG_TYPE type_;
 	tml::XMFLOAT3EX col_;

@@ -351,7 +351,7 @@ void tml::graphic::Manager::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
@@ -723,18 +723,18 @@ DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix(DirectX::XMMATRIX 
  * @param dst_cpu_buf (dst_cpu_buffer)
  * @param dst_msr (dst_mapped_subresource)
  * @param buf (buffer)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return dst_cpu_buf (dst_cpu_buffer)
  */
-tml::DynamicBuffer &tml::graphic::Manager::GetCPUBuffer(tml::DynamicBuffer &dst_cpu_buf, D3D11_MAPPED_SUBRESOURCE &dst_msr, ID3D11Buffer *buf, INT *dst_res)
+tml::DynamicBuffer &tml::graphic::Manager::GetCPUBuffer(tml::DynamicBuffer &dst_cpu_buf, D3D11_MAPPED_SUBRESOURCE &dst_msr, ID3D11Buffer *buf, INT *dst_result)
 {
 	dst_cpu_buf.Init();
 	tml::Clear(&dst_msr, 1U);
-	tml::SetResult(dst_res, 0);
+	tml::SetResult(dst_result, 0);
 
 	if (buf == nullptr) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_cpu_buf);
 	}
@@ -763,12 +763,12 @@ tml::DynamicBuffer &tml::graphic::Manager::GetCPUBuffer(tml::DynamicBuffer &dst_
 		} else {
 			dst_cpu_buf.Init();
 			tml::Clear(&dst_msr, 1U);
-			tml::SetResult(dst_res, -1);
+			tml::SetResult(dst_result, -1);
 		}
 
 		tmp_buf->Release();
 	} else {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 	}
 
 	return (dst_cpu_buf);
@@ -780,18 +780,18 @@ tml::DynamicBuffer &tml::graphic::Manager::GetCPUBuffer(tml::DynamicBuffer &dst_
  * @param dst_cpu_buf_cont (dst_cpu_buffer_container)
  * @param dst_msr_cont (dst_mapped_subresource_container)
  * @param tex (texture)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return dst_cpu_buf_cont (dst_cpu_buffer_container)
  */
-std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetCPUBuffer(std::vector<tml::DynamicBuffer> &dst_cpu_buf_cont, std::vector<D3D11_MAPPED_SUBRESOURCE> &dst_msr_cont, ID3D11Texture2D *tex, INT *dst_res)
+std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetCPUBuffer(std::vector<tml::DynamicBuffer> &dst_cpu_buf_cont, std::vector<D3D11_MAPPED_SUBRESOURCE> &dst_msr_cont, ID3D11Texture2D *tex, INT *dst_result)
 {
 	dst_cpu_buf_cont.clear();
 	dst_msr_cont.clear();
-	tml::SetResult(dst_res, 0);
+	tml::SetResult(dst_result, 0);
 
 	if (tex == nullptr) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_cpu_buf_cont);
 	}
@@ -826,7 +826,7 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetCPUBuffer(std::vector
 				} else {
 					dst_cpu_buf_cont.clear();
 					dst_msr_cont.clear();
-					tml::SetResult(dst_res, -1);
+					tml::SetResult(dst_result, -1);
 
 					ary_i = tmp_tex_desc.ArraySize;
 					mm_i = tmp_tex_desc.MipLevels;
@@ -836,7 +836,7 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetCPUBuffer(std::vector
 
 		tmp_tex->Release();
 	} else {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 	}
 
 	return (dst_cpu_buf_cont);

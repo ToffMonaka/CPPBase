@@ -131,6 +131,10 @@ public: Font(const tml::graphic::Font &) = delete;
 public: tml::graphic::Font &operator =(const tml::graphic::Font &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FONT_TYPE::ETC);
+
 private:
 	HDC dc_handle_;
 	HFONT font_handle_;

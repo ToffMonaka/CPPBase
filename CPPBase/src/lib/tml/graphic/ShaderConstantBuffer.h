@@ -61,6 +61,10 @@ public: ShaderConstantBuffer(const tml::graphic::ShaderConstantBuffer &) = delet
 public: tml::graphic::ShaderConstantBuffer &operator =(const tml::graphic::ShaderConstantBuffer &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_TYPE::ETC);
+
 private:
 	ID3D11Buffer *buf_;
 	CD3D11_BUFFER_DESC buf_desc_;

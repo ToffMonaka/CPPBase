@@ -50,7 +50,7 @@ void tml::graphic::RasterizerStateDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::RasterizerStateDesc::ReadValue(const tml::INIFile &ini_file)
@@ -164,7 +164,7 @@ void tml::graphic::RasterizerState::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::RasterizerState::Create(const tml::graphic::RasterizerStateDesc &desc)

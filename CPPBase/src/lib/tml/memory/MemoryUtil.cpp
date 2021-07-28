@@ -28,7 +28,7 @@ void tml::MemoryUtil::Init(void)
 /**
  * @brief Createä÷êî
  * @param engine (engine)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::MemoryUtil::Create(std::unique_ptr<tml::MemoryUtilEngine> &engine)
@@ -55,17 +55,17 @@ INT tml::MemoryUtil::Create(std::unique_ptr<tml::MemoryUtilEngine> &engine)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param index (index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::SetBufferIndex(const size_t buf_size, size_t &buf_index, const size_t index, INT *dst_res)
+void tml::MemoryUtil::SetBufferIndex(const size_t buf_size, size_t &buf_index, const size_t index, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if (index > buf_size) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -84,12 +84,12 @@ void tml::MemoryUtil::SetBufferIndex(const size_t buf_size, size_t &buf_index, c
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param add_index (add_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::AddBufferIndex(const size_t buf_size, size_t &buf_index, const INT add_index, INT *dst_res)
+void tml::MemoryUtil::AddBufferIndex(const size_t buf_size, size_t &buf_index, const INT add_index, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
@@ -97,7 +97,7 @@ void tml::MemoryUtil::AddBufferIndex(const size_t buf_size, size_t &buf_index, c
 
 	if ((tmp_index < 0LL)
 	|| (tmp_index > static_cast<LONGLONG>(buf_size))) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -116,21 +116,21 @@ void tml::MemoryUtil::AddBufferIndex(const size_t buf_size, size_t &buf_index, c
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-CHAR tml::MemoryUtil::ReadBufferChar(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+CHAR tml::MemoryUtil::ReadBufferChar(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	CHAR val = 0;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(CHAR)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -149,21 +149,21 @@ CHAR tml::MemoryUtil::ReadBufferChar(const BYTE *buf, const size_t buf_size, siz
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-UCHAR tml::MemoryUtil::ReadBufferUChar(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+UCHAR tml::MemoryUtil::ReadBufferUChar(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	UCHAR val = 0;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(UCHAR)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -182,21 +182,21 @@ UCHAR tml::MemoryUtil::ReadBufferUChar(const BYTE *buf, const size_t buf_size, s
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-SHORT tml::MemoryUtil::ReadBufferShortB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+SHORT tml::MemoryUtil::ReadBufferShortB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	SHORT val = 0;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(SHORT)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -216,21 +216,21 @@ SHORT tml::MemoryUtil::ReadBufferShortB(const BYTE *buf, const size_t buf_size, 
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-SHORT tml::MemoryUtil::ReadBufferShortL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+SHORT tml::MemoryUtil::ReadBufferShortL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	SHORT val = 0;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(SHORT)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -250,21 +250,21 @@ SHORT tml::MemoryUtil::ReadBufferShortL(const BYTE *buf, const size_t buf_size, 
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-USHORT tml::MemoryUtil::ReadBufferUShortB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+USHORT tml::MemoryUtil::ReadBufferUShortB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	USHORT val = 0;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(USHORT)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -284,21 +284,21 @@ USHORT tml::MemoryUtil::ReadBufferUShortB(const BYTE *buf, const size_t buf_size
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-USHORT tml::MemoryUtil::ReadBufferUShortL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+USHORT tml::MemoryUtil::ReadBufferUShortL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	USHORT val = 0;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(USHORT)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -318,21 +318,21 @@ USHORT tml::MemoryUtil::ReadBufferUShortL(const BYTE *buf, const size_t buf_size
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-INT tml::MemoryUtil::ReadBufferIntB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+INT tml::MemoryUtil::ReadBufferIntB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	INT val = 0;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(INT)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -354,21 +354,21 @@ INT tml::MemoryUtil::ReadBufferIntB(const BYTE *buf, const size_t buf_size, size
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-INT tml::MemoryUtil::ReadBufferIntL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+INT tml::MemoryUtil::ReadBufferIntL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	INT val = 0;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(INT)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -390,21 +390,21 @@ INT tml::MemoryUtil::ReadBufferIntL(const BYTE *buf, const size_t buf_size, size
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-UINT tml::MemoryUtil::ReadBufferUIntB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+UINT tml::MemoryUtil::ReadBufferUIntB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	UINT val = 0U;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(UINT)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -426,21 +426,21 @@ UINT tml::MemoryUtil::ReadBufferUIntB(const BYTE *buf, const size_t buf_size, si
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-UINT tml::MemoryUtil::ReadBufferUIntL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+UINT tml::MemoryUtil::ReadBufferUIntL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	UINT val = 0U;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(UINT)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -462,21 +462,21 @@ UINT tml::MemoryUtil::ReadBufferUIntL(const BYTE *buf, const size_t buf_size, si
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-LONGLONG tml::MemoryUtil::ReadBufferLongLongB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+LONGLONG tml::MemoryUtil::ReadBufferLongLongB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	LONGLONG val = 0LL;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(LONGLONG)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -502,21 +502,21 @@ LONGLONG tml::MemoryUtil::ReadBufferLongLongB(const BYTE *buf, const size_t buf_
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-LONGLONG tml::MemoryUtil::ReadBufferLongLongL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+LONGLONG tml::MemoryUtil::ReadBufferLongLongL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	LONGLONG val = 0LL;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(LONGLONG)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -542,21 +542,21 @@ LONGLONG tml::MemoryUtil::ReadBufferLongLongL(const BYTE *buf, const size_t buf_
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-ULONGLONG tml::MemoryUtil::ReadBufferULongLongB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+ULONGLONG tml::MemoryUtil::ReadBufferULongLongB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	ULONGLONG val = 0ULL;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(ULONGLONG)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -582,21 +582,21 @@ ULONGLONG tml::MemoryUtil::ReadBufferULongLongB(const BYTE *buf, const size_t bu
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-ULONGLONG tml::MemoryUtil::ReadBufferULongLongL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+ULONGLONG tml::MemoryUtil::ReadBufferULongLongL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	ULONGLONG val = 0ULL;
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
 	if ((buf == nullptr)
 	|| ((buf_index + sizeof(ULONGLONG)) > buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (val);
 	}
@@ -622,16 +622,16 @@ ULONGLONG tml::MemoryUtil::ReadBufferULongLongL(const BYTE *buf, const size_t bu
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-FLOAT tml::MemoryUtil::ReadBufferFloatB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+FLOAT tml::MemoryUtil::ReadBufferFloatB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	FLOAT val = 0.0f;
-	UINT tmp_val = tml::MemoryUtil::ReadBufferUIntB(buf, buf_size, buf_index, dst_res);
+	UINT tmp_val = tml::MemoryUtil::ReadBufferUIntB(buf, buf_size, buf_index, dst_result);
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
@@ -653,16 +653,16 @@ FLOAT tml::MemoryUtil::ReadBufferFloatB(const BYTE *buf, const size_t buf_size, 
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-FLOAT tml::MemoryUtil::ReadBufferFloatL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+FLOAT tml::MemoryUtil::ReadBufferFloatL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	FLOAT val = 0.0f;
-	UINT tmp_val = tml::MemoryUtil::ReadBufferUIntL(buf, buf_size, buf_index, dst_res);
+	UINT tmp_val = tml::MemoryUtil::ReadBufferUIntL(buf, buf_size, buf_index, dst_result);
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
@@ -684,16 +684,16 @@ FLOAT tml::MemoryUtil::ReadBufferFloatL(const BYTE *buf, const size_t buf_size, 
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-DOUBLE tml::MemoryUtil::ReadBufferDoubleB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+DOUBLE tml::MemoryUtil::ReadBufferDoubleB(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	DOUBLE val = 0.0;
-	ULONGLONG tmp_val = tml::MemoryUtil::ReadBufferULongLongB(buf, buf_size, buf_index, dst_res);
+	ULONGLONG tmp_val = tml::MemoryUtil::ReadBufferULongLongB(buf, buf_size, buf_index, dst_result);
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
@@ -715,16 +715,16 @@ DOUBLE tml::MemoryUtil::ReadBufferDoubleB(const BYTE *buf, const size_t buf_size
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return val (value)
  */
-DOUBLE tml::MemoryUtil::ReadBufferDoubleL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+DOUBLE tml::MemoryUtil::ReadBufferDoubleL(const BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
 	DOUBLE val = 0.0;
-	ULONGLONG tmp_val = tml::MemoryUtil::ReadBufferULongLongL(buf, buf_size, buf_index, dst_res);
+	ULONGLONG tmp_val = tml::MemoryUtil::ReadBufferULongLongL(buf, buf_size, buf_index, dst_result);
 
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (val);
 	}
 
@@ -749,13 +749,13 @@ DOUBLE tml::MemoryUtil::ReadBufferDoubleL(const BYTE *buf, const size_t buf_size
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
  * @param read_size (read_size)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return dst_ary (dst_array)
  */
-BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size, const BYTE *buf, const size_t buf_size, size_t &buf_index, const size_t read_size, INT *dst_res)
+BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size, const BYTE *buf, const size_t buf_size, size_t &buf_index, const size_t read_size, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return (dst_ary);
 	}
 
@@ -763,7 +763,7 @@ BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size,
 	|| ((buf_index + read_size) > buf_size)
 	|| (buf == dst_ary)
 	|| (read_size > dst_ary_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_ary);
 	}
@@ -785,13 +785,13 @@ BYTE *tml::MemoryUtil::ReadBufferArray(BYTE *dst_ary, const size_t dst_ary_size,
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return dst_str (dst_string)
  */
-CHAR *tml::MemoryUtil::ReadBufferStringB(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+CHAR *tml::MemoryUtil::ReadBufferStringB(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		if ((dst_str != nullptr)
 		&& (dst_str_size >= sizeof(CHAR))) {
 			dst_str[0] = 0;
@@ -802,18 +802,18 @@ CHAR *tml::MemoryUtil::ReadBufferStringB(CHAR *dst_str, const size_t dst_str_siz
 
 	if ((dst_str == nullptr)
 	|| (dst_str_size < sizeof(CHAR))) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_str);
 	}
 
 	dst_str[0] = 0;
 
-	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUShortB(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
+	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUShortB(buf, buf_size, buf_index, dst_result)) & 0xFFFF;
 
 	if (((buf_index + str_size) > buf_size)
 	|| ((str_size + sizeof(CHAR)) > dst_str_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_str);
 	}
@@ -837,13 +837,13 @@ CHAR *tml::MemoryUtil::ReadBufferStringB(CHAR *dst_str, const size_t dst_str_siz
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return dst_str (dst_string)
  */
-CHAR *tml::MemoryUtil::ReadBufferStringL(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+CHAR *tml::MemoryUtil::ReadBufferStringL(CHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		if ((dst_str != nullptr)
 		&& (dst_str_size >= sizeof(CHAR))) {
 			dst_str[0] = 0;
@@ -854,18 +854,18 @@ CHAR *tml::MemoryUtil::ReadBufferStringL(CHAR *dst_str, const size_t dst_str_siz
 
 	if ((dst_str == nullptr)
 	|| (dst_str_size < sizeof(CHAR))) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_str);
 	}
 
 	dst_str[0] = 0;
 
-	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUShortL(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
+	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUShortL(buf, buf_size, buf_index, dst_result)) & 0xFFFF;
 
 	if (((buf_index + str_size) > buf_size)
 	|| ((str_size + sizeof(CHAR)) > dst_str_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_str);
 	}
@@ -889,13 +889,13 @@ CHAR *tml::MemoryUtil::ReadBufferStringL(CHAR *dst_str, const size_t dst_str_siz
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return dst_str (dst_string)
  */
-WCHAR *tml::MemoryUtil::ReadBufferStringB(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+WCHAR *tml::MemoryUtil::ReadBufferStringB(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		if ((dst_str != nullptr)
 		&& (dst_str_size >= sizeof(WCHAR))) {
 			dst_str[0] = 0;
@@ -906,18 +906,18 @@ WCHAR *tml::MemoryUtil::ReadBufferStringB(WCHAR *dst_str, const size_t dst_str_s
 
 	if ((dst_str == nullptr)
 	|| (dst_str_size < sizeof(WCHAR))) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_str);
 	}
 
 	dst_str[0] = 0;
 
-	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUShortB(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
+	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUShortB(buf, buf_size, buf_index, dst_result)) & 0xFFFF;
 
 	if (((buf_index + str_size) > buf_size)
 	|| ((str_size + sizeof(WCHAR)) > dst_str_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_str);
 	}
@@ -941,13 +941,13 @@ WCHAR *tml::MemoryUtil::ReadBufferStringB(WCHAR *dst_str, const size_t dst_str_s
  * @param buf (buffer)
  * @param buf_size (buffer_size)
  * @param buf_index (buffer_index)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  * @return dst_str (dst_string)
  */
-WCHAR *tml::MemoryUtil::ReadBufferStringL(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_res)
+WCHAR *tml::MemoryUtil::ReadBufferStringL(WCHAR *dst_str, const size_t dst_str_size, BYTE *buf, const size_t buf_size, size_t &buf_index, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		if ((dst_str != nullptr)
 		&& (dst_str_size >= sizeof(WCHAR))) {
 			dst_str[0] = 0;
@@ -958,18 +958,18 @@ WCHAR *tml::MemoryUtil::ReadBufferStringL(WCHAR *dst_str, const size_t dst_str_s
 
 	if ((dst_str == nullptr)
 	|| (dst_str_size < sizeof(WCHAR))) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_str);
 	}
 
 	dst_str[0] = 0;
 
-	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUShortL(buf, buf_size, buf_index, dst_res)) & 0xFFFF;
+	size_t str_size = static_cast<size_t>(tml::MemoryUtil::ReadBufferUShortL(buf, buf_size, buf_index, dst_result)) & 0xFFFF;
 
 	if (((buf_index + str_size) > buf_size)
 	|| ((str_size + sizeof(WCHAR)) > dst_str_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return (dst_str);
 	}
@@ -992,18 +992,18 @@ WCHAR *tml::MemoryUtil::ReadBufferStringL(WCHAR *dst_str, const size_t dst_str_s
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferChar(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferChar(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(CHAR)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1023,18 +1023,18 @@ void tml::MemoryUtil::WriteBufferChar(BYTE *dst_buf, const size_t dst_buf_size, 
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferUChar(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UCHAR val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUChar(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UCHAR val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(UCHAR)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1054,18 +1054,18 @@ void tml::MemoryUtil::WriteBufferUChar(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferShortB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferShortB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(SHORT)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1086,18 +1086,18 @@ void tml::MemoryUtil::WriteBufferShortB(BYTE *dst_buf, const size_t dst_buf_size
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferShortL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferShortL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const SHORT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(SHORT)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1118,18 +1118,18 @@ void tml::MemoryUtil::WriteBufferShortL(BYTE *dst_buf, const size_t dst_buf_size
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferUShortB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUShortB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(USHORT)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1150,18 +1150,18 @@ void tml::MemoryUtil::WriteBufferUShortB(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferUShortL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUShortL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const USHORT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(USHORT)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1182,18 +1182,18 @@ void tml::MemoryUtil::WriteBufferUShortL(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferIntB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferIntB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(INT)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1216,18 +1216,18 @@ void tml::MemoryUtil::WriteBufferIntB(BYTE *dst_buf, const size_t dst_buf_size, 
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferIntL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferIntL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const INT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(INT)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1250,18 +1250,18 @@ void tml::MemoryUtil::WriteBufferIntL(BYTE *dst_buf, const size_t dst_buf_size, 
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferUIntB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUIntB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(UINT)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1284,18 +1284,18 @@ void tml::MemoryUtil::WriteBufferUIntB(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferUIntL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferUIntL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const UINT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(UINT)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1318,18 +1318,18 @@ void tml::MemoryUtil::WriteBufferUIntL(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferLongLongB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferLongLongB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(LONGLONG)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1356,18 +1356,18 @@ void tml::MemoryUtil::WriteBufferLongLongB(BYTE *dst_buf, const size_t dst_buf_s
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferLongLongL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferLongLongL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const LONGLONG val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(LONGLONG)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1394,18 +1394,18 @@ void tml::MemoryUtil::WriteBufferLongLongL(BYTE *dst_buf, const size_t dst_buf_s
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferULongLongB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferULongLongB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(ULONGLONG)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1432,18 +1432,18 @@ void tml::MemoryUtil::WriteBufferULongLongB(BYTE *dst_buf, const size_t dst_buf_
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferULongLongL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferULongLongL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const ULONGLONG val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	if ((dst_buf == nullptr)
 	|| ((dst_buf_index + sizeof(ULONGLONG)) > dst_buf_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1470,12 +1470,12 @@ void tml::MemoryUtil::WriteBufferULongLongL(BYTE *dst_buf, const size_t dst_buf_
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferFloatB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferFloatB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
@@ -1483,7 +1483,7 @@ void tml::MemoryUtil::WriteBufferFloatB(BYTE *dst_buf, const size_t dst_buf_size
 
 	tml::Copy(&tmp_val, reinterpret_cast<const UINT *>(&val), 1U);
 
-	tml::MemoryUtil::WriteBufferUIntB(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
+	tml::MemoryUtil::WriteBufferUIntB(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_result);
 
 	return;
 }
@@ -1498,12 +1498,12 @@ void tml::MemoryUtil::WriteBufferFloatB(BYTE *dst_buf, const size_t dst_buf_size
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferFloatL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferFloatL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const FLOAT val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
@@ -1511,7 +1511,7 @@ void tml::MemoryUtil::WriteBufferFloatL(BYTE *dst_buf, const size_t dst_buf_size
 
 	tml::Copy(&tmp_val, reinterpret_cast<const UINT *>(&val), 1U);
 
-	tml::MemoryUtil::WriteBufferUIntL(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
+	tml::MemoryUtil::WriteBufferUIntL(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_result);
 
 	return;
 }
@@ -1526,12 +1526,12 @@ void tml::MemoryUtil::WriteBufferFloatL(BYTE *dst_buf, const size_t dst_buf_size
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferDoubleB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferDoubleB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
@@ -1539,7 +1539,7 @@ void tml::MemoryUtil::WriteBufferDoubleB(BYTE *dst_buf, const size_t dst_buf_siz
 
 	tml::Copy(&tmp_val, reinterpret_cast<const ULONGLONG *>(&val), 1U);
 
-	tml::MemoryUtil::WriteBufferULongLongB(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
+	tml::MemoryUtil::WriteBufferULongLongB(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_result);
 
 	return;
 }
@@ -1554,12 +1554,12 @@ void tml::MemoryUtil::WriteBufferDoubleB(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param val (value)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferDoubleL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_res)
+void tml::MemoryUtil::WriteBufferDoubleL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const DOUBLE val, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
@@ -1567,7 +1567,7 @@ void tml::MemoryUtil::WriteBufferDoubleL(BYTE *dst_buf, const size_t dst_buf_siz
 
 	tml::Copy(&tmp_val, reinterpret_cast<const ULONGLONG *>(&val), 1U);
 
-	tml::MemoryUtil::WriteBufferULongLongL(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_res);
+	tml::MemoryUtil::WriteBufferULongLongL(dst_buf, dst_buf_size, dst_buf_index, tmp_val, dst_result);
 
 	return;
 }
@@ -1584,12 +1584,12 @@ void tml::MemoryUtil::WriteBufferDoubleL(BYTE *dst_buf, const size_t dst_buf_siz
  * @param ary (array)
  * @param ary_size (array_size)
  * @param write_size (write_size)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const BYTE *ary, const size_t ary_size, const size_t write_size, INT *dst_res)
+void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const BYTE *ary, const size_t ary_size, const size_t write_size, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
@@ -1597,7 +1597,7 @@ void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size,
 	|| ((dst_buf_index + write_size) > dst_buf_size)
 	|| (dst_buf == ary)
 	|| (write_size > ary_size)) {
-		tml::SetResult(dst_res, -1);
+		tml::SetResult(dst_result, -1);
 
 		return;
 	}
@@ -1618,19 +1618,19 @@ void tml::MemoryUtil::WriteBufferArray(BYTE *dst_buf, const size_t dst_buf_size,
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param str (string)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferStringB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_res)
+void tml::MemoryUtil::WriteBufferStringB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	size_t str_size = strlen(str);
 
-	tml::MemoryUtil::WriteBufferUShortB(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
-	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
+	tml::MemoryUtil::WriteBufferUShortB(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_result);
+	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_result);
 
 	return;
 }
@@ -1645,19 +1645,19 @@ void tml::MemoryUtil::WriteBufferStringB(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param str (string)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferStringL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_res)
+void tml::MemoryUtil::WriteBufferStringL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const CHAR *str, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	size_t str_size = strlen(str);
 
-	tml::MemoryUtil::WriteBufferUShortL(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
-	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
+	tml::MemoryUtil::WriteBufferUShortL(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_result);
+	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_result);
 
 	return;
 }
@@ -1672,19 +1672,19 @@ void tml::MemoryUtil::WriteBufferStringL(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param str (string)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferStringB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_res)
+void tml::MemoryUtil::WriteBufferStringB(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	size_t str_size = wcslen(str) << 1;
 
-	tml::MemoryUtil::WriteBufferUShortB(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
-	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
+	tml::MemoryUtil::WriteBufferUShortB(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_result);
+	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_result);
 
 	return;
 }
@@ -1699,19 +1699,19 @@ void tml::MemoryUtil::WriteBufferStringB(BYTE *dst_buf, const size_t dst_buf_siz
  * @param dst_buf_size (dst_buffer_size)
  * @param dst_buf_index (dst_buffer_index)
  * @param str (string)
- * @param dst_res (dst_result)<br>
+ * @param dst_result (dst_result)<br>
  * nullptr=éwíËñ≥Çµ,0ñ¢ñû=é∏îs
  */
-void tml::MemoryUtil::WriteBufferStringL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_res)
+void tml::MemoryUtil::WriteBufferStringL(BYTE *dst_buf, const size_t dst_buf_size, size_t &dst_buf_index, const WCHAR *str, INT *dst_result)
 {
-	if (tml::CheckResult(dst_res)) {
+	if (tml::CheckResult(dst_result)) {
 		return;
 	}
 
 	size_t str_size = wcslen(str) << 1;
 
-	tml::MemoryUtil::WriteBufferUShortL(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_res);
-	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_res);
+	tml::MemoryUtil::WriteBufferUShortL(dst_buf, dst_buf_size, dst_buf_index, static_cast<USHORT>(str_size), dst_result);
+	tml::MemoryUtil::WriteBufferArray(dst_buf, dst_buf_size, dst_buf_index, reinterpret_cast<const BYTE *>(str), str_size, str_size, dst_result);
 
 	return;
 }

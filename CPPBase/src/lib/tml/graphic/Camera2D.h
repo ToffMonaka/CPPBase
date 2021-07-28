@@ -59,6 +59,9 @@ public: Camera2D(const tml::graphic::Camera2D &) = delete;
 public: tml::graphic::Camera2D &operator =(const tml::graphic::Camera2D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::_2D);
+
 private:
 	tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE proj_type_;
 	tml::XMFLOAT2EX fov_size_;

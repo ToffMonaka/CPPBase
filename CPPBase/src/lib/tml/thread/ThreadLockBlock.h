@@ -20,7 +20,7 @@ public: tml::ThreadLockBlock &operator =(const tml::ThreadLockBlock &) = delete;
 
 private:
 	tml::ThreadLock &th_lock_;
-	INT res_;
+	INT result_;
 
 public:
 	ThreadLockBlock(tml::ThreadLock &);
@@ -34,9 +34,9 @@ public:
 
 /**
  * @brief GetResultŠÖ”
- * @return res (result)
+ * @return result (result)
  */
 inline INT tml::ThreadLockBlock::GetResult(void) const
 {
-	return (this->res_);
+	return (this->result_);
 }

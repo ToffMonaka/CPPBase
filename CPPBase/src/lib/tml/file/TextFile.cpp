@@ -155,7 +155,7 @@ void tml::TextFile::Init(void)
 
 /**
  * @brief Readä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::TextFile::Read(void)
@@ -209,7 +209,7 @@ INT tml::TextFile::Read(void)
 
 /**
  * @brief Writeä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::TextFile::Write(void)

@@ -46,7 +46,7 @@ public:
 
 /**
  * @brief CheckFixedThreadŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=Ž¸”s,true=¬Œ÷
  */
 inline bool tml::ThreadUtil::CheckFixedThread(void)
@@ -73,7 +73,7 @@ inline tml::Thread *tml::ThreadUtil::Get(void)
 /**
  * @brief StartŠÖ”
  * @param th (thread)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::MainThread> &th)
@@ -89,7 +89,7 @@ inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::MainThread> &th)
 /**
  * @brief StartŠÖ”
  * @param th (thread)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::SubThread> &th)
@@ -104,7 +104,7 @@ inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::SubThread> &th)
 
 /**
  * @brief StartAllŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 inline INT tml::ThreadUtil::StartAll(void)
@@ -167,7 +167,7 @@ inline INT tml::ThreadUtil::GetExitCode(void)
 /**
  * @brief CreateCOMŠÖ”
  * @param init_flg (init_flag)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 inline INT tml::ThreadUtil::CreateCOM(const DWORD init_flg)

@@ -29,7 +29,7 @@ tml::SpinThreadLock::~SpinThreadLock()
 
 /**
  * @brief Lock関数
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0未満=失敗
  */
 INT tml::SpinThreadLock::Lock(void)
@@ -55,7 +55,7 @@ INT tml::SpinThreadLock::Lock(void)
 /**
  * @brief Lock関数
  * @param timeout_time (timeout_time)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0未満=失敗,-2=タイムアウト
  */
 INT tml::SpinThreadLock::Lock(const tml::TIME_MILLI &timeout_time)

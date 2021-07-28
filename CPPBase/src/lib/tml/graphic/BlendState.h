@@ -59,6 +59,10 @@ public: BlendState(const tml::graphic::BlendState &) = delete;
 public: tml::graphic::BlendState &operator =(const tml::graphic::BlendState &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::BLEND_STATE_TYPE::ETC);
+
 private:
 	ID3D11BlendState *bs_;
 	std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> factor_ary_;

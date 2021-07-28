@@ -47,7 +47,7 @@ void tml::scene::NodeDesc::Init(void)
 /**
  * @brief ReadValueŠÖ”
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::scene::NodeDesc::ReadValue(const tml::INIFile &ini_file)
@@ -139,7 +139,7 @@ void tml::scene::Node::Init(void)
  * @brief CreateŠÖ”
  * @param desc (desc)
  * @param type (type)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc, const tml::ConstantUtil::SCENE::NODE_TYPE type)
@@ -162,7 +162,7 @@ INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc, const tml::Consta
 
 /**
  * @brief StartŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::scene::Node::Start(void)
@@ -277,7 +277,7 @@ void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
  * @brief AddChildNodeŠÖ”
  * @param child_node (child_node)
  * @param event_flg (event_flag)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)

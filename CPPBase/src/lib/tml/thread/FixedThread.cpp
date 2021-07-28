@@ -27,7 +27,7 @@ tml::FixedThread::~FixedThread()
 
 /**
  * @brief CheckŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=¸”s,true=¬Œ÷
  */
 bool tml::FixedThread::Check(void)

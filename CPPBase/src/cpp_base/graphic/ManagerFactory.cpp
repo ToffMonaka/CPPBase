@@ -45,7 +45,7 @@ void cpp_base::graphic::ManagerFactory::Init(void)
 /**
  * @brief Createä÷êî
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::graphic::ManagerFactory::Create(cpp_base::graphic::Manager *mgr)

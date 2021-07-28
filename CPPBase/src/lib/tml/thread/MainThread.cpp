@@ -53,7 +53,7 @@ void tml::MainThread::Init(void)
  * @param instance_handle (instance_handle)
  * @param wnd_name (window_name)
  * @param wnd_show_type (window_show_type)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *wnd_name, const INT wnd_show_type)
@@ -72,7 +72,7 @@ INT tml::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *wnd_na
 
 /**
  * @brief CreateCOMŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::MainThread::CreateCOM(void)
@@ -113,7 +113,7 @@ void tml::MainThread::DeleteCOM(void)
  * @param wnd_class (window_class)
  * @param pos (position)
  * @param size (size)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s,-2=‘½d‹N“®
  */
 INT tml::MainThread::CreateWindow_(const WNDCLASSEX &wnd_class, const tml::XMUINT2EX &pos, const tml::XMUINT2EX &size)

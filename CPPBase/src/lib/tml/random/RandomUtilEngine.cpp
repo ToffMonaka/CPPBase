@@ -36,7 +36,7 @@ void tml::RandomUtilEngine::Init(void)
 
 /**
  * @brief CreateŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::RandomUtilEngine::Create(void)

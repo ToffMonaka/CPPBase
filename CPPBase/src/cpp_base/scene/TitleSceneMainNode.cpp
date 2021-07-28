@@ -57,7 +57,7 @@ void cpp_base::scene::TitleSceneMainNodeDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::TitleSceneMainNodeDesc::ReadValue(const tml::INIFile &ini_file)
@@ -141,7 +141,7 @@ void cpp_base::scene::TitleSceneMainNode::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::TitleSceneMainNode::Create(const cpp_base::scene::TitleSceneMainNodeDesc &desc)
@@ -389,7 +389,7 @@ INT cpp_base::scene::TitleSceneMainNode::Create(const cpp_base::scene::TitleScen
 
 /**
  * @brief OnStartä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::TitleSceneMainNode::OnStart(void)

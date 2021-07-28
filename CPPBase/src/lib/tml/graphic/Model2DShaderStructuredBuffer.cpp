@@ -78,7 +78,7 @@ void tml::graphic::Model2DShaderStructuredBuffer::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Model2DShaderStructuredBuffer::Create(const tml::graphic::Model2DShaderStructuredBufferDesc &desc)

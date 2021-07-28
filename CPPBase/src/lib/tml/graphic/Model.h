@@ -364,6 +364,9 @@ public: Model(const tml::graphic::Model &) = delete;
 public: tml::graphic::Model &operator =(const tml::graphic::Model &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL);
+
 private:
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE type_;
 	std::vector<tml::shared_ptr<tml::graphic::RasterizerState>> rs_cont_;

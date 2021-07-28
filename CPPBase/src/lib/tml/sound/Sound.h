@@ -59,6 +59,9 @@ public: Sound(const tml::sound::Sound &) = delete;
 public: tml::sound::Sound &operator =(const tml::sound::Sound &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND);
+
 private:
 	tml::ConstantUtil::SOUND::SOUND_TYPE type_;
 	ALuint buf_;

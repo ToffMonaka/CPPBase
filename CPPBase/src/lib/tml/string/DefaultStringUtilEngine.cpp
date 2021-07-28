@@ -43,7 +43,7 @@ void tml::DefaultStringUtilEngine::Init(void)
 /**
  * @brief Createä÷êî
  * @param locale_name (locale_name)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::DefaultStringUtilEngine::Create(const CHAR *locale_name)

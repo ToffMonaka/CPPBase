@@ -196,7 +196,7 @@ void tml::scene::Manager::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
@@ -360,7 +360,7 @@ void tml::scene::Manager::Update(void)
 /**
  * @brief StartSceneŠÖ”
  * @param scene (scene)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::scene::Manager::StartScene(const tml::shared_ptr<tml::scene::Scene> &scene)

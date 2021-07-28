@@ -30,7 +30,7 @@ void tml::RandomUtil::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param engine (engine)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::RandomUtil::Create(std::unique_ptr<tml::RandomUtilEngine> &engine)

@@ -235,25 +235,25 @@ inline T1 tml::CastTime(const T2 &time)
 
 /**
  * @brief CheckResult関数
- * @param res (result)
+ * @param result (result)
  * @return error_flg (error_flag)<br>
  * false=エラー無し,true=エラー有り
  */
-inline bool tml::CheckResult(const INT *res)
+inline bool tml::CheckResult(const INT *result)
 {
-	return ((res != nullptr) && ((*res) < 0));
+	return ((result != nullptr) && ((*result) < 0));
 }
 
 
 /**
  * @brief SetResult関数
- * @param dst_res (dst_result)
- * @param res (result)
+ * @param dst_result (dst_result)
+ * @param result (result)
  */
-inline void tml::SetResult(INT *dst_res, const INT res)
+inline void tml::SetResult(INT *dst_result, const INT result)
 {
-	if (dst_res != nullptr) {
-		(*dst_res) = res;
+	if (dst_result != nullptr) {
+		(*dst_result) = result;
 	}
 
 	return;

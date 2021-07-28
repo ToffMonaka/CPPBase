@@ -49,7 +49,7 @@ void tml::sound::ManagerCommon::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::sound::ManagerCommon::Create(tml::sound::Manager *mgr)

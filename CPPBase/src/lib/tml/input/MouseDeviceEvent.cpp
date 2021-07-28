@@ -151,7 +151,7 @@ void tml::input::MouseDeviceEvent::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::input::MouseDeviceEvent::Create(const tml::input::MouseDeviceEventDesc &desc)

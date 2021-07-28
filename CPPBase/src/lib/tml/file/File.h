@@ -46,7 +46,7 @@ inline void tml::FileReadDescData::Release(void)
 
 /**
  * @brief IsEmptyŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=”ñ‹ó,true=‹ó
  */
 inline bool tml::FileReadDescData::IsEmpty(void) const
@@ -210,7 +210,7 @@ inline void tml::FileWriteDescData::Release(void)
 
 /**
  * @brief IsEmptyŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=”ñ‹ó,true=‹ó
  */
 inline bool tml::FileWriteDescData::IsEmpty(void) const

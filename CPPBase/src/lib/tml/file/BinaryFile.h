@@ -80,7 +80,7 @@ inline void tml::BinaryFileReadDescData::Release(void)
 
 /**
  * @brief IsEmptyŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=”ñ‹ó,true=‹ó
  */
 inline bool tml::BinaryFileReadDescData::IsEmpty(void) const
@@ -133,7 +133,7 @@ inline void tml::BinaryFileWriteDescData::Release(void)
 
 /**
  * @brief IsEmptyŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=”ñ‹ó,true=‹ó
  */
 inline bool tml::BinaryFileWriteDescData::IsEmpty(void) const

@@ -134,7 +134,7 @@ void tml::input::Manager::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
@@ -185,7 +185,7 @@ void tml::input::Manager::Update(void)
  * @brief AddMouseDeviceRawInputä÷êî
  * @param rm (raw_mouse)
  * @param pos (position)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::input::Manager::AddMouseDeviceRawInput(const RAWMOUSE &rm, const tml::XMINT2EX &pos)
@@ -244,7 +244,7 @@ INT tml::input::Manager::AddMouseDeviceRawInput(const RAWMOUSE &rm, const tml::X
 /**
  * @brief AddKeyboardDeviceRawInputä÷êî
  * @param rk (raw_keyboard)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::input::Manager::AddKeyboardDeviceRawInput(const RAWKEYBOARD &rk)

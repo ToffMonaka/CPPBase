@@ -46,7 +46,7 @@ void tml::input::ManagerCommon::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::input::ManagerCommon::Create(tml::input::Manager *mgr)

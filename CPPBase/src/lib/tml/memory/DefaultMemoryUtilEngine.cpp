@@ -44,7 +44,7 @@ void tml::DefaultMemoryUtilEngine::Init(void)
  * @brief Createä÷êî
  * @param allocator_type (allocator_type)
  * @param allocator_size (allocator_size)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::DefaultMemoryUtilEngine::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE allocator_type, const size_t allocator_size)

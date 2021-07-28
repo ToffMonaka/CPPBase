@@ -40,7 +40,7 @@ void tml::SubThread::Init(void)
 
 /**
  * @brief Createä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::SubThread::Create(void)
@@ -55,7 +55,7 @@ INT tml::SubThread::Create(void)
 
 /**
  * @brief CreateCOMä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::SubThread::CreateCOM(void)

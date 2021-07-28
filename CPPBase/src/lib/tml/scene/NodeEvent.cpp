@@ -120,7 +120,7 @@ void tml::scene::NodeEvent::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::scene::NodeEvent::Create(const tml::scene::NodeEventDesc &desc)

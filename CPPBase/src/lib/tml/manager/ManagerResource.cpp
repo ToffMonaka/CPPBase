@@ -48,7 +48,7 @@ void tml::ManagerResourceDesc::Init(void)
 /**
  * @brief ReadŠÖ”
  * @param file_read_desc (file_read_desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ManagerResourceDesc::Read(const tml::INIFileReadDesc &file_read_desc)
@@ -78,7 +78,7 @@ INT tml::ManagerResourceDesc::Read(const tml::INIFileReadDesc &file_read_desc)
 /**
  * @brief ReadValueŠÖ”
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
@@ -152,7 +152,7 @@ void tml::ManagerResource::Init(void)
 
 /**
  * @brief LoadŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ManagerResource::Load(void)
@@ -166,7 +166,7 @@ INT tml::ManagerResource::Load(void)
  * @param desc (desc)
  * @param res_main_index (resource_main_index)
  * @param res_sub_index (resource_sub_index)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc, const UINT res_main_index, const UINT res_sub_index)
@@ -184,17 +184,45 @@ INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc, const UIN
 
 
 /**
+ * @brief SetResourceMainIndexŠÖ”
+ * @param mgr (manager)
+ * @param res_main_index (resource_main_index)
+ */
+void tml::ManagerResource::SetResourceMainIndex(tml::Manager *mgr, const UINT res_main_index)
+{
+	if (mgr->CheckFriendResource(this)) {
+		this->res_main_index_ = res_main_index;
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetResourceSubIndexŠÖ”
+ * @param mgr (manager)
+ * @param res_sub_index (resource_sub_index)
+ */
+void tml::ManagerResource::SetResourceSubIndex(tml::Manager *mgr, const UINT res_sub_index)
+{
+	if (mgr->CheckFriendResource(this)) {
+		this->res_sub_index_ = res_sub_index;
+	}
+
+	return;
+}
+
+
+/**
  * @brief SetResourceSharedPointerŠÖ”
  * @param mgr (manager)
  * @param res_shared_p (resource_shared_pointer)
  */
 void tml::ManagerResource::SetResourceSharedPointer(tml::Manager *mgr, const tml::shared_ptr<tml::ManagerResource> &res_shared_p)
 {
-	if (!mgr->CheckFriendResource(this)) {
-		return;
+	if (mgr->CheckFriendResource(this)) {
+		this->res_shared_p_ = res_shared_p;
 	}
-
-	this->res_shared_p_ = res_shared_p;
 
 	return;
 }
@@ -207,11 +235,9 @@ void tml::ManagerResource::SetResourceSharedPointer(tml::Manager *mgr, const tml
  */
 void tml::ManagerResource::SetResourceName(tml::Manager *mgr, const WCHAR *res_name)
 {
-	if (!mgr->CheckFriendResource(this)) {
-		return;
+	if (mgr->CheckFriendResource(this)) {
+		this->res_name_ = res_name;
 	}
-
-	this->res_name_ = res_name;
 
 	return;
 }

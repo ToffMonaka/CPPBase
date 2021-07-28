@@ -68,6 +68,10 @@ public: Light(const tml::graphic::Light &) = delete;
 public: tml::graphic::Light &operator =(const tml::graphic::Light &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::ETC);
+
 private:
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type_;
 	tml::XMFLOAT3EX col_;

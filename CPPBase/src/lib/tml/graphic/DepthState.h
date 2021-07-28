@@ -58,6 +58,10 @@ public: DepthState(const tml::graphic::DepthState &) = delete;
 public: tml::graphic::DepthState &operator =(const tml::graphic::DepthState &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_TYPE::ETC);
+
 private:
 	ID3D11DepthStencilState *ds_;
 

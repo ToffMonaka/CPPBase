@@ -45,7 +45,7 @@ void tml::input::ManagerFactory::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::input::ManagerFactory::Create(tml::input::Manager *mgr)

@@ -42,7 +42,7 @@ void tml::DefaultThreadUtilEngine::Init(void)
 
 /**
  * @brief CreateŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::DefaultThreadUtilEngine::Create(void)

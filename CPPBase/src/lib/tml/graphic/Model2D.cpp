@@ -64,7 +64,7 @@ void tml::graphic::Model2DLayer::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::Model2DLayer::Create(tml::graphic::Manager *mgr)
@@ -128,7 +128,7 @@ void tml::graphic::Model2DStage::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::Model2DStage::Create(tml::graphic::Manager *mgr)
@@ -189,7 +189,7 @@ void tml::graphic::Model2DDesc::Init(void)
 /**
  * @brief ReadValueŠÖ”
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::Model2DDesc::ReadValue(const tml::INIFile &ini_file)
@@ -271,7 +271,7 @@ void tml::graphic::Model2D::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)

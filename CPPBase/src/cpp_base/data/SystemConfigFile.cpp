@@ -99,7 +99,7 @@ void cpp_base::SystemConfigFile::Init(void)
 
 /**
  * @brief Readä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::SystemConfigFile::Read(void)
@@ -225,7 +225,7 @@ INT cpp_base::SystemConfigFile::Read(void)
 
 /**
  * @brief Writeä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::SystemConfigFile::Write(void)

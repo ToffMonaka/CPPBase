@@ -59,7 +59,7 @@ void tml::Thread::Init(void)
 /**
  * @brief Createä÷êî
  * @param type (type)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::Thread::Create(const tml::ConstantUtil::THREAD::TYPE type)
@@ -77,7 +77,7 @@ INT tml::Thread::Create(const tml::ConstantUtil::THREAD::TYPE type)
 
 /**
  * @brief Startä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::Thread::Start(void)
@@ -146,7 +146,7 @@ void tml::Thread::SetRunFlag(const bool run_flg)
 
 /**
  * @brief CreateCoreä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::Thread::CreateCore(void)

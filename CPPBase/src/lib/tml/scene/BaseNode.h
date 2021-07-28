@@ -55,6 +55,9 @@ public: BaseNode(const tml::scene::BaseNode &) = delete;
 public: tml::scene::BaseNode &operator =(const tml::scene::BaseNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_TYPE::BASE);
+
 private:
 
 protected:

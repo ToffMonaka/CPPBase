@@ -51,7 +51,7 @@ void tml::graphic::ShaderStructuredBufferDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::ShaderStructuredBufferDesc::ReadValue(const tml::INIFile &ini_file)
@@ -183,7 +183,7 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStructuredBufferDesc &desc)
@@ -205,11 +205,11 @@ INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStruc
 	this->element_size_ = desc.element_size;
 	this->element_limit_ = desc.element_limit;
 
-	INT res = 0;
+	INT result = 0;
 
-	this->GetManager()->GetCPUBuffer(this->cpu_buf_, this->msr_, this->buf_, &res);
+	this->GetManager()->GetCPUBuffer(this->cpu_buf_, this->msr_, this->buf_, &result);
 
-	if (res < 0) {
+	if (result < 0) {
 		return (-1);
 	}
 

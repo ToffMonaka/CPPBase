@@ -49,7 +49,7 @@ void tml::sound::SoundDesc::Init(void)
 /**
  * @brief ReadValueŠÖ”
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &ini_file)
@@ -141,7 +141,7 @@ void tml::sound::Sound::Init(void)
  * @brief CreateŠÖ”
  * @param desc (desc)
  * @param type (type)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::ConstantUtil::SOUND::SOUND_TYPE type)
@@ -503,14 +503,14 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 		buf.AddWriteIndex(buf.GetSize());
 
 		LONG read_size = 0L;
-		INT read_res = 0;
+		INT read_result = 0;
 		INT read_bitstream = 0;
  
 		while (read_size < static_cast<LONG>(buf.GetLength())) {
 			LONG tmp_read_size = ov_read(&ogg_file, reinterpret_cast<CHAR *>(&buf.Get()[read_size]), static_cast<LONG>(buf.GetLength()) - read_size, 0, 2, 1, &read_bitstream);
  
 			if (tmp_read_size < 0L) {
-				read_res = -1;
+				read_result = -1;
 
 				break;
 			} else if (tmp_read_size == 0L) {
@@ -520,7 +520,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::Cons
 			read_size += tmp_read_size;
 		}
 
-		if (read_res < 0) {
+		if (read_result < 0) {
 			ov_clear(&ogg_file);
 
 			return (-1);
@@ -598,7 +598,7 @@ size_t tml::sound::Sound::ReadOggFile(void *buf, size_t size, size_t cnt, void *
  * @param src (source)
  * @param offset (offset)
  * @param flg (flag)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ˆÈŠO=Ž¸”s
  */
 int tml::sound::Sound::SeekOggFile(void *src, ogg_int64_t offset, int flg)
@@ -647,7 +647,7 @@ int tml::sound::Sound::SeekOggFile(void *src, ogg_int64_t offset, int flg)
 /**
  * @brief CloseOggFileŠÖ”
  * @param src (source)
- * @return res (result)<br>
+ * @return result (result)<br>
  * -1=Ž¸”s
  */
 int tml::sound::Sound::CloseOggFile(void *src)
@@ -659,7 +659,7 @@ int tml::sound::Sound::CloseOggFile(void *src)
 /**
  * @brief TellOggFileŠÖ”
  * @param src (source)
- * @return res (result)<br>
+ * @return result (result)<br>
  * -1=Ž¸”s
  */
 long tml::sound::Sound::TellOggFile(void *src)

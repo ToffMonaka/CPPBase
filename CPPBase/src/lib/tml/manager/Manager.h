@@ -102,12 +102,11 @@ public:
 	const std::vector<std::list<tml::shared_ptr<tml::ManagerResource>>> *GetResourceContainer(const UINT);
 	const std::list<tml::shared_ptr<tml::ManagerResource>> *GetResourceContainer(const UINT, const UINT);
 	template <typename T, typename T2, typename D>
-	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &, INT *dst_get_res = nullptr);
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const D &, INT *dst_result = nullptr);
 	template <typename T, typename T2>
-	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const tml::shared_ptr<T> &, INT *dst_get_res = nullptr);
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const tml::shared_ptr<T> &, INT *dst_result = nullptr);
 	template <typename T, typename T2>
-	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *, INT *dst_get_res = nullptr);
-	void SetResourceSharedPointer(tml::ManagerResource *, const tml::shared_ptr<tml::ManagerResource> &);
+	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *, INT *dst_result = nullptr);
 	void SetResourceName(tml::ManagerResource *, const WCHAR *);
 	bool CheckFriendResource(const tml::ManagerResource *) const;
 	UINT GetEventCount(const UINT) const;
@@ -178,15 +177,15 @@ inline const std::list<tml::shared_ptr<tml::ManagerResource>> *tml::Manager::Get
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param desc (desc)
- * @param dst_get_res (dst_get_result)
+ * @param dst_result (dst_result)
  * @return dst_res (dst_resource)
  */
 template <typename T, typename T2, typename D>
-inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const D &desc, INT *dst_get_res)
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const D &desc, INT *dst_result)
 {
 	dst_res.reset();
 
-	tml::SetResult(dst_get_res, -1);
+	tml::SetResult(dst_result, 0);
 
 	const std::wstring &tmp_res_name = desc.resource_name;
 
@@ -196,25 +195,33 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		if (res_itr != this->res_cont_by_name_.end()) {
 			dst_res = std::dynamic_pointer_cast<T2>(res_itr->second);
 
-			tml::SetResult(dst_get_res, 1);
+			tml::SetResult(dst_result, 1);
 
 			return (dst_res);
 		}
 	}
 
 	if (desc.GetManager() != this) {
+		tml::SetResult(dst_result, -1);
+
 		return (dst_res);
 	}
 
 	tml::shared_ptr<tml::ManagerResource> res = tml::make_shared<T>(1U);
+	UINT res_main_index = T::RESOURCE_MAIN_INDEX;
+	UINT res_sub_index = T::RESOURCE_SUB_INDEX;
 
 	this->friend_res_ = res.get();
+	this->friend_res_->SetResourceMainIndex(this, res_main_index);
+	this->friend_res_->SetResourceSubIndex(this, res_sub_index);
 	this->friend_res_->SetResourceSharedPointer(this, res);
 	this->friend_res_->SetResourceName(this, desc.resource_name.c_str());
 	this->friend_res_ = nullptr;
 
 	if (reinterpret_cast<T *>(res.get())->Create(desc) < 0) {
 		this->GetResourceInitResourcePart(res);
+
+		tml::SetResult(dst_result, -1);
 
 		return (dst_res);
 	}
@@ -233,6 +240,8 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		if (res->Load() < 0) {
 			this->GetResourceInitResourcePart(res);
 
+			tml::SetResult(dst_result, -1);
+
 			return (dst_res);
 		}
 
@@ -249,8 +258,6 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 	dst_res = std::dynamic_pointer_cast<T2>(res);
 
-	tml::SetResult(dst_get_res, 0);
-
 	return (dst_res);
 }
 
@@ -259,11 +266,11 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param res (resource)
- * @param dst_get_res (dst_get_result)
+ * @param dst_result (dst_result)
  * @return dst_res (dst_resource)
  */
 template <typename T, typename T2>
-inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const tml::shared_ptr<T> &res, INT *dst_get_res)
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const tml::shared_ptr<T> &res, INT *dst_result)
 {
 	if (std::is_same<T, T2>::value) {
 		dst_res = res;
@@ -271,7 +278,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		dst_res = std::dynamic_pointer_cast<T2>(res);
 	}
 
-	tml::SetResult(dst_get_res, 1);
+	tml::SetResult(dst_result, 1);
 
 	return (dst_res);
 }
@@ -281,18 +288,20 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
  * @brief GetResourceä÷êî
  * @param dst_res (dst_resource)
  * @param res_name (resource_name)
- * @param dst_get_res (dst_get_result)
+ * @param dst_result (dst_result)
  * @return dst_res (dst_resource)
  */
 template <typename T, typename T2>
-inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const WCHAR *res_name, INT *dst_get_res)
+inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const WCHAR *res_name, INT *dst_result)
 {
 	dst_res.reset();
 
-	tml::SetResult(dst_get_res, -1);
+	tml::SetResult(dst_result, 0);
 
 	if ((res_name == nullptr)
 	|| (res_name[0] == 0)) {
+		tml::SetResult(dst_result, -1);
+
 		return (dst_res);
 	}
 
@@ -304,7 +313,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		if (res_itr != this->res_cont_by_name_.end()) {
 			dst_res = std::dynamic_pointer_cast<T2>(res_itr->second);
 
-			tml::SetResult(dst_get_res, 1);
+			tml::SetResult(dst_result, 1);
 
 			return (dst_res);
 		}
@@ -357,7 +366,7 @@ inline tml::ManagerEvent *tml::Manager::GetEventFast(const UINT event_main_index
 /**
  * @brief AddEventä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <typename T, typename D>
@@ -383,6 +392,9 @@ inline INT tml::Manager::AddEvent(const D &desc)
 
 		event = tml::make_unique<T>(1U);
 
+		this->friend_event_ = event.get();
+		this->friend_event_ = nullptr;
+
 		if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {
 			this->AddEventInitEventPart(event);
 
@@ -393,8 +405,8 @@ inline INT tml::Manager::AddEvent(const D &desc)
 	auto &event_cnt_cont = this->event_cnt_cont_ary_[this->back_event_index_];
 	auto &event_cont_cont = this->event_cont_ary_[this->back_event_index_];
 
-	auto &event_cnt = event_cnt_cont[event_main_index];
-	auto &event_cont = event_cont_cont[event_main_index];
+	auto &event_cnt = event_cnt_cont[event->GetEventMainIndex()];
+	auto &event_cont = event_cont_cont[event->GetEventMainIndex()];
 
 	if (event_cnt >= event_cont.size()) {
 		event_cont.resize(event_cnt + 128U);

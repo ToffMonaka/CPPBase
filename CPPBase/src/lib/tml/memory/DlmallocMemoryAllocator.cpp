@@ -66,7 +66,7 @@ void tml::DlmallocMemoryAllocator::Init(void)
 /**
  * @brief Createä÷êî
  * @param size (size)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::DlmallocMemoryAllocator::Create(const size_t size)

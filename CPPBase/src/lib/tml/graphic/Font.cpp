@@ -49,7 +49,7 @@ void tml::graphic::FontBitmap::Init(void)
  * @brief Createä÷êî
  * @param dc_handle (device_context_handle)
  * @param code (code)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::FontBitmap::Create(const HDC dc_handle, const WCHAR code)
@@ -133,7 +133,7 @@ void tml::graphic::FontDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::FontDesc::ReadValue(const tml::INIFile &ini_file)
@@ -252,7 +252,7 @@ void tml::graphic::Font::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Font::Create(const tml::graphic::FontDesc &desc)
@@ -308,9 +308,9 @@ const tml::graphic::FontBitmap *tml::graphic::Font::GetBitmap(const WCHAR code)
 			return (nullptr);
 		}
 
-		auto insert_res = this->bm_cont_.insert(std::make_pair(code, std::move(bm)));
+		auto insert_result = this->bm_cont_.insert(std::make_pair(code, std::move(bm)));
 
-		return (insert_res.first->second.get());
+		return (insert_result.first->second.get());
 	}
 
 	return (bm_itr->second.get());

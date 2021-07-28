@@ -58,6 +58,9 @@ public: Node(const tml::scene::Node &) = delete;
 public: tml::scene::Node &operator =(const tml::scene::Node &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE);
+
 private:
 	std::wstring name_;
 	tml::ConstantUtil::SCENE::NODE_TYPE type_;
@@ -171,7 +174,7 @@ inline void tml::scene::Node::SetStartFlag(const bool start_flg)
 
 /**
  * @brief IsStarted関数
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=非開始済み,true=開始済み
  */
 inline bool tml::scene::Node::IsStarted(void) const

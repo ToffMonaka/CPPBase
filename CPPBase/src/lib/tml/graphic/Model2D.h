@@ -191,6 +191,9 @@ public:
 		};
 	} VERTEX_BUFFER_ELEMENT;
 
+public:
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D);
+
 private:
 	tml::shared_ptr<tml::graphic::Model2DShaderStructuredBuffer> ssb_;
 	tml::shared_ptr<tml::graphic::Model2DLayerShaderStructuredBuffer> layer_ssb_;

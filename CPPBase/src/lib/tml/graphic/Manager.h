@@ -218,8 +218,8 @@ public:
 	DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera3D &);
 	DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera2D &);
 	DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera3D &);
-	tml::DynamicBuffer &GetCPUBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_res = nullptr);
-	std::vector<tml::DynamicBuffer> &GetCPUBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_res = nullptr);
+	tml::DynamicBuffer &GetCPUBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_result = nullptr);
+	std::vector<tml::DynamicBuffer> &GetCPUBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_result = nullptr);
 
 	void Draw(const UINT);
 	tml::graphic::DRAW_STAGE_DATA *GetDrawStageData(void);

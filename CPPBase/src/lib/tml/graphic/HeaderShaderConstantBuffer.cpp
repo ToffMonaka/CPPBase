@@ -77,7 +77,7 @@ void tml::graphic::HeaderShaderConstantBuffer::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::HeaderShaderConstantBuffer::Create(const tml::graphic::HeaderShaderConstantBufferDesc &desc)

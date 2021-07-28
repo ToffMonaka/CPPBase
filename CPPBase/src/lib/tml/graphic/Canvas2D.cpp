@@ -55,7 +55,7 @@ void tml::graphic::Canvas2DDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Canvas2DDesc::ReadValue(const tml::INIFile &ini_file)
@@ -140,7 +140,7 @@ void tml::graphic::Canvas2D::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Canvas2D::Create(const tml::graphic::Canvas2DDesc &desc)

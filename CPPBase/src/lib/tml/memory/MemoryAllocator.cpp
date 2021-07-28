@@ -40,7 +40,7 @@ void tml::MemoryAllocator::Init(void)
 /**
  * @brief Createä÷êî
  * @param type (type)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::MemoryAllocator::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE type)

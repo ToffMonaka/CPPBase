@@ -123,7 +123,7 @@ void cpp_base::input::Manager::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT cpp_base::input::Manager::Create(const cpp_base::input::ManagerDesc &desc)

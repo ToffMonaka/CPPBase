@@ -119,7 +119,7 @@ inline void tml::Thread::SetStartFlag(const bool start_flg)
 
 /**
  * @brief IsStarted関数
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=非開始済み,true=開始済み
  */
 inline bool tml::Thread::IsStarted(void) const

@@ -44,7 +44,7 @@ void tml::scene::BaseSceneDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::scene::BaseSceneDesc::ReadValue(const tml::INIFile &ini_file)
@@ -116,7 +116,7 @@ void tml::scene::BaseScene::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::scene::BaseScene::Create(const tml::scene::BaseSceneDesc &desc)
@@ -135,7 +135,7 @@ INT tml::scene::BaseScene::Create(const tml::scene::BaseSceneDesc &desc)
 
 /**
  * @brief OnStartä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::scene::BaseScene::OnStart(void)

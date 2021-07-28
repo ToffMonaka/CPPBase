@@ -69,7 +69,7 @@ void tml::graphic::MeshDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::MeshDesc::ReadValue(const tml::INIFile &ini_file)
@@ -230,7 +230,7 @@ void tml::graphic::Mesh::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
@@ -255,11 +255,11 @@ INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
 		this->vb_element_cnt_ = desc.vertex_buffer_element_count;
 
 		if (desc.vertex_buffer_cpu_buffer_flag) {
-			INT res = 0;
+			INT result = 0;
 
-			this->GetManager()->GetCPUBuffer(this->vb_cpu_buf_, this->vb_msr_, this->vb_, &res);
+			this->GetManager()->GetCPUBuffer(this->vb_cpu_buf_, this->vb_msr_, this->vb_, &result);
 
-			if (res < 0) {
+			if (result < 0) {
 				this->Init();
 
 				return (-1);
@@ -280,11 +280,11 @@ INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
 		this->ib_format_ = desc.index_buffer_format;
 
 		if (desc.index_buffer_cpu_buffer_flag) {
-			INT res = 0;
+			INT result = 0;
 
-			this->GetManager()->GetCPUBuffer(this->ib_cpu_buf_, this->ib_msr_, this->ib_, &res);
+			this->GetManager()->GetCPUBuffer(this->ib_cpu_buf_, this->ib_msr_, this->ib_, &result);
 
-			if (res < 0) {
+			if (result < 0) {
 				this->Init();
 
 				return (-1);

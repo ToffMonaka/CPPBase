@@ -49,7 +49,7 @@ void tml::graphic::ShaderConstantBufferDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::ShaderConstantBufferDesc::ReadValue(const tml::INIFile &ini_file)
@@ -157,7 +157,7 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstantBufferDesc &desc)
@@ -178,11 +178,11 @@ INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstan
 	this->buf_->GetDesc(&this->buf_desc_);
 	this->element_size_ = desc.element_size;
 
-	INT res = 0;
+	INT result = 0;
 
-	this->GetManager()->GetCPUBuffer(this->cpu_buf_, this->msr_, this->buf_, &res);
+	this->GetManager()->GetCPUBuffer(this->cpu_buf_, this->msr_, this->buf_, &result);
 
-	if (res < 0) {
+	if (result < 0) {
 		return (-1);
 	}
 

@@ -13,9 +13,9 @@
  */
 tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock) :
 	th_lock_(th_lock),
-	res_(0)
+	result_(0)
 {
-	this->res_ = this->th_lock_.Lock();
+	this->result_ = this->th_lock_.Lock();
 
 	return;
 }
@@ -28,9 +28,9 @@ tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock) :
  */
 tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock, const tml::TIME_MILLI &timeout_time) :
 	th_lock_(th_lock),
-	res_(0)
+	result_(0)
 {
-	this->res_ = this->th_lock_.Lock(timeout_time);
+	this->result_ = this->th_lock_.Lock(timeout_time);
 
 	return;
 }
@@ -41,11 +41,11 @@ tml::ThreadLockBlock::ThreadLockBlock(tml::ThreadLock &th_lock, const tml::TIME_
  */
 tml::ThreadLockBlock::~ThreadLockBlock()
 {
-	if (this->res_ >= 0) {
+	if (this->result_ >= 0) {
 		this->th_lock_.Unlock();
 	}
 
-	this->res_ = 0;
+	this->result_ = 0;
 
 	return;
 }

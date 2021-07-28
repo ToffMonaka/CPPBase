@@ -56,7 +56,7 @@ void cpp_base::TestThread::Init(void)
 
 /**
  * @brief CreateŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT cpp_base::TestThread::Create(void)
@@ -75,7 +75,7 @@ INT cpp_base::TestThread::Create(void)
 
 /**
  * @brief OnStartŠÖ”
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT cpp_base::TestThread::OnStart(void)

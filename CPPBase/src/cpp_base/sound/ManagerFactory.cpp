@@ -45,7 +45,7 @@ void cpp_base::sound::ManagerFactory::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT cpp_base::sound::ManagerFactory::Create(cpp_base::sound::Manager *mgr)

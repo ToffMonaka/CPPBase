@@ -63,7 +63,7 @@ void tml::graphic::ModelLayer::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::ModelLayer::Create(tml::graphic::Manager *mgr)
@@ -132,7 +132,7 @@ void tml::graphic::ModelStage::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::ModelStage::Create(tml::graphic::Manager *mgr)
@@ -200,7 +200,7 @@ void tml::graphic::ModelDesc::Init(void)
 /**
  * @brief ReadValueŠÖ”
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &ini_file)
@@ -283,7 +283,7 @@ void tml::graphic::Model::Init(void)
  * @brief CreateŠÖ”
  * @param desc (desc)
  * @param type (type)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type)

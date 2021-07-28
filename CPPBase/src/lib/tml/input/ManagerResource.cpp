@@ -47,7 +47,7 @@ void tml::input::ManagerResourceDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::input::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
@@ -126,7 +126,7 @@ void tml::input::ManagerResource::Init(void)
  * @param desc (desc)
  * @param res_type (resource_type)
  * @param res_sub_index (resource_sub_index)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::input::ManagerResource::Create(const tml::input::ManagerResourceDesc &desc, const tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type, const UINT res_sub_index)

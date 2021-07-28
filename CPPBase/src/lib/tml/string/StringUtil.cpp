@@ -34,7 +34,7 @@ void tml::StringUtil::Init(void)
 /**
  * @brief Createä÷êî
  * @param engine (engine)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::StringUtil::Create(std::unique_ptr<tml::StringUtilEngine> &engine)
@@ -62,7 +62,7 @@ INT tml::StringUtil::Create(std::unique_ptr<tml::StringUtilEngine> &engine)
 /**
  * @brief CreateLocaleä÷êî
  * @param locale_name (locale_name)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::StringUtil::CreateLocale(const CHAR *locale_name)

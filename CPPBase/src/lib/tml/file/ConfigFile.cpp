@@ -147,7 +147,7 @@ void tml::ConfigFile::Init(void)
 
 /**
  * @brief Readä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::ConfigFile::Read(void)
@@ -225,7 +225,7 @@ INT tml::ConfigFile::Read(void)
 
 /**
  * @brief Writeä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::ConfigFile::Write(void)

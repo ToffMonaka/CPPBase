@@ -152,7 +152,7 @@ void tml::BinaryFile::Init(void)
 
 /**
  * @brief Readä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::BinaryFile::Read(void)
@@ -217,7 +217,7 @@ INT tml::BinaryFile::Read(void)
 
 /**
  * @brief Writeä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::BinaryFile::Write(void)

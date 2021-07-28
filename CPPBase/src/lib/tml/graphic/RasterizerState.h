@@ -58,6 +58,10 @@ public: RasterizerState(const tml::graphic::RasterizerState &) = delete;
 public: tml::graphic::RasterizerState &operator =(const tml::graphic::RasterizerState &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_TYPE::ETC);
+
 private:
 	ID3D11RasterizerState *rs_;
 

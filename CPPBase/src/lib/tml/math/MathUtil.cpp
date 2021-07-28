@@ -28,7 +28,7 @@ void tml::MathUtil::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param engine (engine)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::MathUtil::Create(std::unique_ptr<tml::MathUtilEngine> &engine)

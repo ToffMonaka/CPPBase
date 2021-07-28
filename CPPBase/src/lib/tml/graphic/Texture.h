@@ -73,6 +73,10 @@ public: Texture(const tml::graphic::Texture &) = delete;
 public: tml::graphic::Texture &operator =(const tml::graphic::Texture &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::ETC);
+
 private:
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;

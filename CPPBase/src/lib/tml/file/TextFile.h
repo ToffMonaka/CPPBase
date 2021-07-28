@@ -80,7 +80,7 @@ inline void tml::TextFileReadDescData::Release(void)
 
 /**
  * @brief IsEmptyŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=”ñ‹ó,true=‹ó
  */
 inline bool tml::TextFileReadDescData::IsEmpty(void) const
@@ -132,7 +132,7 @@ inline void tml::TextFileWriteDescData::Release(void)
 
 /**
  * @brief IsEmptyŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=”ñ‹ó,true=‹ó
  */
 inline bool tml::TextFileWriteDescData::IsEmpty(void) const

@@ -97,7 +97,7 @@ void tml::input::ManagerEvent::Init(void)
  * @param desc (desc)
  * @param event_type (event_type)
  * @param event_sub_index (event_sub_index)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
 INT tml::input::ManagerEvent::Create(const tml::input::ManagerEventDesc &desc, const tml::ConstantUtil::INPUT::EVENT_TYPE event_type, const UINT event_sub_index)

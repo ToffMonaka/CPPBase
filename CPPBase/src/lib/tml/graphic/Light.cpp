@@ -68,7 +68,7 @@ void tml::graphic::LightDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &ini_file)
@@ -157,7 +157,7 @@ void tml::graphic::Light::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc)

@@ -187,7 +187,7 @@ void tml::FrameRate::Init(void)
 /**
  * @brief StartŠÖ”
  * @param limit (limit)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::FrameRate::Start(const UINT limit)

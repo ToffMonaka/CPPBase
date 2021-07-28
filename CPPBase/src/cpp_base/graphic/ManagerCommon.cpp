@@ -51,7 +51,7 @@ void cpp_base::graphic::ManagerCommon::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT cpp_base::graphic::ManagerCommon::Create(cpp_base::graphic::Manager *mgr)

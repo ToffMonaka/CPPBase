@@ -78,7 +78,7 @@ void cpp_base::MainThread::Init(void)
  * @param instance_handle (instance_handle)
  * @param wnd_name (window_name)
  * @param wnd_show_type (window_show_type)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *wnd_name, const INT wnd_show_type)
@@ -107,7 +107,7 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
 
 /**
  * @brief OnStartä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::MainThread::OnStart(void)
@@ -267,7 +267,7 @@ void cpp_base::MainThread::OnUpdate(void)
  * @param msg_type (message_type)
  * @param msg_wp (message_wparameter)
  * @param msg_lp (message_lparameter)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg_type, WPARAM msg_wp, LPARAM msg_lp)

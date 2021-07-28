@@ -102,7 +102,9 @@ public:
 
 	tml::Manager *GetManager(void);
 	UINT GetResourceMainIndex(void) const;
+	void SetResourceMainIndex(tml::Manager *, const UINT);
 	UINT GetResourceSubIndex(void) const;
+	void SetResourceSubIndex(tml::Manager *, const UINT);
 	const tml::shared_ptr<tml::ManagerResource> &GetResourceSharedPointer(void) const;
 	void SetResourceSharedPointer(tml::Manager *, const tml::shared_ptr<tml::ManagerResource> &);
 	const std::wstring &GetResourceName(void) const;

@@ -51,7 +51,7 @@ void cpp_base::scene::InitSceneDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::InitSceneDesc::ReadValue(const tml::INIFile &ini_file)
@@ -127,7 +127,7 @@ void cpp_base::scene::InitScene::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &desc)
@@ -195,7 +195,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 
 /**
  * @brief OnStartä÷êî
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT cpp_base::scene::InitScene::OnStart(void)

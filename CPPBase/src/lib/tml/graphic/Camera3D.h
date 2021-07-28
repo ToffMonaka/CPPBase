@@ -62,6 +62,9 @@ public: Camera3D(const tml::graphic::Camera3D &) = delete;
 public: tml::graphic::Camera3D &operator =(const tml::graphic::Camera3D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::_3D);
+
 private:
 	tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE proj_type_;
 	tml::XMFLOAT2EX fov_size_;

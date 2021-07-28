@@ -68,7 +68,7 @@ public:
 
 /**
  * @brief CheckFixedThreadŠÖ”
- * @return res_flg (result_flag)<br>
+ * @return result_flg (result_flag)<br>
  * false=¸”s,true=¬Œ÷
  */
 inline bool tml::RandomUtil::CheckFixedThread(void)

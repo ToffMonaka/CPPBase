@@ -35,7 +35,7 @@ public:
 	virtual void Init(void);
 
 	template <typename T2>
-	tml::shared_ptr<T2> &Get(tml::shared_ptr<T2> &, const WCHAR *, const D &, INT *dst_get_res = nullptr);
+	tml::shared_ptr<T2> &Get(tml::shared_ptr<T2> &, const WCHAR *, const D &, INT *dst_result = nullptr);
 	INT AddFunction(const WCHAR *, std::function<tml::shared_ptr<T>(const D &, INT *)>);
 	void RemoveFunction(const WCHAR *);
 };
@@ -93,29 +93,33 @@ inline void tml::ManagerResourceFactory<T, D>::Init(void)
  * @param dst_res (dst_resource)
  * @param class_name (class_name)
  * @param file_read_desc (file_read_desc)
- * @param dst_get_res (dst_get_result)
+ * @param dst_result (dst_result)
  * @return dst_res (dst_resource)
  */
 template <typename T, typename D>
 template <typename T2>
-inline tml::shared_ptr<T2> &tml::ManagerResourceFactory<T, D>::Get(tml::shared_ptr<T2> &dst_res, const WCHAR *class_name, const D &file_read_desc, INT *dst_get_res)
+inline tml::shared_ptr<T2> &tml::ManagerResourceFactory<T, D>::Get(tml::shared_ptr<T2> &dst_res, const WCHAR *class_name, const D &file_read_desc, INT *dst_result)
 {
 	dst_res.reset();
 
-	tml::SetResult(dst_get_res, -1);
+	tml::SetResult(dst_result, 0);
 
 	if ((class_name == nullptr)
 	|| (class_name[0] == 0)) {
+		tml::SetResult(dst_result, -1);
+
 		return (dst_res);
 	}
 
 	auto func_itr = this->func_cont_.find(class_name);
 
 	if (func_itr == this->func_cont_.end()) {
+		tml::SetResult(dst_result, -1);
+
 		return (dst_res);
 	}
 
-	tml::shared_ptr<T> res = func_itr->second(file_read_desc, dst_get_res);
+	tml::shared_ptr<T> res = func_itr->second(file_read_desc, dst_result);
 
 	if (std::is_same<T, T2>::value) {
 		dst_res = res;
@@ -131,7 +135,7 @@ inline tml::shared_ptr<T2> &tml::ManagerResourceFactory<T, D>::Get(tml::shared_p
  * @brief AddFunctionä÷êî
  * @param class_name (class_name)
  * @param func (function)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <typename T, typename D>

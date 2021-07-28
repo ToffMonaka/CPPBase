@@ -55,6 +55,9 @@ public: SESound(const tml::sound::SESound &) = delete;
 public: tml::sound::SESound &operator =(const tml::sound::SESound &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SOUND::SOUND_TYPE::SE);
+
 private:
 
 protected:

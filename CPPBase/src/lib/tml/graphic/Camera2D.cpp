@@ -50,7 +50,7 @@ void tml::graphic::Camera2DDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Camera2DDesc::ReadValue(const tml::INIFile &ini_file)
@@ -117,7 +117,7 @@ void tml::graphic::Camera2D::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Camera2D::Create(const tml::graphic::Camera2DDesc &desc)

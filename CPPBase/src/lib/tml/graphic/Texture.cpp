@@ -69,7 +69,7 @@ void tml::graphic::TextureDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &ini_file)
@@ -227,7 +227,7 @@ void tml::graphic::Texture::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
@@ -339,11 +339,11 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 			std::vector<tml::DynamicBuffer> cpu_buf_cont;
 			std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont;
-			INT res = 0;
+			INT result = 0;
 
-			this->GetManager()->GetCPUBuffer(cpu_buf_cont, msr_cont, tex, &res);
+			this->GetManager()->GetCPUBuffer(cpu_buf_cont, msr_cont, tex, &result);
 
-			if (res < 0) {
+			if (result < 0) {
 				tex->Release();
 
 				tex = nullptr;
@@ -448,11 +448,11 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	}
 
 	if (desc.cpu_buffer_flag) {
-		INT res = 0;
+		INT result = 0;
 
-		this->GetManager()->GetCPUBuffer(this->cpu_buf_cont_, this->msr_cont_, this->tex_, &res);
+		this->GetManager()->GetCPUBuffer(this->cpu_buf_cont_, this->msr_cont_, this->tex_, &result);
 
-		if (res < 0) {
+		if (result < 0) {
 			this->Init();
 
 			return (-1);

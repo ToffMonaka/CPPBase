@@ -111,6 +111,10 @@ public: Shader(const tml::graphic::Shader &) = delete;
 public: tml::graphic::Shader &operator =(const tml::graphic::Shader &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_TYPE::ETC);
+
 private:
 	ID3D11VertexShader *vs_;
 	ID3D11InputLayout *vs_input_layout_;

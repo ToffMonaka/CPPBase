@@ -56,7 +56,7 @@ void tml::graphic::FogDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::FogDesc::ReadValue(const tml::INIFile &ini_file)
@@ -133,7 +133,7 @@ void tml::graphic::Fog::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc)

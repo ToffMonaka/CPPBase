@@ -50,7 +50,7 @@ void tml::FileUtil::Init(void)
 /**
  * @brief Createä÷êî
  * @param engine (engine)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::FileUtil::Create(std::unique_ptr<tml::FileUtilEngine> &engine)

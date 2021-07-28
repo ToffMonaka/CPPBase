@@ -46,7 +46,7 @@ void cpp_base::input::ManagerCommon::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param mgr (manager)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT cpp_base::input::ManagerCommon::Create(cpp_base::input::Manager *mgr)

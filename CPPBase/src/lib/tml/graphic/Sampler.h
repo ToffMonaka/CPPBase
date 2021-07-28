@@ -58,6 +58,10 @@ public: Sampler(const tml::graphic::Sampler &) = delete;
 public: tml::graphic::Sampler &operator =(const tml::graphic::Sampler &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE::ETC);
+
 private:
 	ID3D11SamplerState *samp_;
 	CD3D11_SAMPLER_DESC samp_desc_;

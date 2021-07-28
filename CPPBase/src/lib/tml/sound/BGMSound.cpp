@@ -44,7 +44,7 @@ void tml::sound::BGMSoundDesc::Init(void)
 /**
  * @brief ReadValueä÷êî
  * @param ini_file (ini_file)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::sound::BGMSoundDesc::ReadValue(const tml::INIFile &ini_file)
@@ -105,7 +105,7 @@ void tml::sound::BGMSound::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 INT tml::sound::BGMSound::Create(const tml::sound::BGMSoundDesc &desc)

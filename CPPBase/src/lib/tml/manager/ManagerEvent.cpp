@@ -89,7 +89,7 @@ void tml::ManagerEvent::Init(void)
  * @param desc (desc)
  * @param event_main_index (event_main_index)
  * @param event_sub_index (event_sub_index)
- * @return res (result)<br>
+ * @return result (result)<br>
  * 0–¢–=¸”s
  */
 INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc, const UINT event_main_index, const UINT event_sub_index)
