@@ -18,9 +18,10 @@ namespace graphic {
 class LightDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
-	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type;
 	tml::XMPosition3D position;
+	tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE effect_type;
 	tml::XMFLOAT3EX color;
+	/*
 	FLOAT mul_value;
 	FLOAT add_value;
 	FLOAT exp_value;
@@ -30,6 +31,7 @@ public:
 	FLOAT cut_angle;
 	FLOAT soft_angle;
 	bool shadow_flag;
+	*/
 
 protected:
 	void Release(void);
@@ -73,8 +75,9 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::ETC);
 
 private:
-	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type_;
+	tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE effect_type_;
 	tml::XMFLOAT3EX col_;
+	/*
 	FLOAT mul_val_;
 	FLOAT add_val_;
 	FLOAT exp_val_;
@@ -86,6 +89,7 @@ private:
 	FLOAT cut_val_;
 	FLOAT soft_val_;
 	bool shadow_flg_;
+	*/
 
 public:
 	tml::XMPosition3D position;
@@ -100,9 +104,10 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::LightDesc &);
 
-	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE GetType(void) const;
+	tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE GetEffectType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;
 	void SetColor(const tml::XMFLOAT3EX &);
+	/*
 	FLOAT GetMulValue(void) const;
 	void SetMulValue(const FLOAT);
 	FLOAT GetAddValue(void) const;
@@ -121,6 +126,7 @@ public:
 	void SetSoftAngle(const FLOAT);
 	FLOAT GetCutValue(void) const;
 	FLOAT GetSoftValue(void) const;
+	*/
 };
 }
 }
@@ -138,12 +144,12 @@ inline void tml::graphic::Light::Release(void)
 
 
 /**
- * @brief GetTypeŠÖ”
- * @return type (type)
+ * @brief GetEffectTypeŠÖ”
+ * @return effect_type (effect_type)
  */
-inline tml::ConstantUtil::GRAPHIC::LIGHT_TYPE tml::graphic::Light::GetType(void) const
+inline tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE tml::graphic::Light::GetEffectType(void) const
 {
-	return (this->type_);
+	return (this->effect_type_);
 }
 
 
@@ -169,6 +175,7 @@ inline void tml::graphic::Light::SetColor(const tml::XMFLOAT3EX &col)
 }
 
 
+#if 0
 /**
  * @brief GetMulValue“¾ŠÖ”
  * @return mul_val (mul_value)
@@ -339,3 +346,4 @@ inline FLOAT tml::graphic::Light::GetSoftValue(void) const
 {
 	return (this->soft_val_);
 }
+#endif

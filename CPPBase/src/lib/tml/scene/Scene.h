@@ -71,7 +71,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::scene::SceneDesc &, const tml::ConstantUtil::SCENE::SCENE_TYPE);
+	INT Create(const tml::scene::SceneDesc &);
 
 public:
 	Scene();

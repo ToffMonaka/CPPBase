@@ -129,10 +129,6 @@ namespace GRAPHIC {
 	enum class LIGHT_TYPE : UINT {
 		NONE = 0U,
 		ETC,
-		AMBIENT,
-		DIRECTIONAL,
-		POINT,
-		SPOT,
 		USER,
 		COUNT
 	};
@@ -140,8 +136,6 @@ namespace GRAPHIC {
 	enum class FOG_TYPE : UINT {
 		NONE = 0U,
 		ETC,
-		WIDTH,
-		HEIGHT,
 		USER,
 		COUNT
 	};
@@ -300,6 +294,18 @@ namespace GRAPHIC {
 		NONE = 0U,
 		PERSPECTIVE,
 		ORTHOGRAPHIC
+	};
+	enum class LIGHT_EFFECT_TYPE : UINT {
+		NONE = 0U,
+		AMBIENT,
+		DIRECTIONAL,
+		POINT,
+		SPOT
+	};
+	enum class FOG_EFFECT_TYPE : UINT {
+		NONE = 0U,
+		WIDTH,
+		HEIGHT
 	};
 	const UINT MODEL_2D_INPUT_ELEMENT_DESC_COUNT = 3U;
 	const D3D11_INPUT_ELEMENT_DESC MODEL_2D_INPUT_ELEMENT_DESC_ARRAY[tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT] = {

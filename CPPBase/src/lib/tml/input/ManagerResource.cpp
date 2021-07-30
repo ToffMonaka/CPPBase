@@ -124,24 +124,21 @@ void tml::input::ManagerResource::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param res_type (resource_type)
- * @param res_sub_index (resource_sub_index)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::input::ManagerResource::Create(const tml::input::ManagerResourceDesc &desc, const tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type, const UINT res_sub_index)
+INT tml::input::ManagerResource::Create(const tml::input::ManagerResourceDesc &desc)
 {
-	if ((desc.GetManager() == nullptr)
-	|| (res_type == tml::ConstantUtil::INPUT::RESOURCE_TYPE::NONE)) {
+	if (desc.GetManager() == nullptr) {
 		return (-1);
 	}
 
-	if (tml::ManagerResource::Create(desc, static_cast<UINT>(res_type), res_sub_index) < 0) {
+	if (tml::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
 	this->mgr_ = desc.GetManager();
-	this->res_type_ = res_type;
+	this->res_type_ = static_cast<tml::ConstantUtil::INPUT::RESOURCE_TYPE>(this->GetResourceMainIndex());
 
 	return (0);
 }

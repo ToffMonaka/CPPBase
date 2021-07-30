@@ -63,7 +63,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::input::DeviceEventDesc &, const tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE);
+	INT Create(const tml::input::DeviceEventDesc &);
 
 public:
 	DeviceEvent();

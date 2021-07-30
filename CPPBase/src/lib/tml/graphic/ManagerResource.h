@@ -80,7 +80,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::ManagerResourceDesc &, const tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE, const UINT);
+	INT Create(const tml::graphic::ManagerResourceDesc &);
 
 public:
 	ManagerResource();

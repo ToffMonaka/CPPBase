@@ -65,7 +65,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::CameraDesc &, const tml::ConstantUtil::GRAPHIC::CAMERA_TYPE);
+	INT Create(const tml::graphic::CameraDesc &);
 
 public:
 	Camera();

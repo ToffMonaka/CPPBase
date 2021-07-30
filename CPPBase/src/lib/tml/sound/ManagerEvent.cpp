@@ -95,24 +95,21 @@ void tml::sound::ManagerEvent::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param event_type (event_type)
- * @param event_sub_index (event_sub_index)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::sound::ManagerEvent::Create(const tml::sound::ManagerEventDesc &desc, const tml::ConstantUtil::SOUND::EVENT_TYPE event_type, const UINT event_sub_index)
+INT tml::sound::ManagerEvent::Create(const tml::sound::ManagerEventDesc &desc)
 {
-	if ((desc.GetManager() == nullptr)
-	|| (event_type == tml::ConstantUtil::SOUND::EVENT_TYPE::NONE)) {
+	if (desc.GetManager() == nullptr) {
 		return (-1);
 	}
 
-	if (tml::ManagerEvent::Create(desc, static_cast<UINT>(event_type), event_sub_index) < 0) {
+	if (tml::ManagerEvent::Create(desc) < 0) {
 		return (-1);
 	}
 
 	this->mgr_ = desc.GetManager();
-	this->event_type_ = event_type;
+	this->event_type_ = static_cast<tml::ConstantUtil::SOUND::EVENT_TYPE>(this->GetEventMainIndex());
 
 	return (0);
 }

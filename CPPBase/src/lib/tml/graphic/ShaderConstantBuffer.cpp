@@ -167,7 +167,7 @@ INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstan
 		return (-1);
 	}
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER, static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_TYPE::ETC)) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 

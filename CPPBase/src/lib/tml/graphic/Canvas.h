@@ -65,7 +65,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::CanvasDesc &, const tml::ConstantUtil::GRAPHIC::CANVAS_TYPE);
+	INT Create(const tml::graphic::CanvasDesc &);
 
 public:
 	Canvas();

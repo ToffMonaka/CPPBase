@@ -112,7 +112,7 @@ INT tml::sound::SESound::Create(const tml::sound::SESoundDesc &desc)
 {
 	this->Init();
 
-	if (tml::sound::Sound::Create(desc, tml::ConstantUtil::SOUND::SOUND_TYPE::SE) < 0) {
+	if (tml::sound::Sound::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

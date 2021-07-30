@@ -12,8 +12,10 @@
  * @brief コンストラクタ
  */
 tml::graphic::LightDesc::LightDesc() :
-	type(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE),
-	color(1.0f),
+	effect_type(tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE),
+	color(1.0f)
+	/*
+	,
 	mul_value(0.0f),
 	add_value(0.0f),
 	exp_value(1.0f),
@@ -23,6 +25,7 @@ tml::graphic::LightDesc::LightDesc() :
 	cut_angle(0.0f),
 	soft_angle(0.0f),
 	shadow_flag(false)
+	*/
 {
 	return;
 }
@@ -46,9 +49,10 @@ void tml::graphic::LightDesc::Init(void)
 {
 	this->Release();
 
-	this->type = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
 	this->position.Init();
+	this->effect_type = tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE;
 	this->color = 1.0f;
+	/*
 	this->mul_value = 0.0f;
 	this->add_value = 0.0f;
 	this->exp_value = 1.0f;
@@ -58,6 +62,7 @@ void tml::graphic::LightDesc::Init(void)
 	this->cut_angle = 0.0f;
 	this->soft_angle = 0.0f;
 	this->shadow_flag = false;
+	*/
 
 	tml::graphic::ManagerResourceDesc::Init();
 
@@ -97,8 +102,10 @@ INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Light::Light() :
-	type_(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE),
-	col_(1.0f),
+	effect_type_(tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE),
+	col_(1.0f)
+	/*
+	,
 	mul_val_(0.0f),
 	add_val_(0.0f),
 	exp_val_(1.0f),
@@ -110,6 +117,7 @@ tml::graphic::Light::Light() :
 	cut_val_(0.0f),
 	soft_val_(0.0f),
 	shadow_flg_(false)
+	*/
 {
 	return;
 }
@@ -133,9 +141,10 @@ void tml::graphic::Light::Init(void)
 {
 	this->Release();
 
-	this->type_ = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
 	this->position.Init();
+	this->effect_type_ = tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE;
 	this->col_ = 1.0f;
+	/*
 	this->mul_val_ = 0.0f;
 	this->add_val_ = 0.0f;
 	this->exp_val_ = 1.0f;
@@ -147,6 +156,7 @@ void tml::graphic::Light::Init(void)
 	this->cut_val_ = 0.0f;
 	this->soft_val_ = 0.0f;
 	this->shadow_flg_ = false;
+	*/
 
 	tml::graphic::ManagerResource::Init();
 
@@ -162,23 +172,18 @@ void tml::graphic::Light::Init(void)
  */
 INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc)
 {
-	if (desc.type == tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE) {
-		this->Init();
-
-		return (-1);
-	}
-
 	this->Init();
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT, static_cast<UINT>(desc.type)) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
-	this->type_ = desc.type;
 	this->position = desc.position;
+	this->effect_type_ = desc.effect_type;
 	this->col_ = desc.color;
+	/*
 	this->mul_val_ = desc.mul_value;
 	this->add_val_ = desc.add_value;
 	this->exp_val_ = desc.exp_value;
@@ -188,11 +193,13 @@ INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc)
 	this->SetCutAngle(desc.cut_angle);
 	this->SetSoftAngle(desc.soft_angle);
 	this->shadow_flg_ = desc.shadow_flag;
+	*/
 
 	return (0);
 }
 
 
+#if 0
 /**
  * @brief SetCutAngle関数
  * @param cut_angle (cut_angle)
@@ -244,3 +251,4 @@ void tml::graphic::Light::SetSoftAngle(const FLOAT soft_angle)
 
 	return;
 }
+#endif

@@ -76,21 +76,16 @@ void tml::input::DeviceEvent::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param type (type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::input::DeviceEvent::Create(const tml::input::DeviceEventDesc &desc, const tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE type)
+INT tml::input::DeviceEvent::Create(const tml::input::DeviceEventDesc &desc)
 {
-	if (type == tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::NONE) {
+	if (tml::input::ManagerEvent::Create(desc) < 0) {
 		return (-1);
 	}
 
-	if (tml::input::ManagerEvent::Create(desc, tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE, static_cast<UINT>(type)) < 0) {
-		return (-1);
-	}
-
-	this->type_ = type;
+	this->type_ = static_cast<tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE>(this->GetEventSubIndex());
 
 	return (0);
 }

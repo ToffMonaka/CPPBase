@@ -104,21 +104,16 @@ void tml::graphic::Camera::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param type (type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc, const tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type)
+INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc)
 {
-	if (type == tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE) {
+	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA, static_cast<UINT>(type)) < 0) {
-		return (-1);
-	}
-
-	this->type_ = type;
+	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::CAMERA_TYPE>(this->GetResourceSubIndex());
 
 	return (0);
 }

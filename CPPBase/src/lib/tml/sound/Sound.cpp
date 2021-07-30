@@ -140,21 +140,16 @@ void tml::sound::Sound::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param type (type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc, const tml::ConstantUtil::SOUND::SOUND_TYPE type)
+INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 {
-	if (type == tml::ConstantUtil::SOUND::SOUND_TYPE::NONE) {
+	if (tml::sound::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
-	if (tml::sound::ManagerResource::Create(desc, tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND, static_cast<UINT>(type)) < 0) {
-		return (-1);
-	}
-
-	this->type_ = type;
+	this->type_ = static_cast<tml::ConstantUtil::SOUND::SOUND_TYPE>(this->GetResourceSubIndex());
 
 	auto file_read_desc_dat = desc.file_read_desc.GetDataByParent();
 

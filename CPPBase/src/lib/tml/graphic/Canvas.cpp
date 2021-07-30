@@ -104,21 +104,16 @@ void tml::graphic::Canvas::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param type (type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Canvas::Create(const tml::graphic::CanvasDesc &desc, const tml::ConstantUtil::GRAPHIC::CANVAS_TYPE type)
+INT tml::graphic::Canvas::Create(const tml::graphic::CanvasDesc &desc)
 {
-	if (type == tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE) {
+	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CANVAS, static_cast<UINT>(type)) < 0) {
-		return (-1);
-	}
-
-	this->type_ = type;
+	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::CANVAS_TYPE>(this->GetResourceSubIndex());
 
 	return (0);
 }

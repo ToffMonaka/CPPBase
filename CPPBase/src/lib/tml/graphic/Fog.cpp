@@ -12,11 +12,14 @@
  * @brief コンストラクタ
  */
 tml::graphic::FogDesc::FogDesc() :
-	type(tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE),
-	color(1.0f),
+	effect_type(tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE::NONE),
+	color(1.0f)
+	/*
+	,
 	mul_value(0.0f),
 	near_range(0.0f),
 	far_range(0.0f)
+	*/
 {
 	return;
 }
@@ -40,12 +43,14 @@ void tml::graphic::FogDesc::Init(void)
 {
 	this->Release();
 
-	this->type = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
 	this->position.Init();
+	this->effect_type = tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE::NONE;
 	this->color = 1.0f;
+	/*
 	this->mul_value = 0.0f;
 	this->near_range = 0.0f;
 	this->far_range = 0.0f;
+	*/
 
 	tml::graphic::ManagerResourceDesc::Init();
 
@@ -85,13 +90,16 @@ INT tml::graphic::FogDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::graphic::Fog::Fog() :
-	type_(tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE),
-	col_(1.0f),
+	effect_type_(tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE::NONE),
+	col_(1.0f)
+	/*
+	,
 	mul_val_(0.0f),
 	near_rng_(0.0f),
 	far_rng_(0.0f),
 	rng_val1_(0.0f),
 	rng_val2_(0.0f)
+	*/
 {
 	return;
 }
@@ -115,14 +123,16 @@ void tml::graphic::Fog::Init(void)
 {
 	this->Release();
 
-	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
 	this->position.Init();
+	this->effect_type_ = tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE::NONE;
 	this->col_ = 1.0f;
+	/*
 	this->mul_val_ = 0.0f;
 	this->near_rng_ = 0.0f;
 	this->far_rng_ = 0.0f;
 	this->rng_val1_ = 0.0f;
 	this->rng_val2_ = 0.0f;
+	*/
 
 	tml::graphic::ManagerResource::Init();
 
@@ -138,31 +148,28 @@ void tml::graphic::Fog::Init(void)
  */
 INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc)
 {
-	if (desc.type == tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE) {
-		this->Init();
-
-		return (-1);
-	}
-
 	this->Init();
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG, static_cast<UINT>(desc.type)) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
-	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
 	this->position = desc.position;
+	this->effect_type_ = desc.effect_type;
 	this->col_ = desc.color;
+	/*
 	this->mul_val_ = desc.mul_value;
 	this->SetNearRange(desc.near_range);
 	this->SetFarRange(desc.far_range);
+	*/
 
 	return (0);
 }
 
 
+#if 0
 /**
  * @brief SetNearRange関数
  * @param near_rng (near_range)
@@ -225,3 +232,4 @@ void tml::graphic::Fog::SetFarRange(const FLOAT far_rng)
 
 	return;
 }
+#endif

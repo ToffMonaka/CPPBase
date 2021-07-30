@@ -126,13 +126,13 @@ INT tml::scene::SceneEvent::Create(const tml::scene::SceneEventDesc &desc)
 {
 	this->Init();
 
-	if (tml::scene::ManagerEvent::Create(desc, tml::ConstantUtil::SCENE::EVENT_TYPE::SCENE, static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_EVENT_TYPE::ETC)) < 0) {
+	if (tml::scene::ManagerEvent::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
-	this->type_ = tml::ConstantUtil::SCENE::SCENE_EVENT_TYPE::ETC;
+	this->type_ = static_cast<tml::ConstantUtil::SCENE::SCENE_EVENT_TYPE>(this->GetEventSubIndex());
 	this->data = desc.data;
 
 	return (0);

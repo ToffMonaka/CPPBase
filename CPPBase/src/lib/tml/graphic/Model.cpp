@@ -282,21 +282,16 @@ void tml::graphic::Model::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param type (type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::ConstantUtil::GRAPHIC::MODEL_TYPE type)
+INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc)
 {
-	if (type == tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE) {
+	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL, static_cast<UINT>(type)) < 0) {
-		return (-1);
-	}
-
-	this->type_ = type;
+	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::MODEL_TYPE>(this->GetResourceSubIndex());
 
 	return (0);
 }

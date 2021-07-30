@@ -87,20 +87,48 @@ void tml::ManagerEvent::Init(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @param event_main_index (event_main_index)
- * @param event_sub_index (event_sub_index)
  * @return result (result)<br>
  * 0–¢–=¸”s
  */
-INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc, const UINT event_main_index, const UINT event_sub_index)
+INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc)
 {
-	if (desc.GetManager() == nullptr) {
+	if ((desc.GetManager() == nullptr)
+	|| (this->event_main_index_ == 0U)
+	|| (this->event_sub_index_ == 0U)) {
 		return (-1);
 	}
 
 	this->mgr_ = desc.GetManager();
-	this->event_main_index_ = event_main_index;
-	this->event_sub_index_ = event_sub_index;
 
 	return (0);
+}
+
+
+/**
+ * @brief SetEventMainIndexŠÖ”
+ * @param mgr (manager)
+ * @param event_main_index (event_main_index)
+ */
+void tml::ManagerEvent::SetEventMainIndex(tml::Manager *mgr, const UINT event_main_index)
+{
+	if (mgr->CheckFriendEvent(this)) {
+		this->event_main_index_ = event_main_index;
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetEventSubIndexŠÖ”
+ * @param mgr (manager)
+ * @param event_sub_index (event_sub_index)
+ */
+void tml::ManagerEvent::SetEventSubIndex(tml::Manager *mgr, const UINT event_sub_index)
+{
+	if (mgr->CheckFriendEvent(this)) {
+		this->event_sub_index_ = event_sub_index;
+	}
+
+	return;
 }

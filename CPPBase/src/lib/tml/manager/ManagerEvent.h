@@ -77,7 +77,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ManagerEventDesc &, const UINT, const UINT);
+	INT Create(const tml::ManagerEventDesc &);
 
 public:
 	ManagerEvent();
@@ -87,7 +87,9 @@ public:
 
 	tml::Manager *GetManager(void);
 	UINT GetEventMainIndex(void) const;
+	void SetEventMainIndex(tml::Manager *, const UINT);
 	UINT GetEventSubIndex(void) const;
+	void SetEventSubIndex(tml::Manager *, const UINT);
 };
 }
 

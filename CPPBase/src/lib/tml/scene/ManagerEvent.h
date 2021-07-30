@@ -78,7 +78,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::scene::ManagerEventDesc &, const tml::ConstantUtil::SCENE::EVENT_TYPE, const UINT);
+	INT Create(const tml::scene::ManagerEventDesc &);
 
 public:
 	ManagerEvent();

@@ -80,7 +80,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::scene::ManagerResourceDesc &, const tml::ConstantUtil::SCENE::RESOURCE_TYPE, const UINT);
+	INT Create(const tml::scene::ManagerResourceDesc &);
 
 public:
 	ManagerResource();

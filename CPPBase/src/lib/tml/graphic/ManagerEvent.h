@@ -78,7 +78,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::ManagerEventDesc &, const tml::ConstantUtil::GRAPHIC::EVENT_TYPE, const UINT);
+	INT Create(const tml::graphic::ManagerEventDesc &);
 
 public:
 	ManagerEvent();

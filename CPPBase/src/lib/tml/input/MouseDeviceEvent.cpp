@@ -158,7 +158,7 @@ INT tml::input::MouseDeviceEvent::Create(const tml::input::MouseDeviceEventDesc 
 {
 	this->Init();
 
-	if (tml::input::DeviceEvent::Create(desc, tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::MOUSE) < 0) {
+	if (tml::input::DeviceEvent::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

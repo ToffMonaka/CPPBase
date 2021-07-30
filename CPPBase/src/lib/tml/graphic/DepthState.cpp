@@ -157,7 +157,7 @@ INT tml::graphic::DepthState::Create(const tml::graphic::DepthStateDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE, static_cast<UINT>(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_TYPE::ETC)) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

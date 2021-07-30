@@ -78,7 +78,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::sound::ManagerEventDesc &, const tml::ConstantUtil::SOUND::EVENT_TYPE, const UINT);
+	INT Create(const tml::sound::ManagerEventDesc &);
 
 public:
 	ManagerEvent();

@@ -18,12 +18,14 @@ namespace graphic {
 class FogDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
-	tml::ConstantUtil::GRAPHIC::FOG_TYPE type;
 	tml::XMPosition3D position;
+	tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE effect_type;
 	tml::XMFLOAT3EX color;
+	/*
 	FLOAT mul_value;
 	FLOAT near_range;
 	FLOAT far_range;
+	*/
 
 protected:
 	void Release(void);
@@ -67,13 +69,15 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::ETC);
 
 private:
-	tml::ConstantUtil::GRAPHIC::FOG_TYPE type_;
+	tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE effect_type_;
 	tml::XMFLOAT3EX col_;
+	/*
 	FLOAT mul_val_;
 	FLOAT near_rng_;
 	FLOAT far_rng_;
 	FLOAT rng_val1_;
 	FLOAT rng_val2_;
+	*/
 
 public:
 	tml::XMPosition3D position;
@@ -88,9 +92,10 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::FogDesc &);
 
-	tml::ConstantUtil::GRAPHIC::FOG_TYPE GetType(void) const;
+	tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE GetEffectType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;
 	void SetColor(const tml::XMFLOAT3EX &);
+	/*
 	FLOAT GetMulValue(void) const;
 	void SetMulValue(const FLOAT);
 	FLOAT GetNearRange(void) const;
@@ -99,6 +104,7 @@ public:
 	void SetFarRange(const FLOAT);
 	FLOAT GetRangeValue1(void) const;
 	FLOAT GetRangeValue2(void) const;
+	*/
 };
 }
 }
@@ -116,12 +122,12 @@ inline void tml::graphic::Fog::Release(void)
 
 
 /**
- * @brief GetTypeŠÖ”
- * @return type (type)
+ * @brief GetEffectTypeŠÖ”
+ * @return effect_type (effect_type)
  */
-inline tml::ConstantUtil::GRAPHIC::FOG_TYPE tml::graphic::Fog::GetType(void) const
+inline tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE tml::graphic::Fog::GetEffectType(void) const
 {
-	return (this->type_);
+	return (this->effect_type_);
 }
 
 
@@ -147,6 +153,7 @@ inline void tml::graphic::Fog::SetColor(const tml::XMFLOAT3EX &col)
 }
 
 
+#if 0
 /**
  * @brief GetMulValueŠÖ”
  * @return mul_val (mul_value)
@@ -207,3 +214,4 @@ inline FLOAT tml::graphic::Fog::GetRangeValue2(void) const
 {
 	return (this->rng_val2_);
 }
+#endif

@@ -259,7 +259,7 @@ INT tml::graphic::Font::Create(const tml::graphic::FontDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::ManagerResource::Create(desc, tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT, static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FONT_TYPE::ETC)) < 0) {
+	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

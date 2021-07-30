@@ -164,20 +164,18 @@ INT tml::ManagerResource::Load(void)
 /**
  * @brief CreateŠÖ”
  * @param desc (desc)
- * @param res_main_index (resource_main_index)
- * @param res_sub_index (resource_sub_index)
  * @return result (result)<br>
  * 0–¢–=¸”s
  */
-INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc, const UINT res_main_index, const UINT res_sub_index)
+INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc)
 {
-	if (desc.GetManager() == nullptr) {
+	if ((desc.GetManager() == nullptr)
+	|| (this->res_main_index_ == 0U)
+	|| (this->res_sub_index_ == 0U)) {
 		return (-1);
 	}
 
 	this->mgr_ = desc.GetManager();
-	this->res_main_index_ = res_main_index;
-	this->res_sub_index_ = res_sub_index;
 
 	return (0);
 }

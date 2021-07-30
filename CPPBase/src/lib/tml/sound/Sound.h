@@ -78,7 +78,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::sound::SoundDesc &, const tml::ConstantUtil::SOUND::SOUND_TYPE);
+	INT Create(const tml::sound::SoundDesc &);
 
 public:
 	Sound();

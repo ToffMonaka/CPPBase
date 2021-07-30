@@ -278,7 +278,7 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D) < 0) {
+	if (tml::graphic::Model::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

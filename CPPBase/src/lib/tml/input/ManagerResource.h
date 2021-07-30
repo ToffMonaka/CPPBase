@@ -80,7 +80,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::input::ManagerResourceDesc &, const tml::ConstantUtil::INPUT::RESOURCE_TYPE, const UINT);
+	INT Create(const tml::input::ManagerResourceDesc &);
 
 public:
 	ManagerResource();

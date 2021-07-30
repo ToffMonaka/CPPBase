@@ -135,22 +135,17 @@ void tml::scene::Scene::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
- * @param type (type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc, const tml::ConstantUtil::SCENE::SCENE_TYPE type)
+INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc)
 {
-	if (type == tml::ConstantUtil::SCENE::SCENE_TYPE::NONE) {
-		return (-1);
-	}
-
-	if (tml::scene::ManagerResource::Create(desc, tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE, static_cast<UINT>(type)) < 0) {
+	if (tml::scene::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
 	this->name_ = desc.name;
-	this->type_ = type;
+	this->type_ = static_cast<tml::ConstantUtil::SCENE::SCENE_TYPE>(this->GetResourceSubIndex());
 	this->start_flg_ = true;
 
 	this->SetRootNode();

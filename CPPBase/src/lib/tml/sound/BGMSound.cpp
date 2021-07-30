@@ -112,7 +112,7 @@ INT tml::sound::BGMSound::Create(const tml::sound::BGMSoundDesc &desc)
 {
 	this->Init();
 
-	if (tml::sound::Sound::Create(desc, tml::ConstantUtil::SOUND::SOUND_TYPE::BGM) < 0) {
+	if (tml::sound::Sound::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

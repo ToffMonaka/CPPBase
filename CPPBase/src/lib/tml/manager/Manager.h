@@ -393,6 +393,8 @@ inline INT tml::Manager::AddEvent(const D &desc)
 		event = tml::make_unique<T>(1U);
 
 		this->friend_event_ = event.get();
+		this->friend_event_->SetEventMainIndex(this, event_main_index);
+		this->friend_event_->SetEventSubIndex(this, event_sub_index);
 		this->friend_event_ = nullptr;
 
 		if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {

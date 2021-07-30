@@ -123,7 +123,7 @@ INT tml::scene::BaseNode::Create(const tml::scene::BaseNodeDesc &desc)
 {
 	this->Init();
 
-	if (tml::scene::Node::Create(desc, tml::ConstantUtil::SCENE::NODE_TYPE::BASE) < 0) {
+	if (tml::scene::Node::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

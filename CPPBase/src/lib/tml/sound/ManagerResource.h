@@ -80,7 +80,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::sound::ManagerResourceDesc &, const tml::ConstantUtil::SOUND::RESOURCE_TYPE, const UINT);
+	INT Create(const tml::sound::ManagerResourceDesc &);
 
 public:
 	ManagerResource();

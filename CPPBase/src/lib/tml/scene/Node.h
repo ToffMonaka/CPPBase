@@ -72,7 +72,7 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::scene::NodeDesc &, const tml::ConstantUtil::SCENE::NODE_TYPE);
+	INT Create(const tml::scene::NodeDesc &);
 
 public:
 	Node();

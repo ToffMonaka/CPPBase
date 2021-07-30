@@ -91,7 +91,7 @@ protected:
 
 protected:
 	void Release(void);
-	INT Create(const tml::ManagerResourceDesc &, const UINT, const UINT);
+	INT Create(const tml::ManagerResourceDesc &);
 
 public:
 	ManagerResource();
