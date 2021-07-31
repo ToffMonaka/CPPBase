@@ -48,7 +48,7 @@ void cpp_base::scene::TitleSceneMainNodeDesc::Init(void)
 {
 	this->Release();
 
-	cpp_base::scene::BaseNodeDesc::Init();
+	cpp_base::scene::NodeDesc::Init();
 
 	return;
 }
@@ -62,7 +62,7 @@ void cpp_base::scene::TitleSceneMainNodeDesc::Init(void)
  */
 INT cpp_base::scene::TitleSceneMainNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (cpp_base::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::NodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -108,7 +108,7 @@ cpp_base::scene::TitleSceneMainNode::~TitleSceneMainNode()
  */
 void cpp_base::scene::TitleSceneMainNode::Release(void)
 {
-	cpp_base::scene::BaseNode::Release();
+	cpp_base::scene::Node::Release();
 
 	return;
 }
@@ -132,7 +132,7 @@ void cpp_base::scene::TitleSceneMainNode::Init(void)
 	this->footer_font.reset();
 	this->footer_model.reset();
 
-	cpp_base::scene::BaseNode::Init();
+	cpp_base::scene::Node::Init();
 
 	return;
 }
@@ -148,7 +148,7 @@ INT cpp_base::scene::TitleSceneMainNode::Create(const cpp_base::scene::TitleScen
 {
 	this->Init();
 
-	if (cpp_base::scene::BaseNode::Create(desc) < 0) {
+	if (cpp_base::scene::Node::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

@@ -113,7 +113,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_TYPE::ETC);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_TYPE::BASE);
 
 private:
 	ID3D11VertexShader *vs_;

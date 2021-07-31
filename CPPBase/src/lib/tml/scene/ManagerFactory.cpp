@@ -7,9 +7,7 @@
 #include "ManagerFactory.h"
 #include "Manager.h"
 #include "Scene.h"
-#include "BaseScene.h"
 #include "Node.h"
-#include "BaseNode.h"
 
 
 /**
@@ -69,16 +67,16 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 
 	this->mgr_ = mgr;
 
-	this->scene_by_ini_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::BASE_SCENE,
+	this->scene_by_ini_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::scene::Scene> {
 			tml::shared_ptr<tml::scene::Scene> scene;
 
-			tml::scene::BaseSceneDesc desc;
+			tml::scene::SceneDesc desc;
 
 			desc.SetManager(this->mgr_);
 			desc.Read(file_read_desc);
 
-			if (this->mgr_->GetResource<tml::scene::BaseScene>(scene, desc, dst_result) == nullptr) {
+			if (this->mgr_->GetResource<tml::scene::Scene>(scene, desc, dst_result) == nullptr) {
 				return (scene);
 			}
 
@@ -142,16 +140,16 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
 		}
 	);
 
-	this->node_by_ini_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::BASE_NODE,
+	this->node_by_ini_file.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
 		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::scene::Node> {
 			tml::shared_ptr<tml::scene::Node> node;
 
-			tml::scene::BaseNodeDesc desc;
+			tml::scene::NodeDesc desc;
 
 			desc.SetManager(this->mgr_);
 			desc.Read(file_read_desc);
 
-			if (this->mgr_->GetResource<tml::scene::BaseNode>(node, desc, dst_result) == nullptr) {
+			if (this->mgr_->GetResource<tml::scene::Node>(node, desc, dst_result) == nullptr) {
 				return (node);
 			}
 

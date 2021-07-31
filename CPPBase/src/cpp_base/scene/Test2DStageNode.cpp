@@ -44,7 +44,7 @@ void cpp_base::scene::Test2DStageNodeDesc::Init(void)
 {
 	this->Release();
 
-	cpp_base::scene::BaseNodeDesc::Init();
+	cpp_base::scene::NodeDesc::Init();
 
 	return;
 }
@@ -58,7 +58,7 @@ void cpp_base::scene::Test2DStageNodeDesc::Init(void)
  */
 INT cpp_base::scene::Test2DStageNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (cpp_base::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::NodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -103,7 +103,7 @@ cpp_base::scene::Test2DStageNode::~Test2DStageNode()
  */
 void cpp_base::scene::Test2DStageNode::Release(void)
 {
-	cpp_base::scene::BaseNode::Release();
+	cpp_base::scene::Node::Release();
 
 	return;
 }
@@ -120,7 +120,7 @@ void cpp_base::scene::Test2DStageNode::Init(void)
 	this->ground_model.reset();
 	this->pl_model.reset();
 
-	cpp_base::scene::BaseNode::Init();
+	cpp_base::scene::Node::Init();
 
 	return;
 }
@@ -136,7 +136,7 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 {
 	this->Init();
 
-	if (cpp_base::scene::BaseNode::Create(desc) < 0) {
+	if (cpp_base::scene::Node::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

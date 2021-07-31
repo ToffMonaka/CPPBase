@@ -1,17 +1,18 @@
 /**
  * @file
- * @brief BaseSceneコードファイル
+ * @brief Sceneコードファイル
  */
 
 
-#include "BaseScene.h"
+#include "Scene.h"
 #include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::scene::BaseSceneDesc::BaseSceneDesc()
+cpp_base::scene::SceneDesc::SceneDesc() :
+	mgr_(nullptr)
 {
 	return;
 }
@@ -20,7 +21,7 @@ tml::scene::BaseSceneDesc::BaseSceneDesc()
 /**
  * @brief デストラクタ
  */
-tml::scene::BaseSceneDesc::~BaseSceneDesc()
+cpp_base::scene::SceneDesc::~SceneDesc()
 {
 	this->Release();
 
@@ -31,9 +32,11 @@ tml::scene::BaseSceneDesc::~BaseSceneDesc()
 /**
  * @brief Init関数
  */
-void tml::scene::BaseSceneDesc::Init(void)
+void cpp_base::scene::SceneDesc::Init(void)
 {
 	this->Release();
+
+	this->mgr_ = nullptr;
 
 	tml::scene::SceneDesc::Init();
 
@@ -47,7 +50,7 @@ void tml::scene::BaseSceneDesc::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::scene::BaseSceneDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::SceneDesc::ReadValue(const tml::INIFile &ini_file)
 {
 	if (tml::scene::SceneDesc::ReadValue(ini_file) < 0) {
 		return (-1);
@@ -57,8 +60,8 @@ INT tml::scene::BaseSceneDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// BaseScene Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"BASE_SCENE");
+	{// Scene Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"SCENE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -70,9 +73,24 @@ INT tml::scene::BaseSceneDesc::ReadValue(const tml::INIFile &ini_file)
 
 
 /**
+ * @brief SetManager関数
+ * @param mgr (manager)
+ */
+void cpp_base::scene::SceneDesc::SetManager(cpp_base::scene::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	tml::scene::SceneDesc::SetManager(mgr);
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
-tml::scene::BaseScene::BaseScene()
+cpp_base::scene::Scene::Scene() :
+	mgr_(nullptr)
 {
 	return;
 }
@@ -81,7 +99,7 @@ tml::scene::BaseScene::BaseScene()
 /**
  * @brief デストラクタ
  */
-tml::scene::BaseScene::~BaseScene()
+cpp_base::scene::Scene::~Scene()
 {
 	this->Release();
 
@@ -92,7 +110,7 @@ tml::scene::BaseScene::~BaseScene()
 /**
  * @brief Release関数
  */
-void tml::scene::BaseScene::Release(void)
+void cpp_base::scene::Scene::Release(void)
 {
 	tml::scene::Scene::Release();
 
@@ -103,9 +121,11 @@ void tml::scene::BaseScene::Release(void)
 /**
  * @brief Init関数
  */
-void tml::scene::BaseScene::Init(void)
+void cpp_base::scene::Scene::Init(void)
 {
 	this->Release();
+
+	this->mgr_ = nullptr;
 
 	tml::scene::Scene::Init();
 
@@ -119,8 +139,14 @@ void tml::scene::BaseScene::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::scene::BaseScene::Create(const tml::scene::BaseSceneDesc &desc)
+INT cpp_base::scene::Scene::Create(const cpp_base::scene::SceneDesc &desc)
 {
+	if (desc.GetManager() == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
 	this->Init();
 
 	if (tml::scene::Scene::Create(desc) < 0) {
@@ -128,6 +154,8 @@ INT tml::scene::BaseScene::Create(const tml::scene::BaseSceneDesc &desc)
 
 		return (-1);
 	}
+
+	this->mgr_ = desc.GetManager();
 
 	return (0);
 }
@@ -138,7 +166,7 @@ INT tml::scene::BaseScene::Create(const tml::scene::BaseSceneDesc &desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::scene::BaseScene::OnStart(void)
+INT cpp_base::scene::Scene::OnStart(void)
 {
 	return (0);
 }
@@ -147,7 +175,7 @@ INT tml::scene::BaseScene::OnStart(void)
 /**
  * @brief OnEnd関数
  */
-void tml::scene::BaseScene::OnEnd(void)
+void cpp_base::scene::Scene::OnEnd(void)
 {
 	return;
 }
@@ -156,7 +184,7 @@ void tml::scene::BaseScene::OnEnd(void)
 /**
  * @brief OnUpdate関数
  */
-void tml::scene::BaseScene::OnUpdate(void)
+void cpp_base::scene::Scene::OnUpdate(void)
 {
 	return;
 }

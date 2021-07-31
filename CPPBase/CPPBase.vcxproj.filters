@@ -342,12 +342,6 @@
     <ClCompile Include="src\cpp_base\sound\ManagerCommon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\lib\tml\scene\BaseScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cpp_base\scene\BaseScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\lib\tml\util\Util.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -355,12 +349,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\lib\tml\manager\ManagerResourceFactory.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib\tml\scene\BaseNode.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cpp_base\scene\BaseNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\lib\tml\input\DeviceEvent.cpp">
@@ -448,6 +436,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\cpp_base\scene\Test2DStageNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp_base\scene\Scene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp_base\scene\Node.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -872,12 +866,6 @@
     <ClInclude Include="src\cpp_base\sound\ManagerCommon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\lib\tml\scene\BaseScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cpp_base\scene\BaseScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\lib\tml\util\Util.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -885,12 +873,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\tml\manager\ManagerResourceFactory.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib\tml\scene\BaseNode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cpp_base\scene\BaseNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\lib\tml\input\DeviceEvent.h">
@@ -984,6 +966,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\cpp_base\scene\Test2DStageNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\scene\Scene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpp_base\scene\Node.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

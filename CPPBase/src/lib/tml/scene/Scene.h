@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMathPosition.h"
 #include "ManagerResource.h"
 
 
@@ -49,17 +50,16 @@ namespace tml {
 namespace scene {
 /**
  * @brief Sceneクラス
- *
- * インターフェースパターン
  */
 class Scene : public tml::scene::ManagerResource
 {
 public: Scene(const tml::scene::Scene &) = delete;
 public: tml::scene::Scene &operator =(const tml::scene::Scene &) = delete;
-protected: virtual void InterfaceDummy(void) = 0;
+protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_TYPE::BASE);
 
 private:
 	std::wstring name_;
@@ -71,21 +71,21 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::scene::SceneDesc &);
 
 public:
 	Scene();
 	virtual ~Scene();
 
 	virtual void Init(void);
+	INT Create(const tml::scene::SceneDesc &);
 
 	INT Start(void);
 	void End(void);
 	void Update(void);
 
-	virtual INT OnStart(void) = 0;
-	virtual void OnEnd(void) = 0;
-	virtual void OnUpdate(void) = 0;
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 	const std::wstring &GetName(void) const;
 	void SetName(const WCHAR *);

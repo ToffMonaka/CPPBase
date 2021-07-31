@@ -64,7 +64,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_TYPE::ETC);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_TYPE::BASE);
 
 private:
 	ID3D11Buffer *buf_;

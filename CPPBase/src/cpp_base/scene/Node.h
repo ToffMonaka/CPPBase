@@ -1,21 +1,21 @@
 /**
  * @file
- * @brief BaseSceneヘッダーファイル
+ * @brief Nodeヘッダーファイル
  */
 #pragma once
 
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_SCENE.h"
-#include "../../lib/tml/scene/BaseScene.h"
+#include "../../lib/tml/scene/Node.h"
 
 
 namespace cpp_base {
 namespace scene {
 /**
- * @brief BaseSceneDescクラス
+ * @brief NodeDescクラス
  */
-class BaseSceneDesc : public tml::scene::BaseSceneDesc
+class NodeDesc : public tml::scene::NodeDesc
 {
 private:
 	cpp_base::scene::Manager *mgr_;
@@ -28,8 +28,8 @@ protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
-	BaseSceneDesc();
-	virtual ~BaseSceneDesc();
+	NodeDesc();
+	virtual ~NodeDesc();
 
 	virtual void Init(void);
 
@@ -43,9 +43,9 @@ public:
 /**
  * @brief Release関数
  */
-inline void cpp_base::scene::BaseSceneDesc::Release(void)
+inline void cpp_base::scene::NodeDesc::Release(void)
 {
-	tml::scene::BaseSceneDesc::Release();
+	tml::scene::NodeDesc::Release();
 
 	return;
 }
@@ -55,7 +55,7 @@ inline void cpp_base::scene::BaseSceneDesc::Release(void)
  * @brief GetManager関数
  * @return mgr (manager)
  */
-inline cpp_base::scene::Manager *cpp_base::scene::BaseSceneDesc::GetManager(void) const
+inline cpp_base::scene::Manager *cpp_base::scene::NodeDesc::GetManager(void) const
 {
 	return (this->mgr_);
 }
@@ -64,12 +64,12 @@ inline cpp_base::scene::Manager *cpp_base::scene::BaseSceneDesc::GetManager(void
 namespace cpp_base {
 namespace scene {
 /**
- * @brief BaseSceneクラス
+ * @brief Nodeクラス
  */
-class BaseScene : public tml::scene::BaseScene
+class Node : public tml::scene::Node
 {
-public: BaseScene(const cpp_base::scene::BaseScene &) = delete;
-public: cpp_base::scene::BaseScene &operator =(const cpp_base::scene::BaseScene &) = delete;
+public: Node(const cpp_base::scene::Node &) = delete;
+public: cpp_base::scene::Node &operator =(const cpp_base::scene::Node &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
@@ -79,11 +79,11 @@ protected:
 	void Release(void);
 
 public:
-	BaseScene();
-	virtual ~BaseScene();
+	Node();
+	virtual ~Node();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::BaseSceneDesc &);
+	INT Create(const cpp_base::scene::NodeDesc &);
 
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
@@ -99,7 +99,7 @@ public:
  * @brief GetManager関数
  * @return mgr (manager)
  */
-inline cpp_base::scene::Manager *cpp_base::scene::BaseScene::GetManager(void)
+inline cpp_base::scene::Manager *cpp_base::scene::Node::GetManager(void)
 {
 	return (this->mgr_);
 }

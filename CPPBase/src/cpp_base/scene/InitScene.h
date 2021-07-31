@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_GRAPHIC.h"
-#include "BaseScene.h"
+#include "Scene.h"
 
 
 namespace cpp_base {
@@ -15,7 +15,7 @@ namespace scene {
 /**
  * @brief InitSceneDescクラス
  */
-class InitSceneDesc : public cpp_base::scene::BaseSceneDesc
+class InitSceneDesc : public cpp_base::scene::SceneDesc
 {
 public:
 
@@ -39,7 +39,7 @@ public:
  */
 inline void cpp_base::scene::InitSceneDesc::Release(void)
 {
-	cpp_base::scene::BaseSceneDesc::Release();
+	cpp_base::scene::SceneDesc::Release();
 
 	return;
 }
@@ -50,7 +50,7 @@ namespace scene {
 /**
  * @brief InitSceneクラス
  */
-class InitScene : public cpp_base::scene::BaseScene
+class InitScene : public cpp_base::scene::Scene
 {
 public: InitScene(const cpp_base::scene::InitScene &) = delete;
 public: cpp_base::scene::InitScene &operator =(const cpp_base::scene::InitScene &) = delete;

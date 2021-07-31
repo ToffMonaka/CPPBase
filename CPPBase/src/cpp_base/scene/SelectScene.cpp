@@ -42,7 +42,7 @@ void cpp_base::scene::SelectSceneDesc::Init(void)
 {
 	this->Release();
 
-	cpp_base::scene::BaseSceneDesc::Init();
+	cpp_base::scene::SceneDesc::Init();
 
 	return;
 }
@@ -56,7 +56,7 @@ void cpp_base::scene::SelectSceneDesc::Init(void)
  */
 INT cpp_base::scene::SelectSceneDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (cpp_base::scene::BaseSceneDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::SceneDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -101,7 +101,7 @@ cpp_base::scene::SelectScene::~SelectScene()
  */
 void cpp_base::scene::SelectScene::Release(void)
 {
-	cpp_base::scene::BaseScene::Release();
+	cpp_base::scene::Scene::Release();
 
 	return;
 }
@@ -118,7 +118,7 @@ void cpp_base::scene::SelectScene::Init(void)
 	this->camera_2d.reset();
 	this->camera_3d.reset();
 
-	cpp_base::scene::BaseScene::Init();
+	cpp_base::scene::Scene::Init();
 
 	return;
 }
@@ -134,7 +134,7 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 {
 	this->Init();
 
-	if (cpp_base::scene::BaseScene::Create(desc) < 0) {
+	if (cpp_base::scene::Scene::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

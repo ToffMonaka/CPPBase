@@ -9,9 +9,7 @@
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
 #include "Scene.h"
-#include "BaseScene.h"
 #include "Node.h"
-#include "BaseNode.h"
 #include "SceneEvent.h"
 #include "NodeEvent.h"
 

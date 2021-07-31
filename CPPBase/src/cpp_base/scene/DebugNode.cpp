@@ -42,7 +42,7 @@ void cpp_base::scene::DebugNodeDesc::Init(void)
 {
 	this->Release();
 
-	cpp_base::scene::BaseNodeDesc::Init();
+	cpp_base::scene::NodeDesc::Init();
 
 	return;
 }
@@ -56,7 +56,7 @@ void cpp_base::scene::DebugNodeDesc::Init(void)
  */
 INT cpp_base::scene::DebugNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (cpp_base::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::NodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -102,7 +102,7 @@ cpp_base::scene::DebugNode::~DebugNode()
  */
 void cpp_base::scene::DebugNode::Release(void)
 {
-	cpp_base::scene::BaseNode::Release();
+	cpp_base::scene::Node::Release();
 
 	return;
 }
@@ -120,7 +120,7 @@ void cpp_base::scene::DebugNode::Init(void)
 	this->font.reset();
 	this->model.reset();
 
-	cpp_base::scene::BaseNode::Init();
+	cpp_base::scene::Node::Init();
 
 	return;
 }
@@ -136,7 +136,7 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 {
 	this->Init();
 
-	if (cpp_base::scene::BaseNode::Create(desc) < 0) {
+	if (cpp_base::scene::Node::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

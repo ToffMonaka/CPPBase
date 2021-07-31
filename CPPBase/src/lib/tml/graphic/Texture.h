@@ -75,7 +75,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::ETC);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::BASE);
 
 private:
 	ID3D11Texture2D *tex_;

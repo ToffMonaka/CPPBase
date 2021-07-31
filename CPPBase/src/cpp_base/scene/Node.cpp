@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief BaseNodeコードファイル
+ * @brief Nodeコードファイル
  */
 
 
-#include "BaseNode.h"
+#include "Node.h"
 #include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::BaseNodeDesc::BaseNodeDesc() :
+cpp_base::scene::NodeDesc::NodeDesc() :
 	mgr_(nullptr)
 {
 	return;
@@ -21,7 +21,7 @@ cpp_base::scene::BaseNodeDesc::BaseNodeDesc() :
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::BaseNodeDesc::~BaseNodeDesc()
+cpp_base::scene::NodeDesc::~NodeDesc()
 {
 	this->Release();
 
@@ -32,13 +32,13 @@ cpp_base::scene::BaseNodeDesc::~BaseNodeDesc()
 /**
  * @brief Init関数
  */
-void cpp_base::scene::BaseNodeDesc::Init(void)
+void cpp_base::scene::NodeDesc::Init(void)
 {
 	this->Release();
 
 	this->mgr_ = nullptr;
 
-	tml::scene::BaseNodeDesc::Init();
+	tml::scene::NodeDesc::Init();
 
 	return;
 }
@@ -50,9 +50,9 @@ void cpp_base::scene::BaseNodeDesc::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::BaseNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::NodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (tml::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
+	if (tml::scene::NodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -60,8 +60,8 @@ INT cpp_base::scene::BaseNodeDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// BaseNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"BASE_NODE");
+	{// Node Section Read
+		val_name_cont = ini_file.data.GetValueNameContainer(L"NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -76,11 +76,11 @@ INT cpp_base::scene::BaseNodeDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief SetManager関数
  * @param mgr (manager)
  */
-void cpp_base::scene::BaseNodeDesc::SetManager(cpp_base::scene::Manager *mgr)
+void cpp_base::scene::NodeDesc::SetManager(cpp_base::scene::Manager *mgr)
 {
 	this->mgr_ = mgr;
 
-	tml::scene::BaseNodeDesc::SetManager(mgr);
+	tml::scene::NodeDesc::SetManager(mgr);
 
 	return;
 }
@@ -89,7 +89,7 @@ void cpp_base::scene::BaseNodeDesc::SetManager(cpp_base::scene::Manager *mgr)
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::BaseNode::BaseNode() :
+cpp_base::scene::Node::Node() :
 	mgr_(nullptr)
 {
 	return;
@@ -99,7 +99,7 @@ cpp_base::scene::BaseNode::BaseNode() :
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::BaseNode::~BaseNode()
+cpp_base::scene::Node::~Node()
 {
 	this->Release();
 
@@ -110,9 +110,9 @@ cpp_base::scene::BaseNode::~BaseNode()
 /**
  * @brief Release関数
  */
-void cpp_base::scene::BaseNode::Release(void)
+void cpp_base::scene::Node::Release(void)
 {
-	tml::scene::BaseNode::Release();
+	tml::scene::Node::Release();
 
 	return;
 }
@@ -121,13 +121,13 @@ void cpp_base::scene::BaseNode::Release(void)
 /**
  * @brief Init関数
  */
-void cpp_base::scene::BaseNode::Init(void)
+void cpp_base::scene::Node::Init(void)
 {
 	this->Release();
 
 	this->mgr_ = nullptr;
 
-	tml::scene::BaseNode::Init();
+	tml::scene::Node::Init();
 
 	return;
 }
@@ -139,7 +139,7 @@ void cpp_base::scene::BaseNode::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::BaseNode::Create(const cpp_base::scene::BaseNodeDesc &desc)
+INT cpp_base::scene::Node::Create(const cpp_base::scene::NodeDesc &desc)
 {
 	if (desc.GetManager() == nullptr) {
 		this->Init();
@@ -149,7 +149,7 @@ INT cpp_base::scene::BaseNode::Create(const cpp_base::scene::BaseNodeDesc &desc)
 
 	this->Init();
 
-	if (tml::scene::BaseNode::Create(desc) < 0) {
+	if (tml::scene::Node::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
@@ -166,7 +166,7 @@ INT cpp_base::scene::BaseNode::Create(const cpp_base::scene::BaseNodeDesc &desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::BaseNode::OnStart(void)
+INT cpp_base::scene::Node::OnStart(void)
 {
 	return (0);
 }
@@ -175,7 +175,7 @@ INT cpp_base::scene::BaseNode::OnStart(void)
 /**
  * @brief OnEnd関数
  */
-void cpp_base::scene::BaseNode::OnEnd(void)
+void cpp_base::scene::Node::OnEnd(void)
 {
 	return;
 }
@@ -184,7 +184,7 @@ void cpp_base::scene::BaseNode::OnEnd(void)
 /**
  * @brief OnUpdate関数
  */
-void cpp_base::scene::BaseNode::OnUpdate(void)
+void cpp_base::scene::Node::OnUpdate(void)
 {
 	return;
 }

@@ -6,7 +6,7 @@
 
 #include "Scene.h"
 #include "Manager.h"
-#include "BaseNode.h"
+#include "Node.h"
 
 
 /**
@@ -93,6 +93,8 @@ tml::scene::Scene::Scene() :
  */
 tml::scene::Scene::~Scene()
 {
+	this->Release();
+
 	return;
 }
 
@@ -120,6 +122,8 @@ void tml::scene::Scene::Release(void)
  */
 void tml::scene::Scene::Init(void)
 {
+	this->Release();
+
 	this->name_.clear();
 	this->type_ = tml::ConstantUtil::SCENE::SCENE_TYPE::NONE;
 	this->run_flg_ = false;
@@ -140,7 +144,11 @@ void tml::scene::Scene::Init(void)
  */
 INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc)
 {
+	this->Init();
+
 	if (tml::scene::ManagerResource::Create(desc) < 0) {
+		this->Init();
+
 		return (-1);
 	}
 
@@ -151,6 +159,8 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc)
 	this->SetRootNode();
 
 	if (this->root_node_ == nullptr) {
+		this->Init();
+
 		return (-1);
 	}
 
@@ -240,6 +250,35 @@ void tml::scene::Scene::Update(void)
 
 
 /**
+ * @brief OnStartä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::scene::Scene::OnStart(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief OnEndä÷êî
+ */
+void tml::scene::Scene::OnEnd(void)
+{
+	return;
+}
+
+
+/**
+ * @brief OnUpdateä÷êî
+ */
+void tml::scene::Scene::OnUpdate(void)
+{
+	return;
+}
+
+
+/**
  * @brief SetRunFlagä÷êî
  * @param run_flg (run_flag)
  */
@@ -267,12 +306,12 @@ void tml::scene::Scene::SetRootNode(void)
 		this->root_node_.reset();
 	}
 
-	tml::scene::BaseNodeDesc desc;
+	tml::scene::NodeDesc desc;
 
 	desc.SetManager(this->GetManager());
 	desc.name = L"root";
 
-	this->GetManager()->GetResource<tml::scene::BaseNode>(this->root_node_, desc);
+	this->GetManager()->GetResource<tml::scene::Node>(this->root_node_, desc);
 
 	return;
 }

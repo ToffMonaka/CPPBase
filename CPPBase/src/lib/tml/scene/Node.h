@@ -49,17 +49,16 @@ namespace tml {
 namespace scene {
 /**
  * @brief Nodeクラス
- *
- * インターフェースパターン
  */
 class Node : public tml::scene::ManagerResource
 {
 public: Node(const tml::scene::Node &) = delete;
 public: tml::scene::Node &operator =(const tml::scene::Node &) = delete;
-protected: virtual void InterfaceDummy(void) = 0;
+protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_TYPE::BASE);
 
 private:
 	std::wstring name_;
@@ -72,21 +71,21 @@ private:
 
 protected:
 	void Release(void);
-	INT Create(const tml::scene::NodeDesc &);
 
 public:
 	Node();
 	virtual ~Node();
 
 	virtual void Init(void);
+	INT Create(const tml::scene::NodeDesc &);
 
 	INT Start(void);
 	void End(void);
 	void Update(void);
 
-	virtual INT OnStart(void) = 0;
-	virtual void OnEnd(void) = 0;
-	virtual void OnUpdate(void) = 0;
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 	const std::wstring &GetName(void) const;
 	void SetName(const WCHAR *);

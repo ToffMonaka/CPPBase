@@ -94,6 +94,8 @@ tml::scene::Node::Node() :
  */
 tml::scene::Node::~Node()
 {
+	this->Release();
+
 	return;
 }
 
@@ -122,6 +124,8 @@ void tml::scene::Node::Release(void)
  */
 void tml::scene::Node::Init(void)
 {
+	this->Release();
+
 	this->name_.clear();
 	this->type_ = tml::ConstantUtil::SCENE::NODE_TYPE::NONE;
 	this->run_flg_ = false;
@@ -143,7 +147,11 @@ void tml::scene::Node::Init(void)
  */
 INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc)
 {
+	this->Init();
+
 	if (tml::scene::ManagerResource::Create(desc) < 0) {
+		this->Init();
+
 		return (-1);
 	}
 
@@ -232,6 +240,35 @@ void tml::scene::Node::Update(void)
 		}
 	}
 
+	return;
+}
+
+
+/**
+ * @brief OnStartä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::scene::Node::OnStart(void)
+{
+	return (0);
+}
+
+
+/**
+ * @brief OnEndä÷êî
+ */
+void tml::scene::Node::OnEnd(void)
+{
+	return;
+}
+
+
+/**
+ * @brief OnUpdateä÷êî
+ */
+void tml::scene::Node::OnUpdate(void)
+{
 	return;
 }
 

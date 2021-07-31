@@ -72,7 +72,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MESH_TYPE::ETC);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MESH_TYPE::BASE);
 
 private:
 	ID3D11Buffer *vb_;

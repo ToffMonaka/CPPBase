@@ -91,7 +91,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	static const UINT EVENT_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::NODE);
-	static const UINT EVENT_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_EVENT_TYPE::ETC);
+	static const UINT EVENT_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_EVENT_TYPE::BASE);
 
 private:
 	tml::ConstantUtil::SCENE::NODE_EVENT_TYPE type_;

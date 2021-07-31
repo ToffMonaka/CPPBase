@@ -17,14 +17,14 @@ namespace INPUT {
 	}
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
-		ETC,
+		BASE,
 		USER,
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::RESOURCE_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
-		ETC,
+		BASE,
 		DEVICE,
 		USER,
 		COUNT
@@ -32,7 +32,7 @@ namespace INPUT {
 	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::COUNT);
 	enum class DEVICE_EVENT_TYPE : UINT {
 		NONE = 0U,
-		ETC,
+		BASE,
 		MOUSE,
 		KEYBOARD,
 		USER,

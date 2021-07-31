@@ -18,7 +18,7 @@ namespace SOUND {
 	}
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
-		ETC,
+		BASE,
 		SOUND,
 		USER,
 		COUNT
@@ -26,7 +26,7 @@ namespace SOUND {
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::COUNT);
 	enum class SOUND_TYPE : UINT {
 		NONE = 0U,
-		ETC,
+		BASE,
 		BGM,
 		SE,
 		USER,
@@ -35,7 +35,7 @@ namespace SOUND {
 	const UINT SOUND_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::SOUND_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
-		ETC,
+		BASE,
 		USER,
 		COUNT
 	};

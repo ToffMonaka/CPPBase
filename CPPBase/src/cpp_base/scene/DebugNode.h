@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_GRAPHIC.h"
-#include "BaseNode.h"
+#include "Node.h"
 
 
 namespace cpp_base {
@@ -15,7 +15,7 @@ namespace scene {
 /**
  * @brief DebugNodeDescクラス
  */
-class DebugNodeDesc : public cpp_base::scene::BaseNodeDesc
+class DebugNodeDesc : public cpp_base::scene::NodeDesc
 {
 public:
 
@@ -39,7 +39,7 @@ public:
  */
 inline void cpp_base::scene::DebugNodeDesc::Release(void)
 {
-	cpp_base::scene::BaseNodeDesc::Release();
+	cpp_base::scene::NodeDesc::Release();
 
 	return;
 }
@@ -50,7 +50,7 @@ namespace scene {
 /**
  * @brief DebugNodeクラス
  */
-class DebugNode : public cpp_base::scene::BaseNode
+class DebugNode : public cpp_base::scene::Node
 {
 public: DebugNode(const cpp_base::scene::DebugNode &) = delete;
 public: cpp_base::scene::DebugNode &operator =(const cpp_base::scene::DebugNode &) = delete;

@@ -40,7 +40,7 @@ void cpp_base::scene::StageSceneMainNodeDesc::Init(void)
 {
 	this->Release();
 
-	cpp_base::scene::BaseNodeDesc::Init();
+	cpp_base::scene::NodeDesc::Init();
 
 	return;
 }
@@ -54,7 +54,7 @@ void cpp_base::scene::StageSceneMainNodeDesc::Init(void)
  */
 INT cpp_base::scene::StageSceneMainNodeDesc::ReadValue(const tml::INIFile &ini_file)
 {
-	if (cpp_base::scene::BaseNodeDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::NodeDesc::ReadValue(ini_file) < 0) {
 		return (-1);
 	}
 
@@ -100,7 +100,7 @@ cpp_base::scene::StageSceneMainNode::~StageSceneMainNode()
  */
 void cpp_base::scene::StageSceneMainNode::Release(void)
 {
-	cpp_base::scene::BaseNode::Release();
+	cpp_base::scene::Node::Release();
 
 	return;
 }
@@ -116,7 +116,7 @@ void cpp_base::scene::StageSceneMainNode::Init(void)
 	this->progress_type_ = 0U;
 	this->canvas_2d.reset();
 
-	cpp_base::scene::BaseNode::Init();
+	cpp_base::scene::Node::Init();
 
 	return;
 }
@@ -132,7 +132,7 @@ INT cpp_base::scene::StageSceneMainNode::Create(const cpp_base::scene::StageScen
 {
 	this->Init();
 
-	if (cpp_base::scene::BaseNode::Create(desc) < 0) {
+	if (cpp_base::scene::Node::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
