@@ -81,12 +81,15 @@ private:
 protected:
 	void Release(void);
 	INT Create(const tml::sound::ManagerResourceDesc &);
+	void ReleaseDeferred(void);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
+	virtual void InitDeferred(void);
+	virtual INT OnCreateDeferred(void);
 
 	tml::sound::Manager *GetManager(void);
 	tml::ConstantUtil::SOUND::RESOURCE_TYPE GetResourceType(void) const;
@@ -101,6 +104,17 @@ public:
 inline void tml::sound::ManagerResource::Release(void)
 {
 	tml::ManagerResource::Release();
+
+	return;
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::sound::ManagerResource::ReleaseDeferred(void)
+{
+	tml::ManagerResource::ReleaseDeferred();
 
 	return;
 }

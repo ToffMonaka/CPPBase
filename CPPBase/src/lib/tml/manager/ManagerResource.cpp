@@ -13,7 +13,7 @@
  */
 tml::ManagerResourceDesc::ManagerResourceDesc() :
 	mgr_(nullptr),
-	deferred_load_flag(false)
+	deferred_create_flag(false)
 {
 	return;
 }
@@ -39,7 +39,7 @@ void tml::ManagerResourceDesc::Init(void)
 
 	this->mgr_ = nullptr;
 	this->resource_name.clear();
-	this->deferred_load_flag = false;
+	this->deferred_create_flag = false;
 
 	return;
 }
@@ -121,8 +121,8 @@ tml::ManagerResource::ManagerResource() :
 	mgr_(nullptr),
 	res_main_index_(0U),
 	res_sub_index_(0U),
-	load_desc_(nullptr),
-	loaded_flg_(false)
+	deferred_create_desc_(nullptr),
+	deferred_created_flg_(false)
 {
 	return;
 }
@@ -142,22 +142,11 @@ tml::ManagerResource::~ManagerResource()
  */
 void tml::ManagerResource::Init(void)
 {
-	this->load_desc_unique_p_.reset();
-	this->load_desc_ = nullptr;
-	this->loaded_flg_ = false;
+	this->deferred_create_desc_unique_p_.reset();
+	this->deferred_create_desc_ = nullptr;
+	this->deferred_created_flg_ = false;
 
 	return;
-}
-
-
-/**
- * @brief LoadŠÖ”
- * @return result (result)<br>
- * 0–¢–=¸”s
- */
-INT tml::ManagerResource::Load(void)
-{
-	return (0);
 }
 
 
@@ -177,6 +166,51 @@ INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc)
 
 	this->mgr_ = desc.GetManager();
 
+	return (0);
+}
+
+
+/**
+ * @brief InitDeferredŠÖ”
+ */
+void tml::ManagerResource::InitDeferred(void)
+{
+	return;
+}
+
+
+/**
+ * @brief CreateDeferredŠÖ”
+ * @return result (result)<br>
+ * 0–¢–=¸”s,1=ì¬Ï‚İ
+ */
+INT tml::ManagerResource::CreateDeferred(void)
+{
+	if (this->deferred_created_flg_) {
+		return (1);
+	}
+
+	if (this->OnCreateDeferred() < 0) {
+		this->InitDeferred();
+
+		return (-1);
+	}
+
+	this->SetDeferredCreateDesc(nullptr);
+
+	this->deferred_created_flg_ = true;
+
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferredŠÖ”
+ * @return result (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::ManagerResource::OnCreateDeferred(void)
+{
 	return (0);
 }
 

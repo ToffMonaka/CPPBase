@@ -79,12 +79,15 @@ private:
 protected:
 	void Release(void);
 	INT Create(const tml::sound::SoundDesc &);
+	void ReleaseDeferred(void);
 
 public:
 	Sound();
 	virtual ~Sound();
 
 	virtual void Init(void);
+	virtual void InitDeferred(void);
+	virtual INT OnCreateDeferred(void);
 
 	tml::ConstantUtil::SOUND::SOUND_TYPE GetType(void) const;
 	ALuint GetBuffer(void) const;

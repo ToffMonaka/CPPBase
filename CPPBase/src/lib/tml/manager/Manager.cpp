@@ -162,16 +162,16 @@ void tml::Manager::Update(void)
 	}
 
 	UINT check_res_cnt = 0U;
-	UINT use_res_cnt = 0U;
+	UINT check_res_use_cnt = 0U;
 
 	while (this->check_res_itr_ != this->check_res_cont_.end()) {
-		use_res_cnt = 3U;
+		check_res_use_cnt = 3U;
 
 		if (!(*this->check_res_itr_)->GetResourceName().empty()) {
-			++use_res_cnt;
+			++check_res_use_cnt;
 		}
 
-		if (this->check_res_itr_->use_count() <= static_cast<LONG>(use_res_cnt)) {
+		if (this->check_res_itr_->use_count() <= static_cast<LONG>(check_res_use_cnt)) {
 			tml::shared_ptr<tml::ManagerResource> res = (*this->check_res_itr_);
 
 			res->Init();
@@ -196,6 +196,14 @@ void tml::Manager::Update(void)
 		if (check_res_cnt >= 10U) {
 			break;
 		}
+	}
+
+	if (!this->deferred_create_res_cont_.empty()) {
+		auto res_itr = this->deferred_create_res_cont_.begin();
+
+		(*res_itr)->CreateDeferred();
+
+		this->deferred_create_res_cont_.erase(res_itr);
 	}
 
 	if (this->front_event_index_ == this->back_event_index_) {
@@ -278,6 +286,7 @@ void tml::Manager::DeleteResourceContainer(void)
 	this->res_cont_by_name_.clear();
 	this->check_res_cont_.clear();
 	this->check_res_itr_ = this->check_res_cont_.end();
+	this->deferred_create_res_cont_.clear();
 
 	return;
 }
@@ -289,7 +298,7 @@ void tml::Manager::DeleteResourceContainer(void)
  */
 void tml::Manager::GetResourceInitResourcePart(tml::shared_ptr<tml::ManagerResource> &res)
 {
-	res->SetLoadDesc(nullptr);
+	res->SetDeferredCreateDesc(nullptr);
 
 	this->friend_res_ = res.get();
 	this->friend_res_->SetResourceSharedPointer(this, tml::shared_ptr<tml::ManagerResource>());

@@ -122,6 +122,17 @@ void tml::sound::Sound::Release(void)
 
 
 /**
+ * @brief ReleaseDeferredä÷êî
+ */
+void tml::sound::Sound::ReleaseDeferred(void)
+{
+	tml::sound::ManagerResource::ReleaseDeferred();
+
+	return;
+}
+
+
+/**
  * @brief Initä÷êî
  */
 void tml::sound::Sound::Init(void)
@@ -174,7 +185,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 	UINT file_format = 0U;
 
 	do {
-		// Check WAVE File
+		// WAVE File Check
 		if ((bin_file_buf.GetLength() >= 4U)
 		&& (strncmp(reinterpret_cast<CHAR *>(bin_file_buf.Get()), "RIFF", 4U) == 0)) {
 			file_format = 1U;
@@ -182,7 +193,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 			break;
 		}
 
-		// Check MP3 File
+		// MP3 File Check
 		if ((bin_file_buf.GetLength() >= 3U)
 		&& (strncmp(reinterpret_cast<CHAR *>(bin_file_buf.Get()), "ID3", 3U) == 0)) {
 			file_format = 2U;
@@ -190,7 +201,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 			break;
 		}
 
-		// Check Ogg File
+		// Ogg File Check
 		if ((bin_file_buf.GetLength() >= 4U)
 		&& (strncmp(reinterpret_cast<CHAR *>(bin_file_buf.Get()), "OggS", 4U) == 0)) {
 			file_format = 3U;
@@ -200,7 +211,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 	} while (0);
 
 	switch (file_format) {
-	case 1: {// Read WAVE File
+	case 1: {// WAVE File Read
 		MMIOINFO mmio_info = {};
 
 		mmio_info.fccIOProc = FOURCC_MEM;
@@ -307,7 +318,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 
 		break;
 	}
-	case 2: {// Read MP3 File
+	case 2: {// MP3 File Read
 		if ((bin_file_buf.GetLength() >= 128U)
 		&& (strncmp(reinterpret_cast<CHAR *>(&bin_file_buf.Get()[bin_file_buf.GetLength() - 128U]), "TAG", 3U) == 0)) {
 			bin_file_buf.SetLength(bin_file_buf.GetLength() - 128U);
@@ -459,7 +470,7 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 
 		break;
 	}
-	case 3: {// Read Ogg File
+	case 3: {// Ogg File Read
 		this->ogg_file_buf_ = bin_file_buf.Get();
 		this->ogg_file_buf_size_ = bin_file_buf.GetLength();
 		this->ogg_file_buf_index_ = 0L;
@@ -551,6 +562,32 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 	alSourcei(this->src_, AL_BUFFER, static_cast<ALint>(this->buf_));
 
 	if (alGetError() != AL_NO_ERROR) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief InitDeferredä÷êî
+ */
+void tml::sound::Sound::InitDeferred(void)
+{
+	tml::sound::ManagerResource::InitDeferred();
+
+	return;
+}
+
+
+/**
+ * @brief OnCreateDeferredä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::sound::Sound::OnCreateDeferred(void)
+{
+	if (tml::sound::ManagerResource::OnCreateDeferred() < 0) {
 		return (-1);
 	}
 

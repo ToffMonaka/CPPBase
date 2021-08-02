@@ -44,11 +44,10 @@ public:
 	virtual void Init(void);
 
 	INT Start(void);
-	void End(void);
-	void Update(void);
-
 	virtual INT OnStart(void) = 0;
+	void End(void);
 	virtual void OnEnd(void) = 0;
+	void Update(void);
 	virtual void OnUpdate(void) = 0;
 
 	const std::thread::id &GetID(void) const;

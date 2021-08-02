@@ -196,6 +196,17 @@ INT tml::scene::Scene::Start(void)
 
 
 /**
+ * @brief OnStartä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::scene::Scene::OnStart(void)
+{
+	return (0);
+}
+
+
+/**
  * @brief Endä÷êî
  */
 void tml::scene::Scene::End(void)
@@ -214,6 +225,15 @@ void tml::scene::Scene::End(void)
 		this->started_flg_ = false;
 	}
 
+	return;
+}
+
+
+/**
+ * @brief OnEndä÷êî
+ */
+void tml::scene::Scene::OnEnd(void)
+{
 	return;
 }
 
@@ -245,26 +265,6 @@ void tml::scene::Scene::Update(void)
 		}
 	}
 
-	return;
-}
-
-
-/**
- * @brief OnStartä÷êî
- * @return result (result)<br>
- * 0ñ¢ñû=é∏îs
- */
-INT tml::scene::Scene::OnStart(void)
-{
-	return (0);
-}
-
-
-/**
- * @brief OnEndä÷êî
- */
-void tml::scene::Scene::OnEnd(void)
-{
 	return;
 }
 

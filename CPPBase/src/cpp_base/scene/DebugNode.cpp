@@ -213,8 +213,10 @@ INT cpp_base::scene::DebugNode::OnStart(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
 
-	if (this->canvas_2d == nullptr) {
-		graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D");
+	{// Canvas2D Create
+		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
+			return (-1);
+		}
 	}
 
 	return (0);
@@ -258,9 +260,7 @@ void cpp_base::scene::DebugNode::OnUpdate(void)
 		this->update_time = tml::TIME_REAL(0.0);
 	}
 
-	if (this->canvas_2d != nullptr) {
-		this->canvas_2d->SetDrawModel(this->model.get());
-	}
+	this->canvas_2d->SetDrawModel(this->model.get());
 
 	return;
 }

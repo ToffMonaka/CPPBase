@@ -68,6 +68,7 @@ private:
 	std::unordered_map<std::wstring, tml::shared_ptr<tml::ManagerResource>> res_cont_by_name_;
 	std::list<tml::shared_ptr<tml::ManagerResource>> check_res_cont_;
 	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator check_res_itr_;
+	std::list<tml::shared_ptr<tml::ManagerResource>> deferred_create_res_cont_;
 	tml::ManagerResource *friend_res_;
 	std::array<std::vector<UINT>, 2U> event_cnt_cont_ary_;
 	std::array<std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>>, 2U> event_cont_ary_;
@@ -226,26 +227,24 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		return (dst_res);
 	}
 
-	if (desc.deferred_load_flag) {
-		tml::unique_ptr<tml::ManagerResourceDesc> load_desc = tml::make_unique<D>(1U);
+	if (desc.deferred_create_flag) {
+		tml::unique_ptr<tml::ManagerResourceDesc> tmp_desc = tml::make_unique<D>(1U);
 
-		(*reinterpret_cast<D *>(load_desc.get())) = desc;
+		(*reinterpret_cast<D *>(tmp_desc.get())) = desc;
 
-		res->SetLoadDesc(load_desc);
+		res->SetDeferredCreateDesc(tmp_desc);
+
+		this->deferred_create_res_cont_.push_back(res);
 	} else {
-		const tml::ManagerResourceDesc *load_desc = &desc;
+		res->SetDeferredCreateDesc(&desc);
 
-		res->SetLoadDesc(load_desc);
-
-		if (res->Load() < 0) {
+		if (res->CreateDeferred() < 0) {
 			this->GetResourceInitResourcePart(res);
 
 			tml::SetResult(dst_result, -1);
 
 			return (dst_res);
 		}
-
-		res->SetLoadDesc(nullptr);
 	}
 
 	this->res_cont_[res->GetResourceMainIndex()][res->GetResourceSubIndex()].push_back(res);

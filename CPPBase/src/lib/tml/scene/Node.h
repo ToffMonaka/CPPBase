@@ -80,11 +80,10 @@ public:
 	INT Create(const tml::scene::NodeDesc &);
 
 	INT Start(void);
-	void End(void);
-	void Update(void);
-
 	virtual INT OnStart(void);
+	void End(void);
 	virtual void OnEnd(void);
+	void Update(void);
 	virtual void OnUpdate(void);
 
 	const std::wstring &GetName(void) const;

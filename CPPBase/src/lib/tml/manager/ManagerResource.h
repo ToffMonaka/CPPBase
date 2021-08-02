@@ -25,7 +25,7 @@ private:
 
 public:
 	std::wstring resource_name;
-	bool deferred_load_flag;
+	bool deferred_create_flag;
 
 protected:
 	void Release(void);
@@ -85,20 +85,27 @@ private:
 	std::wstring res_name_;
 
 protected:
-	tml::unique_ptr<tml::ManagerResourceDesc> load_desc_unique_p_;
-	const tml::ManagerResourceDesc *load_desc_;
-	bool loaded_flg_;
+	tml::unique_ptr<tml::ManagerResourceDesc> deferred_create_desc_unique_p_;
+	const tml::ManagerResourceDesc *deferred_create_desc_;
+	bool deferred_created_flg_;
 
 protected:
 	void Release(void);
 	INT Create(const tml::ManagerResourceDesc &);
+	void ReleaseDeferred(void);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
-	virtual INT Load(void);
+	virtual void InitDeferred(void);
+	INT CreateDeferred(void);
+	virtual INT OnCreateDeferred(void);
+	const tml::ManagerResourceDesc *GetDeferredCreateDesc(void) const;
+	void SetDeferredCreateDesc(tml::unique_ptr<tml::ManagerResourceDesc> &);
+	void SetDeferredCreateDesc(const tml::ManagerResourceDesc *);
+	bool IsDeferredCreated(void) const;
 
 	tml::Manager *GetManager(void);
 	UINT GetResourceMainIndex(void) const;
@@ -109,9 +116,6 @@ public:
 	void SetResourceSharedPointer(tml::Manager *, const tml::shared_ptr<tml::ManagerResource> &);
 	const std::wstring &GetResourceName(void) const;
 	void SetResourceName(tml::Manager *, const WCHAR *);
-	const tml::ManagerResourceDesc *GetLoadDesc(void) const;
-	void SetLoadDesc(tml::unique_ptr<tml::ManagerResourceDesc> &);
-	void SetLoadDesc(const tml::ManagerResourceDesc *);
 };
 }
 
@@ -122,6 +126,62 @@ public:
 inline void tml::ManagerResource::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief ReleaseDeferredä÷êî
+ */
+inline void tml::ManagerResource::ReleaseDeferred(void)
+{
+	return;
+}
+
+
+/**
+ * @brief GetDeferredCreateDescä÷êî
+ * @return deferred_create_desc (deferred_create_desc)
+ */
+inline const tml::ManagerResourceDesc *tml::ManagerResource::GetDeferredCreateDesc(void) const
+{
+	return (this->deferred_create_desc_);
+}
+
+
+/**
+ * @brief SetDeferredCreateDescä÷êî
+ * @return deferred_create_desc (deferred_create_desc)
+ */
+inline void tml::ManagerResource::SetDeferredCreateDesc(tml::unique_ptr<tml::ManagerResourceDesc> &deferred_create_desc)
+{
+	this->deferred_create_desc_unique_p_ = std::move(deferred_create_desc);
+	this->deferred_create_desc_ = this->deferred_create_desc_unique_p_.get();
+
+	return;
+}
+
+
+/**
+ * @brief SetDeferredCreateDescä÷êî
+ * @return deferred_create_desc (deferred_create_desc)
+ */
+inline void tml::ManagerResource::SetDeferredCreateDesc(const tml::ManagerResourceDesc *deferred_create_desc)
+{
+	this->deferred_create_desc_unique_p_.reset();
+	this->deferred_create_desc_ = deferred_create_desc;
+
+	return;
+}
+
+
+/**
+ * @brief IsDeferredCreatedä÷êî
+ * @return result_flg (result_flag)<br>
+ * false=îÒçÏê¨çœÇ›,true=çÏê¨çœÇ›
+ */
+inline bool tml::ManagerResource::IsDeferredCreated(void) const
+{
+	return (this->deferred_created_flg_);
 }
 
 
@@ -172,40 +232,4 @@ inline const tml::shared_ptr<tml::ManagerResource> &tml::ManagerResource::GetRes
 inline const std::wstring &tml::ManagerResource::GetResourceName(void) const
 {
 	return (this->res_name_);
-}
-
-
-/**
- * @brief GetLoadDescä÷êî
- * @return load_desc (load_desc)
- */
-inline const tml::ManagerResourceDesc *tml::ManagerResource::GetLoadDesc(void) const
-{
-	return (this->load_desc_);
-}
-
-
-/**
- * @brief SetLoadDescä÷êî
- * @return load_desc (load_desc)
- */
-inline void tml::ManagerResource::SetLoadDesc(tml::unique_ptr<tml::ManagerResourceDesc> &load_desc)
-{
-	this->load_desc_unique_p_ = std::move(load_desc);
-	this->load_desc_ = this->load_desc_unique_p_.get();
-
-	return;
-}
-
-
-/**
- * @brief SetLoadDescä÷êî
- * @return load_desc (load_desc)
- */
-inline void tml::ManagerResource::SetLoadDesc(const tml::ManagerResourceDesc *load_desc)
-{
-	this->load_desc_unique_p_.reset();
-	this->load_desc_ = load_desc;
-
-	return;
 }

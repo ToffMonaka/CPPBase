@@ -142,3 +142,29 @@ INT tml::sound::ManagerResource::Create(const tml::sound::ManagerResourceDesc &d
 
 	return (0);
 }
+
+
+/**
+ * @brief InitDeferredŠÖ”
+ */
+void tml::sound::ManagerResource::InitDeferred(void)
+{
+	tml::ManagerResource::InitDeferred();
+
+	return;
+}
+
+
+/**
+ * @brief OnCreateDeferredŠÖ”
+ * @return result (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::sound::ManagerResource::OnCreateDeferred(void)
+{
+	if (tml::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
