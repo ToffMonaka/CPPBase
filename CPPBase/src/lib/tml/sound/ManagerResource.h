@@ -22,9 +22,10 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -45,8 +46,6 @@ public:
  */
 inline void tml::sound::ManagerResourceDesc::Release(void)
 {
-	tml::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -78,18 +77,20 @@ private:
 	tml::sound::Manager *mgr_;
 	tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::sound::ManagerResourceDesc &);
 	void ReleaseDeferred(void);
+
+protected:
+	virtual INT OnCreateDeferred(void);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
+	INT Create(const tml::sound::ManagerResourceDesc &);
 	virtual void InitDeferred(void);
-	virtual INT OnCreateDeferred(void);
 
 	tml::sound::Manager *GetManager(void);
 	tml::ConstantUtil::SOUND::RESOURCE_TYPE GetResourceType(void) const;
@@ -103,19 +104,17 @@ public:
  */
 inline void tml::sound::ManagerResource::Release(void)
 {
-	tml::ManagerResource::Release();
+	this->ReleaseDeferred();
 
 	return;
 }
 
 
 /**
- * @brief ReleaseŠÖ”
+ * @brief ReleaseDeferredŠÖ”
  */
 inline void tml::sound::ManagerResource::ReleaseDeferred(void)
 {
-	tml::ManagerResource::ReleaseDeferred();
-
 	return;
 }
 

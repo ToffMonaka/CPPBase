@@ -108,8 +108,6 @@ cpp_base::scene::TitleSceneMainNode::~TitleSceneMainNode()
  */
 void cpp_base::scene::TitleSceneMainNode::Release(void)
 {
-	cpp_base::scene::Node::Release();
-
 	return;
 }
 

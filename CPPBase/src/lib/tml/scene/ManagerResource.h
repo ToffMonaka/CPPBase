@@ -22,9 +22,10 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -45,8 +46,6 @@ public:
  */
 inline void tml::scene::ManagerResourceDesc::Release(void)
 {
-	tml::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -78,13 +77,13 @@ private:
 	tml::scene::Manager *mgr_;
 	tml::ConstantUtil::SCENE::RESOURCE_TYPE res_type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::scene::ManagerResourceDesc &);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
+	INT Create(const tml::scene::ManagerResourceDesc &);
 
 	virtual void Init(void);
 
@@ -100,8 +99,6 @@ public:
  */
 inline void tml::scene::ManagerResource::Release(void)
 {
-	tml::ManagerResource::Release();
-
 	return;
 }
 

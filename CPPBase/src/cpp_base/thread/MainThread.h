@@ -37,16 +37,16 @@ private:
 protected:
 	void Release(void);
 
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
+
 public:
 	MainThread();
 	virtual ~MainThread();
 
 	virtual void Init(void);
 	INT Create(const HINSTANCE, const WCHAR *, const INT);
-
-	virtual INT OnStart(void);
-	virtual void OnEnd(void);
-	virtual void OnUpdate(void);
 
 	cpp_base::SystemConfigFile &GetSystemConfigFile(void);
 	cpp_base::input::Manager &GetInputManager(void);

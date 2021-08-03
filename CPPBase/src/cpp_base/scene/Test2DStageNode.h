@@ -19,9 +19,10 @@ class Test2DStageNodeDesc : public cpp_base::scene::NodeDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -39,8 +40,6 @@ public:
  */
 inline void cpp_base::scene::Test2DStageNodeDesc::Release(void)
 {
-	cpp_base::scene::NodeDesc::Release();
-
 	return;
 }
 
@@ -61,8 +60,13 @@ public:
 	tml::shared_ptr<tml::graphic::Model2D> ground_model;
 	tml::shared_ptr<tml::graphic::Model2D> pl_model;
 
-protected:
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 public:
 	Test2DStageNode();
@@ -70,10 +74,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::Test2DStageNodeDesc &);
-
-	virtual INT OnStart(void);
-	virtual void OnEnd(void);
-	virtual void OnUpdate(void);
 };
 }
 }

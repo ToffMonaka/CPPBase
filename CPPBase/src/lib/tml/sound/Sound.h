@@ -20,9 +20,10 @@ class SoundDesc : public tml::sound::ManagerResourceDesc
 public:
 	tml::BinaryFileReadDesc file_read_desc;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -40,8 +41,6 @@ public:
  */
 inline void tml::sound::SoundDesc::Release(void)
 {
-	tml::sound::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -76,18 +75,20 @@ private:
 	static int CloseOggFile(void *);
 	static long TellOggFile(void *);
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::sound::SoundDesc &);
 	void ReleaseDeferred(void);
+
+protected:
+	virtual INT OnCreateDeferred(void);
 
 public:
 	Sound();
 	virtual ~Sound();
 
 	virtual void Init(void);
+	INT Create(const tml::sound::SoundDesc &);
 	virtual void InitDeferred(void);
-	virtual INT OnCreateDeferred(void);
 
 	tml::ConstantUtil::SOUND::SOUND_TYPE GetType(void) const;
 	ALuint GetBuffer(void) const;

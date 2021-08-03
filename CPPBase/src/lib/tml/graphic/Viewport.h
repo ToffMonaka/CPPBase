@@ -20,7 +20,7 @@ class Viewport
 private:
 	D3D11_VIEWPORT vp_;
 
-protected:
+private:
 	void Release(void);
 
 public:

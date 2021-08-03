@@ -20,9 +20,10 @@ class SelectSceneMainNodeDesc : public cpp_base::scene::NodeDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -40,8 +41,6 @@ public:
  */
 inline void cpp_base::scene::SelectSceneMainNodeDesc::Release(void)
 {
-	cpp_base::scene::NodeDesc::Release();
-
 	return;
 }
 
@@ -68,8 +67,13 @@ public:
 	tml::shared_ptr<tml::graphic::Model2D> stage_model;
 	tml::shared_ptr<tml::sound::SESound> stage_se_sound;
 
-protected:
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 public:
 	SelectSceneMainNode();
@@ -77,10 +81,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::SelectSceneMainNodeDesc &);
-
-	virtual INT OnStart(void);
-	virtual void OnEnd(void);
-	virtual void OnUpdate(void);
 };
 }
 }

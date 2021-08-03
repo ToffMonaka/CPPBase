@@ -22,9 +22,10 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -45,8 +46,6 @@ public:
  */
 inline void cpp_base::scene::NodeDesc::Release(void)
 {
-	tml::scene::NodeDesc::Release();
-
 	return;
 }
 
@@ -75,8 +74,13 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	cpp_base::scene::Manager *mgr_;
 
-protected:
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 public:
 	Node();
@@ -84,10 +88,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::NodeDesc &);
-
-	virtual INT OnStart(void);
-	virtual void OnEnd(void);
-	virtual void OnUpdate(void);
 
 	cpp_base::scene::Manager *GetManager(void);
 };

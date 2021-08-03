@@ -94,6 +94,8 @@ tml::sound::Sound::Sound() :
  */
 tml::sound::Sound::~Sound()
 {
+	this->Release();
+
 	return;
 }
 
@@ -103,6 +105,8 @@ tml::sound::Sound::~Sound()
  */
 void tml::sound::Sound::Release(void)
 {
+	this->ReleaseDeferred();
+
 	if (this->src_ != 0U) {
 		alDeleteSources(1, &this->src_);
 
@@ -115,19 +119,6 @@ void tml::sound::Sound::Release(void)
 		this->buf_ = 0U;
 	}
 
-	tml::sound::ManagerResource::Release();
-
-	return;
-}
-
-
-/**
- * @brief ReleaseDeferredŠÖ”
- */
-void tml::sound::Sound::ReleaseDeferred(void)
-{
-	tml::sound::ManagerResource::ReleaseDeferred();
-
 	return;
 }
 
@@ -137,6 +128,8 @@ void tml::sound::Sound::ReleaseDeferred(void)
  */
 void tml::sound::Sound::Init(void)
 {
+	this->Release();
+
 	this->type_ = tml::ConstantUtil::SOUND::SOUND_TYPE::NONE;
 	this->ogg_file_buf_ = nullptr;
 	this->ogg_file_buf_size_ = 0L;
@@ -570,10 +563,21 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 
 
 /**
+ * @brief ReleaseDeferredŠÖ”
+ */
+void tml::sound::Sound::ReleaseDeferred(void)
+{
+	return;
+}
+
+
+/**
  * @brief InitDeferredŠÖ”
  */
 void tml::sound::Sound::InitDeferred(void)
 {
+	this->ReleaseDeferred();
+
 	tml::sound::ManagerResource::InitDeferred();
 
 	return;

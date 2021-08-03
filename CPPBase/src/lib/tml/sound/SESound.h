@@ -18,9 +18,10 @@ class SESoundDesc : public tml::sound::SoundDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -38,8 +39,6 @@ public:
  */
 inline void tml::sound::SESoundDesc::Release(void)
 {
-	tml::sound::SoundDesc::Release();
-
 	return;
 }
 
@@ -60,7 +59,7 @@ public:
 
 private:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -71,15 +70,4 @@ public:
 	INT Create(const tml::sound::SESoundDesc &);
 };
 }
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-inline void tml::sound::SESound::Release(void)
-{
-	tml::sound::Sound::Release();
-
-	return;
 }

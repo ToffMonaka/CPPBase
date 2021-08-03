@@ -103,6 +103,8 @@ tml::input::ManagerResource::ManagerResource() :
  */
 tml::input::ManagerResource::~ManagerResource()
 {
+	this->Release();
+
 	return;
 }
 
@@ -112,6 +114,8 @@ tml::input::ManagerResource::~ManagerResource()
  */
 void tml::input::ManagerResource::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->res_type_ = tml::ConstantUtil::INPUT::RESOURCE_TYPE::NONE;
 

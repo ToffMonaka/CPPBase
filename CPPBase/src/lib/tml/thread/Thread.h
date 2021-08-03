@@ -37,6 +37,10 @@ protected:
 	void Release(void);
 	INT Create(const tml::ConstantUtil::THREAD::TYPE);
 
+	virtual INT OnStart(void) = 0;
+	virtual void OnEnd(void) = 0;
+	virtual void OnUpdate(void) = 0;
+
 public:
 	Thread();
 	virtual ~Thread();
@@ -44,11 +48,8 @@ public:
 	virtual void Init(void);
 
 	INT Start(void);
-	virtual INT OnStart(void) = 0;
 	void End(void);
-	virtual void OnEnd(void) = 0;
 	void Update(void);
-	virtual void OnUpdate(void) = 0;
 
 	const std::thread::id &GetID(void) const;
 	tml::ConstantUtil::THREAD::TYPE GetType(void) const;

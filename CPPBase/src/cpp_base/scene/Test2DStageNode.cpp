@@ -103,8 +103,6 @@ cpp_base::scene::Test2DStageNode::~Test2DStageNode()
  */
 void cpp_base::scene::Test2DStageNode::Release(void)
 {
-	cpp_base::scene::Node::Release();
-
 	return;
 }
 

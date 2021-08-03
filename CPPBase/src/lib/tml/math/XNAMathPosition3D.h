@@ -24,12 +24,11 @@ private:
 	tml::XMFLOAT3EX z_axis_vec_;
 
 private:
+	void Release(void);
+
 	void UpdateQuaternionFromAngle(void);
 	void UpdateAngleFromQuaternion(void);
 	void UpdateAxisVectorFromQuaternion(void);
-
-protected:
-	void Release(void);
 
 public:
 	XMPosition3D();

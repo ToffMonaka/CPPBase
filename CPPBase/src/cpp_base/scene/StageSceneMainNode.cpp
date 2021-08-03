@@ -100,8 +100,6 @@ cpp_base::scene::StageSceneMainNode::~StageSceneMainNode()
  */
 void cpp_base::scene::StageSceneMainNode::Release(void)
 {
-	cpp_base::scene::Node::Release();
-
 	return;
 }
 

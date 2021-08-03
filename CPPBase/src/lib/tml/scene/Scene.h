@@ -20,9 +20,10 @@ class SceneDesc : public tml::scene::ManagerResourceDesc
 public:
 	std::wstring name;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -40,8 +41,6 @@ public:
  */
 inline void tml::scene::SceneDesc::Release(void)
 {
-	tml::scene::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -69,8 +68,13 @@ private:
 	bool started_flg_;
 	tml::shared_ptr<tml::scene::Node> root_node_;
 
-protected:
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 public:
 	Scene();
@@ -80,11 +84,8 @@ public:
 	INT Create(const tml::scene::SceneDesc &);
 
 	INT Start(void);
-	virtual INT OnStart(void);
 	void End(void);
-	virtual void OnEnd(void);
 	void Update(void);
-	virtual void OnUpdate(void);
 
 	const std::wstring &GetName(void) const;
 	void SetName(const WCHAR *);

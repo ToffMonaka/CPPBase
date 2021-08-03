@@ -101,8 +101,6 @@ cpp_base::scene::InitScene::~InitScene()
  */
 void cpp_base::scene::InitScene::Release(void)
 {
-	cpp_base::scene::Scene::Release();
-
 	return;
 }
 

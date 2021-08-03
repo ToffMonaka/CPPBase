@@ -101,8 +101,6 @@ cpp_base::scene::SelectScene::~SelectScene()
  */
 void cpp_base::scene::SelectScene::Release(void)
 {
-	cpp_base::scene::Scene::Release();
-
 	return;
 }
 

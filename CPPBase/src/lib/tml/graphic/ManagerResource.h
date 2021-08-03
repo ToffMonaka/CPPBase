@@ -22,9 +22,11 @@ private:
 
 public:
 
+private:
 protected:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -45,8 +47,6 @@ public:
  */
 inline void tml::graphic::ManagerResourceDesc::Release(void)
 {
-	tml::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -78,15 +78,16 @@ private:
 	tml::graphic::Manager *mgr_;
 	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type_;
 
+private:
 protected:
 	void Release(void);
-	INT Create(const tml::graphic::ManagerResourceDesc &);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
+	INT Create(const tml::graphic::ManagerResourceDesc &);
 
 	tml::graphic::Manager *GetManager(void);
 	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE GetResourceType(void) const;
@@ -100,8 +101,6 @@ public:
  */
 inline void tml::graphic::ManagerResource::Release(void)
 {
-	tml::ManagerResource::Release();
-
 	return;
 }
 

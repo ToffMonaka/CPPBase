@@ -103,6 +103,8 @@ tml::sound::ManagerResource::ManagerResource() :
  */
 tml::sound::ManagerResource::~ManagerResource()
 {
+	this->Release();
+
 	return;
 }
 
@@ -112,6 +114,8 @@ tml::sound::ManagerResource::~ManagerResource()
  */
 void tml::sound::ManagerResource::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->res_type_ = tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE;
 
@@ -149,6 +153,8 @@ INT tml::sound::ManagerResource::Create(const tml::sound::ManagerResourceDesc &d
  */
 void tml::sound::ManagerResource::InitDeferred(void)
 {
+	this->ReleaseDeferred();
+
 	tml::ManagerResource::InitDeferred();
 
 	return;

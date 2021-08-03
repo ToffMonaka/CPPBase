@@ -90,6 +90,15 @@ tml::sound::SESound::~SESound()
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+void tml::sound::SESound::Release(void)
+{
+	return;
+}
+
+
+/**
  * @brief Initä÷êî
  */
 void tml::sound::SESound::Init(void)

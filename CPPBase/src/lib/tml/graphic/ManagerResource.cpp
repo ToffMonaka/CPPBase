@@ -103,6 +103,8 @@ tml::graphic::ManagerResource::ManagerResource() :
  */
 tml::graphic::ManagerResource::~ManagerResource()
 {
+	this->Release();
+
 	return;
 }
 
@@ -112,6 +114,8 @@ tml::graphic::ManagerResource::~ManagerResource()
  */
 void tml::graphic::ManagerResource::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->res_type_ = tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::NONE;
 

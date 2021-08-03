@@ -36,6 +36,10 @@ protected:
 	void Release(void);
 	INT Create(const HINSTANCE, const WCHAR *, const INT);
 
+	virtual INT OnStart(void) = 0;
+	virtual void OnEnd(void) = 0;
+	virtual void OnUpdate(void) = 0;
+
 	INT CreateCOM(void);
 	void DeleteCOM(void);
 	INT CreateWindow_(const WNDCLASSEX &, const tml::XMUINT2EX &, const tml::XMUINT2EX &);
@@ -46,10 +50,6 @@ public:
 	virtual ~MainThread();
 
 	virtual void Init(void);
-
-	virtual INT OnStart(void) = 0;
-	virtual void OnEnd(void) = 0;
-	virtual void OnUpdate(void) = 0;
 
 	HINSTANCE GetInstanceHandle(void) const;
 	HWND GetWindowHandle(void) const;

@@ -101,8 +101,6 @@ cpp_base::scene::StageScene::~StageScene()
  */
 void cpp_base::scene::StageScene::Release(void)
 {
-	cpp_base::scene::Scene::Release();
-
 	return;
 }
 

@@ -107,8 +107,6 @@ cpp_base::scene::InitSceneMainNode::~InitSceneMainNode()
  */
 void cpp_base::scene::InitSceneMainNode::Release(void)
 {
-	cpp_base::scene::Node::Release();
-
 	return;
 }
 

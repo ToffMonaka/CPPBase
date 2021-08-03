@@ -112,8 +112,6 @@ cpp_base::scene::Scene::~Scene()
  */
 void cpp_base::scene::Scene::Release(void)
 {
-	tml::scene::Scene::Release();
-
 	return;
 }
 

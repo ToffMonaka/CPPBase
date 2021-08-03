@@ -102,8 +102,6 @@ cpp_base::scene::DebugNode::~DebugNode()
  */
 void cpp_base::scene::DebugNode::Release(void)
 {
-	cpp_base::scene::Node::Release();
-
 	return;
 }
 

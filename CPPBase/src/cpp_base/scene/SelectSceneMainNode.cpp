@@ -108,8 +108,6 @@ cpp_base::scene::SelectSceneMainNode::~SelectSceneMainNode()
  */
 void cpp_base::scene::SelectSceneMainNode::Release(void)
 {
-	cpp_base::scene::Node::Release();
-
 	return;
 }
 

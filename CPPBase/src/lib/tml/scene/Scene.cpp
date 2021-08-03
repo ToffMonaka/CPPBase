@@ -111,8 +111,6 @@ void tml::scene::Scene::Release(void)
 		this->root_node_.reset();
 	}
 
-	tml::scene::ManagerResource::Release();
-
 	return;
 }
 

@@ -90,6 +90,15 @@ tml::sound::BGMSound::~BGMSound()
 
 
 /**
+ * @brief Releaseä÷êî
+ */
+void tml::sound::BGMSound::Release(void)
+{
+	return;
+}
+
+
+/**
  * @brief Initä÷êî
  */
 void tml::sound::BGMSound::Init(void)

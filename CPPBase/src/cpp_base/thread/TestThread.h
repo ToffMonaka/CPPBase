@@ -24,15 +24,15 @@ private:
 protected:
 	void Release(void);
 
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
+
 public:
 	TestThread();
 	virtual ~TestThread();
 
 	virtual void Init(void);
 	INT Create(void);
-
-	virtual INT OnStart(void);
-	virtual void OnEnd(void);
-	virtual void OnUpdate(void);
 };
 }

@@ -22,10 +22,9 @@ private:
 	tml::XMFLOAT2EX y_axis_vec_;
 
 private:
-	void UpdateAxisVectorFromAngle(void);
-
-protected:
 	void Release(void);
+
+	void UpdateAxisVectorFromAngle(void);
 
 public:
 	XMPosition2D();

@@ -133,6 +133,8 @@ tml::ManagerResource::ManagerResource() :
  */
 tml::ManagerResource::~ManagerResource()
 {
+	this->Release();
+
 	return;
 }
 
@@ -142,6 +144,8 @@ tml::ManagerResource::~ManagerResource()
  */
 void tml::ManagerResource::Init(void)
 {
+	this->Release();
+
 	this->deferred_create_desc_unique_p_.reset();
 	this->deferred_create_desc_ = nullptr;
 	this->deferred_created_flg_ = false;
@@ -175,6 +179,8 @@ INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc)
  */
 void tml::ManagerResource::InitDeferred(void)
 {
+	this->ReleaseDeferred();
+
 	return;
 }
 

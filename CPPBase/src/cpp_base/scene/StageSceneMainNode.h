@@ -19,9 +19,10 @@ class StageSceneMainNodeDesc : public cpp_base::scene::NodeDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -39,8 +40,6 @@ public:
  */
 inline void cpp_base::scene::StageSceneMainNodeDesc::Release(void)
 {
-	cpp_base::scene::NodeDesc::Release();
-
 	return;
 }
 
@@ -62,8 +61,13 @@ private:
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 
-protected:
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 public:
 	StageSceneMainNode();
@@ -71,10 +75,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::StageSceneMainNodeDesc &);
-
-	virtual INT OnStart(void);
-	virtual void OnEnd(void);
-	virtual void OnUpdate(void);
 };
 }
 }

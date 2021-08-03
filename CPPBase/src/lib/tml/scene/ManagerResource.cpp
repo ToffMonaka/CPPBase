@@ -103,6 +103,8 @@ tml::scene::ManagerResource::ManagerResource() :
  */
 tml::scene::ManagerResource::~ManagerResource()
 {
+	this->Release();
+
 	return;
 }
 
@@ -112,6 +114,8 @@ tml::scene::ManagerResource::~ManagerResource()
  */
 void tml::scene::ManagerResource::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->res_type_ = tml::ConstantUtil::SCENE::RESOURCE_TYPE::NONE;
 

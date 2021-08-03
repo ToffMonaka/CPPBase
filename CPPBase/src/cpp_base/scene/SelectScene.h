@@ -19,9 +19,10 @@ class SelectSceneDesc : public cpp_base::scene::SceneDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -39,8 +40,6 @@ public:
  */
 inline void cpp_base::scene::SelectSceneDesc::Release(void)
 {
-	cpp_base::scene::SceneDesc::Release();
-
 	return;
 }
 
@@ -63,8 +62,13 @@ public:
 	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
 	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
 
-protected:
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 public:
 	SelectScene();
@@ -72,10 +76,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::SelectSceneDesc &);
-
-	virtual INT OnStart(void);
-	virtual void OnEnd(void);
-	virtual void OnUpdate(void);
 };
 }
 }

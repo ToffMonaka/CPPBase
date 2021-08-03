@@ -28,6 +28,10 @@ protected:
 	void Release(void);
 	INT Create(void);
 
+	virtual INT OnStart(void) = 0;
+	virtual void OnEnd(void) = 0;
+	virtual void OnUpdate(void) = 0;
+
 	INT CreateCOM(void);
 	void DeleteCOM(void);
 
@@ -36,10 +40,6 @@ public:
 	virtual ~SubThread();
 
 	virtual void Init(void);
-
-	virtual INT OnStart(void) = 0;
-	virtual void OnEnd(void) = 0;
-	virtual void OnUpdate(void) = 0;
 };
 }
 

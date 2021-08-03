@@ -20,9 +20,10 @@ class TitleSceneMainNodeDesc : public cpp_base::scene::NodeDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -40,8 +41,6 @@ public:
  */
 inline void cpp_base::scene::TitleSceneMainNodeDesc::Release(void)
 {
-	cpp_base::scene::NodeDesc::Release();
-
 	return;
 }
 
@@ -71,8 +70,13 @@ public:
 	tml::shared_ptr<tml::graphic::Font> footer_font;
 	tml::shared_ptr<tml::graphic::Model2D> footer_model;
 
-protected:
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnStart(void);
+	virtual void OnEnd(void);
+	virtual void OnUpdate(void);
 
 public:
 	TitleSceneMainNode();
@@ -80,10 +84,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::TitleSceneMainNodeDesc &);
-
-	virtual INT OnStart(void);
-	virtual void OnEnd(void);
-	virtual void OnUpdate(void);
 };
 }
 }

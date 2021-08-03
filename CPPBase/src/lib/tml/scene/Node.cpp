@@ -113,8 +113,6 @@ void tml::scene::Node::Release(void)
 
 	this->child_node_cont_.clear();
 
-	tml::scene::ManagerResource::Release();
-
 	return;
 }
 

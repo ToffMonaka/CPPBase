@@ -22,9 +22,10 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -45,8 +46,6 @@ public:
  */
 inline void tml::input::ManagerResourceDesc::Release(void)
 {
-	tml::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -78,15 +77,15 @@ private:
 	tml::input::Manager *mgr_;
 	tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::input::ManagerResourceDesc &);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
+	INT Create(const tml::input::ManagerResourceDesc &);
 
 	tml::input::Manager *GetManager(void);
 	tml::ConstantUtil::INPUT::RESOURCE_TYPE GetResourceType(void) const;
@@ -100,8 +99,6 @@ public:
  */
 inline void tml::input::ManagerResource::Release(void)
 {
-	tml::ManagerResource::Release();
-
 	return;
 }
 

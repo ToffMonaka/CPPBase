@@ -27,9 +27,10 @@ public:
 	std::wstring resource_name;
 	bool deferred_create_flag;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -89,19 +90,21 @@ protected:
 	const tml::ManagerResourceDesc *deferred_create_desc_;
 	bool deferred_created_flg_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::ManagerResourceDesc &);
 	void ReleaseDeferred(void);
+
+protected:
+	virtual INT OnCreateDeferred(void);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
+	INT Create(const tml::ManagerResourceDesc &);
 	virtual void InitDeferred(void);
 	INT CreateDeferred(void);
-	virtual INT OnCreateDeferred(void);
 	const tml::ManagerResourceDesc *GetDeferredCreateDesc(void) const;
 	void SetDeferredCreateDesc(tml::unique_ptr<tml::ManagerResourceDesc> &);
 	void SetDeferredCreateDesc(const tml::ManagerResourceDesc *);
@@ -125,6 +128,8 @@ public:
  */
 inline void tml::ManagerResource::Release(void)
 {
+	this->ReleaseDeferred();
+
 	return;
 }
 
