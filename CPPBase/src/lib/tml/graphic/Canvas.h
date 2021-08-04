@@ -18,9 +18,10 @@ class CanvasDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -38,8 +39,6 @@ public:
  */
 inline void tml::graphic::CanvasDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -63,15 +62,15 @@ public:
 private:
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::graphic::CanvasDesc &);
 
 public:
 	Canvas();
 	virtual ~Canvas();
 
 	virtual void Init(void);
+	INT Create(const tml::graphic::CanvasDesc &);
 
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE GetType(void) const;
 
@@ -86,8 +85,6 @@ public:
  */
 inline void tml::graphic::Canvas::Release(void)
 {
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

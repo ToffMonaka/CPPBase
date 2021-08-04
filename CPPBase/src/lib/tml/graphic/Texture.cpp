@@ -198,8 +198,6 @@ void tml::graphic::Texture::Release(void)
 		this->tex_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

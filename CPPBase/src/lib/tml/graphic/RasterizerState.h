@@ -19,9 +19,10 @@ class RasterizerStateDesc : public tml::graphic::ManagerResourceDesc
 public:
 	CD3D11_RASTERIZER_DESC rasterizer_state_desc;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -41,8 +42,6 @@ public:
  */
 inline void tml::graphic::RasterizerStateDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -65,7 +64,7 @@ public:
 private:
 	ID3D11RasterizerState *rs_;
 
-protected:
+private:
 	void Release(void);
 
 public:

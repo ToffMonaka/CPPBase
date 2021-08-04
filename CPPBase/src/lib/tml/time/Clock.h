@@ -20,7 +20,7 @@ private:
 public:
 	static tml::TIME_MILLI GetNowTime(void);
 
-protected:
+private:
 	void Release(void);
 
 public:

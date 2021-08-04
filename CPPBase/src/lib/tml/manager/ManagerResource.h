@@ -109,6 +109,7 @@ public:
 	void SetDeferredCreateDesc(tml::unique_ptr<tml::ManagerResourceDesc> &);
 	void SetDeferredCreateDesc(const tml::ManagerResourceDesc *);
 	bool IsDeferredCreated(void) const;
+	bool IsDeferredCreating(void) const;
 
 	tml::Manager *GetManager(void);
 	UINT GetResourceMainIndex(void) const;
@@ -187,6 +188,17 @@ inline void tml::ManagerResource::SetDeferredCreateDesc(const tml::ManagerResour
 inline bool tml::ManagerResource::IsDeferredCreated(void) const
 {
 	return (this->deferred_created_flg_);
+}
+
+
+/**
+ * @brief IsDeferredCreatingŠÖ”
+ * @return result_flg (result_flag)<br>
+ * false=”ñì¬’†,true=ì¬’†
+ */
+inline bool tml::ManagerResource::IsDeferredCreating(void) const
+{
+	return (false);
 }
 
 

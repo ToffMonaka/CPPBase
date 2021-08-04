@@ -30,7 +30,7 @@ private:
 	tml::TIME_REAL over_time_;
 	bool started_flg_;
 
-protected:
+private:
 	void Release(void);
 
 public:

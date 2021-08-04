@@ -42,8 +42,6 @@ tml::graphic::Model2DLayer::~Model2DLayer()
  */
 void tml::graphic::Model2DLayer::Release(void)
 {
-	tml::graphic::ModelLayer::Release();
-
 	return;
 }
 
@@ -106,8 +104,6 @@ tml::graphic::Model2DStage::~Model2DStage()
  */
 void tml::graphic::Model2DStage::Release(void)
 {
-	tml::graphic::ModelStage::Release();
-
 	return;
 }
 
@@ -242,8 +238,6 @@ tml::graphic::Model2D::~Model2D()
  */
 void tml::graphic::Model2D::Release(void)
 {
-	tml::graphic::Model::Release();
-
 	return;
 }
 

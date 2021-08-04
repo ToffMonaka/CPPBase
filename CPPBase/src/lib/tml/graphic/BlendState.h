@@ -20,9 +20,10 @@ public:
 	CD3D11_BLEND_DESC blend_state_desc;
 	std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> factor_array;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -42,8 +43,6 @@ public:
  */
 inline void tml::graphic::BlendStateDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -67,7 +66,7 @@ private:
 	ID3D11BlendState *bs_;
 	std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> factor_ary_;
 
-protected:
+private:
 	void Release(void);
 
 public:

@@ -21,9 +21,10 @@ public:
 	UINT element_size;
 	UINT element_limit;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -43,8 +44,6 @@ public:
  */
 inline void tml::graphic::ShaderStructuredBufferDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -77,10 +76,10 @@ private:
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::graphic::ShaderStructuredBufferDesc &);
 
+protected:
 	template <typename T>
 	T *GetElement(const UINT);
 	template <typename T>
@@ -91,6 +90,7 @@ public:
 	virtual ~ShaderStructuredBuffer();
 
 	virtual void Init(void);
+	INT Create(const tml::graphic::ShaderStructuredBufferDesc &);
 
 	ID3D11Buffer *GetBuffer(void);
 	const CD3D11_BUFFER_DESC &GetBufferDesc(void) const;

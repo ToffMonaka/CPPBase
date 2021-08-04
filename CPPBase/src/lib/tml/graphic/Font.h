@@ -25,7 +25,7 @@ private:
 	GLYPHMETRICS gm_;
 	tml::DynamicBuffer buf_;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -92,9 +92,10 @@ class FontDesc : public tml::graphic::ManagerResourceDesc
 public:
 	LOGFONT font_desc;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -114,8 +115,6 @@ public:
  */
 inline void tml::graphic::FontDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -142,7 +141,7 @@ private:
 	TEXTMETRIC tm_;
 	std::map<WCHAR, tml::unique_ptr<tml::graphic::FontBitmap>> bm_cont_;
 
-protected:
+private:
 	void Release(void);
 
 public:

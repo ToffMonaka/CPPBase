@@ -19,7 +19,7 @@ class FogShaderStructuredBufferDesc : public tml::graphic::ShaderStructuredBuffe
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,8 +37,6 @@ public:
  */
 inline void tml::graphic::FogShaderStructuredBufferDesc::Release(void)
 {
-	tml::graphic::ShaderStructuredBufferDesc::Release();
-
 	return;
 }
 
@@ -78,7 +76,7 @@ public:
 		};
 	} ELEMENT;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -102,8 +100,6 @@ public:
  */
 inline void tml::graphic::FogShaderStructuredBuffer::Release(void)
 {
-	tml::graphic::ShaderStructuredBuffer::Release();
-
 	return;
 }
 

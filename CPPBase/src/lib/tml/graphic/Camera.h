@@ -18,9 +18,10 @@ class CameraDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -38,8 +39,6 @@ public:
  */
 inline void tml::graphic::CameraDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -63,15 +62,15 @@ public:
 private:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::graphic::CameraDesc &);
 
 public:
 	Camera();
 	virtual ~Camera();
 
 	virtual void Init(void);
+	INT Create(const tml::graphic::CameraDesc &);
 
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE GetType(void) const;
 };
@@ -84,8 +83,6 @@ public:
  */
 inline void tml::graphic::Camera::Release(void)
 {
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

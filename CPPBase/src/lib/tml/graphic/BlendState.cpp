@@ -257,8 +257,6 @@ void tml::graphic::BlendState::Release(void)
 		this->bs_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

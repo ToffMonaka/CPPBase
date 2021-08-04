@@ -84,6 +84,8 @@ tml::graphic::Camera::Camera() :
  */
 tml::graphic::Camera::~Camera()
 {
+	this->Release();
+
 	return;
 }
 
@@ -93,6 +95,8 @@ tml::graphic::Camera::~Camera()
  */
 void tml::graphic::Camera::Init(void)
 {
+	this->Release();
+
 	this->type_ = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
 
 	tml::graphic::ManagerResource::Init();

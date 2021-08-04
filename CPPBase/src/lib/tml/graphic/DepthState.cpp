@@ -128,8 +128,6 @@ void tml::graphic::DepthState::Release(void)
 		this->ds_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

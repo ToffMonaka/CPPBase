@@ -30,9 +30,10 @@ public:
 	bool index_buffer_cpu_buffer_flag;
 	D3D11_PRIMITIVE_TOPOLOGY primitive_topology;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -53,8 +54,6 @@ public:
  */
 inline void tml::graphic::MeshDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -90,7 +89,7 @@ private:
 	D3D11_MAPPED_SUBRESOURCE ib_msr_;
 	D3D11_PRIMITIVE_TOPOLOGY pt_;
 
-protected:
+private:
 	void Release(void);
 
 public:

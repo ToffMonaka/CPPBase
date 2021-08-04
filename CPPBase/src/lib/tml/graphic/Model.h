@@ -30,15 +30,15 @@ private:
 	UINT diffuse_tex_index_;
 	UINT diffuse_samp_index_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(tml::graphic::Manager *);
 
 public:
 	ModelLayer();
 	virtual ~ModelLayer();
 
 	virtual void Init(void);
+	INT Create(tml::graphic::Manager *);
 
 	tml::graphic::Manager *GetManager(void);
 	UINT GetMeshIndex(void) const;
@@ -150,10 +150,10 @@ private:
 
 	std::vector<tml::unique_ptr<tml::graphic::ModelLayer>> layer_cont_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(tml::graphic::Manager *);
 
+protected:
 	tml::graphic::ModelLayer *GetLayer(const UINT);
 	tml::graphic::ModelLayer *GetLayerFast(const UINT);
 	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::ModelLayer> &);
@@ -163,6 +163,7 @@ public:
 	virtual ~ModelStage();
 
 	virtual void Init(void);
+	INT Create(tml::graphic::Manager *);
 
 	tml::graphic::Manager *GetManager(void);
 	UINT GetRasterizerStateIndex(void) const;
@@ -325,9 +326,10 @@ class ModelDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -345,8 +347,6 @@ public:
  */
 inline void tml::graphic::ModelDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -386,10 +386,10 @@ private:
 
 	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_cont_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::graphic::ModelDesc &);
 
+protected:
 	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
@@ -399,6 +399,7 @@ public:
 	virtual ~Model();
 
 	virtual void Init(void);
+	INT Create(const tml::graphic::ModelDesc &);
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
 	UINT GetRasterizerStateCount(void) const;

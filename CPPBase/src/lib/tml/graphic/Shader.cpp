@@ -342,8 +342,6 @@ void tml::graphic::Shader::Release(void)
 		this->vs_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

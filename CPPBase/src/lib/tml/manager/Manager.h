@@ -238,7 +238,8 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 	} else {
 		res->SetDeferredCreateDesc(&desc);
 
-		if (res->CreateDeferred() < 0) {
+		if ((res->CreateDeferred() < 0)
+		|| (res->IsDeferredCreating())) {
 			this->GetResourceInitResourcePart(res);
 
 			tml::SetResult(dst_result, -1);

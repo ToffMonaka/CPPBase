@@ -142,8 +142,6 @@ void tml::graphic::RasterizerState::Release(void)
 		this->rs_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

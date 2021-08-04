@@ -84,6 +84,8 @@ tml::graphic::Canvas::Canvas() :
  */
 tml::graphic::Canvas::~Canvas()
 {
+	this->Release();
+
 	return;
 }
 
@@ -93,6 +95,8 @@ tml::graphic::Canvas::~Canvas()
  */
 void tml::graphic::Canvas::Init(void)
 {
+	this->Release();
+
 	this->type_ = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE;
 
 	tml::graphic::ManagerResource::Init();

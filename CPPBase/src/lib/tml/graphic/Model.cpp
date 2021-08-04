@@ -33,6 +33,8 @@ tml::graphic::ModelLayer::ModelLayer() :
  */
 tml::graphic::ModelLayer::~ModelLayer()
 {
+	this->Release();
+
 	return;
 }
 
@@ -51,6 +53,8 @@ void tml::graphic::ModelLayer::Release(void)
  */
 void tml::graphic::ModelLayer::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->mesh_index_ = 0U;
 	this->diffuse_tex_index_ = 0U;
@@ -97,6 +101,8 @@ tml::graphic::ModelStage::ModelStage() :
  */
 tml::graphic::ModelStage::~ModelStage()
 {
+	this->Release();
+
 	return;
 }
 
@@ -119,6 +125,8 @@ void tml::graphic::ModelStage::Release(void)
  */
 void tml::graphic::ModelStage::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->rs_index_ = 0U;
 	this->bs_index_ = 0U;
@@ -240,6 +248,8 @@ tml::graphic::Model::Model() :
  */
 tml::graphic::Model::~Model()
 {
+	this->Release();
+
 	return;
 }
 
@@ -253,8 +263,6 @@ void tml::graphic::Model::Release(void)
 		stage.reset();
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 
@@ -264,6 +272,8 @@ void tml::graphic::Model::Release(void)
  */
 void tml::graphic::Model::Init(void)
 {
+	this->Release();
+
 	this->type_ = tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE;
 	this->rs_cont_.clear();
 	this->bs_cont_.clear();

@@ -24,7 +24,7 @@ private:
 	size_t write_index_;
 	INT write_result_;
 
-protected:
+private:
 	void Release(void);
 
 public:

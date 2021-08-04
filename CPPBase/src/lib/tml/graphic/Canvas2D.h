@@ -19,9 +19,10 @@ class Canvas2DDesc : public tml::graphic::CanvasDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -39,8 +40,6 @@ public:
  */
 inline void tml::graphic::Canvas2DDesc::Release(void)
 {
-	tml::graphic::CanvasDesc::Release();
-
 	return;
 }
 
@@ -78,7 +77,7 @@ private:
 protected:
 	tml::graphic::Viewport vp_;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -120,8 +119,6 @@ public:
  */
 inline void tml::graphic::Canvas2D::Release(void)
 {
-	tml::graphic::Canvas::Release();
-
 	return;
 }
 

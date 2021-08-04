@@ -20,9 +20,10 @@ public:
 	CD3D11_BUFFER_DESC buffer_desc;
 	UINT element_size;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -42,8 +43,6 @@ public:
  */
 inline void tml::graphic::ShaderConstantBufferDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -72,10 +71,10 @@ private:
 	tml::DynamicBuffer cpu_buf_;
 	D3D11_MAPPED_SUBRESOURCE msr_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::graphic::ShaderConstantBufferDesc &);
 
+protected:
 	template <typename T>
 	T *GetElement(void);
 
@@ -84,6 +83,7 @@ public:
 	virtual ~ShaderConstantBuffer();
 
 	virtual void Init(void);
+	INT Create(const tml::graphic::ShaderConstantBufferDesc &);
 
 	ID3D11Buffer *GetBuffer(void);
 	const CD3D11_BUFFER_DESC &GetBufferDesc(void) const;

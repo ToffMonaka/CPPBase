@@ -19,9 +19,10 @@ class SamplerDesc : public tml::graphic::ManagerResourceDesc
 public:
 	CD3D11_SAMPLER_DESC sampler_desc;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -41,8 +42,6 @@ public:
  */
 inline void tml::graphic::SamplerDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -66,7 +65,7 @@ private:
 	ID3D11SamplerState *samp_;
 	CD3D11_SAMPLER_DESC samp_desc_;
 
-protected:
+private:
 	void Release(void);
 
 public:

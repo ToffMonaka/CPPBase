@@ -27,9 +27,10 @@ public:
 	FLOAT far_range;
 	*/
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -47,8 +48,6 @@ public:
  */
 inline void tml::graphic::FogDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -82,7 +81,7 @@ private:
 public:
 	tml::XMPosition3D position;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -115,8 +114,6 @@ public:
  */
 inline void tml::graphic::Fog::Release(void)
 {
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

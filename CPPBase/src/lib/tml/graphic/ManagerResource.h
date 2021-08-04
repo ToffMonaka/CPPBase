@@ -23,7 +23,6 @@ private:
 public:
 
 private:
-protected:
 	void Release(void);
 
 protected:
@@ -79,7 +78,6 @@ private:
 	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type_;
 
 private:
-protected:
 	void Release(void);
 
 public:

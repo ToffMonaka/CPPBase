@@ -33,7 +33,7 @@ private:
 	WCHAR *GetStringSetStringPart(WCHAR *, const size_t) const;
 	void SetStringSetTimePart(void);
 
-protected:
+private:
 	void Release(void);
 
 public:

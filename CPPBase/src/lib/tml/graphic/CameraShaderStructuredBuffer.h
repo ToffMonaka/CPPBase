@@ -19,7 +19,7 @@ class CameraShaderStructuredBufferDesc : public tml::graphic::ShaderStructuredBu
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,8 +37,6 @@ public:
  */
 inline void tml::graphic::CameraShaderStructuredBufferDesc::Release(void)
 {
-	tml::graphic::ShaderStructuredBufferDesc::Release();
-
 	return;
 }
 
@@ -76,7 +74,7 @@ public:
 		};
 	} ELEMENT;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -99,8 +97,6 @@ public:
  */
 inline void tml::graphic::CameraShaderStructuredBuffer::Release(void)
 {
-	tml::graphic::ShaderStructuredBuffer::Release();
-
 	return;
 }
 

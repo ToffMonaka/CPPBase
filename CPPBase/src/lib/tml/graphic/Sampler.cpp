@@ -189,8 +189,6 @@ void tml::graphic::Sampler::Release(void)
 		this->samp_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

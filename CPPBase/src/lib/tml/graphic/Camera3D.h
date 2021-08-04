@@ -25,9 +25,10 @@ public:
 	FLOAT near_clip;
 	FLOAT far_clip;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -45,8 +46,6 @@ public:
  */
 inline void tml::graphic::Camera3DDesc::Release(void)
 {
-	tml::graphic::CameraDesc::Release();
-
 	return;
 }
 
@@ -75,7 +74,7 @@ private:
 public:
 	tml::XMPosition3D position;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -104,8 +103,6 @@ public:
  */
 inline void tml::graphic::Camera3D::Release(void)
 {
-	tml::graphic::Camera::Release();
-
 	return;
 }
 

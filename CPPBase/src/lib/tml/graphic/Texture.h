@@ -34,9 +34,10 @@ public:
 	DXGI_FORMAT uasr_format;
 	bool uasr_desc_null_flag;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -56,8 +57,6 @@ public:
  */
 inline void tml::graphic::TextureDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -90,7 +89,7 @@ private:
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
 
-protected:
+private:
 	void Release(void);
 
 public:

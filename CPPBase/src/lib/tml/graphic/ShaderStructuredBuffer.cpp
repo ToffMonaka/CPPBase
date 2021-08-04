@@ -129,6 +129,8 @@ tml::graphic::ShaderStructuredBuffer::ShaderStructuredBuffer() :
  */
 tml::graphic::ShaderStructuredBuffer::~ShaderStructuredBuffer()
 {
+	this->Release();
+
 	return;
 }
 
@@ -156,8 +158,6 @@ void tml::graphic::ShaderStructuredBuffer::Release(void)
 		this->buf_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 
@@ -167,6 +167,8 @@ void tml::graphic::ShaderStructuredBuffer::Release(void)
  */
 void tml::graphic::ShaderStructuredBuffer::Init(void)
 {
+	this->Release();
+
 	this->buf_desc_ = CD3D11_BUFFER_DESC(0U, 0U);
 	this->element_size_ = 0U;
 	this->element_limit_ = 0U;

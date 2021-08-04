@@ -195,8 +195,6 @@ void tml::graphic::Mesh::Release(void)
 		this->vb_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

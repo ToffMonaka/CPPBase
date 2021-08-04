@@ -18,7 +18,7 @@ class HeaderShaderConstantBufferDesc : public tml::graphic::ShaderConstantBuffer
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -36,8 +36,6 @@ public:
  */
 inline void tml::graphic::HeaderShaderConstantBufferDesc::Release(void)
 {
-	tml::graphic::ShaderConstantBufferDesc::Release();
-
 	return;
 }
 
@@ -77,7 +75,7 @@ public:
 		};
 	} ELEMENT;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -99,8 +97,6 @@ public:
  */
 inline void tml::graphic::HeaderShaderConstantBuffer::Release(void)
 {
-	tml::graphic::ShaderConstantBuffer::Release();
-
 	return;
 }
 

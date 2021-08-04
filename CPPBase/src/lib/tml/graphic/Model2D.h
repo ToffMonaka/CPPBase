@@ -23,7 +23,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -50,7 +50,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -120,9 +120,10 @@ public:
 	tml::XMFLOAT2EX scale;
 	tml::XMFLOAT4EX color;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -140,8 +141,6 @@ public:
  */
 inline void tml::graphic::Model2DDesc::Release(void)
 {
-	tml::graphic::ModelDesc::Release();
-
 	return;
 }
 
@@ -204,7 +203,7 @@ public:
 	tml::XMFLOAT2EX scale;
 	tml::XMFLOAT4EX color;
 
-protected:
+private:
 	void Release(void);
 
 public:

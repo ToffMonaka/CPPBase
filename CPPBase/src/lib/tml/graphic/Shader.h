@@ -22,7 +22,7 @@ public: tml::graphic::ShaderInclude &operator =(const tml::graphic::ShaderInclud
 private:
 	std::wstring dir_path_;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -74,9 +74,10 @@ public:
 	std::wstring compute_shader_model_name;
 	std::list<std::pair<std::wstring, std::wstring>> macro_container;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -94,8 +95,6 @@ public:
  */
 inline void tml::graphic::ShaderDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -125,11 +124,10 @@ private:
 	ID3D11ComputeShader *cs_;
 
 private:
+	void Release(void);
+
 	ID3DBlob *GetBlob(const tml::DynamicBuffer &, const WCHAR *, const WCHAR *, const WCHAR *, const D3D10_SHADER_MACRO *);
 	void ReleaseBlob(ID3DBlob **);
-
-protected:
-	void Release(void);
 
 public:
 	Shader();

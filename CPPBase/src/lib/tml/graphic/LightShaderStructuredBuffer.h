@@ -19,7 +19,7 @@ class LightShaderStructuredBufferDesc : public tml::graphic::ShaderStructuredBuf
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,8 +37,6 @@ public:
  */
 inline void tml::graphic::LightShaderStructuredBufferDesc::Release(void)
 {
-	tml::graphic::ShaderStructuredBufferDesc::Release();
-
 	return;
 }
 
@@ -78,7 +76,7 @@ public:
 		};
 	} ELEMENT;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -102,8 +100,6 @@ public:
  */
 inline void tml::graphic::LightShaderStructuredBuffer::Release(void)
 {
-	tml::graphic::ShaderStructuredBuffer::Release();
-
 	return;
 }
 

@@ -117,6 +117,8 @@ tml::graphic::ShaderConstantBuffer::ShaderConstantBuffer() :
  */
 tml::graphic::ShaderConstantBuffer::~ShaderConstantBuffer()
 {
+	this->Release();
+
 	return;
 }
 
@@ -132,8 +134,6 @@ void tml::graphic::ShaderConstantBuffer::Release(void)
 		this->buf_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 
@@ -143,6 +143,8 @@ void tml::graphic::ShaderConstantBuffer::Release(void)
  */
 void tml::graphic::ShaderConstantBuffer::Init(void)
 {
+	this->Release();
+
 	this->buf_desc_ = CD3D11_BUFFER_DESC(0U, 0U);
 	this->element_size_ = 0U;
 	this->cpu_buf_.Init();

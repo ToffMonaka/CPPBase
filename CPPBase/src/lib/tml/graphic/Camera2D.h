@@ -22,9 +22,10 @@ public:
 	tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE projection_type;
 	tml::XMFLOAT2EX fov_size;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -42,8 +43,6 @@ public:
  */
 inline void tml::graphic::Camera2DDesc::Release(void)
 {
-	tml::graphic::CameraDesc::Release();
-
 	return;
 }
 
@@ -69,7 +68,7 @@ private:
 public:
 	tml::XMPosition2D position;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -92,8 +91,6 @@ public:
  */
 inline void tml::graphic::Camera2D::Release(void)
 {
-	tml::graphic::Camera::Release();
-
 	return;
 }
 

@@ -201,9 +201,10 @@ void tml::Manager::Update(void)
 	if (!this->deferred_create_res_cont_.empty()) {
 		auto res_itr = this->deferred_create_res_cont_.begin();
 
-		(*res_itr)->CreateDeferred();
-
-		this->deferred_create_res_cont_.erase(res_itr);
+		if (((*res_itr)->CreateDeferred() < 0)
+		|| (!(*res_itr)->IsDeferredCreating())) {
+			this->deferred_create_res_cont_.erase(res_itr);
+		}
 	}
 
 	if (this->front_event_index_ == this->back_event_index_) {

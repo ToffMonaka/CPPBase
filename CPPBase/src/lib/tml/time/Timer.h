@@ -19,7 +19,7 @@ private:
 	tml::TIME_REAL elapsed_time_;
 	bool started_flg_;
 
-protected:
+private:
 	void Release(void);
 
 public:

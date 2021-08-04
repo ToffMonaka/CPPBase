@@ -33,9 +33,10 @@ public:
 	bool shadow_flag;
 	*/
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
@@ -53,8 +54,6 @@ public:
  */
 inline void tml::graphic::LightDesc::Release(void)
 {
-	tml::graphic::ManagerResourceDesc::Release();
-
 	return;
 }
 
@@ -94,7 +93,7 @@ private:
 public:
 	tml::XMPosition3D position;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -137,8 +136,6 @@ public:
  */
 inline void tml::graphic::Light::Release(void)
 {
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

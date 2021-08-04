@@ -226,8 +226,6 @@ void tml::graphic::Font::Release(void)
 		this->dc_handle_ = nullptr;
 	}
 
-	tml::graphic::ManagerResource::Release();
-
 	return;
 }
 

@@ -19,7 +19,7 @@ class Model2DLayerShaderStructuredBufferDesc : public tml::graphic::ShaderStruct
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,8 +37,6 @@ public:
  */
 inline void tml::graphic::Model2DLayerShaderStructuredBufferDesc::Release(void)
 {
-	tml::graphic::ShaderStructuredBufferDesc::Release();
-
 	return;
 }
 
@@ -78,7 +76,7 @@ public:
 		};
 	} ELEMENT;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -101,8 +99,6 @@ public:
  */
 inline void tml::graphic::Model2DLayerShaderStructuredBuffer::Release(void)
 {
-	tml::graphic::ShaderStructuredBuffer::Release();
-
 	return;
 }
 
