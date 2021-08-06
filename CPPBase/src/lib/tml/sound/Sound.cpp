@@ -107,18 +107,6 @@ void tml::sound::Sound::Release(void)
 {
 	this->ReleaseDeferred();
 
-	if (this->src_ != 0U) {
-		alDeleteSources(1, &this->src_);
-
-		this->src_ = 0U;
-	}
-
-	if (this->buf_ != 0U) {
-		alDeleteBuffers(1, &this->buf_);
-
-		this->buf_ = 0U;
-	}
-
 	return;
 }
 
@@ -130,10 +118,11 @@ void tml::sound::Sound::Init(void)
 {
 	this->Release();
 
-	this->type_ = tml::ConstantUtil::SOUND::SOUND_TYPE::NONE;
 	this->ogg_file_buf_ = nullptr;
 	this->ogg_file_buf_size_ = 0L;
 	this->ogg_file_buf_index_ = 0L;
+
+	this->type_ = tml::ConstantUtil::SOUND::SOUND_TYPE::NONE;
 
 	tml::sound::ManagerResource::Init();
 
@@ -155,7 +144,66 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 
 	this->type_ = static_cast<tml::ConstantUtil::SOUND::SOUND_TYPE>(this->GetResourceSubIndex());
 
-	auto file_read_desc_dat = desc.file_read_desc.GetDataByParent();
+	return (0);
+}
+
+
+/**
+ * @brief ReleaseDeferredä÷êî
+ */
+void tml::sound::Sound::ReleaseDeferred(void)
+{
+	if (this->src_ != 0U) {
+		alDeleteSources(1, &this->src_);
+
+		this->src_ = 0U;
+	}
+
+	if (this->buf_ != 0U) {
+		alDeleteBuffers(1, &this->buf_);
+
+		this->buf_ = 0U;
+	}
+
+	return;
+}
+
+
+/**
+ * @brief InitDeferredä÷êî
+ */
+void tml::sound::Sound::InitDeferred(void)
+{
+	this->ReleaseDeferred();
+
+	this->ogg_file_buf_ = nullptr;
+	this->ogg_file_buf_size_ = 0L;
+	this->ogg_file_buf_index_ = 0L;
+
+	tml::sound::ManagerResource::InitDeferred();
+
+	return;
+}
+
+
+/**
+ * @brief OnCreateDeferredä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::sound::Sound::OnCreateDeferred(void)
+{
+	if (tml::sound::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	auto desc = dynamic_cast<const tml::sound::SoundDesc *>(this->deferred_create_desc_);
+
+	if (desc == nullptr) {
+		return (-1);
+	}
+
+	auto file_read_desc_dat = desc->file_read_desc.GetDataByParent();
 
 	tml::BinaryFile bin_file;
 
@@ -555,43 +603,6 @@ INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
 	alSourcei(this->src_, AL_BUFFER, static_cast<ALint>(this->buf_));
 
 	if (alGetError() != AL_NO_ERROR) {
-		return (-1);
-	}
-
-	return (0);
-}
-
-
-/**
- * @brief ReleaseDeferredä÷êî
- */
-void tml::sound::Sound::ReleaseDeferred(void)
-{
-	return;
-}
-
-
-/**
- * @brief InitDeferredä÷êî
- */
-void tml::sound::Sound::InitDeferred(void)
-{
-	this->ReleaseDeferred();
-
-	tml::sound::ManagerResource::InitDeferred();
-
-	return;
-}
-
-
-/**
- * @brief OnCreateDeferredä÷êî
- * @return result (result)<br>
- * 0ñ¢ñû=é∏îs
- */
-INT tml::sound::Sound::OnCreateDeferred(void)
-{
-	if (tml::sound::ManagerResource::OnCreateDeferred() < 0) {
 		return (-1);
 	}
 

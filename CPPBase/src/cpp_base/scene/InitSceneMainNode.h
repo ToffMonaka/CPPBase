@@ -57,6 +57,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	UINT progress_type_;
+	std::list<tml::shared_ptr<tml::ManagerResource>> deferred_create_res_cont_;
+	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator deferred_create_res_itr_;
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;

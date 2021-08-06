@@ -87,6 +87,9 @@ cpp_base::scene::InitSceneMainNode::InitSceneMainNode() :
 	progress_type_(0U),
 	wait_update_time(0.0)
 {
+	this->deferred_create_res_cont_.clear();
+	this->deferred_create_res_itr_ = this->deferred_create_res_cont_.end();
+
 	return;
 }
 
@@ -119,6 +122,9 @@ void cpp_base::scene::InitSceneMainNode::Init(void)
 	this->Release();
 
 	this->progress_type_ = 0U;
+	this->deferred_create_res_cont_.clear();
+	this->deferred_create_res_itr_ = this->deferred_create_res_cont_.end();
+
 	this->canvas_2d.reset();
 	this->bg_model.reset();
 	this->wait_update_time = tml::TIME_REAL(0.0);
@@ -148,6 +154,11 @@ INT cpp_base::scene::InitSceneMainNode::Create(const cpp_base::scene::InitSceneM
 	}
 
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+	auto sound_mgr = this->GetManager()->GetSoundManager();
+
+	this->deferred_create_res_cont_.push_back(sound_mgr->common2.title_bgm_sound);
+	this->deferred_create_res_cont_.push_back(sound_mgr->common2.select_bgm_sound);
+	this->deferred_create_res_cont_.push_back(sound_mgr->common2.start_se_sound);
 
 	{// BackgroundModel Create
 		tml::graphic::Model2DDesc desc;
@@ -257,6 +268,8 @@ INT cpp_base::scene::InitSceneMainNode::OnStart(void)
 
 	this->progress_type_ = 1U;
 
+	this->deferred_create_res_itr_ = this->deferred_create_res_cont_.begin();
+
 	{// Canvas2D Create
 		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
 			return (-1);
@@ -288,66 +301,31 @@ void cpp_base::scene::InitSceneMainNode::OnUpdate(void)
 
 	switch (this->progress_type_) {
 	case 1U: {
-		{// TitleBGMSound Create
-			tml::sound::BGMSoundDesc desc;
+		if (this->deferred_create_res_itr_ != this->deferred_create_res_cont_.end()) {
+			auto &res = (*this->deferred_create_res_itr_);
 
-			desc.SetManager(sound_mgr);
-			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BGM_SOUND;
+			if (res->IsDeferredCreated()) {
+				++this->deferred_create_res_itr_;
+			} else if (!res->IsDeferredCreating()) {
+				if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+					OutputDebugString(L"Error: Resource Deferred Create\n");
+				}
 
-			if (sound_mgr->GetResource<tml::sound::BGMSound>(sound_mgr->common2.title_bgm_sound, desc) == nullptr) {
 				this->GetManager()->EndScene();
 
 				return;
 			}
 		}
 
-		this->wait_update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
+		if (this->deferred_create_res_itr_ == this->deferred_create_res_cont_.end()) {
+			this->progress_type_ = 2U;
+		}
 
-		this->progress_type_ = 2U;
+		this->wait_update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
 
 		break;
 	}
 	case 2U: {
-		{// SelectBGMSound Create
-			tml::sound::BGMSoundDesc desc;
-
-			desc.SetManager(sound_mgr);
-			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SELECT_BGM_SOUND;
-
-			if (sound_mgr->GetResource<tml::sound::BGMSound>(sound_mgr->common2.select_bgm_sound, desc) == nullptr) {
-				this->GetManager()->EndScene();
-
-				return;
-			}
-		}
-
-		this->wait_update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
-
-		this->progress_type_ = 3U;
-
-		break;
-	}
-	case 3U: {
-		{// StartSESound Create
-			tml::sound::SESoundDesc desc;
-
-			desc.SetManager(sound_mgr);
-			desc.file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::START_SE_SOUND;
-
-			if (sound_mgr->GetResource<tml::sound::SESound>(sound_mgr->common2.start_se_sound, desc) == nullptr) {
-				this->GetManager()->EndScene();
-
-				return;
-			}
-		}
-
-		this->wait_update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
-
-		this->progress_type_ = 4U;
-
-		break;
-	}
-	case 4U: {
 		this->wait_update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
 
 		if (this->wait_update_time.count() >= 3.0) {
@@ -375,7 +353,7 @@ void cpp_base::scene::InitSceneMainNode::OnUpdate(void)
 				}
 			}
 
-			this->progress_type_ = 5U;
+			this->progress_type_ = 3U;
 		}
 
 		break;

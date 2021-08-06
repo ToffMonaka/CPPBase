@@ -120,6 +120,7 @@ void cpp_base::scene::TitleSceneMainNode::Init(void)
 	this->Release();
 
 	this->progress_type_ = 0U;
+
 	this->canvas_2d.reset();
 	this->bg_model.reset();
 	this->bgm_sound.reset();

@@ -89,6 +89,7 @@ protected:
 	tml::unique_ptr<tml::ManagerResourceDesc> deferred_create_desc_unique_p_;
 	const tml::ManagerResourceDesc *deferred_create_desc_;
 	bool deferred_created_flg_;
+	bool deferred_creating_flg_;
 
 private:
 	void Release(void);
@@ -198,7 +199,7 @@ inline bool tml::ManagerResource::IsDeferredCreated(void) const
  */
 inline bool tml::ManagerResource::IsDeferredCreating(void) const
 {
-	return (false);
+	return (this->deferred_creating_flg_);
 }
 
 
