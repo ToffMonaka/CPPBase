@@ -28,7 +28,7 @@ public:
 	tml::shared_ptr<tml::sound::BGMSound> select_bgm_sound;
 	tml::shared_ptr<tml::sound::SESound> start_se_sound;
 
-protected:
+private:
 	void Release(void);
 
 public:

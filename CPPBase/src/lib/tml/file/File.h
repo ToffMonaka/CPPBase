@@ -21,7 +21,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 public:
 	std::wstring file_path;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -66,7 +66,7 @@ public:
 	T data;
 	const T *parent_data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -185,7 +185,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 public:
 	std::wstring file_path;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -230,7 +230,7 @@ public:
 	T data;
 	const T *parent_data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -348,7 +348,7 @@ public: File(const tml::File &) = delete;
 public: tml::File &operator =(const tml::File &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
-protected:
+private:
 	void Release(void);
 
 public:

@@ -32,10 +32,10 @@ private:
 	WNDCLASSEX wnd_class_;
 	ATOM wnd_class_atom_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const HINSTANCE, const WCHAR *, const INT);
 
+protected:
 	virtual INT OnStart(void) = 0;
 	virtual void OnEnd(void) = 0;
 	virtual void OnUpdate(void) = 0;
@@ -50,6 +50,7 @@ public:
 	virtual ~MainThread();
 
 	virtual void Init(void);
+	INT Create(const HINSTANCE, const WCHAR *, const INT);
 
 	HINSTANCE GetInstanceHandle(void) const;
 	HWND GetWindowHandle(void) const;
@@ -65,8 +66,6 @@ public:
  */
 inline void tml::MainThread::Release(void)
 {
-	tml::Thread::Release();
-
 	return;
 }
 

@@ -21,6 +21,8 @@ tml::TimeUtilEngine::TimeUtilEngine()
  */
 tml::TimeUtilEngine::~TimeUtilEngine()
 {
+	this->Release();
+
 	return;
 }
 
@@ -30,6 +32,8 @@ tml::TimeUtilEngine::~TimeUtilEngine()
  */
 void tml::TimeUtilEngine::Init(void)
 {
+	this->Release();
+
 	return;
 }
 

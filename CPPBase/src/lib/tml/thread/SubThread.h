@@ -24,10 +24,10 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	bool com_created_flg_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(void);
 
+protected:
 	virtual INT OnStart(void) = 0;
 	virtual void OnEnd(void) = 0;
 	virtual void OnUpdate(void) = 0;
@@ -40,6 +40,7 @@ public:
 	virtual ~SubThread();
 
 	virtual void Init(void);
+	INT Create(void);
 };
 }
 
@@ -49,7 +50,5 @@ public:
  */
 inline void tml::SubThread::Release(void)
 {
-	tml::Thread::Release();
-
 	return;
 }

@@ -19,7 +19,7 @@ class ConfigFileData
 public:
 	std::map<std::wstring, std::wstring> value_container;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -68,7 +68,7 @@ class ConfigFileReadDescData : public tml::TextFileReadDescData
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -87,8 +87,6 @@ using ConfigFileReadDesc = tml::FileReadDesc<tml::ConfigFileReadDescData>;
  */
 inline void tml::ConfigFileReadDescData::Release(void)
 {
-	tml::TextFileReadDescData::Release();
-
 	return;
 }
 
@@ -101,7 +99,7 @@ class ConfigFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -120,8 +118,6 @@ using ConfigFileWriteDesc = tml::FileWriteDesc<tml::ConfigFileWriteDescData>;
  */
 inline void tml::ConfigFileWriteDescData::Release(void)
 {
-	tml::TextFileWriteDescData::Release();
-
 	return;
 }
 
@@ -141,7 +137,7 @@ public:
 	tml::ConfigFileReadDesc read_desc;
 	tml::ConfigFileWriteDesc write_desc;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -161,7 +157,5 @@ public:
  */
 inline void tml::ConfigFile::Release(void)
 {
-	tml::File::Release();
-
 	return;
 }

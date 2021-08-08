@@ -33,10 +33,10 @@ private:
 	std::atomic<bool> core_created_flg_;
 	tml::MutexThreadLock core_th_lock_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::THREAD::TYPE);
 
+protected:
 	virtual INT OnStart(void) = 0;
 	virtual void OnEnd(void) = 0;
 	virtual void OnUpdate(void) = 0;
@@ -46,6 +46,7 @@ public:
 	virtual ~Thread();
 
 	virtual void Init(void);
+	INT Create(const tml::ConstantUtil::THREAD::TYPE);
 
 	INT Start(void);
 	void End(void);
@@ -62,6 +63,15 @@ public:
 	void DeleteCore(void);
 	void RunCore(void);
 };
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::Thread::Release(void)
+{
+	return;
 }
 
 

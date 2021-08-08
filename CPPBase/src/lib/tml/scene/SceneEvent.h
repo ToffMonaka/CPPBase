@@ -21,7 +21,7 @@ public:
 	tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE type;
 	tml::shared_ptr<tml::scene::Scene> scene;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -53,7 +53,7 @@ class SceneEventDesc : public tml::scene::ManagerEventDesc
 public:
 	tml::scene::SceneEventData data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -71,8 +71,6 @@ public:
  */
 inline void tml::scene::SceneEventDesc::Release(void)
 {
-	tml::scene::ManagerEventDesc::Release();
-
 	return;
 }
 
@@ -98,7 +96,7 @@ private:
 public:
 	tml::scene::SceneEventData data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -119,8 +117,6 @@ public:
  */
 inline void tml::scene::SceneEvent::Release(void)
 {
-	tml::scene::ManagerEvent::Release();
-
 	return;
 }
 

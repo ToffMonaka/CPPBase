@@ -24,7 +24,7 @@ private:
 	size_t ms_use_size_;
 	size_t ms_cnt_head_size_;
 
-protected:
+private:
 	void Release(void);
 
 public:

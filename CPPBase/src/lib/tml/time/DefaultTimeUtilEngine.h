@@ -19,7 +19,7 @@ public: DefaultTimeUtilEngine(const tml::DefaultTimeUtilEngine &) = delete;
 public: tml::DefaultTimeUtilEngine &operator =(const tml::DefaultTimeUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,7 +37,5 @@ public:
  */
 inline void tml::DefaultTimeUtilEngine::Release(void)
 {
-	tml::TimeUtilEngine::Release();
-
 	return;
 }

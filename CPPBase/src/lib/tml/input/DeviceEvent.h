@@ -18,7 +18,7 @@ class DeviceEventDesc : public tml::input::ManagerEventDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -36,8 +36,6 @@ public:
  */
 inline void tml::input::DeviceEventDesc::Release(void)
 {
-	tml::input::ManagerEventDesc::Release();
-
 	return;
 }
 
@@ -61,15 +59,15 @@ public:
 private:
 	tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::input::DeviceEventDesc &);
 
 public:
 	DeviceEvent();
 	virtual ~DeviceEvent();
 
 	virtual void Init(void);
+	INT Create(const tml::input::DeviceEventDesc &);
 
 	tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE GetType(void) const;
 };
@@ -82,8 +80,6 @@ public:
  */
 inline void tml::input::DeviceEvent::Release(void)
 {
-	tml::input::ManagerEvent::Release();
-
 	return;
 }
 

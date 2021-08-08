@@ -21,6 +21,8 @@ tml::RandomUtilEngine::RandomUtilEngine()
  */
 tml::RandomUtilEngine::~RandomUtilEngine()
 {
+	this->Release();
+
 	return;
 }
 
@@ -30,6 +32,8 @@ tml::RandomUtilEngine::~RandomUtilEngine()
  */
 void tml::RandomUtilEngine::Init(void)
 {
+	this->Release();
+
 	return;
 }
 

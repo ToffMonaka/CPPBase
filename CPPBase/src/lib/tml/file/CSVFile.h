@@ -19,7 +19,7 @@ class CSVFileData
 public:
 	std::vector<std::vector<std::wstring>> value_container;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -94,7 +94,7 @@ class CSVFileReadDescData : public tml::TextFileReadDescData
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -113,8 +113,6 @@ using CSVFileReadDesc = tml::FileReadDesc<tml::CSVFileReadDescData>;
  */
 inline void tml::CSVFileReadDescData::Release(void)
 {
-	tml::TextFileReadDescData::Release();
-
 	return;
 }
 
@@ -127,7 +125,7 @@ class CSVFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -146,8 +144,6 @@ using CSVFileWriteDesc = tml::FileWriteDesc<tml::CSVFileWriteDescData>;
  */
 inline void tml::CSVFileWriteDescData::Release(void)
 {
-	tml::TextFileWriteDescData::Release();
-
 	return;
 }
 
@@ -167,7 +163,7 @@ public:
 	tml::CSVFileReadDesc read_desc;
 	tml::CSVFileWriteDesc write_desc;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -187,7 +183,5 @@ public:
  */
 inline void tml::CSVFile::Release(void)
 {
-	tml::File::Release();
-
 	return;
 }

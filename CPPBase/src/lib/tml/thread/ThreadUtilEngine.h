@@ -59,15 +59,15 @@ private:
 	tml::SpinThreadLock stat_th_lock_;
 	tml::MutexThreadLock com_th_lock_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(void);
 
 public:
 	ThreadUtilEngine();
 	virtual ~ThreadUtilEngine();
 
 	virtual void Init(void);
+	INT Create(void);
 
 	tml::Thread *Get(void);
 	INT Start(std::unique_ptr<tml::MainThread> &);

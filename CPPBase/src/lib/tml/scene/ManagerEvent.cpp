@@ -74,6 +74,8 @@ tml::scene::ManagerEvent::ManagerEvent() :
  */
 tml::scene::ManagerEvent::~ManagerEvent()
 {
+	this->Release();
+
 	return;
 }
 
@@ -83,6 +85,8 @@ tml::scene::ManagerEvent::~ManagerEvent()
  */
 void tml::scene::ManagerEvent::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->event_type_ = tml::ConstantUtil::SCENE::EVENT_TYPE::NONE;
 

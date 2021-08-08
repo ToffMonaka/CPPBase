@@ -22,15 +22,15 @@ public: MathUtilEngine(const tml::MathUtilEngine &) = delete;
 public: tml::MathUtilEngine &operator =(const tml::MathUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
-protected:
+private:
 	void Release(void);
-	INT Create(void);
 
 public:
 	MathUtilEngine();
 	virtual ~MathUtilEngine();
 
 	virtual void Init(void);
+	INT Create(void);
 };
 }
 

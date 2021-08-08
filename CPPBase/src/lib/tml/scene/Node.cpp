@@ -174,6 +174,8 @@ INT tml::scene::Node::Start(void)
 
 	if (!this->started_flg_) {
 		if (this->OnStart() < 0) {
+			this->OnEnd();
+
 			return (-1);
 		}
 

@@ -22,15 +22,15 @@ public: RandomUtilEngine(const tml::RandomUtilEngine &) = delete;
 public: tml::RandomUtilEngine &operator =(const tml::RandomUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
-protected:
+private:
 	void Release(void);
-	INT Create(void);
 
 public:
 	RandomUtilEngine();
 	virtual ~RandomUtilEngine();
 
 	virtual void Init(void);
+	INT Create(void);
 };
 }
 

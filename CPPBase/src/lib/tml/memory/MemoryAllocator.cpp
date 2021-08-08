@@ -22,6 +22,8 @@ tml::MemoryAllocator::MemoryAllocator() :
  */
 tml::MemoryAllocator::~MemoryAllocator()
 {
+	this->Release();
+
 	return;
 }
 
@@ -31,6 +33,8 @@ tml::MemoryAllocator::~MemoryAllocator()
  */
 void tml::MemoryAllocator::Init(void)
 {
+	this->Release();
+
 	this->type_ = tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE;
 
 	return;

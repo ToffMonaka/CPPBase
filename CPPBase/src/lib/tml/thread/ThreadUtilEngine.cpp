@@ -21,6 +21,8 @@ tml::ThreadUtilEngine::ThreadUtilEngine()
  */
 tml::ThreadUtilEngine::~ThreadUtilEngine()
 {
+	this->Release();
+
 	return;
 }
 
@@ -41,6 +43,8 @@ void tml::ThreadUtilEngine::Release(void)
  */
 void tml::ThreadUtilEngine::Init(void)
 {
+	this->Release();
+
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		this->stat_ = tml::ThreadUtilEngine::STATE();
 	}
@@ -272,6 +276,10 @@ void tml::ThreadUtilEngine::EndAll(const bool finish_flg)
 	}
 
 	if (!sub_th_cont.empty()) {
+		for (auto &sub_th : sub_th_cont) {
+			sub_th->DeleteCore();
+		}
+
 		sub_th_cont.clear();
 	}
 
@@ -281,6 +289,8 @@ void tml::ThreadUtilEngine::EndAll(const bool finish_flg)
 
 			this->End(true);
 		}
+
+		main_th->DeleteCore();
 
 		main_th.reset();
 	}

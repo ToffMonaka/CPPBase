@@ -22,15 +22,15 @@ public: TimeUtilEngine(const tml::TimeUtilEngine &) = delete;
 public: tml::TimeUtilEngine &operator =(const tml::TimeUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
-protected:
+private:
 	void Release(void);
-	INT Create(void);
 
 public:
 	TimeUtilEngine();
 	virtual ~TimeUtilEngine();
 
 	virtual void Init(void);
+	INT Create(void);
 };
 }
 

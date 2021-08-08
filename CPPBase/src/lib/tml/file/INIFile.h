@@ -19,7 +19,7 @@ class INIFileData
 public:
 	std::map<std::wstring, std::map<std::wstring, std::wstring>> value_container;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -114,7 +114,7 @@ class INIFileReadDescData : public tml::TextFileReadDescData
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -133,8 +133,6 @@ using INIFileReadDesc = tml::FileReadDesc<tml::INIFileReadDescData>;
  */
 inline void tml::INIFileReadDescData::Release(void)
 {
-	tml::TextFileReadDescData::Release();
-
 	return;
 }
 
@@ -147,7 +145,7 @@ class INIFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -166,8 +164,6 @@ using INIFileWriteDesc = tml::FileWriteDesc<tml::INIFileWriteDescData>;
  */
 inline void tml::INIFileWriteDescData::Release(void)
 {
-	tml::TextFileWriteDescData::Release();
-
 	return;
 }
 
@@ -187,7 +183,7 @@ public:
 	tml::INIFileReadDesc read_desc;
 	tml::INIFileWriteDesc write_desc;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -207,7 +203,5 @@ public:
  */
 inline void tml::INIFile::Release(void)
 {
-	tml::File::Release();
-
 	return;
 }

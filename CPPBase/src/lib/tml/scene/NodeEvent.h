@@ -22,7 +22,7 @@ public:
 	tml::shared_ptr<tml::scene::Node> parent_node;
 	tml::shared_ptr<tml::scene::Node> child_node;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -54,7 +54,7 @@ class NodeEventDesc : public tml::scene::ManagerEventDesc
 public:
 	tml::scene::NodeEventData data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -72,8 +72,6 @@ public:
  */
 inline void tml::scene::NodeEventDesc::Release(void)
 {
-	tml::scene::ManagerEventDesc::Release();
-
 	return;
 }
 
@@ -99,7 +97,7 @@ private:
 public:
 	tml::scene::NodeEventData data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -120,8 +118,6 @@ public:
  */
 inline void tml::scene::NodeEvent::Release(void)
 {
-	tml::scene::ManagerEvent::Release();
-
 	return;
 }
 

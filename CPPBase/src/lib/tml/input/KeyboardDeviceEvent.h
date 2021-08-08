@@ -20,7 +20,7 @@ public:
 	tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE type_flag;
 	tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE code;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -54,7 +54,7 @@ class KeyboardDeviceEventDesc : public tml::input::DeviceEventDesc
 public:
 	tml::input::KeyboardDeviceEventData data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -72,8 +72,6 @@ public:
  */
 inline void tml::input::KeyboardDeviceEventDesc::Release(void)
 {
-	tml::input::DeviceEventDesc::Release();
-
 	return;
 }
 
@@ -97,7 +95,7 @@ private:
 public:
 	tml::input::KeyboardDeviceEventData data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -116,7 +114,5 @@ public:
  */
 inline void tml::input::KeyboardDeviceEvent::Release(void)
 {
-	tml::input::DeviceEvent::Release();
-
 	return;
 }

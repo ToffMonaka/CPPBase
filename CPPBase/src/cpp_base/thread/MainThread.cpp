@@ -44,16 +44,6 @@ cpp_base::MainThread::~MainThread()
  */
 void cpp_base::MainThread::Release(void)
 {
-	this->scene_mgr_.Init();
-	this->sound_mgr_.Init();
-	this->graphic_mgr_.Init();
-	this->input_mgr_.Init();
-
-	this->DeleteWindow_();
-	this->DeleteCOM();
-
-	tml::MainThread::Release();
-
 	return;
 }
 
@@ -242,6 +232,15 @@ INT cpp_base::MainThread::OnStart(void)
  */
 void cpp_base::MainThread::OnEnd(void)
 {
+	this->scene_mgr_.Init();
+	this->sound_mgr_.Init();
+	this->graphic_mgr_.Init();
+	this->input_mgr_.Init();
+
+	this->DeleteWindow_();
+
+	this->DeleteCOM();
+
 	return;
 }
 

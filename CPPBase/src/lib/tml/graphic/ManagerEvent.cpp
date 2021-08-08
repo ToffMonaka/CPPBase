@@ -74,6 +74,8 @@ tml::graphic::ManagerEvent::ManagerEvent() :
  */
 tml::graphic::ManagerEvent::~ManagerEvent()
 {
+	this->Release();
+
 	return;
 }
 
@@ -83,6 +85,8 @@ tml::graphic::ManagerEvent::~ManagerEvent()
  */
 void tml::graphic::ManagerEvent::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->event_type_ = tml::ConstantUtil::GRAPHIC::EVENT_TYPE::NONE;
 

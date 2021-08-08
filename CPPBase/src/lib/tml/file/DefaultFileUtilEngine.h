@@ -19,7 +19,7 @@ public: DefaultFileUtilEngine(const tml::DefaultFileUtilEngine &) = delete;
 public: tml::DefaultFileUtilEngine &operator =(const tml::DefaultFileUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,7 +37,5 @@ public:
  */
 inline void tml::DefaultFileUtilEngine::Release(void)
 {
-	tml::FileUtilEngine::Release();
-
 	return;
 }

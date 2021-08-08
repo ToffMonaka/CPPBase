@@ -56,6 +56,8 @@ tml::input::DeviceEvent::DeviceEvent() :
  */
 tml::input::DeviceEvent::~DeviceEvent()
 {
+	this->Release();
+
 	return;
 }
 
@@ -65,6 +67,8 @@ tml::input::DeviceEvent::~DeviceEvent()
  */
 void tml::input::DeviceEvent::Init(void)
 {
+	this->Release();
+
 	this->type_ = tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::NONE;
 
 	tml::input::ManagerEvent::Init();

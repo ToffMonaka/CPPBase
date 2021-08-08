@@ -21,6 +21,8 @@ tml::StringUtilEngine::StringUtilEngine()
  */
 tml::StringUtilEngine::~StringUtilEngine()
 {
+	this->Release();
+
 	return;
 }
 
@@ -30,6 +32,8 @@ tml::StringUtilEngine::~StringUtilEngine()
  */
 void tml::StringUtilEngine::Init(void)
 {
+	this->Release();
+
 	this->locale_name_.clear();
 
 	return;

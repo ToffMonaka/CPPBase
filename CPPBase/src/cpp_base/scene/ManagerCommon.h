@@ -26,7 +26,7 @@ private:
 public:
 	tml::shared_ptr<cpp_base::scene::DebugNode> debug_node;
 
-protected:
+private:
 	void Release(void);
 
 public:

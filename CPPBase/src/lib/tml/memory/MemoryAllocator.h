@@ -48,15 +48,15 @@ public:
 private:
 	tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE);
 
 public:
 	MemoryAllocator();
 	virtual ~MemoryAllocator();
 
 	virtual void Init(void);
+	INT Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE);
 
 	tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE GetType(void) const;
 	virtual tml::MemoryAllocator::INFO GetInfo(void) const;

@@ -30,10 +30,9 @@ public:
 	tml::ManagerResourceFactory<tml::scene::Node, tml::XMLFileReadDesc> node_by_xml_file;
 
 private:
-	void SetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
-
-protected:
 	void Release(void);
+
+	void SetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
 
 public:
 	ManagerFactory();

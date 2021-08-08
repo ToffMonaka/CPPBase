@@ -19,7 +19,7 @@ class BinaryFileData
 public:
 	tml::DynamicBuffer buffer;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -51,7 +51,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::DynamicBuffer buffer;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -72,8 +72,6 @@ using BinaryFileReadDesc = tml::FileReadDesc<tml::BinaryFileReadDescData>;
  */
 inline void tml::BinaryFileReadDescData::Release(void)
 {
-	tml::FileReadDescData::Release();
-
 	return;
 }
 
@@ -104,7 +102,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	bool add_flag;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -125,8 +123,6 @@ using BinaryFileWriteDesc = tml::FileWriteDesc<tml::BinaryFileWriteDescData>;
  */
 inline void tml::BinaryFileWriteDescData::Release(void)
 {
-	tml::FileWriteDescData::Release();
-
 	return;
 }
 
@@ -157,7 +153,7 @@ public:
 	tml::BinaryFileReadDesc read_desc;
 	tml::BinaryFileWriteDesc write_desc;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -177,7 +173,5 @@ public:
  */
 inline void tml::BinaryFile::Release(void)
 {
-	tml::File::Release();
-
 	return;
 }

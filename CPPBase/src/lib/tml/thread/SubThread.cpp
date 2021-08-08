@@ -23,6 +23,8 @@ tml::SubThread::SubThread() :
  */
 tml::SubThread::~SubThread()
 {
+	this->Release();
+
 	return;
 }
 
@@ -32,6 +34,8 @@ tml::SubThread::~SubThread()
  */
 void tml::SubThread::Init(void)
 {
+	this->Release();
+
 	tml::Thread::Init();
 
 	return;

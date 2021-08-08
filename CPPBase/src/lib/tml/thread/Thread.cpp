@@ -27,16 +27,7 @@ tml::Thread::Thread() :
  */
 tml::Thread::~Thread()
 {
-	return;
-}
-
-
-/**
- * @brief ReleaseŠÖ”
- */
-void tml::Thread::Release(void)
-{
-	this->DeleteCore();
+	this->Release();
 
 	return;
 }
@@ -47,6 +38,8 @@ void tml::Thread::Release(void)
  */
 void tml::Thread::Init(void)
 {
+	this->Release();
+
 	this->type_ = tml::ConstantUtil::THREAD::TYPE::NONE;
 	this->run_flg_ = false;
 	this->start_flg_ = false;
@@ -88,6 +81,8 @@ INT tml::Thread::Start(void)
 
 	if (!this->started_flg_) {
 		if (this->OnStart() < 0) {
+			this->OnEnd();
+
 			return (-1);
 		}
 

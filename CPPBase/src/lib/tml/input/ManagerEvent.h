@@ -22,7 +22,7 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -43,8 +43,6 @@ public:
  */
 inline void tml::input::ManagerEventDesc::Release(void)
 {
-	tml::ManagerEventDesc::Release();
-
 	return;
 }
 
@@ -76,15 +74,15 @@ private:
 	tml::input::Manager *mgr_;
 	tml::ConstantUtil::INPUT::EVENT_TYPE event_type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::input::ManagerEventDesc &);
 
 public:
 	ManagerEvent();
 	virtual ~ManagerEvent();
 
 	virtual void Init(void);
+	INT Create(const tml::input::ManagerEventDesc &);
 
 	tml::input::Manager *GetManager(void);
 	tml::ConstantUtil::INPUT::EVENT_TYPE GetEventType(void) const;
@@ -98,8 +96,6 @@ public:
  */
 inline void tml::input::ManagerEvent::Release(void)
 {
-	tml::ManagerEvent::Release();
-
 	return;
 }
 

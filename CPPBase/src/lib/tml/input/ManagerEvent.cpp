@@ -74,6 +74,8 @@ tml::input::ManagerEvent::ManagerEvent() :
  */
 tml::input::ManagerEvent::~ManagerEvent()
 {
+	this->Release();
+
 	return;
 }
 
@@ -83,6 +85,8 @@ tml::input::ManagerEvent::~ManagerEvent()
  */
 void tml::input::ManagerEvent::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->event_type_ = tml::ConstantUtil::INPUT::EVENT_TYPE::NONE;
 

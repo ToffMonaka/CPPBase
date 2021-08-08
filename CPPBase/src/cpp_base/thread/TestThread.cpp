@@ -33,10 +33,6 @@ cpp_base::TestThread::~TestThread()
  */
 void cpp_base::TestThread::Release(void)
 {
-	this->DeleteCOM();
-
-	tml::SubThread::Release();
-
 	return;
 }
 
@@ -95,6 +91,8 @@ INT cpp_base::TestThread::OnStart(void)
  */
 void cpp_base::TestThread::OnEnd(void)
 {
+	this->DeleteCOM();
+
 	return;
 }
 

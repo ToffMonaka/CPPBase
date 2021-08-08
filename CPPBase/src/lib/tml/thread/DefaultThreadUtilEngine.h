@@ -19,7 +19,7 @@ public: DefaultThreadUtilEngine(const tml::DefaultThreadUtilEngine &) = delete;
 public: tml::DefaultThreadUtilEngine &operator =(const tml::DefaultThreadUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,7 +37,5 @@ public:
  */
 inline void tml::DefaultThreadUtilEngine::Release(void)
 {
-	tml::ThreadUtilEngine::Release();
-
 	return;
 }

@@ -24,7 +24,7 @@ public:
 	tml::XMINT2EX move_value;
 	tml::XMFLOAT2EX wheel_value;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -58,7 +58,7 @@ class MouseDeviceEventDesc : public tml::input::DeviceEventDesc
 public:
 	tml::input::MouseDeviceEventData data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -76,8 +76,6 @@ public:
  */
 inline void tml::input::MouseDeviceEventDesc::Release(void)
 {
-	tml::input::DeviceEventDesc::Release();
-
 	return;
 }
 
@@ -101,7 +99,7 @@ private:
 public:
 	tml::input::MouseDeviceEventData data;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -120,7 +118,5 @@ public:
  */
 inline void tml::input::MouseDeviceEvent::Release(void)
 {
-	tml::input::DeviceEvent::Release();
-
 	return;
 }

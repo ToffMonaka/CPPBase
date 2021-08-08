@@ -22,15 +22,15 @@ public: FileUtilEngine(const tml::FileUtilEngine &) = delete;
 public: tml::FileUtilEngine &operator =(const tml::FileUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
-protected:
+private:
 	void Release(void);
-	INT Create(void);
 
 public:
 	FileUtilEngine();
 	virtual ~FileUtilEngine();
 
 	virtual void Init(void);
+	INT Create(void);
 };
 }
 

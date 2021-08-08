@@ -21,9 +21,10 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);

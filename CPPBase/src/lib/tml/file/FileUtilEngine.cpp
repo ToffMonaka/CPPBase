@@ -21,6 +21,8 @@ tml::FileUtilEngine::FileUtilEngine()
  */
 tml::FileUtilEngine::~FileUtilEngine()
 {
+	this->Release();
+
 	return;
 }
 
@@ -30,6 +32,8 @@ tml::FileUtilEngine::~FileUtilEngine()
  */
 void tml::FileUtilEngine::Init(void)
 {
+	this->Release();
+
 	return;
 }
 

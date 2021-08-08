@@ -27,7 +27,7 @@ public:
 	tml::shared_ptr<tml::graphic::Texture> bg_tex;
 	tml::shared_ptr<tml::graphic::Texture> empty_bg_tex;
 
-protected:
+private:
 	void Release(void);
 
 public:

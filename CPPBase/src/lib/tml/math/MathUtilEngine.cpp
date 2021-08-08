@@ -21,6 +21,8 @@ tml::MathUtilEngine::MathUtilEngine()
  */
 tml::MathUtilEngine::~MathUtilEngine()
 {
+	this->Release();
+
 	return;
 }
 
@@ -30,6 +32,8 @@ tml::MathUtilEngine::~MathUtilEngine()
  */
 void tml::MathUtilEngine::Init(void)
 {
+	this->Release();
+
 	return;
 }
 

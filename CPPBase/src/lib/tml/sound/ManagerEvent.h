@@ -22,7 +22,7 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -43,8 +43,6 @@ public:
  */
 inline void tml::sound::ManagerEventDesc::Release(void)
 {
-	tml::ManagerEventDesc::Release();
-
 	return;
 }
 
@@ -76,15 +74,15 @@ private:
 	tml::sound::Manager *mgr_;
 	tml::ConstantUtil::SOUND::EVENT_TYPE event_type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::sound::ManagerEventDesc &);
 
 public:
 	ManagerEvent();
 	virtual ~ManagerEvent();
 
 	virtual void Init(void);
+	INT Create(const tml::sound::ManagerEventDesc &);
 
 	tml::sound::Manager *GetManager(void);
 	tml::ConstantUtil::SOUND::EVENT_TYPE GetEventType(void) const;
@@ -98,8 +96,6 @@ public:
  */
 inline void tml::sound::ManagerEvent::Release(void)
 {
-	tml::ManagerEvent::Release();
-
 	return;
 }
 

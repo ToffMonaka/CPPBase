@@ -40,8 +40,6 @@ void tml::NewMemoryAllocator::Release(void)
 		this->ms_use_size_ = 0U;
 	}
 
-	tml::MemoryAllocator::Release();
-
 	return;
 }
 

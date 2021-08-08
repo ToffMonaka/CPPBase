@@ -25,15 +25,15 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	std::string locale_name_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const CHAR *);
 
 public:
 	StringUtilEngine();
 	virtual ~StringUtilEngine();
 
 	virtual void Init(void);
+	INT Create(const CHAR *);
 
 	const std::string &GetLocaleName(void) const;
 };

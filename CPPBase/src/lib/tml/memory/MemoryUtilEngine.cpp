@@ -22,6 +22,8 @@ tml::MemoryUtilEngine::MemoryUtilEngine() :
  */
 tml::MemoryUtilEngine::~MemoryUtilEngine()
 {
+	this->Release();
+
 	return;
 }
 
@@ -46,6 +48,8 @@ void tml::MemoryUtilEngine::Release(void)
  */
 void tml::MemoryUtilEngine::Init(void)
 {
+	this->Release();
+
 	return;
 }
 

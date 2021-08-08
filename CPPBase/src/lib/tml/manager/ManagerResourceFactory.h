@@ -25,7 +25,7 @@ public: tml::ManagerResourceFactory<T, D> &operator =(const tml::ManagerResource
 private:
 	std::unordered_map<std::wstring, std::function<tml::shared_ptr<T>(const D &, INT *)>> func_cont_;
 
-protected:
+private:
 	void Release(void);
 
 public:

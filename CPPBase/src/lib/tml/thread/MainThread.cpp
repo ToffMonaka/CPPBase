@@ -29,6 +29,8 @@ tml::MainThread::MainThread() :
  */
 tml::MainThread::~MainThread()
 {
+	this->Release();
+
 	return;
 }
 
@@ -38,6 +40,8 @@ tml::MainThread::~MainThread()
  */
 void tml::MainThread::Init(void)
 {
+	this->Release();
+
 	this->instance_handle_ = nullptr;
 	this->wnd_name_.clear();
 	this->wnd_show_type_ = 0;

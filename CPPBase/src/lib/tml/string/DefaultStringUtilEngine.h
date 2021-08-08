@@ -19,7 +19,7 @@ public: DefaultStringUtilEngine(const tml::DefaultStringUtilEngine &) = delete;
 public: tml::DefaultStringUtilEngine &operator =(const tml::DefaultStringUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,7 +37,5 @@ public:
  */
 inline void tml::DefaultStringUtilEngine::Release(void)
 {
-	tml::StringUtilEngine::Release();
-
 	return;
 }

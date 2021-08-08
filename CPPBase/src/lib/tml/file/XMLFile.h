@@ -29,7 +29,7 @@ public:
 	std::map<std::wstring, std::wstring> value_container;
 	std::wstring string;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -102,10 +102,9 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
-private:
 	void SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFileDataNode> &, const rapidxml::xml_node<> *);
 
 public:
@@ -138,7 +137,7 @@ class XMLFileReadDescData : public tml::TextFileReadDescData
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -157,8 +156,6 @@ using XMLFileReadDesc = tml::FileReadDesc<tml::XMLFileReadDescData>;
  */
 inline void tml::XMLFileReadDescData::Release(void)
 {
-	tml::TextFileReadDescData::Release();
-
 	return;
 }
 
@@ -171,7 +168,7 @@ class XMLFileWriteDescData : public tml::TextFileWriteDescData
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -190,8 +187,6 @@ using XMLFileWriteDesc = tml::FileWriteDesc<tml::XMLFileWriteDescData>;
  */
 inline void tml::XMLFileWriteDescData::Release(void)
 {
-	tml::TextFileWriteDescData::Release();
-
 	return;
 }
 
@@ -214,7 +209,7 @@ public:
 private:
 	void WriteRecursivePart(tml::TextFile &, const tml::shared_ptr<tml::XMLFileDataNode> &, const size_t);
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -234,7 +229,5 @@ public:
  */
 inline void tml::XMLFile::Release(void)
 {
-	tml::File::Release();
-
 	return;
 }

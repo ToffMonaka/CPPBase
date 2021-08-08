@@ -25,7 +25,7 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:

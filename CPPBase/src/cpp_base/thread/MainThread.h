@@ -34,9 +34,10 @@ private:
 private:
 	static LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);

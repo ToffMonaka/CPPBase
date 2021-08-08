@@ -51,7 +51,7 @@ public:
 	tml::shared_ptr<tml::graphic::Sampler> wc_sampler;
 	tml::shared_ptr<tml::graphic::Sampler> ww_sampler;
 
-protected:
+private:
 	void Release(void);
 
 public:

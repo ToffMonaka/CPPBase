@@ -74,6 +74,8 @@ tml::sound::ManagerEvent::ManagerEvent() :
  */
 tml::sound::ManagerEvent::~ManagerEvent()
 {
+	this->Release();
+
 	return;
 }
 
@@ -83,6 +85,8 @@ tml::sound::ManagerEvent::~ManagerEvent()
  */
 void tml::sound::ManagerEvent::Init(void)
 {
+	this->Release();
+
 	this->mgr_ = nullptr;
 	this->event_type_ = tml::ConstantUtil::SOUND::EVENT_TYPE::NONE;
 

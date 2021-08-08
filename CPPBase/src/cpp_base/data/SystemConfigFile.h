@@ -28,7 +28,7 @@ public:
 	FLOAT sound_se_volume;
 	bool sound_se_mute_flag;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -64,7 +64,7 @@ public:
 	tml::INIFileReadDesc read_desc;
 	tml::INIFileWriteDesc write_desc;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -84,7 +84,5 @@ public:
  */
 inline void cpp_base::SystemConfigFile::Release(void)
 {
-	tml::File::Release();
-
 	return;
 }

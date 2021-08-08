@@ -19,7 +19,7 @@ public: DefaultMathUtilEngine(const tml::DefaultMathUtilEngine &) = delete;
 public: tml::DefaultMathUtilEngine &operator =(const tml::DefaultMathUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,7 +37,5 @@ public:
  */
 inline void tml::DefaultMathUtilEngine::Release(void)
 {
-	tml::MathUtilEngine::Release();
-
 	return;
 }

@@ -42,8 +42,6 @@ void tml::DlmallocMemoryAllocator::Release(void)
 		this->ms_use_cnt_ = 0U;
 	}
 
-	tml::MemoryAllocator::Release();
-
 	return;
 }
 

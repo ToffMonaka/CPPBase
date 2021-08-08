@@ -24,7 +24,7 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -75,15 +75,15 @@ private:
 	UINT event_main_index_;
 	UINT event_sub_index_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::ManagerEventDesc &);
 
 public:
 	ManagerEvent();
 	virtual ~ManagerEvent();
 
 	virtual void Init(void);
+	INT Create(const tml::ManagerEventDesc &);
 
 	tml::Manager *GetManager(void);
 	UINT GetEventMainIndex(void) const;

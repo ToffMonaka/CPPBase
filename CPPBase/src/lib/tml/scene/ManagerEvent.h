@@ -22,7 +22,7 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -43,8 +43,6 @@ public:
  */
 inline void tml::scene::ManagerEventDesc::Release(void)
 {
-	tml::ManagerEventDesc::Release();
-
 	return;
 }
 
@@ -76,15 +74,15 @@ private:
 	tml::scene::Manager *mgr_;
 	tml::ConstantUtil::SCENE::EVENT_TYPE event_type_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::scene::ManagerEventDesc &);
 
 public:
 	ManagerEvent();
 	virtual ~ManagerEvent();
 
 	virtual void Init(void);
+	INT Create(const tml::scene::ManagerEventDesc &);
 
 	tml::scene::Manager *GetManager(void);
 	tml::ConstantUtil::SCENE::EVENT_TYPE GetEventType(void) const;
@@ -98,8 +96,6 @@ public:
  */
 inline void tml::scene::ManagerEvent::Release(void)
 {
-	tml::ManagerEvent::Release();
-
 	return;
 }
 

@@ -30,15 +30,15 @@ private:
 	std::unique_ptr<tml::DlmallocMemoryAllocator> dlmalloc_allocator_;
 	tml::SpinThreadLock allocator_th_lock_;
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE, const size_t);
 
 public:
 	MemoryUtilEngine();
 	virtual ~MemoryUtilEngine();
 
 	virtual void Init(void);
+	INT Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE, const size_t);
 
 	template <typename T, typename... ARGS>
 	T *Get(const size_t, ARGS&&...);

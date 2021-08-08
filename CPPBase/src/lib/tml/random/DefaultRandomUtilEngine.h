@@ -19,7 +19,7 @@ public: DefaultRandomUtilEngine(const tml::DefaultRandomUtilEngine &) = delete;
 public: tml::DefaultRandomUtilEngine &operator =(const tml::DefaultRandomUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -37,7 +37,5 @@ public:
  */
 inline void tml::DefaultRandomUtilEngine::Release(void)
 {
-	tml::RandomUtilEngine::Release();
-
 	return;
 }

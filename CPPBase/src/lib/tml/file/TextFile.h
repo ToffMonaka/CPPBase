@@ -20,7 +20,7 @@ class TextFileData
 public:
 	std::list<std::wstring> line_string_container;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -51,7 +51,7 @@ public:
 	std::wstring string;
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -72,8 +72,6 @@ using TextFileReadDesc = tml::FileReadDesc<tml::TextFileReadDescData>;
  */
 inline void tml::TextFileReadDescData::Release(void)
 {
-	tml::BinaryFileReadDescData::Release();
-
 	return;
 }
 
@@ -103,7 +101,7 @@ public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 	size_t add_newline_code_count;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -124,8 +122,6 @@ using TextFileWriteDesc = tml::FileWriteDesc<tml::TextFileWriteDescData>;
  */
 inline void tml::TextFileWriteDescData::Release(void)
 {
-	tml::BinaryFileWriteDescData::Release();
-
 	return;
 }
 
@@ -156,7 +152,7 @@ public:
 	tml::TextFileReadDesc read_desc;
 	tml::TextFileWriteDesc write_desc;
 
-protected:
+private:
 	void Release(void);
 
 public:
@@ -176,7 +172,5 @@ public:
  */
 inline void tml::TextFile::Release(void)
 {
-	tml::File::Release();
-
 	return;
 }

@@ -71,6 +71,8 @@ tml::ManagerEvent::ManagerEvent() :
  */
 tml::ManagerEvent::~ManagerEvent()
 {
+	this->Release();
+
 	return;
 }
 
@@ -80,6 +82,8 @@ tml::ManagerEvent::~ManagerEvent()
  */
 void tml::ManagerEvent::Init(void)
 {
+	this->Release();
+
 	return;
 }
 
