@@ -56,9 +56,10 @@ public:
 	bool vsync_flag;
 	UINT frame_rate_limit;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	void InitResourceCount(void);
 	void InitEventCount(void);
 
@@ -77,8 +78,6 @@ public:
  */
 inline void tml::graphic::ManagerDesc::Release(void)
 {
-	tml::ManagerDesc::Release();
-
 	return;
 }
 
@@ -184,7 +183,7 @@ public:
 	tml::graphic::ManagerFactory factory;
 	tml::graphic::ManagerCommon common;
 
-protected:
+private:
 	void Release(void);
 
 public:

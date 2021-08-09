@@ -101,8 +101,6 @@ void cpp_base::graphic::Manager::Release(void)
 	this->factory2.Init();
 	this->common2.Init();
 
-	tml::graphic::Manager::Release();
-
 	return;
 }
 

@@ -39,11 +39,11 @@ private:
 public:
 
 private:
-	void InitResourceCount(void);
-	void InitEventCount(void);
+	void Release(void);
 
 protected:
-	void Release(void);
+	void InitResourceCount(void);
+	void InitEventCount(void);
 
 public:
 	ManagerDesc();
@@ -67,8 +67,6 @@ public:
  */
 inline void cpp_base::scene::ManagerDesc::Release(void)
 {
-	tml::scene::ManagerDesc::Release();
-
 	return;
 }
 
@@ -123,7 +121,7 @@ public:
 	cpp_base::scene::ManagerFactory factory2;
 	cpp_base::scene::ManagerCommon common2;
 
-protected:
+private:
 	void Release(void);
 
 public:

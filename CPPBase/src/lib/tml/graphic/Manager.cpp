@@ -231,6 +231,7 @@ void tml::graphic::Manager::Release(void)
 	this->common.Init();
 
 	this->DeleteResourceContainer();
+	this->DeleteEventContainer();
 
 	if (this->swap_chain_ != nullptr) {
 		this->swap_chain_->Release();
@@ -261,8 +262,6 @@ void tml::graphic::Manager::Release(void)
 
 		this->factory_ = nullptr;
 	}
-
-	tml::Manager::Release();
 
 	return;
 }

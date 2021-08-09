@@ -101,8 +101,6 @@ void cpp_base::input::Manager::Release(void)
 	this->factory2.Init();
 	this->common2.Init();
 
-	tml::input::Manager::Release();
-
 	return;
 }
 

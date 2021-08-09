@@ -116,6 +116,7 @@ void tml::sound::Manager::Release(void)
 	this->common.Init();
 
 	this->DeleteResourceContainer();
+	this->DeleteEventContainer();
 
 	if (this->device_context_ != nullptr) {
 		alcMakeContextCurrent(nullptr);
@@ -129,8 +130,6 @@ void tml::sound::Manager::Release(void)
 
 		this->device_ = nullptr;
 	}
-
-	tml::Manager::Release();
 
 	return;
 }

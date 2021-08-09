@@ -107,8 +107,7 @@ void tml::input::Manager::Release(void)
 	this->common.Init();
 
 	this->DeleteResourceContainer();
-
-	tml::Manager::Release();
+	this->DeleteEventContainer();
 
 	return;
 }

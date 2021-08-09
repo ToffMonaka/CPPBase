@@ -21,11 +21,11 @@ class ManagerDesc : public tml::graphic::ManagerDesc
 public:
 
 private:
-	void InitResourceCount(void);
-	void InitEventCount(void);
+	void Release(void);
 
 protected:
-	void Release(void);
+	void InitResourceCount(void);
+	void InitEventCount(void);
 
 public:
 	ManagerDesc();
@@ -42,8 +42,6 @@ public:
  */
 inline void cpp_base::graphic::ManagerDesc::Release(void)
 {
-	tml::graphic::ManagerDesc::Release();
-
 	return;
 }
 
@@ -65,7 +63,7 @@ public:
 	cpp_base::graphic::ManagerFactory factory2;
 	cpp_base::graphic::ManagerCommon common2;
 
-protected:
+private:
 	void Release(void);
 
 public:

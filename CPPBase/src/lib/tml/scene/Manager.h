@@ -41,9 +41,10 @@ private:
 
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	void InitResourceCount(void);
 	void InitEventCount(void);
 
@@ -69,8 +70,6 @@ public:
  */
 inline void tml::scene::ManagerDesc::Release(void)
 {
-	tml::ManagerDesc::Release();
-
 	return;
 }
 
@@ -127,7 +126,7 @@ public:
 	tml::scene::ManagerFactory factory;
 	tml::scene::ManagerCommon common;
 
-protected:
+private:
 	void Release(void);
 
 public:

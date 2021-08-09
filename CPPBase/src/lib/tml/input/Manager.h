@@ -21,9 +21,10 @@ class ManagerDesc : public tml::ManagerDesc
 {
 public:
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	void InitResourceCount(void);
 	void InitEventCount(void);
 
@@ -42,8 +43,6 @@ public:
  */
 inline void tml::input::ManagerDesc::Release(void)
 {
-	tml::ManagerDesc::Release();
-
 	return;
 }
 
@@ -68,7 +67,7 @@ public:
 	tml::input::ManagerFactory factory;
 	tml::input::ManagerCommon common;
 
-protected:
+private:
 	void Release(void);
 
 public:

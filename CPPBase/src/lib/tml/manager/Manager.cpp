@@ -94,6 +94,8 @@ tml::Manager::Manager() :
  */
 tml::Manager::~Manager()
 {
+	this->Release();
+
 	return;
 }
 
@@ -115,6 +117,8 @@ void tml::Manager::Release(void)
  */
 void tml::Manager::Init(void)
 {
+	this->Release();
+
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
 	this->friend_res_ = nullptr;

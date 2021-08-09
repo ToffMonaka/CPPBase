@@ -25,9 +25,10 @@ public:
 	std::vector<UINT> resource_count_container;
 	std::vector<UINT> event_count_container;
 
-protected:
+private:
 	void Release(void);
 
+protected:
 	void InitResourceCount(void);
 	void InitEventCount(void);
 
@@ -82,10 +83,10 @@ private:
 	void GetResourceInitResourcePart(tml::shared_ptr<tml::ManagerResource> &);
 	void AddEventInitEventPart(tml::unique_ptr<tml::ManagerEvent> &);
 
-protected:
+private:
 	void Release(void);
-	INT Create(const tml::ManagerDesc &);
 
+protected:
 	INT CreateResourceContainer(const std::vector<UINT> &);
 	void DeleteResourceContainer(void);
 	INT CreateEventContainer(const std::vector<UINT> &);
@@ -96,6 +97,7 @@ public:
 	virtual ~Manager();
 
 	virtual void Init(void);
+	INT Create(const tml::ManagerDesc &);
 
 	void Update(void);
 	HWND GetWindowHandle(void) const;

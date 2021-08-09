@@ -101,8 +101,6 @@ void cpp_base::sound::Manager::Release(void)
 	this->factory2.Init();
 	this->common2.Init();
 
-	tml::sound::Manager::Release();
-
 	return;
 }
 

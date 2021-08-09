@@ -21,11 +21,11 @@ class ManagerDesc : public tml::sound::ManagerDesc
 public:
 
 private:
-	void InitResourceCount(void);
-	void InitEventCount(void);
+	void Release(void);
 
 protected:
-	void Release(void);
+	void InitResourceCount(void);
+	void InitEventCount(void);
 
 public:
 	ManagerDesc();
@@ -42,8 +42,6 @@ public:
  */
 inline void cpp_base::sound::ManagerDesc::Release(void)
 {
-	tml::sound::ManagerDesc::Release();
-
 	return;
 }
 
@@ -65,7 +63,7 @@ public:
 	cpp_base::sound::ManagerFactory factory2;
 	cpp_base::sound::ManagerCommon common2;
 
-protected:
+private:
 	void Release(void);
 
 public:

@@ -168,8 +168,6 @@ void cpp_base::scene::Manager::Release(void)
 	this->factory2.Init();
 	this->common2.Init();
 
-	tml::scene::Manager::Release();
-
 	return;
 }
 

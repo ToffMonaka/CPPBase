@@ -166,8 +166,7 @@ void tml::scene::Manager::Release(void)
 	this->common.Init();
 
 	this->DeleteResourceContainer();
-
-	tml::Manager::Release();
+	this->DeleteEventContainer();
 
 	return;
 }
