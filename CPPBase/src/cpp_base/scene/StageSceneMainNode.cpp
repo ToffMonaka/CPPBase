@@ -10,7 +10,6 @@
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
-#include "Test2DStageNode.h"
 
 
 /**
@@ -137,18 +136,6 @@ INT cpp_base::scene::StageSceneMainNode::Create(const cpp_base::scene::StageScen
 		return (-1);
 	}
 
-	{// StageNode Create
-		tml::shared_ptr<tml::scene::Node> node;
-
-		if (this->GetManager()->factory.node_by_xml_file.Get(node, tml::ConstantUtil::SCENE::CLASS_NAME::NODE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TEST_2D_STAGE_NODE)) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-
-		this->AddChildNode(node);
-	}
-
 	return (0);
 }
 
@@ -188,8 +175,6 @@ void cpp_base::scene::StageSceneMainNode::OnEnd(void)
  */
 void cpp_base::scene::StageSceneMainNode::OnUpdate(void)
 {
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
 	switch (this->progress_type_) {
 	case 1U: {
 		break;

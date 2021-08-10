@@ -324,6 +324,8 @@ void cpp_base::scene::SelectSceneMainNode::OnUpdate(void)
 
 				if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 					if (this->stage_model->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {
+						this->GetManager()->factory_value_container[L"stage_type"] = L"1";
+
 						{// StageScene Start
 							tml::shared_ptr<tml::scene::Scene> scene;
 

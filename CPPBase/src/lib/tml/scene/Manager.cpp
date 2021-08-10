@@ -163,6 +163,7 @@ void tml::scene::Manager::Release(void)
 	}
 
 	this->factory.Init();
+	this->factory_value_container.clear();
 	this->common.Init();
 
 	this->DeleteResourceContainer();
@@ -223,6 +224,8 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 
 		return (-1);
 	}
+
+	this->factory_value_container.insert(std::make_pair(L"stage_type", L"1"));
 
 	if (this->common.Create(this) < 0) {
 		this->Init();

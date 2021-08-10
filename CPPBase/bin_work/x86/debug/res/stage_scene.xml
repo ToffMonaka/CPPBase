@@ -5,6 +5,12 @@
 	<node class_name="StageSceneMainNode">
 		[NODE]
 		NAME=main
+		<if stage_type="1">
+			<node class_name="Test2DStageNode">
+				[NODE]
+				NAME=stage
+			</node>
+		</if>
 	</node>
 	<node res_name="DebugNode">
 	</node>

@@ -224,12 +224,32 @@ INT tml::scene::ManagerFactory::Create(tml::scene::Manager *mgr)
  */
 void tml::scene::ManagerFactory::SetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &parent_node, const tml::shared_ptr<tml::XMLFileDataNode> &xml_file_node)
 {
-	tml::shared_ptr<tml::scene::Node> child_node;
-
 	if (xml_file_node->name != L"node") {
+		if (xml_file_node->name == L"if") {
+			bool result_flg = true;
+
+			for (auto &val : xml_file_node->value_container) {
+				auto factory_val_itr = this->mgr_->factory_value_container.find(val.first);
+
+				if ((factory_val_itr == this->mgr_->factory_value_container.end())
+				|| (factory_val_itr->second != val.second)) {
+					result_flg = false;
+
+					break;
+				}
+			}
+
+			if (result_flg) {
+				for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
+					this->SetNodeRecursivePart(parent_node, xml_file_child_node);
+				}
+			}
+		}
+
 		return;
 	}
 
+	tml::shared_ptr<tml::scene::Node> child_node;
 	auto child_node_class_name = xml_file_node->GetValue(L"class_name");
 	auto child_node_res_name = xml_file_node->GetValue(L"res_name");
 	INT child_node_get_result = -1;

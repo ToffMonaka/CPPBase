@@ -25,7 +25,6 @@ namespace FILE_PATH {
 	const WCHAR TITLE_SCENE[] = L"res/title_scene.xml";
 	const WCHAR SELECT_SCENE[] = L"res/select_scene.xml";
 	const WCHAR STAGE_SCENE[] = L"res/stage_scene.xml";
-	const WCHAR TEST_2D_STAGE_NODE[] = L"res/test_2d_stage_node.xml";
 }
 }
 }

@@ -124,6 +124,7 @@ private:
 
 public:
 	tml::scene::ManagerFactory factory;
+	std::map<std::wstring, std::wstring> factory_value_container;
 	tml::scene::ManagerCommon common;
 
 private:
