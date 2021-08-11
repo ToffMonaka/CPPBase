@@ -15,10 +15,6 @@
 #include "StageScene.h"
 #include "Node.h"
 #include "DebugNode.h"
-#include "InitSceneMainNode.h"
-#include "TitleSceneMainNode.h"
-#include "SelectSceneMainNode.h"
-#include "StageSceneMainNode.h"
 #include "Test2DStageNode.h"
 
 

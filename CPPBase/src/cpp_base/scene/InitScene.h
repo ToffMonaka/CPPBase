@@ -56,11 +56,18 @@ public: cpp_base::scene::InitScene &operator =(const cpp_base::scene::InitScene 
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	UINT progress_type_;
+	std::list<tml::shared_ptr<tml::ManagerResource>> deferred_create_res_cont_;
+	std::list<tml::shared_ptr<tml::ManagerResource>>::iterator deferred_create_res_itr_;
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
 	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
+	tml::shared_ptr<tml::graphic::Model2D> bg_model;
+	tml::TIME_REAL wait_update_time;
+	tml::shared_ptr<tml::graphic::Font> wait_font;
+	tml::shared_ptr<tml::graphic::Model2D> wait_model;
 
 private:
 	void Release(void);

@@ -2,7 +2,7 @@
 <scene class_name="SelectScene">
 	[SCENE]
 	NAME=select
-	<node class_name="SelectSceneMainNode">
+	<node class_name="Node">
 		[NODE]
 		NAME=main
 	</node>

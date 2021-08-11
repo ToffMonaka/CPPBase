@@ -79,7 +79,8 @@ INT cpp_base::scene::StageSceneDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::StageScene::StageScene()
+cpp_base::scene::StageScene::StageScene() :
+	progress_type_(0U)
 {
 	return;
 }
@@ -111,6 +112,8 @@ void cpp_base::scene::StageScene::Release(void)
 void cpp_base::scene::StageScene::Init(void)
 {
 	this->Release();
+
+	this->progress_type_ = 0U;
 
 	this->canvas_2d.reset();
 	this->camera_2d.reset();
@@ -198,6 +201,8 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
  */
 INT cpp_base::scene::StageScene::OnStart(void)
 {
+	this->progress_type_ = 1U;
+
 	return (0);
 }
 
@@ -217,6 +222,12 @@ void cpp_base::scene::StageScene::OnEnd(void)
 void cpp_base::scene::StageScene::OnUpdate(void)
 {
 	auto graphic_mgr = this->GetManager()->GetGraphicManager();
+
+	switch (this->progress_type_) {
+	case 1U: {
+		break;
+	}
+	}
 
 	this->canvas_2d->SetDrawCamera(this->camera_2d.get());
 

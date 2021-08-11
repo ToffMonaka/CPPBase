@@ -2,7 +2,7 @@
 <scene class_name="StageScene">
 	[SCENE]
 	NAME=stage
-	<node class_name="StageSceneMainNode">
+	<node class_name="Node">
 		[NODE]
 		NAME=main
 		<if stage_type="1">

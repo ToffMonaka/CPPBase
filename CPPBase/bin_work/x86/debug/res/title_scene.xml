@@ -2,7 +2,7 @@
 <scene class_name="TitleScene">
 	[SCENE]
 	NAME=title
-	<node class_name="TitleSceneMainNode">
+	<node class_name="Node">
 		[NODE]
 		NAME=main
 	</node>

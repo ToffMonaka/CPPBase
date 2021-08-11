@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantUtil_GRAPHIC.h"
+#include "../constant/ConstantUtil_SOUND.h"
 #include "Scene.h"
 
 
@@ -56,11 +57,20 @@ public: cpp_base::scene::TitleScene &operator =(const cpp_base::scene::TitleScen
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	UINT progress_type_;
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
 	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
+	tml::shared_ptr<tml::graphic::Model2D> bg_model;
+	tml::shared_ptr<tml::sound::BGMSound> bgm_sound;
+	tml::shared_ptr<tml::graphic::Model2D> logo_model;
+	tml::shared_ptr<tml::graphic::Font> start_font;
+	tml::shared_ptr<tml::graphic::Model2D> start_model;
+	tml::shared_ptr<tml::sound::SESound> start_se_sound;
+	tml::shared_ptr<tml::graphic::Font> footer_font;
+	tml::shared_ptr<tml::graphic::Model2D> footer_model;
 
 private:
 	void Release(void);
