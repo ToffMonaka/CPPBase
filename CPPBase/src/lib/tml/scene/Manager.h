@@ -138,6 +138,7 @@ public:
 	INT Create(const tml::scene::ManagerDesc &);
 
 	void Update(void);
+	const std::wstring *GetFactoryValue(const WCHAR *) const;
 
 	tml::input::Manager *GetInputManager(void);
 	tml::graphic::Manager *GetGraphicManager(void);
@@ -149,6 +150,24 @@ public:
 	void EndScene(void);
 };
 }
+}
+
+
+/**
+ * @brief GetFactoryValueä÷êî
+ * @param factory_val_name (factory_value_name)
+ * @return factory_val (factory_value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::scene::Manager::GetFactoryValue(const WCHAR *factory_val_name) const
+{
+	auto factory_val_itr = this->factory_value_container.find(factory_val_name);
+
+	if (factory_val_itr == this->factory_value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&factory_val_itr->second);
 }
 
 

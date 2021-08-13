@@ -229,10 +229,15 @@ void tml::scene::ManagerFactory::SetNodeRecursivePart(const tml::shared_ptr<tml:
 			bool result_flg = true;
 
 			for (auto &val : xml_file_node->value_container) {
-				auto factory_val_itr = this->mgr_->factory_value_container.find(val.first);
+				auto factory_val = this->mgr_->GetFactoryValue(val.first.c_str());
 
-				if ((factory_val_itr == this->mgr_->factory_value_container.end())
-				|| (factory_val_itr->second != val.second)) {
+				if (factory_val == nullptr) {
+					result_flg = false;
+
+					break;
+				}
+
+				if ((*factory_val) != val.second) {
 					result_flg = false;
 
 					break;

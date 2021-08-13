@@ -228,6 +228,7 @@ tml::graphic::Manager::~Manager()
 void tml::graphic::Manager::Release(void)
 {
 	this->factory.Init();
+	this->factory_value_container.clear();
 	this->common.Init();
 
 	this->DeleteResourceContainer();

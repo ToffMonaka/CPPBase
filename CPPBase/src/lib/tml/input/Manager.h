@@ -65,6 +65,7 @@ private:
 
 public:
 	tml::input::ManagerFactory factory;
+	std::map<std::wstring, std::wstring> factory_value_container;
 	tml::input::ManagerCommon common;
 
 private:
@@ -78,6 +79,7 @@ public:
 	INT Create(const tml::input::ManagerDesc &);
 
 	void Update(void);
+	const std::wstring *GetFactoryValue(const WCHAR *) const;
 
 	const tml::XMINT2EX &GetMouseDevicePosition(void) const;
 	const tml::XMINT2EX &GetMouseDevicePosition(const bool);
@@ -95,6 +97,24 @@ public:
 	INT AddKeyboardDeviceRawInput(const RAWKEYBOARD &);
 };
 }
+}
+
+
+/**
+ * @brief GetFactoryValueä÷êî
+ * @param factory_val_name (factory_value_name)
+ * @return factory_val (factory_value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::input::Manager::GetFactoryValue(const WCHAR *factory_val_name) const
+{
+	auto factory_val_itr = this->factory_value_container.find(factory_val_name);
+
+	if (factory_val_itr == this->factory_value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&factory_val_itr->second);
 }
 
 

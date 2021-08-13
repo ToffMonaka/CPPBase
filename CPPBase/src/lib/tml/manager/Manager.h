@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include <list>
+#include <map>
 #include <unordered_map>
 #include "ManagerResource.h"
 #include "ManagerEvent.h"

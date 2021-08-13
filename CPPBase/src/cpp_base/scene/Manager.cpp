@@ -213,6 +213,8 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 	this->graphic_mgr_ = desc.GetGraphicManager();
 	this->sound_mgr_ = desc.GetSoundManager();
 
+	this->factory_value_container.insert(std::make_pair(L"stage_type", L"1"));
+
 	if (this->factory2.Create(this) < 0) {
 		this->Init();
 

@@ -120,6 +120,7 @@ private:
 
 public:
 	tml::sound::ManagerFactory factory;
+	std::map<std::wstring, std::wstring> factory_value_container;
 	tml::sound::ManagerCommon common;
 
 private:
@@ -133,6 +134,7 @@ public:
 	INT Create(const tml::sound::ManagerDesc &);
 
 	void Update(void);
+	const std::wstring *GetFactoryValue(const WCHAR *) const;
 
 	ALCdevice *GetDevice(void);
 	ALCcontext *GetDeviceContext(void);
@@ -146,6 +148,24 @@ public:
 	void PauseSound(tml::sound::Sound *);
 };
 }
+}
+
+
+/**
+ * @brief GetFactoryValueä÷êî
+ * @param factory_val_name (factory_value_name)
+ * @return factory_val (factory_value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::sound::Manager::GetFactoryValue(const WCHAR *factory_val_name) const
+{
+	auto factory_val_itr = this->factory_value_container.find(factory_val_name);
+
+	if (factory_val_itr == this->factory_value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&factory_val_itr->second);
 }
 
 

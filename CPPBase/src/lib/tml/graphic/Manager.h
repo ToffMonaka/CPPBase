@@ -181,6 +181,7 @@ private:
 
 public:
 	tml::graphic::ManagerFactory factory;
+	std::map<std::wstring, std::wstring> factory_value_container;
 	tml::graphic::ManagerCommon common;
 
 private:
@@ -194,6 +195,7 @@ public:
 	INT Create(const tml::graphic::ManagerDesc &);
 
 	void Update(void);
+	const std::wstring *GetFactoryValue(const WCHAR *) const;
 
 	IDXGIFactory1 *GetFactory(void);
 	IDXGIAdapter1 *GetAdapter(void);
@@ -287,6 +289,24 @@ public:
 	void ClearComputeSamplerSR(const UINT, const UINT);
 };
 }
+}
+
+
+/**
+ * @brief GetFactoryValueä÷êî
+ * @param factory_val_name (factory_value_name)
+ * @return factory_val (factory_value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::graphic::Manager::GetFactoryValue(const WCHAR *factory_val_name) const
+{
+	auto factory_val_itr = this->factory_value_container.find(factory_val_name);
+
+	if (factory_val_itr == this->factory_value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&factory_val_itr->second);
 }
 
 

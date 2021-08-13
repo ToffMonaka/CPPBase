@@ -104,6 +104,7 @@ tml::input::Manager::~Manager()
 void tml::input::Manager::Release(void)
 {
 	this->factory.Init();
+	this->factory_value_container.clear();
 	this->common.Init();
 
 	this->DeleteResourceContainer();
