@@ -140,15 +140,13 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 		return (-1);
 	}
 
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
 	{// GroundModel Create
 		tml::graphic::Model2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
-		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+		desc.SetManager(this->GetGraphicManager());
+		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
-		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->ground_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->ground_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -164,11 +162,11 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 
 			tml::graphic::TextureDesc desc;
 
-			desc.SetManager(graphic_mgr);
+			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_TEXTURE;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -181,10 +179,10 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 	{// PlayerModel Create
 		tml::graphic::Model2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -128.0f));
 
-		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->pl_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->pl_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -200,11 +198,11 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 
 			tml::graphic::TextureDesc desc;
 
-			desc.SetManager(graphic_mgr);
+			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::PLAYER_2D_TEXTURE;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -227,10 +225,8 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
  */
 INT cpp_base::scene::Test2DStageNode::OnStart(void)
 {
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
 	{// Canvas2D Create
-		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
 			return (-1);
 		}
 	}
@@ -253,18 +249,15 @@ void cpp_base::scene::Test2DStageNode::OnEnd(void)
  */
 void cpp_base::scene::Test2DStageNode::OnUpdate(void)
 {
-	auto input_mgr = this->GetManager()->GetInputManager();
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
-	if (input_mgr->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W)) {
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W)) {
 		this->pl_model->position.SetY(this->pl_model->position.GetY() + 2.0f);
-	} else if (input_mgr->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S)) {
+	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S)) {
 		this->pl_model->position.SetY(this->pl_model->position.GetY() - 2.0f);
 	}
 
-	if (input_mgr->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A)) {
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A)) {
 		this->pl_model->position.SetX(this->pl_model->position.GetX() - 2.0f);
-	} else if (input_mgr->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D)) {
+	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D)) {
 		this->pl_model->position.SetX(this->pl_model->position.GetX() + 2.0f);
 	}
 

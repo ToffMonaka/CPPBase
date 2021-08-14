@@ -10,8 +10,6 @@
 #include "../manager/Manager.h"
 #include "ManagerFactory.h"
 #include "ManagerCommon.h"
-#include "Scene.h"
-#include "Node.h"
 
 
 namespace tml {

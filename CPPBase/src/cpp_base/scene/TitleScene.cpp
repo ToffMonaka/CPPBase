@@ -157,33 +157,30 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		return (-1);
 	}
 
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-	auto sound_mgr = this->GetManager()->GetSoundManager();
-
 	{// Canvas2D Create
 		tml::graphic::Canvas2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.resource_name = L"Canvas2D";
 
-		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		this->canvas_2d->SetRenderTargetTexture(graphic_mgr->common.main_render_target_texture);
+		this->canvas_2d->SetRenderTargetTexture(this->GetGraphicManager()->common.main_render_target_texture);
 		this->canvas_2d->SetRenderTargetTextureClearFlag(true);
 	}
 
 	{// Camera2D Create
 		tml::graphic::Camera2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::ORTHOGRAPHIC;
-		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
-		if (graphic_mgr->GetResource<tml::graphic::Camera2D>(this->camera_2d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -193,14 +190,14 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// Camera3D Create
 		tml::graphic::Camera3DDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::PERSPECTIVE;
-		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
 		desc.near_clip = 0.1f;
 		desc.far_clip = 1000.0f;
 
-		if (graphic_mgr->GetResource<tml::graphic::Camera3D>(this->camera_3d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -210,10 +207,10 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// BackgroundModel Create
 		tml::graphic::Model2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
-		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(graphic_mgr->GetSize().x), static_cast<FLOAT>(graphic_mgr->GetSize().y));
+		desc.SetManager(this->GetGraphicManager());
+		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
-		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->bg_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->bg_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -229,11 +226,11 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			tml::graphic::TextureDesc desc;
 
-			desc.SetManager(graphic_mgr);
+			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BACKGROUND_TEXTURE;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -244,7 +241,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	}
 
 	{// BGMSound Create
-		if (sound_mgr->GetResource<tml::sound::BGMSound>(this->bgm_sound, sound_mgr->common2.title_bgm_sound) == nullptr) {
+		if (this->GetSoundManager()->GetResource<tml::sound::BGMSound>(this->bgm_sound, this->GetSoundManager()->common2.title_bgm_sound) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -254,10 +251,10 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// LogoModel Create
 		tml::graphic::Model2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
 
-		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->logo_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->logo_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -273,11 +270,11 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			tml::graphic::TextureDesc desc;
 
-			desc.SetManager(graphic_mgr);
+			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
 			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_LOGO_TEXTURE;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -295,10 +292,10 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// StartFont Create
 		tml::graphic::FontDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.SetFontDesc(start_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-		if (graphic_mgr->GetResource<tml::graphic::Font>(this->start_font, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->start_font, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -308,11 +305,11 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// StartModel Create
 		tml::graphic::Model2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -192.0f));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->start_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->start_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -328,11 +325,11 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			tml::graphic::TextureDesc desc;
 
-			desc.SetManager(graphic_mgr);
+			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, start_model_size);
 			desc.cpu_buffer_flag = true;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -353,7 +350,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	}
 
 	{// StartSESound Create
-		if (sound_mgr->GetResource<tml::sound::SESound>(this->start_se_sound, sound_mgr->common2.start_se_sound) == nullptr) {
+		if (this->GetSoundManager()->GetResource<tml::sound::SESound>(this->start_se_sound, this->GetSoundManager()->common2.start_se_sound) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -361,15 +358,15 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	}
 
 	tml::XMUINT2EX footer_font_size = tml::XMUINT2EX(0U, 16U);
-	tml::XMUINT2EX footer_model_size = tml::XMUINT2EX(graphic_mgr->GetSize().x, 24U);
+	tml::XMUINT2EX footer_model_size = tml::XMUINT2EX(this->GetGraphicManager()->GetSize().x, 24U);
 
 	{// FooterFont Create
 		tml::graphic::FontDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.SetFontDesc(footer_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-		if (graphic_mgr->GetResource<tml::graphic::Font>(this->footer_font, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->footer_font, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -379,11 +376,11 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 	{// FooterModel Create
 		tml::graphic::Model2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
-		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(graphic_mgr->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_model_size.y >> 1)));
+		desc.SetManager(this->GetGraphicManager());
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(this->GetGraphicManager()->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_model_size.y >> 1)));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->footer_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->footer_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -399,11 +396,11 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			tml::graphic::TextureDesc desc;
 
-			desc.SetManager(graphic_mgr);
+			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, footer_model_size);
 			desc.cpu_buffer_flag = true;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -444,11 +441,9 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
  */
 INT cpp_base::scene::TitleScene::OnStart(void)
 {
-	auto sound_mgr = this->GetManager()->GetSoundManager();
-
 	this->progress_type_ = 1U;
 
-	sound_mgr->PlaySound(this->bgm_sound.get(), true);
+	this->GetSoundManager()->PlaySound(this->bgm_sound.get(), true);
 
 	return (0);
 }
@@ -459,9 +454,7 @@ INT cpp_base::scene::TitleScene::OnStart(void)
  */
 void cpp_base::scene::TitleScene::OnEnd(void)
 {
-	auto sound_mgr = this->GetManager()->GetSoundManager();
-
-	sound_mgr->StopSound(this->bgm_sound.get());
+	this->GetSoundManager()->StopSound(this->bgm_sound.get());
 
 	return;
 }
@@ -472,21 +465,17 @@ void cpp_base::scene::TitleScene::OnEnd(void)
  */
 void cpp_base::scene::TitleScene::OnUpdate(void)
 {
-	auto input_mgr = this->GetManager()->GetInputManager();
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-	auto sound_mgr = this->GetManager()->GetSoundManager();
-
 	switch (this->progress_type_) {
 	case 1U: {
-		for (UINT event_i = 0U; event_i < input_mgr->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
-			auto event = reinterpret_cast<tml::input::DeviceEvent *>(input_mgr->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
+		for (UINT event_i = 0U; event_i < this->GetInputManager()->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
+			auto event = reinterpret_cast<tml::input::DeviceEvent *>(this->GetInputManager()->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
 
 			switch (event->GetEventSubIndex()) {
 			case tml::input::MouseDeviceEvent::EVENT_SUB_INDEX: {
 				auto &event_dat = reinterpret_cast<tml::input::MouseDeviceEvent *>(event)->data;
 
 				if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
-					if (this->start_model->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {
+					if (this->start_model->IsHitByMouseDevice(this->GetInputManager()->GetMouseDevicePosition())) {
 						{// SelectScene Start
 							tml::shared_ptr<tml::scene::Scene> scene;
 
@@ -511,7 +500,7 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 							}
 						}
 
-						sound_mgr->PlaySound(this->start_se_sound.get(), false);
+						this->GetSoundManager()->PlaySound(this->start_se_sound.get(), false);
 
 						this->progress_type_ = 2U;
 					}
@@ -529,7 +518,7 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 	}
 	}
 
-	if (this->start_model->IsHitByMouseDevice(input_mgr->GetMouseDevicePosition())) {
+	if (this->start_model->IsHitByMouseDevice(this->GetInputManager()->GetMouseDevicePosition())) {
 		this->start_model->scale = tml::XMFLOAT2EX(1.2f, 1.2f);
 		this->start_model->color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), 1.0f);
 	} else {
@@ -543,7 +532,7 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 	this->canvas_2d->SetDrawModel(this->start_model.get());
 	this->canvas_2d->SetDrawModel(this->footer_model.get());
 
-	graphic_mgr->SetDrawCanvas(this->canvas_2d.get());
+	this->GetGraphicManager()->SetDrawCanvas(this->canvas_2d.get());
 
 	return;
 }

@@ -17,6 +17,7 @@
 #include "../constant/ConstantUtil_WINDOW.h"
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
+#include "../scene/InitScene.h"
 
 
 /**

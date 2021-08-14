@@ -6,8 +6,20 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMathPosition.h"
 #include "ManagerResource.h"
+
+
+namespace tml {
+namespace input {
+class Manager;
+}
+namespace graphic {
+class Manager;
+}
+namespace sound {
+class Manager;
+}
+}
 
 
 namespace tml {
@@ -61,6 +73,9 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_TYPE::BASE);
 
 private:
+	tml::input::Manager *input_mgr_;
+	tml::graphic::Manager *graphic_mgr_;
+	tml::sound::Manager *sound_mgr_;
 	std::wstring name_;
 	tml::ConstantUtil::SCENE::SCENE_TYPE type_;
 	bool run_flg_;
@@ -87,6 +102,9 @@ public:
 	void End(void);
 	void Update(void);
 
+	tml::input::Manager *GetInputManager(void);
+	tml::graphic::Manager *GetGraphicManager(void);
+	tml::sound::Manager *GetSoundManager(void);
 	const std::wstring &GetName(void) const;
 	void SetName(const WCHAR *);
 	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
@@ -99,6 +117,36 @@ public:
 	void SetRootNode(void);
 };
 }
+}
+
+
+/**
+ * @brief GetInputManagerŠÖ”
+ * @return input_mgr (input_manager)
+ */
+inline tml::input::Manager *tml::scene::Scene::GetInputManager(void)
+{
+	return (this->input_mgr_);
+}
+
+
+/**
+ * @brief GetGraphicManagerŠÖ”
+ * @return graphic_mgr (graphic_manager)
+ */
+inline tml::graphic::Manager *tml::scene::Scene::GetGraphicManager(void)
+{
+	return (this->graphic_mgr_);
+}
+
+
+/**
+ * @brief GetSoundManagerŠÖ”
+ * @return sound_mgr (sound_manager)
+ */
+inline tml::sound::Manager *tml::scene::Scene::GetSoundManager(void)
+{
+	return (this->sound_mgr_);
 }
 
 

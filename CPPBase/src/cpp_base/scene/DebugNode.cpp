@@ -140,20 +140,18 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 		return (-1);
 	}
 
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
 	this->update_time = tml::TIME_REAL(1.0);
 
 	tml::XMUINT2EX font_size = tml::XMUINT2EX(0U, 16U);
-	tml::XMUINT2EX model_size = graphic_mgr->GetSize();
+	tml::XMUINT2EX model_size = this->GetGraphicManager()->GetSize();
 
 	{// Font Create
 		tml::graphic::FontDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.SetFontDesc(font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-		if (graphic_mgr->GetResource<tml::graphic::Font>(this->font, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->font, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -163,10 +161,10 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 	{// Model Create
 		tml::graphic::Model2DDesc desc;
 
-		desc.SetManager(graphic_mgr);
+		desc.SetManager(this->GetGraphicManager());
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (graphic_mgr->GetResource<tml::graphic::Model2D>(this->model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -182,11 +180,11 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 
 			tml::graphic::TextureDesc desc;
 
-			desc.SetManager(graphic_mgr);
+			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, model_size);
 			desc.cpu_buffer_flag = true;
 
-			if (graphic_mgr->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -209,10 +207,8 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
  */
 INT cpp_base::scene::DebugNode::OnStart(void)
 {
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
 	{// Canvas2D Create
-		if (graphic_mgr->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
 			return (-1);
 		}
 	}
@@ -235,8 +231,6 @@ void cpp_base::scene::DebugNode::OnEnd(void)
  */
 void cpp_base::scene::DebugNode::OnUpdate(void)
 {
-	auto graphic_mgr = this->GetManager()->GetGraphicManager();
-
 	this->update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
 
 	if (this->update_time.count() >= 1.0) {

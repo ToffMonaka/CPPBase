@@ -5,6 +5,9 @@
 
 
 #include "Scene.h"
+#include "../input/Manager.h"
+#include "../graphic/Manager.h"
+#include "../sound/Manager.h"
 #include "Manager.h"
 #include "Node.h"
 
@@ -79,6 +82,9 @@ INT tml::scene::SceneDesc::ReadValue(const tml::INIFile &ini_file)
  * @brief コンストラクタ
  */
 tml::scene::Scene::Scene() :
+	input_mgr_(nullptr),
+	graphic_mgr_(nullptr),
+	sound_mgr_(nullptr),
 	type_(tml::ConstantUtil::SCENE::SCENE_TYPE::NONE),
 	run_flg_(false),
 	start_flg_(false),
@@ -122,6 +128,9 @@ void tml::scene::Scene::Init(void)
 {
 	this->Release();
 
+	this->input_mgr_ = nullptr;
+	this->graphic_mgr_ = nullptr;
+	this->sound_mgr_ = nullptr;
 	this->name_.clear();
 	this->type_ = tml::ConstantUtil::SCENE::SCENE_TYPE::NONE;
 	this->run_flg_ = false;
@@ -150,6 +159,9 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc)
 		return (-1);
 	}
 
+	this->input_mgr_ = desc.GetManager()->GetInputManager();
+	this->graphic_mgr_ = desc.GetManager()->GetGraphicManager();
+	this->sound_mgr_ = desc.GetManager()->GetSoundManager();
 	this->name_ = desc.name;
 	this->type_ = static_cast<tml::ConstantUtil::SCENE::SCENE_TYPE>(this->GetResourceSubIndex());
 	this->start_flg_ = true;

@@ -5,6 +5,9 @@
 
 
 #include "Scene.h"
+#include "../input/Manager.h"
+#include "../graphic/Manager.h"
+#include "../sound/Manager.h"
 #include "Manager.h"
 
 
@@ -90,7 +93,10 @@ void cpp_base::scene::SceneDesc::SetManager(cpp_base::scene::Manager *mgr)
  * @brief コンストラクタ
  */
 cpp_base::scene::Scene::Scene() :
-	mgr_(nullptr)
+	mgr_(nullptr),
+	input_mgr_(nullptr),
+	graphic_mgr_(nullptr),
+	sound_mgr_(nullptr)
 {
 	return;
 }
@@ -124,6 +130,9 @@ void cpp_base::scene::Scene::Init(void)
 	this->Release();
 
 	this->mgr_ = nullptr;
+	this->input_mgr_ = nullptr;
+	this->graphic_mgr_ = nullptr;
+	this->sound_mgr_ = nullptr;
 
 	tml::scene::Scene::Init();
 
@@ -154,6 +163,9 @@ INT cpp_base::scene::Scene::Create(const cpp_base::scene::SceneDesc &desc)
 	}
 
 	this->mgr_ = desc.GetManager();
+	this->input_mgr_ = desc.GetManager()->GetInputManager();
+	this->graphic_mgr_ = desc.GetManager()->GetGraphicManager();
+	this->sound_mgr_ = desc.GetManager()->GetSoundManager();
 
 	return (0);
 }
