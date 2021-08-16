@@ -6,9 +6,7 @@
 		[NODE]
 		NAME=main
 		<if stage_type="1">
-			<node class_name="Test2DStageNode">
-				[NODE]
-				NAME=stage
+			<node class_name="Node" xml_file_path="res/test_2d_stage_node.xml">
 			</node>
 		</if>
 	</node>

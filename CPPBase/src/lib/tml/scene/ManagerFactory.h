@@ -32,7 +32,9 @@ public:
 private:
 	void Release(void);
 
-	void SetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
+	tml::shared_ptr<tml::scene::Scene> &GetScenePart(tml::shared_ptr<tml::scene::Scene> &, const tml::shared_ptr<tml::XMLFileDataNode> &, INT *dst_result = nullptr);
+	tml::shared_ptr<tml::scene::Node> &GetNodePart(tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &, INT *dst_result = nullptr);
+	void GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
 
 public:
 	ManagerFactory();
