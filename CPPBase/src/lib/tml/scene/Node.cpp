@@ -318,6 +318,31 @@ void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
 
 
 /**
+ * @brief GetChildNodeRecursivePartä÷êî
+ * @param dst_child_node (dst_child_node)
+ * @param child_node_cont (child_node_container)
+ * @param child_node_name (child_node_name)
+ * @return dst_child_node (dst_child_node)
+ */
+const tml::shared_ptr<tml::scene::Node> &tml::scene::Node::GetChildNodeRecursivePart(tml::shared_ptr<tml::scene::Node> &dst_child_node, const std::list<tml::shared_ptr<tml::scene::Node>> &child_node_cont, const WCHAR *child_node_name)
+{
+	for (auto &child_node : child_node_cont) {
+		if (child_node->GetName() == child_node_name) {
+			dst_child_node = child_node;
+
+			break;
+		}
+
+		if (this->GetChildNodeRecursivePart(dst_child_node, child_node->GetChildNodeContainer(), child_node_name) != nullptr) {
+			break;
+		}
+	}
+
+	return (dst_child_node);
+}
+
+
+/**
  * @brief AddChildNodeä÷êî
  * @param child_node (child_node)
  * @param event_flg (event_flag)

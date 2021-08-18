@@ -15,6 +15,7 @@
 #include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/sound/BGMSound.h"
 #include "../../lib/tml/sound/SESound.h"
+#include "../../lib/tml/scene/Node.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
@@ -134,6 +135,7 @@ void cpp_base::scene::InitScene::Init(void)
 	this->wait_update_time = tml::TIME_REAL(0.0);
 	this->wait_font.reset();
 	this->wait_model.reset();
+	this->main_node.reset();
 
 	cpp_base::scene::Scene::Init();
 
@@ -317,6 +319,12 @@ INT cpp_base::scene::InitScene::OnStart(void)
 	this->deferred_create_res_itr_ = this->deferred_create_res_cont_.begin();
 
 	this->wait_update_time = tml::TIME_REAL(0.0);
+
+	{// MainNode Create
+		if (this->GetRootNode()->GetChildNode(this->main_node, L"main") == nullptr) {
+			return (-1);
+		}
+	}
 
 	return (0);
 }

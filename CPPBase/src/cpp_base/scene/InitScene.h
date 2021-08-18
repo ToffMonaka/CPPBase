@@ -68,6 +68,7 @@ public:
 	tml::TIME_REAL wait_update_time;
 	tml::shared_ptr<tml::graphic::Font> wait_font;
 	tml::shared_ptr<tml::graphic::Model2D> wait_model;
+	tml::shared_ptr<tml::scene::Node> main_node;
 
 private:
 	void Release(void);

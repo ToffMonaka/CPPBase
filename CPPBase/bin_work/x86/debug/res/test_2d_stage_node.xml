@@ -2,4 +2,12 @@
 <node class_name="Test2DStageNode">
 	[NODE]
 	NAME=stage
+	<node class_name="Node">
+		[NODE]
+		NAME=ground_layout
+	</node>
+	<node class_name="Node">
+		[NODE]
+		NAME=pc_layout
+	</node>
 </node>

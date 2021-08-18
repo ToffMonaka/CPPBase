@@ -62,6 +62,8 @@ public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
 	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
+	tml::shared_ptr<tml::scene::Node> main_node;
+	tml::shared_ptr<tml::scene::Node> stage_layout_node;
 
 private:
 	void Release(void);

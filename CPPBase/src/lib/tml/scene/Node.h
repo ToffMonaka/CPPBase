@@ -87,6 +87,8 @@ private:
 private:
 	void Release(void);
 
+	const tml::shared_ptr<tml::scene::Node> &GetChildNodeRecursivePart(tml::shared_ptr<tml::scene::Node> &, const std::list<tml::shared_ptr<tml::scene::Node>> &, const WCHAR *);
+
 protected:
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
@@ -117,6 +119,7 @@ public:
 	tml::scene::Node *GetParentNode(void);
 	void SetParentNode(tml::scene::Node *);
 	const std::list<tml::shared_ptr<tml::scene::Node>> &GetChildNodeContainer(void);
+	const tml::shared_ptr<tml::scene::Node> &GetChildNode(tml::shared_ptr<tml::scene::Node> &, const WCHAR *);
 	INT AddChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
 	void RemoveChildNode(const bool event_flg = true);
 	void RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
@@ -248,4 +251,23 @@ inline tml::scene::Node *tml::scene::Node::GetParentNode(void)
 inline const std::list<tml::shared_ptr<tml::scene::Node>> &tml::scene::Node::GetChildNodeContainer(void)
 {
 	return (this->child_node_cont_);
+}
+
+
+/**
+ * @brief GetChildNodeä÷êî
+ * @param dst_child_node (dst_child_node)
+ * @param child_node_name (child_node_name)
+ * @return dst_child_node (dst_child_node)
+ */
+inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Node::GetChildNode(tml::shared_ptr<tml::scene::Node> &dst_child_node, const WCHAR *child_node_name)
+{
+	dst_child_node.reset();
+
+	if ((child_node_name == nullptr)
+	|| (child_node_name[0] == 0)) {
+		return (dst_child_node);
+	}
+
+	return (this->GetChildNodeRecursivePart(dst_child_node, this->child_node_cont_, child_node_name));
 }

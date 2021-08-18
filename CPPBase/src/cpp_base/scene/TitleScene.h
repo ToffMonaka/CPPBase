@@ -71,6 +71,7 @@ public:
 	tml::shared_ptr<tml::sound::SESound> start_se_sound;
 	tml::shared_ptr<tml::graphic::Font> footer_font;
 	tml::shared_ptr<tml::graphic::Model2D> footer_model;
+	tml::shared_ptr<tml::scene::Node> main_node;
 
 private:
 	void Release(void);

@@ -11,6 +11,7 @@
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/Model2D.h"
+#include "../../lib/tml/scene/Node.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
@@ -116,7 +117,9 @@ void cpp_base::scene::Test2DStageNode::Init(void)
 
 	this->canvas_2d.reset();
 	this->ground_model.reset();
-	this->pl_model.reset();
+	this->player_character_model.reset();
+	this->ground_layout_node.reset();
+	this->player_character_layout_node.reset();
 
 	cpp_base::scene::Node::Init();
 
@@ -176,19 +179,19 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 		}
 	}
 
-	{// PlayerModel Create
+	{// PlayerCharacterModel Create
 		tml::graphic::Model2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, -128.0f));
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->pl_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->player_character_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		auto stage = this->pl_model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+		auto stage = this->player_character_model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 		auto layer = stage->GetLayerFast(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
@@ -200,7 +203,7 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 
 			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::PLAYER_2D_TEXTURE;
+			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::PLAYER_CHARACTER_2D_TEXTURE;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
@@ -208,9 +211,9 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 				return (-1);
 			}
 
-			this->pl_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+			this->player_character_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->pl_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
+			this->player_character_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
 		}
 	}
 
@@ -227,6 +230,18 @@ INT cpp_base::scene::Test2DStageNode::OnStart(void)
 {
 	{// Canvas2D Create
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
+			return (-1);
+		}
+	}
+
+	{// GroundLayoutNode Create
+		if (this->GetChildNode(this->ground_layout_node, L"ground_layout") == nullptr) {
+			return (-1);
+		}
+	}
+
+	{// PlayerCharacterLayoutNode Create
+		if (this->GetChildNode(this->player_character_layout_node, L"pc_layout") == nullptr) {
 			return (-1);
 		}
 	}
@@ -250,19 +265,19 @@ void cpp_base::scene::Test2DStageNode::OnEnd(void)
 void cpp_base::scene::Test2DStageNode::OnUpdate(void)
 {
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W)) {
-		this->pl_model->position.SetY(this->pl_model->position.GetY() + 2.0f);
+		this->player_character_model->position.SetY(this->player_character_model->position.GetY() + 2.0f);
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S)) {
-		this->pl_model->position.SetY(this->pl_model->position.GetY() - 2.0f);
+		this->player_character_model->position.SetY(this->player_character_model->position.GetY() - 2.0f);
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A)) {
-		this->pl_model->position.SetX(this->pl_model->position.GetX() - 2.0f);
+		this->player_character_model->position.SetX(this->player_character_model->position.GetX() - 2.0f);
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D)) {
-		this->pl_model->position.SetX(this->pl_model->position.GetX() + 2.0f);
+		this->player_character_model->position.SetX(this->player_character_model->position.GetX() + 2.0f);
 	}
 
 	this->canvas_2d->SetDrawModel(this->ground_model.get());
-	this->canvas_2d->SetDrawModel(this->pl_model.get());
+	this->canvas_2d->SetDrawModel(this->player_character_model.get());
 
 	return;
 }

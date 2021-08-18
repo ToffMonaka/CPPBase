@@ -58,7 +58,9 @@ protected: virtual void InterfaceDummy(void) {return;};
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::Model2D> ground_model;
-	tml::shared_ptr<tml::graphic::Model2D> pl_model;
+	tml::shared_ptr<tml::graphic::Model2D> player_character_model;
+	tml::shared_ptr<tml::scene::Node> ground_layout_node;
+	tml::shared_ptr<tml::scene::Node> player_character_layout_node;
 
 private:
 	void Release(void);

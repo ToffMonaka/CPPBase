@@ -16,6 +16,7 @@
 #include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/sound/BGMSound.h"
 #include "../../lib/tml/sound/SESound.h"
+#include "../../lib/tml/scene/Node.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
@@ -131,6 +132,7 @@ void cpp_base::scene::SelectScene::Init(void)
 	this->stage_font.reset();
 	this->stage_model.reset();
 	this->stage_se_sound.reset();
+	this->main_node.reset();
 
 	cpp_base::scene::Scene::Init();
 
@@ -326,6 +328,12 @@ INT cpp_base::scene::SelectScene::OnStart(void)
 
 	this->GetSoundManager()->PlaySound(this->bgm_sound.get(), true);
 
+	{// MainNode Create
+		if (this->GetRootNode()->GetChildNode(this->main_node, L"main") == nullptr) {
+			return (-1);
+		}
+	}
+
 	return (0);
 }
 
@@ -357,8 +365,6 @@ void cpp_base::scene::SelectScene::OnUpdate(void)
 
 				if (static_cast<bool>(event_dat.type_flag & tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE::LEFT_BUTTON_DOWN)) {
 					if (this->stage_model->IsHitByMouseDevice(this->GetInputManager()->GetMouseDevicePosition())) {
-						this->GetManager()->factory_value_container[L"stage_type"] = L"1";
-
 						{// StageScene Start
 							tml::shared_ptr<tml::scene::Scene> scene;
 

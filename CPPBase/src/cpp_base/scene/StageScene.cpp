@@ -11,6 +11,8 @@
 #include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/Camera2D.h"
 #include "../../lib/tml/graphic/Camera3D.h"
+#include "../../lib/tml/scene/Node.h"
+#include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
 
@@ -118,6 +120,8 @@ void cpp_base::scene::StageScene::Init(void)
 	this->canvas_2d.reset();
 	this->camera_2d.reset();
 	this->camera_3d.reset();
+	this->main_node.reset();
+	this->stage_layout_node.reset();
 
 	cpp_base::scene::Scene::Init();
 
@@ -200,6 +204,26 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 INT cpp_base::scene::StageScene::OnStart(void)
 {
 	this->progress_type_ = 1U;
+
+	{// MainNode Create
+		if (this->GetRootNode()->GetChildNode(this->main_node, L"main") == nullptr) {
+			return (-1);
+		}
+	}
+
+	{// StageLayoutNode Create
+		if (this->main_node->GetChildNode(this->stage_layout_node, L"stage_layout") == nullptr) {
+			return (-1);
+		}
+	}
+
+	tml::shared_ptr<tml::scene::Node> stage_node;
+
+	if (this->GetManager()->factory.node_by_xml_file.Get(stage_node, tml::ConstantUtil::SCENE::CLASS_NAME::NODE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TEST_2D_STAGE_NODE)) == nullptr) {
+		return (-1);
+	}
+
+	this->stage_layout_node->AddChildNode(stage_node);
 
 	return (0);
 }

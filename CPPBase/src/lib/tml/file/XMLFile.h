@@ -32,6 +32,8 @@ public:
 private:
 	void Release(void);
 
+	const tml::shared_ptr<tml::XMLFileDataNode> &GetChildNodeRecursivePart(tml::shared_ptr<tml::XMLFileDataNode> &, const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &, const WCHAR *);
+
 public:
 	XMLFileDataNode();
 	virtual ~XMLFileDataNode();
@@ -42,6 +44,7 @@ public:
 	tml::XMLFileDataNode *GetParentNode(void);
 	void SetParentNode(tml::XMLFileDataNode *);
 	const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &GetChildNodeContainer(void);
+	const tml::shared_ptr<tml::XMLFileDataNode> &GetChildNode(tml::shared_ptr<tml::XMLFileDataNode> &, const WCHAR *);
 	INT AddChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &);
 	void RemoveChildNode(void);
 	void RemoveChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &);
@@ -85,6 +88,25 @@ inline tml::XMLFileDataNode *tml::XMLFileDataNode::GetParentNode(void)
 inline const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &tml::XMLFileDataNode::GetChildNodeContainer(void)
 {
 	return (this->child_node_cont_);
+}
+
+
+/**
+ * @brief GetChildNodeä÷êî
+ * @param dst_child_node (dst_child_node)
+ * @param child_node_name (child_node_name)
+ * @return dst_child_node (dst_child_node)
+ */
+inline const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileDataNode::GetChildNode(tml::shared_ptr<tml::XMLFileDataNode> &dst_child_node, const WCHAR *child_node_name)
+{
+	dst_child_node.reset();
+
+	if ((child_node_name == nullptr)
+	|| (child_node_name[0] == 0)) {
+		return (dst_child_node);
+	}
+
+	return (this->GetChildNodeRecursivePart(dst_child_node, this->child_node_cont_, child_node_name));
 }
 
 

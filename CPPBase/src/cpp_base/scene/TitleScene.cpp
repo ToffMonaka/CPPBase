@@ -16,6 +16,7 @@
 #include "../../lib/tml/graphic/Model2D.h"
 #include "../../lib/tml/sound/BGMSound.h"
 #include "../../lib/tml/sound/SESound.h"
+#include "../../lib/tml/scene/Node.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
@@ -134,6 +135,7 @@ void cpp_base::scene::TitleScene::Init(void)
 	this->start_se_sound.reset();
 	this->footer_font.reset();
 	this->footer_model.reset();
+	this->main_node.reset();
 
 	cpp_base::scene::Scene::Init();
 
@@ -444,6 +446,12 @@ INT cpp_base::scene::TitleScene::OnStart(void)
 	this->progress_type_ = 1U;
 
 	this->GetSoundManager()->PlaySound(this->bgm_sound.get(), true);
+
+	{// MainNode Create
+		if (this->GetRootNode()->GetChildNode(this->main_node, L"main") == nullptr) {
+			return (-1);
+		}
+	}
 
 	return (0);
 }
