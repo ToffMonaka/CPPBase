@@ -16,6 +16,7 @@
 #include "Node.h"
 #include "DebugNode.h"
 #include "Test2DStageNode.h"
+#include "Field2DNode.h"
 
 
 /**

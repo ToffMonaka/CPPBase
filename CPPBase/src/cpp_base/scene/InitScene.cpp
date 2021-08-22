@@ -321,7 +321,9 @@ INT cpp_base::scene::InitScene::OnStart(void)
 	this->wait_update_time = tml::TIME_REAL(0.0);
 
 	{// MainNode Create
-		if (this->GetRootNode()->GetChildNode(this->main_node, L"main") == nullptr) {
+		this->main_node = this->GetRootNode()->GetChildNode(L"main");
+
+		if (this->main_node == nullptr) {
 			return (-1);
 		}
 	}

@@ -206,24 +206,30 @@ INT cpp_base::scene::StageScene::OnStart(void)
 	this->progress_type_ = 1U;
 
 	{// MainNode Create
-		if (this->GetRootNode()->GetChildNode(this->main_node, L"main") == nullptr) {
+		this->main_node = this->GetRootNode()->GetChildNode(L"main");
+
+		if (this->main_node == nullptr) {
 			return (-1);
 		}
 	}
 
 	{// StageLayoutNode Create
-		if (this->main_node->GetChildNode(this->stage_layout_node, L"stage_layout") == nullptr) {
+		this->stage_layout_node = this->GetRootNode()->GetChildNode(L"stage_layout");
+
+		if (this->stage_layout_node == nullptr) {
 			return (-1);
 		}
 	}
 
-	tml::shared_ptr<tml::scene::Node> stage_node;
+	{// StageNode Create
+		tml::shared_ptr<tml::scene::Node> stage_node;
 
-	if (this->GetManager()->factory.node_by_xml_file.Get(stage_node, tml::ConstantUtil::SCENE::CLASS_NAME::NODE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TEST_2D_STAGE_NODE)) == nullptr) {
-		return (-1);
+		if (this->GetManager()->factory.node_by_xml_file.Get(stage_node, tml::ConstantUtil::SCENE::CLASS_NAME::NODE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TEST_2D_STAGE_NODE)) == nullptr) {
+			return (-1);
+		}
+
+		this->stage_layout_node->AddChildNode(stage_node);
 	}
-
-	this->stage_layout_node->AddChildNode(stage_node);
 
 	return (0);
 }

@@ -78,26 +78,25 @@ void tml::XMLFileDataNode::SetParentNode(tml::XMLFileDataNode *parent_node)
 
 /**
  * @brief GetChildNodeRecursivePartä÷êî
- * @param dst_child_node (dst_child_node)
  * @param child_node_cont (child_node_container)
  * @param child_node_name (child_node_name)
- * @return dst_child_node (dst_child_node)
+ * @return child_node (child_node)
  */
-const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileDataNode::GetChildNodeRecursivePart(tml::shared_ptr<tml::XMLFileDataNode> &dst_child_node, const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &child_node_cont, const WCHAR *child_node_name)
+const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileDataNode::GetChildNodeRecursivePart(const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &child_node_cont, const WCHAR *child_node_name)
 {
 	for (auto &child_node : child_node_cont) {
 		if (child_node->name == child_node_name) {
-			dst_child_node = child_node;
-
-			break;
+			return (child_node);
 		}
 
-		if (this->GetChildNodeRecursivePart(dst_child_node, child_node->GetChildNodeContainer(), child_node_name) != nullptr) {
-			break;
+		auto &child_child_node = this->GetChildNodeRecursivePart(child_node->GetChildNodeContainer(), child_node_name);
+
+		if (child_child_node != nullptr) {
+			return (child_child_node);
 		}
 	}
 
-	return (dst_child_node);
+	return (this->empty_child_node_);
 }
 
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="shift_jis" ?>
+<node class_name="Field2DNode">
+	[NODE]
+	NAME=field
+	<node class_name="Node">
+		[NODE]
+		NAME=ground_layout
+	</node>
+	<node class_name="Node">
+		[NODE]
+		NAME=mob_layout
+	</node>
+	<node class_name="Node">
+		[NODE]
+		NAME=pl_layout
+	</node>
+</node>

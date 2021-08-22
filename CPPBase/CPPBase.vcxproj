@@ -175,6 +175,7 @@
     <ClCompile Include="src\cpp_base\input\ManagerCommon.cpp" />
     <ClCompile Include="src\cpp_base\input\ManagerFactory.cpp" />
     <ClCompile Include="src\cpp_base\scene\DebugNode.cpp" />
+    <ClCompile Include="src\cpp_base\scene\Field2DNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\InitScene.cpp" />
     <ClCompile Include="src\cpp_base\scene\Manager.cpp" />
     <ClCompile Include="src\cpp_base\scene\ManagerCommon.cpp" />
@@ -324,6 +325,7 @@
     <ClInclude Include="src\cpp_base\input\ManagerFactory.h" />
     <ClInclude Include="src\cpp_base\resource\resource.h" />
     <ClInclude Include="src\cpp_base\scene\DebugNode.h" />
+    <ClInclude Include="src\cpp_base\scene\Field2DNode.h" />
     <ClInclude Include="src\cpp_base\scene\InitScene.h" />
     <ClInclude Include="src\cpp_base\scene\Manager.h" />
     <ClInclude Include="src\cpp_base\scene\ManagerCommon.h" />

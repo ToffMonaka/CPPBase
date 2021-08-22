@@ -4,10 +4,6 @@
 	NAME=stage
 	<node class_name="Node">
 		[NODE]
-		NAME=ground_layout
-	</node>
-	<node class_name="Node">
-		[NODE]
-		NAME=pc_layout
+		NAME=field_layout
 	</node>
 </node>

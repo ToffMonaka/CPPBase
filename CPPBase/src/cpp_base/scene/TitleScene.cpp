@@ -448,7 +448,9 @@ INT cpp_base::scene::TitleScene::OnStart(void)
 	this->GetSoundManager()->PlaySound(this->bgm_sound.get(), true);
 
 	{// MainNode Create
-		if (this->GetRootNode()->GetChildNode(this->main_node, L"main") == nullptr) {
+		this->main_node = this->GetRootNode()->GetChildNode(L"main");
+
+		if (this->main_node == nullptr) {
 			return (-1);
 		}
 	}
