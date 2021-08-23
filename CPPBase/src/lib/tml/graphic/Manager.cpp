@@ -755,7 +755,7 @@ tml::DynamicBuffer &tml::graphic::Manager::GetCPUBuffer(tml::DynamicBuffer &dst_
 		D3D11_MAPPED_SUBRESOURCE msr;
 
 		if (SUCCEEDED(this->device_context_->Map(tmp_buf, 0U, D3D11_MAP_READ, 0U, &msr))) {
-			dst_cpu_buf.Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
+			dst_cpu_buf.Set(reinterpret_cast<BYTE *>(msr.pData), msr.DepthPitch);
 			dst_msr = msr;
 			dst_msr.pData = nullptr;
 
@@ -818,7 +818,7 @@ std::vector<tml::DynamicBuffer> &tml::graphic::Manager::GetCPUBuffer(std::vector
 				D3D11_MAPPED_SUBRESOURCE msr;
 
 				if (SUCCEEDED(this->device_context_->Map(tmp_tex, cpu_buf_index, D3D11_MAP_READ, 0U, &msr))) {
-					dst_cpu_buf_cont[cpu_buf_index].Set(static_cast<BYTE *>(msr.pData), msr.DepthPitch);
+					dst_cpu_buf_cont[cpu_buf_index].Set(reinterpret_cast<BYTE *>(msr.pData), msr.DepthPitch);
 					dst_msr_cont[cpu_buf_index] = msr;
 					dst_msr_cont[cpu_buf_index].pData = nullptr;
 

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Test2DStageNodeヘッダーファイル
+ * @brief Field2DGroundNodeヘッダーファイル
  */
 #pragma once
 
@@ -13,9 +13,9 @@
 namespace cpp_base {
 namespace scene {
 /**
- * @brief Test2DStageNodeDescクラス
+ * @brief Field2DGroundNodeDescクラス
  */
-class Test2DStageNodeDesc : public cpp_base::scene::NodeDesc
+class Field2DGroundNodeDesc : public cpp_base::scene::NodeDesc
 {
 public:
 
@@ -26,8 +26,8 @@ protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
 public:
-	Test2DStageNodeDesc();
-	virtual ~Test2DStageNodeDesc();
+	Field2DGroundNodeDesc();
+	virtual ~Field2DGroundNodeDesc();
 
 	virtual void Init(void);
 };
@@ -38,7 +38,7 @@ public:
 /**
  * @brief Release関数
  */
-inline void cpp_base::scene::Test2DStageNodeDesc::Release(void)
+inline void cpp_base::scene::Field2DGroundNodeDesc::Release(void)
 {
 	return;
 }
@@ -47,18 +47,17 @@ inline void cpp_base::scene::Test2DStageNodeDesc::Release(void)
 namespace cpp_base {
 namespace scene {
 /**
- * @brief Test2DStageNodeクラス
+ * @brief Field2DGroundNodeクラス
  */
-class Test2DStageNode : public cpp_base::scene::Node
+class Field2DGroundNode : public cpp_base::scene::Node
 {
-public: Test2DStageNode(const cpp_base::scene::Test2DStageNode &) = delete;
-public: cpp_base::scene::Test2DStageNode &operator =(const cpp_base::scene::Test2DStageNode &) = delete;
+public: Field2DGroundNode(const cpp_base::scene::Field2DGroundNode &) = delete;
+public: cpp_base::scene::Field2DGroundNode &operator =(const cpp_base::scene::Field2DGroundNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
-	tml::shared_ptr<tml::scene::Node> field_layout_node;
-	tml::shared_ptr<tml::scene::Node> field_node;
+	tml::shared_ptr<tml::graphic::Model2D> model;
 
 private:
 	void Release(void);
@@ -69,11 +68,11 @@ protected:
 	virtual void OnUpdate(void);
 
 public:
-	Test2DStageNode();
-	virtual ~Test2DStageNode();
+	Field2DGroundNode();
+	virtual ~Field2DGroundNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::Test2DStageNodeDesc &);
+	INT Create(const cpp_base::scene::Field2DGroundNodeDesc &);
 };
 }
 }

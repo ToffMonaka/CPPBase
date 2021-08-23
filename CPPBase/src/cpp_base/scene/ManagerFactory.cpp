@@ -15,6 +15,9 @@
 #include "DebugNode.h"
 #include "Test2DStageNode.h"
 #include "Field2DNode.h"
+#include "Field2DGroundNode.h"
+#include "Field2DPlayerNode.h"
+#include "Field2DMobNode.h"
 
 
 /**
@@ -198,6 +201,57 @@ INT cpp_base::scene::ManagerFactory::Create(cpp_base::scene::Manager *mgr)
 			desc.Read(file_read_desc);
 
 			if (this->mgr_->GetResource<cpp_base::scene::Field2DNode>(node, desc, dst_result) == nullptr) {
+				return (node);
+			}
+
+			return (node);
+		}
+	);
+
+	this->mgr_->factory.node_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_GROUND_NODE,
+		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::scene::Node> {
+			tml::shared_ptr<tml::scene::Node> node;
+
+			cpp_base::scene::Field2DGroundNodeDesc desc;
+
+			desc.SetManager(this->mgr_);
+			desc.Read(file_read_desc);
+
+			if (this->mgr_->GetResource<cpp_base::scene::Field2DGroundNode>(node, desc, dst_result) == nullptr) {
+				return (node);
+			}
+
+			return (node);
+		}
+	);
+
+	this->mgr_->factory.node_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_PLAYER_NODE,
+		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::scene::Node> {
+			tml::shared_ptr<tml::scene::Node> node;
+
+			cpp_base::scene::Field2DPlayerNodeDesc desc;
+
+			desc.SetManager(this->mgr_);
+			desc.Read(file_read_desc);
+
+			if (this->mgr_->GetResource<cpp_base::scene::Field2DPlayerNode>(node, desc, dst_result) == nullptr) {
+				return (node);
+			}
+
+			return (node);
+		}
+	);
+
+	this->mgr_->factory.node_by_ini_file.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_MOB_NODE,
+		[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::scene::Node> {
+			tml::shared_ptr<tml::scene::Node> node;
+
+			cpp_base::scene::Field2DMobNodeDesc desc;
+
+			desc.SetManager(this->mgr_);
+			desc.Read(file_read_desc);
+
+			if (this->mgr_->GetResource<cpp_base::scene::Field2DMobNode>(node, desc, dst_result) == nullptr) {
 				return (node);
 			}
 

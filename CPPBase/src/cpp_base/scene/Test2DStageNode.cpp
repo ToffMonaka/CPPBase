@@ -10,6 +10,7 @@
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
+#include "Field2DNode.h"
 
 
 /**
@@ -111,6 +112,7 @@ void cpp_base::scene::Test2DStageNode::Init(void)
 
 	this->canvas_2d.reset();
 	this->field_layout_node.reset();
+	this->field_node.reset();
 
 	cpp_base::scene::Node::Init();
 
@@ -160,13 +162,11 @@ INT cpp_base::scene::Test2DStageNode::OnStart(void)
 	}
 
 	{// FieldNode Create
-		tml::shared_ptr<tml::scene::Node> field_node;
-
-		if (this->GetManager()->factory.node_by_xml_file.Get(field_node, tml::ConstantUtil::SCENE::CLASS_NAME::NODE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE)) == nullptr) {
+		if (this->GetManager()->factory.node_by_xml_file.Get(this->field_node, tml::ConstantUtil::SCENE::CLASS_NAME::NODE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE)) == nullptr) {
 			return (-1);
 		}
 
-		this->field_layout_node->AddChildNode(field_node);
+		this->field_layout_node->AddChildNode(this->field_node);
 	}
 
 	return (0);

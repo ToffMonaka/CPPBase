@@ -82,7 +82,7 @@ inline BYTE *tml::DlmallocMemoryAllocator::GetMemorySpacePart(const size_t cnt)
 		return (nullptr);
 	}
 
-	BYTE *ms_p = static_cast<BYTE *>(mspace_malloc(this->ms_, sizeof(T) * cnt + this->ms_cnt_head_size_));
+	BYTE *ms_p = reinterpret_cast<BYTE *>(mspace_malloc(this->ms_, sizeof(T) * cnt + this->ms_cnt_head_size_));
 
 	if (ms_p == nullptr) {
 		return (nullptr);

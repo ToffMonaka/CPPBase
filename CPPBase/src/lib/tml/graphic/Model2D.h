@@ -76,7 +76,7 @@ public:
  */
 inline tml::graphic::Model2DLayer *tml::graphic::Model2DStage::GetLayer(const UINT index)
 {
-	return (static_cast<tml::graphic::Model2DLayer *>(tml::graphic::ModelStage::GetLayer(index)));
+	return (reinterpret_cast<tml::graphic::Model2DLayer *>(tml::graphic::ModelStage::GetLayer(index)));
 }
 
 
@@ -88,7 +88,7 @@ inline tml::graphic::Model2DLayer *tml::graphic::Model2DStage::GetLayer(const UI
  */
 inline tml::graphic::Model2DLayer *tml::graphic::Model2DStage::GetLayerFast(const UINT index)
 {
-	return (static_cast<tml::graphic::Model2DLayer *>(tml::graphic::ModelStage::GetLayerFast(index)));
+	return (reinterpret_cast<tml::graphic::Model2DLayer *>(tml::graphic::ModelStage::GetLayerFast(index)));
 }
 
 
@@ -234,7 +234,7 @@ public:
  */
 inline tml::graphic::Model2DStage *tml::graphic::Model2D::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
-	return (static_cast<tml::graphic::Model2DStage *>(tml::graphic::Model::GetStage(type)));
+	return (reinterpret_cast<tml::graphic::Model2DStage *>(tml::graphic::Model::GetStage(type)));
 }
 
 
@@ -246,7 +246,7 @@ inline tml::graphic::Model2DStage *tml::graphic::Model2D::GetStage(const tml::Co
  */
 inline tml::graphic::Model2DStage *tml::graphic::Model2D::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
-	return (static_cast<tml::graphic::Model2DStage *>(tml::graphic::Model::GetStageFast(type)));
+	return (reinterpret_cast<tml::graphic::Model2DStage *>(tml::graphic::Model::GetStageFast(type)));
 }
 
 

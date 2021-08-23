@@ -19,6 +19,9 @@ namespace SCENE {
 		const WCHAR STAGE_SCENE[] = L"StageScene";
 		const WCHAR TEST_2D_STAGE_NODE[] = L"Test2DStageNode";
 		const WCHAR FIELD_2D_NODE[] = L"Field2DNode";
+		const WCHAR FIELD_2D_GROUND_NODE[] = L"Field2DGroundNode";
+		const WCHAR FIELD_2D_PLAYER_NODE[] = L"Field2DPlayerNode";
+		const WCHAR FIELD_2D_MOB_NODE[] = L"Field2DMobNode";
 	}
 	namespace RESOURCE_NAME {
 		const WCHAR DEBUG_NODE[] = L"DebugNode";
@@ -50,5 +53,8 @@ class Node;
 class DebugNode;
 class Test2DStageNode;
 class Field2DNode;
+class Field2DGroundNode;
+class Field2DPlayerNode;
+class Field2DMobNode;
 }
 }
