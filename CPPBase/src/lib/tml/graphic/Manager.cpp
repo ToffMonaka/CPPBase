@@ -31,6 +31,8 @@
 #include "Fog.h"
 #include "Model.h"
 #include "Model2D.h"
+#include "FigureModel2D.h"
+#include "GroundModel2D.h"
 
 
 /**

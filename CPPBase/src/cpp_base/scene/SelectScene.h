@@ -63,10 +63,10 @@ public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
 	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
-	tml::shared_ptr<tml::graphic::Model2D> bg_model;
+	tml::shared_ptr<tml::graphic::FigureModel2D> bg_model;
 	tml::shared_ptr<tml::sound::BGMSound> bgm_sound;
 	tml::shared_ptr<tml::graphic::Font> stage_font;
-	tml::shared_ptr<tml::graphic::Model2D> stage_model;
+	tml::shared_ptr<tml::graphic::FigureModel2D> stage_model;
 	tml::shared_ptr<tml::sound::SESound> stage_se_sound;
 	tml::shared_ptr<tml::scene::Node> main_node;
 

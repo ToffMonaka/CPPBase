@@ -214,9 +214,11 @@
     <ClCompile Include="src\lib\tml\graphic\Canvas2D.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\DepthState.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\FigureModel2D.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Fog.cpp" />
     <ClCompile Include="src\lib\tml\graphic\FogShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Font.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\GroundModel2D.cpp" />
     <ClCompile Include="src\lib\tml\graphic\HeaderShaderConstantBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\LightShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Manager.cpp" />
@@ -387,9 +389,11 @@
     <ClInclude Include="src\lib\tml\graphic\Canvas2D.h" />
     <ClInclude Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\DepthState.h" />
+    <ClInclude Include="src\lib\tml\graphic\FigureModel2D.h" />
     <ClInclude Include="src\lib\tml\graphic\Fog.h" />
     <ClInclude Include="src\lib\tml\graphic\FogShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Font.h" />
+    <ClInclude Include="src\lib\tml\graphic\GroundModel2D.h" />
     <ClInclude Include="src\lib\tml\graphic\HeaderShaderConstantBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\LightShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Manager.h" />

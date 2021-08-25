@@ -10,7 +10,7 @@
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Font.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
-#include "../../lib/tml/graphic/Model2D.h"
+#include "../../lib/tml/graphic/FigureModel2D.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
 
@@ -159,12 +159,12 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 	}
 
 	{// Model Create
-		tml::graphic::Model2DDesc desc;
+		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

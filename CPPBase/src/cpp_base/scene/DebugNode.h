@@ -61,7 +61,7 @@ public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::TIME_REAL update_time;
 	tml::shared_ptr<tml::graphic::Font> font;
-	tml::shared_ptr<tml::graphic::Model2D> model;
+	tml::shared_ptr<tml::graphic::FigureModel2D> model;
 
 private:
 	void Release(void);

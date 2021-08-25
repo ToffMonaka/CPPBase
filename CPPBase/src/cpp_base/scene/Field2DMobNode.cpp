@@ -8,7 +8,7 @@
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
-#include "../../lib/tml/graphic/Model2D.h"
+#include "../../lib/tml/graphic/FigureModel2D.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
@@ -137,12 +137,12 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 	}
 
 	{// Model Create
-		tml::graphic::Model2DDesc desc;
+		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 128.0f));
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

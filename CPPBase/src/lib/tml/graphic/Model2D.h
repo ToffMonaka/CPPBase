@@ -14,12 +14,14 @@ namespace tml {
 namespace graphic {
 /**
  * @brief Model2DLayerクラス
+ *
+ * インターフェースパターン
  */
 class Model2DLayer : public tml::graphic::ModelLayer
 {
 public: Model2DLayer(const tml::graphic::Model2DLayer &) = delete;
 public: tml::graphic::Model2DLayer &operator =(const tml::graphic::Model2DLayer &) = delete;
-protected: virtual void InterfaceDummy(void) {return;};
+protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 
@@ -41,12 +43,14 @@ namespace tml {
 namespace graphic {
 /**
  * @brief Model2DStageクラス
+ *
+ * インターフェースパターン
  */
 class Model2DStage : public tml::graphic::ModelStage
 {
 public: Model2DStage(const tml::graphic::Model2DStage &) = delete;
 public: tml::graphic::Model2DStage &operator =(const tml::graphic::Model2DStage &) = delete;
-protected: virtual void InterfaceDummy(void) {return;};
+protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 
@@ -60,50 +64,8 @@ public:
 	virtual void Init(void);
 	INT Create(tml::graphic::Manager *);
 
-	tml::graphic::Model2DLayer *GetLayer(const UINT);
-	tml::graphic::Model2DLayer *GetLayerFast(const UINT);
-	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::Model2DLayer> &);
 };
 }
-}
-
-
-/**
- * @brief GetLayer関数
- * @param index (index)
- * @return layer (layer)<br>
- * nullptr=失敗
- */
-inline tml::graphic::Model2DLayer *tml::graphic::Model2DStage::GetLayer(const UINT index)
-{
-	return (reinterpret_cast<tml::graphic::Model2DLayer *>(tml::graphic::ModelStage::GetLayer(index)));
-}
-
-
-/**
- * @brief GetLayerFast関数
- * @param index (index)
- * @return layer (layer)<br>
- * nullptr=失敗
- */
-inline tml::graphic::Model2DLayer *tml::graphic::Model2DStage::GetLayerFast(const UINT index)
-{
-	return (reinterpret_cast<tml::graphic::Model2DLayer *>(tml::graphic::ModelStage::GetLayerFast(index)));
-}
-
-
-/**
- * @brief SetLayer関数
- * @param index (index)
- * @param layer (layer)
- */
-inline void tml::graphic::Model2DStage::SetLayer(const UINT index, tml::unique_ptr<tml::graphic::Model2DLayer> &layer)
-{
-	tml::unique_ptr<tml::graphic::ModelLayer> tmp_layer = std::move(layer);
-
-	tml::graphic::ModelStage::SetLayer(index, tmp_layer);
-
-	return;
 }
 
 
@@ -149,12 +111,14 @@ namespace tml {
 namespace graphic {
 /**
  * @brief Model2Dクラス
+ *
+ * インターフェースパターン
  */
 class Model2D : public tml::graphic::Model
 {
 public: Model2D(const tml::graphic::Model2D &) = delete;
 public: tml::graphic::Model2D &operator =(const tml::graphic::Model2D &) = delete;
-protected: virtual void InterfaceDummy(void) {return;};
+protected: virtual void InterfaceDummy(void) = 0;
 
 public:
 	/**
@@ -193,7 +157,7 @@ public:
 public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D);
 
-private:
+protected:
 	tml::shared_ptr<tml::graphic::Model2DShaderStructuredBuffer> ssb_;
 	tml::shared_ptr<tml::graphic::Model2DLayerShaderStructuredBuffer> layer_ssb_;
 
@@ -212,54 +176,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::graphic::Model2DDesc &);
-
-	tml::graphic::Model2DStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	tml::graphic::Model2DStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::Model2DStage> &);
-
-	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
-
-	virtual void DrawStageInit(void);
-	virtual void DrawStageForward2D(void);
 };
 }
-}
-
-
-/**
- * @brief GetStage関数
- * @param type (type)
- * @return stage (stage)<br>
- * nullptr=失敗
- */
-inline tml::graphic::Model2DStage *tml::graphic::Model2D::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
-{
-	return (reinterpret_cast<tml::graphic::Model2DStage *>(tml::graphic::Model::GetStage(type)));
-}
-
-
-/**
- * @brief GetStageFast関数
- * @param type (type)
- * @return stage (stage)<br>
- * nullptr=失敗
- */
-inline tml::graphic::Model2DStage *tml::graphic::Model2D::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
-{
-	return (reinterpret_cast<tml::graphic::Model2DStage *>(tml::graphic::Model::GetStageFast(type)));
-}
-
-
-/**
- * @brief SetStage関数
- * @param type (type)
- * @param stage (stage)
- */
-inline void tml::graphic::Model2D::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::Model2DStage> &stage)
-{
-	tml::unique_ptr<tml::graphic::ModelStage> tmp_stage = std::move(stage);
-
-	tml::graphic::Model::SetStage(type, tmp_stage);
-
-	return;
 }

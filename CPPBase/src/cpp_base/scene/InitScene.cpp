@@ -12,7 +12,7 @@
 #include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/Camera2D.h"
 #include "../../lib/tml/graphic/Camera3D.h"
-#include "../../lib/tml/graphic/Model2D.h"
+#include "../../lib/tml/graphic/FigureModel2D.h"
 #include "../../lib/tml/sound/BGMSound.h"
 #include "../../lib/tml/sound/SESound.h"
 #include "../../lib/tml/scene/Node.h"
@@ -211,13 +211,13 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	}
 
 	{// BackgroundModel Create
-		tml::graphic::Model2DDesc desc;
+		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->bg_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -258,12 +258,12 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	}
 
 	{// WaitModel Create
-		tml::graphic::Model2DDesc desc;
+		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->wait_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->wait_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

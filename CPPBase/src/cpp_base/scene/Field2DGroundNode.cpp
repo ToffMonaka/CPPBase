@@ -8,7 +8,7 @@
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
-#include "../../lib/tml/graphic/Model2D.h"
+#include "../../lib/tml/graphic/GroundModel2D.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
@@ -137,12 +137,12 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 	}
 
 	{// Model Create
-		tml::graphic::Model2DDesc desc;
+		tml::graphic::GroundModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Model2D>(this->model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::GroundModel2D>(this->model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);

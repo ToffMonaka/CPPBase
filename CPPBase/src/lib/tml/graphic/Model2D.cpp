@@ -67,11 +67,7 @@ void tml::graphic::Model2DLayer::Init(void)
  */
 INT tml::graphic::Model2DLayer::Create(tml::graphic::Manager *mgr)
 {
-	this->Init();
-
 	if (tml::graphic::ModelLayer::Create(mgr) < 0) {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -129,11 +125,7 @@ void tml::graphic::Model2DStage::Init(void)
  */
 INT tml::graphic::Model2DStage::Create(tml::graphic::Manager *mgr)
 {
-	this->Init();
-
 	if (tml::graphic::ModelStage::Create(mgr) < 0) {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -270,11 +262,7 @@ void tml::graphic::Model2D::Init(void)
  */
 INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 {
-	this->Init();
-
 	if (tml::graphic::Model::Create(desc) < 0) {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -283,211 +271,5 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 	this->scale = desc.scale;
 	this->color = desc.color;
 
-	{// Forward2DStage Create
-		auto stage = tml::make_unique<tml::graphic::Model2DStage>(1U);
-
-		if (stage->Create(this->GetManager()) < 0) {
-			this->Init();
-
-			return (-1);
-		}
-
-		stage->SetRasterizerStateIndex(0U);
-		stage->SetBlendStateIndex(0U);
-		stage->SetDepthStateIndex(0U);
-		stage->SetShaderIndex(0U);
-
-		{// RasterizerState Create
-			tml::shared_ptr<tml::graphic::RasterizerState> rs;
-
-			if (this->GetManager()->GetResource<tml::graphic::RasterizerState>(rs, this->GetManager()->common.back_culling_rasterizer_state) == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			this->SetRasterizerState(stage->GetRasterizerStateIndex(), rs);
-		}
-
-		{// BlendState Create
-			tml::shared_ptr<tml::graphic::BlendState> bs;
-
-			if (this->GetManager()->GetResource<tml::graphic::BlendState>(bs, this->GetManager()->common.alignment_blend_state_array[1]) == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			this->SetBlendState(stage->GetBlendStateIndex(), bs);
-		}
-
-		{// DepthState Create
-			tml::shared_ptr<tml::graphic::DepthState> ds;
-
-			if (this->GetManager()->GetResource<tml::graphic::DepthState>(ds, this->GetManager()->common.reference_depth_state) == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			this->SetDepthState(stage->GetDepthStateIndex(), ds);
-		}
-
-		{// Shader Create
-			tml::shared_ptr<tml::graphic::Shader> shader;
-
-			if (this->GetManager()->GetResource<tml::graphic::Shader>(shader, this->GetManager()->common.model_2d_shader) == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			this->SetShader(stage->GetShaderIndex(), shader);
-		}
-
-		{// Layer0 Create
-			auto layer = tml::make_unique<tml::graphic::Model2DLayer>(1U);
-
-			if (layer->Create(this->GetManager()) < 0) {
-				this->Init();
-
-				return (-1);
-			}
-
-			layer->SetMeshIndex(0U);
-			layer->SetDiffuseSamplerIndex(0U);
-
-			{// Mesh Create
-				tml::shared_ptr<tml::graphic::Mesh> mesh;
-
-				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.model_2d_mesh) == nullptr) {
-					this->Init();
-
-					return (-1);
-				}
-
-				this->SetMesh(layer->GetMeshIndex(), mesh);
-			}
-
-			{// DiffuseSampler Create
-				tml::shared_ptr<tml::graphic::Sampler> samp;
-
-				if (this->GetManager()->GetResource<tml::graphic::Sampler>(samp, this->GetManager()->common.cc_sampler) == nullptr) {
-					this->Init();
-
-					return (-1);
-				}
-
-				this->SetSampler(layer->GetDiffuseSamplerIndex(), samp);
-			}
-
-			stage->SetLayer(0U, layer);
-		}
-
-		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
-	}
-
-	{// ShaderStructuredBuffer Create
-		tml::graphic::Model2DShaderStructuredBufferDesc desc;
-
-		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Model2DShaderStructuredBuffer::ELEMENT), 1U);
-
-		if (this->GetManager()->GetResource<tml::graphic::Model2DShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
-	{// LayerShaderStructuredBuffer Create
-		tml::graphic::Model2DLayerShaderStructuredBufferDesc desc;
-
-		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Model2DLayerShaderStructuredBuffer::ELEMENT), 1U);
-
-		if (this->GetManager()->GetResource<tml::graphic::Model2DLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-	}
-
 	return (0);
-}
-
-
-/**
- * @brief IsHitByMouseDeviceä÷êî
- * @param mouse_device_pos (mouse_device_position)
- * @return hit_flg (hit_flag)
- */
-bool tml::graphic::Model2D::IsHitByMouseDevice(const tml::XMINT2EX &mouse_device_pos)
-{
-	tml::XMFLOAT2EX tmp_mouse_device_pos;
-
-	tmp_mouse_device_pos.x = static_cast<FLOAT>(mouse_device_pos.x - static_cast<INT>(this->GetManager()->GetSize().GetHalfX()));
-	tmp_mouse_device_pos.y = static_cast<FLOAT>(-mouse_device_pos.y + static_cast<INT>(this->GetManager()->GetSize().GetHalfY()));
-
-	if ((tmp_mouse_device_pos.x >= (this->position.GetX() - (this->size.GetHalfX() * this->scale.x)))
-	&& (tmp_mouse_device_pos.x <= (this->position.GetX() + (this->size.GetHalfX() * this->scale.x)))
-	&& (tmp_mouse_device_pos.y >= (this->position.GetY() - (this->size.GetHalfY() * this->scale.y)))
-	&& (tmp_mouse_device_pos.y <= (this->position.GetY() + (this->size.GetHalfY() * this->scale.y)))
-	) {
-		return (true);
-	}
-
-	return (false);
-}
-
-
-/**
- * @brief DrawStageInitä÷êî
- */
-void tml::graphic::Model2D::DrawStageInit(void)
-{
-	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayerFast(0U);
-
-	DirectX::XMMATRIX w_mat;
-
-	this->GetManager()->GetWorldMatrix(w_mat, (*this));
-
-	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix, this->GetManager()->GetDrawStageData()->projection_matrix, this->color);
-	this->ssb_->UploadCPUBuffer();
-
-	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
-	this->layer_ssb_->UploadCPUBuffer();
-
-	return;
-}
-
-
-/**
- * @brief DrawStageForward2Dä÷êî
- */
-void tml::graphic::Model2D::DrawStageForward2D(void)
-{
-	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayerFast(0U);
-
-	std::array<tml::graphic::ShaderStructuredBuffer *, 2U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get()};
-
-	this->GetManager()->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::MODEL, ssb_ary.size(), ssb_ary.data());
-
-	this->GetManager()->SetDrawRasterizerState(this->GetRasterizerState(stage->GetRasterizerStateIndex()).get());
-	this->GetManager()->SetDrawBlendState(this->GetBlendState(stage->GetBlendStateIndex()).get());
-	this->GetManager()->SetDrawDepthState(this->GetDepthState(stage->GetDepthStateIndex()).get());
-	this->GetManager()->SetDrawShader(this->GetShader(stage->GetShaderIndex()).get());
-	this->GetManager()->SetDrawMesh(this->GetMesh(layer->GetMeshIndex()).get());
-
-	this->GetManager()->SetDrawTextureSR(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
-	this->GetManager()->SetDrawSamplerSR(0U, this->GetSampler(layer->GetDiffuseSamplerIndex()).get());
-
-	this->GetManager()->Draw(1U);
-
-	this->GetManager()->ClearDrawTextureSR(0U);
-	this->GetManager()->ClearDrawSamplerSR(0U);
-
-	return;
 }

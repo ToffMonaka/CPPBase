@@ -64,10 +64,10 @@ public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
 	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
-	tml::shared_ptr<tml::graphic::Model2D> bg_model;
+	tml::shared_ptr<tml::graphic::FigureModel2D> bg_model;
 	tml::TIME_REAL wait_update_time;
 	tml::shared_ptr<tml::graphic::Font> wait_font;
-	tml::shared_ptr<tml::graphic::Model2D> wait_model;
+	tml::shared_ptr<tml::graphic::FigureModel2D> wait_model;
 	tml::shared_ptr<tml::scene::Node> main_node;
 
 private:

@@ -57,7 +57,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
-	tml::shared_ptr<tml::graphic::Model2D> model;
+	tml::shared_ptr<tml::graphic::GroundModel2D> model;
 
 private:
 	void Release(void);
