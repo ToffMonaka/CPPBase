@@ -98,7 +98,6 @@ cpp_base::input::Manager::~Manager()
  */
 void cpp_base::input::Manager::Release(void)
 {
-	this->factory2.Init();
 	this->common2.Init();
 
 	return;
@@ -134,10 +133,7 @@ INT cpp_base::input::Manager::Create(const cpp_base::input::ManagerDesc &desc)
 		return (-1);
 	}
 
-	if (this->factory2.Create(this) < 0) {
-		this->Init();
-
-		return (-1);
+	{// ResourceFactory Set
 	}
 
 	if (this->common2.Create(this) < 0) {

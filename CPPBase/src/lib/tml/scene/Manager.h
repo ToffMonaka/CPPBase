@@ -7,8 +7,8 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../time/FrameRate.h"
+#include "../file/XMLFile.h"
 #include "../manager/Manager.h"
-#include "ManagerFactory.h"
 #include "ManagerCommon.h"
 
 
@@ -121,12 +121,14 @@ private:
 	tml::shared_ptr<tml::scene::Scene> scene_;
 
 public:
-	tml::scene::ManagerFactory factory;
-	std::map<std::wstring, std::wstring> factory_value_container;
 	tml::scene::ManagerCommon common;
 
 private:
 	void Release(void);
+
+	tml::shared_ptr<tml::scene::Scene> &GetSceneGetPart(tml::shared_ptr<tml::scene::Scene> &, const tml::shared_ptr<tml::XMLFileDataNode> &, INT *dst_result = nullptr);
+	tml::shared_ptr<tml::scene::Node> &GetNodeGetPart(tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &, INT *dst_result = nullptr);
+	void GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
 
 public:
 	Manager();
@@ -136,36 +138,19 @@ public:
 	INT Create(const tml::scene::ManagerDesc &);
 
 	void Update(void);
-	const std::wstring *GetFactoryValue(const WCHAR *) const;
 
 	tml::input::Manager *GetInputManager(void);
 	tml::graphic::Manager *GetGraphicManager(void);
 	tml::sound::Manager *GetSoundManager(void);
 	const tml::FrameRate &GetFrameRate(void) const;
 
+	tml::shared_ptr<tml::scene::Scene> &GetScene(tml::shared_ptr<tml::scene::Scene> &, const tml::XMLFileReadDesc &, INT *dst_result = nullptr);
 	const tml::shared_ptr<tml::scene::Scene> &GetScene(void);
 	INT StartScene(const tml::shared_ptr<tml::scene::Scene> &);
 	void EndScene(void);
+	tml::shared_ptr<tml::scene::Node> &GetNode(tml::shared_ptr<tml::scene::Node> &, const tml::XMLFileReadDesc &, INT *dst_result = nullptr);
 };
 }
-}
-
-
-/**
- * @brief GetFactoryValueä÷êî
- * @param factory_val_name (factory_value_name)
- * @return factory_val (factory_value)<br>
- * nullptr=é∏îs
- */
-inline const std::wstring *tml::scene::Manager::GetFactoryValue(const WCHAR *factory_val_name) const
-{
-	auto factory_val_itr = this->factory_value_container.find(factory_val_name);
-
-	if (factory_val_itr == this->factory_value_container.end()) {
-		return (nullptr);
-	}
-
-	return (&factory_val_itr->second);
 }
 
 

@@ -98,7 +98,6 @@ cpp_base::graphic::Manager::~Manager()
  */
 void cpp_base::graphic::Manager::Release(void)
 {
-	this->factory2.Init();
 	this->common2.Init();
 
 	return;
@@ -134,10 +133,7 @@ INT cpp_base::graphic::Manager::Create(const cpp_base::graphic::ManagerDesc &des
 		return (-1);
 	}
 
-	if (this->factory2.Create(this) < 0) {
-		this->Init();
-
-		return (-1);
+	{// ResourceFactory Set
 	}
 
 	if (this->common2.Create(this) < 0) {

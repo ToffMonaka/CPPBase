@@ -162,7 +162,7 @@ INT cpp_base::scene::Test2DStageNode::OnStart(void)
 	}
 
 	{// FieldNode Create
-		if (this->GetManager()->factory.node_by_xml_file.Get(this->field_node, tml::ConstantUtil::SCENE::CLASS_NAME::NODE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE)) == nullptr) {
+		if (this->GetManager()->GetNode(this->field_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE)) == nullptr) {
 			return (-1);
 		}
 

@@ -379,7 +379,7 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 			{// TitleScene Start
 				tml::shared_ptr<tml::scene::Scene> scene;
 
-				if (this->GetManager()->factory.scene_by_xml_file.Get(scene, tml::ConstantUtil::SCENE::CLASS_NAME::SCENE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TITLE_SCENE)) == nullptr) {
+				if (this->GetManager()->GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TITLE_SCENE)) == nullptr) {
 					if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
 						OutputDebugString(L"Error: TitleScene Create\n");
 					}

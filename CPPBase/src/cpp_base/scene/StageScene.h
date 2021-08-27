@@ -64,6 +64,7 @@ public:
 	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
 	tml::shared_ptr<tml::scene::Node> main_node;
 	tml::shared_ptr<tml::scene::Node> stage_layout_node;
+	tml::shared_ptr<tml::scene::Node> stage_node;
 
 private:
 	void Release(void);

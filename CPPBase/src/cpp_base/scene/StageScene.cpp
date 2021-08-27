@@ -122,6 +122,7 @@ void cpp_base::scene::StageScene::Init(void)
 	this->camera_3d.reset();
 	this->main_node.reset();
 	this->stage_layout_node.reset();
+	this->stage_node.reset();
 
 	cpp_base::scene::Scene::Init();
 
@@ -222,13 +223,11 @@ INT cpp_base::scene::StageScene::OnStart(void)
 	}
 
 	{// StageNode Create
-		tml::shared_ptr<tml::scene::Node> stage_node;
-
-		if (this->GetManager()->factory.node_by_xml_file.Get(stage_node, tml::ConstantUtil::SCENE::CLASS_NAME::NODE, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TEST_2D_STAGE_NODE)) == nullptr) {
+		if (this->GetManager()->GetNode(this->stage_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TEST_2D_STAGE_NODE)) == nullptr) {
 			return (-1);
 		}
 
-		this->stage_layout_node->AddChildNode(stage_node);
+		this->stage_layout_node->AddChildNode(this->stage_node);
 	}
 
 	return (0);

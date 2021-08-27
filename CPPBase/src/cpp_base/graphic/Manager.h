@@ -7,7 +7,6 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../../lib/tml/graphic/Manager.h"
-#include "ManagerFactory.h"
 #include "ManagerCommon.h"
 
 
@@ -60,7 +59,6 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 
 public:
-	cpp_base::graphic::ManagerFactory factory2;
 	cpp_base::graphic::ManagerCommon common2;
 
 private:

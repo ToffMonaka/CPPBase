@@ -98,7 +98,6 @@ cpp_base::sound::Manager::~Manager()
  */
 void cpp_base::sound::Manager::Release(void)
 {
-	this->factory2.Init();
 	this->common2.Init();
 
 	return;
@@ -134,10 +133,7 @@ INT cpp_base::sound::Manager::Create(const cpp_base::sound::ManagerDesc &desc)
 		return (-1);
 	}
 
-	if (this->factory2.Create(this) < 0) {
-		this->Init();
-
-		return (-1);
+	{// ResourceFactory Set
 	}
 
 	if (this->common2.Create(this) < 0) {

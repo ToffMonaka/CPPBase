@@ -124,6 +124,9 @@ void tml::Manager::Init(void)
 	this->friend_res_ = nullptr;
 	this->friend_event_ = nullptr;
 
+	this->resource_factory.Init();
+	this->resource_factory_value_container.clear();
+
 	return;
 }
 
@@ -298,10 +301,10 @@ void tml::Manager::DeleteResourceContainer(void)
 
 
 /**
- * @brief GetResourceInitResourcePartä÷êî
+ * @brief GetResourceInitPartä÷êî
  * @param res (resource)
  */
-void tml::Manager::GetResourceInitResourcePart(tml::shared_ptr<tml::ManagerResource> &res)
+void tml::Manager::GetResourceInitPart(tml::shared_ptr<tml::ManagerResource> &res)
 {
 	res->SetDeferredCreateDesc(nullptr);
 
@@ -410,10 +413,10 @@ void tml::Manager::DeleteEventContainer(void)
 
 
 /**
- * @brief AddEventInitEventPartä÷êî
+ * @brief AddEventInitPartä÷êî
  * @param event (event)
  */
-void tml::Manager::AddEventInitEventPart(tml::unique_ptr<tml::ManagerEvent> &event)
+void tml::Manager::AddEventInitPart(tml::unique_ptr<tml::ManagerEvent> &event)
 {
 	return;
 }

@@ -103,8 +103,6 @@ tml::input::Manager::~Manager()
  */
 void tml::input::Manager::Release(void)
 {
-	this->factory.Init();
-	this->factory_value_container.clear();
 	this->common.Init();
 
 	this->DeleteResourceContainer();
@@ -154,10 +152,7 @@ INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 
 	this->mouse_device_pos_ = tml::XMINT2EX(mouse_device_sys_pos.x, mouse_device_sys_pos.y);
 
-	if (this->factory.Create(this) < 0) {
-		this->Init();
-
-		return (-1);
+	{// ResourceFactory Set
 	}
 
 	if (this->common.Create(this) < 0) {

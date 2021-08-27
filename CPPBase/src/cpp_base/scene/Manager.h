@@ -7,7 +7,6 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../../lib/tml/scene/Manager.h"
-#include "ManagerFactory.h"
 #include "ManagerCommon.h"
 
 
@@ -118,7 +117,6 @@ private:
 	cpp_base::sound::Manager *sound_mgr_;
 
 public:
-	cpp_base::scene::ManagerFactory factory2;
 	cpp_base::scene::ManagerCommon common2;
 
 private:

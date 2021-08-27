@@ -165,7 +165,6 @@ cpp_base::scene::Manager::~Manager()
  */
 void cpp_base::scene::Manager::Release(void)
 {
-	this->factory2.Init();
 	this->common2.Init();
 
 	return;
@@ -217,10 +216,193 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 	this->graphic_mgr_ = desc.GetGraphicManager();
 	this->sound_mgr_ = desc.GetSoundManager();
 
-	if (this->factory2.Create(this) < 0) {
-		this->Init();
+	{// ResourceFactory Set
+		this->resource_factory.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
 
-		return (-1);
+				cpp_base::scene::SceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::Scene>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::INIT_SCENE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::InitSceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::InitScene>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TITLE_SCENE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::TitleSceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::TitleScene>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::SELECT_SCENE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::SelectSceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::SelectScene>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::STAGE_SCENE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::StageSceneDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::StageScene>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::NodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::Node>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TEST_2D_STAGE_NODE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::Test2DStageNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::Test2DStageNode>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_NODE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::Field2DNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::Field2DNode>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_GROUND_NODE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::Field2DGroundNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::Field2DGroundNode>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_PLAYER_NODE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::Field2DPlayerNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::Field2DPlayerNode>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
+
+		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_MOB_NODE,
+			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<tml::ManagerResource> res;
+
+				cpp_base::scene::Field2DMobNodeDesc desc;
+
+				desc.SetManager(this);
+				desc.Read(file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::Field2DMobNode>(res, desc, dst_result) == nullptr) {
+					return (res);
+				}
+
+				return (res);
+			}
+		);
 	}
 
 	if (this->common2.Create(this) < 0) {

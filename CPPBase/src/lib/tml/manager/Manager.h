@@ -11,6 +11,7 @@
 #include <map>
 #include <unordered_map>
 #include "ManagerResource.h"
+#include "ManagerResourceFactory.h"
 #include "ManagerEvent.h"
 
 
@@ -80,9 +81,13 @@ private:
 	std::vector<std::vector<std::vector<tml::unique_ptr<tml::ManagerEvent>>>> stock_event_cont_cont_;
 	tml::ManagerEvent *friend_event_;
 
+public:
+	tml::ManagerResourceFactory resource_factory;
+	std::map<std::wstring, std::wstring> resource_factory_value_container;
+
 private:
-	void GetResourceInitResourcePart(tml::shared_ptr<tml::ManagerResource> &);
-	void AddEventInitEventPart(tml::unique_ptr<tml::ManagerEvent> &);
+	void GetResourceInitPart(tml::shared_ptr<tml::ManagerResource> &);
+	void AddEventInitPart(tml::unique_ptr<tml::ManagerEvent> &);
 
 private:
 	void Release(void);
@@ -119,6 +124,8 @@ public:
 	template <typename T, typename D>
 	INT AddEvent(const D &);
 	bool CheckFriendEvent(const tml::ManagerEvent *) const;
+
+	const std::wstring *GetResourceFactoryValue(const WCHAR *) const;
 };
 }
 
@@ -188,7 +195,6 @@ template <typename T, typename T2, typename D>
 inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const D &desc, INT *dst_result)
 {
 	dst_res.reset();
-
 	tml::SetResult(dst_result, 0);
 
 	const std::wstring &tmp_res_name = desc.resource_name;
@@ -199,7 +205,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		if (res_itr != this->res_cont_by_name_.end()) {
 			dst_res = std::dynamic_pointer_cast<T2>(res_itr->second);
 
-			tml::SetResult(dst_result, 1);
+			tml::SetResult(dst_result, (dst_res != nullptr) ? 1 : -1);
 
 			return (dst_res);
 		}
@@ -223,7 +229,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 	this->friend_res_ = nullptr;
 
 	if (reinterpret_cast<T *>(res.get())->Create(desc) < 0) {
-		this->GetResourceInitResourcePart(res);
+		this->GetResourceInitPart(res);
 
 		tml::SetResult(dst_result, -1);
 
@@ -243,7 +249,7 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 		if ((res->CreateDeferred() < 0)
 		|| (res->IsDeferredCreating())) {
-			this->GetResourceInitResourcePart(res);
+			this->GetResourceInitPart(res);
 
 			tml::SetResult(dst_result, -1);
 
@@ -261,6 +267,10 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 
 	dst_res = std::dynamic_pointer_cast<T2>(res);
 
+	if (dst_res == nullptr) {
+		tml::SetResult(dst_result, -1);
+	}
+
 	return (dst_res);
 }
 
@@ -275,13 +285,9 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 template <typename T, typename T2>
 inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const tml::shared_ptr<T> &res, INT *dst_result)
 {
-	if (std::is_same<T, T2>::value) {
-		dst_res = res;
-	} else {
-		dst_res = std::dynamic_pointer_cast<T2>(res);
-	}
+	dst_res = std::dynamic_pointer_cast<T2>(res);
 
-	tml::SetResult(dst_result, 1);
+	tml::SetResult(dst_result, (dst_res != nullptr) ? 1 : -1);
 
 	return (dst_res);
 }
@@ -298,7 +304,6 @@ template <typename T, typename T2>
 inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_res, const WCHAR *res_name, INT *dst_result)
 {
 	dst_res.reset();
-
 	tml::SetResult(dst_result, 0);
 
 	if ((res_name == nullptr)
@@ -316,10 +321,14 @@ inline tml::shared_ptr<T2> &tml::Manager::GetResource(tml::shared_ptr<T2> &dst_r
 		if (res_itr != this->res_cont_by_name_.end()) {
 			dst_res = std::dynamic_pointer_cast<T2>(res_itr->second);
 
-			tml::SetResult(dst_result, 1);
+			tml::SetResult(dst_result, (dst_res != nullptr) ? 1 : -1);
 
 			return (dst_res);
 		}
+	}
+
+	if (dst_res == nullptr) {
+		tml::SetResult(dst_result, -1);
 	}
 
 	return (dst_res);
@@ -401,7 +410,7 @@ inline INT tml::Manager::AddEvent(const D &desc)
 		this->friend_event_ = nullptr;
 
 		if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {
-			this->AddEventInitEventPart(event);
+			this->AddEventInitPart(event);
 
 			return (-1);
 		}
@@ -422,4 +431,22 @@ inline INT tml::Manager::AddEvent(const D &desc)
 	++event_cnt;
 
 	return (0);
+}
+
+
+/**
+ * @brief GetResourceFactoryValueä÷êî
+ * @param res_factory_val_name (resource_factory_value_name)
+ * @return resource_factory_val (resource_factory_value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::Manager::GetResourceFactoryValue(const WCHAR *res_factory_val_name) const
+{
+	auto res_factory_val_itr = this->resource_factory_value_container.find(res_factory_val_name);
+
+	if (res_factory_val_itr == this->resource_factory_value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&res_factory_val_itr->second);
 }
