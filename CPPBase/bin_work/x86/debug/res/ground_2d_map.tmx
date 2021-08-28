@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="64" tileheight="64" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="main" tilewidth="64" tileheight="64" tilecount="2" columns="2">
+  <image source="ground_2d_atlas_img.png" width="128" height="64"/>
+ </tileset>
+ <layer id="1" name="main" width="8" height="8">
+  <data encoding="csv">
+2,1,2,1,2,1,2,1,
+1,2,1,2,1,2,1,2,
+2,1,2,1,2,1,2,1,
+1,2,1,2,1,2,1,2,
+2,1,2,1,2,1,2,1,
+1,2,1,2,1,2,1,2,
+2,1,2,1,2,1,2,1,
+1,2,1,2,1,2,1,2
+</data>
+ </layer>
+</map>
