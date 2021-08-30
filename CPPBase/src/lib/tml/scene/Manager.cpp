@@ -407,13 +407,15 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetScene(tml::shared_pt
 		return (dst_scene);
 	}
 
-	if (xml_file.data.GetRootNode()->GetChildNodeContainer().empty()) {
+	auto &xml_file_root_node = xml_file.data.GetRootNode();
+
+	if (xml_file_root_node->GetChildNodeContainer().empty()) {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_scene);
 	}
 
-	auto &xml_file_node = xml_file.data.GetRootNode()->GetChildNodeContainer().front();
+	auto &xml_file_node = xml_file_root_node->GetChildNodeContainer().front();
 
 	if (xml_file_node->name != L"scene") {
 		tml::SetResult(dst_result, -1);
@@ -560,13 +562,15 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNode(tml::shared_ptr<
 		return (dst_node);
 	}
 
-	if (xml_file.data.GetRootNode()->GetChildNodeContainer().empty()) {
+	auto &xml_file_root_node = xml_file.data.GetRootNode();
+
+	if (xml_file_root_node->GetChildNodeContainer().empty()) {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_node);
 	}
 
-	auto &xml_file_node = xml_file.data.GetRootNode()->GetChildNodeContainer().front();
+	auto &xml_file_node = xml_file_root_node->GetChildNodeContainer().front();
 
 	if (xml_file_node->name != L"node") {
 		tml::SetResult(dst_result, -1);
@@ -659,15 +663,15 @@ void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene:
 			bool result_flg = true;
 
 			for (auto &val : xml_file_node->value_container) {
-				auto factory_val = this->GetResourceFactoryValue(val.first.c_str());
+				auto res_factory_val = this->resource_factory.GetValue(val.first.c_str());
 
-				if (factory_val == nullptr) {
+				if (res_factory_val == nullptr) {
 					result_flg = false;
 
 					break;
 				}
 
-				if ((*factory_val) != val.second) {
+				if ((*res_factory_val) != val.second) {
 					result_flg = false;
 
 					break;

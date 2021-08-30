@@ -5,6 +5,7 @@
 
 
 #include "GroundModel2D.h"
+#include "../string/StringUtil.h"
 #include "Manager.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
@@ -168,6 +169,8 @@ void tml::graphic::GroundModel2DDesc::Init(void)
 {
 	this->Release();
 
+	this->file_read_desc.Init();
+
 	tml::graphic::Model2DDesc::Init();
 
 	return;
@@ -205,7 +208,9 @@ INT tml::graphic::GroundModel2DDesc::ReadValue(const tml::INIFile &ini_file)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::GroundModel2D::GroundModel2D()
+tml::graphic::GroundModel2D::GroundModel2D() :
+	mass_cnt_(0U),
+	mass_size_(0U)
 {
 	return;
 }
@@ -238,6 +243,10 @@ void tml::graphic::GroundModel2D::Init(void)
 {
 	this->Release();
 
+	this->mass_cnt_ = 0U;
+	this->mass_size_ = 0U;
+	this->mass_type_cont_.clear();
+
 	tml::graphic::Model2D::Init();
 
 	return;
@@ -255,6 +264,114 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	this->Init();
 
 	if (tml::graphic::Model2D::Create(desc) < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	auto file_read_desc_dat = desc.file_read_desc.GetDataByParent();
+
+	tml::XMLFile xml_file;
+
+	xml_file.read_desc.parent_data = file_read_desc_dat;
+
+	if (xml_file.Read() < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	auto &xml_file_root_node = xml_file.data.GetRootNode();
+
+	if (xml_file_root_node->GetChildNodeContainer().empty()) {
+		this->Init();
+
+		return (-1);
+	}
+
+	auto &xml_file_map_node = xml_file_root_node->GetChildNode(L"map");
+
+	if (xml_file_map_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	auto &xml_file_img_node = xml_file_root_node->GetChildNode(L"image");
+
+	if (xml_file_img_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	auto &xml_file_dat_node = xml_file_root_node->GetChildNode(L"data");
+
+	if (xml_file_dat_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	const std::wstring *val = nullptr;
+	std::vector<std::wstring> val_cont;
+
+	val = xml_file_map_node->GetValue(L"width");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->mass_cnt_.x, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = xml_file_map_node->GetValue(L"height");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->mass_cnt_.y, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = xml_file_map_node->GetValue(L"tilewidth");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->mass_size_.x, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = xml_file_map_node->GetValue(L"tileheight");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->mass_size_.y, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	tml::StringUtil::Split(val_cont, xml_file_dat_node->string.c_str(), L",");
+
+	this->mass_type_cont_.resize(val_cont.size());
+
+	for (size_t val_i = 0U; val_i < val_cont.size(); ++val_i) {
+		tml::StringUtil::GetValue(this->mass_type_cont_[val_i], val_cont[val_i].c_str());
+	}
+
+	std::wstring mass_img_file_path;
+
+	val = xml_file_img_node->GetValue(L"source");
+
+	if (val != nullptr) {
+		mass_img_file_path = L"res/";
+		mass_img_file_path += (*val);
+	} else {
 		this->Init();
 
 		return (-1);

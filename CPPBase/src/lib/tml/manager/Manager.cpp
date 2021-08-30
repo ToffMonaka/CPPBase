@@ -123,9 +123,7 @@ void tml::Manager::Init(void)
 	this->wnd_dc_handle_ = nullptr;
 	this->friend_res_ = nullptr;
 	this->friend_event_ = nullptr;
-
 	this->resource_factory.Init();
-	this->resource_factory_value_container.clear();
 
 	return;
 }

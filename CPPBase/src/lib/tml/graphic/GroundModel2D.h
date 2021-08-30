@@ -6,6 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMathUINT.h"
+#include "../file/XMLFile.h"
 #include "Model2D.h"
 
 
@@ -114,6 +116,7 @@ namespace graphic {
 class GroundModel2DDesc : public tml::graphic::Model2DDesc
 {
 public:
+	tml::XMLFileReadDesc file_read_desc;
 
 private:
 	void Release(void);
@@ -152,6 +155,9 @@ public: tml::graphic::GroundModel2D &operator =(const tml::graphic::GroundModel2
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	tml::XMUINT2EX mass_cnt_;
+	tml::XMUINT2EX mass_size_;
+	std::vector<UINT> mass_type_cont_;
 
 private:
 	void Release(void);

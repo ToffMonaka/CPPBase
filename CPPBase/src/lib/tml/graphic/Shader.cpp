@@ -81,10 +81,16 @@ HRESULT __stdcall tml::graphic::ShaderInclude::Open(D3D_INCLUDE_TYPE inc_type, L
 		return (E_FAIL);
 	}
 
-	(*dst_dat) = bin_file.data.buffer.Get();
-	(*dst_dat_len) = bin_file.data.buffer.GetLength();
+	auto &bin_file_buf = bin_file.data.buffer;
 
-	bin_file.data.buffer.Clear();
+	if (bin_file_buf.GetLength() <= 0U) {
+		return (E_FAIL);
+	}
+
+	(*dst_dat) = bin_file_buf.Get();
+	(*dst_dat_len) = bin_file_buf.GetLength();
+
+	bin_file_buf.Clear();
 
 	return (S_OK);
 }

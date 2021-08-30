@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>mass1_none_img.png</key>
+            <key>mass1_base_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -16,21 +16,6 @@
                 <string>{64,64}</string>
                 <key>textureRect</key>
                 <string>{{0,0},{64,64}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>mass2_base_img.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{64,64}</string>
-                <key>spriteSourceSize</key>
-                <string>{64,64}</string>
-                <key>textureRect</key>
-                <string>{{64,0},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -46,9 +31,9 @@
             <key>realTextureFileName</key>
             <string>ground_2d_atlas_img.png</string>
             <key>size</key>
-            <string>{128,64}</string>
+            <string>{64,64}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:e5be9ae811def4961496544ad7bfc9c4:15e01ec59bc50320b6305d463eb72094:eee90c18d3ee2d5b53a4796a3613758c$</string>
+            <string>$TexturePacker:SmartUpdate:96c446b04aca290ba339f0f0a33f8579:0a3959fe2d10344fca3d4e509296d164:eee90c18d3ee2d5b53a4796a3613758c$</string>
             <key>textureFileName</key>
             <string>ground_2d_atlas_img.png</string>
         </dict>

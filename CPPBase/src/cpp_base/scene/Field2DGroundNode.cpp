@@ -141,6 +141,7 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
+		desc.file_read_desc.data.file_path = L"res/ground_2d_map.tmx";
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::GroundModel2D>(this->model, desc) == nullptr) {
 			this->Init();

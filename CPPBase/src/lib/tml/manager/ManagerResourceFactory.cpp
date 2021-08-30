@@ -35,6 +35,7 @@ void tml::ManagerResourceFactory::Init(void)
 	this->Release();
 
 	this->func_cont_.clear();
+	this->value_container.clear();
 
 	return;
 }

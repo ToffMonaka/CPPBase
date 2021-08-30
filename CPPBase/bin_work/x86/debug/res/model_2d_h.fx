@@ -1,5 +1,5 @@
-#ifndef __MODEL_2D_UTIL_H__
-#define __MODEL_2D_UTIL_H__
+#ifndef __MODEL_2D_H__
+#define __MODEL_2D_H__
 
 
 #include "constant_util_h.fx"

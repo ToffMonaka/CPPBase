@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <functional>
+#include <map>
 #include <unordered_map>
 #include "ManagerResource.h"
 
@@ -23,6 +24,9 @@ public: tml::ManagerResourceFactory &operator =(const tml::ManagerResourceFactor
 private:
 	std::unordered_map<std::wstring, std::function<tml::shared_ptr<tml::ManagerResource>(const tml::INIFileReadDesc &, INT *)>> func_cont_;
 
+public:
+	std::map<std::wstring, std::wstring> value_container;
+
 private:
 	void Release(void);
 
@@ -36,6 +40,7 @@ public:
 	tml::shared_ptr<T> &Get(tml::shared_ptr<T> &, const WCHAR *, const tml::INIFileReadDesc &, INT *dst_result = nullptr);
 	INT AddFunction(const WCHAR *, std::function<tml::shared_ptr<tml::ManagerResource>(const tml::INIFileReadDesc &, INT *)>);
 	void RemoveFunction(const WCHAR *);
+	const std::wstring *GetValue(const WCHAR *) const;
 };
 }
 
@@ -87,4 +92,22 @@ inline tml::shared_ptr<T> &tml::ManagerResourceFactory::Get(tml::shared_ptr<T> &
 	}
 
 	return (dst_res);
+}
+
+
+/**
+ * @brief GetValueä÷êî
+ * @param val_name (value_name)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::ManagerResourceFactory::GetValue(const WCHAR *val_name) const
+{
+	auto res_factory_val_itr = this->value_container.find(val_name);
+
+	if (res_factory_val_itr == this->value_container.end()) {
+		return (nullptr);
+	}
+
+	return (&res_factory_val_itr->second);
 }

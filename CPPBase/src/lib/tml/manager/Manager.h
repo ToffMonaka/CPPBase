@@ -8,8 +8,6 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include <list>
-#include <map>
-#include <unordered_map>
 #include "ManagerResource.h"
 #include "ManagerResourceFactory.h"
 #include "ManagerEvent.h"
@@ -83,7 +81,6 @@ private:
 
 public:
 	tml::ManagerResourceFactory resource_factory;
-	std::map<std::wstring, std::wstring> resource_factory_value_container;
 
 private:
 	void GetResourceInitPart(tml::shared_ptr<tml::ManagerResource> &);
@@ -124,8 +121,6 @@ public:
 	template <typename T, typename D>
 	INT AddEvent(const D &);
 	bool CheckFriendEvent(const tml::ManagerEvent *) const;
-
-	const std::wstring *GetResourceFactoryValue(const WCHAR *) const;
 };
 }
 
@@ -431,22 +426,4 @@ inline INT tml::Manager::AddEvent(const D &desc)
 	++event_cnt;
 
 	return (0);
-}
-
-
-/**
- * @brief GetResourceFactoryValueä÷êî
- * @param res_factory_val_name (resource_factory_value_name)
- * @return resource_factory_val (resource_factory_value)<br>
- * nullptr=é∏îs
- */
-inline const std::wstring *tml::Manager::GetResourceFactoryValue(const WCHAR *res_factory_val_name) const
-{
-	auto res_factory_val_itr = this->resource_factory_value_container.find(res_factory_val_name);
-
-	if (res_factory_val_itr == this->resource_factory_value_container.end()) {
-		return (nullptr);
-	}
-
-	return (&res_factory_val_itr->second);
 }
