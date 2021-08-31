@@ -176,13 +176,13 @@ void tml::graphic::Model2DDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Model2DDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::graphic::Model2DDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (tml::graphic::ModelDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ModelDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -191,7 +191,7 @@ INT tml::graphic::Model2DDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// Model2D Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"MODEL_2D");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"MODEL_2D");
 
 		if (val_name_cont != nullptr) {
 		}

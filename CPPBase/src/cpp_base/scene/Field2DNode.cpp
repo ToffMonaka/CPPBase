@@ -49,13 +49,13 @@ void cpp_base::scene::Field2DNodeDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::Field2DNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::Field2DNodeDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (cpp_base::scene::NodeDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::NodeDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -64,7 +64,7 @@ INT cpp_base::scene::Field2DNodeDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// Field2DNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"FIELD_2D_NODE");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"FIELD_2D_NODE");
 
 		if (val_name_cont != nullptr) {
 		}

@@ -57,13 +57,13 @@ void cpp_base::scene::InitSceneDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::InitSceneDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::InitSceneDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (cpp_base::scene::SceneDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::SceneDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -72,7 +72,7 @@ INT cpp_base::scene::InitSceneDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// InitScene Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"INIT_SCENE");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"INIT_SCENE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -379,7 +379,7 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 			{// TitleScene Start
 				tml::shared_ptr<tml::scene::Scene> scene;
 
-				if (this->GetManager()->GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TITLE_SCENE)) == nullptr) {
+				if (this->GetManager()->GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TITLE_SCENE_PREFAB)) == nullptr) {
 					if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
 						OutputDebugString(L"Error: TitleScene Create\n");
 					}

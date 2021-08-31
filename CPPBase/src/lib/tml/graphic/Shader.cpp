@@ -167,13 +167,13 @@ void tml::graphic::ShaderDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::ShaderDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::graphic::ShaderDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -181,88 +181,88 @@ INT tml::graphic::ShaderDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// Shader Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"SHADER");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"SHADER");
 
 		if (val_name_cont != nullptr) {
-			val = ini_file.data.GetValue((*val_name_cont), L"FILE_PATH");
+			val = conf_file.data.GetValue((*val_name_cont), L"FILE_PATH");
 
 			if (val != nullptr) {
 				this->file_read_desc.data.file_path = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"INC_DIR_PATH");
+			val = conf_file.data.GetValue((*val_name_cont), L"INC_DIR_PATH");
 
 			if (val != nullptr) {
 				this->include_directory_path = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"VS_FUNC_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"VS_FUNC_NAME");
 
 			if (val != nullptr) {
 				this->vertex_shader_function_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"VS_MODEL_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"VS_MODEL_NAME");
 
 			if (val != nullptr) {
 				this->vertex_shader_model_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"HS_FUNC_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"HS_FUNC_NAME");
 
 			if (val != nullptr) {
 				this->hull_shader_function_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"HS_MODEL_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"HS_MODEL_NAME");
 
 			if (val != nullptr) {
 				this->hull_shader_model_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"DS_FUNC_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"DS_FUNC_NAME");
 
 			if (val != nullptr) {
 				this->domain_shader_function_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"DS_MODEL_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"DS_MODEL_NAME");
 
 			if (val != nullptr) {
 				this->domain_shader_model_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"GS_FUNC_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"GS_FUNC_NAME");
 
 			if (val != nullptr) {
 				this->geometry_shader_function_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"GS_MODEL_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"GS_MODEL_NAME");
 
 			if (val != nullptr) {
 				this->geometry_shader_model_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"PS_FUNC_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"PS_FUNC_NAME");
 
 			if (val != nullptr) {
 				this->pixel_shader_function_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"PS_MODEL_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"PS_MODEL_NAME");
 
 			if (val != nullptr) {
 				this->pixel_shader_model_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"CS_FUNC_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"CS_FUNC_NAME");
 
 			if (val != nullptr) {
 				this->compute_shader_function_name = (*val);
 			}
 
-			val = ini_file.data.GetValue((*val_name_cont), L"CS_MODEL_NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"CS_MODEL_NAME");
 
 			if (val != nullptr) {
 				this->compute_shader_model_name = (*val);

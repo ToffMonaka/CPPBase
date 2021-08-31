@@ -219,13 +219,13 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 
 	{// ResourceFactory Set
 		this->resource_factory.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
-			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
 				tml::scene::SceneDesc desc;
 
 				desc.SetManager(this);
-				desc.Read(file_read_desc);
+				desc.Read(conf_file_read_desc);
 
 				if (this->GetResource<tml::scene::Scene>(res, desc, dst_result) == nullptr) {
 					return (res);
@@ -236,13 +236,13 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 		);
 
 		this->resource_factory.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
-			[this] (const tml::INIFileReadDesc &file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
 				tml::scene::NodeDesc desc;
 
 				desc.SetManager(this);
-				desc.Read(file_read_desc);
+				desc.Read(conf_file_read_desc);
 
 				if (this->GetResource<tml::scene::Node>(res, desc, dst_result) == nullptr) {
 					return (res);
@@ -386,38 +386,38 @@ void tml::scene::Manager::Update(void)
 /**
  * @brief GetSceneä÷êî
  * @param dst_scene (dst_scene)
- * @param file_read_desc (file_read_desc)
+ * @param prefab_file_read_desc (prefab_file_read_desc)
  * @param dst_result (dst_result)
  * @return dst_scene (dst_scene)
  */
-tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetScene(tml::shared_ptr<tml::scene::Scene> &dst_scene, const tml::XMLFileReadDesc &file_read_desc, INT *dst_result)
+tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetScene(tml::shared_ptr<tml::scene::Scene> &dst_scene, const tml::XMLFileReadDesc &prefab_file_read_desc, INT *dst_result)
 {
 	dst_scene.reset();
 	tml::SetResult(dst_result, 0);
 
-	auto file_read_desc_dat = file_read_desc.GetDataByParent();
+	auto prefab_file_read_desc_dat = prefab_file_read_desc.GetDataByParent();
 
-	tml::XMLFile xml_file;
+	tml::XMLFile prefab_file;
 
-	xml_file.read_desc.parent_data = file_read_desc_dat;
+	prefab_file.read_desc.parent_data = prefab_file_read_desc_dat;
 
-	if (xml_file.Read() < 0) {
+	if (prefab_file.Read() < 0) {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_scene);
 	}
 
-	auto &xml_file_root_node = xml_file.data.GetRootNode();
+	auto &prefab_file_root_node = prefab_file.data.GetRootNode();
 
-	if (xml_file_root_node->GetChildNodeContainer().empty()) {
+	if (prefab_file_root_node->GetChildNodeContainer().empty()) {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_scene);
 	}
 
-	auto &xml_file_node = xml_file_root_node->GetChildNodeContainer().front();
+	auto &prefab_file_node = prefab_file_root_node->GetChildNodeContainer().front();
 
-	if (xml_file_node->name != L"scene") {
+	if (prefab_file_node->name != L"scene") {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_scene);
@@ -425,15 +425,15 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetScene(tml::shared_pt
 
 	INT get_result = 0;
 
-	if (this->GetSceneGetPart(dst_scene, xml_file_node, &get_result) == nullptr) {
+	if (this->GetSceneGetPart(dst_scene, prefab_file_node, &get_result) == nullptr) {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_scene);
 	}
 
 	if (get_result == 0) {
-		for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
-			this->GetNodeRecursivePart(dst_scene->GetRootNode(), xml_file_child_node);
+		for (auto &prefab_file_child_node : prefab_file_node->GetChildNodeContainer()) {
+			this->GetNodeRecursivePart(dst_scene->GetRootNode(), prefab_file_child_node);
 		}
 	}
 
@@ -446,35 +446,25 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetScene(tml::shared_pt
 /**
  * @brief GetSceneGetPartä÷êî
  * @param dst_scene (dst_scene)
- * @param xml_file_node (xml_file_node)
+ * @param prefab_file_node (prefab_file_node)
  * @param dst_result (dst_result)
  */
-tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::shared_ptr<tml::scene::Scene> &dst_scene, const tml::shared_ptr<tml::XMLFileDataNode> &xml_file_node, INT *dst_result)
+tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::shared_ptr<tml::scene::Scene> &dst_scene, const tml::shared_ptr<tml::XMLFileDataNode> &prefab_file_node, INT *dst_result)
 {
-	auto class_name = xml_file_node->GetValue(L"class_name");
-	auto ini_file_path = xml_file_node->GetValue(L"ini_file_path");
-	auto xml_file_path = xml_file_node->GetValue(L"xml_file_path");
-	auto res_name = xml_file_node->GetValue(L"res_name");
+	auto class_name = prefab_file_node->GetValue(L"class_name");
+	auto conf_file_path = prefab_file_node->GetValue(L"conf_file_path");
+	auto res_name = prefab_file_node->GetValue(L"res_name");
+	auto prefab_file_path = prefab_file_node->GetValue(L"prefab_file_path");
 
 	if (class_name != nullptr) {
-		if (xml_file_path != nullptr) {
-			if ((*class_name) != ConstantUtil::SCENE::CLASS_NAME::SCENE) {
-				tml::SetResult(dst_result, -1);
-
-				return (dst_scene);
-			}
-
-			if (this->GetScene(dst_scene, tml::XMLFileReadDesc(xml_file_path->c_str()), dst_result) == nullptr) {
-				return (dst_scene);
-			}
-		} else if (ini_file_path != nullptr) {
-			if (this->resource_factory.Get(dst_scene, class_name->c_str(), tml::INIFileReadDesc(ini_file_path->c_str()), dst_result) == nullptr) {
+		if (conf_file_path != nullptr) {
+			if (this->resource_factory.Get(dst_scene, class_name->c_str(), tml::INIFileReadDesc(conf_file_path->c_str()), dst_result) == nullptr) {
 				return (dst_scene);
 			}
 		} else {
 			tml::INIFileReadDesc desc;
 
-			desc.data.string = xml_file_node->string;
+			desc.data.string = prefab_file_node->string;
 
 			if (this->resource_factory.Get(dst_scene, class_name->c_str(), desc, dst_result) == nullptr) {
 				return (dst_scene);
@@ -482,6 +472,10 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::sh
 		}
 	} else if (res_name != nullptr) {
 		if (this->GetResource<tml::scene::Scene>(dst_scene, res_name->c_str(), dst_result) == nullptr) {
+			return (dst_scene);
+		}
+	} else if (prefab_file_path != nullptr) {
+		if (this->GetScene(dst_scene, tml::XMLFileReadDesc(prefab_file_path->c_str()), dst_result) == nullptr) {
 			return (dst_scene);
 		}
 	} else {
@@ -541,38 +535,38 @@ void tml::scene::Manager::EndScene(void)
 /**
  * @brief GetNodeä÷êî
  * @param dst_node (dst_node)
- * @param file_read_desc (file_read_desc)
+ * @param prefab_file_read_desc (prefab_file_read_desc)
  * @param dst_result (dst_result)
  * @return dst_node (dst_node)
  */
-tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNode(tml::shared_ptr<tml::scene::Node> &dst_node, const tml::XMLFileReadDesc &file_read_desc, INT *dst_result)
+tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNode(tml::shared_ptr<tml::scene::Node> &dst_node, const tml::XMLFileReadDesc &prefab_file_read_desc, INT *dst_result)
 {
 	dst_node.reset();
 	tml::SetResult(dst_result, 0);
 
-	auto file_read_desc_dat = file_read_desc.GetDataByParent();
+	auto prefab_file_read_desc_dat = prefab_file_read_desc.GetDataByParent();
 
-	tml::XMLFile xml_file;
+	tml::XMLFile prefab_file;
 
-	xml_file.read_desc.parent_data = file_read_desc_dat;
+	prefab_file.read_desc.parent_data = prefab_file_read_desc_dat;
 
-	if (xml_file.Read() < 0) {
+	if (prefab_file.Read() < 0) {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_node);
 	}
 
-	auto &xml_file_root_node = xml_file.data.GetRootNode();
+	auto &prefab_file_root_node = prefab_file.data.GetRootNode();
 
-	if (xml_file_root_node->GetChildNodeContainer().empty()) {
+	if (prefab_file_root_node->GetChildNodeContainer().empty()) {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_node);
 	}
 
-	auto &xml_file_node = xml_file_root_node->GetChildNodeContainer().front();
+	auto &prefab_file_node = prefab_file_root_node->GetChildNodeContainer().front();
 
-	if (xml_file_node->name != L"node") {
+	if (prefab_file_node->name != L"node") {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_node);
@@ -580,15 +574,15 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNode(tml::shared_ptr<
 
 	INT get_result = 0;
 
-	if (this->GetNodeGetPart(dst_node, xml_file_node, &get_result) == nullptr) {
+	if (this->GetNodeGetPart(dst_node, prefab_file_node, &get_result) == nullptr) {
 		tml::SetResult(dst_result, -1);
 
 		return (dst_node);
 	}
 
 	if (get_result == 0) {
-		for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
-			this->GetNodeRecursivePart(dst_node, xml_file_child_node);
+		for (auto &prefab_file_child_node : prefab_file_node->GetChildNodeContainer()) {
+			this->GetNodeRecursivePart(dst_node, prefab_file_child_node);
 		}
 	}
 
@@ -601,35 +595,25 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNode(tml::shared_ptr<
 /**
  * @brief GetNodeGetPartä÷êî
  * @param dst_node (dst_node)
- * @param xml_file_node (xml_file_node)
+ * @param prefab_file_node (prefab_file_node)
  * @param dst_result (dst_result)
  */
-tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shared_ptr<tml::scene::Node> &dst_node, const tml::shared_ptr<tml::XMLFileDataNode> &xml_file_node, INT *dst_result)
+tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shared_ptr<tml::scene::Node> &dst_node, const tml::shared_ptr<tml::XMLFileDataNode> &prefab_file_node, INT *dst_result)
 {
-	auto class_name = xml_file_node->GetValue(L"class_name");
-	auto ini_file_path = xml_file_node->GetValue(L"ini_file_path");
-	auto xml_file_path = xml_file_node->GetValue(L"xml_file_path");
-	auto res_name = xml_file_node->GetValue(L"res_name");
+	auto class_name = prefab_file_node->GetValue(L"class_name");
+	auto conf_file_path = prefab_file_node->GetValue(L"conf_file_path");
+	auto res_name = prefab_file_node->GetValue(L"res_name");
+	auto prefab_file_path = prefab_file_node->GetValue(L"prefab_file_path");
 
 	if (class_name != nullptr) {
-		if (xml_file_path != nullptr) {
-			if ((*class_name) != ConstantUtil::SCENE::CLASS_NAME::NODE) {
-				tml::SetResult(dst_result, -1);
-
-				return (dst_node);
-			}
-
-			if (this->GetNode(dst_node, tml::XMLFileReadDesc(xml_file_path->c_str()), dst_result) == nullptr) {
-				return (dst_node);
-			}
-		} else if (ini_file_path != nullptr) {
-			if (this->resource_factory.Get(dst_node, class_name->c_str(), tml::INIFileReadDesc(ini_file_path->c_str()), dst_result) == nullptr) {
+		if (conf_file_path != nullptr) {
+			if (this->resource_factory.Get(dst_node, class_name->c_str(), tml::INIFileReadDesc(conf_file_path->c_str()), dst_result) == nullptr) {
 				return (dst_node);
 			}
 		} else {
 			tml::INIFileReadDesc desc;
 
-			desc.data.string = xml_file_node->string;
+			desc.data.string = prefab_file_node->string;
 
 			if (this->resource_factory.Get(dst_node, class_name->c_str(), desc, dst_result) == nullptr) {
 				return (dst_node);
@@ -637,6 +621,10 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shar
 		}
 	} else if (res_name != nullptr) {
 		if (this->GetResource<tml::scene::Node>(dst_node, res_name->c_str(), dst_result) == nullptr) {
+			return (dst_node);
+		}
+	} else if (prefab_file_path != nullptr) {
+		if (this->GetNode(dst_node, tml::XMLFileReadDesc(prefab_file_path->c_str()), dst_result) == nullptr) {
 			return (dst_node);
 		}
 	} else {
@@ -652,17 +640,17 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shar
 /**
  * @brief GetNodeRecursivePartä÷êî
  * @param parent_node (parent_node)
- * @param xml_file_node (xml_file_node)
+ * @param prefab_file_node (prefab_file_node)
  */
-void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &parent_node, const tml::shared_ptr<tml::XMLFileDataNode> &xml_file_node)
+void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &parent_node, const tml::shared_ptr<tml::XMLFileDataNode> &prefab_file_node)
 {
 	tml::shared_ptr<tml::scene::Node> child_node;
 
-	if (xml_file_node->name != L"node") {
-		if (xml_file_node->name == L"if") {
+	if (prefab_file_node->name != L"node") {
+		if (prefab_file_node->name == L"if") {
 			bool result_flg = true;
 
-			for (auto &val : xml_file_node->value_container) {
+			for (auto &val : prefab_file_node->value_container) {
 				auto res_factory_val = this->resource_factory.GetValue(val.first.c_str());
 
 				if (res_factory_val == nullptr) {
@@ -679,8 +667,8 @@ void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene:
 			}
 
 			if (result_flg) {
-				for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
-					this->GetNodeRecursivePart(parent_node, xml_file_child_node);
+				for (auto &prefab_file_child_node : prefab_file_node->GetChildNodeContainer()) {
+					this->GetNodeRecursivePart(parent_node, prefab_file_child_node);
 				}
 			}
 		}
@@ -690,7 +678,7 @@ void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene:
 
 	INT get_result = 0;
 
-	if (this->GetNodeGetPart(child_node, xml_file_node, &get_result) == nullptr) {
+	if (this->GetNodeGetPart(child_node, prefab_file_node, &get_result) == nullptr) {
 		return;
 	}
 
@@ -699,8 +687,8 @@ void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene:
 	parent_node->AddChildNode(child_node);
 
 	if (get_result == 0) {
-		for (auto &xml_file_child_node : xml_file_node->GetChildNodeContainer()) {
-			this->GetNodeRecursivePart(child_node, xml_file_child_node);
+		for (auto &prefab_file_child_node : prefab_file_node->GetChildNodeContainer()) {
+			this->GetNodeRecursivePart(child_node, prefab_file_child_node);
 		}
 	}
 

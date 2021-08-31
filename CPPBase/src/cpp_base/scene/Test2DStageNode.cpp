@@ -48,13 +48,13 @@ void cpp_base::scene::Test2DStageNodeDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::Test2DStageNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::Test2DStageNodeDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (cpp_base::scene::NodeDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::NodeDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -63,7 +63,7 @@ INT cpp_base::scene::Test2DStageNodeDesc::ReadValue(const tml::INIFile &ini_file
 	const std::wstring *val = nullptr;
 
 	{// Test2DStageNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"TEST_2D_STAGE_NODE");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"TEST_2D_STAGE_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -162,7 +162,7 @@ INT cpp_base::scene::Test2DStageNode::OnStart(void)
 	}
 
 	{// FieldNode Create
-		if (this->GetManager()->GetNode(this->field_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE)) == nullptr) {
+		if (this->GetManager()->GetNode(this->field_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE_PREFAB)) == nullptr) {
 			return (-1);
 		}
 

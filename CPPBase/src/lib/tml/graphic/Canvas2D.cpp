@@ -54,13 +54,13 @@ void tml::graphic::Canvas2DDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Canvas2DDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::graphic::Canvas2DDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (tml::graphic::CanvasDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::CanvasDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -69,7 +69,7 @@ INT tml::graphic::Canvas2DDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// Canvas2D Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"CANVAS_2D");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"CANVAS_2D");
 
 		if (val_name_cont != nullptr) {
 		}

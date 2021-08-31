@@ -68,13 +68,13 @@ void tml::graphic::MeshDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::MeshDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::graphic::MeshDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -83,7 +83,7 @@ INT tml::graphic::MeshDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// Mesh Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"MESH");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"MESH");
 
 		if (val_name_cont != nullptr) {
 		}

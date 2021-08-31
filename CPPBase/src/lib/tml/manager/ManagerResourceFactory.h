@@ -58,12 +58,12 @@ inline void tml::ManagerResourceFactory::Release(void)
  * @brief Getä÷êî
  * @param dst_res (dst_resource)
  * @param class_name (class_name)
- * @param file_read_desc (file_read_desc)
+ * @param conf_file_read_desc (config_file_read_desc)
  * @param dst_result (dst_result)
  * @return dst_res (dst_resource)
  */
 template <typename T>
-inline tml::shared_ptr<T> &tml::ManagerResourceFactory::Get(tml::shared_ptr<T> &dst_res, const WCHAR *class_name, const tml::INIFileReadDesc &file_read_desc, INT *dst_result)
+inline tml::shared_ptr<T> &tml::ManagerResourceFactory::Get(tml::shared_ptr<T> &dst_res, const WCHAR *class_name, const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result)
 {
 	dst_res.reset();
 	tml::SetResult(dst_result, 0);
@@ -83,7 +83,7 @@ inline tml::shared_ptr<T> &tml::ManagerResourceFactory::Get(tml::shared_ptr<T> &
 		return (dst_res);
 	}
 
-	tml::shared_ptr<tml::ManagerResource> res = func_itr->second(file_read_desc, dst_result);
+	tml::shared_ptr<tml::ManagerResource> res = func_itr->second(conf_file_read_desc, dst_result);
 
 	dst_res = std::dynamic_pointer_cast<T>(res);
 

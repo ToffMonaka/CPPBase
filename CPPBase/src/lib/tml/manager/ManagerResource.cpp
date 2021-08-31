@@ -47,50 +47,50 @@ void tml::ManagerResourceDesc::Init(void)
 
 /**
  * @brief Readä÷êî
- * @param file_read_desc (file_read_desc)
+ * @param conf_file_read_desc (config_file_read_desc)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::ManagerResourceDesc::Read(const tml::INIFileReadDesc &file_read_desc)
+INT tml::ManagerResourceDesc::Read(const tml::INIFileReadDesc &conf_file_read_desc)
 {
-	auto file_read_desc_dat = file_read_desc.GetDataByParent();
+	auto conf_file_read_desc_dat = conf_file_read_desc.GetDataByParent();
 
-	if (file_read_desc_dat->IsEmpty()) {
+	if (conf_file_read_desc_dat->IsEmpty()) {
 		return (0);
 	}
 
-	tml::INIFile ini_file;
+	tml::INIFile conf_file;
 
-	ini_file.read_desc.parent_data = file_read_desc_dat;
+	conf_file.read_desc.parent_data = conf_file_read_desc_dat;
 
-	if (ini_file.Read() < 0) {
+	if (conf_file.Read() < 0) {
 		return (-1);
 	}
 
-	if (ini_file.data.value_container.empty()) {
+	if (conf_file.data.value_container.empty()) {
 		return (0);
 	}
 
-	return (this->ReadValue(ini_file));
+	return (this->ReadValue(conf_file));
 }
 
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::ManagerResourceDesc::ReadValue(const tml::INIFile &conf_file)
 {
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
 	{// Resource Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"RES");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"RES");
 
 		if (val_name_cont != nullptr) {
-			val = ini_file.data.GetValue((*val_name_cont), L"NAME");
+			val = conf_file.data.GetValue((*val_name_cont), L"NAME");
 
 			if (val != nullptr) {
 				this->resource_name = (*val);

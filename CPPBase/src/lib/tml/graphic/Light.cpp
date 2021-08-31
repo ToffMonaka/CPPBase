@@ -72,13 +72,13 @@ void tml::graphic::LightDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (tml::graphic::ManagerResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::graphic::ManagerResourceDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -87,7 +87,7 @@ INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// Light Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"LIGHT");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"LIGHT");
 
 		if (val_name_cont != nullptr) {
 		}

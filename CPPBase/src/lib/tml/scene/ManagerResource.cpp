@@ -46,13 +46,13 @@ void tml::scene::ManagerResourceDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::scene::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::scene::ManagerResourceDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (tml::ManagerResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::ManagerResourceDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -61,7 +61,7 @@ INT tml::scene::ManagerResourceDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// Resource Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"RES");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"RES");
 
 		if (val_name_cont != nullptr) {
 		}

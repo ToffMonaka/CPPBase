@@ -59,13 +59,13 @@ void cpp_base::scene::TitleSceneDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::TitleSceneDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::TitleSceneDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (cpp_base::scene::SceneDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::SceneDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -74,7 +74,7 @@ INT cpp_base::scene::TitleSceneDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// TitleScene Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"TITLE_SCENE");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"TITLE_SCENE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -230,7 +230,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BACKGROUND_TEXTURE;
+			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BACKGROUND_IMAGE;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
@@ -274,7 +274,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_LOGO_TEXTURE;
+			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_LOGO_IMAGE;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
@@ -489,7 +489,7 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 						{// SelectScene Start
 							tml::shared_ptr<tml::scene::Scene> scene;
 
-							if (this->GetManager()->GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::SELECT_SCENE)) == nullptr) {
+							if (this->GetManager()->GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::SELECT_SCENE_PREFAB)) == nullptr) {
 								if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
 									OutputDebugString(L"Error: SelectScene Create\n");
 								}

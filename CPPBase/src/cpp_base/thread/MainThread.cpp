@@ -187,7 +187,7 @@ INT cpp_base::MainThread::OnStart(void)
 	{// InitScene Start
 		tml::shared_ptr<tml::scene::Scene> scene;
 
-		if (this->scene_mgr_.GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::INIT_SCENE)) == nullptr) {
+		if (this->scene_mgr_.GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::INIT_SCENE_PREFAB)) == nullptr) {
 			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
 				OutputDebugString(L"Error: InitScene Create\n");
 			}

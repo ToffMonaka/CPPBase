@@ -48,13 +48,13 @@ void tml::sound::SoundDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &ini_file)
+INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (tml::sound::ManagerResourceDesc::ReadValue(ini_file) < 0) {
+	if (tml::sound::ManagerResourceDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -63,7 +63,7 @@ INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// Sound Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"SOUND");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"SOUND");
 
 		if (val_name_cont != nullptr) {
 		}

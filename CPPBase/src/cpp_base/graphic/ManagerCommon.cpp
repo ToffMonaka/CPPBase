@@ -71,7 +71,7 @@ INT cpp_base::graphic::ManagerCommon::Create(cpp_base::graphic::Manager *mgr)
 
 		desc.SetManager(this->mgr_);
 		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-		desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::BACKGROUND_TEXTURE;
+		desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::BACKGROUND_IMAGE;
 
 		if (this->mgr_->GetResource<tml::graphic::Texture>(this->bg_tex, desc) == nullptr) {
 			this->Init();
@@ -85,7 +85,7 @@ INT cpp_base::graphic::ManagerCommon::Create(cpp_base::graphic::Manager *mgr)
 
 		desc.SetManager(this->mgr_);
 		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-		desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::EMPTY_BACKGROUND_TEXTURE;
+		desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::EMPTY_BACKGROUND_IMAGE;
 
 		if (this->mgr_->GetResource<tml::graphic::Texture>(this->empty_bg_tex, desc) == nullptr) {
 			this->Init();

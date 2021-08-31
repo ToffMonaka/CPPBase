@@ -49,13 +49,13 @@ void cpp_base::scene::Field2DGroundNodeDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::Field2DGroundNodeDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::Field2DGroundNodeDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (cpp_base::scene::NodeDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::NodeDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -64,7 +64,7 @@ INT cpp_base::scene::Field2DGroundNodeDesc::ReadValue(const tml::INIFile &ini_fi
 	const std::wstring *val = nullptr;
 
 	{// Field2DGroundNode Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"FIELD_2D_GROUND_NODE");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"FIELD_2D_GROUND_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -161,7 +161,7 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 
 			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_TEXTURE;
+			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_IMAGE;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();

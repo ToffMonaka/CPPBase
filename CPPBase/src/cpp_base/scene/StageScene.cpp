@@ -52,13 +52,13 @@ void cpp_base::scene::StageSceneDesc::Init(void)
 
 /**
  * @brief ReadValueä÷êî
- * @param ini_file (ini_file)
+ * @param conf_file (config_file)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::StageSceneDesc::ReadValue(const tml::INIFile &ini_file)
+INT cpp_base::scene::StageSceneDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	if (cpp_base::scene::SceneDesc::ReadValue(ini_file) < 0) {
+	if (cpp_base::scene::SceneDesc::ReadValue(conf_file) < 0) {
 		return (-1);
 	}
 
@@ -67,7 +67,7 @@ INT cpp_base::scene::StageSceneDesc::ReadValue(const tml::INIFile &ini_file)
 	const std::wstring *val = nullptr;
 
 	{// StageScene Section Read
-		val_name_cont = ini_file.data.GetValueNameContainer(L"STAGE_SCENE");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"STAGE_SCENE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -223,7 +223,7 @@ INT cpp_base::scene::StageScene::OnStart(void)
 	}
 
 	{// StageNode Create
-		if (this->GetManager()->GetNode(this->stage_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TEST_2D_STAGE_NODE)) == nullptr) {
+		if (this->GetManager()->GetNode(this->stage_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TEST_2D_STAGE_NODE_PREFAB)) == nullptr) {
 			return (-1);
 		}
 

@@ -330,7 +330,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::ShaderDesc desc;
 
 		desc.SetManager(this->mgr_);
-		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::FIGURE_MODEL_2D_SHADER));
+		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::FIGURE_MODEL_2D_SHADER_CONFIG));
 		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT;
 		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_ARRAY;
 
@@ -345,7 +345,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::ShaderDesc desc;
 
 		desc.SetManager(this->mgr_);
-		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::GROUND_MODEL_2D_SHADER));
+		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::GROUND_MODEL_2D_SHADER_CONFIG));
 		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT;
 		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_ARRAY;
 
