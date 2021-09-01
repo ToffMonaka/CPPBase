@@ -426,11 +426,11 @@ void tml::XMLFile::Init(void)
  */
 INT tml::XMLFile::Read(void)
 {
-	auto file_read_desc_dat = this->read_desc.GetDataByParent();
+	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::TextFile txt_file;
 
-	txt_file.read_desc.parent_data = file_read_desc_dat;
+	txt_file.read_desc.parent_data = read_desc_dat;
 
 	if (txt_file.Read() < 0) {
 		return (-1);
@@ -498,9 +498,9 @@ INT tml::XMLFile::Write(void)
 	static const std::wstring empty_str = L"";
 	static const std::wstring header_str = L"<?xml version=\"1.0\" encoding=\"shift_jis\" ?>";
 
-	auto file_write_desc_dat = this->write_desc.GetDataByParent();
+	auto write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (file_write_desc_dat->file_path.empty()) {
+	if (write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -518,7 +518,7 @@ INT tml::XMLFile::Write(void)
 		txt_file.data.line_string_container.push_back(empty_str);
 	}
 
-	txt_file.write_desc.parent_data = file_write_desc_dat;
+	txt_file.write_desc.parent_data = write_desc_dat;
 
 	if (txt_file.Write() < 0) {
 		return (-1);

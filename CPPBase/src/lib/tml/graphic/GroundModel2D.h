@@ -116,7 +116,8 @@ namespace graphic {
 class GroundModel2DDesc : public tml::graphic::Model2DDesc
 {
 public:
-	tml::XMLFileReadDesc file_read_desc;
+	tml::BinaryFileReadDesc image_file_read_desc;
+	tml::XMLFileReadDesc map_file_read_desc;
 
 private:
 	void Release(void);

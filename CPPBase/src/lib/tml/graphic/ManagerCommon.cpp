@@ -95,8 +95,8 @@ void tml::graphic::ManagerCommon::Init(void)
 	this->camera_shader_structured_buffer.reset();
 	this->light_shader_structured_buffer.reset();
 	this->fog_shader_structured_buffer.reset();
-	this->model_2d_plane_mesh.reset();
-	this->model_3d_plane_mesh.reset();
+	this->model_2d_default_mesh.reset();
+	this->model_3d_default_mesh.reset();
 	this->cc_sampler.reset();
 	this->cw_sampler.reset();
 	this->wc_sampler.reset();
@@ -427,7 +427,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// Model2DPlaneMesh Create
+	{// Model2DDefaultMesh Create
 		tml::graphic::MeshDesc desc;
 		std::array<tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
 			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
@@ -442,14 +442,14 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
 		desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 
-		if (this->mgr_->GetResource<tml::graphic::Mesh>(model_2d_plane_mesh, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Mesh>(model_2d_default_mesh, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// Model3DPlaneMesh Create
+	{// Model3DDefaultMesh Create
 	}
 
 	{// CCSampler Create

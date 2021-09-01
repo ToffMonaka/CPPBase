@@ -168,6 +168,8 @@ void tml::graphic::FigureModel2DDesc::Init(void)
 {
 	this->Release();
 
+	this->image_file_read_desc.Init();
+
 	tml::graphic::Model2DDesc::Init();
 
 	return;
@@ -260,6 +262,8 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		return (-1);
 	}
 
+	auto image_file_read_desc_dat = desc.image_file_read_desc.GetDataByParent();
+
 	{// Forward2DStage Create
 		auto stage = tml::make_unique<tml::graphic::FigureModel2DStage>(1U);
 
@@ -332,18 +336,42 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			}
 
 			layer->SetMeshIndex(0U);
+			layer->SetDiffuseTextureIndex(0U);
 			layer->SetDiffuseSamplerIndex(0U);
 
 			{// Mesh Create
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
 
-				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.model_2d_plane_mesh) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.model_2d_default_mesh) == nullptr) {
 					this->Init();
 
 					return (-1);
 				}
 
 				this->SetMesh(layer->GetMeshIndex(), mesh);
+			}
+
+			// DiffuseTexture Create
+			if (!image_file_read_desc_dat->IsEmpty()) {
+				tml::shared_ptr<tml::graphic::Texture> tex;
+
+				tml::graphic::TextureDesc desc;
+
+				desc.SetManager(this->GetManager());
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+				desc.image_file_read_desc_container[0].parent_data = image_file_read_desc_dat;
+
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+					this->Init();
+
+					return (-1);
+				}
+
+				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+
+				this->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
+			} else {
+				this->SetTexture(layer->GetDiffuseTextureIndex(), tml::shared_ptr<tml::graphic::Texture>());
 			}
 
 			{// DiffuseSampler Create

@@ -18,7 +18,7 @@ namespace sound {
 class SoundDesc : public tml::sound::ManagerResourceDesc
 {
 public:
-	tml::BinaryFileReadDesc file_read_desc;
+	tml::BinaryFileReadDesc sound_file_read_desc;
 
 private:
 	void Release(void);

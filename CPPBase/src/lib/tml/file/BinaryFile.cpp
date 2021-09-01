@@ -157,13 +157,13 @@ void tml::BinaryFile::Init(void)
  */
 INT tml::BinaryFile::Read(void)
 {
-	auto file_read_desc_dat = this->read_desc.GetDataByParent();
+	auto read_desc_dat = this->read_desc.GetDataByParent();
 
-	if (file_read_desc_dat->file_path.empty()) {
-		if (file_read_desc_dat->buffer.GetLength() > 0U) {
+	if (read_desc_dat->file_path.empty()) {
+		if (read_desc_dat->buffer.GetLength() > 0U) {
 			this->data.Init();
 
-			this->data.buffer = file_read_desc_dat->buffer;
+			this->data.buffer = read_desc_dat->buffer;
 
 			return (0);
 		}
@@ -181,7 +181,7 @@ INT tml::BinaryFile::Read(void)
 	{tml::ThreadLockBlock th_lock_block(tml::FileUtil::GetFileThreadLock());
 		std::ifstream ifs;
 
-		ifs.open(file_read_desc_dat->file_path.c_str(), std::ios_base::in | std::ios_base::binary);
+		ifs.open(read_desc_dat->file_path.c_str(), std::ios_base::in | std::ios_base::binary);
 
 		if (!ifs) {
 			return (-1);
@@ -222,9 +222,9 @@ INT tml::BinaryFile::Read(void)
  */
 INT tml::BinaryFile::Write(void)
 {
-	auto file_write_desc_dat = this->write_desc.GetDataByParent();
+	auto write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (file_write_desc_dat->file_path.empty()) {
+	if (write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -236,10 +236,10 @@ INT tml::BinaryFile::Write(void)
 	{tml::ThreadLockBlock th_lock_block(tml::FileUtil::GetFileThreadLock());
 		std::ofstream ofs;
 
-		if (file_write_desc_dat->add_flag) {
-			ofs.open(file_write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::app);
+		if (write_desc_dat->add_flag) {
+			ofs.open(write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::app);
 		} else {
-			ofs.open(file_write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary);
+			ofs.open(write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary);
 		}
 
 		if (!ofs) {

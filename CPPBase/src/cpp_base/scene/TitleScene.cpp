@@ -230,7 +230,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			desc.SetManager(this->GetGraphicManager());
 			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BACKGROUND_IMAGE;
+			desc.image_file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BACKGROUND_IMAGE;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 				this->Init();
@@ -255,36 +255,12 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
+		desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_LOGO_IMAGE;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->logo_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
-		}
-
-		auto stage = this->logo_model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-		auto layer = stage->GetLayerFast(0U);
-
-		layer->SetDiffuseTextureIndex(0U);
-
-		{// DiffuseTexture Create
-			tml::shared_ptr<tml::graphic::Texture> tex;
-
-			tml::graphic::TextureDesc desc;
-
-			desc.SetManager(this->GetGraphicManager());
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_LOGO_IMAGE;
-
-			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			this->logo_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-
-			this->logo_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
 		}
 	}
 

@@ -22,7 +22,7 @@ class TextureDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	IDXGISwapChain *swap_chain;
-	std::vector<tml::BinaryFileReadDesc> file_read_desc_container;
+	std::vector<tml::BinaryFileReadDesc> image_file_read_desc_container;
 	CD3D11_TEXTURE2D_DESC texture_desc;
 	bool cpu_buffer_flag;
 	DXGI_FORMAT render_target_format;

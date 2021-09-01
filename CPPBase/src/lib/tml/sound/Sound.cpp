@@ -38,7 +38,7 @@ void tml::sound::SoundDesc::Init(void)
 {
 	this->Release();
 
-	this->file_read_desc.Init();
+	this->sound_file_read_desc.Init();
 
 	tml::sound::ManagerResourceDesc::Init();
 
@@ -203,19 +203,19 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 		return (-1);
 	}
 
-	auto file_read_desc_dat = desc->file_read_desc.GetDataByParent();
+	auto sound_file_read_desc_dat = desc->sound_file_read_desc.GetDataByParent();
 
-	tml::BinaryFile bin_file;
+	tml::BinaryFile sound_file;
 
-	bin_file.read_desc.parent_data = file_read_desc_dat;
+	sound_file.read_desc.parent_data = sound_file_read_desc_dat;
 
-	if (bin_file.Read() < 0) {
+	if (sound_file.Read() < 0) {
 		return (-1);
 	}
 
-	auto &bin_file_buf = bin_file.data.buffer;
+	auto &sound_file_buf = sound_file.data.buffer;
 
-	if (bin_file_buf.GetLength() <= 0U) {
+	if (sound_file_buf.GetLength() <= 0U) {
 		return (-1);
 	}
 
@@ -227,24 +227,24 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 
 	do {
 		// WAVE File Check
-		if ((bin_file_buf.GetLength() >= 4U)
-		&& (strncmp(reinterpret_cast<CHAR *>(bin_file_buf.Get()), "RIFF", 4U) == 0)) {
+		if ((sound_file_buf.GetLength() >= 4U)
+		&& (strncmp(reinterpret_cast<CHAR *>(sound_file_buf.Get()), "RIFF", 4U) == 0)) {
 			file_format = 1U;
 
 			break;
 		}
 
 		// MP3 File Check
-		if ((bin_file_buf.GetLength() >= 3U)
-		&& (strncmp(reinterpret_cast<CHAR *>(bin_file_buf.Get()), "ID3", 3U) == 0)) {
+		if ((sound_file_buf.GetLength() >= 3U)
+		&& (strncmp(reinterpret_cast<CHAR *>(sound_file_buf.Get()), "ID3", 3U) == 0)) {
 			file_format = 2U;
 
 			break;
 		}
 
 		// Ogg File Check
-		if ((bin_file_buf.GetLength() >= 4U)
-		&& (strncmp(reinterpret_cast<CHAR *>(bin_file_buf.Get()), "OggS", 4U) == 0)) {
+		if ((sound_file_buf.GetLength() >= 4U)
+		&& (strncmp(reinterpret_cast<CHAR *>(sound_file_buf.Get()), "OggS", 4U) == 0)) {
 			file_format = 3U;
 
 			break;
@@ -256,8 +256,8 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 		MMIOINFO mmio_info = {};
 
 		mmio_info.fccIOProc = FOURCC_MEM;
-		mmio_info.cchBuffer = bin_file_buf.GetLength();
-		mmio_info.pchBuffer = reinterpret_cast<HPSTR>(bin_file_buf.Get());
+		mmio_info.cchBuffer = sound_file_buf.GetLength();
+		mmio_info.pchBuffer = reinterpret_cast<HPSTR>(sound_file_buf.Get());
 
 		HMMIO mmio_handle = mmioOpen(nullptr, &mmio_info, MMIO_READ);
 
@@ -360,36 +360,36 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 		break;
 	}
 	case 2: {// MP3 File Read
-		if ((bin_file_buf.GetLength() >= 128U)
-		&& (strncmp(reinterpret_cast<CHAR *>(&bin_file_buf.Get()[bin_file_buf.GetLength() - 128U]), "TAG", 3U) == 0)) {
-			bin_file_buf.SetLength(bin_file_buf.GetLength() - 128U);
+		if ((sound_file_buf.GetLength() >= 128U)
+		&& (strncmp(reinterpret_cast<CHAR *>(&sound_file_buf.Get()[sound_file_buf.GetLength() - 128U]), "TAG", 3U) == 0)) {
+			sound_file_buf.SetLength(sound_file_buf.GetLength() - 128U);
 		}
 
-		size_t bin_file_buf_index = 0U;
+		size_t sound_file_buf_index = 0U;
 
 		std::array<BYTE, 10U> mp3_tag_header;
 
-		if (bin_file_buf.GetLength() < (bin_file_buf_index + mp3_tag_header.size())) {
+		if (sound_file_buf.GetLength() < (sound_file_buf_index + mp3_tag_header.size())) {
 			return (-1);
 		}
 
-		tml::Copy(mp3_tag_header.data(), &bin_file_buf.Get()[bin_file_buf_index], mp3_tag_header.size());
+		tml::Copy(mp3_tag_header.data(), &sound_file_buf.Get()[sound_file_buf_index], mp3_tag_header.size());
 
 		size_t mp3_tag_size = ((mp3_tag_header[6] << 21) | (mp3_tag_header[7] << 14) | (mp3_tag_header[8] << 7) | mp3_tag_header[9]) + mp3_tag_header.size();
 
-		if (bin_file_buf.GetLength() < (bin_file_buf_index + mp3_tag_size)) {
+		if (sound_file_buf.GetLength() < (sound_file_buf_index + mp3_tag_size)) {
 			return (-1);
 		}
 
-		bin_file_buf_index += mp3_tag_size;
+		sound_file_buf_index += mp3_tag_size;
 
 		std::array<BYTE, 4U> mp3_frame_header;
 
-		if (bin_file_buf.GetLength() < (bin_file_buf_index + mp3_frame_header.size())) {
+		if (sound_file_buf.GetLength() < (sound_file_buf_index + mp3_frame_header.size())) {
 			return (-1);
 		}
 
-		tml::Copy(mp3_frame_header.data(), &bin_file_buf.Get()[bin_file_buf_index], mp3_frame_header.size());
+		tml::Copy(mp3_frame_header.data(), &sound_file_buf.Get()[sound_file_buf_index], mp3_frame_header.size());
 
 		if (!((mp3_frame_header[0] == 0xFF) && ((mp3_frame_header[1] & 0xE0) == 0xE0))) {
 			return (-1);
@@ -461,7 +461,7 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 			return (-1);
 		}
 
-		DWORD mp3_buf_size = bin_file_buf.GetLength() - bin_file_buf_index;
+		DWORD mp3_buf_size = sound_file_buf.GetLength() - sound_file_buf_index;
 		DWORD wav_buf_size = 0UL;
 
 		if (acmStreamSize(acm_stream_handle, mp3_buf_size, &wav_buf_size, ACM_STREAMSIZEF_SOURCE) != 0) {
@@ -476,7 +476,7 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 		ACMSTREAMHEADER acm_stream_header = {};
 
 		acm_stream_header.cbStruct = sizeof(ACMSTREAMHEADER);
-		acm_stream_header.pbSrc = &bin_file_buf.Get()[bin_file_buf_index];
+		acm_stream_header.pbSrc = &sound_file_buf.Get()[sound_file_buf_index];
 		acm_stream_header.cbSrcLength = mp3_buf_size;
 		acm_stream_header.pbDst = &buf.Get()[0];
 		acm_stream_header.cbDstLength = wav_buf_size;
@@ -512,8 +512,8 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 		break;
 	}
 	case 3: {// Ogg File Read
-		this->ogg_file_buf_ = bin_file_buf.Get();
-		this->ogg_file_buf_size_ = bin_file_buf.GetLength();
+		this->ogg_file_buf_ = sound_file_buf.Get();
+		this->ogg_file_buf_size_ = sound_file_buf.GetLength();
 		this->ogg_file_buf_index_ = 0L;
 
 		OggVorbis_File ogg_file;

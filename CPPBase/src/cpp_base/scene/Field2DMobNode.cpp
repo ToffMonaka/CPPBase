@@ -141,36 +141,12 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 128.0f));
+		desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::MOB_2D_IMAGE;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
-		}
-
-		auto stage = this->model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-		auto layer = stage->GetLayerFast(0U);
-
-		layer->SetDiffuseTextureIndex(0U);
-
-		{// DiffuseTexture Create
-			tml::shared_ptr<tml::graphic::Texture> tex;
-
-			tml::graphic::TextureDesc desc;
-
-			desc.SetManager(this->GetGraphicManager());
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::MOB_2D_IMAGE;
-
-			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			this->model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-
-			this->model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
 		}
 	}
 

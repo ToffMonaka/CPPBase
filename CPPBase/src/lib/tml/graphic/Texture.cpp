@@ -48,7 +48,7 @@ void tml::graphic::TextureDesc::Init(void)
 	this->Release();
 
 	this->swap_chain = nullptr;
-	this->file_read_desc_container.clear();
+	this->image_file_read_desc_container.clear();
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
 	this->cpu_buffer_flag = false;
 	this->render_target_format = DXGI_FORMAT_UNKNOWN;
@@ -106,8 +106,8 @@ INT tml::graphic::TextureDesc::ReadValue(const tml::INIFile &conf_file)
  */
 void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG bind_flg, const DXGI_FORMAT format, const tml::XMUINT2EX &size, const UINT ary_cnt, const UINT mm_cnt, const DXGI_SAMPLE_DESC &ms_desc, const bool dynamic_flg)
 {
-	this->file_read_desc_container.clear();
-	this->file_read_desc_container.resize(ary_cnt);
+	this->image_file_read_desc_container.clear();
+	this->image_file_read_desc_container.resize(ary_cnt);
 	this->texture_desc = CD3D11_TEXTURE2D_DESC(format, size.x, size.y, ary_cnt, mm_cnt, 0U);
 
 	if (static_cast<bool>(bind_flg & tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET)) {
@@ -244,7 +244,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 			return (-1);
 		}
-	} else if (desc.file_read_desc_container.size() > 1U) {
+	} else if (desc.image_file_read_desc_container.size() > 1U) {
 		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
 		bool tmp_tex_desc_fixed_flg = false;
 		std::list<D3D11_SUBRESOURCE_DATA> srd_cont;
@@ -252,23 +252,23 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		ID3D11Texture2D *tex = nullptr;
 		CD3D11_TEXTURE2D_DESC tex_desc;
 
-		for (auto &file_read_desc : desc.file_read_desc_container) {
-			auto file_read_desc_dat = file_read_desc.GetDataByParent();
+		for (auto &img_file_read_desc : desc.image_file_read_desc_container) {
+			auto img_file_read_desc_dat = img_file_read_desc.GetDataByParent();
 
-			if (!file_read_desc_dat->IsEmpty()) {
-				tml::BinaryFile bin_file;
+			if (!img_file_read_desc_dat->IsEmpty()) {
+				tml::BinaryFile img_file;
 
-				bin_file.read_desc.parent_data = file_read_desc_dat;
+				img_file.read_desc.parent_data = img_file_read_desc_dat;
 
-				if (bin_file.Read() < 0) {
+				if (img_file.Read() < 0) {
 					this->Init();
 
 					return (-1);
 				}
 
-				auto &bin_file_buf = bin_file.data.buffer;
+				auto &img_file_buf = img_file.data.buffer;
 
-				if (bin_file_buf.GetLength() <= 0U) {
+				if (img_file_buf.GetLength() <= 0U) {
 					this->Init();
 
 					return (-1);
@@ -285,7 +285,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				img_load_info.CpuAccessFlags = D3DX11_DEFAULT;
 				img_load_info.Format = (tmp_tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : tmp_tex_desc.Format;
 
-				if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(bin_file_buf.Get()), bin_file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) {
+				if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(img_file_buf.Get()), img_file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) {
 					this->Init();
 
 					return (-1);
@@ -373,25 +373,25 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 			return (-1);
 		}
-	} else if (desc.file_read_desc_container.size() == 1U) {
+	} else if (desc.image_file_read_desc_container.size() == 1U) {
 		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
 
-		auto file_read_desc_dat = desc.file_read_desc_container[0].GetDataByParent();
+		auto img_file_read_desc_dat = desc.image_file_read_desc_container[0].GetDataByParent();
 
-		if (!file_read_desc_dat->IsEmpty()) {
-			tml::BinaryFile bin_file;
+		if (!img_file_read_desc_dat->IsEmpty()) {
+			tml::BinaryFile img_file;
 
-			bin_file.read_desc.parent_data = file_read_desc_dat;
+			img_file.read_desc.parent_data = img_file_read_desc_dat;
 
-			if (bin_file.Read() < 0) {
+			if (img_file.Read() < 0) {
 				this->Init();
 
 				return (-1);
 			}
 
-			auto &bin_file_buf = bin_file.data.buffer;
+			auto &img_file_buf = img_file.data.buffer;
 
-			if (bin_file_buf.GetLength() <= 0U) {
+			if (img_file_buf.GetLength() <= 0U) {
 				this->Init();
 
 				return (-1);
@@ -408,7 +408,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			img_load_info.CpuAccessFlags = tmp_tex_desc.CPUAccessFlags;
 			img_load_info.Format = (tmp_tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : tmp_tex_desc.Format;
 
-			if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(bin_file_buf.Get()), bin_file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&this->tex_), nullptr))) {
+			if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(img_file_buf.Get()), img_file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&this->tex_), nullptr))) {
 				this->Init();
 
 				return (-1);

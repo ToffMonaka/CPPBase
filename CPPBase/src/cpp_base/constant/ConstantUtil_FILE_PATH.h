@@ -19,6 +19,7 @@ namespace FILE_PATH {
 	const WCHAR GROUND_2D_IMAGE[] = L"res/ground_2d_img.png";
 	const WCHAR PLAYER_2D_IMAGE[] = L"res/pl_2d_img.png";
 	const WCHAR MOB_2D_IMAGE[] = L"res/mob_2d_img.png";
+	const WCHAR GROUND_2D_MAP[] = L"res/ground_2d_map.tmx";
 	const WCHAR TITLE_BGM_SOUND[] = L"res/title_bgm_sound.mp3";
 	const WCHAR SELECT_BGM_SOUND[] = L"res/select_bgm_sound.mp3";
 	const WCHAR START_SE_SOUND[] = L"res/start_se_sound.mp3";

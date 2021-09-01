@@ -140,8 +140,8 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 		tml::graphic::GroundModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
-		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
-		desc.file_read_desc.data.file_path = L"res/ground_2d_map.tmx";
+		desc.position.Set(tml::XMFLOAT2EX(0.0f, 0.0f));
+		desc.map_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_MAP;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::GroundModel2D>(this->model, desc) == nullptr) {
 			this->Init();
@@ -149,28 +149,7 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 			return (-1);
 		}
 
-		auto stage = this->model->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-		auto layer = stage->GetLayerFast(0U);
-
-		layer->SetDiffuseTextureIndex(0U);
-
-		{// DiffuseTexture Create
-			tml::shared_ptr<tml::graphic::Texture> tex;
-
-			tml::graphic::TextureDesc desc;
-
-			desc.SetManager(this->GetGraphicManager());
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-			desc.file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_IMAGE;
-
-			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
-				this->Init();
-
-				return (-1);
-			}
-
-			this->model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
-		}
+		this->model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 	}
 
 	return (0);

@@ -104,11 +104,11 @@ void cpp_base::SystemConfigFile::Init(void)
  */
 INT cpp_base::SystemConfigFile::Read(void)
 {
-	auto conf_file_read_desc_dat = this->read_desc.GetDataByParent();
+	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	tml::INIFile conf_file;
 
-	conf_file.read_desc.parent_data = conf_file_read_desc_dat;
+	conf_file.read_desc.parent_data = read_desc_dat;
 
 	if (conf_file.Read() < 0) {
 		return (-1);
@@ -235,9 +235,9 @@ INT cpp_base::SystemConfigFile::Write(void)
 	static const std::wstring section_end_str = L"]";
 	static const std::wstring equal_str = L"=";
 
-	auto conf_file_write_desc_dat = this->write_desc.GetDataByParent();
+	auto write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (conf_file_write_desc_dat->file_path.empty()) {
+	if (write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
@@ -261,7 +261,7 @@ INT cpp_base::SystemConfigFile::Write(void)
 		conf_file.data.line_string_container.push_back(empty_str);
 	}
 
-	conf_file.write_desc.parent_data = conf_file_write_desc_dat;
+	conf_file.write_desc.parent_data = write_desc_dat;
 
 	if (conf_file.Write() < 0) {
 		return (-1);

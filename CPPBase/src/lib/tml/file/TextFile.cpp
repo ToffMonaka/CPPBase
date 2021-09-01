@@ -160,14 +160,14 @@ void tml::TextFile::Init(void)
  */
 INT tml::TextFile::Read(void)
 {
-	auto file_read_desc_dat = this->read_desc.GetDataByParent();
+	auto read_desc_dat = this->read_desc.GetDataByParent();
 
-	if (file_read_desc_dat->file_path.empty()) {
-		if (file_read_desc_dat->buffer.GetLength() <= 0U) {
-			if (!file_read_desc_dat->string.empty()) {
+	if (read_desc_dat->file_path.empty()) {
+		if (read_desc_dat->buffer.GetLength() <= 0U) {
+			if (!read_desc_dat->string.empty()) {
 				this->data.Init();
 
-				tml::StringUtil::Split(this->data.line_string_container, file_read_desc_dat->string.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetStringW(file_read_desc_dat->newline_code_type));
+				tml::StringUtil::Split(this->data.line_string_container, read_desc_dat->string.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetStringW(read_desc_dat->newline_code_type));
 
 				return (0);
 			}
@@ -180,7 +180,7 @@ INT tml::TextFile::Read(void)
 
 	tml::BinaryFile bin_file;
 
-	bin_file.read_desc.parent_data = file_read_desc_dat;
+	bin_file.read_desc.parent_data = read_desc_dat;
 
 	if (bin_file.Read() < 0) {
 		return (-1);
@@ -201,7 +201,7 @@ INT tml::TextFile::Read(void)
 
 	tml::StringUtil::GetString(str, tmp_str);
 
-	tml::StringUtil::Split(this->data.line_string_container, str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetStringW(file_read_desc_dat->newline_code_type));
+	tml::StringUtil::Split(this->data.line_string_container, str.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetStringW(read_desc_dat->newline_code_type));
 
 	return (0);
 }
@@ -214,23 +214,23 @@ INT tml::TextFile::Read(void)
  */
 INT tml::TextFile::Write(void)
 {
-	auto file_write_desc_dat = this->write_desc.GetDataByParent();
+	auto write_desc_dat = this->write_desc.GetDataByParent();
 
-	if (file_write_desc_dat->file_path.empty()) {
+	if (write_desc_dat->file_path.empty()) {
 		return (-1);
 	}
 
 	std::wstring tmp_str;
 
-	tml::StringUtil::Join(tmp_str, this->data.line_string_container, tml::ConstantUtil::NEWLINE_CODE::GetStringW(file_write_desc_dat->newline_code_type));
+	tml::StringUtil::Join(tmp_str, this->data.line_string_container, tml::ConstantUtil::NEWLINE_CODE::GetStringW(write_desc_dat->newline_code_type));
 
 	if (!tmp_str.empty()) {
-		if ((file_write_desc_dat->add_flag)
-		&& (file_write_desc_dat->add_newline_code_count > 0U)) {
+		if ((write_desc_dat->add_flag)
+		&& (write_desc_dat->add_newline_code_count > 0U)) {
 			std::wstring add_newline_code_str;
 
-			for (size_t add_newline_code_i = 0U; add_newline_code_i < file_write_desc_dat->add_newline_code_count; ++add_newline_code_i) {
-				add_newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetStringW(file_write_desc_dat->newline_code_type);
+			for (size_t add_newline_code_i = 0U; add_newline_code_i < write_desc_dat->add_newline_code_count; ++add_newline_code_i) {
+				add_newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetStringW(write_desc_dat->newline_code_type);
 			}
 
 			tmp_str.insert(0U, add_newline_code_str);
@@ -246,7 +246,7 @@ INT tml::TextFile::Write(void)
 	bin_file.data.buffer.SetSize(str.length());
 	bin_file.data.buffer.WriteArray(reinterpret_cast<const BYTE *>(str.c_str()), str.length(), str.length());
 
-	bin_file.write_desc.parent_data = file_write_desc_dat;
+	bin_file.write_desc.parent_data = write_desc_dat;
 
 	if (bin_file.Write() < 0) {
 		return (-1);

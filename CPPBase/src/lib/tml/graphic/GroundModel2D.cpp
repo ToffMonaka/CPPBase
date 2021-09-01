@@ -169,7 +169,8 @@ void tml::graphic::GroundModel2DDesc::Init(void)
 {
 	this->Release();
 
-	this->file_read_desc.Init();
+	this->image_file_read_desc.Init();
+	this->map_file_read_desc.Init();
 
 	tml::graphic::Model2DDesc::Init();
 
@@ -269,45 +270,47 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		return (-1);
 	}
 
-	auto file_read_desc_dat = desc.file_read_desc.GetDataByParent();
+	auto image_file_read_desc_dat = desc.image_file_read_desc.GetDataByParent();
 
-	tml::XMLFile xml_file;
+	auto map_file_read_desc_dat = desc.map_file_read_desc.GetDataByParent();
 
-	xml_file.read_desc.parent_data = file_read_desc_dat;
+	tml::XMLFile map_file;
 
-	if (xml_file.Read() < 0) {
+	map_file.read_desc.parent_data = map_file_read_desc_dat;
+
+	if (map_file.Read() < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
-	auto &xml_file_root_node = xml_file.data.GetRootNode();
+	auto &map_file_root_node = map_file.data.GetRootNode();
 
-	if (xml_file_root_node->GetChildNodeContainer().empty()) {
+	if (map_file_root_node->GetChildNodeContainer().empty()) {
 		this->Init();
 
 		return (-1);
 	}
 
-	auto &xml_file_map_node = xml_file_root_node->GetChildNode(L"map");
+	auto &map_file_map_node = map_file_root_node->GetChildNode(L"map");
 
-	if (xml_file_map_node == nullptr) {
+	if (map_file_map_node == nullptr) {
 		this->Init();
 
 		return (-1);
 	}
 
-	auto &xml_file_img_node = xml_file_root_node->GetChildNode(L"image");
+	auto &map_file_img_node = map_file_root_node->GetChildNode(L"image");
 
-	if (xml_file_img_node == nullptr) {
+	if (map_file_img_node == nullptr) {
 		this->Init();
 
 		return (-1);
 	}
 
-	auto &xml_file_dat_node = xml_file_root_node->GetChildNode(L"data");
+	auto &map_file_dat_node = map_file_root_node->GetChildNode(L"data");
 
-	if (xml_file_dat_node == nullptr) {
+	if (map_file_dat_node == nullptr) {
 		this->Init();
 
 		return (-1);
@@ -316,7 +319,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	const std::wstring *val = nullptr;
 	std::vector<std::wstring> val_cont;
 
-	val = xml_file_map_node->GetValue(L"width");
+	val = map_file_map_node->GetValue(L"width");
 
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->mass_cnt_.x, val->c_str());
@@ -326,7 +329,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		return (-1);
 	}
 
-	val = xml_file_map_node->GetValue(L"height");
+	val = map_file_map_node->GetValue(L"height");
 
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->mass_cnt_.y, val->c_str());
@@ -336,7 +339,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		return (-1);
 	}
 
-	val = xml_file_map_node->GetValue(L"tilewidth");
+	val = map_file_map_node->GetValue(L"tilewidth");
 
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->mass_size_.x, val->c_str());
@@ -346,7 +349,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		return (-1);
 	}
 
-	val = xml_file_map_node->GetValue(L"tileheight");
+	val = map_file_map_node->GetValue(L"tileheight");
 
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->mass_size_.y, val->c_str());
@@ -356,7 +359,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		return (-1);
 	}
 
-	tml::StringUtil::Split(val_cont, xml_file_dat_node->string.c_str(), L",");
+	tml::StringUtil::Split(val_cont, map_file_dat_node->string.c_str(), L",");
 
 	this->mass_type_cont_.resize(val_cont.size());
 
@@ -364,17 +367,21 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		tml::StringUtil::GetValue(this->mass_type_cont_[val_i], val_cont[val_i].c_str());
 	}
 
-	std::wstring mass_img_file_path;
+	tml::BinaryFileReadDescData mass_image_file_read_desc_dat;
 
-	val = xml_file_img_node->GetValue(L"source");
+	if (image_file_read_desc_dat->IsEmpty()) {
+		val = map_file_img_node->GetValue(L"source");
 
-	if (val != nullptr) {
-		mass_img_file_path = L"res/";
-		mass_img_file_path += (*val);
-	} else {
-		this->Init();
+		if (val != nullptr) {
+			mass_image_file_read_desc_dat.file_path = L"res/";
+			mass_image_file_read_desc_dat.file_path += (*val);
+		} else {
+			this->Init();
 
-		return (-1);
+			return (-1);
+		}
+
+		image_file_read_desc_dat = &mass_image_file_read_desc_dat;
 	}
 
 	{// Forward2DStage Create
@@ -449,18 +456,42 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			}
 
 			layer->SetMeshIndex(0U);
+			layer->SetDiffuseTextureIndex(0U);
 			layer->SetDiffuseSamplerIndex(0U);
 
 			{// Mesh Create
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
 
-				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.model_2d_plane_mesh) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.model_2d_default_mesh) == nullptr) {
 					this->Init();
 
 					return (-1);
 				}
 
 				this->SetMesh(layer->GetMeshIndex(), mesh);
+			}
+
+			// DiffuseTexture Create
+			if (!image_file_read_desc_dat->IsEmpty()) {
+				tml::shared_ptr<tml::graphic::Texture> tex;
+
+				tml::graphic::TextureDesc desc;
+
+				desc.SetManager(this->GetManager());
+				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+				desc.image_file_read_desc_container[0].parent_data = image_file_read_desc_dat;
+
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+					this->Init();
+
+					return (-1);
+				}
+
+				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+
+				this->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
+			} else {
+				this->SetTexture(layer->GetDiffuseTextureIndex(), tml::shared_ptr<tml::graphic::Texture>());
 			}
 
 			{// DiffuseSampler Create
