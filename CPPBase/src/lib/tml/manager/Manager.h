@@ -8,9 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include <list>
-#include "ManagerResource.h"
-#include "ManagerResourceFactory.h"
-#include "ManagerEvent.h"
+#include "ManagerFactory.h"
 
 
 namespace tml {
@@ -22,6 +20,7 @@ class ManagerDesc
 public:
 	HWND window_handle;
 	HDC window_device_context_handle;
+	tml::ManagerFactory *factory;
 	std::vector<UINT> resource_count_container;
 	std::vector<UINT> event_count_container;
 
@@ -80,7 +79,7 @@ private:
 	tml::ManagerEvent *friend_event_;
 
 public:
-	tml::ManagerResourceFactory resource_factory;
+	tml::ManagerFactory *factory;
 
 private:
 	void GetResourceInitPart(tml::shared_ptr<tml::ManagerResource> &);

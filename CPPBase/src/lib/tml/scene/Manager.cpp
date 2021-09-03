@@ -218,7 +218,7 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 	this->sound_mgr_ = desc.GetSoundManager();
 
 	{// ResourceFactory Set
-		this->resource_factory.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
+		this->factory->AddResourceFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -235,7 +235,7 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
+		this->factory->AddResourceFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -251,6 +251,9 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 				return (res);
 			}
 		);
+	}
+
+	{// EventFactory Set
 	}
 
 	if (this->common.Create(this) < 0) {
@@ -458,7 +461,7 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::sh
 
 	if (class_name != nullptr) {
 		if (conf_file_path != nullptr) {
-			if (this->resource_factory.Get(dst_scene, class_name->c_str(), tml::INIFileReadDesc(conf_file_path->c_str()), dst_result) == nullptr) {
+			if (this->factory->GetResource(dst_scene, class_name->c_str(), tml::INIFileReadDesc(conf_file_path->c_str()), dst_result) == nullptr) {
 				return (dst_scene);
 			}
 		} else {
@@ -466,7 +469,7 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::sh
 
 			desc.data.string = prefab_file_node->string;
 
-			if (this->resource_factory.Get(dst_scene, class_name->c_str(), desc, dst_result) == nullptr) {
+			if (this->factory->GetResource(dst_scene, class_name->c_str(), desc, dst_result) == nullptr) {
 				return (dst_scene);
 			}
 		}
@@ -607,7 +610,7 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shar
 
 	if (class_name != nullptr) {
 		if (conf_file_path != nullptr) {
-			if (this->resource_factory.Get(dst_node, class_name->c_str(), tml::INIFileReadDesc(conf_file_path->c_str()), dst_result) == nullptr) {
+			if (this->factory->GetResource(dst_node, class_name->c_str(), tml::INIFileReadDesc(conf_file_path->c_str()), dst_result) == nullptr) {
 				return (dst_node);
 			}
 		} else {
@@ -615,7 +618,7 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shar
 
 			desc.data.string = prefab_file_node->string;
 
-			if (this->resource_factory.Get(dst_node, class_name->c_str(), desc, dst_result) == nullptr) {
+			if (this->factory->GetResource(dst_node, class_name->c_str(), desc, dst_result) == nullptr) {
 				return (dst_node);
 			}
 		}
@@ -651,15 +654,15 @@ void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene:
 			bool result_flg = true;
 
 			for (auto &val : prefab_file_node->value_container) {
-				auto res_factory_val = this->resource_factory.GetValue(val.first.c_str());
+				auto factory_val = this->factory->GetValue(val.first.c_str());
 
-				if (res_factory_val == nullptr) {
+				if (factory_val == nullptr) {
 					result_flg = false;
 
 					break;
 				}
 
-				if ((*res_factory_val) != val.second) {
+				if ((*factory_val) != val.second) {
 					result_flg = false;
 
 					break;

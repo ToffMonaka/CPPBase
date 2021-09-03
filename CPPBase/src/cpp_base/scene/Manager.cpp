@@ -29,7 +29,6 @@ cpp_base::scene::ManagerDesc::ManagerDesc() :
 	input_mgr_(nullptr),
 	graphic_mgr_(nullptr),
 	sound_mgr_(nullptr)
-
 {
 	this->InitResourceCount();
 	this->InitEventCount();
@@ -217,7 +216,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 	this->sound_mgr_ = desc.GetSoundManager();
 
 	{// ResourceFactory Set
-		this->resource_factory.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
+		this->factory->AddResourceFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -234,7 +233,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::INIT_SCENE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::INIT_SCENE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -251,7 +250,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TITLE_SCENE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TITLE_SCENE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -268,7 +267,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::SELECT_SCENE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::SELECT_SCENE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -285,7 +284,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::STAGE_SCENE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::STAGE_SCENE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -302,7 +301,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
+		this->factory->AddResourceFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -319,7 +318,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TEST_2D_STAGE_NODE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::TEST_2D_STAGE_NODE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -336,7 +335,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_NODE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_NODE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -353,7 +352,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_GROUND_NODE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_GROUND_NODE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -370,7 +369,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_PLAYER_NODE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_PLAYER_NODE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -387,7 +386,7 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 			}
 		);
 
-		this->resource_factory.AddFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_MOB_NODE,
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_MOB_NODE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
 				tml::shared_ptr<tml::ManagerResource> res;
 
@@ -403,6 +402,9 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 				return (res);
 			}
 		);
+	}
+
+	{// EventFactory Set
 	}
 
 	if (this->common2.Create(this) < 0) {

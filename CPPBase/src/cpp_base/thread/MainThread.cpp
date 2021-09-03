@@ -130,11 +130,20 @@ INT cpp_base::MainThread::OnStart(void)
 		}
 	}
 
+	{// ManagerFactory Create
+		cpp_base::ManagerFactoryDesc desc;
+
+		if (this->mgr_factory_.Create(desc) < 0) {
+			return (-1);
+		}
+	}
+
 	{// InputManager Create
 		cpp_base::input::ManagerDesc desc;
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		desc.factory = &this->mgr_factory_;
 
 		if (this->input_mgr_.Create(desc) < 0) {
 			return (-1);
@@ -146,6 +155,7 @@ INT cpp_base::MainThread::OnStart(void)
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		desc.factory = &this->mgr_factory_;
 		desc.size = this->sys_conf_file_.data.window_size;
 		desc.vsync_flag = this->sys_conf_file_.data.graphic_vsync_flag;
 		desc.frame_rate_limit = this->sys_conf_file_.data.graphic_frame_rate_limit;
@@ -160,6 +170,7 @@ INT cpp_base::MainThread::OnStart(void)
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		desc.factory = &this->mgr_factory_;
 		desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_volume);
 		desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_mute_flag);
 		desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_volume);
@@ -175,6 +186,7 @@ INT cpp_base::MainThread::OnStart(void)
 
 		desc.window_handle = this->GetWindowHandle();
 		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		desc.factory = &this->mgr_factory_;
 		desc.SetInputManager(&this->input_mgr_);
 		desc.SetGraphicManager(&this->graphic_mgr_);
 		desc.SetSoundManager(&this->sound_mgr_);
@@ -237,6 +249,7 @@ void cpp_base::MainThread::OnEnd(void)
 	this->sound_mgr_.Init();
 	this->graphic_mgr_.Init();
 	this->input_mgr_.Init();
+	this->mgr_factory_.Init();
 
 	this->DeleteWindow_();
 

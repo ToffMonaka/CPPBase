@@ -167,7 +167,11 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
 	}
 
 	{// GroundNode Create
-		if (this->GetManager()->resource_factory.Get(this->ground_node, cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_GROUND_NODE, tml::INIFileReadDesc()) == nullptr) {
+		cpp_base::scene::Field2DGroundNodeDesc desc;
+
+		desc.SetManager(this->GetManager());
+
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DGroundNode>(this->ground_node, desc) == nullptr) {
 			return (-1);
 		}
 
@@ -183,7 +187,11 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
 	}
 
 	{// PlayerNode Create
-		if (this->GetManager()->resource_factory.Get(this->player_node, cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_PLAYER_NODE, tml::INIFileReadDesc()) == nullptr) {
+		cpp_base::scene::Field2DPlayerNodeDesc desc;
+
+		desc.SetManager(this->GetManager());
+
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DPlayerNode>(this->player_node, desc) == nullptr) {
 			return (-1);
 		}
 
@@ -199,7 +207,11 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
 	}
 
 	{// MobNode Create
-		if (this->GetManager()->resource_factory.Get(this->mob_node, cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_MOB_NODE, tml::INIFileReadDesc()) == nullptr) {
+		cpp_base::scene::Field2DMobNodeDesc desc;
+
+		desc.SetManager(this->GetManager());
+
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DMobNode>(this->mob_node, desc) == nullptr) {
 			return (-1);
 		}
 

@@ -96,11 +96,11 @@ private:
 	IDXGIFactory1 *factory_;
 	IDXGIAdapter1 *adapter_;
 	DXGI_ADAPTER_DESC1 adapter_desc_;
-	IDXGISwapChain *swap_chain_;
-	DXGI_SWAP_CHAIN_DESC swap_chain_desc_;
 	ID3D11Device *device_;
 	ID3D11DeviceContext *device_context_;
 	D3D_FEATURE_LEVEL device_future_lv_;
+	IDXGISwapChain *swap_chain_;
+	DXGI_SWAP_CHAIN_DESC swap_chain_desc_;
 	tml::XMUINT2EX size_;
 	bool vsync_flg_;
 	UINT frame_rate_limit_;

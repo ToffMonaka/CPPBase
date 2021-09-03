@@ -155,6 +155,9 @@ INT tml::input::Manager::Create(const tml::input::ManagerDesc &desc)
 	{// ResourceFactory Set
 	}
 
+	{// EventFactory Set
+	}
+
 	if (this->common.Create(this) < 0) {
 		this->Init();
 

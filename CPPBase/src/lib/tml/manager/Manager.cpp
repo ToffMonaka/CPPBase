@@ -12,7 +12,8 @@
  */
 tml::ManagerDesc::ManagerDesc() :
 	window_handle(nullptr),
-	window_device_context_handle(nullptr)
+	window_device_context_handle(nullptr),
+	factory(nullptr)
 {
 	this->InitResourceCount();
 	this->InitEventCount();
@@ -41,6 +42,7 @@ void tml::ManagerDesc::Init(void)
 
 	this->window_handle = nullptr;
 	this->window_device_context_handle = nullptr;
+	this->factory = nullptr;
 
 	this->InitResourceCount();
 	this->InitEventCount();
@@ -77,6 +79,7 @@ void tml::ManagerDesc::InitEventCount(void)
 tml::Manager::Manager() :
 	wnd_handle_(nullptr),
 	wnd_dc_handle_(nullptr),
+	factory(nullptr),
 	friend_res_(nullptr),
 	front_event_index_(0U),
 	back_event_index_(0U),
@@ -121,9 +124,9 @@ void tml::Manager::Init(void)
 
 	this->wnd_handle_ = nullptr;
 	this->wnd_dc_handle_ = nullptr;
+	this->factory = nullptr;
 	this->friend_res_ = nullptr;
 	this->friend_event_ = nullptr;
-	this->resource_factory.Init();
 
 	return;
 }
@@ -138,12 +141,14 @@ void tml::Manager::Init(void)
 INT tml::Manager::Create(const tml::ManagerDesc &desc)
 {
 	if ((desc.window_handle == nullptr)
-	|| (desc.window_device_context_handle == nullptr)) {
+	|| (desc.window_device_context_handle == nullptr)
+	|| (desc.factory == nullptr)) {
 		return (-1);
 	}
 
 	this->wnd_handle_ = desc.window_handle;
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
+	this->factory = desc.factory;
 
 	if (this->CreateResourceContainer(desc.resource_count_container) < 0) {
 		return (-1);

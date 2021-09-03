@@ -11,7 +11,6 @@
  * @brief コンストラクタ
  */
 cpp_base::input::ManagerDesc::ManagerDesc()
-
 {
 	this->InitResourceCount();
 	this->InitEventCount();
@@ -134,6 +133,9 @@ INT cpp_base::input::Manager::Create(const cpp_base::input::ManagerDesc &desc)
 	}
 
 	{// ResourceFactory Set
+	}
+
+	{// EventFactory Set
 	}
 
 	if (this->common2.Create(this) < 0) {

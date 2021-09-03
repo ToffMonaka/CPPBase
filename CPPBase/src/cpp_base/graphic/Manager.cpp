@@ -11,7 +11,6 @@
  * @brief コンストラクタ
  */
 cpp_base::graphic::ManagerDesc::ManagerDesc()
-
 {
 	this->InitResourceCount();
 	this->InitEventCount();
@@ -134,6 +133,9 @@ INT cpp_base::graphic::Manager::Create(const cpp_base::graphic::ManagerDesc &des
 	}
 
 	{// ResourceFactory Set
+	}
+
+	{// EventFactory Set
 	}
 
 	if (this->common2.Create(this) < 0) {

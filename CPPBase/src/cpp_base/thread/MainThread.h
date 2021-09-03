@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../../lib/tml/thread/MainThread.h"
 #include "../data/SystemConfigFile.h"
+#include "../manager/ManagerFactory.h"
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
 #include "../sound/Manager.h"
@@ -26,6 +27,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	cpp_base::SystemConfigFile sys_conf_file_;
+	cpp_base::ManagerFactory mgr_factory_;
 	cpp_base::input::Manager input_mgr_;
 	cpp_base::graphic::Manager graphic_mgr_;
 	cpp_base::sound::Manager sound_mgr_;

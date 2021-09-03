@@ -172,6 +172,7 @@
     <ClCompile Include="src\cpp_base\graphic\ManagerCommon.cpp" />
     <ClCompile Include="src\cpp_base\input\Manager.cpp" />
     <ClCompile Include="src\cpp_base\input\ManagerCommon.cpp" />
+    <ClCompile Include="src\cpp_base\manager\ManagerFactory.cpp" />
     <ClCompile Include="src\cpp_base\scene\DebugNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\Field2DGroundNode.cpp" />
     <ClCompile Include="src\cpp_base\scene\Field2DMobNode.cpp" />
@@ -243,8 +244,8 @@
     <ClCompile Include="src\lib\tml\input\MouseDeviceEvent.cpp" />
     <ClCompile Include="src\lib\tml\manager\Manager.cpp" />
     <ClCompile Include="src\lib\tml\manager\ManagerEvent.cpp" />
+    <ClCompile Include="src\lib\tml\manager\ManagerFactory.cpp" />
     <ClCompile Include="src\lib\tml\manager\ManagerResource.cpp" />
-    <ClCompile Include="src\lib\tml\manager\ManagerResourceFactory.cpp" />
     <ClCompile Include="src\lib\tml\math\DefaultMathUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtil.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtilEngine.cpp" />
@@ -318,6 +319,7 @@
     <ClInclude Include="src\cpp_base\graphic\ManagerCommon.h" />
     <ClInclude Include="src\cpp_base\input\Manager.h" />
     <ClInclude Include="src\cpp_base\input\ManagerCommon.h" />
+    <ClInclude Include="src\cpp_base\manager\ManagerFactory.h" />
     <ClInclude Include="src\cpp_base\resource\resource.h" />
     <ClInclude Include="src\cpp_base\scene\DebugNode.h" />
     <ClInclude Include="src\cpp_base\scene\Field2DGroundNode.h" />
@@ -410,8 +412,8 @@
     <ClInclude Include="src\lib\tml\input\MouseDeviceEvent.h" />
     <ClInclude Include="src\lib\tml\manager\Manager.h" />
     <ClInclude Include="src\lib\tml\manager\ManagerEvent.h" />
+    <ClInclude Include="src\lib\tml\manager\ManagerFactory.h" />
     <ClInclude Include="src\lib\tml\manager\ManagerResource.h" />
-    <ClInclude Include="src\lib\tml\manager\ManagerResourceFactory.h" />
     <ClInclude Include="src\lib\tml\math\DefaultMathUtilEngine.h" />
     <ClInclude Include="src\lib\tml\math\MathUtil.h" />
     <ClInclude Include="src\lib\tml\math\MathUtilEngine.h" />

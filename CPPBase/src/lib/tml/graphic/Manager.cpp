@@ -129,11 +129,11 @@ tml::graphic::Manager::Manager() :
 	factory_(nullptr),
 	adapter_(nullptr),
 	adapter_desc_{},
-	swap_chain_(nullptr),
-	swap_chain_desc_{},
 	device_(nullptr),
 	device_context_(nullptr),
 	device_future_lv_(static_cast<D3D_FEATURE_LEVEL>(0)),
+	swap_chain_(nullptr),
+	swap_chain_desc_{},
 	size_(0U),
 	vsync_flg_(true),
 	frame_rate_limit_(60U),
@@ -276,8 +276,8 @@ void tml::graphic::Manager::Init(void)
 	this->Release();
 
 	tml::Clear(&this->adapter_desc_, 1U);
-	tml::Clear(&this->swap_chain_desc_, 1U);
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
+	tml::Clear(&this->swap_chain_desc_, 1U);
 	this->size_ = 0U;
 	this->vsync_flg_ = true;
 	this->frame_rate_limit_ = 60U;
@@ -578,6 +578,9 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	this->device_context_->CSSetSamplers(0U, this->null_samp_sr_ary_.size(), this->null_samp_sr_ary_.data());
 
 	{// ResourceFactory Set
+	}
+
+	{// EventFactory Set
 	}
 
 	if (this->common.Create(this) < 0) {
