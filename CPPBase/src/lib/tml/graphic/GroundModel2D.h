@@ -118,6 +118,7 @@ class GroundModel2DDesc : public tml::graphic::Model2DDesc
 public:
 	tml::BinaryFileReadDesc image_file_read_desc;
 	tml::XMLFileReadDesc map_file_read_desc;
+	std::wstring map_directory_path;
 
 private:
 	void Release(void);
@@ -156,8 +157,8 @@ public: tml::graphic::GroundModel2D &operator =(const tml::graphic::GroundModel2
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
-	tml::XMUINT2EX mass_cnt_;
 	tml::XMUINT2EX mass_size_;
+	tml::XMUINT2EX mass_cnt_;
 	std::vector<UINT> mass_type_cont_;
 
 private:

@@ -57,7 +57,7 @@ class ShaderDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
 	tml::BinaryFileReadDesc shader_file_read_desc;
-	std::wstring include_directory_path;
+	std::wstring shader_directory_path;
 	std::wstring vertex_shader_function_name;
 	std::wstring vertex_shader_model_name;
 	UINT vertex_shader_input_element_desc_count;

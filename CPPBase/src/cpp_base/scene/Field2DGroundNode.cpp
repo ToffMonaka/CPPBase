@@ -142,14 +142,13 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 		desc.SetManager(this->GetGraphicManager());
 		desc.position.Set(tml::XMFLOAT2EX(0.0f, 0.0f));
 		desc.map_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_MAP;
+		desc.map_directory_path = L"res";
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::GroundModel2D>(this->model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
-
-		this->model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 	}
 
 	return (0);

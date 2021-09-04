@@ -45,6 +45,34 @@ void tml::graphic::ManagerEventDesc::Init(void)
 
 
 /**
+ * @brief ReadValueä÷êî
+ * @param conf_file (config_file)
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::graphic::ManagerEventDesc::ReadValue(const tml::INIFile &conf_file)
+{
+	if (tml::ManagerEventDesc::ReadValue(conf_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// Event Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"EVENT");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief SetManagerä÷êî
  * @param mgr (manager)
  */

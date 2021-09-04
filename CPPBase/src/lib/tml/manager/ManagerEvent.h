@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../file/INIFile.h"
 
 
 namespace tml {
@@ -27,11 +28,16 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	ManagerEventDesc();
 	virtual ~ManagerEventDesc();
 
 	virtual void Init(void);
+
+	INT Read(const tml::INIFileReadDesc &);
 
 	tml::Manager *GetManager(void) const;
 	void SetManager(tml::Manager *);
