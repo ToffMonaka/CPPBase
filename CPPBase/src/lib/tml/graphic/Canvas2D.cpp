@@ -189,9 +189,9 @@ void tml::graphic::Canvas2D::Draw(void)
 		DirectX::XMMATRIX inv_v_mat;
 		DirectX::XMMATRIX p_mat;
 
-		this->GetManager()->GetViewMatrix(v_mat, (*this->draw_camera_));
+		this->draw_camera_->GetViewMatrix(v_mat);
 		inv_v_mat = DirectX::XMMatrixInverse(nullptr, v_mat);
-		this->GetManager()->GetProjectionMatrix(p_mat, (*this->draw_camera_));
+		this->draw_camera_->GetProjectionMatrix(p_mat);
 
 		tml::graphic::DRAW_STAGE_DATA draw_stage_dat(v_mat, inv_v_mat, p_mat);
 

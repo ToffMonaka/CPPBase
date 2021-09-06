@@ -151,3 +151,45 @@ INT tml::graphic::Camera3D::Create(const tml::graphic::Camera3DDesc &desc)
 
 	return (0);
 }
+
+
+/**
+ * @brief GetViewMatrixŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @return dst_mat (dst_matrix)
+ */
+DirectX::XMMATRIX &tml::graphic::Camera3D::GetViewMatrix(DirectX::XMMATRIX &dst_mat)
+{
+	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&this->position.Get()), DirectX::XMLoadFloat3(&this->position.GetZAxisVector()), DirectX::XMLoadFloat3(&this->position.GetYAxisVector()));
+
+	return (dst_mat);
+}
+
+
+/**
+ * @brief GetProjectionMatrixŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @return dst_mat (dst_matrix)
+ */
+DirectX::XMMATRIX &tml::graphic::Camera3D::GetProjectionMatrix(DirectX::XMMATRIX &dst_mat)
+{
+	switch (this->proj_type_) {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::PERSPECTIVE: {
+		dst_mat = DirectX::XMMatrixPerspectiveFovLH(this->fov_angle_, this->fov_size_.x / this->fov_size_.y, this->near_clip_, this->far_clip_);
+
+		break;
+	}
+	case tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::ORTHOGRAPHIC: {
+		dst_mat = DirectX::XMMatrixOrthographicLH(this->fov_size_.x, this->fov_size_.y, this->near_clip_, this->far_clip_);
+
+		break;
+	}
+	default: {
+		dst_mat = DirectX::XMMatrixIdentity();
+
+		break;
+	}
+	}
+
+	return (dst_mat);
+}

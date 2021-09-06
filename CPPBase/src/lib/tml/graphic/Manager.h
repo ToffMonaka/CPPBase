@@ -210,11 +210,6 @@ public:
 	tml::ConstantUtil::GRAPHIC::AO_QUALITY_TYPE GetAOQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE GetBloomQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE GetAAQualityType(void) const;
-	DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &, const tml::graphic::Model2D &);
-	DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera2D &);
-	DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera3D &);
-	DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera2D &);
-	DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &, const tml::graphic::Camera3D &);
 	tml::DynamicBuffer &GetCPUBuffer(tml::DynamicBuffer &, D3D11_MAPPED_SUBRESOURCE &, ID3D11Buffer *, INT *dst_result = nullptr);
 	std::vector<tml::DynamicBuffer> &GetCPUBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_result = nullptr);
 

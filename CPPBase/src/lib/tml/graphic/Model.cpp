@@ -469,9 +469,9 @@ void tml::graphic::Model::DrawStageDeferred3D(void)
 
 
 /**
- * @brief DrawStageDeferredShadow3Dä÷êî
+ * @brief DrawStageDeferred3DShadowä÷êî
  */
-void tml::graphic::Model::DrawStageDeferredShadow3D(void)
+void tml::graphic::Model::DrawStageDeferred3DShadow(void)
 {
 	return;
 }

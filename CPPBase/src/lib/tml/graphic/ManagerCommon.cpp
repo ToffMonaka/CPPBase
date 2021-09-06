@@ -18,8 +18,10 @@
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
-#include "Model2DShaderStructuredBuffer.h"
-#include "Model2DLayerShaderStructuredBuffer.h"
+#include "FigureModel2DShaderStructuredBuffer.h"
+#include "FigureModel2DLayerShaderStructuredBuffer.h"
+#include "GroundModel2DShaderStructuredBuffer.h"
+#include "GroundModel2DLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
@@ -95,8 +97,8 @@ void tml::graphic::ManagerCommon::Init(void)
 	this->camera_shader_structured_buffer.reset();
 	this->light_shader_structured_buffer.reset();
 	this->fog_shader_structured_buffer.reset();
-	this->model_2d_default_mesh.reset();
-	this->model_3d_default_mesh.reset();
+	this->figure_model_2d_mesh.reset();
+	this->figure_model_3d_mesh.reset();
 	this->cc_sampler.reset();
 	this->cw_sampler.reset();
 	this->wc_sampler.reset();
@@ -331,8 +333,8 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 
 		desc.SetManager(this->mgr_);
 		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::FIGURE_MODEL_2D_SHADER_CONFIG));
-		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT;
-		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_ARRAY;
+		desc.vertex_shader_input_element_desc_count = tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_COUNT;
+		desc.vertex_shader_input_element_desc_array = tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_ARRAY;
 
 		if (this->mgr_->GetResource<tml::graphic::Shader>(this->figure_model_2d_shader, desc) == nullptr) {
 			this->Init();
@@ -346,8 +348,8 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 
 		desc.SetManager(this->mgr_);
 		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::GROUND_MODEL_2D_SHADER_CONFIG));
-		desc.vertex_shader_input_element_desc_count = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_COUNT;
-		desc.vertex_shader_input_element_desc_array = tml::ConstantUtil::GRAPHIC::MODEL_2D_INPUT_ELEMENT_DESC_ARRAY;
+		desc.vertex_shader_input_element_desc_count = tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT;
+		desc.vertex_shader_input_element_desc_array = tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_ARRAY;
 
 		if (this->mgr_->GetResource<tml::graphic::Shader>(this->ground_model_2d_shader, desc) == nullptr) {
 			this->Init();
@@ -427,29 +429,29 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// Model2DDefaultMesh Create
+	{// FigureModel2DMesh Create
 		tml::graphic::MeshDesc desc;
-		std::array<tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
-			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
-			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
-			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
-			tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
+		std::array<tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
+			tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
+			tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
+			tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
+			tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f, -0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
 		};
 		std::array<UINT, 4U> ib_element_ary = {0U, 1U, 2U, 3U};
 
 		desc.SetManager(this->mgr_);
-		desc.SetVertexBufferDesc(sizeof(tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
+		desc.SetVertexBufferDesc(sizeof(tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
 		desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
 		desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 
-		if (this->mgr_->GetResource<tml::graphic::Mesh>(model_2d_default_mesh, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Mesh>(figure_model_2d_mesh, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// Model3DDefaultMesh Create
+	{// FigureModel3DMesh Create
 	}
 
 	{// CCSampler Create

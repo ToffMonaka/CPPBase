@@ -48,8 +48,8 @@ public:
 	tml::shared_ptr<tml::graphic::CameraShaderStructuredBuffer> camera_shader_structured_buffer;
 	tml::shared_ptr<tml::graphic::LightShaderStructuredBuffer> light_shader_structured_buffer;
 	tml::shared_ptr<tml::graphic::FogShaderStructuredBuffer> fog_shader_structured_buffer;
-	tml::shared_ptr<tml::graphic::Mesh> model_2d_default_mesh;
-	tml::shared_ptr<tml::graphic::Mesh> model_3d_default_mesh;
+	tml::shared_ptr<tml::graphic::Mesh> figure_model_2d_mesh;
+	tml::shared_ptr<tml::graphic::Mesh> figure_model_3d_mesh;
 	tml::shared_ptr<tml::graphic::Sampler> cc_sampler;
 	tml::shared_ptr<tml::graphic::Sampler> cw_sampler;
 	tml::shared_ptr<tml::graphic::Sampler> wc_sampler;

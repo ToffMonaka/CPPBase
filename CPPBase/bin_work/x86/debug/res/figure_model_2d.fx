@@ -1,4 +1,4 @@
-#include "model_2d_h.fx"
+#include "figure_model_2d_h.fx"
 
 
 struct VS_OUTPUT

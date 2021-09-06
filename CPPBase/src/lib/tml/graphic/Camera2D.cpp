@@ -136,3 +136,40 @@ INT tml::graphic::Camera2D::Create(const tml::graphic::Camera2DDesc &desc)
 
 	return (0);
 }
+
+
+/**
+ * @brief GetViewMatrixŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @return dst_mat (dst_matrix)
+ */
+DirectX::XMMATRIX &tml::graphic::Camera2D::GetViewMatrix(DirectX::XMMATRIX &dst_mat)
+{
+	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat2(&this->position.Get()), DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), DirectX::XMLoadFloat2(&this->position.GetYAxisVector()));
+
+	return (dst_mat);
+}
+
+
+/**
+ * @brief GetProjectionMatrixŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @return dst_mat (dst_matrix)
+ */
+DirectX::XMMATRIX &tml::graphic::Camera2D::GetProjectionMatrix(DirectX::XMMATRIX &dst_mat)
+{
+	switch (this->proj_type_) {
+	case tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::ORTHOGRAPHIC: {
+		dst_mat = DirectX::XMMatrixOrthographicLH(this->fov_size_.x, this->fov_size_.y, 0.0f, 1.0f);
+
+		break;
+	}
+	default: {
+		dst_mat = DirectX::XMMatrixIdentity();
+
+		break;
+	}
+	}
+
+	return (dst_mat);
+}

@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include <vector>
 #include "../math/XNAMathINT.h"
+#include "../math/XNAMathPosition.h"
 #include "ManagerResource.h"
 
 
@@ -147,7 +148,6 @@ private:
 	UINT bs_index_;
 	UINT ds_index_;
 	UINT shader_index_;
-
 	std::vector<tml::unique_ptr<tml::graphic::ModelLayer>> layer_cont_;
 
 private:
@@ -174,7 +174,6 @@ public:
 	void SetDepthStateIndex(const UINT);
 	UINT GetShaderIndex(void) const;
 	void SetShaderIndex(const UINT);
-
 	UINT GetLayerCount(void) const;
 };
 }
@@ -383,7 +382,6 @@ private:
 	tml::shared_ptr<tml::graphic::Texture> empty_tex_;
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
 	tml::shared_ptr<tml::graphic::Sampler> empty_samp_;
-
 	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_cont_;
 
 private:
@@ -430,14 +428,14 @@ public:
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSampler(const UINT);
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSamplerFast(const UINT);
 	void SetSampler(const UINT, const tml::shared_ptr<tml::graphic::Sampler> &);
-
 	UINT GetStageCount(void) const;
+	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &) = 0;
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
 
 	virtual void DrawStageInit(void);
 	virtual void DrawStageDeferred3D(void);
-	virtual void DrawStageDeferredShadow3D(void);
+	virtual void DrawStageDeferred3DShadow(void);
 	virtual void DrawStageForward3D(void);
 	virtual void DrawStageForward2D(void);
 };

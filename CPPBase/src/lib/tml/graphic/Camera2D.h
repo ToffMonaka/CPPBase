@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMathPosition.h"
 #include "Camera.h"
 
 
@@ -81,6 +80,8 @@ public:
 	tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE GetProjectionType(void) const;
 	const tml::XMFLOAT2EX &GetFOVSize(void) const;
 	void SetFOVSize(const tml::XMFLOAT2EX &);
+	virtual DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &);
+	virtual DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &);
 };
 }
 }

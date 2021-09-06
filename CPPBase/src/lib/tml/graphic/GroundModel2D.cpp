@@ -11,11 +11,18 @@
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
-#include "Model2DShaderStructuredBuffer.h"
-#include "Model2DLayerShaderStructuredBuffer.h"
+#include "GroundModel2DShaderStructuredBuffer.h"
+#include "GroundModel2DLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
+
+
+const D3D11_INPUT_ELEMENT_DESC tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_ARRAY[tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT] = {
+	{"POSITION", 0U, DXGI_FORMAT_R32G32B32A32_FLOAT, 0U, 0U, D3D11_INPUT_PER_VERTEX_DATA, 0U},
+	{"TEXCOORD", 0U, DXGI_FORMAT_R32G32_FLOAT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U},
+	{"LAYER_INDEX", 0U, DXGI_FORMAT_R32_UINT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U}
+};
 
 
 /**
@@ -248,6 +255,8 @@ void tml::graphic::GroundModel2D::Init(void)
 	this->mass_size_ = 0U;
 	this->mass_cnt_ = 0U;
 	this->mass_type_cont_.clear();
+	this->ssb_.reset();
+	this->layer_ssb_.reset();
 
 	tml::graphic::Model2D::Init();
 
@@ -386,7 +395,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		image_file_read_desc_dat = &mass_image_file_read_desc_dat;
 	}
 
-	this->size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->mass_size_.x * this->mass_cnt_.x), static_cast<FLOAT>(this->mass_size_.y * this->mass_cnt_.y));
+	tml::XMFLOAT2EX size;
 
 	{// Forward2DStage Create
 		auto stage = tml::make_unique<tml::graphic::GroundModel2DStage>(1U);
@@ -467,13 +476,13 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
 
 				tml::graphic::MeshDesc desc;
-				std::vector<tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT> vb_element_cont;
+				std::vector<tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT> vb_element_cont;
 				std::vector<UINT> ib_element_cont;
-				std::array<tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT, 4U> base_vb_element_ary = {
-					tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
-					tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
-					tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
-					tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
+				std::array<tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT, 4U> base_vb_element_ary = {
+					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
+					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
+					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
+					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
 				};
 				std::array<UINT, 6U> base_ib_element_ary = {0U, 1U, 2U, 2U, 1U, 3U};
 				FLOAT offset_x = -static_cast<FLOAT>(this->mass_cnt_.x) * 0.5f;
@@ -503,7 +512,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 				}
 
 				desc.SetManager(this->GetManager());
-				desc.SetVertexBufferDesc(sizeof(tml::graphic::Model2D::VERTEX_BUFFER_ELEMENT), vb_element_cont.size(), reinterpret_cast<BYTE *>(vb_element_cont.data()));
+				desc.SetVertexBufferDesc(sizeof(tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT), vb_element_cont.size(), reinterpret_cast<BYTE *>(vb_element_cont.data()));
 				desc.SetIndexBufferDesc(sizeof(UINT), ib_element_cont.size(), reinterpret_cast<BYTE *>(ib_element_cont.data()), DXGI_FORMAT_R32_UINT);
 				desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
@@ -533,6 +542,8 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 				}
 
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+
+				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
 			} else {
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tml::shared_ptr<tml::graphic::Texture>());
 			}
@@ -555,13 +566,21 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
 	}
 
+	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->mass_size_.x * this->mass_cnt_.x), static_cast<FLOAT>(this->mass_size_.y * this->mass_cnt_.y));
+
+	if (desc.size_flag) {
+		this->size = desc.size;
+	} else {
+		this->size = size;
+	}
+
 	{// ShaderStructuredBuffer Create
-		tml::graphic::Model2DShaderStructuredBufferDesc desc;
+		tml::graphic::GroundModel2DShaderStructuredBufferDesc desc;
 
 		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Model2DShaderStructuredBuffer::ELEMENT), 1U);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::Model2DShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -569,19 +588,36 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	}
 
 	{// LayerShaderStructuredBuffer Create
-		tml::graphic::Model2DLayerShaderStructuredBufferDesc desc;
+		tml::graphic::GroundModel2DLayerShaderStructuredBufferDesc desc;
 
 		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Model2DLayerShaderStructuredBuffer::ELEMENT), 1U);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::Model2DLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
+
 	return (0);
+}
+
+
+/**
+ * @brief GetWorldMatrixŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @return dst_mat (dst_matrix)
+ */
+DirectX::XMMATRIX &tml::graphic::GroundModel2D::GetWorldMatrix(DirectX::XMMATRIX &dst_mat)
+{
+	auto scale_x = this->size.x / static_cast<FLOAT>(this->mass_cnt_.x) * this->scale.x;
+	auto scale_y = this->size.y / static_cast<FLOAT>(this->mass_cnt_.y) * this->scale.y;
+
+	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale_x, scale_y, 0.0f, 0.0f), DirectX::g_XMZero, this->position.GetAngle(), DirectX::XMVectorSet(this->position.GetX(), this->position.GetY(), 0.0f, 0.0f));
+
+	return (dst_mat);
 }
 
 
@@ -619,13 +655,7 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
 
 	DirectX::XMMATRIX w_mat;
 
-	this->size.x = static_cast<FLOAT>(this->mass_size_.x);
-	this->size.y = static_cast<FLOAT>(this->mass_size_.y);
-
-	this->GetManager()->GetWorldMatrix(w_mat, (*this));
-
-	this->size.x *= static_cast<FLOAT>(this->mass_cnt_.x);
-	this->size.y *= static_cast<FLOAT>(this->mass_cnt_.y);
+	this->GetWorldMatrix(w_mat);
 
 	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix, this->GetManager()->GetDrawStageData()->projection_matrix, this->color);
 	this->ssb_->UploadCPUBuffer();

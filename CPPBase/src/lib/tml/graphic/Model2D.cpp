@@ -10,8 +10,6 @@
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
-#include "Model2DShaderStructuredBuffer.h"
-#include "Model2DLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
@@ -138,6 +136,7 @@ INT tml::graphic::Model2DStage::Create(tml::graphic::Manager *mgr)
  */
 tml::graphic::Model2DDesc::Model2DDesc() :
 	size(0.0f),
+	size_flag(false),
 	scale(1.0f),
 	color(1.0f)
 {
@@ -165,6 +164,7 @@ void tml::graphic::Model2DDesc::Init(void)
 
 	this->position.Init();
 	this->size = 0.0f;
+	this->size_flag = false;
 	this->scale = 1.0f;
 	this->color = 1.0f;
 
@@ -245,8 +245,6 @@ void tml::graphic::Model2D::Init(void)
 	this->size = 0.0f;
 	this->scale = 1.0f;
 	this->color = 1.0f;
-	this->ssb_.reset();
-	this->layer_ssb_.reset();
 
 	tml::graphic::Model::Init();
 

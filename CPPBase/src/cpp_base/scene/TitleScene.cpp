@@ -211,6 +211,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 		desc.SetManager(this->GetGraphicManager());
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
+		desc.size_flag = true;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, desc) == nullptr) {
 			this->Init();

@@ -1,18 +1,18 @@
 /**
  * @file
- * @brief Model2DShaderStructuredBufferコードファイル
+ * @brief FigureModel2DShaderStructuredBufferコードファイル
  */
 
 
-#include "Model2DShaderStructuredBuffer.h"
+#include "FigureModel2DShaderStructuredBuffer.h"
 #include "Manager.h"
-#include "Model2D.h"
+#include "FigureModel2D.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Model2DShaderStructuredBufferDesc::Model2DShaderStructuredBufferDesc()
+tml::graphic::FigureModel2DShaderStructuredBufferDesc::FigureModel2DShaderStructuredBufferDesc()
 {
 	return;
 }
@@ -21,7 +21,7 @@ tml::graphic::Model2DShaderStructuredBufferDesc::Model2DShaderStructuredBufferDe
 /**
  * @brief デストラクタ
  */
-tml::graphic::Model2DShaderStructuredBufferDesc::~Model2DShaderStructuredBufferDesc()
+tml::graphic::FigureModel2DShaderStructuredBufferDesc::~FigureModel2DShaderStructuredBufferDesc()
 {
 	this->Release();
 
@@ -32,7 +32,7 @@ tml::graphic::Model2DShaderStructuredBufferDesc::~Model2DShaderStructuredBufferD
 /**
  * @brief Init関数
  */
-void tml::graphic::Model2DShaderStructuredBufferDesc::Init(void)
+void tml::graphic::FigureModel2DShaderStructuredBufferDesc::Init(void)
 {
 	this->Release();
 
@@ -45,7 +45,7 @@ void tml::graphic::Model2DShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Model2DShaderStructuredBuffer::Model2DShaderStructuredBuffer()
+tml::graphic::FigureModel2DShaderStructuredBuffer::FigureModel2DShaderStructuredBuffer()
 {
 	return;
 }
@@ -54,7 +54,7 @@ tml::graphic::Model2DShaderStructuredBuffer::Model2DShaderStructuredBuffer()
 /**
  * @brief デストラクタ
  */
-tml::graphic::Model2DShaderStructuredBuffer::~Model2DShaderStructuredBuffer()
+tml::graphic::FigureModel2DShaderStructuredBuffer::~FigureModel2DShaderStructuredBuffer()
 {
 	this->Release();
 
@@ -65,7 +65,7 @@ tml::graphic::Model2DShaderStructuredBuffer::~Model2DShaderStructuredBuffer()
 /**
  * @brief Init関数
  */
-void tml::graphic::Model2DShaderStructuredBuffer::Init(void)
+void tml::graphic::FigureModel2DShaderStructuredBuffer::Init(void)
 {
 	this->Release();
 
@@ -81,7 +81,7 @@ void tml::graphic::Model2DShaderStructuredBuffer::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Model2DShaderStructuredBuffer::Create(const tml::graphic::Model2DShaderStructuredBufferDesc &desc)
+INT tml::graphic::FigureModel2DShaderStructuredBuffer::Create(const tml::graphic::FigureModel2DShaderStructuredBufferDesc &desc)
 {
 	this->Init();
 
@@ -103,7 +103,7 @@ INT tml::graphic::Model2DShaderStructuredBuffer::Create(const tml::graphic::Mode
  * @param p_mat (projection_matrix)
  * @param col (color)
  */
-void tml::graphic::Model2DShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
+void tml::graphic::FigureModel2DShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
 {
 	auto element = this->GetElement(index);
 

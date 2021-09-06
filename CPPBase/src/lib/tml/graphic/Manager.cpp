@@ -16,8 +16,10 @@
 #include "CameraShaderStructuredBuffer.h"
 #include "LightShaderStructuredBuffer.h"
 #include "FogShaderStructuredBuffer.h"
-#include "Model2DShaderStructuredBuffer.h"
-#include "Model2DLayerShaderStructuredBuffer.h"
+#include "FigureModel2DShaderStructuredBuffer.h"
+#include "FigureModel2DLayerShaderStructuredBuffer.h"
+#include "GroundModel2DShaderStructuredBuffer.h"
+#include "GroundModel2DLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
@@ -615,106 +617,6 @@ void tml::graphic::Manager::Update(void)
 	this->swap_chain_->Present(this->vsync_flg_, 0U);
 
 	return;
-}
-
-
-/**
- * @brief GetWorldMatrixä÷êî
- * @param dst_mat (dst_matrix)
- * @param model (model)
- * @return dst_mat (dst_matrix)
- */
-DirectX::XMMATRIX &tml::graphic::Manager::GetWorldMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Model2D &model)
-{
-	auto w = model.size.x * model.scale.x;
-	auto h = model.size.y * model.scale.y;
-
-	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(w, h, 0.0f, 0.0f), DirectX::g_XMZero, model.position.GetAngle(), DirectX::XMVectorSet(model.position.GetX(), model.position.GetY(), 0.0f, 0.0f));
-
-	return (dst_mat);
-}
-
-
-/**
- * @brief GetViewMatrixä÷êî
- * @param dst_mat (dst_matrix)
- * @param camera (camera)
- * @return dst_mat (dst_matrix)
- */
-DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera2D &camera)
-{
-	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat2(&camera.position.Get()), DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), DirectX::XMLoadFloat2(&camera.position.GetYAxisVector()));
-
-	return (dst_mat);
-}
-
-
-/**
- * @brief GetViewMatrixä÷êî
- * @param dst_mat (dst_matrix)
- * @param camera (camera)
- * @return dst_mat (dst_matrix)
- */
-DirectX::XMMATRIX &tml::graphic::Manager::GetViewMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera3D &camera)
-{
-	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&camera.position.Get()), DirectX::XMLoadFloat3(&camera.position.GetZAxisVector()), DirectX::XMLoadFloat3(&camera.position.GetYAxisVector()));
-
-	return (dst_mat);
-}
-
-
-/**
- * @brief GetProjectionMatrixä÷êî
- * @param dst_mat (dst_matrix)
- * @param camera (camera)
- * @return dst_mat (dst_matrix)
- */
-DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera2D &camera)
-{
-	switch (camera.GetProjectionType()) {
-	case tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::ORTHOGRAPHIC: {
-		dst_mat = DirectX::XMMatrixOrthographicLH(camera.GetFOVSize().x, camera.GetFOVSize().y, 0.0f, 1.0f);
-
-		break;
-	}
-	default: {
-		dst_mat = DirectX::XMMatrixIdentity();
-
-		break;
-	}
-	}
-
-	return (dst_mat);
-}
-
-
-/**
- * @brief GetProjectionMatrixä÷êî
- * @param dst_mat (dst_matrix)
- * @param camera (camera)
- * @return dst_mat (dst_matrix)
- */
-DirectX::XMMATRIX &tml::graphic::Manager::GetProjectionMatrix(DirectX::XMMATRIX &dst_mat, const tml::graphic::Camera3D &camera)
-{
-	switch (camera.GetProjectionType()) {
-	case tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::PERSPECTIVE: {
-		dst_mat = DirectX::XMMatrixPerspectiveFovLH(camera.GetFOVAngle(), camera.GetFOVSize().x / camera.GetFOVSize().y, camera.GetNearClip(), camera.GetFarClip());
-
-		break;
-	}
-	case tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::ORTHOGRAPHIC: {
-		dst_mat = DirectX::XMMatrixOrthographicLH(camera.GetFOVSize().x, camera.GetFOVSize().y, camera.GetNearClip(), camera.GetFarClip());
-
-		break;
-	}
-	default: {
-		dst_mat = DirectX::XMMatrixIdentity();
-
-		break;
-	}
-	}
-
-	return (dst_mat);
 }
 
 

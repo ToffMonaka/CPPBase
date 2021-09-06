@@ -1,18 +1,18 @@
 /**
  * @file
- * @brief Model2DLayerShaderStructuredBufferコードファイル
+ * @brief FigureModel2DLayerShaderStructuredBufferコードファイル
  */
 
 
-#include "Model2DLayerShaderStructuredBuffer.h"
+#include "FigureModel2DLayerShaderStructuredBuffer.h"
 #include "Manager.h"
-#include "Model2D.h"
+#include "FigureModel2D.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Model2DLayerShaderStructuredBufferDesc::Model2DLayerShaderStructuredBufferDesc()
+tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc::FigureModel2DLayerShaderStructuredBufferDesc()
 {
 	return;
 }
@@ -21,7 +21,7 @@ tml::graphic::Model2DLayerShaderStructuredBufferDesc::Model2DLayerShaderStructur
 /**
  * @brief デストラクタ
  */
-tml::graphic::Model2DLayerShaderStructuredBufferDesc::~Model2DLayerShaderStructuredBufferDesc()
+tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc::~FigureModel2DLayerShaderStructuredBufferDesc()
 {
 	this->Release();
 
@@ -32,7 +32,7 @@ tml::graphic::Model2DLayerShaderStructuredBufferDesc::~Model2DLayerShaderStructu
 /**
  * @brief Init関数
  */
-void tml::graphic::Model2DLayerShaderStructuredBufferDesc::Init(void)
+void tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc::Init(void)
 {
 	this->Release();
 
@@ -45,7 +45,7 @@ void tml::graphic::Model2DLayerShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Model2DLayerShaderStructuredBuffer::Model2DLayerShaderStructuredBuffer()
+tml::graphic::FigureModel2DLayerShaderStructuredBuffer::FigureModel2DLayerShaderStructuredBuffer()
 {
 	return;
 }
@@ -54,7 +54,7 @@ tml::graphic::Model2DLayerShaderStructuredBuffer::Model2DLayerShaderStructuredBu
 /**
  * @brief デストラクタ
  */
-tml::graphic::Model2DLayerShaderStructuredBuffer::~Model2DLayerShaderStructuredBuffer()
+tml::graphic::FigureModel2DLayerShaderStructuredBuffer::~FigureModel2DLayerShaderStructuredBuffer()
 {
 	this->Release();
 
@@ -65,7 +65,7 @@ tml::graphic::Model2DLayerShaderStructuredBuffer::~Model2DLayerShaderStructuredB
 /**
  * @brief Init関数
  */
-void tml::graphic::Model2DLayerShaderStructuredBuffer::Init(void)
+void tml::graphic::FigureModel2DLayerShaderStructuredBuffer::Init(void)
 {
 	this->Release();
 
@@ -81,7 +81,7 @@ void tml::graphic::Model2DLayerShaderStructuredBuffer::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Model2DLayerShaderStructuredBuffer::Create(const tml::graphic::Model2DLayerShaderStructuredBufferDesc &desc)
+INT tml::graphic::FigureModel2DLayerShaderStructuredBuffer::Create(const tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc &desc)
 {
 	this->Init();
 
@@ -100,7 +100,7 @@ INT tml::graphic::Model2DLayerShaderStructuredBuffer::Create(const tml::graphic:
  * @param index (index)
  * @param diffuse_tex_flg (diffuse_texture_flag)
  */
-void tml::graphic::Model2DLayerShaderStructuredBuffer::SetElement(const UINT index, const bool diffuse_tex_flg)
+void tml::graphic::FigureModel2DLayerShaderStructuredBuffer::SetElement(const UINT index, const bool diffuse_tex_flg)
 {
 	auto element = this->GetElement(index);
 

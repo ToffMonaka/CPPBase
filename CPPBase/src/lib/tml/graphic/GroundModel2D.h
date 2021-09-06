@@ -156,10 +156,50 @@ public: GroundModel2D(const tml::graphic::GroundModel2D &) = delete;
 public: tml::graphic::GroundModel2D &operator =(const tml::graphic::GroundModel2D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+public:
+	/**
+	 * @brief VERTEX_BUFFER_ELEMENT構造体
+	 */
+	typedef struct VERTEX_BUFFER_ELEMENT_
+	{
+		tml::XMFLOAT4EX position;
+		tml::XMFLOAT2EX texture_position;
+		UINT layer_index;
+
+		/**
+		 * @brief コンストラクタ
+		 */
+		VERTEX_BUFFER_ELEMENT_() :
+			layer_index(0U)
+		{
+			return;
+		};
+
+		/**
+		 * @brief コンストラクタ
+		 * @param pos (position)
+		 * @param tex_pos (texture_position)
+		 * @param layer_index (layer_index)
+		 */
+		VERTEX_BUFFER_ELEMENT_(const tml::XMFLOAT4EX &pos, const tml::XMFLOAT2EX &tex_pos, const UINT layer_index) :
+			position(pos),
+			texture_position(tex_pos),
+			layer_index(layer_index)
+		{
+			return;
+		};
+	} VERTEX_BUFFER_ELEMENT;
+
+public:
+	static const UINT INPUT_ELEMENT_DESC_COUNT = 3U;
+	static const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_ARRAY[tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT];
+
 private:
 	tml::XMUINT2EX mass_size_;
 	tml::XMUINT2EX mass_cnt_;
 	std::vector<UINT> mass_type_cont_;
+	tml::shared_ptr<tml::graphic::GroundModel2DShaderStructuredBuffer> ssb_;
+	tml::shared_ptr<tml::graphic::GroundModel2DLayerShaderStructuredBuffer> layer_ssb_;
 
 private:
 	void Release(void);
@@ -174,6 +214,7 @@ public:
 	tml::graphic::GroundModel2DStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	tml::graphic::GroundModel2DStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::GroundModel2DStage> &);
+	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &);
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
 

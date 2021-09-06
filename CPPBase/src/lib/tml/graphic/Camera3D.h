@@ -6,7 +6,6 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMathPosition.h"
 #include "Camera.h"
 
 
@@ -93,6 +92,8 @@ public:
 	void SetNearClip(const FLOAT);
 	FLOAT GetFarClip(void) const;
 	void SetFarClip(const FLOAT);
+	virtual DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &);
+	virtual DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &);
 };
 }
 }

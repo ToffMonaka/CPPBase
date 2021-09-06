@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMathPosition.h"
 #include "ManagerResource.h"
 
 
@@ -73,6 +74,8 @@ public:
 	INT Create(const tml::graphic::CameraDesc &);
 
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE GetType(void) const;
+	virtual DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &) = 0;
+	virtual DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &) = 0;
 };
 }
 }

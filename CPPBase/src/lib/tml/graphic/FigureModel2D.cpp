@@ -10,11 +10,18 @@
 #include "BlendState.h"
 #include "DepthState.h"
 #include "Shader.h"
-#include "Model2DShaderStructuredBuffer.h"
-#include "Model2DLayerShaderStructuredBuffer.h"
+#include "FigureModel2DShaderStructuredBuffer.h"
+#include "FigureModel2DLayerShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
+
+
+const D3D11_INPUT_ELEMENT_DESC tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_ARRAY[tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_COUNT] = {
+	{"POSITION", 0U, DXGI_FORMAT_R32G32B32A32_FLOAT, 0U, 0U, D3D11_INPUT_PER_VERTEX_DATA, 0U},
+	{"TEXCOORD", 0U, DXGI_FORMAT_R32G32_FLOAT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U},
+	{"LAYER_INDEX", 0U, DXGI_FORMAT_R32_UINT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U}
+};
 
 
 /**
@@ -240,6 +247,9 @@ void tml::graphic::FigureModel2D::Init(void)
 {
 	this->Release();
 
+	this->ssb_.reset();
+	this->layer_ssb_.reset();
+
 	tml::graphic::Model2D::Init();
 
 	return;
@@ -263,6 +273,8 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 	}
 
 	auto image_file_read_desc_dat = desc.image_file_read_desc.GetDataByParent();
+
+	tml::XMFLOAT2EX size;
 
 	{// Forward2DStage Create
 		auto stage = tml::make_unique<tml::graphic::FigureModel2DStage>(1U);
@@ -342,7 +354,7 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			{// Mesh Create
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
 
-				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.model_2d_default_mesh) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.figure_model_2d_mesh) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -369,7 +381,7 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-				this->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
+				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
 			} else {
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tml::shared_ptr<tml::graphic::Texture>());
 			}
@@ -392,13 +404,19 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
 	}
 
+	if (desc.size_flag) {
+		this->size = desc.size;
+	} else {
+		this->size = size;
+	}
+
 	{// ShaderStructuredBuffer Create
-		tml::graphic::Model2DShaderStructuredBufferDesc desc;
+		tml::graphic::FigureModel2DShaderStructuredBufferDesc desc;
 
 		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Model2DShaderStructuredBuffer::ELEMENT), 1U);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FigureModel2DShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::Model2DShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::FigureModel2DShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -406,12 +424,12 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 	}
 
 	{// LayerShaderStructuredBuffer Create
-		tml::graphic::Model2DLayerShaderStructuredBufferDesc desc;
+		tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc desc;
 
 		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Model2DLayerShaderStructuredBuffer::ELEMENT), 1U);
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FigureModel2DLayerShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::Model2DLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::FigureModel2DLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -419,6 +437,22 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief GetWorldMatrixŠÖ”
+ * @param dst_mat (dst_matrix)
+ * @return dst_mat (dst_matrix)
+ */
+DirectX::XMMATRIX &tml::graphic::FigureModel2D::GetWorldMatrix(DirectX::XMMATRIX &dst_mat)
+{
+	auto scale_x = this->size.x * this->scale.x;
+	auto scale_y = this->size.y * this->scale.y;
+
+	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale_x, scale_y, 0.0f, 0.0f), DirectX::g_XMZero, this->position.GetAngle(), DirectX::XMVectorSet(this->position.GetX(), this->position.GetY(), 0.0f, 0.0f));
+
+	return (dst_mat);
 }
 
 
@@ -456,7 +490,7 @@ void tml::graphic::FigureModel2D::DrawStageInit(void)
 
 	DirectX::XMMATRIX w_mat;
 
-	this->GetManager()->GetWorldMatrix(w_mat, (*this));
+	this->GetWorldMatrix(w_mat);
 
 	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix, this->GetManager()->GetDrawStageData()->projection_matrix, this->color);
 	this->ssb_->UploadCPUBuffer();
