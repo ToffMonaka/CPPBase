@@ -195,9 +195,10 @@ public:
 	static const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_ARRAY[tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT];
 
 private:
-	tml::XMUINT2EX mass_size_;
-	tml::XMUINT2EX mass_cnt_;
-	std::vector<UINT> mass_type_cont_;
+	tml::XMUINT2EX tile_size_;
+	tml::XMUINT2EX tile_cnt_;
+	std::vector<UINT> tile_type_cont_;
+	tml::XMUINT2EX tileset_tile_cnt_;
 	tml::shared_ptr<tml::graphic::GroundModel2DShaderStructuredBuffer> ssb_;
 	tml::shared_ptr<tml::graphic::GroundModel2DLayerShaderStructuredBuffer> layer_ssb_;
 

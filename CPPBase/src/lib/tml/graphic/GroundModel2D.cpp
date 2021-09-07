@@ -218,8 +218,9 @@ INT tml::graphic::GroundModel2DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::GroundModel2D::GroundModel2D() :
-	mass_size_(0U),
-	mass_cnt_(0U)
+	tile_size_(0U),
+	tile_cnt_(0U),
+	tileset_tile_cnt_(0U)
 {
 	return;
 }
@@ -252,9 +253,10 @@ void tml::graphic::GroundModel2D::Init(void)
 {
 	this->Release();
 
-	this->mass_size_ = 0U;
-	this->mass_cnt_ = 0U;
-	this->mass_type_cont_.clear();
+	this->tile_size_ = 0U;
+	this->tile_cnt_ = 0U;
+	this->tile_type_cont_.clear();
+	this->tileset_tile_cnt_ = 0U;
 	this->ssb_.reset();
 	this->layer_ssb_.reset();
 
@@ -280,7 +282,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		return (-1);
 	}
 
-	auto image_file_read_desc_dat = desc.image_file_read_desc.GetDataByParent();
+	auto img_file_read_desc_dat = desc.image_file_read_desc.GetDataByParent();
 
 	auto map_file_read_desc_dat = desc.map_file_read_desc.GetDataByParent();
 
@@ -310,6 +312,14 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		return (-1);
 	}
 
+	auto &map_file_tileset_node = map_file_root_node->GetChildNode(L"tileset");
+
+	if (map_file_tileset_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
 	auto &map_file_img_node = map_file_root_node->GetChildNode(L"image");
 
 	if (map_file_img_node == nullptr) {
@@ -332,7 +342,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	val = map_file_map_node->GetValue(L"tilewidth");
 
 	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->mass_size_.x, val->c_str());
+		tml::StringUtil::GetValue(this->tile_size_.x, val->c_str());
 	} else {
 		this->Init();
 
@@ -342,7 +352,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	val = map_file_map_node->GetValue(L"tileheight");
 
 	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->mass_size_.y, val->c_str());
+		tml::StringUtil::GetValue(this->tile_size_.y, val->c_str());
 	} else {
 		this->Init();
 
@@ -352,7 +362,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	val = map_file_map_node->GetValue(L"width");
 
 	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->mass_cnt_.x, val->c_str());
+		tml::StringUtil::GetValue(this->tile_cnt_.x, val->c_str());
 	} else {
 		this->Init();
 
@@ -362,7 +372,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	val = map_file_map_node->GetValue(L"height");
 
 	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->mass_cnt_.y, val->c_str());
+		tml::StringUtil::GetValue(this->tile_cnt_.y, val->c_str());
 	} else {
 		this->Init();
 
@@ -371,28 +381,50 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 
 	tml::StringUtil::Split(val_cont, map_file_dat_node->string.c_str(), L",");
 
-	this->mass_type_cont_.resize(val_cont.size());
+	this->tile_type_cont_.resize(val_cont.size());
 
 	for (size_t val_i = 0U; val_i < val_cont.size(); ++val_i) {
-		tml::StringUtil::GetValue(this->mass_type_cont_[val_i], val_cont[val_i].c_str());
+		tml::StringUtil::GetValue(this->tile_type_cont_[val_i], val_cont[val_i].c_str());
 	}
 
-	tml::BinaryFileReadDescData mass_image_file_read_desc_dat;
+	val = map_file_tileset_node->GetValue(L"columns");
 
-	if (image_file_read_desc_dat->IsEmpty()) {
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tileset_tile_cnt_.x, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = map_file_tileset_node->GetValue(L"tilecount");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tileset_tile_cnt_.y, val->c_str());
+
+		this->tileset_tile_cnt_.y /= this->tileset_tile_cnt_.x;
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	tml::BinaryFileReadDescData tile_img_file_read_desc_dat;
+
+	if (img_file_read_desc_dat->IsEmpty()) {
 		val = map_file_img_node->GetValue(L"source");
 
 		if (val != nullptr) {
-			mass_image_file_read_desc_dat.file_path = desc.map_directory_path;
-			mass_image_file_read_desc_dat.file_path += L"/";
-			mass_image_file_read_desc_dat.file_path += (*val);
+			tile_img_file_read_desc_dat.file_path = desc.map_directory_path;
+			tile_img_file_read_desc_dat.file_path += L"/";
+			tile_img_file_read_desc_dat.file_path += (*val);
 		} else {
 			this->Init();
 
 			return (-1);
 		}
 
-		image_file_read_desc_dat = &mass_image_file_read_desc_dat;
+		img_file_read_desc_dat = &tile_img_file_read_desc_dat;
 	}
 
 	tml::XMFLOAT2EX size;
@@ -485,28 +517,28 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
 				};
 				std::array<UINT, 6U> base_ib_element_ary = {0U, 1U, 2U, 2U, 1U, 3U};
-				FLOAT offset_x = -static_cast<FLOAT>(this->mass_cnt_.x) * 0.5f;
-				FLOAT offset_y = static_cast<FLOAT>(this->mass_cnt_.y) * 0.5f;
+				FLOAT offset_x = -static_cast<FLOAT>(this->tile_cnt_.x) * 0.5f;
+				FLOAT offset_y = static_cast<FLOAT>(this->tile_cnt_.y) * 0.5f;
 
-				vb_element_cont.resize(base_vb_element_ary.size() * this->mass_cnt_.x * this->mass_cnt_.y);
-				ib_element_cont.resize(base_ib_element_ary.size() * this->mass_cnt_.x * this->mass_cnt_.y);
+				vb_element_cont.resize(base_vb_element_ary.size() * this->tile_cnt_.x * this->tile_cnt_.y);
+				ib_element_cont.resize(base_ib_element_ary.size() * this->tile_cnt_.x * this->tile_cnt_.y);
 
-				for (UINT mass_y = 0U; mass_y < this->mass_cnt_.y; ++mass_y) {
-					for (UINT mass_x = 0U; mass_x < this->mass_cnt_.x; ++mass_x) {
-						UINT mass_index = (mass_y * this->mass_cnt_.x + mass_x);
+				for (UINT tile_y = 0U; tile_y < this->tile_cnt_.y; ++tile_y) {
+					for (UINT tile_x = 0U; tile_x < this->tile_cnt_.x; ++tile_x) {
+						UINT tile_index = (tile_y * this->tile_cnt_.x + tile_x);
 
 						for (UINT base_vb_element_i = 0U; base_vb_element_i < base_vb_element_ary.size(); ++base_vb_element_i) {
-							auto &vb_element = vb_element_cont[mass_index * base_vb_element_ary.size() + base_vb_element_i];
+							auto &vb_element = vb_element_cont[tile_index * base_vb_element_ary.size() + base_vb_element_i];
 
 							vb_element = base_vb_element_ary[base_vb_element_i];
-							vb_element.position.x = vb_element.position.x + static_cast<FLOAT>(mass_x) + offset_x;
-							vb_element.position.y = vb_element.position.y - static_cast<FLOAT>(mass_y) + offset_y;
+							vb_element.position.x = vb_element.position.x + static_cast<FLOAT>(tile_x) + offset_x;
+							vb_element.position.y = vb_element.position.y - static_cast<FLOAT>(tile_y) + offset_y;
 						}
 
 						for (UINT base_ib_element_i = 0U; base_ib_element_i < base_ib_element_ary.size(); ++base_ib_element_i) {
-							auto &ib_element = ib_element_cont[mass_index * base_ib_element_ary.size() + base_ib_element_i];
+							auto &ib_element = ib_element_cont[tile_index * base_ib_element_ary.size() + base_ib_element_i];
 
-							ib_element = base_ib_element_ary[base_ib_element_i] + (mass_index * base_vb_element_ary.size());
+							ib_element = base_ib_element_ary[base_ib_element_i] + (tile_index * base_vb_element_ary.size());
 						}
 					}
 				}
@@ -526,14 +558,14 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			}
 
 			// DiffuseTexture Create
-			if (!image_file_read_desc_dat->IsEmpty()) {
+			if (!img_file_read_desc_dat->IsEmpty()) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
 
 				tml::graphic::TextureDesc desc;
 
 				desc.SetManager(this->GetManager());
 				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-				desc.image_file_read_desc_container[0].parent_data = image_file_read_desc_dat;
+				desc.image_file_read_desc_container[0].parent_data = img_file_read_desc_dat;
 
 				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 					this->Init();
@@ -566,7 +598,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
 	}
 
-	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->mass_size_.x * this->mass_cnt_.x), static_cast<FLOAT>(this->mass_size_.y * this->mass_cnt_.y));
+	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->tile_size_.x * this->tile_cnt_.x), static_cast<FLOAT>(this->tile_size_.y * this->tile_cnt_.y));
 
 	if (desc.size_flag) {
 		this->size = desc.size;
@@ -612,8 +644,8 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
  */
 DirectX::XMMATRIX &tml::graphic::GroundModel2D::GetWorldMatrix(DirectX::XMMATRIX &dst_mat)
 {
-	auto scale_x = this->size.x / static_cast<FLOAT>(this->mass_cnt_.x) * this->scale.x;
-	auto scale_y = this->size.y / static_cast<FLOAT>(this->mass_cnt_.y) * this->scale.y;
+	auto scale_x = this->size.x / static_cast<FLOAT>(this->tile_cnt_.x) * this->scale.x;
+	auto scale_y = this->size.y / static_cast<FLOAT>(this->tile_cnt_.y) * this->scale.y;
 
 	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale_x, scale_y, 0.0f, 0.0f), DirectX::g_XMZero, this->position.GetAngle(), DirectX::XMVectorSet(this->position.GetX(), this->position.GetY(), 0.0f, 0.0f));
 

@@ -272,7 +272,7 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		return (-1);
 	}
 
-	auto image_file_read_desc_dat = desc.image_file_read_desc.GetDataByParent();
+	auto img_file_read_desc_dat = desc.image_file_read_desc.GetDataByParent();
 
 	tml::XMFLOAT2EX size;
 
@@ -364,14 +364,14 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			}
 
 			// DiffuseTexture Create
-			if (!image_file_read_desc_dat->IsEmpty()) {
+			if (!img_file_read_desc_dat->IsEmpty()) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
 
 				tml::graphic::TextureDesc desc;
 
 				desc.SetManager(this->GetManager());
 				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-				desc.image_file_read_desc_container[0].parent_data = image_file_read_desc_dat;
+				desc.image_file_read_desc_container[0].parent_data = img_file_read_desc_dat;
 
 				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
 					this->Init();
