@@ -111,6 +111,39 @@ inline void tml::graphic::GroundModel2DStage::SetLayer(const UINT index, tml::un
 namespace tml {
 namespace graphic {
 /**
+ * @brief GroundModel2DBlockクラス
+ */
+class GroundModel2DBlock
+{
+public:
+	tml::XMUINT2EX tile_count;
+	std::vector<UINT> tile_type_container;
+
+private:
+	void Release(void);
+
+public:
+	GroundModel2DBlock();
+	virtual ~GroundModel2DBlock();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::graphic::GroundModel2DBlock::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+namespace graphic {
+/**
  * @brief GroundModel2DDescクラス
  */
 class GroundModel2DDesc : public tml::graphic::Model2DDesc
@@ -195,12 +228,14 @@ public:
 	static const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_ARRAY[tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT];
 
 private:
-	tml::XMUINT2EX tile_size_;
 	tml::XMUINT2EX tile_cnt_;
-	std::vector<UINT> tile_type_cont_;
+	tml::XMUINT2EX block_cnt_;
+	std::vector<tml::graphic::GroundModel2DBlock> block_cont_;
+	tml::XMUINT2EX tileset_tile_size_;
 	tml::XMUINT2EX tileset_tile_cnt_;
 	tml::shared_ptr<tml::graphic::GroundModel2DShaderStructuredBuffer> ssb_;
 	tml::shared_ptr<tml::graphic::GroundModel2DLayerShaderStructuredBuffer> layer_ssb_;
+	tml::shared_ptr<tml::graphic::GroundModel2DBlockShaderStructuredBuffer> block_ssb_;
 
 private:
 	void Release(void);

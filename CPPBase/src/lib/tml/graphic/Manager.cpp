@@ -20,6 +20,7 @@
 #include "FigureModel2DLayerShaderStructuredBuffer.h"
 #include "GroundModel2DShaderStructuredBuffer.h"
 #include "GroundModel2DLayerShaderStructuredBuffer.h"
+#include "GroundModel2DBlockShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"

@@ -354,6 +354,7 @@ class FigureModel2DShaderStructuredBuffer;
 class FigureModel2DLayerShaderStructuredBuffer;
 class GroundModel2DShaderStructuredBuffer;
 class GroundModel2DLayerShaderStructuredBuffer;
+class GroundModel2DBlockShaderStructuredBuffer;
 class Mesh;
 class Texture;
 class Sampler;

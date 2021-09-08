@@ -218,6 +218,7 @@
     <ClCompile Include="src\lib\tml\graphic\FogShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Font.cpp" />
     <ClCompile Include="src\lib\tml\graphic\GroundModel2D.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\GroundModel2DBlockShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\GroundModel2DLayerShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\GroundModel2DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\HeaderShaderConstantBuffer.cpp" />
@@ -388,6 +389,7 @@
     <ClInclude Include="src\lib\tml\graphic\FogShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Font.h" />
     <ClInclude Include="src\lib\tml\graphic\GroundModel2D.h" />
+    <ClInclude Include="src\lib\tml\graphic\GroundModel2DBlockShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\GroundModel2DLayerShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\GroundModel2DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\HeaderShaderConstantBuffer.h" />

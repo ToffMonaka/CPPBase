@@ -13,6 +13,7 @@
 #include "Shader.h"
 #include "GroundModel2DShaderStructuredBuffer.h"
 #include "GroundModel2DLayerShaderStructuredBuffer.h"
+#include "GroundModel2DBlockShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
@@ -152,6 +153,41 @@ INT tml::graphic::GroundModel2DStage::Create(tml::graphic::Manager *mgr)
 /**
  * @brief コンストラクタ
  */
+tml::graphic::GroundModel2DBlock::GroundModel2DBlock() :
+	tile_count(0U)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::GroundModel2DBlock::~GroundModel2DBlock()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::GroundModel2DBlock::Init(void)
+{
+	this->Release();
+
+	this->tile_count = 0U;
+	this->tile_type_container.clear();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::graphic::GroundModel2DDesc::GroundModel2DDesc()
 {
 	return;
@@ -218,8 +254,9 @@ INT tml::graphic::GroundModel2DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::GroundModel2D::GroundModel2D() :
-	tile_size_(0U),
 	tile_cnt_(0U),
+	block_cnt_(0U),
+	tileset_tile_size_(0U),
 	tileset_tile_cnt_(0U)
 {
 	return;
@@ -253,12 +290,14 @@ void tml::graphic::GroundModel2D::Init(void)
 {
 	this->Release();
 
-	this->tile_size_ = 0U;
 	this->tile_cnt_ = 0U;
-	this->tile_type_cont_.clear();
+	this->block_cnt_ = 0U;
+	this->block_cont_.clear();
+	this->tileset_tile_size_ = 0U;
 	this->tileset_tile_cnt_ = 0U;
 	this->ssb_.reset();
 	this->layer_ssb_.reset();
+	this->block_ssb_.reset();
 
 	tml::graphic::Model2D::Init();
 
@@ -337,27 +376,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	}
 
 	const std::wstring *val = nullptr;
-	std::vector<std::wstring> val_cont;
-
-	val = map_file_map_node->GetValue(L"tilewidth");
-
-	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->tile_size_.x, val->c_str());
-	} else {
-		this->Init();
-
-		return (-1);
-	}
-
-	val = map_file_map_node->GetValue(L"tileheight");
-
-	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->tile_size_.y, val->c_str());
-	} else {
-		this->Init();
-
-		return (-1);
-	}
 
 	val = map_file_map_node->GetValue(L"width");
 
@@ -379,12 +397,57 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		return (-1);
 	}
 
-	tml::StringUtil::Split(val_cont, map_file_dat_node->string.c_str(), L",");
+	std::vector<UINT> tile_type_cont;
+	std::vector<std::wstring> tile_type_str_cont;
 
-	this->tile_type_cont_.resize(val_cont.size());
+	tml::StringUtil::Split(tile_type_str_cont, map_file_dat_node->string.c_str(), L",");
 
-	for (size_t val_i = 0U; val_i < val_cont.size(); ++val_i) {
-		tml::StringUtil::GetValue(this->tile_type_cont_[val_i], val_cont[val_i].c_str());
+	tile_type_cont.resize(tile_type_str_cont.size());
+
+	for (size_t val_i = 0U; val_i < tile_type_str_cont.size(); ++val_i) {
+		tml::StringUtil::GetValue(tile_type_cont[val_i], tile_type_str_cont[val_i].c_str());
+	}
+
+	this->block_cnt_.x = static_cast<UINT>(std::ceil(static_cast<FLOAT>(this->tile_cnt_.x) / 16.0f));
+	this->block_cnt_.y = static_cast<UINT>(std::ceil(static_cast<FLOAT>(this->tile_cnt_.y) / 16.0f));
+	this->block_cont_.resize(this->block_cnt_.x * this->block_cnt_.y);
+
+	for (UINT block_y = 0U; block_y < this->block_cnt_.y; ++block_y) {
+		for (UINT block_x = 0U; block_x < this->block_cnt_.x; ++block_x) {
+			auto &block = this->block_cont_[block_y * this->block_cnt_.x + block_x];
+
+			block.tile_count.x = (block_x == (this->block_cnt_.x - 1U)) ? this->tile_cnt_.x - (block_x * 16U) : 16U;
+			block.tile_count.y = (block_y == (this->block_cnt_.y - 1U)) ? this->tile_cnt_.y - (block_y * 16U) : 16U;
+			block.tile_type_container.resize(block.tile_count.x * block.tile_count.y);
+
+			for (UINT block_tile_y = 0U; block_tile_y < block.tile_count.y; ++block_tile_y) {
+				for (UINT block_tile_x = 0U; block_tile_x < block.tile_count.x; ++block_tile_x) {
+					auto &block_tile_type = block.tile_type_container[block_tile_y * block.tile_count.x + block_tile_x];
+
+					block_tile_type = tile_type_cont[((block_y * 16U + block_tile_y) * this->tile_cnt_.x) + (block_x * 16U + block_tile_x)];
+				}
+			}
+		}
+	}
+
+	val = map_file_tileset_node->GetValue(L"tilewidth");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tileset_tile_size_.x, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = map_file_tileset_node->GetValue(L"tileheight");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tileset_tile_size_.y, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
 	}
 
 	val = map_file_tileset_node->GetValue(L"columns");
@@ -598,7 +661,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
 	}
 
-	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->tile_size_.x * this->tile_cnt_.x), static_cast<FLOAT>(this->tile_size_.y * this->tile_cnt_.y));
+	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->tileset_tile_size_.x * this->tile_cnt_.x), static_cast<FLOAT>(this->tileset_tile_size_.y * this->tile_cnt_.y));
 
 	if (desc.size_flag) {
 		this->size = desc.size;
@@ -632,6 +695,8 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		}
 	}
 
+	{// BlockShaderStructuredBuffer Create
+	}
 
 	return (0);
 }
