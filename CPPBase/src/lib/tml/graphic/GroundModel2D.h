@@ -198,12 +198,16 @@ public:
 		tml::XMFLOAT4EX position;
 		tml::XMFLOAT2EX texture_position;
 		UINT layer_index;
+		UINT block_index;
+		UINT block_tile_index;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		VERTEX_BUFFER_ELEMENT_() :
-			layer_index(0U)
+			layer_index(0U),
+			block_index(0U),
+			block_tile_index(0U)
 		{
 			return;
 		};
@@ -213,18 +217,22 @@ public:
 		 * @param pos (position)
 		 * @param tex_pos (texture_position)
 		 * @param layer_index (layer_index)
+		 * @param block_index (block_index)
+		 * @param block_tile_index (block_tile_index)
 		 */
-		VERTEX_BUFFER_ELEMENT_(const tml::XMFLOAT4EX &pos, const tml::XMFLOAT2EX &tex_pos, const UINT layer_index) :
+		VERTEX_BUFFER_ELEMENT_(const tml::XMFLOAT4EX &pos, const tml::XMFLOAT2EX &tex_pos, const UINT layer_index, const UINT block_index, const UINT block_tile_index) :
 			position(pos),
 			texture_position(tex_pos),
-			layer_index(layer_index)
+			layer_index(layer_index),
+			block_index(block_index),
+			block_tile_index(block_tile_index)
 		{
 			return;
 		};
 	} VERTEX_BUFFER_ELEMENT;
 
 public:
-	static const UINT INPUT_ELEMENT_DESC_COUNT = 3U;
+	static const UINT INPUT_ELEMENT_DESC_COUNT = 5U;
 	static const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_ARRAY[tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT];
 
 private:

@@ -22,6 +22,8 @@ struct VS_INPUT
 	float4 pos : POSITION0;
 	float2 tex_pos : TEXCOORD0;
 	uint layer_index : LAYER_INDEX0;
+	uint block_index : BLOCK_INDEX0;
+	uint block_tile_index : BLOCK_TILE_INDEX0;
 };
 
 
@@ -30,6 +32,8 @@ struct VS_OUTPUT
 	float4 pos : SV_POSITION;
 	float2 tex_pos : TEXCOORD0;
 	uint layer_index : LAYER_INDEX0;
+	uint block_index : BLOCK_INDEX0;
+	uint block_tile_index : BLOCK_TILE_INDEX0;
 };
 
 
@@ -52,6 +56,8 @@ VS_OUTPUT RunVS(VS_INPUT input)
 	output.pos = mul(input.pos, model_ssb[0].wvp_mat);
 	output.tex_pos = input.tex_pos;
 	output.layer_index = input.layer_index;
+	output.block_index = input.block_index;
+	output.block_tile_index = input.block_tile_index;
 
 	return (output);
 }

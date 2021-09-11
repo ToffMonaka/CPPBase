@@ -22,7 +22,9 @@
 const D3D11_INPUT_ELEMENT_DESC tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_ARRAY[tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT] = {
 	{"POSITION", 0U, DXGI_FORMAT_R32G32B32A32_FLOAT, 0U, 0U, D3D11_INPUT_PER_VERTEX_DATA, 0U},
 	{"TEXCOORD", 0U, DXGI_FORMAT_R32G32_FLOAT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U},
-	{"LAYER_INDEX", 0U, DXGI_FORMAT_R32_UINT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U}
+	{"LAYER_INDEX", 0U, DXGI_FORMAT_R32_UINT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U},
+	{"BLOCK_INDEX", 0U, DXGI_FORMAT_R32_UINT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U},
+	{"BLOCK_TILE_INDEX", 0U, DXGI_FORMAT_R32_UINT, 0U, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0U}
 };
 
 
@@ -412,19 +414,19 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	this->block_cnt_.y = static_cast<UINT>(std::ceil(static_cast<FLOAT>(this->tile_cnt_.y) / 16.0f));
 	this->block_cont_.resize(this->block_cnt_.x * this->block_cnt_.y);
 
-	for (UINT block_y = 0U; block_y < this->block_cnt_.y; ++block_y) {
-		for (UINT block_x = 0U; block_x < this->block_cnt_.x; ++block_x) {
-			auto &block = this->block_cont_[block_y * this->block_cnt_.x + block_x];
+	for (UINT block_index_y = 0U; block_index_y < this->block_cnt_.y; ++block_index_y) {
+		for (UINT block_index_x = 0U; block_index_x < this->block_cnt_.x; ++block_index_x) {
+			auto &block = this->block_cont_[block_index_y * this->block_cnt_.x + block_index_x];
 
-			block.tile_count.x = (block_x == (this->block_cnt_.x - 1U)) ? this->tile_cnt_.x - (block_x * 16U) : 16U;
-			block.tile_count.y = (block_y == (this->block_cnt_.y - 1U)) ? this->tile_cnt_.y - (block_y * 16U) : 16U;
+			block.tile_count.x = (block_index_x == (this->block_cnt_.x - 1U)) ? this->tile_cnt_.x - (block_index_x * 16U) : 16U;
+			block.tile_count.y = (block_index_y == (this->block_cnt_.y - 1U)) ? this->tile_cnt_.y - (block_index_y * 16U) : 16U;
 			block.tile_type_container.resize(block.tile_count.x * block.tile_count.y);
 
-			for (UINT block_tile_y = 0U; block_tile_y < block.tile_count.y; ++block_tile_y) {
-				for (UINT block_tile_x = 0U; block_tile_x < block.tile_count.x; ++block_tile_x) {
-					auto &block_tile_type = block.tile_type_container[block_tile_y * block.tile_count.x + block_tile_x];
+			for (UINT block_tile_index_y = 0U; block_tile_index_y < block.tile_count.y; ++block_tile_index_y) {
+				for (UINT block_tile_index_x = 0U; block_tile_index_x < block.tile_count.x; ++block_tile_index_x) {
+					auto &block_tile_type = block.tile_type_container[block_tile_index_y * block.tile_count.x + block_tile_index_x];
 
-					block_tile_type = tile_type_cont[((block_y * 16U + block_tile_y) * this->tile_cnt_.x) + (block_x * 16U + block_tile_x)];
+					block_tile_type = tile_type_cont[((block_index_y * 16U + block_tile_index_y) * this->tile_cnt_.x) + (block_index_x * 16U + block_tile_index_x)];
 				}
 			}
 		}
@@ -574,28 +576,37 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 				std::vector<tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT> vb_element_cont;
 				std::vector<UINT> ib_element_cont;
 				std::array<tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT, 4U> base_vb_element_ary = {
-					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
-					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
-					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U),
-					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U)
+					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U, 0U, 0U),
+					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f,  0.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U, 0U, 0U),
+					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  1.0f), 0U, 0U, 0U),
+					tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 1.0f, -1.0f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  1.0f), 0U, 0U, 0U)
 				};
 				std::array<UINT, 6U> base_ib_element_ary = {0U, 1U, 2U, 2U, 1U, 3U};
-				FLOAT offset_x = -static_cast<FLOAT>(this->tile_cnt_.x) * 0.5f;
-				FLOAT offset_y = static_cast<FLOAT>(this->tile_cnt_.y) * 0.5f;
+				UINT tile_index = 0U;
+				FLOAT tile_pos_x = 0.0f;
+				FLOAT tile_pos_y = 0.0f;
+				UINT block_index = 0U;
+				UINT block_tile_index = 0U;
 
 				vb_element_cont.resize(base_vb_element_ary.size() * this->tile_cnt_.x * this->tile_cnt_.y);
 				ib_element_cont.resize(base_ib_element_ary.size() * this->tile_cnt_.x * this->tile_cnt_.y);
 
-				for (UINT tile_y = 0U; tile_y < this->tile_cnt_.y; ++tile_y) {
-					for (UINT tile_x = 0U; tile_x < this->tile_cnt_.x; ++tile_x) {
-						UINT tile_index = (tile_y * this->tile_cnt_.x + tile_x);
+				for (UINT tile_index_y = 0U; tile_index_y < this->tile_cnt_.y; ++tile_index_y) {
+					for (UINT tile_index_x = 0U; tile_index_x < this->tile_cnt_.x; ++tile_index_x) {
+						tile_index = (tile_index_y * this->tile_cnt_.x) + (tile_index_x);
+						tile_pos_x = static_cast<FLOAT>(tile_index_x) - static_cast<FLOAT>(this->tile_cnt_.x) * 0.5f;
+						tile_pos_y = -static_cast<FLOAT>(tile_index_y) + static_cast<FLOAT>(this->tile_cnt_.y) * 0.5f;
+						block_index = (tile_index_y / 16U * this->block_cnt_.x) + (tile_index_x / 16U);
+						block_tile_index = ((tile_index_y % 16U) * this->block_cont_[block_index].tile_count.x) + (tile_index_x % 16U);
 
 						for (UINT base_vb_element_i = 0U; base_vb_element_i < base_vb_element_ary.size(); ++base_vb_element_i) {
 							auto &vb_element = vb_element_cont[tile_index * base_vb_element_ary.size() + base_vb_element_i];
 
 							vb_element = base_vb_element_ary[base_vb_element_i];
-							vb_element.position.x = vb_element.position.x + static_cast<FLOAT>(tile_x) + offset_x;
-							vb_element.position.y = vb_element.position.y - static_cast<FLOAT>(tile_y) + offset_y;
+							vb_element.position.x += tile_pos_x;
+							vb_element.position.y += tile_pos_y;
+							vb_element.block_index = block_index;
+							vb_element.block_tile_index = block_tile_index;
 						}
 
 						for (UINT base_ib_element_i = 0U; base_ib_element_i < base_ib_element_ary.size(); ++base_ib_element_i) {
@@ -696,6 +707,16 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	}
 
 	{// BlockShaderStructuredBuffer Create
+		tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc desc;
+
+		desc.SetManager(this->GetManager());
+		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT), this->block_cont_.size());
+
+		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DBlockShaderStructuredBuffer>(this->block_ssb_, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
 	}
 
 	return (0);
