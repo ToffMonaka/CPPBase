@@ -11,6 +11,13 @@
 
 namespace tml {
 namespace graphic {
+class GroundModel2DLayer;
+}
+}
+
+
+namespace tml {
+namespace graphic {
 /**
  * @brief GroundModel2DLayerShaderStructuredBufferDescƒNƒ‰ƒX
  */

@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMathUINT.h"
 #include "../math/XNAMathFLOAT.h"
 #include "ShaderStructuredBuffer.h"
 
@@ -60,13 +61,19 @@ public:
 	{
 		tml::XMFLOAT4X4EX world_view_projection_matrix;
 		tml::XMFLOAT4EX color;
+		tml::XMUINT2EX tileset_tile_count;
+		UINT dummy1;
+		UINT dummy2;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
 			world_view_projection_matrix(tml::ConstantUtil::XNAMATH::IDENTITY_MATRIX::TYPE),
-			color(1.0f)
+			color(1.0f),
+			tileset_tile_count(0U),
+			dummy1(0U),
+			dummy2(0U)
 		{
 			return;
 		};
@@ -84,7 +91,7 @@ public:
 
 	tml::graphic::GroundModel2DShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::GroundModel2DShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
-	void SetElement(const UINT, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const tml::XMFLOAT4EX &);
+	void SetElement(const UINT, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const tml::XMFLOAT4EX &, const tml::XMUINT2EX &);
 };
 }
 }

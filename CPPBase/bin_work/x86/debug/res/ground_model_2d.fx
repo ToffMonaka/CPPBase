@@ -5,6 +5,9 @@ struct MODEL_SSB_ELEMENT
 {
 	matrix wvp_mat;
 	float4 col;
+	uint2 tileset_tile_cnt;
+	uint dummy1;
+	uint dummy2;
 };
 
 
@@ -14,6 +17,15 @@ struct MODEL_LAYER_SSB_ELEMENT
 	uint dummy1;
 	uint dummy2;
 	uint dummy3;
+};
+
+
+struct MODEL_BLOCK_SSB_ELEMENT
+{
+	uint2 tile_cnt;
+	uint dummy1;
+	uint dummy2;
+	uint tile_type_ary[256];
 };
 
 
@@ -32,8 +44,7 @@ struct VS_OUTPUT
 	float4 pos : SV_POSITION;
 	float2 tex_pos : TEXCOORD0;
 	uint layer_index : LAYER_INDEX0;
-	uint block_index : BLOCK_INDEX0;
-	uint block_tile_index : BLOCK_TILE_INDEX0;
+	uint tile_type : TILE_TYPE0;
 };
 
 
@@ -45,6 +56,7 @@ struct PS_OUTPUT
 
 StructuredBuffer<MODEL_SSB_ELEMENT> model_ssb : MODEL_SSB_SR;
 StructuredBuffer<MODEL_LAYER_SSB_ELEMENT> model_layer_ssb : MODEL_LAYER_SSB_SR;
+StructuredBuffer<MODEL_BLOCK_SSB_ELEMENT> model_block_ssb : USER1_SSB_SR;
 Texture2D<float4> diffuse_tex : USER1_TEX_SR;
 SamplerState diffuse_samp : USER1_SAMP_SR;
 
@@ -56,8 +68,12 @@ VS_OUTPUT RunVS(VS_INPUT input)
 	output.pos = mul(input.pos, model_ssb[0].wvp_mat);
 	output.tex_pos = input.tex_pos;
 	output.layer_index = input.layer_index;
-	output.block_index = input.block_index;
-	output.block_tile_index = input.block_tile_index;
+	output.tile_type = model_block_ssb[input.block_index].tile_type_ary[input.block_tile_index];
+
+	if (output.tile_type != 0) {
+		output.tex_pos.x = (output.tex_pos.x + (uint)((output.tile_type - 1) % model_ssb[0].tileset_tile_cnt.x)) * (1.0f / model_ssb[0].tileset_tile_cnt.x);
+		output.tex_pos.y = (output.tex_pos.y + (uint)((output.tile_type - 1) / model_ssb[0].tileset_tile_cnt.x)) * (1.0f / model_ssb[0].tileset_tile_cnt.y);
+	}
 
 	return (output);
 }
@@ -65,6 +81,10 @@ VS_OUTPUT RunVS(VS_INPUT input)
 
 PS_OUTPUT RunPS(VS_OUTPUT input)
 {
+	if (input.tile_type == 0) {
+		discard;
+	}
+
 	PS_OUTPUT output;
 
 	float4 diffuse_col = float4(1.0f, 1.0f, 1.0f, 1.0f);

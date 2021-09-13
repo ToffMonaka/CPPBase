@@ -12,6 +12,13 @@
 
 namespace tml {
 namespace graphic {
+class FigureModel2DLayer;
+}
+}
+
+
+namespace tml {
+namespace graphic {
 /**
  * @brief FigureModel2DLayerShaderStructuredBufferDescƒNƒ‰ƒX
  */

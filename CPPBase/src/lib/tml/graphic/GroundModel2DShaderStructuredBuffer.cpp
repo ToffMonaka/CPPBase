@@ -102,8 +102,9 @@ INT tml::graphic::GroundModel2DShaderStructuredBuffer::Create(const tml::graphic
  * @param v_mat (view_matrix)
  * @param p_mat (projection_matrix)
  * @param col (color)
+ * @param tileset_tile_cnt (tileset_tile_count)
  */
-void tml::graphic::GroundModel2DShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col)
+void tml::graphic::GroundModel2DShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &w_mat, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &p_mat, const tml::XMFLOAT4EX &col, const tml::XMUINT2EX &tileset_tile_cnt)
 {
 	auto element = this->GetElement(index);
 
@@ -118,6 +119,7 @@ void tml::graphic::GroundModel2DShaderStructuredBuffer::SetElement(const UINT in
 
 	DirectX::XMStoreFloat4x4(&element->world_view_projection_matrix, DirectX::XMMatrixTranspose(wvp_mat));
 	element->color = col;
+	element->tileset_tile_count = tileset_tile_cnt;
 
 	return;
 }

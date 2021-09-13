@@ -547,7 +547,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		{// Shader Create
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
-			if (this->GetManager()->GetResource<tml::graphic::Shader>(shader, this->GetManager()->common.figure_model_2d_shader) == nullptr) {
+			if (this->GetManager()->GetResource<tml::graphic::Shader>(shader, this->GetManager()->common.ground_model_2d_shader) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -775,11 +775,14 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
 
 	this->GetWorldMatrix(w_mat);
 
-	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix, this->GetManager()->GetDrawStageData()->projection_matrix, this->color);
+	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix, this->GetManager()->GetDrawStageData()->projection_matrix, this->color, this->tileset_tile_cnt_);
 	this->ssb_->UploadCPUBuffer();
 
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
 	this->layer_ssb_->UploadCPUBuffer();
+
+	this->block_ssb_->SetElement(0U, this->block_cont_);
+	this->block_ssb_->UploadCPUBuffer();
 
 	return;
 }
@@ -793,7 +796,7 @@ void tml::graphic::GroundModel2D::DrawStageForward2D(void)
 	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 	auto layer = stage->GetLayerFast(0U);
 
-	std::array<tml::graphic::ShaderStructuredBuffer *, 2U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get()};
+	std::array<tml::graphic::ShaderStructuredBuffer *, 3U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get(), this->block_ssb_.get()};
 
 	this->GetManager()->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::MODEL, ssb_ary.size(), ssb_ary.data());
 

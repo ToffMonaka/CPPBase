@@ -6,7 +6,16 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <vector>
+#include "../math/XNAMathUINT.h"
 #include "ShaderStructuredBuffer.h"
+
+
+namespace tml {
+namespace graphic {
+class GroundModel2DBlock;
+}
+}
 
 
 namespace tml {
@@ -57,19 +66,19 @@ public:
 	 */
 	typedef struct ELEMENT_
 	{
+		tml::XMUINT2EX tile_count;
 		UINT dummy1;
 		UINT dummy2;
-		UINT dummy3;
-		UINT dummy4;
+		UINT tile_type_array[256];
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
+			tile_count(0U),
 			dummy1(0U),
 			dummy2(0U),
-			dummy3(0U),
-			dummy4(0U)
+			tile_type_array{}
 		{
 			return;
 		};
@@ -87,7 +96,7 @@ public:
 
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
-	void SetElement(const UINT);
+	void SetElement(const UINT, const std::vector<tml::graphic::GroundModel2DBlock> &);
 };
 }
 }
