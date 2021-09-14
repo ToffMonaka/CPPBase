@@ -4,183 +4,153 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>tile10_base_img.png</key>
+            <key>tile10_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{64,64},{64,64}}</string>
+                <string>{{32,32},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile11_base_img.png</key>
+            <key>tile1_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{128,64},{64,64}}</string>
+                <string>{{0,0},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile12_base_img.png</key>
+            <key>tile2_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{192,64},{64,64}}</string>
+                <string>{{32,0},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile1_base_img.png</key>
+            <key>tile3_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{0,0},{64,64}}</string>
+                <string>{{64,0},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile2_base_img.png</key>
+            <key>tile4_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{64,0},{64,64}}</string>
+                <string>{{96,0},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile3_base_img.png</key>
+            <key>tile5_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{128,0},{64,64}}</string>
+                <string>{{128,0},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile4_base_img.png</key>
+            <key>tile6_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{192,0},{64,64}}</string>
+                <string>{{160,0},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile5_base_img.png</key>
+            <key>tile7_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{256,0},{64,64}}</string>
+                <string>{{192,0},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile6_base_img.png</key>
+            <key>tile8_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{320,0},{64,64}}</string>
+                <string>{{224,0},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>tile7_base_img.png</key>
+            <key>tile9_img.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>spriteSourceSize</key>
-                <string>{64,64}</string>
+                <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{384,0},{64,64}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>tile8_base_img.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{64,64}</string>
-                <key>spriteSourceSize</key>
-                <string>{64,64}</string>
-                <key>textureRect</key>
-                <string>{{448,0},{64,64}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>tile9_base_img.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{64,64}</string>
-                <key>spriteSourceSize</key>
-                <string>{64,64}</string>
-                <key>textureRect</key>
-                <string>{{0,64},{64,64}}</string>
+                <string>{{0,32},{32,32}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -196,9 +166,9 @@
             <key>realTextureFileName</key>
             <string>ground_2d_atlas_img.png</string>
             <key>size</key>
-            <string>{512,128}</string>
+            <string>{256,64}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:acdd3483c886de59208c1f284f8ee833:fb295b32d198348c665ea3f609d6f58f:eee90c18d3ee2d5b53a4796a3613758c$</string>
+            <string>$TexturePacker:SmartUpdate:298fbdc9388efab98a04288002d55ac0:957e0d32777bd2ecaf10953c44fc1933:eee90c18d3ee2d5b53a4796a3613758c$</string>
             <key>textureFileName</key>
             <string>ground_2d_atlas_img.png</string>
         </dict>
