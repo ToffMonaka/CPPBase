@@ -5,6 +5,7 @@
 
 
 #include "Field2DPlayerNode.h"
+#include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/input/KeyboardDeviceEvent.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
@@ -115,6 +116,7 @@ void cpp_base::scene::Field2DPlayerNode::Init(void)
 
 	this->canvas_2d.reset();
 	this->model.reset();
+	this->shadow_model.reset();
 
 	cpp_base::scene::Node::Init();
 
@@ -142,10 +144,27 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
-		desc.position.Set(tml::XMFLOAT2EX(0.0f, -128.0f));
+		desc.position = tml::XMFLOAT2EX(0.0f, -128.0f);
 		desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::PLAYER_2D_IMAGE;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// ShadowModel Create
+		tml::graphic::FigureModel2DDesc desc;
+
+		desc.SetManager(this->GetGraphicManager());
+		desc.position = tml::XMFLOAT2EX(this->model->position.GetX(), this->model->position.GetY() - this->model->size.GetHalfY());
+		desc.size = tml::XMFLOAT2EX(96.0f, 64.0f);
+		desc.size_flag = true;
+		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 0.5f);
+		desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SHADOW_2D_IMAGE;
+
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->shadow_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -189,16 +208,21 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 {
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W)) {
 		this->model->position.SetY(this->model->position.GetY() + 2.0f);
+		this->shadow_model->position.SetY(this->model->position.GetY() - this->model->size.GetHalfY());
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S)) {
 		this->model->position.SetY(this->model->position.GetY() - 2.0f);
+		this->shadow_model->position.SetY(this->model->position.GetY() - this->model->size.GetHalfY());
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A)) {
 		this->model->position.SetX(this->model->position.GetX() - 2.0f);
+		this->shadow_model->position.SetX(this->model->position.GetX());
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D)) {
 		this->model->position.SetX(this->model->position.GetX() + 2.0f);
+		this->shadow_model->position.SetX(this->model->position.GetX());
 	}
 
+	this->canvas_2d->SetDrawModel(this->shadow_model.get());
 	this->canvas_2d->SetDrawModel(this->model.get());
 
 	return;

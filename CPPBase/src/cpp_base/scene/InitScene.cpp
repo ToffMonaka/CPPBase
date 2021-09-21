@@ -214,6 +214,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
+		desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 		desc.size_flag = true;
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
@@ -262,6 +263,7 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
+		desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->wait_model, desc) == nullptr) {

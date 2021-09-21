@@ -5,6 +5,7 @@
 
 
 #include "Field2DMobNode.h"
+#include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
@@ -113,6 +114,7 @@ void cpp_base::scene::Field2DMobNode::Init(void)
 
 	this->canvas_2d.reset();
 	this->model.reset();
+	this->shadow_model.reset();
 
 	cpp_base::scene::Node::Init();
 
@@ -140,10 +142,27 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
-		desc.position.Set(tml::XMFLOAT2EX(0.0f, 128.0f));
+		desc.position = tml::XMFLOAT2EX(0.0f, 128.0f);
 		desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::MOB_2D_IMAGE;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// ShadowModel Create
+		tml::graphic::FigureModel2DDesc desc;
+
+		desc.SetManager(this->GetGraphicManager());
+		desc.position = tml::XMFLOAT2EX(this->model->position.GetX(), this->model->position.GetY() - this->model->size.GetHalfY());
+		desc.size = tml::XMFLOAT2EX(96.0f, 64.0f);
+		desc.size_flag = true;
+		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 0.5f);
+		desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SHADOW_2D_IMAGE;
+
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->shadow_model, desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -185,6 +204,7 @@ void cpp_base::scene::Field2DMobNode::OnEnd(void)
  */
 void cpp_base::scene::Field2DMobNode::OnUpdate(void)
 {
+	this->canvas_2d->SetDrawModel(this->shadow_model.get());
 	this->canvas_2d->SetDrawModel(this->model.get());
 
 	return;

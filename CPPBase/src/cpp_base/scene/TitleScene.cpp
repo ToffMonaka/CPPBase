@@ -210,6 +210,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
+		desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
 		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 		desc.size_flag = true;
 
@@ -255,7 +256,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
-		desc.position.Set(tml::XMFLOAT2EX(0.0f, 32.0f));
+		desc.position = tml::XMFLOAT2EX(0.0f, 32.0f);
 		desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_LOGO_IMAGE;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->logo_model, desc) == nullptr) {
@@ -285,7 +286,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
-		desc.position.Set(tml::XMFLOAT2EX(0.0f, -192.0f));
+		desc.position = tml::XMFLOAT2EX(0.0f, -192.0f);
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->start_model, desc) == nullptr) {
@@ -356,7 +357,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::FigureModel2DDesc desc;
 
 		desc.SetManager(this->GetGraphicManager());
-		desc.position.Set(tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(this->GetGraphicManager()->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_model_size.y >> 1)));
+		desc.position = tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(this->GetGraphicManager()->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_model_size.y >> 1));
 		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->footer_model, desc) == nullptr) {
