@@ -27,6 +27,8 @@
 #include "Texture.h"
 #include "Sampler.h"
 #include "Font.h"
+#include "Atlas.h"
+#include "Map.h"
 #include "Canvas.h"
 #include "Canvas2D.h"
 #include "Camera.h"

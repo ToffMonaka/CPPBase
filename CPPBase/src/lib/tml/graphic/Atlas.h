@@ -1,0 +1,86 @@
+/**
+ * @file
+ * @brief Atlasヘッダーファイル
+ */
+#pragma once
+
+
+#include "../constant/ConstantUtil.h"
+#include "../file/XMLFile.h"
+#include "ManagerResource.h"
+
+
+namespace tml {
+namespace graphic {
+/**
+ * @brief AtlasDescクラス
+ */
+class AtlasDesc : public tml::graphic::ManagerResourceDesc
+{
+public:
+	tml::XMLFileReadDesc atlas_file_read_desc;
+	std::wstring atlas_directory_path;
+
+private:
+	void Release(void);
+
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
+public:
+	AtlasDesc();
+	virtual ~AtlasDesc();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::graphic::AtlasDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+namespace graphic {
+/**
+ * @brief Atlasクラス
+ */
+class Atlas : public tml::graphic::ManagerResource
+{
+public: Atlas(const tml::graphic::Atlas &) = delete;
+public: tml::graphic::Atlas &operator =(const tml::graphic::Atlas &) = delete;
+protected: virtual void InterfaceDummy(void) {return;};
+
+public:
+	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::ATLAS);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::ATLAS_TYPE::BASE);
+
+private:
+
+private:
+	void Release(void);
+
+public:
+	Atlas();
+	virtual ~Atlas();
+
+	virtual void Init(void);
+	INT Create(const tml::graphic::AtlasDesc &);
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::graphic::Atlas::Release(void)
+{
+	return;
+}

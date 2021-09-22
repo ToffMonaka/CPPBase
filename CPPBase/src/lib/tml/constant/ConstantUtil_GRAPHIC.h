@@ -29,6 +29,8 @@ namespace GRAPHIC {
 		TEXTURE,
 		SAMPLER,
 		FONT,
+		ATLAS,
+		MAP,
 		CANVAS,
 		CAMERA,
 		LIGHT,
@@ -108,6 +110,20 @@ namespace GRAPHIC {
 		COUNT
 	};
 	const UINT FONT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FONT_TYPE::COUNT);
+	enum class ATLAS_TYPE : UINT {
+		NONE = 0U,
+		BASE,
+		USER,
+		COUNT
+	};
+	const UINT ATLAS_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::ATLAS_TYPE::COUNT);
+	enum class MAP_TYPE : UINT {
+		NONE = 0U,
+		BASE,
+		USER,
+		COUNT
+	};
+	const UINT MAP_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MAP_TYPE::COUNT);
 	enum class CANVAS_TYPE : UINT {
 		NONE = 0U,
 		BASE,
@@ -359,6 +375,8 @@ class Mesh;
 class Texture;
 class Sampler;
 class Font;
+class Atlas;
+class Map;
 class Canvas;
 class Canvas2D;
 class Camera;

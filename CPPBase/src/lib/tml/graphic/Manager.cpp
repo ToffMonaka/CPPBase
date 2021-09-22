@@ -25,6 +25,8 @@
 #include "Texture.h"
 #include "Sampler.h"
 #include "Font.h"
+#include "Atlas.h"
+#include "Map.h"
 #include "Canvas.h"
 #include "Canvas2D.h"
 #include "Camera.h"
@@ -102,6 +104,8 @@ void tml::graphic::ManagerDesc::InitResourceCount(void)
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE)] = tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER)] = tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT)] = tml::ConstantUtil::GRAPHIC::FONT_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::ATLAS)] = tml::ConstantUtil::GRAPHIC::ATLAS_TYPE_COUNT;
+	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MAP)] = tml::ConstantUtil::GRAPHIC::MAP_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CANVAS)] = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA)] = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE_COUNT;
 	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT)] = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE_COUNT;
