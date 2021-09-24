@@ -6,12 +6,15 @@
 
 #include "Atlas.h"
 #include "Manager.h"
+#include "Texture.h"
+#include "Sampler.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::AtlasDesc::AtlasDesc()
+tml::graphic::AtlasDesc::AtlasDesc() :
+	texture_flag(true)
 {
 	return;
 }
@@ -37,6 +40,7 @@ void tml::graphic::AtlasDesc::Init(void)
 
 	this->atlas_file_read_desc.Init();
 	this->atlas_directory_path.clear();
+	this->texture_flag = true;
 
 	tml::graphic::ManagerResourceDesc::Init();
 
@@ -99,6 +103,8 @@ void tml::graphic::Atlas::Init(void)
 {
 	this->Release();
 
+	this->tex_.reset();
+
 	tml::graphic::ManagerResource::Init();
 
 	return;
@@ -139,6 +145,94 @@ INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
 		this->Init();
 
 		return (-1);
+	}
+
+	auto &atlas_file_root_dict_node = atlas_file_root_node->GetChildNode(L"dict");
+
+	if (atlas_file_root_dict_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	tml::XMLFileDataNode *atlas_file_frames_dict_node = nullptr;
+	tml::XMLFileDataNode *atlas_file_metadata_dict_node = nullptr;
+
+	for (auto node_itr = atlas_file_root_dict_node->GetChildNodeContainer().begin(), node_end_itr = atlas_file_root_dict_node->GetChildNodeContainer().end(); node_itr != node_end_itr; ++node_itr) {
+		if ((*node_itr)->name != L"key") {
+			continue;
+		}
+
+		if ((*node_itr)->string == L"frames") {
+			++node_itr;
+
+			if (node_itr != node_end_itr) {
+				if ((*node_itr)->name == L"dict") {
+					atlas_file_frames_dict_node = (*node_itr).get();
+				}
+			}
+
+			--node_itr;
+		} else if ((*node_itr)->string == L"metadata") {
+			++node_itr;
+
+			if (node_itr != node_end_itr) {
+				if ((*node_itr)->name == L"dict") {
+					atlas_file_metadata_dict_node = (*node_itr).get();
+				}
+			}
+
+			--node_itr;
+		}
+	}
+
+	if (atlas_file_frames_dict_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	if (atlas_file_metadata_dict_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	std::wstring img_file_path;
+
+	for (auto node_itr = atlas_file_metadata_dict_node->GetChildNodeContainer().begin(), node_end_itr = atlas_file_metadata_dict_node->GetChildNodeContainer().end(); node_itr != node_end_itr; ++node_itr) {
+		if ((*node_itr)->name != L"key") {
+			continue;
+		}
+
+		if ((*node_itr)->string == L"textureFileName") {
+			++node_itr;
+
+			if (node_itr != node_end_itr) {
+				if ((*node_itr)->name == L"string") {
+					img_file_path = desc.atlas_directory_path;
+					img_file_path += L"/";
+					img_file_path += (*node_itr)->string;
+				}
+			}
+
+			--node_itr;
+		}
+	}
+
+	// Texture Create
+	if (desc.texture_flag) {
+		tml::graphic::TextureDesc desc;
+
+		desc.SetManager(this->GetManager());
+		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+		desc.image_file_read_desc_container[0].data.file_path = img_file_path;
+
+		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->tex_, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
 	}
 
 	return (0);

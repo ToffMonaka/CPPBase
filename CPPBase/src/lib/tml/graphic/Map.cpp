@@ -6,12 +6,15 @@
 
 #include "Map.h"
 #include "Manager.h"
+#include "Texture.h"
+#include "Sampler.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::MapDesc::MapDesc()
+tml::graphic::MapDesc::MapDesc() :
+	texture_flag(true)
 {
 	return;
 }
@@ -37,6 +40,7 @@ void tml::graphic::MapDesc::Init(void)
 
 	this->map_file_read_desc.Init();
 	this->map_directory_path.clear();
+	this->texture_flag = true;
 
 	tml::graphic::ManagerResourceDesc::Init();
 
@@ -99,6 +103,8 @@ void tml::graphic::Map::Init(void)
 {
 	this->Release();
 
+	this->tex_.reset();
+
 	tml::graphic::ManagerResource::Init();
 
 	return;
@@ -139,6 +145,41 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 		this->Init();
 
 		return (-1);
+	}
+
+	auto &map_file_img_node = map_file_root_node->GetChildNode(L"image");
+
+	if (map_file_img_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	const std::wstring *val = nullptr;
+
+	std::wstring img_file_path;
+
+	val = map_file_img_node->GetValue(L"source");
+
+	if (val != nullptr) {
+		img_file_path = desc.map_directory_path;
+		img_file_path += L"/";
+		img_file_path += (*val);
+	}
+
+	// Texture Create
+	if (desc.texture_flag) {
+		tml::graphic::TextureDesc desc;
+
+		desc.SetManager(this->GetManager());
+		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+		desc.image_file_read_desc_container[0].data.file_path = img_file_path;
+
+		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->tex_, desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
 	}
 
 	return (0);

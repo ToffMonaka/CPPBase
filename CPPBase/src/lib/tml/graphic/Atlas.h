@@ -20,6 +20,7 @@ class AtlasDesc : public tml::graphic::ManagerResourceDesc
 public:
 	tml::XMLFileReadDesc atlas_file_read_desc;
 	std::wstring atlas_directory_path;
+	bool texture_flag;
 
 private:
 	void Release(void);
@@ -62,6 +63,7 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::ATLAS_TYPE::BASE);
 
 private:
+	tml::shared_ptr<tml::graphic::Texture> tex_;
 
 private:
 	void Release(void);
