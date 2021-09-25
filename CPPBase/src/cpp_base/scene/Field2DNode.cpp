@@ -167,11 +167,11 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
 	}
 
 	{// GroundNode Create
-		cpp_base::scene::Field2DGroundNodeDesc desc;
+		cpp_base::scene::Field2DGroundNodeDesc node_desc;
 
-		desc.SetManager(this->GetManager());
+		node_desc.SetManager(this->GetManager());
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DGroundNode>(this->ground_node, desc) == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DGroundNode>(this->ground_node, node_desc) == nullptr) {
 			return (-1);
 		}
 
@@ -187,11 +187,11 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
 	}
 
 	{// PlayerNode Create
-		cpp_base::scene::Field2DPlayerNodeDesc desc;
+		cpp_base::scene::Field2DPlayerNodeDesc node_desc;
 
-		desc.SetManager(this->GetManager());
+		node_desc.SetManager(this->GetManager());
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DPlayerNode>(this->player_node, desc) == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DPlayerNode>(this->player_node, node_desc) == nullptr) {
 			return (-1);
 		}
 
@@ -207,11 +207,11 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
 	}
 
 	{// MobNode Create
-		cpp_base::scene::Field2DMobNodeDesc desc;
+		cpp_base::scene::Field2DMobNodeDesc node_desc;
 
-		desc.SetManager(this->GetManager());
+		node_desc.SetManager(this->GetManager());
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DMobNode>(this->mob_node, desc) == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DMobNode>(this->mob_node, node_desc) == nullptr) {
 			return (-1);
 		}
 

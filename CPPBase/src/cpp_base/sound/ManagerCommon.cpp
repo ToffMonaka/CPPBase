@@ -68,13 +68,13 @@ INT cpp_base::sound::ManagerCommon::Create(cpp_base::sound::Manager *mgr)
 	this->mgr_ = mgr;
 
 	{// TitleBGMSound Create
-		tml::sound::BGMSoundDesc desc;
+		tml::sound::BGMSoundDesc sound_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.deferred_create_flag = true;
-		desc.sound_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BGM_SOUND;
+		sound_desc.SetManager(this->mgr_);
+		sound_desc.deferred_create_flag = true;
+		sound_desc.sound_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BGM_SOUND;
 
-		if (this->mgr_->GetResource<tml::sound::BGMSound>(this->title_bgm_sound, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::sound::BGMSound>(this->title_bgm_sound, sound_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -82,13 +82,13 @@ INT cpp_base::sound::ManagerCommon::Create(cpp_base::sound::Manager *mgr)
 	}
 
 	{// SelectBGMSound Create
-		tml::sound::BGMSoundDesc desc;
+		tml::sound::BGMSoundDesc sound_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.deferred_create_flag = true;
-		desc.sound_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SELECT_BGM_SOUND;
+		sound_desc.SetManager(this->mgr_);
+		sound_desc.deferred_create_flag = true;
+		sound_desc.sound_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SELECT_BGM_SOUND;
 
-		if (this->mgr_->GetResource<tml::sound::BGMSound>(this->select_bgm_sound, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::sound::BGMSound>(this->select_bgm_sound, sound_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -96,13 +96,13 @@ INT cpp_base::sound::ManagerCommon::Create(cpp_base::sound::Manager *mgr)
 	}
 
 	{// StartSESound Create
-		tml::sound::SESoundDesc desc;
+		tml::sound::SESoundDesc sound_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.deferred_create_flag = true;
-		desc.sound_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::START_SE_SOUND;
+		sound_desc.SetManager(this->mgr_);
+		sound_desc.deferred_create_flag = true;
+		sound_desc.sound_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::START_SE_SOUND;
 
-		if (this->mgr_->GetResource<tml::sound::SESound>(this->start_se_sound, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::sound::SESound>(this->start_se_sound, sound_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

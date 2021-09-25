@@ -220,35 +220,33 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 	{// ResourceFactory Set
 		this->factory->AddResourceFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
-				tml::shared_ptr<tml::ManagerResource> res;
+				tml::shared_ptr<tml::scene::Scene> scene;
+				tml::scene::SceneDesc scene_desc;
 
-				tml::scene::SceneDesc desc;
+				scene_desc.SetManager(this);
+				scene_desc.Read(conf_file_read_desc);
 
-				desc.SetManager(this);
-				desc.Read(conf_file_read_desc);
-
-				if (this->GetResource<tml::scene::Scene>(res, desc, dst_result) == nullptr) {
-					return (res);
+				if (this->GetResource<tml::scene::Scene>(scene, scene_desc, dst_result) == nullptr) {
+					return (scene);
 				}
 
-				return (res);
+				return (scene);
 			}
 		);
 
 		this->factory->AddResourceFunction(tml::ConstantUtil::SCENE::CLASS_NAME::NODE,
 			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
-				tml::shared_ptr<tml::ManagerResource> res;
+				tml::shared_ptr<tml::scene::Node> node;
+				tml::scene::NodeDesc node_desc;
 
-				tml::scene::NodeDesc desc;
+				node_desc.SetManager(this);
+				node_desc.Read(conf_file_read_desc);
 
-				desc.SetManager(this);
-				desc.Read(conf_file_read_desc);
-
-				if (this->GetResource<tml::scene::Node>(res, desc, dst_result) == nullptr) {
-					return (res);
+				if (this->GetResource<tml::scene::Node>(node, node_desc, dst_result) == nullptr) {
+					return (node);
 				}
 
-				return (res);
+				return (node);
 			}
 		);
 	}
@@ -465,11 +463,11 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::sh
 				return (dst_scene);
 			}
 		} else {
-			tml::INIFileReadDesc desc;
+			tml::INIFileReadDesc conf_file_read_desc;
 
-			desc.data.string = prefab_file_node->string;
+			conf_file_read_desc.data.string = prefab_file_node->string;
 
-			if (this->factory->GetResource(dst_scene, class_name->c_str(), desc, dst_result) == nullptr) {
+			if (this->factory->GetResource(dst_scene, class_name->c_str(), conf_file_read_desc, dst_result) == nullptr) {
 				return (dst_scene);
 			}
 		}
@@ -614,11 +612,11 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shar
 				return (dst_node);
 			}
 		} else {
-			tml::INIFileReadDesc desc;
+			tml::INIFileReadDesc conf_file_read_desc;
 
-			desc.data.string = prefab_file_node->string;
+			conf_file_read_desc.data.string = prefab_file_node->string;
 
-			if (this->factory->GetResource(dst_node, class_name->c_str(), desc, dst_result) == nullptr) {
+			if (this->factory->GetResource(dst_node, class_name->c_str(), conf_file_read_desc, dst_result) == nullptr) {
 				return (dst_node);
 			}
 		}

@@ -6,8 +6,43 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <vector>
+#include "../math/XNAMathUINT.h"
 #include "../file/XMLFile.h"
 #include "ManagerResource.h"
+
+
+namespace tml {
+namespace graphic {
+/**
+ * @brief MapBlockÉNÉâÉX
+ */
+class MapBlock
+{
+public:
+	tml::XMUINT2EX tile_count;
+	std::vector<UINT> tile_type_container;
+
+private:
+	void Release(void);
+
+public:
+	MapBlock();
+	virtual ~MapBlock();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::MapBlock::Release(void)
+{
+	return;
+}
 
 
 namespace tml {
@@ -63,6 +98,11 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MAP_TYPE::BASE);
 
 private:
+	tml::XMUINT2EX tile_cnt_;
+	tml::XMUINT2EX block_cnt_;
+	std::vector<tml::graphic::MapBlock> block_cont_;
+	tml::XMUINT2EX tileset_tile_size_;
+	tml::XMUINT2EX tileset_tile_cnt_;
 	tml::shared_ptr<tml::graphic::Texture> tex_;
 
 private:
@@ -74,6 +114,13 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::graphic::MapDesc &);
+
+	const tml::XMUINT2EX &GetTileCount(void) const;
+	const tml::XMUINT2EX &GetBlockCount(void) const;
+	const std::vector<tml::graphic::MapBlock> &GetBlockContainer(void) const;
+	const tml::XMUINT2EX &GetTilesetTileSize(void) const;
+	const tml::XMUINT2EX &GetTilesetTileCount(void) const;
+	const tml::shared_ptr<tml::graphic::Texture> &GetTexture(void);
 };
 }
 }
@@ -85,4 +132,64 @@ public:
 inline void tml::graphic::Map::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetTileCountä÷êî
+ * @return tile_cnt (tile_count)
+ */
+inline const tml::XMUINT2EX &tml::graphic::Map::GetTileCount(void) const
+{
+	return (this->tile_cnt_);
+}
+
+
+/**
+ * @brief GetBlockCountä÷êî
+ * @return block_cnt (block_count)
+ */
+inline const tml::XMUINT2EX &tml::graphic::Map::GetBlockCount(void) const
+{
+	return (this->block_cnt_);
+}
+
+
+/**
+ * @brief GetBlockContainerä÷êî
+ * @return block_cont (block_container)
+ */
+inline const std::vector<tml::graphic::MapBlock> &tml::graphic::Map::GetBlockContainer(void) const
+{
+	return (this->block_cont_);
+}
+
+
+/**
+ * @brief GetTilesetTileSizeä÷êî
+ * @return tileset_tile_size (tileset_tile_size)
+ */
+inline const tml::XMUINT2EX &tml::graphic::Map::GetTilesetTileSize(void) const
+{
+	return (this->tileset_tile_size_);
+}
+
+
+/**
+ * @brief GetTilesetTileCountä÷êî
+ * @return tileset_tile_cnt (tileset_tile_count)
+ */
+inline const tml::XMUINT2EX &tml::graphic::Map::GetTilesetTileCount(void) const
+{
+	return (this->tileset_tile_cnt_);
+}
+
+
+/**
+ * @brief GetTextureä÷êî
+ * @return tex (texture)
+ */
+inline const tml::shared_ptr<tml::graphic::Texture> &tml::graphic::Map::GetTexture(void)
+{
+	return (this->tex_);
 }

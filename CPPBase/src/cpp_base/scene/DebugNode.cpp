@@ -146,12 +146,12 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 	tml::XMUINT2EX model_size = this->GetGraphicManager()->GetSize();
 
 	{// Font Create
-		tml::graphic::FontDesc desc;
+		tml::graphic::FontDesc font_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.SetFontDesc(font_size, L"‚l‚r ƒSƒVƒbƒN");
+		font_desc.SetManager(this->GetGraphicManager());
+		font_desc.SetFontDesc(font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->font, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->font, font_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -159,13 +159,13 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 	}
 
 	{// Model Create
-		tml::graphic::FigureModel2DDesc desc;
+		tml::graphic::FigureModel2DDesc model_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
-		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
+		model_desc.SetManager(this->GetGraphicManager());
+		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
+		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, model_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -178,14 +178,13 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 
 		{// DiffuseTexture Create
 			tml::shared_ptr<tml::graphic::Texture> tex;
+			tml::graphic::TextureDesc tex_desc;
 
-			tml::graphic::TextureDesc desc;
+			tex_desc.SetManager(this->GetGraphicManager());
+			tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, model_size);
+			tex_desc.cpu_buffer_flag = true;
 
-			desc.SetManager(this->GetGraphicManager());
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, model_size);
-			desc.cpu_buffer_flag = true;
-
-			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
 				this->Init();
 
 				return (-1);

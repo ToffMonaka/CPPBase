@@ -147,12 +147,12 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 	}
 
 	{// Canvas2D Create
-		tml::graphic::Canvas2DDesc desc;
+		tml::graphic::Canvas2DDesc canvas_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.resource_name = L"Canvas2D";
+		canvas_desc.SetManager(this->GetGraphicManager());
+		canvas_desc.resource_name = L"Canvas2D";
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -163,13 +163,13 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 	}
 
 	{// Camera2D Create
-		tml::graphic::Camera2DDesc desc;
+		tml::graphic::Camera2DDesc camera_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::ORTHOGRAPHIC;
-		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
+		camera_desc.SetManager(this->GetGraphicManager());
+		camera_desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::ORTHOGRAPHIC;
+		camera_desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, camera_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -177,16 +177,16 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 	}
 
 	{// Camera3D Create
-		tml::graphic::Camera3DDesc desc;
+		tml::graphic::Camera3DDesc camera_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::PERSPECTIVE;
-		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
-		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
-		desc.near_clip = 0.1f;
-		desc.far_clip = 1000.0f;
+		camera_desc.SetManager(this->GetGraphicManager());
+		camera_desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::PERSPECTIVE;
+		camera_desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
+		camera_desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
+		camera_desc.near_clip = 0.1f;
+		camera_desc.far_clip = 1000.0f;
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, camera_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

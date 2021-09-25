@@ -366,14 +366,13 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			// DiffuseTexture Create
 			if (!img_file_read_desc_dat->IsEmpty()) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
+				tml::graphic::TextureDesc tex_desc;
 
-				tml::graphic::TextureDesc desc;
+				tex_desc.SetManager(this->GetManager());
+				tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+				tex_desc.image_file_read_desc_container[0].parent_data = img_file_read_desc_dat;
 
-				desc.SetManager(this->GetManager());
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-				desc.image_file_read_desc_container[0].parent_data = img_file_read_desc_dat;
-
-				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -411,12 +410,12 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 	}
 
 	{// ShaderStructuredBuffer Create
-		tml::graphic::FigureModel2DShaderStructuredBufferDesc desc;
+		tml::graphic::FigureModel2DShaderStructuredBufferDesc ssb_desc;
 
-		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FigureModel2DShaderStructuredBuffer::ELEMENT), 1U);
+		ssb_desc.SetManager(this->GetManager());
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FigureModel2DShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::FigureModel2DShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::FigureModel2DShaderStructuredBuffer>(this->ssb_, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -424,12 +423,12 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 	}
 
 	{// LayerShaderStructuredBuffer Create
-		tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc desc;
+		tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc ssb_desc;
 
-		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FigureModel2DLayerShaderStructuredBuffer::ELEMENT), 1U);
+		ssb_desc.SetManager(this->GetManager());
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FigureModel2DLayerShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::FigureModel2DLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::FigureModel2DLayerShaderStructuredBuffer>(this->layer_ssb_, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

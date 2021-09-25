@@ -5,9 +5,45 @@
 
 
 #include "Map.h"
+#include "../string/StringUtil.h"
 #include "Manager.h"
 #include "Texture.h"
 #include "Sampler.h"
+
+
+/**
+ * @brief コンストラクタ
+ */
+tml::graphic::MapBlock::MapBlock() :
+	tile_count(0U)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::MapBlock::~MapBlock()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::MapBlock::Init(void)
+{
+	this->Release();
+
+	this->tile_count = 0U;
+	this->tile_type_container.clear();
+
+	return;
+}
 
 
 /**
@@ -79,7 +115,11 @@ INT tml::graphic::MapDesc::ReadValue(const tml::INIFile &conf_file)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Map::Map()
+tml::graphic::Map::Map() :
+	tile_cnt_(0U),
+	block_cnt_(0U),
+	tileset_tile_size_(0U),
+	tileset_tile_cnt_(0U)
 {
 	return;
 }
@@ -103,6 +143,11 @@ void tml::graphic::Map::Init(void)
 {
 	this->Release();
 
+	this->tile_cnt_ = 0U;
+	this->block_cnt_ = 0U;
+	this->block_cont_.clear();
+	this->tileset_tile_size_ = 0U;
+	this->tileset_tile_cnt_ = 0U;
 	this->tex_.reset();
 
 	tml::graphic::ManagerResource::Init();
@@ -147,6 +192,22 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 		return (-1);
 	}
 
+	auto &map_file_map_node = map_file_root_node->GetChildNode(L"map");
+
+	if (map_file_map_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	auto &map_file_tileset_node = map_file_root_node->GetChildNode(L"tileset");
+
+	if (map_file_tileset_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
 	auto &map_file_img_node = map_file_root_node->GetChildNode(L"image");
 
 	if (map_file_img_node == nullptr) {
@@ -155,7 +216,110 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 		return (-1);
 	}
 
+	auto &map_file_dat_node = map_file_root_node->GetChildNode(L"data");
+
+	if (map_file_dat_node == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
 	const std::wstring *val = nullptr;
+
+	val = map_file_map_node->GetValue(L"width");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tile_cnt_.x, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = map_file_map_node->GetValue(L"height");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tile_cnt_.y, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	std::vector<UINT> tile_type_cont;
+	std::vector<std::wstring> tile_type_str_cont;
+
+	tml::StringUtil::Split(tile_type_str_cont, map_file_dat_node->string.c_str(), L",");
+
+	tile_type_cont.resize(tile_type_str_cont.size());
+
+	for (size_t val_i = 0U; val_i < tile_type_str_cont.size(); ++val_i) {
+		tml::StringUtil::GetValue(tile_type_cont[val_i], tile_type_str_cont[val_i].c_str());
+	}
+
+	this->block_cnt_.x = static_cast<UINT>(std::ceil(static_cast<FLOAT>(this->tile_cnt_.x) / 16.0f));
+	this->block_cnt_.y = static_cast<UINT>(std::ceil(static_cast<FLOAT>(this->tile_cnt_.y) / 16.0f));
+	this->block_cont_.resize(this->block_cnt_.x * this->block_cnt_.y);
+
+	for (UINT block_index_y = 0U; block_index_y < this->block_cnt_.y; ++block_index_y) {
+		for (UINT block_index_x = 0U; block_index_x < this->block_cnt_.x; ++block_index_x) {
+			auto &block = this->block_cont_[block_index_y * this->block_cnt_.x + block_index_x];
+
+			block.tile_count.x = (block_index_x == (this->block_cnt_.x - 1U)) ? this->tile_cnt_.x - (block_index_x * 16U) : 16U;
+			block.tile_count.y = (block_index_y == (this->block_cnt_.y - 1U)) ? this->tile_cnt_.y - (block_index_y * 16U) : 16U;
+			block.tile_type_container.resize(block.tile_count.x * block.tile_count.y);
+
+			for (UINT block_tile_index_y = 0U; block_tile_index_y < block.tile_count.y; ++block_tile_index_y) {
+				for (UINT block_tile_index_x = 0U; block_tile_index_x < block.tile_count.x; ++block_tile_index_x) {
+					auto &block_tile_type = block.tile_type_container[block_tile_index_y * block.tile_count.x + block_tile_index_x];
+
+					block_tile_type = tile_type_cont[((block_index_y * 16U + block_tile_index_y) * this->tile_cnt_.x) + (block_index_x * 16U + block_tile_index_x)];
+				}
+			}
+		}
+	}
+
+	val = map_file_tileset_node->GetValue(L"tilewidth");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tileset_tile_size_.x, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = map_file_tileset_node->GetValue(L"tileheight");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tileset_tile_size_.y, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = map_file_tileset_node->GetValue(L"columns");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tileset_tile_cnt_.x, val->c_str());
+	} else {
+		this->Init();
+
+		return (-1);
+	}
+
+	val = map_file_tileset_node->GetValue(L"tilecount");
+
+	if (val != nullptr) {
+		tml::StringUtil::GetValue(this->tileset_tile_cnt_.y, val->c_str());
+
+		this->tileset_tile_cnt_.y /= this->tileset_tile_cnt_.x;
+	} else {
+		this->Init();
+
+		return (-1);
+	}
 
 	std::wstring img_file_path;
 
@@ -169,13 +333,13 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 
 	// Texture Create
 	if (desc.texture_flag) {
-		tml::graphic::TextureDesc desc;
+		tml::graphic::TextureDesc tex_desc;
 
-		desc.SetManager(this->GetManager());
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-		desc.image_file_read_desc_container[0].data.file_path = img_file_path;
+		tex_desc.SetManager(this->GetManager());
+		tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+		tex_desc.image_file_read_desc_container[0].data.file_path = img_file_path;
 
-		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->tex_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->tex_, tex_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

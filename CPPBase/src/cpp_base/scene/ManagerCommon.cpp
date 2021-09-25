@@ -77,13 +77,13 @@ INT cpp_base::scene::ManagerCommon::Create(cpp_base::scene::Manager *mgr)
 
 	if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
 		{// DebugNode Create
-			cpp_base::scene::DebugNodeDesc desc;
+			cpp_base::scene::DebugNodeDesc node_desc;
 
-			desc.SetManager(this->mgr_);
-			desc.resource_name = cpp_base::ConstantUtil::SCENE::RESOURCE_NAME::DEBUG_NODE;
-			desc.name = L"debug";
+			node_desc.SetManager(this->mgr_);
+			node_desc.resource_name = cpp_base::ConstantUtil::SCENE::RESOURCE_NAME::DEBUG_NODE;
+			node_desc.name = L"debug";
 
-			if (this->mgr_->GetResource<cpp_base::scene::DebugNode>(this->debug_node, desc) == nullptr) {
+			if (this->mgr_->GetResource<cpp_base::scene::DebugNode>(this->debug_node, node_desc) == nullptr) {
 				this->Init();
 
 				return (-1);

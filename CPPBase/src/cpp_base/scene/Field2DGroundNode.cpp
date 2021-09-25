@@ -137,14 +137,14 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 	}
 
 	{// Model Create
-		tml::graphic::GroundModel2DDesc desc;
+		tml::graphic::GroundModel2DDesc model_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
-		desc.map_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_MAP;
-		desc.map_directory_path = L"res";
+		model_desc.SetManager(this->GetGraphicManager());
+		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
+		model_desc.map_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_MAP;
+		model_desc.map_directory_path = L"res";
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::GroundModel2D>(this->model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::GroundModel2D>(this->model, model_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

@@ -571,8 +571,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 
 			{// Mesh Create
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
-
-				tml::graphic::MeshDesc desc;
+				tml::graphic::MeshDesc mesh_desc;
 				std::vector<tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT> vb_element_cont;
 				std::vector<UINT> ib_element_cont;
 				std::array<tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT, 4U> base_vb_element_ary = {
@@ -617,12 +616,12 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 					}
 				}
 
-				desc.SetManager(this->GetManager());
-				desc.SetVertexBufferDesc(sizeof(tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT), vb_element_cont.size(), reinterpret_cast<BYTE *>(vb_element_cont.data()));
-				desc.SetIndexBufferDesc(sizeof(UINT), ib_element_cont.size(), reinterpret_cast<BYTE *>(ib_element_cont.data()), DXGI_FORMAT_R32_UINT);
-				desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+				mesh_desc.SetManager(this->GetManager());
+				mesh_desc.SetVertexBufferDesc(sizeof(tml::graphic::GroundModel2D::VERTEX_BUFFER_ELEMENT), vb_element_cont.size(), reinterpret_cast<BYTE *>(vb_element_cont.data()));
+				mesh_desc.SetIndexBufferDesc(sizeof(UINT), ib_element_cont.size(), reinterpret_cast<BYTE *>(ib_element_cont.data()), DXGI_FORMAT_R32_UINT);
+				mesh_desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, desc) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, mesh_desc) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -634,14 +633,13 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			// DiffuseTexture Create
 			if (!img_file_read_desc_dat->IsEmpty()) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
+				tml::graphic::TextureDesc tex_desc;
 
-				tml::graphic::TextureDesc desc;
+				tex_desc.SetManager(this->GetManager());
+				tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+				tex_desc.image_file_read_desc_container[0].parent_data = img_file_read_desc_dat;
 
-				desc.SetManager(this->GetManager());
-				desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-				desc.image_file_read_desc_container[0].parent_data = img_file_read_desc_dat;
-
-				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -681,12 +679,12 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	}
 
 	{// ShaderStructuredBuffer Create
-		tml::graphic::GroundModel2DShaderStructuredBufferDesc desc;
+		tml::graphic::GroundModel2DShaderStructuredBufferDesc ssb_desc;
 
-		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DShaderStructuredBuffer::ELEMENT), 1U);
+		ssb_desc.SetManager(this->GetManager());
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DShaderStructuredBuffer>(this->ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DShaderStructuredBuffer>(this->ssb_, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -694,12 +692,12 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	}
 
 	{// LayerShaderStructuredBuffer Create
-		tml::graphic::GroundModel2DLayerShaderStructuredBufferDesc desc;
+		tml::graphic::GroundModel2DLayerShaderStructuredBufferDesc ssb_desc;
 
-		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT), 1U);
+		ssb_desc.SetManager(this->GetManager());
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT), 1U);
 
-		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DLayerShaderStructuredBuffer>(this->layer_ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DLayerShaderStructuredBuffer>(this->layer_ssb_, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -707,12 +705,12 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 	}
 
 	{// BlockShaderStructuredBuffer Create
-		tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc desc;
+		tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc ssb_desc;
 
-		desc.SetManager(this->GetManager());
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT), this->block_cont_.size());
+		ssb_desc.SetManager(this->GetManager());
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT), this->block_cont_.size());
 
-		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DBlockShaderStructuredBuffer>(this->block_ssb_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DBlockShaderStructuredBuffer>(this->block_ssb_, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

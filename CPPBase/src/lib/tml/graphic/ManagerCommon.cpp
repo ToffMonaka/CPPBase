@@ -130,16 +130,16 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	this->mgr_ = mgr;
 
 	{// MainRenderTargetTexture Create
-		tml::graphic::TextureDesc desc;
+		tml::graphic::TextureDesc tex_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.swap_chain = this->mgr_->GetSwapChain();
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::UASR);
-		desc.render_target_desc_null_flag = true;
-		desc.sr_desc_null_flag = true;
-		desc.uasr_desc_null_flag = true;
+		tex_desc.SetManager(this->mgr_);
+		tex_desc.swap_chain = this->mgr_->GetSwapChain();
+		tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::UASR);
+		tex_desc.render_target_desc_null_flag = true;
+		tex_desc.sr_desc_null_flag = true;
+		tex_desc.uasr_desc_null_flag = true;
 
-		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_render_target_texture, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_render_target_texture, tex_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -147,13 +147,13 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// MainDepthTargetTexture Create
-		tml::graphic::TextureDesc desc;
+		tml::graphic::TextureDesc tex_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::DEPTH_TARGET, DXGI_FORMAT_R24G8_TYPELESS, this->mgr_->GetSize());
-		desc.depth_target_format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		tex_desc.SetManager(this->mgr_);
+		tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::DEPTH_TARGET, DXGI_FORMAT_R24G8_TYPELESS, this->mgr_->GetSize());
+		tex_desc.depth_target_format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_depth_target_texture, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_depth_target_texture, tex_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -161,12 +161,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// DefaultRasterizerState Create
-		tml::graphic::RasterizerStateDesc desc;
+		tml::graphic::RasterizerStateDesc rs_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT);
+		rs_desc.SetManager(this->mgr_);
+		rs_desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::DEFAULT);
 
-		if (this->mgr_->GetResource<tml::graphic::RasterizerState>(this->default_rasterizer_state, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::RasterizerState>(this->default_rasterizer_state, rs_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -174,12 +174,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// WireframeRasterizerState Create
-		tml::graphic::RasterizerStateDesc desc;
+		tml::graphic::RasterizerStateDesc rs_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::WIREFRAME);
+		rs_desc.SetManager(this->mgr_);
+		rs_desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::WIREFRAME);
 
-		if (this->mgr_->GetResource<tml::graphic::RasterizerState>(this->wireframe_rasterizer_state, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::RasterizerState>(this->wireframe_rasterizer_state, rs_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -187,12 +187,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// FrontCullingRasterizerState Create
-		tml::graphic::RasterizerStateDesc desc;
+		tml::graphic::RasterizerStateDesc rs_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::FRONT_CULLING);
+		rs_desc.SetManager(this->mgr_);
+		rs_desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::FRONT_CULLING);
 
-		if (this->mgr_->GetResource<tml::graphic::RasterizerState>(this->front_culling_rasterizer_state, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::RasterizerState>(this->front_culling_rasterizer_state, rs_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -200,12 +200,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// BackCullingRasterizerState Create
-		tml::graphic::RasterizerStateDesc desc;
+		tml::graphic::RasterizerStateDesc rs_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::BACK_CULLING);
+		rs_desc.SetManager(this->mgr_);
+		rs_desc.SetRasterizerStateDesc(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_DESC_TYPE::BACK_CULLING);
 
-		if (this->mgr_->GetResource<tml::graphic::RasterizerState>(this->back_culling_rasterizer_state, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::RasterizerState>(this->back_culling_rasterizer_state, rs_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -214,12 +214,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 
 	for (UINT rt_i = 0U; rt_i < 2U; ++rt_i) {
 		{// DefaultBlendState Create
-			tml::graphic::BlendStateDesc desc;
+			tml::graphic::BlendStateDesc bs_desc;
 
-			desc.SetManager(this->mgr_);
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::NONE, rt_i);
+			bs_desc.SetManager(this->mgr_);
+			bs_desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::DEFAULT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::NONE, rt_i);
 
-			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->default_blend_state_array[rt_i], desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->default_blend_state_array[rt_i], bs_desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -227,12 +227,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// AlignmentBlendState Create
-			tml::graphic::BlendStateDesc desc;
+			tml::graphic::BlendStateDesc bs_desc;
 
-			desc.SetManager(this->mgr_);
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ALIGNMENT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			bs_desc.SetManager(this->mgr_);
+			bs_desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ALIGNMENT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
-			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->alignment_blend_state_array[rt_i], desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->alignment_blend_state_array[rt_i], bs_desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -240,12 +240,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// AddBlendState Create
-			tml::graphic::BlendStateDesc desc;
+			tml::graphic::BlendStateDesc bs_desc;
 
-			desc.SetManager(this->mgr_);
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ADD, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			bs_desc.SetManager(this->mgr_);
+			bs_desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::ADD, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
-			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->add_blend_state_array[rt_i], desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->add_blend_state_array[rt_i], bs_desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -253,12 +253,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// SubBlendState Create
-			tml::graphic::BlendStateDesc desc;
+			tml::graphic::BlendStateDesc bs_desc;
 
-			desc.SetManager(this->mgr_);
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::SUB, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			bs_desc.SetManager(this->mgr_);
+			bs_desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::SUB, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
-			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->sub_blend_state_array[rt_i], desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->sub_blend_state_array[rt_i], bs_desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -266,12 +266,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// MulBlendState Create
-			tml::graphic::BlendStateDesc desc;
+			tml::graphic::BlendStateDesc bs_desc;
 
-			desc.SetManager(this->mgr_);
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::MUL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			bs_desc.SetManager(this->mgr_);
+			bs_desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::MUL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
-			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->mul_blend_state_array[rt_i], desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->mul_blend_state_array[rt_i], bs_desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -279,12 +279,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// ReverseBlendState Create
-			tml::graphic::BlendStateDesc desc;
+			tml::graphic::BlendStateDesc bs_desc;
 
-			desc.SetManager(this->mgr_);
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::REVERSE, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
+			bs_desc.SetManager(this->mgr_);
+			bs_desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::REVERSE, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::DST, rt_i);
 
-			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->reverse_blend_state_array[rt_i], desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->reverse_blend_state_array[rt_i], bs_desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -292,12 +292,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 
 		{// TotalBlendState Create
-			tml::graphic::BlendStateDesc desc;
+			tml::graphic::BlendStateDesc bs_desc;
 
-			desc.SetManager(this->mgr_);
-			desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::TOTAL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::TOTAL, rt_i);
+			bs_desc.SetManager(this->mgr_);
+			bs_desc.SetBlendStateDesc(tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_TYPE::TOTAL, tml::ConstantUtil::GRAPHIC::BLEND_STATE_DESC_ALPHA_TYPE::TOTAL, rt_i);
 
-			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->total_blend_state_array[rt_i], desc) == nullptr) {
+			if (this->mgr_->GetResource<tml::graphic::BlendState>(this->total_blend_state_array[rt_i], bs_desc) == nullptr) {
 				this->Init();
 
 				return (-1);
@@ -306,12 +306,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// DefaultDepthState Create
-		tml::graphic::DepthStateDesc desc;
+		tml::graphic::DepthStateDesc ds_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetDepthStateDesc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT);
+		ds_desc.SetManager(this->mgr_);
+		ds_desc.SetDepthStateDesc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::DEFAULT);
 
-		if (this->mgr_->GetResource<tml::graphic::DepthState>(this->default_depth_state, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::DepthState>(this->default_depth_state, ds_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -319,12 +319,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// ReferenceDepthState Create
-		tml::graphic::DepthStateDesc desc;
+		tml::graphic::DepthStateDesc ds_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetDepthStateDesc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::REFERENCE);
+		ds_desc.SetManager(this->mgr_);
+		ds_desc.SetDepthStateDesc(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_DESC_TYPE::REFERENCE);
 
-		if (this->mgr_->GetResource<tml::graphic::DepthState>(this->reference_depth_state, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::DepthState>(this->reference_depth_state, ds_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -332,14 +332,14 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// FigureModel2DShader Create
-		tml::graphic::ShaderDesc desc;
+		tml::graphic::ShaderDesc shader_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::FIGURE_MODEL_2D_SHADER_CONFIG));
-		desc.vertex_shader_input_element_desc_count = tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_COUNT;
-		desc.vertex_shader_input_element_desc_array = tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_ARRAY;
+		shader_desc.SetManager(this->mgr_);
+		shader_desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::FIGURE_MODEL_2D_SHADER_CONFIG));
+		shader_desc.vertex_shader_input_element_desc_count = tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_COUNT;
+		shader_desc.vertex_shader_input_element_desc_array = tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_ARRAY;
 
-		if (this->mgr_->GetResource<tml::graphic::Shader>(this->figure_model_2d_shader, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Shader>(this->figure_model_2d_shader, shader_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -347,14 +347,14 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// GroundModel2DShader Create
-		tml::graphic::ShaderDesc desc;
+		tml::graphic::ShaderDesc shader_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::GROUND_MODEL_2D_SHADER_CONFIG));
-		desc.vertex_shader_input_element_desc_count = tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT;
-		desc.vertex_shader_input_element_desc_array = tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_ARRAY;
+		shader_desc.SetManager(this->mgr_);
+		shader_desc.Read(tml::INIFileReadDesc(tml::ConstantUtil::FILE_PATH::GROUND_MODEL_2D_SHADER_CONFIG));
+		shader_desc.vertex_shader_input_element_desc_count = tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT;
+		shader_desc.vertex_shader_input_element_desc_array = tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_ARRAY;
 
-		if (this->mgr_->GetResource<tml::graphic::Shader>(this->ground_model_2d_shader, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Shader>(this->ground_model_2d_shader, shader_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -368,12 +368,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// ConfigShaderConstantBuffer Create
-		tml::graphic::ConfigShaderConstantBufferDesc desc;
+		tml::graphic::ConfigShaderConstantBufferDesc scb_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::ConfigShaderConstantBuffer::ELEMENT));
+		scb_desc.SetManager(this->mgr_);
+		scb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::ConfigShaderConstantBuffer::ELEMENT));
 
-		if (this->mgr_->GetResource<tml::graphic::ConfigShaderConstantBuffer>(this->config_shader_constant_buffer, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::ConfigShaderConstantBuffer>(this->config_shader_constant_buffer, scb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -381,12 +381,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// HeaderShaderConstantBuffer Create
-		tml::graphic::HeaderShaderConstantBufferDesc desc;
+		tml::graphic::HeaderShaderConstantBufferDesc scb_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::HeaderShaderConstantBuffer::ELEMENT));
+		scb_desc.SetManager(this->mgr_);
+		scb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::HeaderShaderConstantBuffer::ELEMENT));
 
-		if (this->mgr_->GetResource<tml::graphic::HeaderShaderConstantBuffer>(this->header_shader_constant_buffer, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::HeaderShaderConstantBuffer>(this->header_shader_constant_buffer, scb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -394,12 +394,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// CameraShaderStructuredBuffer Create
-		tml::graphic::CameraShaderStructuredBufferDesc desc;
+		tml::graphic::CameraShaderStructuredBufferDesc ssb_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::CameraShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT);
+		ssb_desc.SetManager(this->mgr_);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::CameraShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT);
 
-		if (this->mgr_->GetResource<tml::graphic::CameraShaderStructuredBuffer>(this->camera_shader_structured_buffer, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::CameraShaderStructuredBuffer>(this->camera_shader_structured_buffer, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -407,12 +407,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// LightShaderStructuredBuffer Create
-		tml::graphic::LightShaderStructuredBufferDesc desc;
+		tml::graphic::LightShaderStructuredBufferDesc ssb_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::LightShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT);
+		ssb_desc.SetManager(this->mgr_);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::LightShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT);
 
-		if (this->mgr_->GetResource<tml::graphic::LightShaderStructuredBuffer>(this->light_shader_structured_buffer, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::LightShaderStructuredBuffer>(this->light_shader_structured_buffer, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -420,12 +420,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// FogShaderStructuredBuffer Create
-		tml::graphic::FogShaderStructuredBufferDesc desc;
+		tml::graphic::FogShaderStructuredBufferDesc ssb_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FogShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT);
+		ssb_desc.SetManager(this->mgr_);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FogShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT);
 
-		if (this->mgr_->GetResource<tml::graphic::FogShaderStructuredBuffer>(this->fog_shader_structured_buffer, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::FogShaderStructuredBuffer>(this->fog_shader_structured_buffer, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -433,7 +433,7 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// FigureModel2DMesh Create
-		tml::graphic::MeshDesc desc;
+		tml::graphic::MeshDesc mesh_desc;
 		std::array<tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT, 4U> vb_element_ary = {
 			tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX(-0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 0.0f,  0.0f), 0U),
 			tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT(tml::XMFLOAT4EX( 0.5f,  0.5f,  0.0f,  1.0f), tml::XMFLOAT2EX( 1.0f,  0.0f), 0U),
@@ -442,12 +442,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		};
 		std::array<UINT, 4U> ib_element_ary = {0U, 1U, 2U, 3U};
 
-		desc.SetManager(this->mgr_);
-		desc.SetVertexBufferDesc(sizeof(tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
-		desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
-		desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+		mesh_desc.SetManager(this->mgr_);
+		mesh_desc.SetVertexBufferDesc(sizeof(tml::graphic::FigureModel2D::VERTEX_BUFFER_ELEMENT), vb_element_ary.size(), reinterpret_cast<BYTE *>(vb_element_ary.data()));
+		mesh_desc.SetIndexBufferDesc(sizeof(UINT), ib_element_ary.size(), reinterpret_cast<BYTE *>(ib_element_ary.data()), DXGI_FORMAT_R32_UINT);
+		mesh_desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 
-		if (this->mgr_->GetResource<tml::graphic::Mesh>(figure_model_2d_mesh, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Mesh>(figure_model_2d_mesh, mesh_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -458,12 +458,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// CCSampler Create
-		tml::graphic::SamplerDesc desc;
+		tml::graphic::SamplerDesc samp_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
+		samp_desc.SetManager(this->mgr_);
+		samp_desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CC);
 
-		if (this->mgr_->GetResource<tml::graphic::Sampler>(this->cc_sampler, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Sampler>(this->cc_sampler, samp_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -471,12 +471,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// CWSampler Create
-		tml::graphic::SamplerDesc desc;
+		tml::graphic::SamplerDesc samp_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
+		samp_desc.SetManager(this->mgr_);
+		samp_desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::CW);
 
-		if (this->mgr_->GetResource<tml::graphic::Sampler>(this->cw_sampler, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Sampler>(this->cw_sampler, samp_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -484,12 +484,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// WCSampler Create
-		tml::graphic::SamplerDesc desc;
+		tml::graphic::SamplerDesc samp_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
+		samp_desc.SetManager(this->mgr_);
+		samp_desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WC);
 
-		if (this->mgr_->GetResource<tml::graphic::Sampler>(this->wc_sampler, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Sampler>(this->wc_sampler, samp_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -497,12 +497,12 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 	}
 
 	{// WWSampler Create
-		tml::graphic::SamplerDesc desc;
+		tml::graphic::SamplerDesc samp_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
+		samp_desc.SetManager(this->mgr_);
+		samp_desc.SetSamplerDesc(tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_BIND_FLAG::SR, this->mgr_->GetSamplerQualityType(), tml::ConstantUtil::GRAPHIC::SAMPLER_DESC_WRAP_TYPE::WW);
 
-		if (this->mgr_->GetResource<tml::graphic::Sampler>(this->ww_sampler, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Sampler>(this->ww_sampler, samp_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

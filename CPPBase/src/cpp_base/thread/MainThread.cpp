@@ -131,67 +131,67 @@ INT cpp_base::MainThread::OnStart(void)
 	}
 
 	{// ManagerFactory Create
-		cpp_base::ManagerFactoryDesc desc;
+		cpp_base::ManagerFactoryDesc mgr_factory_desc;
 
-		if (this->mgr_factory_.Create(desc) < 0) {
+		if (this->mgr_factory_.Create(mgr_factory_desc) < 0) {
 			return (-1);
 		}
 	}
 
 	{// InputManager Create
-		cpp_base::input::ManagerDesc desc;
+		cpp_base::input::ManagerDesc mgr_desc;
 
-		desc.window_handle = this->GetWindowHandle();
-		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
-		desc.factory = &this->mgr_factory_;
+		mgr_desc.window_handle = this->GetWindowHandle();
+		mgr_desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		mgr_desc.factory = &this->mgr_factory_;
 
-		if (this->input_mgr_.Create(desc) < 0) {
+		if (this->input_mgr_.Create(mgr_desc) < 0) {
 			return (-1);
 		}
 	}
 
 	{// GraphicManager Create
-		cpp_base::graphic::ManagerDesc desc;
+		cpp_base::graphic::ManagerDesc mgr_desc;
 
-		desc.window_handle = this->GetWindowHandle();
-		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
-		desc.factory = &this->mgr_factory_;
-		desc.size = this->sys_conf_file_.data.window_size;
-		desc.vsync_flag = this->sys_conf_file_.data.graphic_vsync_flag;
-		desc.frame_rate_limit = this->sys_conf_file_.data.graphic_frame_rate_limit;
+		mgr_desc.window_handle = this->GetWindowHandle();
+		mgr_desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		mgr_desc.factory = &this->mgr_factory_;
+		mgr_desc.size = this->sys_conf_file_.data.window_size;
+		mgr_desc.vsync_flag = this->sys_conf_file_.data.graphic_vsync_flag;
+		mgr_desc.frame_rate_limit = this->sys_conf_file_.data.graphic_frame_rate_limit;
 
-		if (this->graphic_mgr_.Create(desc) < 0) {
+		if (this->graphic_mgr_.Create(mgr_desc) < 0) {
 			return (-1);
 		}
 	}
 
 	{// SoundManager Create
-		cpp_base::sound::ManagerDesc desc;
+		cpp_base::sound::ManagerDesc mgr_desc;
 
-		desc.window_handle = this->GetWindowHandle();
-		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
-		desc.factory = &this->mgr_factory_;
-		desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_volume);
-		desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_mute_flag);
-		desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_volume);
-		desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_mute_flag);
+		mgr_desc.window_handle = this->GetWindowHandle();
+		mgr_desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		mgr_desc.factory = &this->mgr_factory_;
+		mgr_desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_volume);
+		mgr_desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_mute_flag);
+		mgr_desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_volume);
+		mgr_desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_mute_flag);
 
-		if (this->sound_mgr_.Create(desc) < 0) {
+		if (this->sound_mgr_.Create(mgr_desc) < 0) {
 			return (-1);
 		}
 	}
 
 	{// SceneManager Create
-		cpp_base::scene::ManagerDesc desc;
+		cpp_base::scene::ManagerDesc mgr_desc;
 
-		desc.window_handle = this->GetWindowHandle();
-		desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
-		desc.factory = &this->mgr_factory_;
-		desc.SetInputManager(&this->input_mgr_);
-		desc.SetGraphicManager(&this->graphic_mgr_);
-		desc.SetSoundManager(&this->sound_mgr_);
+		mgr_desc.window_handle = this->GetWindowHandle();
+		mgr_desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
+		mgr_desc.factory = &this->mgr_factory_;
+		mgr_desc.SetInputManager(&this->input_mgr_);
+		mgr_desc.SetGraphicManager(&this->graphic_mgr_);
+		mgr_desc.SetSoundManager(&this->sound_mgr_);
 
-		if (this->scene_mgr_.Create(desc) < 0) {
+		if (this->scene_mgr_.Create(mgr_desc) < 0) {
 			return (-1);
 		}
 	}

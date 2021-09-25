@@ -71,13 +71,13 @@ INT cpp_base::graphic::ManagerCommon::Create(cpp_base::graphic::Manager *mgr)
 	this->mgr_ = mgr;
 
 	{// BackgroundTexture Create
-		tml::graphic::TextureDesc desc;
+		tml::graphic::TextureDesc tex_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-		desc.image_file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::BACKGROUND_IMAGE;
+		tex_desc.SetManager(this->mgr_);
+		tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+		tex_desc.image_file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::BACKGROUND_IMAGE;
 
-		if (this->mgr_->GetResource<tml::graphic::Texture>(this->background_texture, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Texture>(this->background_texture, tex_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -85,13 +85,13 @@ INT cpp_base::graphic::ManagerCommon::Create(cpp_base::graphic::Manager *mgr)
 	}
 
 	{// EmptyBackgroundTexture Create
-		tml::graphic::TextureDesc desc;
+		tml::graphic::TextureDesc tex_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-		desc.image_file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::EMPTY_BACKGROUND_IMAGE;
+		tex_desc.SetManager(this->mgr_);
+		tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+		tex_desc.image_file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::EMPTY_BACKGROUND_IMAGE;
 
-		if (this->mgr_->GetResource<tml::graphic::Texture>(this->empty_background_texture, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Texture>(this->empty_background_texture, tex_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -99,12 +99,12 @@ INT cpp_base::graphic::ManagerCommon::Create(cpp_base::graphic::Manager *mgr)
 	}
 
 	{// CommonFont Create
-		tml::graphic::FontDesc desc;
+		tml::graphic::FontDesc font_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.SetFontDesc(tml::XMUINT2EX(0U, 16U), L"‚l‚r ƒSƒVƒbƒN");
+		font_desc.SetManager(this->mgr_);
+		font_desc.SetFontDesc(tml::XMUINT2EX(0U, 16U), L"‚l‚r ƒSƒVƒbƒN");
 
-		if (this->mgr_->GetResource<tml::graphic::Font>(this->common_font, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Font>(this->common_font, font_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -112,13 +112,13 @@ INT cpp_base::graphic::ManagerCommon::Create(cpp_base::graphic::Manager *mgr)
 	}
 
 	{// CommonAtlas Create
-		tml::graphic::AtlasDesc desc;
+		tml::graphic::AtlasDesc atlas_desc;
 
-		desc.SetManager(this->mgr_);
-		desc.atlas_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::COMMON_ATLAS;
-		desc.atlas_directory_path = L"res";
+		atlas_desc.SetManager(this->mgr_);
+		atlas_desc.atlas_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::COMMON_ATLAS;
+		atlas_desc.atlas_directory_path = L"res";
 
-		if (this->mgr_->GetResource<tml::graphic::Atlas>(this->common_atlas, desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Atlas>(this->common_atlas, atlas_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

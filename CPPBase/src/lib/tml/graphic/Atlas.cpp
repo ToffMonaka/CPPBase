@@ -222,13 +222,13 @@ INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
 
 	// Texture Create
 	if (desc.texture_flag) {
-		tml::graphic::TextureDesc desc;
+		tml::graphic::TextureDesc tex_desc;
 
-		desc.SetManager(this->GetManager());
-		desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-		desc.image_file_read_desc_container[0].data.file_path = img_file_path;
+		tex_desc.SetManager(this->GetManager());
+		tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
+		tex_desc.image_file_read_desc_container[0].data.file_path = img_file_path;
 
-		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->tex_, desc) == nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->tex_, tex_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

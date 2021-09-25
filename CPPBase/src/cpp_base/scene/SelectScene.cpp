@@ -157,12 +157,12 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 	}
 
 	{// Canvas2D Create
-		tml::graphic::Canvas2DDesc desc;
+		tml::graphic::Canvas2DDesc canvas_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.resource_name = L"Canvas2D";
+		canvas_desc.SetManager(this->GetGraphicManager());
+		canvas_desc.resource_name = L"Canvas2D";
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -173,13 +173,13 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 	}
 
 	{// Camera2D Create
-		tml::graphic::Camera2DDesc desc;
+		tml::graphic::Camera2DDesc camera_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::ORTHOGRAPHIC;
-		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
+		camera_desc.SetManager(this->GetGraphicManager());
+		camera_desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::ORTHOGRAPHIC;
+		camera_desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, camera_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -187,16 +187,16 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 	}
 
 	{// Camera3D Create
-		tml::graphic::Camera3DDesc desc;
+		tml::graphic::Camera3DDesc camera_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::PERSPECTIVE;
-		desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
-		desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
-		desc.near_clip = 0.1f;
-		desc.far_clip = 1000.0f;
+		camera_desc.SetManager(this->GetGraphicManager());
+		camera_desc.projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::PERSPECTIVE;
+		camera_desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
+		camera_desc.fov_angle = tml::MathUtil::GetAngleRadian(55.0f);
+		camera_desc.near_clip = 0.1f;
+		camera_desc.far_clip = 1000.0f;
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, camera_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -204,15 +204,15 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 	}
 
 	{// BackgroundModel Create
-		tml::graphic::FigureModel2DDesc desc;
+		tml::graphic::FigureModel2DDesc model_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
-		desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
-		desc.size_flag = true;
-		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
+		model_desc.SetManager(this->GetGraphicManager());
+		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
+		model_desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
+		model_desc.size_flag = true;
+		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, model_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -248,12 +248,12 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 	tml::XMUINT2EX stage_model_size = tml::XMUINT2EX(128U, 32U);
 
 	{// StartFont Create
-		tml::graphic::FontDesc desc;
+		tml::graphic::FontDesc font_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.SetFontDesc(stage_font_size, L"‚l‚r ƒSƒVƒbƒN");
+		font_desc.SetManager(this->GetGraphicManager());
+		font_desc.SetFontDesc(stage_font_size, L"‚l‚r ƒSƒVƒbƒN");
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->stage_font, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->stage_font, font_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -261,13 +261,13 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 	}
 
 	{// StageModel Create
-		tml::graphic::FigureModel2DDesc desc;
+		tml::graphic::FigureModel2DDesc model_desc;
 
-		desc.SetManager(this->GetGraphicManager());
-		desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
-		desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
+		model_desc.SetManager(this->GetGraphicManager());
+		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
+		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->stage_model, desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->stage_model, model_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -280,14 +280,13 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 
 		{// DiffuseTexture Create
 			tml::shared_ptr<tml::graphic::Texture> tex;
+			tml::graphic::TextureDesc tex_desc;
 
-			tml::graphic::TextureDesc desc;
+			tex_desc.SetManager(this->GetGraphicManager());
+			tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, stage_model_size);
+			tex_desc.cpu_buffer_flag = true;
 
-			desc.SetManager(this->GetGraphicManager());
-			desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR, DXGI_FORMAT_R8G8B8A8_UNORM, stage_model_size);
-			desc.cpu_buffer_flag = true;
-
-			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, desc) == nullptr) {
+			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
 				this->Init();
 
 				return (-1);

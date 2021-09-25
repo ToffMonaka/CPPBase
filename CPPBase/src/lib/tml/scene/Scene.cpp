@@ -318,12 +318,12 @@ void tml::scene::Scene::SetRootNode(void)
 		this->root_node_.reset();
 	}
 
-	tml::scene::NodeDesc desc;
+	tml::scene::NodeDesc node_desc;
 
-	desc.SetManager(this->GetManager());
-	desc.name = L"root";
+	node_desc.SetManager(this->GetManager());
+	node_desc.name = L"root";
 
-	this->GetManager()->GetResource<tml::scene::Node>(this->root_node_, desc);
+	this->GetManager()->GetResource<tml::scene::Node>(this->root_node_, node_desc);
 
 	return;
 }

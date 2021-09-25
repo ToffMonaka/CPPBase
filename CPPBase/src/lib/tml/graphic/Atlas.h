@@ -74,6 +74,8 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::graphic::AtlasDesc &);
+
+	const tml::shared_ptr<tml::graphic::Texture> &GetTexture(void);
 };
 }
 }
@@ -85,4 +87,14 @@ public:
 inline void tml::graphic::Atlas::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetTextureä÷êî
+ * @return tex (texture)
+ */
+inline const tml::shared_ptr<tml::graphic::Texture> &tml::graphic::Atlas::GetTexture(void)
+{
+	return (this->tex_);
 }
