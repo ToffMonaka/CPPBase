@@ -6,8 +6,80 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <map>
+#include "../math/XNAMathUINT.h"
 #include "../file/XMLFile.h"
 #include "ManagerResource.h"
+
+
+namespace tml {
+namespace graphic {
+/**
+ * @brief AtlasRectÉNÉâÉX
+ */
+class AtlasRect
+{
+friend class tml::graphic::Atlas;
+
+private:
+	std::wstring name_;
+	tml::XMUINT2EX pos_;
+	tml::XMUINT2EX size_;
+
+private:
+	void Release(void);
+
+public:
+	AtlasRect();
+	virtual ~AtlasRect();
+
+	virtual void Init(void);
+
+	const std::wstring &GetName(void) const;
+	const tml::XMUINT2EX &GetPosition(void) const;
+	const tml::XMUINT2EX &GetSize(void) const;
+};
+}
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::AtlasRect::Release(void)
+{
+	return;
+}
+
+
+/**
+ * @brief GetNameä÷êî
+ * @return name (name)
+ */
+inline const std::wstring &tml::graphic::AtlasRect::GetName(void) const
+{
+	return (this->name_);
+}
+
+
+/**
+ * @brief GetPositionä÷êî
+ * @return pos (position)
+ */
+inline const tml::XMUINT2EX &tml::graphic::AtlasRect::GetPosition(void) const
+{
+	return (this->pos_);
+}
+
+
+/**
+ * @brief GetSizeä÷êî
+ * @return size (size)
+ */
+inline const tml::XMUINT2EX &tml::graphic::AtlasRect::GetSize(void) const
+{
+	return (this->size_);
+}
 
 
 namespace tml {
@@ -63,6 +135,7 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::ATLAS_TYPE::BASE);
 
 private:
+	std::map<std::wstring, tml::graphic::AtlasRect> rect_cont_;
 	tml::shared_ptr<tml::graphic::Texture> tex_;
 
 private:
@@ -75,6 +148,7 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::AtlasDesc &);
 
+	const tml::graphic::AtlasRect *GetRect(const WCHAR *) const;
 	const tml::shared_ptr<tml::graphic::Texture> &GetTexture(void);
 };
 }
@@ -87,6 +161,24 @@ public:
 inline void tml::graphic::Atlas::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetRectä÷êî
+ * @param rect_name (rect_name)
+ * @return rect (rect)<br>
+ * nullptr=é∏îs
+ */
+inline const tml::graphic::AtlasRect *tml::graphic::Atlas::GetRect(const WCHAR *rect_name) const
+{
+	auto rect_itr = this->rect_cont_.find(rect_name);
+
+	if (rect_itr == this->rect_cont_.end()) {
+		return (nullptr);
+	}
+
+	return (&rect_itr->second);
 }
 
 

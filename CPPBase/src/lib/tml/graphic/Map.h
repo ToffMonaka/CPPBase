@@ -15,13 +15,61 @@
 namespace tml {
 namespace graphic {
 /**
+ * @brief MapTileクラス
+ */
+class MapTile
+{
+friend class tml::graphic::Map;
+
+private:
+	UINT type_;
+
+private:
+	void Release(void);
+
+public:
+	MapTile();
+	virtual ~MapTile();
+
+	virtual void Init(void);
+
+	UINT GetType(void) const;
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::graphic::MapTile::Release(void)
+{
+	return;
+}
+
+
+/**
+ * @brief GetType関数
+ * @return type (type)
+ */
+inline UINT tml::graphic::MapTile::GetType(void) const
+{
+	return (this->type_);
+}
+
+
+namespace tml {
+namespace graphic {
+/**
  * @brief MapBlockクラス
  */
 class MapBlock
 {
-public:
-	tml::XMUINT2EX tile_count;
-	std::vector<UINT> tile_type_container;
+friend class tml::graphic::Map;
+
+private:
+	tml::XMUINT2EX tile_cnt_;
+	std::vector<tml::graphic::MapTile> tile_cont_;
 
 private:
 	void Release(void);
@@ -31,6 +79,10 @@ public:
 	virtual ~MapBlock();
 
 	virtual void Init(void);
+
+	const tml::XMUINT2EX &GetTileCount(void) const;
+	const std::vector<tml::graphic::MapTile> &GetTileContainer(void) const;
+	const tml::graphic::MapTile *GetTile(const UINT, const UINT) const;
 };
 }
 }
@@ -42,6 +94,44 @@ public:
 inline void tml::graphic::MapBlock::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetTileCount関数
+ * @return tile_cnt (tile_count)
+ */
+inline const tml::XMUINT2EX &tml::graphic::MapBlock::GetTileCount(void) const
+{
+	return (this->tile_cnt_);
+}
+
+
+/**
+ * @brief GetTileContainer関数
+ * @return tile_cont (tile_container)
+ */
+inline const std::vector<tml::graphic::MapTile> &tml::graphic::MapBlock::GetTileContainer(void) const
+{
+	return (this->tile_cont_);
+}
+
+
+/**
+ * @brief GetTile関数
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @return tile (tile)<br>
+ * nullptr=失敗
+ */
+inline const tml::graphic::MapTile *tml::graphic::MapBlock::GetTile(const UINT tile_index_x, const UINT tile_index_y) const
+{
+	if ((tile_index_x >= this->tile_cnt_.x)
+	|| (tile_index_y >= this->tile_cnt_.y)) {
+		return (nullptr);
+	}
+
+	return (&this->tile_cont_[tile_index_y * this->tile_cnt_.x + tile_index_x]);
 }
 
 
@@ -118,6 +208,7 @@ public:
 	const tml::XMUINT2EX &GetTileCount(void) const;
 	const tml::XMUINT2EX &GetBlockCount(void) const;
 	const std::vector<tml::graphic::MapBlock> &GetBlockContainer(void) const;
+	const tml::graphic::MapBlock *GetBlock(const UINT, const UINT) const;
 	const tml::XMUINT2EX &GetTilesetTileSize(void) const;
 	const tml::XMUINT2EX &GetTilesetTileCount(void) const;
 	const tml::shared_ptr<tml::graphic::Texture> &GetTexture(void);
@@ -162,6 +253,24 @@ inline const tml::XMUINT2EX &tml::graphic::Map::GetBlockCount(void) const
 inline const std::vector<tml::graphic::MapBlock> &tml::graphic::Map::GetBlockContainer(void) const
 {
 	return (this->block_cont_);
+}
+
+
+/**
+ * @brief GetBlock関数
+ * @param block_index_x (block_index_x)
+ * @param block_index_y (block_index_y)
+ * @return block (block)<br>
+ * nullptr=失敗
+ */
+inline const tml::graphic::MapBlock *tml::graphic::Map::GetBlock(const UINT block_index_x, const UINT block_index_y) const
+{
+	if ((block_index_x >= this->block_cnt_.x)
+	|| (block_index_y >= this->block_cnt_.y)) {
+		return (nullptr);
+	}
+
+	return (&this->block_cont_[block_index_y * this->block_cnt_.x + block_index_x]);
 }
 
 
