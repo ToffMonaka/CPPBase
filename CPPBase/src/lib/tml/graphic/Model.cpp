@@ -259,7 +259,7 @@ tml::graphic::Model::~Model()
  */
 void tml::graphic::Model::Release(void)
 {
-	for (auto &stage : this->stage_cont_) {
+	for (auto &stage : this->stage_ary_) {
 		stage.reset();
 	}
 
@@ -433,7 +433,7 @@ void tml::graphic::Model::SetSampler(const UINT index, const tml::shared_ptr<tml
  */
 void tml::graphic::Model::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::ModelStage> &stage)
 {
-	this->stage_cont_[static_cast<UINT>(type)] = std::move(stage);
+	this->stage_ary_[static_cast<UINT>(type)] = std::move(stage);
 
 	return;
 }

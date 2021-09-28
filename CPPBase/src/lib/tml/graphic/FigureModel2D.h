@@ -205,7 +205,6 @@ public:
 	INT Create(const tml::graphic::FigureModel2DDesc &);
 
 	tml::graphic::FigureModel2DStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	tml::graphic::FigureModel2DStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::FigureModel2DStage> &);
 	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &);
 
@@ -227,18 +226,6 @@ public:
 inline tml::graphic::FigureModel2DStage *tml::graphic::FigureModel2D::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
 	return (reinterpret_cast<tml::graphic::FigureModel2DStage *>(tml::graphic::Model2D::GetStage(type)));
-}
-
-
-/**
- * @brief GetStageFastä÷êî
- * @param type (type)
- * @return stage (stage)<br>
- * nullptr=é∏îs
- */
-inline tml::graphic::FigureModel2DStage *tml::graphic::FigureModel2D::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
-{
-	return (reinterpret_cast<tml::graphic::FigureModel2DStage *>(tml::graphic::Model2D::GetStageFast(type)));
 }
 
 

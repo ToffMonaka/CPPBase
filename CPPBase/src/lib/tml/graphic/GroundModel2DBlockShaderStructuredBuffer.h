@@ -6,8 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include <vector>
-#include "../math/XNAMathUINT.h"
+#include "Map.h"
 #include "ShaderStructuredBuffer.h"
 
 
@@ -96,7 +95,7 @@ public:
 
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
-	void SetElement(const UINT, const std::vector<tml::graphic::GroundModel2DBlock> &);
+	void SetElement(const UINT, const std::vector<tml::graphic::MapBlock> &);
 };
 }
 }

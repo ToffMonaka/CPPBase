@@ -15,52 +15,6 @@
 namespace tml {
 namespace graphic {
 /**
- * @brief MapTileÉNÉâÉX
- */
-class MapTile
-{
-friend class tml::graphic::Map;
-
-private:
-	UINT type_;
-
-private:
-	void Release(void);
-
-public:
-	MapTile();
-	virtual ~MapTile();
-
-	virtual void Init(void);
-
-	UINT GetType(void) const;
-};
-}
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-inline void tml::graphic::MapTile::Release(void)
-{
-	return;
-}
-
-
-/**
- * @brief GetTypeä÷êî
- * @return type (type)
- */
-inline UINT tml::graphic::MapTile::GetType(void) const
-{
-	return (this->type_);
-}
-
-
-namespace tml {
-namespace graphic {
-/**
  * @brief MapBlockÉNÉâÉX
  */
 class MapBlock
@@ -69,7 +23,7 @@ friend class tml::graphic::Map;
 
 private:
 	tml::XMUINT2EX tile_cnt_;
-	std::vector<tml::graphic::MapTile> tile_cont_;
+	std::vector<UINT> tile_type_cont_;
 
 private:
 	void Release(void);
@@ -81,8 +35,9 @@ public:
 	virtual void Init(void);
 
 	const tml::XMUINT2EX &GetTileCount(void) const;
-	const std::vector<tml::graphic::MapTile> &GetTileContainer(void) const;
-	const tml::graphic::MapTile *GetTile(const UINT, const UINT) const;
+	const std::vector<UINT> &GetTileTypeContainer(void) const;
+	const UINT *GetTileType(const UINT, const UINT) const;
+	const UINT *GetTileTypeFast(const UINT, const UINT) const;
 };
 }
 }
@@ -108,30 +63,43 @@ inline const tml::XMUINT2EX &tml::graphic::MapBlock::GetTileCount(void) const
 
 
 /**
- * @brief GetTileContainerä÷êî
- * @return tile_cont (tile_container)
+ * @brief GetTileTypeContainerä÷êî
+ * @return tile_type_cont (tile_type_container)
  */
-inline const std::vector<tml::graphic::MapTile> &tml::graphic::MapBlock::GetTileContainer(void) const
+inline const std::vector<UINT> &tml::graphic::MapBlock::GetTileTypeContainer(void) const
 {
-	return (this->tile_cont_);
+	return (this->tile_type_cont_);
 }
 
 
 /**
- * @brief GetTileä÷êî
+ * @brief GetTileTypeä÷êî
  * @param tile_index_x (tile_index_x)
  * @param tile_index_y (tile_index_y)
- * @return tile (tile)<br>
+ * @return tile_type (tile_type)<br>
  * nullptr=é∏îs
  */
-inline const tml::graphic::MapTile *tml::graphic::MapBlock::GetTile(const UINT tile_index_x, const UINT tile_index_y) const
+inline const UINT *tml::graphic::MapBlock::GetTileType(const UINT tile_index_x, const UINT tile_index_y) const
 {
 	if ((tile_index_x >= this->tile_cnt_.x)
 	|| (tile_index_y >= this->tile_cnt_.y)) {
 		return (nullptr);
 	}
 
-	return (&this->tile_cont_[tile_index_y * this->tile_cnt_.x + tile_index_x]);
+	return (&this->tile_type_cont_[tile_index_y * this->tile_cnt_.x + tile_index_x]);
+}
+
+
+/**
+ * @brief GetTileTypeFastä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @return tile_type (tile_type)<br>
+ * nullptr=é∏îs
+ */
+inline const UINT *tml::graphic::MapBlock::GetTileTypeFast(const UINT tile_index_x, const UINT tile_index_y) const
+{
+	return (&this->tile_type_cont_[tile_index_y * this->tile_cnt_.x + tile_index_x]);
 }
 
 
@@ -206,9 +174,14 @@ public:
 	INT Create(const tml::graphic::MapDesc &);
 
 	const tml::XMUINT2EX &GetTileCount(void) const;
+	const UINT *GetTileType(const UINT, const UINT) const;
+	const UINT *GetTileTypeFast(const UINT, const UINT) const;
+	void SetTileType(const UINT, const UINT, const UINT);
+	void SetTileTypeFast(const UINT, const UINT, const UINT);
 	const tml::XMUINT2EX &GetBlockCount(void) const;
 	const std::vector<tml::graphic::MapBlock> &GetBlockContainer(void) const;
 	const tml::graphic::MapBlock *GetBlock(const UINT, const UINT) const;
+	const tml::graphic::MapBlock *GetBlockFast(const UINT, const UINT) const;
 	const tml::XMUINT2EX &GetTilesetTileSize(void) const;
 	const tml::XMUINT2EX &GetTilesetTileCount(void) const;
 	const tml::shared_ptr<tml::graphic::Texture> &GetTexture(void);
@@ -233,6 +206,82 @@ inline void tml::graphic::Map::Release(void)
 inline const tml::XMUINT2EX &tml::graphic::Map::GetTileCount(void) const
 {
 	return (this->tile_cnt_);
+}
+
+
+/**
+ * @brief GetTileTypeä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @return tile_type (tile_type)<br>
+ * nullptr=é∏îs
+ */
+inline const UINT *tml::graphic::Map::GetTileType(const UINT tile_index_x, const UINT tile_index_y) const
+{
+	if ((tile_index_x >= this->tile_cnt_.x)
+	|| (tile_index_y >= this->tile_cnt_.y)) {
+		return (nullptr);
+	}
+
+	UINT block_index = (tile_index_y / 16U * this->block_cnt_.x) + (tile_index_x / 16U);
+	UINT block_tile_index = ((tile_index_y % 16U) * this->block_cont_[block_index].tile_cnt_.x) + (tile_index_x % 16U);
+
+	return (&this->block_cont_[block_index].tile_type_cont_[block_tile_index]);
+}
+
+
+/**
+ * @brief GetTileTypeFastä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @return tile_type (tile_type)<br>
+ * nullptr=é∏îs
+ */
+inline const UINT *tml::graphic::Map::GetTileTypeFast(const UINT tile_index_x, const UINT tile_index_y) const
+{
+	UINT block_index = (tile_index_y / 16U * this->block_cnt_.x) + (tile_index_x / 16U);
+	UINT block_tile_index = ((tile_index_y % 16U) * this->block_cont_[block_index].tile_cnt_.x) + (tile_index_x % 16U);
+
+	return (&this->block_cont_[block_index].tile_type_cont_[block_tile_index]);
+}
+
+
+/**
+ * @brief SetTileTypeä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @param tile_type (tile_type)
+ */
+inline void tml::graphic::Map::SetTileType(const UINT tile_index_x, const UINT tile_index_y, const UINT tile_type)
+{
+	if ((tile_index_x >= this->tile_cnt_.x)
+	|| (tile_index_y >= this->tile_cnt_.y)) {
+		return;
+	}
+
+	UINT block_index = (tile_index_y / 16U * this->block_cnt_.x) + (tile_index_x / 16U);
+	UINT block_tile_index = ((tile_index_y % 16U) * this->block_cont_[block_index].tile_cnt_.x) + (tile_index_x % 16U);
+
+	this->block_cont_[block_index].tile_type_cont_[block_tile_index] = tile_type;
+
+	return;
+}
+
+
+/**
+ * @brief SetTileTypeFastä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @param tile_type (tile_type)
+ */
+inline void tml::graphic::Map::SetTileTypeFast(const UINT tile_index_x, const UINT tile_index_y, const UINT tile_type)
+{
+	UINT block_index = (tile_index_y / 16U * this->block_cnt_.x) + (tile_index_x / 16U);
+	UINT block_tile_index = ((tile_index_y % 16U) * this->block_cont_[block_index].tile_cnt_.x) + (tile_index_x % 16U);
+
+	this->block_cont_[block_index].tile_type_cont_[block_tile_index] = tile_type;
+
+	return;
 }
 
 
@@ -270,6 +319,19 @@ inline const tml::graphic::MapBlock *tml::graphic::Map::GetBlock(const UINT bloc
 		return (nullptr);
 	}
 
+	return (&this->block_cont_[block_index_y * this->block_cnt_.x + block_index_x]);
+}
+
+
+/**
+ * @brief GetBlockFastä÷êî
+ * @param block_index_x (block_index_x)
+ * @param block_index_y (block_index_y)
+ * @return block (block)<br>
+ * nullptr=é∏îs
+ */
+inline const tml::graphic::MapBlock *tml::graphic::Map::GetBlockFast(const UINT block_index_x, const UINT block_index_y) const
+{
 	return (&this->block_cont_[block_index_y * this->block_cnt_.x + block_index_x]);
 }
 

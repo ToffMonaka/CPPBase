@@ -382,14 +382,13 @@ private:
 	tml::shared_ptr<tml::graphic::Texture> empty_tex_;
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
 	tml::shared_ptr<tml::graphic::Sampler> empty_samp_;
-	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_cont_;
+	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_ary_;
 
 private:
 	void Release(void);
 
 protected:
 	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	tml::graphic::ModelStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
 
 public:
@@ -428,7 +427,6 @@ public:
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSampler(const UINT);
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSamplerFast(const UINT);
 	void SetSampler(const UINT, const tml::shared_ptr<tml::graphic::Sampler> &);
-	UINT GetStageCount(void) const;
 	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &) = 0;
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
@@ -720,34 +718,11 @@ inline const tml::shared_ptr<tml::graphic::Sampler> &tml::graphic::Model::GetSam
 
 
 /**
- * @brief GetStageCountä÷êî
- * @return stage_cnt (stage_count)
- */
-inline UINT tml::graphic::Model::GetStageCount(void) const
-{
-	return (this->stage_cont_.size());
-}
-
-
-/**
  * @brief GetStageä÷êî
  * @param type (type)
- * @return stage (stage)<br>
- * nullptr=é∏îs
+ * @return stage (stage)
  */
 inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
-	return (this->stage_cont_[static_cast<UINT>(type)].get());
-}
-
-
-/**
- * @brief GetStageFastä÷êî
- * @param type (type)
- * @return stage (stage)<br>
- * nullptr=é∏îs
- */
-inline tml::graphic::ModelStage *tml::graphic::Model::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
-{
-	return (this->stage_cont_[static_cast<UINT>(type)].get());
+	return (this->stage_ary_[static_cast<UINT>(type)].get());
 }

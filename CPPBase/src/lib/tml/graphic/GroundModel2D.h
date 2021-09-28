@@ -6,8 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMathUINT.h"
-#include "../file/XMLFile.h"
+#include "Map.h"
 #include "Model2D.h"
 
 
@@ -111,39 +110,6 @@ inline void tml::graphic::GroundModel2DStage::SetLayer(const UINT index, tml::un
 namespace tml {
 namespace graphic {
 /**
- * @brief GroundModel2DBlockÉNÉâÉX
- */
-class GroundModel2DBlock
-{
-public:
-	tml::XMUINT2EX tile_count;
-	std::vector<UINT> tile_type_container;
-
-private:
-	void Release(void);
-
-public:
-	GroundModel2DBlock();
-	virtual ~GroundModel2DBlock();
-
-	virtual void Init(void);
-};
-}
-}
-
-
-/**
- * @brief Releaseä÷êî
- */
-inline void tml::graphic::GroundModel2DBlock::Release(void)
-{
-	return;
-}
-
-
-namespace tml {
-namespace graphic {
-/**
  * @brief GroundModel2DDescÉNÉâÉX
  */
 class GroundModel2DDesc : public tml::graphic::Model2DDesc
@@ -236,11 +202,7 @@ public:
 	static const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_ARRAY[tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT];
 
 private:
-	tml::XMUINT2EX tile_cnt_;
-	tml::XMUINT2EX block_cnt_;
-	std::vector<tml::graphic::GroundModel2DBlock> block_cont_;
-	tml::XMUINT2EX tileset_tile_size_;
-	tml::XMUINT2EX tileset_tile_cnt_;
+	tml::shared_ptr<tml::graphic::Map> map_;
 	tml::shared_ptr<tml::graphic::GroundModel2DShaderStructuredBuffer> ssb_;
 	tml::shared_ptr<tml::graphic::GroundModel2DLayerShaderStructuredBuffer> layer_ssb_;
 	tml::shared_ptr<tml::graphic::GroundModel2DBlockShaderStructuredBuffer> block_ssb_;
@@ -256,9 +218,13 @@ public:
 	INT Create(const tml::graphic::GroundModel2DDesc &);
 
 	tml::graphic::GroundModel2DStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
-	tml::graphic::GroundModel2DStage *GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::GroundModel2DStage> &);
 	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &);
+	const tml::XMUINT2EX &GetTileCount(void) const;
+	const UINT *GetTileType(const UINT, const UINT) const;
+	const UINT *GetTileTypeFast(const UINT, const UINT) const;
+	void SetTileType(const UINT, const UINT, const UINT);
+	void SetTileTypeFast(const UINT, const UINT, const UINT);
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
 
@@ -282,18 +248,6 @@ inline tml::graphic::GroundModel2DStage *tml::graphic::GroundModel2D::GetStage(c
 
 
 /**
- * @brief GetStageFastä÷êî
- * @param type (type)
- * @return stage (stage)<br>
- * nullptr=é∏îs
- */
-inline tml::graphic::GroundModel2DStage *tml::graphic::GroundModel2D::GetStageFast(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
-{
-	return (reinterpret_cast<tml::graphic::GroundModel2DStage *>(tml::graphic::Model2D::GetStageFast(type)));
-}
-
-
-/**
  * @brief SetStageä÷êî
  * @param type (type)
  * @param stage (stage)
@@ -303,6 +257,70 @@ inline void tml::graphic::GroundModel2D::SetStage(const tml::ConstantUtil::GRAPH
 	tml::unique_ptr<tml::graphic::ModelStage> tmp_stage = std::move(stage);
 
 	tml::graphic::Model2D::SetStage(type, tmp_stage);
+
+	return;
+}
+
+
+/**
+ * @brief GetTileCountä÷êî
+ * @return tile_cnt (tile_count)
+ */
+inline const tml::XMUINT2EX &tml::graphic::GroundModel2D::GetTileCount(void) const
+{
+	return (this->map_->GetTileCount());
+}
+
+
+/**
+ * @brief GetTileTypeä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @return tile_type (tile_type)<br>
+ * nullptr=é∏îs
+ */
+inline const UINT *tml::graphic::GroundModel2D::GetTileType(const UINT tile_index_x, const UINT tile_index_y) const
+{
+	return (this->map_->GetTileType(tile_index_x, tile_index_y));
+}
+
+
+/**
+ * @brief GetTileTypeFastä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @return tile_type (tile_type)<br>
+ * nullptr=é∏îs
+ */
+inline const UINT *tml::graphic::GroundModel2D::GetTileTypeFast(const UINT tile_index_x, const UINT tile_index_y) const
+{
+	return (this->map_->GetTileTypeFast(tile_index_x, tile_index_y));
+}
+
+
+/**
+ * @brief SetTileTypeä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @param tile_type (tile_type)
+ */
+inline void tml::graphic::GroundModel2D::SetTileType(const UINT tile_index_x, const UINT tile_index_y, const UINT tile_type)
+{
+	this->map_->SetTileType(tile_index_x, tile_index_y, tile_type);
+
+	return;
+}
+
+
+/**
+ * @brief SetTileTypeFastä÷êî
+ * @param tile_index_x (tile_index_x)
+ * @param tile_index_y (tile_index_y)
+ * @param tile_type (tile_type)
+ */
+inline void tml::graphic::GroundModel2D::SetTileTypeFast(const UINT tile_index_x, const UINT tile_index_y, const UINT tile_type)
+{
+	this->map_->SetTileTypeFast(tile_index_x, tile_index_y, tile_type);
 
 	return;
 }

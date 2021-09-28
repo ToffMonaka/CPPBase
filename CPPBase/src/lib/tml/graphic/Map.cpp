@@ -14,40 +14,6 @@
 /**
  * @brief コンストラクタ
  */
-tml::graphic::MapTile::MapTile() :
-	type_(0U)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::graphic::MapTile::~MapTile()
-{
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::graphic::MapTile::Init(void)
-{
-	this->Release();
-
-	this->type_ = 0U;
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
 tml::graphic::MapBlock::MapBlock() :
 	tile_cnt_(0U)
 {
@@ -74,7 +40,7 @@ void tml::graphic::MapBlock::Init(void)
 	this->Release();
 
 	this->tile_cnt_ = 0U;
-	this->tile_cont_.clear();
+	this->tile_type_cont_.clear();
 
 	return;
 }
@@ -301,13 +267,13 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 
 			block.tile_cnt_.x = (block_index_x == (this->block_cnt_.x - 1U)) ? this->tile_cnt_.x - (block_index_x * 16U) : 16U;
 			block.tile_cnt_.y = (block_index_y == (this->block_cnt_.y - 1U)) ? this->tile_cnt_.y - (block_index_y * 16U) : 16U;
-			block.tile_cont_.resize(block.tile_cnt_.x * block.tile_cnt_.y);
+			block.tile_type_cont_.resize(block.tile_cnt_.x * block.tile_cnt_.y);
 
 			for (UINT block_tile_index_y = 0U; block_tile_index_y < block.tile_cnt_.y; ++block_tile_index_y) {
 				for (UINT block_tile_index_x = 0U; block_tile_index_x < block.tile_cnt_.x; ++block_tile_index_x) {
-					auto &block_tile = block.tile_cont_[block_tile_index_y * block.tile_cnt_.x + block_tile_index_x];
+					auto &block_tile_type = block.tile_type_cont_[block_tile_index_y * block.tile_cnt_.x + block_tile_index_x];
 
-					block_tile.type_ = tile_type_cont[((block_index_y * 16U + block_tile_index_y) * this->tile_cnt_.x) + (block_index_x * 16U + block_tile_index_x)];
+					block_tile_type = tile_type_cont[((block_index_y * 16U + block_tile_index_y) * this->tile_cnt_.x) + (block_index_x * 16U + block_tile_index_x)];
 				}
 			}
 		}

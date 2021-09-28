@@ -26,7 +26,6 @@ private:
 public:
 	tml::shared_ptr<tml::graphic::Texture> background_texture;
 	tml::shared_ptr<tml::graphic::Texture> empty_background_texture;
-	tml::shared_ptr<tml::graphic::Font> common_font;
 	tml::shared_ptr<tml::graphic::Atlas> common_atlas;
 
 private:

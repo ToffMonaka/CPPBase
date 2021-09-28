@@ -5,7 +5,6 @@
 
 
 #include "GroundModel2D.h"
-#include "../string/StringUtil.h"
 #include "Manager.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
@@ -155,41 +154,6 @@ INT tml::graphic::GroundModel2DStage::Create(tml::graphic::Manager *mgr)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::GroundModel2DBlock::GroundModel2DBlock() :
-	tile_count(0U)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::graphic::GroundModel2DBlock::~GroundModel2DBlock()
-{
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::graphic::GroundModel2DBlock::Init(void)
-{
-	this->Release();
-
-	this->tile_count = 0U;
-	this->tile_type_container.clear();
-
-	return;
-}
-
-
-/**
- * @brief コンストラクタ
- */
 tml::graphic::GroundModel2DDesc::GroundModel2DDesc()
 {
 	return;
@@ -255,11 +219,7 @@ INT tml::graphic::GroundModel2DDesc::ReadValue(const tml::INIFile &conf_file)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::GroundModel2D::GroundModel2D() :
-	tile_cnt_(0U),
-	block_cnt_(0U),
-	tileset_tile_size_(0U),
-	tileset_tile_cnt_(0U)
+tml::graphic::GroundModel2D::GroundModel2D()
 {
 	return;
 }
@@ -292,11 +252,7 @@ void tml::graphic::GroundModel2D::Init(void)
 {
 	this->Release();
 
-	this->tile_cnt_ = 0U;
-	this->block_cnt_ = 0U;
-	this->block_cont_.clear();
-	this->tileset_tile_size_ = 0U;
-	this->tileset_tile_cnt_ = 0U;
+	this->map_.reset();
 	this->ssb_.reset();
 	this->layer_ssb_.reset();
 	this->block_ssb_.reset();
@@ -327,169 +283,18 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 
 	auto map_file_read_desc_dat = desc.map_file_read_desc.GetDataByParent();
 
-	tml::XMLFile map_file;
+	{// Map Create
+		tml::graphic::MapDesc map_desc;
 
-	map_file.read_desc.parent_data = map_file_read_desc_dat;
+		map_desc.SetManager(this->GetManager());
+		map_desc.map_file_read_desc.parent_data = map_file_read_desc_dat;
+		map_desc.map_directory_path = desc.map_directory_path;
 
-	if (map_file.Read() < 0) {
-		this->Init();
-
-		return (-1);
-	}
-
-	auto &map_file_root_node = map_file.data.GetRootNode();
-
-	if (map_file_root_node->GetChildNodeContainer().empty()) {
-		this->Init();
-
-		return (-1);
-	}
-
-	auto &map_file_map_node = map_file_root_node->GetChildNode(L"map");
-
-	if (map_file_map_node == nullptr) {
-		this->Init();
-
-		return (-1);
-	}
-
-	auto &map_file_tileset_node = map_file_root_node->GetChildNode(L"tileset");
-
-	if (map_file_tileset_node == nullptr) {
-		this->Init();
-
-		return (-1);
-	}
-
-	auto &map_file_img_node = map_file_root_node->GetChildNode(L"image");
-
-	if (map_file_img_node == nullptr) {
-		this->Init();
-
-		return (-1);
-	}
-
-	auto &map_file_dat_node = map_file_root_node->GetChildNode(L"data");
-
-	if (map_file_dat_node == nullptr) {
-		this->Init();
-
-		return (-1);
-	}
-
-	const std::wstring *val = nullptr;
-
-	val = map_file_map_node->GetValue(L"width");
-
-	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->tile_cnt_.x, val->c_str());
-	} else {
-		this->Init();
-
-		return (-1);
-	}
-
-	val = map_file_map_node->GetValue(L"height");
-
-	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->tile_cnt_.y, val->c_str());
-	} else {
-		this->Init();
-
-		return (-1);
-	}
-
-	std::vector<UINT> tile_type_cont;
-	std::vector<std::wstring> tile_type_str_cont;
-
-	tml::StringUtil::Split(tile_type_str_cont, map_file_dat_node->string.c_str(), L",");
-
-	tile_type_cont.resize(tile_type_str_cont.size());
-
-	for (size_t val_i = 0U; val_i < tile_type_str_cont.size(); ++val_i) {
-		tml::StringUtil::GetValue(tile_type_cont[val_i], tile_type_str_cont[val_i].c_str());
-	}
-
-	this->block_cnt_.x = static_cast<UINT>(std::ceil(static_cast<FLOAT>(this->tile_cnt_.x) / 16.0f));
-	this->block_cnt_.y = static_cast<UINT>(std::ceil(static_cast<FLOAT>(this->tile_cnt_.y) / 16.0f));
-	this->block_cont_.resize(this->block_cnt_.x * this->block_cnt_.y);
-
-	for (UINT block_index_y = 0U; block_index_y < this->block_cnt_.y; ++block_index_y) {
-		for (UINT block_index_x = 0U; block_index_x < this->block_cnt_.x; ++block_index_x) {
-			auto &block = this->block_cont_[block_index_y * this->block_cnt_.x + block_index_x];
-
-			block.tile_count.x = (block_index_x == (this->block_cnt_.x - 1U)) ? this->tile_cnt_.x - (block_index_x * 16U) : 16U;
-			block.tile_count.y = (block_index_y == (this->block_cnt_.y - 1U)) ? this->tile_cnt_.y - (block_index_y * 16U) : 16U;
-			block.tile_type_container.resize(block.tile_count.x * block.tile_count.y);
-
-			for (UINT block_tile_index_y = 0U; block_tile_index_y < block.tile_count.y; ++block_tile_index_y) {
-				for (UINT block_tile_index_x = 0U; block_tile_index_x < block.tile_count.x; ++block_tile_index_x) {
-					auto &block_tile_type = block.tile_type_container[block_tile_index_y * block.tile_count.x + block_tile_index_x];
-
-					block_tile_type = tile_type_cont[((block_index_y * 16U + block_tile_index_y) * this->tile_cnt_.x) + (block_index_x * 16U + block_tile_index_x)];
-				}
-			}
-		}
-	}
-
-	val = map_file_tileset_node->GetValue(L"tilewidth");
-
-	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->tileset_tile_size_.x, val->c_str());
-	} else {
-		this->Init();
-
-		return (-1);
-	}
-
-	val = map_file_tileset_node->GetValue(L"tileheight");
-
-	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->tileset_tile_size_.y, val->c_str());
-	} else {
-		this->Init();
-
-		return (-1);
-	}
-
-	val = map_file_tileset_node->GetValue(L"columns");
-
-	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->tileset_tile_cnt_.x, val->c_str());
-	} else {
-		this->Init();
-
-		return (-1);
-	}
-
-	val = map_file_tileset_node->GetValue(L"tilecount");
-
-	if (val != nullptr) {
-		tml::StringUtil::GetValue(this->tileset_tile_cnt_.y, val->c_str());
-
-		this->tileset_tile_cnt_.y /= this->tileset_tile_cnt_.x;
-	} else {
-		this->Init();
-
-		return (-1);
-	}
-
-	tml::BinaryFileReadDescData tile_img_file_read_desc_dat;
-
-	if (img_file_read_desc_dat->IsEmpty()) {
-		val = map_file_img_node->GetValue(L"source");
-
-		if (val != nullptr) {
-			tile_img_file_read_desc_dat.file_path = desc.map_directory_path;
-			tile_img_file_read_desc_dat.file_path += L"/";
-			tile_img_file_read_desc_dat.file_path += (*val);
-		} else {
+		if (this->GetManager()->GetResource<tml::graphic::Map>(this->map_, map_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
-
-		img_file_read_desc_dat = &tile_img_file_read_desc_dat;
 	}
 
 	tml::XMFLOAT2EX size;
@@ -587,16 +392,16 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 				UINT block_index = 0U;
 				UINT block_tile_index = 0U;
 
-				vb_element_cont.resize(base_vb_element_ary.size() * this->tile_cnt_.x * this->tile_cnt_.y);
-				ib_element_cont.resize(base_ib_element_ary.size() * this->tile_cnt_.x * this->tile_cnt_.y);
+				vb_element_cont.resize(base_vb_element_ary.size() * this->map_->GetTileCount().x * this->map_->GetTileCount().y);
+				ib_element_cont.resize(base_ib_element_ary.size() * this->map_->GetTileCount().x * this->map_->GetTileCount().y);
 
-				for (UINT tile_index_y = 0U; tile_index_y < this->tile_cnt_.y; ++tile_index_y) {
-					for (UINT tile_index_x = 0U; tile_index_x < this->tile_cnt_.x; ++tile_index_x) {
-						tile_index = (tile_index_y * this->tile_cnt_.x) + (tile_index_x);
-						tile_pos_x = static_cast<FLOAT>(tile_index_x) - static_cast<FLOAT>(this->tile_cnt_.x) * 0.5f;
-						tile_pos_y = -static_cast<FLOAT>(tile_index_y) + static_cast<FLOAT>(this->tile_cnt_.y) * 0.5f;
-						block_index = (tile_index_y / 16U * this->block_cnt_.x) + (tile_index_x / 16U);
-						block_tile_index = ((tile_index_y % 16U) * this->block_cont_[block_index].tile_count.x) + (tile_index_x % 16U);
+				for (UINT tile_index_y = 0U; tile_index_y < this->map_->GetTileCount().y; ++tile_index_y) {
+					for (UINT tile_index_x = 0U; tile_index_x < this->map_->GetTileCount().x; ++tile_index_x) {
+						tile_index = (tile_index_y * this->map_->GetTileCount().x) + (tile_index_x);
+						tile_pos_x = static_cast<FLOAT>(tile_index_x) - static_cast<FLOAT>(this->map_->GetTileCount().x) * 0.5f;
+						tile_pos_y = -static_cast<FLOAT>(tile_index_y) + static_cast<FLOAT>(this->map_->GetTileCount().y) * 0.5f;
+						block_index = (tile_index_y / 16U * this->map_->GetBlockCount().x) + (tile_index_x / 16U);
+						block_tile_index = ((tile_index_y % 16U) * this->map_->GetBlockContainer()[block_index].GetTileCount().x) + (tile_index_x % 16U);
 
 						for (UINT base_vb_element_i = 0U; base_vb_element_i < base_vb_element_ary.size(); ++base_vb_element_i) {
 							auto &vb_element = vb_element_cont[tile_index * base_vb_element_ary.size() + base_vb_element_i];
@@ -649,7 +454,21 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 
 				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
 			} else {
-				this->SetTexture(layer->GetDiffuseTextureIndex(), tml::shared_ptr<tml::graphic::Texture>());
+				if (this->map_->GetTexture() != nullptr) {
+					tml::shared_ptr<tml::graphic::Texture> tex;
+
+					if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, this->map_->GetTexture()) == nullptr) {
+						this->Init();
+
+						return (-1);
+					}
+
+					this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
+
+					size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSizeFast(0U)->x), static_cast<FLOAT>(tex->GetSizeFast(0U)->y));
+				} else {
+					this->SetTexture(layer->GetDiffuseTextureIndex(), tml::shared_ptr<tml::graphic::Texture>());
+				}
 			}
 
 			{// DiffuseSampler Create
@@ -670,7 +489,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
 	}
 
-	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->tileset_tile_size_.x * this->tile_cnt_.x), static_cast<FLOAT>(this->tileset_tile_size_.y * this->tile_cnt_.y));
+	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->map_->GetTilesetTileSize().x * this->map_->GetTileCount().x), static_cast<FLOAT>(this->map_->GetTilesetTileSize().y * this->map_->GetTileCount().y));
 
 	if (desc.size_flag) {
 		this->size = desc.size;
@@ -708,7 +527,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc ssb_desc;
 
 		ssb_desc.SetManager(this->GetManager());
-		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT), this->block_cont_.size());
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT), this->map_->GetBlockContainer().size());
 
 		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DBlockShaderStructuredBuffer>(this->block_ssb_, ssb_desc) == nullptr) {
 			this->Init();
@@ -728,8 +547,8 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
  */
 DirectX::XMMATRIX &tml::graphic::GroundModel2D::GetWorldMatrix(DirectX::XMMATRIX &dst_mat)
 {
-	auto scale_x = this->size.x / static_cast<FLOAT>(this->tile_cnt_.x) * this->scale.x;
-	auto scale_y = this->size.y / static_cast<FLOAT>(this->tile_cnt_.y) * this->scale.y;
+	auto scale_x = this->size.x / static_cast<FLOAT>(this->map_->GetTileCount().x) * this->scale.x;
+	auto scale_y = this->size.y / static_cast<FLOAT>(this->map_->GetTileCount().y) * this->scale.y;
 
 	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale_x, scale_y, 0.0f, 0.0f), DirectX::g_XMZero, this->position.GetAngle(), DirectX::XMVectorSet(this->position.GetX(), this->position.GetY(), 0.0f, 0.0f));
 
@@ -766,20 +585,20 @@ bool tml::graphic::GroundModel2D::IsHitByMouseDevice(const tml::XMINT2EX &mouse_
  */
 void tml::graphic::GroundModel2D::DrawStageInit(void)
 {
-	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 	auto layer = stage->GetLayerFast(0U);
 
 	DirectX::XMMATRIX w_mat;
 
 	this->GetWorldMatrix(w_mat);
 
-	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix, this->GetManager()->GetDrawStageData()->projection_matrix, this->color, this->tileset_tile_cnt_);
+	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix, this->GetManager()->GetDrawStageData()->projection_matrix, this->color, this->map_->GetTilesetTileCount());
 	this->ssb_->UploadCPUBuffer();
 
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
 	this->layer_ssb_->UploadCPUBuffer();
 
-	this->block_ssb_->SetElement(0U, this->block_cont_);
+	this->block_ssb_->SetElement(0U, this->map_->GetBlockContainer());
 	this->block_ssb_->UploadCPUBuffer();
 
 	return;
@@ -791,7 +610,7 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
  */
 void tml::graphic::GroundModel2D::DrawStageForward2D(void)
 {
-	auto stage = this->GetStageFast(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
+	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 	auto layer = stage->GetLayerFast(0U);
 
 	std::array<tml::graphic::ShaderStructuredBuffer *, 3U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get(), this->block_ssb_.get()};

@@ -100,7 +100,7 @@ INT tml::graphic::GroundModel2DBlockShaderStructuredBuffer::Create(const tml::gr
  * @param index (index)
  * @param block_cont (block_container)
  */
-void tml::graphic::GroundModel2DBlockShaderStructuredBuffer::SetElement(const UINT index, const std::vector<tml::graphic::GroundModel2DBlock> &block_cont)
+void tml::graphic::GroundModel2DBlockShaderStructuredBuffer::SetElement(const UINT index, const std::vector<tml::graphic::MapBlock> &block_cont)
 {
 	for (UINT block_i = 0U; block_i < block_cont.size(); ++block_i) {
 		auto element = this->GetElement(index + block_i);
@@ -111,8 +111,8 @@ void tml::graphic::GroundModel2DBlockShaderStructuredBuffer::SetElement(const UI
 
 		auto &block = block_cont[block_i];
 
-		element->tile_count = block.tile_count;
-		tml::Copy(element->tile_type_array, block.tile_type_container.data(), block.tile_type_container.size());
+		element->tile_count = block.GetTileCount();
+		tml::Copy(element->tile_type_array, block.GetTileTypeContainer().data(), block.GetTileTypeContainer().size());
 	}
 
 	return;
