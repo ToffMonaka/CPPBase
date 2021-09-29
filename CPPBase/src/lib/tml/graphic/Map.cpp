@@ -47,6 +47,24 @@ void tml::graphic::MapBlock::Init(void)
 
 
 /**
+ * @brief Create関数
+ * @param tile_cnt (tile_count)
+ * @param tile_type_cont (tile_type_container)
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::MapBlock::Create(const tml::XMUINT2EX &tile_cnt, const std::vector<UINT> &tile_type_cont)
+{
+	this->Init();
+
+	this->tile_cnt_ = tile_cnt;
+	this->tile_type_cont_ = tile_type_cont;
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::MapDesc::MapDesc() :
@@ -253,7 +271,7 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 
 	tile_type_cont.resize(tile_type_str_cont.size());
 
-	for (size_t val_i = 0U; val_i < tile_type_str_cont.size(); ++val_i) {
+	for (size_t val_i = 0U, val_end_i = tile_type_str_cont.size(); val_i < val_end_i; ++val_i) {
 		tml::StringUtil::GetValue(tile_type_cont[val_i], tile_type_str_cont[val_i].c_str());
 	}
 
@@ -261,16 +279,16 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 	this->block_cnt_.y = static_cast<UINT>(std::ceil(static_cast<FLOAT>(this->tile_cnt_.y) / 16.0f));
 	this->block_cont_.resize(this->block_cnt_.x * this->block_cnt_.y);
 
-	for (UINT block_index_y = 0U; block_index_y < this->block_cnt_.y; ++block_index_y) {
-		for (UINT block_index_x = 0U; block_index_x < this->block_cnt_.x; ++block_index_x) {
+	for (UINT block_index_y = 0U, block_index_end_y = this->block_cnt_.y; block_index_y < block_index_end_y; ++block_index_y) {
+		for (UINT block_index_x = 0U, block_index_end_x = this->block_cnt_.x; block_index_x < block_index_end_x; ++block_index_x) {
 			auto &block = this->block_cont_[block_index_y * this->block_cnt_.x + block_index_x];
 
 			block.tile_cnt_.x = (block_index_x == (this->block_cnt_.x - 1U)) ? this->tile_cnt_.x - (block_index_x * 16U) : 16U;
 			block.tile_cnt_.y = (block_index_y == (this->block_cnt_.y - 1U)) ? this->tile_cnt_.y - (block_index_y * 16U) : 16U;
 			block.tile_type_cont_.resize(block.tile_cnt_.x * block.tile_cnt_.y);
 
-			for (UINT block_tile_index_y = 0U; block_tile_index_y < block.tile_cnt_.y; ++block_tile_index_y) {
-				for (UINT block_tile_index_x = 0U; block_tile_index_x < block.tile_cnt_.x; ++block_tile_index_x) {
+			for (UINT block_tile_index_y = 0U, block_tile_index_end_y = block.tile_cnt_.y; block_tile_index_y < block_tile_index_end_y; ++block_tile_index_y) {
+				for (UINT block_tile_index_x = 0U, block_tile_index_end_x = block.tile_cnt_.x; block_tile_index_x < block_tile_index_end_x; ++block_tile_index_x) {
 					auto &block_tile_type = block.tile_type_cont_[block_tile_index_y * block.tile_cnt_.x + block_tile_index_x];
 
 					block_tile_type = tile_type_cont[((block_index_y * 16U + block_tile_index_y) * this->tile_cnt_.x) + (block_index_x * 16U + block_tile_index_x)];

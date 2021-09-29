@@ -34,6 +34,7 @@ public:
 	virtual ~AtlasRect();
 
 	virtual void Init(void);
+	INT Create(const WCHAR *, const tml::XMUINT2EX &, const tml::XMUINT2EX &);
 
 	const std::wstring &GetName(void) const;
 	const tml::XMUINT2EX &GetPosition(void) const;

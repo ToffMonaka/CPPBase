@@ -17,8 +17,7 @@ namespace graphic {
  */
 class FontBitmap
 {
-public: FontBitmap(const tml::graphic::FontBitmap &) = delete;
-public: tml::graphic::FontBitmap &operator =(const tml::graphic::FontBitmap &) = delete;
+friend class tml::graphic::Font;
 
 private:
 	WCHAR code_;
@@ -139,7 +138,7 @@ private:
 	HFONT font_handle_;
 	LOGFONT font_desc_;
 	TEXTMETRIC tm_;
-	std::map<WCHAR, tml::unique_ptr<tml::graphic::FontBitmap>> bm_cont_;
+	std::map<WCHAR, tml::graphic::FontBitmap> bm_cont_;
 
 private:
 	void Release(void);

@@ -84,7 +84,7 @@ INT tml::graphic::FontBitmap::Create(const HDC dc_handle, const WCHAR code)
 	this->buf_.SetSize(buf.GetLength() << 2);
 	this->buf_.AddWriteIndex(this->buf_.GetSize());
 
-	for (size_t buf_i = 0U; buf_i < buf.GetLength(); ++buf_i) {
+	for (size_t buf_i = 0U, buf_end_i = buf.GetLength(); buf_i < buf_end_i; ++buf_i) {
 		UINT a = (255U * static_cast<UINT>(buf.Get()[buf_i]) >> 4) & 0xFF;
 
 		reinterpret_cast<UINT *>(this->buf_.Get())[buf_i] = 0x00FFFFFFU | (a << 24);
@@ -300,16 +300,16 @@ const tml::graphic::FontBitmap *tml::graphic::Font::GetBitmap(const WCHAR code)
 	auto bm_itr = this->bm_cont_.find(code);
 
 	if (bm_itr == this->bm_cont_.end()) {
-		auto bm = tml::make_unique<tml::graphic::FontBitmap>(1U);
+		tml::graphic::FontBitmap bm;
 
-		if (bm->Create(this->dc_handle_, code) < 0) {
+		if (bm.Create(this->dc_handle_, code) < 0) {
 			return (nullptr);
 		}
 
-		auto insert_result = this->bm_cont_.insert(std::make_pair(code, std::move(bm)));
+		auto insert_result = this->bm_cont_.emplace(code, bm);
 
-		return (insert_result.first->second.get());
+		return (&insert_result.first->second);
 	}
 
-	return (bm_itr->second.get());
+	return (&bm_itr->second);
 }

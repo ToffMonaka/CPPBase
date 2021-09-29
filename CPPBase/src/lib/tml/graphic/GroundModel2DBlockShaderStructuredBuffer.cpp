@@ -98,11 +98,13 @@ INT tml::graphic::GroundModel2DBlockShaderStructuredBuffer::Create(const tml::gr
 /**
  * @brief SetElementä÷êî
  * @param index (index)
- * @param block_cont (block_container)
+ * @param map (map)
  */
-void tml::graphic::GroundModel2DBlockShaderStructuredBuffer::SetElement(const UINT index, const std::vector<tml::graphic::MapBlock> &block_cont)
+void tml::graphic::GroundModel2DBlockShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Map *map)
 {
-	for (UINT block_i = 0U; block_i < block_cont.size(); ++block_i) {
+	auto &block_cont = map->GetBlockContainer();
+
+	for (UINT block_i = 0U, block_end_i = block_cont.size(); block_i < block_end_i; ++block_i) {
 		auto element = this->GetElement(index + block_i);
 
 		if (element == nullptr) {

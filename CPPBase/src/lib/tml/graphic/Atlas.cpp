@@ -49,6 +49,32 @@ void tml::graphic::AtlasRect::Init(void)
 
 
 /**
+ * @brief Create関数
+ * @param name (name)
+ * @param pos (position)
+ * @param size (size)
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::AtlasRect::Create(const WCHAR *name, const tml::XMUINT2EX &pos, const tml::XMUINT2EX &size)
+{
+	if (name == nullptr) {
+		this->Init();
+
+		return (-1);
+	}
+
+	this->Init();
+
+	this->name_ = name;
+	this->pos_ = pos;
+	this->size_ = size;
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::graphic::AtlasDesc::AtlasDesc() :
@@ -298,7 +324,7 @@ INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
 
 		--node_itr;
 
-		this->rect_cont_.insert(std::make_pair(rect.name_, rect));
+		this->rect_cont_.emplace(rect.name_, rect);
 	}
 
 	std::wstring img_file_path;

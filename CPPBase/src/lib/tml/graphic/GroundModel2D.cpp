@@ -527,7 +527,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc ssb_desc;
 
 		ssb_desc.SetManager(this->GetManager());
-		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT), this->map_->GetBlockContainer().size());
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT), this->map_->GetBlockCount().x * this->map_->GetBlockCount().y);
 
 		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DBlockShaderStructuredBuffer>(this->block_ssb_, ssb_desc) == nullptr) {
 			this->Init();
@@ -598,7 +598,7 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
 	this->layer_ssb_->UploadCPUBuffer();
 
-	this->block_ssb_->SetElement(0U, this->map_->GetBlockContainer());
+	this->block_ssb_->SetElement(0U, this->map_.get());
 	this->block_ssb_->UploadCPUBuffer();
 
 	return;

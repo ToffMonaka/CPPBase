@@ -33,6 +33,7 @@ public:
 	virtual ~MapBlock();
 
 	virtual void Init(void);
+	INT Create(const tml::XMUINT2EX &, const std::vector<UINT> &);
 
 	const tml::XMUINT2EX &GetTileCount(void) const;
 	const std::vector<UINT> &GetTileTypeContainer(void) const;
