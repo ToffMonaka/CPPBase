@@ -11,6 +11,7 @@
 #include "../math/XNAMathUINT.h"
 #include "../math/XNAMathFLOAT.h"
 #include "ManagerResource.h"
+#include "Font.h"
 
 
 namespace tml {
@@ -79,7 +80,8 @@ public:
 private:
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;
-	std::vector<tml::XMUINT2EX> size_cont_;
+	tml::XMUINT2EX size_;
+	std::vector<tml::XMUINT2EX> mm_size_cont_;
 	std::vector<tml::DynamicBuffer> cpu_buf_cont_;
 	std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont_;
 	std::vector<tml::DynamicBuffer> clear_cpu_buf_cont_;
@@ -101,9 +103,11 @@ public:
 
 	ID3D11Texture2D *GetTexture(void);
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
-	UINT GetSizeCount(void) const;
-	const tml::XMUINT2EX *GetSize(const UINT) const;
-	const tml::XMUINT2EX *GetSizeFast(const UINT) const;
+	const tml::XMUINT2EX &GetSize(void) const;
+	UINT GetMipmapCount(void) const;
+	const std::vector<tml::XMUINT2EX> &GetMipmapSizeContainer(void) const;
+	const tml::XMUINT2EX *GetMipmapSize(const UINT) const;
+	const tml::XMUINT2EX *GetMipmapSizeFast(const UINT) const;
 	UINT GetCPUBufferCount(void) const;
 	tml::DynamicBuffer *GetCPUBuffer(const UINT, const UINT);
 	tml::DynamicBuffer *GetCPUBufferFast(const UINT, const UINT);
@@ -146,40 +150,60 @@ inline const CD3D11_TEXTURE2D_DESC &tml::graphic::Texture::GetTextureDesc(void) 
 
 
 /**
- * @brief GetSizeCountä÷êî
- * @return size_cnt (size_count)
+ * @brief GetSizeä÷êî
+ * @return size (size)
  */
-inline UINT tml::graphic::Texture::GetSizeCount(void) const
+inline const tml::XMUINT2EX &tml::graphic::Texture::GetSize(void) const
 {
-	return (this->size_cont_.size());
+	return (this->size_);
 }
 
 
 /**
- * @brief GetSizeä÷êî
+ * @brief GetMipmapCountä÷êî
+ * @return mm_cnt (mm_cnt)
+ */
+inline UINT tml::graphic::Texture::GetMipmapCount(void) const
+{
+	return (this->mm_size_cont_.size());
+}
+
+
+/**
+ * @brief GetMipmapSizeContainerä÷êî
+ * @return mm_size_cont (mm_size_container)
+ */
+inline const std::vector<tml::XMUINT2EX> &tml::graphic::Texture::GetMipmapSizeContainer(void) const
+{
+	return (this->mm_size_cont_);
+}
+
+
+/**
+ * @brief GetMipmapSizeä÷êî
  * @param mm_index (mipmap_index)
  * @return size (size)<br>
  * nullptr=é∏îs
  */
-inline const tml::XMUINT2EX *tml::graphic::Texture::GetSize(const UINT mm_index) const
+inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSize(const UINT mm_index) const
 {
-	if (mm_index >= this->size_cont_.size()) {
+	if (mm_index >= this->mm_size_cont_.size()) {
 		return (nullptr);
 	}
 
-	return (&this->size_cont_[mm_index]);
+	return (&this->mm_size_cont_[mm_index]);
 }
 
 
 /**
- * @brief GetSizeFastä÷êî
+ * @brief GetMipmapSizeFastä÷êî
  * @param mm_index (mipmap_index)
  * @return size (size)<br>
  * nullptr=é∏îs
  */
-inline const tml::XMUINT2EX *tml::graphic::Texture::GetSizeFast(const UINT mm_index) const
+inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSizeFast(const UINT mm_index) const
 {
-	return (&this->size_cont_[mm_index]);
+	return (&this->mm_size_cont_[mm_index]);
 }
 
 

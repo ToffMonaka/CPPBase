@@ -177,13 +177,12 @@ void tml::graphic::Canvas2D::Draw(void)
 	if (this->draw_camera_ != nullptr) {
 		auto rt_tex = this->GetRenderTargetTexture().get();
 		auto rt_tex_clear_flg = this->GetRenderTargetTextureClearFlag();
-		auto rt_tex_size = rt_tex->GetSizeFast(0U);
 		auto vp = &this->vp_;
 
-		vp->SetX(static_cast<FLOAT>(rt_tex_size->x) * this->GetViewportX());
-		vp->SetY(static_cast<FLOAT>(rt_tex_size->y) * this->GetViewportY());
-		vp->SetWidth(static_cast<FLOAT>(rt_tex_size->x) * this->GetViewportWidth());
-		vp->SetHeight(static_cast<FLOAT>(rt_tex_size->y) * this->GetViewportHeight());
+		vp->SetX(static_cast<FLOAT>(rt_tex->GetSize().x) * this->GetViewportX());
+		vp->SetY(static_cast<FLOAT>(rt_tex->GetSize().y) * this->GetViewportY());
+		vp->SetWidth(static_cast<FLOAT>(rt_tex->GetSize().x) * this->GetViewportWidth());
+		vp->SetHeight(static_cast<FLOAT>(rt_tex->GetSize().y) * this->GetViewportHeight());
 
 		DirectX::XMMATRIX v_mat;
 		DirectX::XMMATRIX inv_v_mat;

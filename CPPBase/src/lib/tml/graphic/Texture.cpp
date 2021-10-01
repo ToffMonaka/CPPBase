@@ -6,7 +6,6 @@
 
 #include "Texture.h"
 #include "Manager.h"
-#include "Font.h"
 
 
 /**
@@ -143,11 +142,15 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
 tml::graphic::Texture::Texture() :
 	tex_(nullptr),
 	tex_desc_(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
+	size_(0U),
 	rt_(nullptr),
 	dt_(nullptr),
 	sr_(nullptr),
 	uasr_(nullptr)
 {
+	this->mm_size_cont_.resize(1U);
+	this->mm_size_cont_[0] = this->size_;
+
 	return;
 }
 
@@ -210,7 +213,9 @@ void tml::graphic::Texture::Init(void)
 	this->Release();
 
 	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
-	this->size_cont_.clear();
+	this->size_ = 0U;
+	this->mm_size_cont_.resize(1U);
+	this->mm_size_cont_[0] = this->size_;
 	this->cpu_buf_cont_.clear();
 	this->msr_cont_.clear();
 	this->clear_cpu_buf_cont_.clear();
@@ -355,7 +360,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 			tex = nullptr;
 
-			for (size_t cpu_buf_i = 0U; cpu_buf_i < cpu_buf_cont.size(); ++cpu_buf_i) {
+			for (size_t cpu_buf_i = 0U, cpu_buf_end_i = cpu_buf_cont.size(); cpu_buf_i < cpu_buf_end_i; ++cpu_buf_i) {
 				D3D11_SUBRESOURCE_DATA srd = {};
 
 				srd.pSysMem = cpu_buf_cont[cpu_buf_i].Get();
@@ -434,15 +439,17 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 	this->tex_->GetDesc(&this->tex_desc_);
 
-	tml::XMUINT2EX tmp_size(this->tex_desc_.Width, this->tex_desc_.Height);
+	this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
 
-	this->size_cont_.resize(this->tex_desc_.MipLevels);
+	this->mm_size_cont_.resize(this->tex_desc_.MipLevels);
 
-	for (auto &size : this->size_cont_) {
-		size = tmp_size;
+	auto tmp_mm_size = this->size_;
 
-		tmp_size.x = (tmp_size.x > 1U) ? (tmp_size.x >> 1) : 1U;
-		tmp_size.y = (tmp_size.y > 1U) ? (tmp_size.y >> 1) : 1U;
+	for (auto &mm_size : this->mm_size_cont_) {
+		mm_size = tmp_mm_size;
+
+		tmp_mm_size.x = (tmp_mm_size.x > 1U) ? (tmp_mm_size.x >> 1) : 1U;
+		tmp_mm_size.y = (tmp_mm_size.y > 1U) ? (tmp_mm_size.y >> 1) : 1U;
 	}
 
 	if (desc.cpu_buffer_flag) {
@@ -458,13 +465,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 		this->clear_cpu_buf_cont_.resize(this->cpu_buf_cont_.size());
 
-		for(size_t cpu_buf_i = 0U; cpu_buf_i < this->cpu_buf_cont_.size(); ++cpu_buf_i){
-			this->clear_cpu_buf_cont_[cpu_buf_i] = this->cpu_buf_cont_[cpu_buf_i];
-
+		for(size_t cpu_buf_i = 0U, cpu_buf_end_i = this->cpu_buf_cont_.size(); cpu_buf_i < cpu_buf_end_i; ++cpu_buf_i){
 			auto &clear_cpu_buf = this->clear_cpu_buf_cont_[cpu_buf_i];
-			auto pixel_cnt = clear_cpu_buf.GetLength() >> 2;
 
-			for (size_t pixel_i = 0U; pixel_i < pixel_cnt; ++pixel_i) {
+			clear_cpu_buf = this->cpu_buf_cont_[cpu_buf_i];
+
+			for (size_t pixel_i = 0U, pixel_end_i = clear_cpu_buf.GetLength() >> 2; pixel_i < pixel_end_i; ++pixel_i) {
 				reinterpret_cast<UINT *>(clear_cpu_buf.Get())[pixel_i] = 0U;
 			}
 		}
@@ -727,7 +733,7 @@ void tml::graphic::Texture::ClearCPUBuffer(void)
 		return;
 	}
 
-	for(size_t cpu_buf_i = 0U; cpu_buf_i < this->cpu_buf_cont_.size(); ++cpu_buf_i){
+	for(size_t cpu_buf_i = 0U, cpu_buf_end_i = this->cpu_buf_cont_.size(); cpu_buf_i < cpu_buf_end_i; ++cpu_buf_i){
 		memcpy(this->cpu_buf_cont_[cpu_buf_i].Get(), this->clear_cpu_buf_cont_[cpu_buf_i].Get(), this->clear_cpu_buf_cont_[cpu_buf_i].GetLength());
 	}
 
@@ -760,8 +766,8 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::Con
 	LONG str_line_max_w = 0L;
 	tml::XMINT2EX tmp_pos;
 	UINT *buf = reinterpret_cast<UINT *>(this->cpu_buf_cont_[0].Get());
-	LONG buf_w = static_cast<LONG>(this->size_cont_[0].x);
-	LONG buf_h = static_cast<LONG>(this->size_cont_[0].y);
+	LONG buf_w = static_cast<LONG>(this->size_.x);
+	LONG buf_h = static_cast<LONG>(this->size_.y);
 	LONG buf_x = 0L;
 	LONG buf_y = 0L;
 	LONG buf_offset_x = 0L;
