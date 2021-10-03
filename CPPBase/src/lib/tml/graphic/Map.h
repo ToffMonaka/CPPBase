@@ -36,7 +36,7 @@ public:
 	INT Create(const tml::XMUINT2EX &, const std::vector<UINT> &);
 
 	const tml::XMUINT2EX &GetTileCount(void) const;
-	const std::vector<UINT> &GetTileTypeContainer(void) const;
+	const UINT *GetTileTypeArray(void) const;
 	const UINT *GetTileType(const UINT, const UINT) const;
 	const UINT *GetTileTypeFast(const UINT, const UINT) const;
 };
@@ -64,12 +64,12 @@ inline const tml::XMUINT2EX &tml::graphic::MapBlock::GetTileCount(void) const
 
 
 /**
- * @brief GetTileTypeContainerä÷êî
- * @return tile_type_cont (tile_type_container)
+ * @brief GetTileTypeArrayä÷êî
+ * @return tile_type_ary (tile_type_array)
  */
-inline const std::vector<UINT> &tml::graphic::MapBlock::GetTileTypeContainer(void) const
+inline const UINT *tml::graphic::MapBlock::GetTileTypeArray(void) const
 {
-	return (this->tile_type_cont_);
+	return (this->tile_type_cont_.data());
 }
 
 
@@ -180,7 +180,7 @@ public:
 	void SetTileType(const UINT, const UINT, const UINT);
 	void SetTileTypeFast(const UINT, const UINT, const UINT);
 	const tml::XMUINT2EX &GetBlockCount(void) const;
-	const std::vector<tml::graphic::MapBlock> &GetBlockContainer(void) const;
+	const tml::graphic::MapBlock *GetBlockArray(void) const;
 	const tml::graphic::MapBlock *GetBlock(const UINT, const UINT) const;
 	const tml::graphic::MapBlock *GetBlockFast(const UINT, const UINT) const;
 	const tml::XMUINT2EX &GetTilesetTileSize(void) const;
@@ -297,12 +297,12 @@ inline const tml::XMUINT2EX &tml::graphic::Map::GetBlockCount(void) const
 
 
 /**
- * @brief GetBlockContainerä÷êî
- * @return block_cont (block_container)
+ * @brief GetBlockArrayä÷êî
+ * @return block_ary (block_array)
  */
-inline const std::vector<tml::graphic::MapBlock> &tml::graphic::Map::GetBlockContainer(void) const
+inline const tml::graphic::MapBlock *tml::graphic::Map::GetBlockArray(void) const
 {
-	return (this->block_cont_);
+	return (this->block_cont_.data());
 }
 
 

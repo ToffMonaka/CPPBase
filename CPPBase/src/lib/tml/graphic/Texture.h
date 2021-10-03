@@ -105,7 +105,7 @@ public:
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
 	const tml::XMUINT2EX &GetSize(void) const;
 	UINT GetMipmapCount(void) const;
-	const std::vector<tml::XMUINT2EX> &GetMipmapSizeContainer(void) const;
+	const tml::XMUINT2EX *GetMipmapSizeArray(void) const;
 	const tml::XMUINT2EX *GetMipmapSize(const UINT) const;
 	const tml::XMUINT2EX *GetMipmapSizeFast(const UINT) const;
 	UINT GetCPUBufferCount(void) const;
@@ -170,12 +170,12 @@ inline UINT tml::graphic::Texture::GetMipmapCount(void) const
 
 
 /**
- * @brief GetMipmapSizeContainerä÷êî
- * @return mm_size_cont (mm_size_container)
+ * @brief GetMipmapSizeArrayä÷êî
+ * @return mm_size_ary (mm_size_array)
  */
-inline const std::vector<tml::XMUINT2EX> &tml::graphic::Texture::GetMipmapSizeContainer(void) const
+inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSizeArray(void) const
 {
-	return (this->mm_size_cont_);
+	return (this->mm_size_cont_.data());
 }
 
 

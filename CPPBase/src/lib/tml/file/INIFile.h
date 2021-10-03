@@ -16,6 +16,11 @@ namespace tml {
  */
 class INIFileData
 {
+public: INIFileData(const tml::INIFileData &) = delete;
+public: tml::INIFileData &operator =(const tml::INIFileData &) = delete;
+
+private:
+
 public:
 	std::map<std::wstring, std::map<std::wstring, std::wstring>> value_container;
 
@@ -29,8 +34,8 @@ public:
 	virtual void Init(void);
 
 	const std::map<std::wstring, std::wstring> *GetValueNameContainer(const WCHAR *) const;
-	const std::wstring *GetValue(const WCHAR *, const WCHAR *) const;
 	const std::wstring *GetValue(const std::map<std::wstring, std::wstring> &, const WCHAR *) const;
+	const std::wstring *GetValue(const WCHAR *, const WCHAR *) const;
 };
 }
 
@@ -64,6 +69,25 @@ inline const std::map<std::wstring, std::wstring> *tml::INIFileData::GetValueNam
 
 /**
  * @brief GetValueä÷êî
+ * @param val_name_cont (valalue_name_container)
+ * @param val_name (valalue_name)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::INIFileData::GetValue(const std::map<std::wstring, std::wstring> &val_name_cont, const WCHAR *val_name) const
+{
+	auto val_itr = val_name_cont.find(val_name);
+
+	if (val_itr == val_name_cont.end()) {
+		return (nullptr);
+	}
+
+	return (&val_itr->second);
+}
+
+
+/**
+ * @brief GetValueä÷êî
  * @param section_name (section_name)
  * @param val_name (valalue_name)
  * @return val (value)<br>
@@ -80,25 +104,6 @@ inline const std::wstring *tml::INIFileData::GetValue(const WCHAR *section_name,
 	auto val_itr = val_name_itr->second.find(val_name);
 
 	if (val_itr == val_name_itr->second.end()) {
-		return (nullptr);
-	}
-
-	return (&val_itr->second);
-}
-
-
-/**
- * @brief GetValueä÷êî
- * @param val_name_cont (valalue_name_container)
- * @param val_name (valalue_name)
- * @return val (value)<br>
- * nullptr=é∏îs
- */
-inline const std::wstring *tml::INIFileData::GetValue(const std::map<std::wstring, std::wstring> &val_name_cont, const WCHAR *val_name) const
-{
-	auto val_itr = val_name_cont.find(val_name);
-
-	if (val_itr == val_name_cont.end()) {
 		return (nullptr);
 	}
 

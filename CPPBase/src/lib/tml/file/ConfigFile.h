@@ -16,6 +16,11 @@ namespace tml {
  */
 class ConfigFileData
 {
+public: ConfigFileData(const tml::ConfigFileData &) = delete;
+public: tml::ConfigFileData &operator =(const tml::ConfigFileData &) = delete;
+
+private:
+
 public:
 	std::map<std::wstring, std::wstring> value_container;
 

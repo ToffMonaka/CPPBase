@@ -401,7 +401,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 						tile_pos_x = static_cast<FLOAT>(tile_index_x) - static_cast<FLOAT>(this->map_->GetTileCount().x) * 0.5f;
 						tile_pos_y = -static_cast<FLOAT>(tile_index_y) + static_cast<FLOAT>(this->map_->GetTileCount().y) * 0.5f;
 						block_index = (tile_index_y / 16U * this->map_->GetBlockCount().x) + (tile_index_x / 16U);
-						block_tile_index = ((tile_index_y % 16U) * this->map_->GetBlockContainer()[block_index].GetTileCount().x) + (tile_index_x % 16U);
+						block_tile_index = ((tile_index_y % 16U) * this->map_->GetBlockArray()[block_index].GetTileCount().x) + (tile_index_x % 16U);
 
 						for (UINT base_vb_element_i = 0U; base_vb_element_i < base_vb_element_ary.size(); ++base_vb_element_i) {
 							auto &vb_element = vb_element_cont[tile_index * base_vb_element_ary.size() + base_vb_element_i];

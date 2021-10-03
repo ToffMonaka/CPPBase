@@ -16,6 +16,11 @@ namespace tml {
  */
 class CSVFileData
 {
+public: CSVFileData(const tml::CSVFileData &) = delete;
+public: tml::CSVFileData &operator =(const tml::CSVFileData &) = delete;
+
+private:
+
 public:
 	std::vector<std::vector<std::wstring>> value_container;
 
@@ -31,6 +36,7 @@ public:
 	size_t GetRowCount(void) const;
 	size_t GetColumnCount(void) const;
 	const std::wstring *GetValue(const size_t, const size_t) const;
+	const std::wstring *GetValueFast(const size_t, const size_t) const;
 };
 }
 
@@ -60,11 +66,7 @@ inline size_t tml::CSVFileData::GetRowCount(void) const
  */
 inline size_t tml::CSVFileData::GetColumnCount(void) const
 {
-	if (this->value_container.empty()) {
-		return (0U);
-	}
-	
-	return (this->value_container[0].size());
+	return ((this->value_container.empty()) ? 0U : this->value_container[0].size());
 }
 
 
@@ -82,6 +84,19 @@ inline const std::wstring *tml::CSVFileData::GetValue(const size_t row_index, co
 		return (nullptr);
 	}
 
+	return (&this->value_container[row_index][column_index]);
+}
+
+
+/**
+ * @brief GetValueFastä÷êî
+ * @param row_index (row_index)
+ * @param column_index (column_index)
+ * @return val (value)<br>
+ * nullptr=é∏îs
+ */
+inline const std::wstring *tml::CSVFileData::GetValueFast(const size_t row_index, const size_t column_index) const
+{
 	return (&this->value_container[row_index][column_index]);
 }
 

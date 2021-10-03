@@ -102,19 +102,17 @@ INT tml::graphic::GroundModel2DBlockShaderStructuredBuffer::Create(const tml::gr
  */
 void tml::graphic::GroundModel2DBlockShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Map *map)
 {
-	auto &block_cont = map->GetBlockContainer();
-
-	for (UINT block_i = 0U, block_end_i = block_cont.size(); block_i < block_end_i; ++block_i) {
+	for (UINT block_i = 0U, block_end_i = map->GetBlockCount().x * map->GetBlockCount().y; block_i < block_end_i; ++block_i) {
 		auto element = this->GetElement(index + block_i);
 
 		if (element == nullptr) {
 			break;
 		}
 
-		auto &block = block_cont[block_i];
+		auto &block = map->GetBlockArray()[block_i];
 
 		element->tile_count = block.GetTileCount();
-		tml::Copy(element->tile_type_array, block.GetTileTypeContainer().data(), block.GetTileTypeContainer().size());
+		tml::Copy(element->tile_type_array, block.GetTileTypeArray(), block.GetTileCount().x * block.GetTileCount().y);
 	}
 
 	return;
