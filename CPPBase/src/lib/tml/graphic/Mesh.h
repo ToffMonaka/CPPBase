@@ -104,6 +104,8 @@ public:
 	UINT GetVertexBufferElementSize(void) const;
 	UINT GetVertexBufferElementCount(void) const;
 	template <typename T>
+	T *GetVertexBufferElementArray(void);
+	template <typename T>
 	T *GetVertexBufferElement(const UINT);
 	template <typename T>
 	T *GetVertexBufferElementFast(const UINT);
@@ -115,6 +117,8 @@ public:
 	const CD3D11_BUFFER_DESC &GetIndexBufferDesc(void) const;
 	UINT GetIndexBufferElementSize(void) const;
 	UINT GetIndexBufferElementCount(void) const;
+	template <typename T>
+	T *GetIndexBufferElementArray(void);
 	template <typename T>
 	T *GetIndexBufferElement(const UINT);
 	template <typename T>
@@ -167,6 +171,17 @@ inline UINT tml::graphic::Mesh::GetVertexBufferElementSize(void) const
 inline UINT tml::graphic::Mesh::GetVertexBufferElementCount(void) const
 {
 	return (this->vb_element_cnt_);
+}
+
+
+/**
+ * @brief GetVertexBufferElementArrayä÷êî
+ * @return vb_element_ary (vertex_buffer_element_array)
+ */
+template <typename T>
+inline T *tml::graphic::Mesh::GetVertexBufferElementArray(void)
+{
+	return (reinterpret_cast<T *>(this->vb_cpu_buf_.Get()));
 }
 
 
@@ -257,6 +272,17 @@ inline UINT tml::graphic::Mesh::GetIndexBufferElementSize(void) const
 inline UINT tml::graphic::Mesh::GetIndexBufferElementCount(void) const
 {
 	return (this->ib_element_cnt_);
+}
+
+
+/**
+ * @brief GetIndexBufferElementArrayä÷êî
+ * @return ib_element_ary (index_buffer_element_array)
+ */
+template <typename T>
+inline T *tml::graphic::Mesh::GetIndexBufferElementArray(void)
+{
+	return (reinterpret_cast<T *>(this->ib_cpu_buf_.Get()));
 }
 
 

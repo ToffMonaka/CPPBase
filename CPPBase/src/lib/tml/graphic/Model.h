@@ -382,7 +382,7 @@ private:
 	tml::shared_ptr<tml::graphic::Texture> empty_tex_;
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
 	tml::shared_ptr<tml::graphic::Sampler> empty_samp_;
-	std::array<tml::unique_ptr<tml::graphic::ModelStage>, tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT> stage_ary_;
+	std::vector<tml::unique_ptr<tml::graphic::ModelStage>> stage_cont_;
 
 private:
 	void Release(void);
@@ -724,5 +724,5 @@ inline const tml::shared_ptr<tml::graphic::Sampler> &tml::graphic::Model::GetSam
  */
 inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
-	return (this->stage_ary_[static_cast<UINT>(type)].get());
+	return (this->stage_cont_[static_cast<UINT>(type)].get());
 }

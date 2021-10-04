@@ -109,11 +109,13 @@ public:
 	const tml::XMUINT2EX *GetMipmapSize(const UINT) const;
 	const tml::XMUINT2EX *GetMipmapSizeFast(const UINT) const;
 	UINT GetCPUBufferCount(void) const;
+	tml::DynamicBuffer *GetCPUBufferArray(void);
 	tml::DynamicBuffer *GetCPUBuffer(const UINT, const UINT);
 	tml::DynamicBuffer *GetCPUBufferFast(const UINT, const UINT);
 	void UploadCPUBuffer(void);
 	void DownloadCPUBuffer(void);
 	UINT GetMappedSubresourceCount(void) const;
+	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresourceArray(void) const;
 	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresource(const UINT, const UINT) const;
 	const D3D11_MAPPED_SUBRESOURCE *GetMappedSubresourceFast(const UINT, const UINT) const;
 	void ClearCPUBuffer(void);
@@ -218,6 +220,16 @@ inline UINT tml::graphic::Texture::GetCPUBufferCount(void) const
 
 
 /**
+ * @brief GetCPUBufferArrayŠÖ”
+ * @return cpu_buf_ary (cpu_buffer_array)
+ */
+inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferArray(void)
+{
+	return (this->cpu_buf_cont_.data());
+}
+
+
+/**
  * @brief GetCPUBufferŠÖ”
  * @param ary_index (array_index)
  * @param mm_index (mipmap_index)
@@ -258,6 +270,16 @@ inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferFast(const UINT ar
 inline UINT tml::graphic::Texture::GetMappedSubresourceCount(void) const
 {
 	return (this->msr_cont_.size());
+}
+
+
+/**
+ * @brief GetMappedSubresourceArrayŠÖ”
+ * @return msr_ary (mapped_subresource_array)
+ */
+inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresourceArray(void) const
+{
+	return (this->msr_cont_.data());
 }
 
 

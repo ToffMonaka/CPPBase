@@ -92,6 +92,8 @@ tml::graphic::ModelStage::ModelStage() :
 	ds_index_(0U),
 	shader_index_(0U)
 {
+	this->layer_cont_.resize(0U);
+
 	return;
 }
 
@@ -132,6 +134,7 @@ void tml::graphic::ModelStage::Init(void)
 	this->bs_index_ = 0U;
 	this->ds_index_ = 0U;
 	this->shader_index_ = 0U;
+	this->layer_cont_.resize(0U);
 
 	return;
 }
@@ -239,6 +242,8 @@ INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &conf_file)
 tml::graphic::Model::Model() :
 	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE)
 {
+	this->stage_cont_.resize(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT);
+
 	return;
 }
 
@@ -259,7 +264,7 @@ tml::graphic::Model::~Model()
  */
 void tml::graphic::Model::Release(void)
 {
-	for (auto &stage : this->stage_ary_) {
+	for (auto &stage : this->stage_cont_) {
 		stage.reset();
 	}
 
@@ -282,6 +287,7 @@ void tml::graphic::Model::Init(void)
 	this->mesh_cont_.clear();
 	this->tex_cont_.clear();
 	this->samp_cont_.clear();
+	this->stage_cont_.resize(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT);
 
 	tml::graphic::ManagerResource::Init();
 
@@ -433,7 +439,7 @@ void tml::graphic::Model::SetSampler(const UINT index, const tml::shared_ptr<tml
  */
 void tml::graphic::Model::SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type, tml::unique_ptr<tml::graphic::ModelStage> &stage)
 {
-	this->stage_ary_[static_cast<UINT>(type)] = std::move(stage);
+	this->stage_cont_[static_cast<UINT>(type)] = std::move(stage);
 
 	return;
 }

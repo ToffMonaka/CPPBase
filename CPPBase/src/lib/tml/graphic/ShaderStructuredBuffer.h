@@ -81,6 +81,8 @@ private:
 
 protected:
 	template <typename T>
+	T *GetElementArray(void);
+	template <typename T>
 	T *GetElement(const UINT);
 	template <typename T>
 	T *GetElementFast(const UINT);
@@ -168,6 +170,17 @@ inline void tml::graphic::ShaderStructuredBuffer::SetElementCount(const UINT ele
 	this->element_cnt_ = element_cnt;
 
 	return;
+}
+
+
+/**
+ * @brief GetElementArrayä÷êî
+ * @return element_ary (element_array)
+ */
+template <typename T>
+inline T *tml::graphic::ShaderStructuredBuffer::GetElementArray(void)
+{
+	return (reinterpret_cast<T *>(this->cpu_buf_.Get()));
 }
 
 

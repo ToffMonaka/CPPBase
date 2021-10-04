@@ -84,6 +84,7 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::CameraShaderStructuredBufferDesc &);
 
+	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::CameraShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
 	void SetElement(const UINT, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &, const DirectX::XMMATRIX &);
@@ -98,6 +99,16 @@ public:
 inline void tml::graphic::CameraShaderStructuredBuffer::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetElementArrayä÷êî
+ * @return element_ary (element_array)
+ */
+inline tml::graphic::CameraShaderStructuredBuffer::ELEMENT *tml::graphic::CameraShaderStructuredBuffer::GetElementArray(void)
+{
+	return (tml::graphic::ShaderStructuredBuffer::GetElementArray<tml::graphic::CameraShaderStructuredBuffer::ELEMENT>());
 }
 
 

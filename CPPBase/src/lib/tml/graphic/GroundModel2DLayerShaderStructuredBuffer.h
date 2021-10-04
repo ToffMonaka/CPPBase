@@ -92,6 +92,7 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::GroundModel2DLayerShaderStructuredBufferDesc &);
 
+	tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
 	void SetElement(const UINT, const bool);
@@ -118,6 +119,16 @@ inline void tml::graphic::GroundModel2DLayerShaderStructuredBuffer::Release(void
 inline tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT *tml::graphic::GroundModel2DLayerShaderStructuredBuffer::GetElement(const UINT index)
 {
 	return (tml::graphic::ShaderStructuredBuffer::GetElement<tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT>(index));
+}
+
+
+/**
+ * @brief GetElementArrayä÷êî
+ * @return element_ary (element_array)
+ */
+inline tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT *tml::graphic::GroundModel2DLayerShaderStructuredBuffer::GetElementArray(void)
+{
+	return (tml::graphic::ShaderStructuredBuffer::GetElementArray<tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT>());
 }
 
 
