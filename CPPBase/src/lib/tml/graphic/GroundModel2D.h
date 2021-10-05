@@ -61,7 +61,6 @@ public:
 	INT Create(tml::graphic::Manager *);
 
 	tml::graphic::GroundModel2DLayer *GetLayer(const UINT);
-	tml::graphic::GroundModel2DLayer *GetLayerFast(const UINT);
 	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::GroundModel2DLayer> &);
 };
 }
@@ -77,18 +76,6 @@ public:
 inline tml::graphic::GroundModel2DLayer *tml::graphic::GroundModel2DStage::GetLayer(const UINT index)
 {
 	return (reinterpret_cast<tml::graphic::GroundModel2DLayer *>(tml::graphic::Model2DStage::GetLayer(index)));
-}
-
-
-/**
- * @brief GetLayerFastä÷êî
- * @param index (index)
- * @return layer (layer)<br>
- * nullptr=é∏îs
- */
-inline tml::graphic::GroundModel2DLayer *tml::graphic::GroundModel2DStage::GetLayerFast(const UINT index)
-{
-	return (reinterpret_cast<tml::graphic::GroundModel2DLayer *>(tml::graphic::Model2DStage::GetLayerFast(index)));
 }
 
 

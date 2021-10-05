@@ -155,7 +155,6 @@ private:
 
 protected:
 	tml::graphic::ModelLayer *GetLayer(const UINT);
-	tml::graphic::ModelLayer *GetLayerFast(const UINT);
 	void SetLayer(const UINT, tml::unique_ptr<tml::graphic::ModelLayer> &);
 
 public:
@@ -295,22 +294,6 @@ inline UINT tml::graphic::ModelStage::GetLayerCount(void) const
  * nullptr=é∏îs
  */
 inline tml::graphic::ModelLayer *tml::graphic::ModelStage::GetLayer(const UINT index)
-{
-	if (index >= this->layer_cont_.size()) {
-		return (nullptr);
-	}
-
-	return (this->layer_cont_[index].get());
-}
-
-
-/**
- * @brief GetLayerFastä÷êî
- * @param index (index)
- * @return layer (layer)<br>
- * nullptr=é∏îs
- */
-inline tml::graphic::ModelLayer *tml::graphic::ModelStage::GetLayerFast(const UINT index)
 {
 	return (this->layer_cont_[index].get());
 }

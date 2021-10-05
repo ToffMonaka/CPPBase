@@ -96,7 +96,7 @@ public:
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
-	void SetElement(const UINT, const tml::graphic::Map *);
+	void SetElement(const UINT, const tml::XMUINT2EX &, const tml::graphic::MapBlock *);
 };
 }
 }

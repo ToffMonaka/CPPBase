@@ -171,7 +171,7 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 		}
 
 		auto stage = this->model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-		auto layer = stage->GetLayerFast(0U);
+		auto layer = stage->GetLayer(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
 

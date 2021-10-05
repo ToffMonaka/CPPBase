@@ -586,7 +586,7 @@ bool tml::graphic::GroundModel2D::IsHitByMouseDevice(const tml::XMINT2EX &mouse_
 void tml::graphic::GroundModel2D::DrawStageInit(void)
 {
 	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayerFast(0U);
+	auto layer = stage->GetLayer(0U);
 
 	DirectX::XMMATRIX w_mat;
 
@@ -598,7 +598,7 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
 	this->layer_ssb_->UploadCPUBuffer();
 
-	this->block_ssb_->SetElement(0U, this->map_.get());
+	this->block_ssb_->SetElement(0U, this->map_->GetBlockCount(), this->map_->GetBlockArray());
 	this->block_ssb_->UploadCPUBuffer();
 
 	return;
@@ -611,7 +611,7 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
 void tml::graphic::GroundModel2D::DrawStageForward2D(void)
 {
 	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayerFast(0U);
+	auto layer = stage->GetLayer(0U);
 
 	std::array<tml::graphic::ShaderStructuredBuffer *, 3U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get(), this->block_ssb_.get()};
 

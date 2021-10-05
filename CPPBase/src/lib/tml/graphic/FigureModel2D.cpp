@@ -485,7 +485,7 @@ bool tml::graphic::FigureModel2D::IsHitByMouseDevice(const tml::XMINT2EX &mouse_
 void tml::graphic::FigureModel2D::DrawStageInit(void)
 {
 	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayerFast(0U);
+	auto layer = stage->GetLayer(0U);
 
 	DirectX::XMMATRIX w_mat;
 
@@ -507,7 +507,7 @@ void tml::graphic::FigureModel2D::DrawStageInit(void)
 void tml::graphic::FigureModel2D::DrawStageForward2D(void)
 {
 	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-	auto layer = stage->GetLayerFast(0U);
+	auto layer = stage->GetLayer(0U);
 
 	std::array<tml::graphic::ShaderStructuredBuffer *, 2U> ssb_ary = {this->ssb_.get(), this->layer_ssb_.get()};
 

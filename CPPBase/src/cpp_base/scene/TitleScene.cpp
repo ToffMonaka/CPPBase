@@ -220,7 +220,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		}
 
 		auto stage = this->bg_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-		auto layer = stage->GetLayerFast(0U);
+		auto layer = stage->GetLayer(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
 
@@ -294,7 +294,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		}
 
 		auto stage = this->start_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-		auto layer = stage->GetLayerFast(0U);
+		auto layer = stage->GetLayer(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
 
@@ -364,7 +364,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		}
 
 		auto stage = this->footer_model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
-		auto layer = stage->GetLayerFast(0U);
+		auto layer = stage->GetLayer(0U);
 
 		layer->SetDiffuseTextureIndex(0U);
 
