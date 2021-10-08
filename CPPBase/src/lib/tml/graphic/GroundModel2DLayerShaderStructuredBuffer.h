@@ -6,6 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMathUINT.h"
+#include "../math/XNAMathFLOAT.h"
 #include "ShaderStructuredBuffer.h"
 
 
@@ -65,6 +67,8 @@ public:
 	typedef struct ELEMENT_
 	{
 		UINT diffuse_texture_flag;
+		tml::XMUINT2EX diffuse_texture_rect_position;
+		tml::XMUINT2EX diffuse_texture_rect_size;
 		UINT dummy1;
 		UINT dummy2;
 		UINT dummy3;
@@ -74,6 +78,8 @@ public:
 		 */
 		ELEMENT_() :
 			diffuse_texture_flag(0U),
+			diffuse_texture_rect_position(0U),
+			diffuse_texture_rect_size(0U),
 			dummy1(0U),
 			dummy2(0U),
 			dummy3(0U)

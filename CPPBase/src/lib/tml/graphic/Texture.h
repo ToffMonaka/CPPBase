@@ -12,6 +12,41 @@
 #include "../math/XNAMathFLOAT.h"
 #include "ManagerResource.h"
 #include "Font.h"
+#include "Atlas.h"
+#include "Map.h"
+
+
+namespace tml {
+namespace graphic {
+/**
+ * @brief TextureRectÉNÉâÉX
+ */
+class TextureRect
+{
+public:
+	tml::XMUINT2EX position;
+	tml::XMUINT2EX size;
+
+private:
+	void Release(void);
+
+public:
+	TextureRect();
+	virtual ~TextureRect();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Releaseä÷êî
+ */
+inline void tml::graphic::TextureRect::Release(void)
+{
+	return;
+}
 
 
 namespace tml {
@@ -34,6 +69,8 @@ public:
 	bool sr_desc_null_flag;
 	DXGI_FORMAT uasr_format;
 	bool uasr_desc_null_flag;
+	tml::shared_ptr<tml::graphic::Texture> atlas_texture;
+	tml::graphic::AtlasRect atlas_rect;
 
 private:
 	void Release(void);
@@ -81,6 +118,7 @@ private:
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;
 	tml::XMUINT2EX size_;
+	tml::graphic::TextureRect rect_;
 	std::vector<tml::XMUINT2EX> mm_size_cont_;
 	std::vector<tml::DynamicBuffer> cpu_buf_cont_;
 	std::vector<D3D11_MAPPED_SUBRESOURCE> msr_cont_;
@@ -90,6 +128,7 @@ private:
 	ID3D11DepthStencilView *dt_;
 	ID3D11ShaderResourceView *sr_;
 	ID3D11UnorderedAccessView *uasr_;
+	tml::shared_ptr<tml::graphic::Texture> atlas_tex_;
 
 private:
 	void Release(void);
@@ -104,6 +143,7 @@ public:
 	ID3D11Texture2D *GetTexture(void);
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
 	const tml::XMUINT2EX &GetSize(void) const;
+	const tml::graphic::TextureRect &GetRect(void) const;
 	UINT GetMipmapCount(void) const;
 	const tml::XMUINT2EX *GetMipmapSizeArray(void) const;
 	const tml::XMUINT2EX *GetMipmapSize(const UINT) const;
@@ -126,6 +166,7 @@ public:
 	void ClearDepthTarget(void);
 	ID3D11ShaderResourceView *GetSR(void);
 	ID3D11UnorderedAccessView *GetUASR(void);
+	const tml::shared_ptr<tml::graphic::Texture> &GetAtlasTexture(void);
 };
 }
 }
@@ -158,6 +199,16 @@ inline const CD3D11_TEXTURE2D_DESC &tml::graphic::Texture::GetTextureDesc(void) 
 inline const tml::XMUINT2EX &tml::graphic::Texture::GetSize(void) const
 {
 	return (this->size_);
+}
+
+
+/**
+ * @brief GetRectä÷êî
+ * @return rect (rect)
+ */
+inline const tml::graphic::TextureRect &tml::graphic::Texture::GetRect(void) const
+{
+	return (this->rect_);
 }
 
 
@@ -354,4 +405,14 @@ inline ID3D11ShaderResourceView *tml::graphic::Texture::GetSR(void)
 inline ID3D11UnorderedAccessView *tml::graphic::Texture::GetUASR(void)
 {
 	return (this->uasr_);
+}
+
+
+/**
+ * @brief GetAtlasTextureä÷êî
+ * @return atlas_tex (atlas_texture)
+ */
+inline const tml::shared_ptr<tml::graphic::Texture> &tml::graphic::Texture::GetAtlasTexture(void)
+{
+	return (this->atlas_tex_);
 }

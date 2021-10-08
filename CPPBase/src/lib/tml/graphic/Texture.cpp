@@ -11,6 +11,42 @@
 /**
  * @brief コンストラクタ
  */
+tml::graphic::TextureRect::TextureRect() :
+	position(0U),
+	size(0U)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::graphic::TextureRect::~TextureRect()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::graphic::TextureRect::Init(void)
+{
+	this->Release();
+
+	this->position = 0U;
+	this->size = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::graphic::TextureDesc::TextureDesc() :
 	swap_chain(nullptr),
 	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
@@ -58,6 +94,8 @@ void tml::graphic::TextureDesc::Init(void)
 	this->sr_desc_null_flag = false;
 	this->uasr_format = DXGI_FORMAT_UNKNOWN;
 	this->uasr_desc_null_flag = false;
+	this->atlas_texture.reset();
+	this->atlas_rect.Init();
 
 	tml::graphic::ManagerResourceDesc::Init();
 
@@ -214,12 +252,14 @@ void tml::graphic::Texture::Init(void)
 
 	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
 	this->size_ = 0U;
+	this->rect_.Init();
 	this->mm_size_cont_.resize(1U);
 	this->mm_size_cont_[0] = this->size_;
 	this->cpu_buf_cont_.clear();
 	this->msr_cont_.clear();
 	this->clear_cpu_buf_cont_.clear();
 	this->str_line_w_cont_.clear();
+	this->atlas_tex_.reset();
 
 	tml::graphic::ManagerResource::Init();
 
@@ -243,12 +283,22 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		return (-1);
 	}
 
-	if (desc.swap_chain != nullptr) {
+	if (desc.atlas_texture != nullptr) {
+		if (desc.atlas_texture.get() == this) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->atlas_tex_ = desc.atlas_texture;
+	} else if (desc.swap_chain != nullptr) {
 		if (FAILED(desc.swap_chain->GetBuffer(0U, IID_PPV_ARGS(&this->tex_)))) {
 			this->Init();
 
 			return (-1);
 		}
+
+		this->tex_->GetDesc(&this->tex_desc_);
 	} else if (desc.image_file_read_desc_container.size() > 1U) {
 		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
 		bool tmp_tex_desc_fixed_flg = false;
@@ -378,6 +428,8 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 			return (-1);
 		}
+
+		this->tex_->GetDesc(&this->tex_desc_);
 	} else if (desc.image_file_read_desc_container.size() == 1U) {
 		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
 
@@ -431,205 +483,213 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				return (-1);
 			}
 		}
+
+		this->tex_->GetDesc(&this->tex_desc_);
 	} else {
 		this->Init();
 
 		return (-1);
 	}
 
-	this->tex_->GetDesc(&this->tex_desc_);
+	if (this->atlas_tex_ != nullptr) {
+		this->size_ = desc.atlas_rect.GetSize();
+		this->rect_.position = desc.atlas_rect.GetPosition();
+		this->rect_.size = this->size_;
+	} else {
+		this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
+		this->rect_.position = tml::XMUINT2EX(0U, 0U);
+		this->rect_.size = this->size_;
 
-	this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
+		this->mm_size_cont_.resize(this->tex_desc_.MipLevels);
 
-	this->mm_size_cont_.resize(this->tex_desc_.MipLevels);
+		auto tmp_mm_size = this->size_;
 
-	auto tmp_mm_size = this->size_;
+		for (auto &mm_size : this->mm_size_cont_) {
+			mm_size = tmp_mm_size;
 
-	for (auto &mm_size : this->mm_size_cont_) {
-		mm_size = tmp_mm_size;
-
-		tmp_mm_size.x = (tmp_mm_size.x > 1U) ? (tmp_mm_size.x >> 1) : 1U;
-		tmp_mm_size.y = (tmp_mm_size.y > 1U) ? (tmp_mm_size.y >> 1) : 1U;
-	}
-
-	if (desc.cpu_buffer_flag) {
-		INT result = 0;
-
-		this->GetManager()->GetCPUBuffer(this->cpu_buf_cont_, this->msr_cont_, this->tex_, &result);
-
-		if (result < 0) {
-			this->Init();
-
-			return (-1);
+			tmp_mm_size.x = (tmp_mm_size.x > 1U) ? (tmp_mm_size.x >> 1) : 1U;
+			tmp_mm_size.y = (tmp_mm_size.y > 1U) ? (tmp_mm_size.y >> 1) : 1U;
 		}
 
-		this->clear_cpu_buf_cont_.resize(this->cpu_buf_cont_.size());
+		if (desc.cpu_buffer_flag) {
+			INT result = 0;
 
-		for(size_t cpu_buf_i = 0U, cpu_buf_end_i = this->cpu_buf_cont_.size(); cpu_buf_i < cpu_buf_end_i; ++cpu_buf_i){
-			auto &clear_cpu_buf = this->clear_cpu_buf_cont_[cpu_buf_i];
+			this->GetManager()->GetCPUBuffer(this->cpu_buf_cont_, this->msr_cont_, this->tex_, &result);
 
-			clear_cpu_buf = this->cpu_buf_cont_[cpu_buf_i];
-
-			for (size_t pixel_i = 0U, pixel_end_i = clear_cpu_buf.GetLength() >> 2; pixel_i < pixel_end_i; ++pixel_i) {
-				reinterpret_cast<UINT *>(clear_cpu_buf.Get())[pixel_i] = 0U;
-			}
-		}
-	}
-
-	if (this->tex_desc_.BindFlags & D3D11_BIND_RENDER_TARGET) {
-		if (desc.render_target_desc_null_flag) {
-			if (FAILED(this->GetManager()->GetDevice()->CreateRenderTargetView(this->tex_, nullptr, &this->rt_))) {
+			if (result < 0) {
 				this->Init();
 
 				return (-1);
 			}
-		} else {
-			D3D11_RTV_DIMENSION dimension;
 
-			if (this->tex_desc_.SampleDesc.Count > 1U) {
-				if (this->tex_desc_.ArraySize > 1U) {
-					dimension = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
-				} else {
-					dimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+			this->clear_cpu_buf_cont_.resize(this->cpu_buf_cont_.size());
+
+			for(size_t cpu_buf_i = 0U, cpu_buf_end_i = this->cpu_buf_cont_.size(); cpu_buf_i < cpu_buf_end_i; ++cpu_buf_i){
+				auto &clear_cpu_buf = this->clear_cpu_buf_cont_[cpu_buf_i];
+
+				clear_cpu_buf = this->cpu_buf_cont_[cpu_buf_i];
+
+				for (size_t pixel_i = 0U, pixel_end_i = clear_cpu_buf.GetLength() >> 2; pixel_i < pixel_end_i; ++pixel_i) {
+					reinterpret_cast<UINT *>(clear_cpu_buf.Get())[pixel_i] = 0U;
+				}
+			}
+		}
+
+		if (this->tex_desc_.BindFlags & D3D11_BIND_RENDER_TARGET) {
+			if (desc.render_target_desc_null_flag) {
+				if (FAILED(this->GetManager()->GetDevice()->CreateRenderTargetView(this->tex_, nullptr, &this->rt_))) {
+					this->Init();
+
+					return (-1);
 				}
 			} else {
-				if (this->tex_desc_.ArraySize > 1U) {
-					dimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+				D3D11_RTV_DIMENSION dimension;
+
+				if (this->tex_desc_.SampleDesc.Count > 1U) {
+					if (this->tex_desc_.ArraySize > 1U) {
+						dimension = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
+					} else {
+						dimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+					}
 				} else {
-					dimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+					if (this->tex_desc_.ArraySize > 1U) {
+						dimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+					} else {
+						dimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+					}
 				}
-			}
 
-			DXGI_FORMAT format = desc.render_target_format;
+				DXGI_FORMAT format = desc.render_target_format;
 
-			if (format == DXGI_FORMAT_UNKNOWN) {
-				format = this->tex_desc_.Format;
-			}
+				if (format == DXGI_FORMAT_UNKNOWN) {
+					format = this->tex_desc_.Format;
+				}
 
-			CD3D11_RENDER_TARGET_VIEW_DESC rt_desc = CD3D11_RENDER_TARGET_VIEW_DESC(this->tex_, dimension, format);
+				CD3D11_RENDER_TARGET_VIEW_DESC rt_desc = CD3D11_RENDER_TARGET_VIEW_DESC(this->tex_, dimension, format);
 
-			if (FAILED(this->GetManager()->GetDevice()->CreateRenderTargetView(this->tex_, &rt_desc, &this->rt_))) {
-				this->Init();
+				if (FAILED(this->GetManager()->GetDevice()->CreateRenderTargetView(this->tex_, &rt_desc, &this->rt_))) {
+					this->Init();
 
-				return (-1);
+					return (-1);
+				}
 			}
 		}
-	}
 
-	if (this->tex_desc_.BindFlags & D3D11_BIND_DEPTH_STENCIL) {
-		if (desc.depth_target_desc_null_flag) {
-			if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilView(this->tex_, nullptr, &this->dt_))) {
-				this->Init();
+		if (this->tex_desc_.BindFlags & D3D11_BIND_DEPTH_STENCIL) {
+			if (desc.depth_target_desc_null_flag) {
+				if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilView(this->tex_, nullptr, &this->dt_))) {
+					this->Init();
 
-				return (-1);
-			}
-		} else {
-			D3D11_DSV_DIMENSION dimension;
-
-			if (this->tex_desc_.SampleDesc.Count > 1U) {
-				if (this->tex_desc_.ArraySize > 1U) {
-					dimension = D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY;
-				} else {
-					dimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+					return (-1);
 				}
 			} else {
-				if (this->tex_desc_.ArraySize > 1U) {
-					dimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
+				D3D11_DSV_DIMENSION dimension;
+
+				if (this->tex_desc_.SampleDesc.Count > 1U) {
+					if (this->tex_desc_.ArraySize > 1U) {
+						dimension = D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY;
+					} else {
+						dimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+					}
 				} else {
-					dimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+					if (this->tex_desc_.ArraySize > 1U) {
+						dimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
+					} else {
+						dimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+					}
 				}
-			}
 
-			DXGI_FORMAT format = desc.depth_target_format;
+				DXGI_FORMAT format = desc.depth_target_format;
 
-			if (format == DXGI_FORMAT_UNKNOWN) {
-				format = this->tex_desc_.Format;
-			}
+				if (format == DXGI_FORMAT_UNKNOWN) {
+					format = this->tex_desc_.Format;
+				}
 
-			CD3D11_DEPTH_STENCIL_VIEW_DESC dt_desc = CD3D11_DEPTH_STENCIL_VIEW_DESC(this->tex_, dimension, format);
+				CD3D11_DEPTH_STENCIL_VIEW_DESC dt_desc = CD3D11_DEPTH_STENCIL_VIEW_DESC(this->tex_, dimension, format);
 
-			if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilView(this->tex_, &dt_desc, &this->dt_))) {
-				this->Init();
+				if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilView(this->tex_, &dt_desc, &this->dt_))) {
+					this->Init();
 
-				return (-1);
+					return (-1);
+				}
 			}
 		}
-	}
 
-	if (this->tex_desc_.BindFlags & D3D11_BIND_SHADER_RESOURCE) {
-		if (desc.sr_desc_null_flag) {
-			if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->tex_, nullptr, &this->sr_))) {
-				this->Init();
+		if (this->tex_desc_.BindFlags & D3D11_BIND_SHADER_RESOURCE) {
+			if (desc.sr_desc_null_flag) {
+				if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->tex_, nullptr, &this->sr_))) {
+					this->Init();
 
-				return (-1);
-			}
-		} else {
-			D3D11_SRV_DIMENSION dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-
-			if (this->tex_desc_.SampleDesc.Count > 1U) {
-				if (this->tex_desc_.ArraySize > 1U) {
-					dimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
-				} else {
-					dimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+					return (-1);
 				}
 			} else {
-				if (this->tex_desc_.ArraySize > 1U) {
-					dimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+				D3D11_SRV_DIMENSION dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+
+				if (this->tex_desc_.SampleDesc.Count > 1U) {
+					if (this->tex_desc_.ArraySize > 1U) {
+						dimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
+					} else {
+						dimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+					}
 				} else {
-					dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+					if (this->tex_desc_.ArraySize > 1U) {
+						dimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+					} else {
+						dimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+					}
 				}
-			}
 
-			DXGI_FORMAT format = desc.sr_format;
+				DXGI_FORMAT format = desc.sr_format;
 
-			if (format == DXGI_FORMAT_UNKNOWN) {
-				format = this->tex_desc_.Format;
-			}
+				if (format == DXGI_FORMAT_UNKNOWN) {
+					format = this->tex_desc_.Format;
+				}
 
-			CD3D11_SHADER_RESOURCE_VIEW_DESC sr_desc = CD3D11_SHADER_RESOURCE_VIEW_DESC(this->tex_, dimension, format);
+				CD3D11_SHADER_RESOURCE_VIEW_DESC sr_desc = CD3D11_SHADER_RESOURCE_VIEW_DESC(this->tex_, dimension, format);
 
-			if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->tex_, &sr_desc, &this->sr_))) {
-				this->Init();
+				if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->tex_, &sr_desc, &this->sr_))) {
+					this->Init();
 
-				return (-1);
+					return (-1);
+				}
 			}
 		}
-	}
 
-	if (this->tex_desc_.BindFlags & D3D11_BIND_UNORDERED_ACCESS) {
-		if (desc.uasr_desc_null_flag) {
-			if (FAILED(this->GetManager()->GetDevice()->CreateUnorderedAccessView(this->tex_, nullptr, &this->uasr_))) {
-				this->Init();
+		if (this->tex_desc_.BindFlags & D3D11_BIND_UNORDERED_ACCESS) {
+			if (desc.uasr_desc_null_flag) {
+				if (FAILED(this->GetManager()->GetDevice()->CreateUnorderedAccessView(this->tex_, nullptr, &this->uasr_))) {
+					this->Init();
 
-				return (-1);
-			}
-		} else {
-			D3D11_UAV_DIMENSION dimension = D3D11_UAV_DIMENSION_TEXTURE2D;
-
-			if (this->tex_desc_.SampleDesc.Count > 1U) {
-				this->Init();
-
-				return (-1);
-			} else {
-				if (this->tex_desc_.ArraySize > 1U) {
-					dimension = D3D11_UAV_DIMENSION_TEXTURE2DARRAY;
-				} else {
-					dimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+					return (-1);
 				}
-			}
+			} else {
+				D3D11_UAV_DIMENSION dimension = D3D11_UAV_DIMENSION_TEXTURE2D;
 
-			DXGI_FORMAT format = desc.uasr_format;
+				if (this->tex_desc_.SampleDesc.Count > 1U) {
+					this->Init();
 
-			if (format == DXGI_FORMAT_UNKNOWN) {
-				format = this->tex_desc_.Format;
-			}
+					return (-1);
+				} else {
+					if (this->tex_desc_.ArraySize > 1U) {
+						dimension = D3D11_UAV_DIMENSION_TEXTURE2DARRAY;
+					} else {
+						dimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+					}
+				}
 
-			CD3D11_UNORDERED_ACCESS_VIEW_DESC uasr_desc = CD3D11_UNORDERED_ACCESS_VIEW_DESC(this->tex_, dimension, format);
+				DXGI_FORMAT format = desc.uasr_format;
 
-			if (FAILED(this->GetManager()->GetDevice()->CreateUnorderedAccessView(this->tex_, &uasr_desc, &this->uasr_))) {
-				this->Init();
+				if (format == DXGI_FORMAT_UNKNOWN) {
+					format = this->tex_desc_.Format;
+				}
 
-				return (-1);
+				CD3D11_UNORDERED_ACCESS_VIEW_DESC uasr_desc = CD3D11_UNORDERED_ACCESS_VIEW_DESC(this->tex_, dimension, format);
+
+				if (FAILED(this->GetManager()->GetDevice()->CreateUnorderedAccessView(this->tex_, &uasr_desc, &this->uasr_))) {
+					this->Init();
+
+					return (-1);
+				}
 			}
 		}
 	}

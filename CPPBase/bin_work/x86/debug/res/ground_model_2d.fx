@@ -14,6 +14,8 @@ struct MODEL_SSB_ELEMENT
 struct MODEL_LAYER_SSB_ELEMENT
 {
 	uint diffuse_tex_flg;
+	uint2 diffuse_tex_rect_pos;
+	uint2 diffuse_tex_rect_size;
 	uint dummy1;
 	uint dummy2;
 	uint dummy3;
