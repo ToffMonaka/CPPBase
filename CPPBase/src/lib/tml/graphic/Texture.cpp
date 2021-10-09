@@ -12,8 +12,8 @@
  * @brief コンストラクタ
  */
 tml::graphic::TextureRect::TextureRect() :
-	position(0U),
-	size(0U)
+	pos_(0U),
+	size_(0U)
 {
 	return;
 }
@@ -37,8 +37,8 @@ void tml::graphic::TextureRect::Init(void)
 {
 	this->Release();
 
-	this->position = 0U;
-	this->size = 0U;
+	this->pos_ = 0U;
+	this->size_ = 0U;
 
 	return;
 }
@@ -58,7 +58,8 @@ tml::graphic::TextureDesc::TextureDesc() :
 	sr_format(DXGI_FORMAT_UNKNOWN),
 	sr_desc_null_flag(false),
 	uasr_format(DXGI_FORMAT_UNKNOWN),
-	uasr_desc_null_flag(false)
+	uasr_desc_null_flag(false),
+	rect_auto_flag(true)
 {
 	return;
 }
@@ -94,6 +95,8 @@ void tml::graphic::TextureDesc::Init(void)
 	this->sr_desc_null_flag = false;
 	this->uasr_format = DXGI_FORMAT_UNKNOWN;
 	this->uasr_desc_null_flag = false;
+	this->rect.Init();
+	this->rect_auto_flag = true;
 	this->atlas_texture.reset();
 	this->atlas_rect.Init();
 
@@ -180,15 +183,11 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
 tml::graphic::Texture::Texture() :
 	tex_(nullptr),
 	tex_desc_(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
-	size_(0U),
 	rt_(nullptr),
 	dt_(nullptr),
 	sr_(nullptr),
 	uasr_(nullptr)
 {
-	this->mm_size_cont_.resize(1U);
-	this->mm_size_cont_[0] = this->size_;
-
 	return;
 }
 
@@ -251,10 +250,8 @@ void tml::graphic::Texture::Init(void)
 	this->Release();
 
 	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
-	this->size_ = 0U;
 	this->rect_.Init();
-	this->mm_size_cont_.resize(1U);
-	this->mm_size_cont_[0] = this->size_;
+	this->mm_size_cont_.clear();
 	this->cpu_buf_cont_.clear();
 	this->msr_cont_.clear();
 	this->clear_cpu_buf_cont_.clear();
@@ -284,7 +281,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	}
 
 	if (desc.atlas_texture != nullptr) {
-		if (desc.atlas_texture.get() == this) {
+		if (desc.atlas_texture->GetTexture() == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -492,23 +489,28 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	}
 
 	if (this->atlas_tex_ != nullptr) {
-		this->size_ = desc.atlas_rect.GetSize();
-		this->rect_.position = desc.atlas_rect.GetPosition();
-		this->rect_.size = this->size_;
+		if (desc.rect_auto_flag) {
+			this->rect_.SetPosition(desc.atlas_rect.GetPosition());
+			this->rect_.SetSize(desc.atlas_rect.GetSize());
+		} else {
+			this->rect_ = desc.rect;
+		}
 	} else {
-		this->size_ = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
-		this->rect_.position = tml::XMUINT2EX(0U, 0U);
-		this->rect_.size = this->size_;
+		if (desc.rect_auto_flag) {
+			this->rect_.SetPosition(tml::XMUINT2EX(0U, 0U));
+			this->rect_.SetSize(tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height));
+		} else {
+			this->rect_ = desc.rect;
+		}
 
 		this->mm_size_cont_.resize(this->tex_desc_.MipLevels);
+		this->mm_size_cont_[0] = tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height);
 
-		auto tmp_mm_size = this->size_;
+		for (size_t mm_size_i = 1U, mm_size_end_i = this->mm_size_cont_.size(); mm_size_i < mm_size_end_i; ++mm_size_i) {
+			auto &mm_size = this->mm_size_cont_[mm_size_i - 1U];
 
-		for (auto &mm_size : this->mm_size_cont_) {
-			mm_size = tmp_mm_size;
-
-			tmp_mm_size.x = (tmp_mm_size.x > 1U) ? (tmp_mm_size.x >> 1) : 1U;
-			tmp_mm_size.y = (tmp_mm_size.y > 1U) ? (tmp_mm_size.y >> 1) : 1U;
+			mm_size.x = (mm_size.x > 1U) ? (mm_size.x >> 1) : 1U;
+			mm_size.y = (mm_size.y > 1U) ? (mm_size.y >> 1) : 1U;
 		}
 
 		if (desc.cpu_buffer_flag) {
@@ -826,8 +828,8 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::Con
 	LONG str_line_max_w = 0L;
 	tml::XMINT2EX tmp_pos;
 	UINT *buf = reinterpret_cast<UINT *>(this->cpu_buf_cont_[0].Get());
-	LONG buf_w = static_cast<LONG>(this->size_.x);
-	LONG buf_h = static_cast<LONG>(this->size_.y);
+	LONG buf_w = static_cast<LONG>(this->tex_desc_.Width);
+	LONG buf_h = static_cast<LONG>(this->tex_desc_.Height);
 	LONG buf_x = 0L;
 	LONG buf_y = 0L;
 	LONG buf_offset_x = 0L;

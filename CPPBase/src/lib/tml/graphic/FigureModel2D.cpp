@@ -380,7 +380,7 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y));
+				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
 			} else {
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tml::shared_ptr<tml::graphic::Texture>());
 			}
@@ -403,10 +403,10 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
 	}
 
-	if (desc.size_flag) {
-		this->size = desc.size;
-	} else {
+	if (desc.size_auto_flag) {
 		this->size = size;
+	} else {
+		this->size = desc.size;
 	}
 
 	{// ShaderStructuredBuffer Create

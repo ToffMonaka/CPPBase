@@ -136,7 +136,7 @@ INT tml::graphic::Model2DStage::Create(tml::graphic::Manager *mgr)
  */
 tml::graphic::Model2DDesc::Model2DDesc() :
 	size(0.0f),
-	size_flag(false),
+	size_auto_flag(true),
 	scale(1.0f),
 	color(1.0f)
 {
@@ -164,7 +164,7 @@ void tml::graphic::Model2DDesc::Init(void)
 
 	this->position.Init();
 	this->size = 0.0f;
-	this->size_flag = false;
+	this->size_auto_flag = true;
 	this->scale = 1.0f;
 	this->color = 1.0f;
 

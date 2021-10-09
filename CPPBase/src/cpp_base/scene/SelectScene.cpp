@@ -208,7 +208,7 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		model_desc.SetManager(this->GetGraphicManager());
 		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
 		model_desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
-		model_desc.size_flag = true;
+		model_desc.size_auto_flag = false;
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, model_desc) == nullptr) {
@@ -293,7 +293,7 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 
 			this->stage_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->stage_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y));
+			this->stage_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
 		}
 	}
 

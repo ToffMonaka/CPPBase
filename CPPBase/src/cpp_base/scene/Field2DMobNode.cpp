@@ -158,7 +158,7 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 		model_desc.SetManager(this->GetGraphicManager());
 		model_desc.position = tml::XMFLOAT2EX(this->model->position.GetX(), this->model->position.GetY() - this->model->size.GetHalfY());
 		model_desc.size = tml::XMFLOAT2EX(96.0f, 64.0f);
-		model_desc.size_flag = true;
+		model_desc.size_auto_flag = false;
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 0.5f);
 		model_desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SHADOW_2D_IMAGE;
 

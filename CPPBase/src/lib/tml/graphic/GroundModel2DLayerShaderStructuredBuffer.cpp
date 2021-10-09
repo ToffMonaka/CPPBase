@@ -6,6 +6,8 @@
 
 #include "GroundModel2DLayerShaderStructuredBuffer.h"
 #include "Manager.h"
+#include "Texture.h"
+#include "Sampler.h"
 #include "GroundModel2D.h"
 
 
@@ -98,9 +100,9 @@ INT tml::graphic::GroundModel2DLayerShaderStructuredBuffer::Create(const tml::gr
 /**
  * @brief SetElementŠÖ”
  * @param index (index)
- * @param diffuse_tex_flg (diffuse_texture_flag)
+ * @param diffuse_tex (diffuse_texture)
  */
-void tml::graphic::GroundModel2DLayerShaderStructuredBuffer::SetElement(const UINT index, const bool diffuse_tex_flg)
+void tml::graphic::GroundModel2DLayerShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Texture *diffuse_tex)
 {
 	auto element = this->GetElement(index);
 
@@ -108,7 +110,13 @@ void tml::graphic::GroundModel2DLayerShaderStructuredBuffer::SetElement(const UI
 		return;
 	}
 
-	element->diffuse_texture_flag = diffuse_tex_flg;
+	element->texture_flag = 0U;
+
+	if (diffuse_tex != nullptr) {
+		element->texture_flag = 1U;
+		element->diffuse_texture_rect_position = diffuse_tex->GetRect().GetPosition();
+		element->diffuse_texture_rect_size = diffuse_tex->GetRect().GetSize();
+	}
 
 	return;
 }

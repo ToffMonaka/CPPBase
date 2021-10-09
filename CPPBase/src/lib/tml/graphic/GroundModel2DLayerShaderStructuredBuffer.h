@@ -66,23 +66,23 @@ public:
 	 */
 	typedef struct ELEMENT_
 	{
-		UINT diffuse_texture_flag;
-		tml::XMUINT2EX diffuse_texture_rect_position;
-		tml::XMUINT2EX diffuse_texture_rect_size;
+		UINT texture_flag;
 		UINT dummy1;
 		UINT dummy2;
 		UINT dummy3;
+		tml::XMUINT2EX diffuse_texture_rect_position;
+		tml::XMUINT2EX diffuse_texture_rect_size;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		ELEMENT_() :
-			diffuse_texture_flag(0U),
-			diffuse_texture_rect_position(0U),
-			diffuse_texture_rect_size(0U),
+			texture_flag(0U),
 			dummy1(0U),
 			dummy2(0U),
-			dummy3(0U)
+			dummy3(0U),
+			diffuse_texture_rect_position(0U),
+			diffuse_texture_rect_size(0U)
 		{
 			return;
 		};
@@ -101,7 +101,7 @@ public:
 	tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
-	void SetElement(const UINT, const bool);
+	void SetElement(const UINT, const tml::graphic::Texture *);
 };
 }
 }

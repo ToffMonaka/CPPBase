@@ -23,9 +23,9 @@ namespace graphic {
  */
 class TextureRect
 {
-public:
-	tml::XMUINT2EX position;
-	tml::XMUINT2EX size;
+private:
+	tml::XMUINT2EX pos_;
+	tml::XMUINT2EX size_;
 
 private:
 	void Release(void);
@@ -35,6 +35,11 @@ public:
 	virtual ~TextureRect();
 
 	virtual void Init(void);
+
+	const tml::XMUINT2EX &GetPosition(void) const;
+	void SetPosition(const tml::XMUINT2EX &);
+	const tml::XMUINT2EX &GetSize(void) const;
+	void SetSize(const tml::XMUINT2EX &);
 };
 }
 }
@@ -45,6 +50,50 @@ public:
  */
 inline void tml::graphic::TextureRect::Release(void)
 {
+	return;
+}
+
+
+/**
+ * @brief GetPositionŠÖ”
+ * @return pos (position)
+ */
+inline const tml::XMUINT2EX &tml::graphic::TextureRect::GetPosition(void) const
+{
+	return (this->pos_);
+}
+
+
+/**
+ * @brief SetPositionŠÖ”
+ * @param pos (position)
+ */
+inline void tml::graphic::TextureRect::SetPosition(const tml::XMUINT2EX &pos)
+{
+	this->pos_ = pos;
+
+	return;
+}
+
+
+/**
+ * @brief GetSizeŠÖ”
+ * @return size (size)
+ */
+inline const tml::XMUINT2EX &tml::graphic::TextureRect::GetSize(void) const
+{
+	return (this->size_);
+}
+
+
+/**
+ * @brief SetSizeŠÖ”
+ * @param size (size)
+ */
+inline void tml::graphic::TextureRect::SetSize(const tml::XMUINT2EX &size)
+{
+	this->size_ = size;
+
 	return;
 }
 
@@ -69,6 +118,8 @@ public:
 	bool sr_desc_null_flag;
 	DXGI_FORMAT uasr_format;
 	bool uasr_desc_null_flag;
+	tml::graphic::TextureRect rect;
+	bool rect_auto_flag;
 	tml::shared_ptr<tml::graphic::Texture> atlas_texture;
 	tml::graphic::AtlasRect atlas_rect;
 
@@ -117,7 +168,6 @@ public:
 private:
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;
-	tml::XMUINT2EX size_;
 	tml::graphic::TextureRect rect_;
 	std::vector<tml::XMUINT2EX> mm_size_cont_;
 	std::vector<tml::DynamicBuffer> cpu_buf_cont_;
@@ -142,8 +192,8 @@ public:
 
 	ID3D11Texture2D *GetTexture(void);
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
-	const tml::XMUINT2EX &GetSize(void) const;
 	const tml::graphic::TextureRect &GetRect(void) const;
+	UINT GetArrayCount(void) const;
 	UINT GetMipmapCount(void) const;
 	const tml::XMUINT2EX *GetMipmapSizeArray(void) const;
 	const tml::XMUINT2EX *GetMipmapSize(const UINT) const;
@@ -193,16 +243,6 @@ inline const CD3D11_TEXTURE2D_DESC &tml::graphic::Texture::GetTextureDesc(void) 
 
 
 /**
- * @brief GetSizeŠÖ”
- * @return size (size)
- */
-inline const tml::XMUINT2EX &tml::graphic::Texture::GetSize(void) const
-{
-	return (this->size_);
-}
-
-
-/**
  * @brief GetRectŠÖ”
  * @return rect (rect)
  */
@@ -213,12 +253,22 @@ inline const tml::graphic::TextureRect &tml::graphic::Texture::GetRect(void) con
 
 
 /**
+ * @brief GetArrayCountŠÖ”
+ * @return ary_cnt (array_cnt)
+ */
+inline UINT tml::graphic::Texture::GetArrayCount(void) const
+{
+	return (this->tex_desc_.ArraySize);
+}
+
+
+/**
  * @brief GetMipmapCountŠÖ”
  * @return mm_cnt (mm_cnt)
  */
 inline UINT tml::graphic::Texture::GetMipmapCount(void) const
 {
-	return (this->mm_size_cont_.size());
+	return (this->tex_desc_.MipLevels);
 }
 
 

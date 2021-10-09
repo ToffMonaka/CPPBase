@@ -452,7 +452,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y));
+				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
 			} else {
 				if (this->map_->GetTexture() != nullptr) {
 					tml::shared_ptr<tml::graphic::Texture> tex;
@@ -465,7 +465,7 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 
 					this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-					size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y));
+					size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
 				} else {
 					this->SetTexture(layer->GetDiffuseTextureIndex(), tml::shared_ptr<tml::graphic::Texture>());
 				}
@@ -491,10 +491,10 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 
 	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->map_->GetTilesetTileSize().x * this->map_->GetTileCount().x), static_cast<FLOAT>(this->map_->GetTilesetTileSize().y * this->map_->GetTileCount().y));
 
-	if (desc.size_flag) {
-		this->size = desc.size;
-	} else {
+	if (desc.size_auto_flag) {
 		this->size = size;
+	} else {
+		this->size = desc.size;
 	}
 
 	{// ShaderStructuredBuffer Create
@@ -598,7 +598,7 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
 	this->layer_ssb_->UploadCPUBuffer();
 
-	this->block_ssb_->SetElement(0U, this->map_->GetBlockCount(), this->map_->GetBlockArray());
+	this->block_ssb_->SetElement(0U, this->map_.get());
 	this->block_ssb_->UploadCPUBuffer();
 
 	return;

@@ -211,7 +211,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		model_desc.SetManager(this->GetGraphicManager());
 		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
 		model_desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
-		model_desc.size_flag = true;
+		model_desc.size_auto_flag = false;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, model_desc) == nullptr) {
 			this->Init();
@@ -314,7 +314,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			this->start_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->start_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y));
+			this->start_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
 		}
 	}
 
@@ -384,7 +384,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			this->footer_model->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
-			this->footer_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetSize().x), static_cast<FLOAT>(tex->GetSize().y));
+			this->footer_model->size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
 		}
 	}
 

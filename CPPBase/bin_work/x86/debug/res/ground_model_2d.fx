@@ -13,12 +13,12 @@ struct MODEL_SSB_ELEMENT
 
 struct MODEL_LAYER_SSB_ELEMENT
 {
-	uint diffuse_tex_flg;
-	uint2 diffuse_tex_rect_pos;
-	uint2 diffuse_tex_rect_size;
+	uint tex_flg;
 	uint dummy1;
 	uint dummy2;
 	uint dummy3;
+	uint2 diffuse_tex_rect_pos;
+	uint2 diffuse_tex_rect_size;
 };
 
 
@@ -91,7 +91,7 @@ PS_OUTPUT RunPS(VS_OUTPUT input)
 
 	float4 diffuse_col = float4(1.0f, 1.0f, 1.0f, 1.0f);
 	
-	if (model_layer_ssb[input.layer_index].diffuse_tex_flg) {
+	if (model_layer_ssb[input.layer_index].tex_flg & 1) {
 		diffuse_col = diffuse_tex.Sample(diffuse_samp, input.tex_pos);
 	}
 
