@@ -92,7 +92,16 @@ PS_OUTPUT RunPS(VS_OUTPUT input)
 	float4 diffuse_col = float4(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	if (model_layer_ssb[input.layer_index].tex_flg & 1) {
-		diffuse_col = diffuse_tex.Sample(diffuse_samp, input.tex_pos);
+		float2 tex_size;
+
+		diffuse_tex.GetDimensions(tex_size.x, tex_size.y);
+
+		float2 tex_pos;
+
+		tex_pos.x = model_layer_ssb[input.layer_index].diffuse_tex_rect_pos.x / tex_size.x + model_layer_ssb[input.layer_index].diffuse_tex_rect_size.x / tex_size.x * input.tex_pos.x;
+		tex_pos.y = model_layer_ssb[input.layer_index].diffuse_tex_rect_pos.y / tex_size.y + model_layer_ssb[input.layer_index].diffuse_tex_rect_size.y / tex_size.y * input.tex_pos.y;
+
+		diffuse_col = diffuse_tex.Sample(diffuse_samp, tex_pos);
 	}
 
 	output.col = diffuse_col * model_ssb[0].col;

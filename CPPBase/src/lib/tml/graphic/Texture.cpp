@@ -257,6 +257,7 @@ void tml::graphic::Texture::Init(void)
 	this->clear_cpu_buf_cont_.clear();
 	this->str_line_w_cont_.clear();
 	this->atlas_tex_.reset();
+	this->atlas_rect_.Init();
 
 	tml::graphic::ManagerResource::Init();
 
@@ -288,6 +289,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		}
 
 		this->atlas_tex_ = desc.atlas_texture;
+		this->atlas_rect_ = desc.atlas_rect;
 	} else if (desc.swap_chain != nullptr) {
 		if (FAILED(desc.swap_chain->GetBuffer(0U, IID_PPV_ARGS(&this->tex_)))) {
 			this->Init();
@@ -490,8 +492,8 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 	if (this->atlas_tex_ != nullptr) {
 		if (desc.rect_auto_flag) {
-			this->rect_.SetPosition(desc.atlas_rect.GetPosition());
-			this->rect_.SetSize(desc.atlas_rect.GetSize());
+			this->rect_.SetPosition(this->atlas_rect_.GetPosition());
+			this->rect_.SetSize(this->atlas_rect_.GetSize());
 		} else {
 			this->rect_ = desc.rect;
 		}
@@ -705,6 +707,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
  */
 void tml::graphic::Texture::UploadCPUBuffer(void)
 {
+	if (this->atlas_tex_ != nullptr) {
+		this->UploadCPUBuffer();
+
+		return;
+	}
+
 	if (this->cpu_buf_cont_.size() <= 0U) {
 		return;
 	}
@@ -746,6 +754,12 @@ void tml::graphic::Texture::UploadCPUBuffer(void)
  */
 void tml::graphic::Texture::DownloadCPUBuffer(void)
 {
+	if (this->atlas_tex_ != nullptr) {
+		this->DownloadCPUBuffer();
+
+		return;
+	}
+
 	if (this->cpu_buf_cont_.size() <= 0U) {
 		return;
 	}
@@ -791,6 +805,12 @@ void tml::graphic::Texture::DownloadCPUBuffer(void)
  */
 void tml::graphic::Texture::ClearCPUBuffer(void)
 {
+	if (this->atlas_tex_ != nullptr) {
+		this->ClearCPUBuffer();
+
+		return;
+	}
+
 	if (this->cpu_buf_cont_.size() <= 0U) {
 		return;
 	}
@@ -813,6 +833,12 @@ void tml::graphic::Texture::ClearCPUBuffer(void)
  */
 void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE str_alignment_type, const tml::XMINT2EX &pos, const tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE pos_fit_type, tml::graphic::Font *font)
 {
+	if (this->atlas_tex_ != nullptr) {
+		this->DrawCPUBufferString(str, str_alignment_type, pos, pos_fit_type, font);
+
+		return;
+	}
+
 	if ((this->cpu_buf_cont_.size() <= 0U)
 	|| (str[0] == 0)
 	|| (font == nullptr)) {
@@ -1062,6 +1088,12 @@ void tml::graphic::Texture::DrawCPUBufferString(const WCHAR *str, const tml::Con
  */
 void tml::graphic::Texture::ClearRenderTarget(const tml::XMFLOAT4EX &col)
 {
+	if (this->atlas_tex_ != nullptr) {
+		this->ClearRenderTarget(col);
+
+		return;
+	}
+
 	if (this->rt_ == nullptr) {
 		return;
 	}
@@ -1084,6 +1116,12 @@ void tml::graphic::Texture::ClearRenderTarget(const tml::XMFLOAT4EX &col)
  */
 void tml::graphic::Texture::ClearDepthTarget(void)
 {
+	if (this->atlas_tex_ != nullptr) {
+		this->ClearDepthTarget();
+
+		return;
+	}
+
 	if (this->dt_ == nullptr) {
 		return;
 	}

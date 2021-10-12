@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "Atlas.h"
 #include "Model2D.h"
 
 
@@ -102,6 +103,8 @@ class FigureModel2DDesc : public tml::graphic::Model2DDesc
 {
 public:
 	tml::BinaryFileReadDesc image_file_read_desc;
+	tml::shared_ptr<tml::graphic::Texture> atlas_texture;
+	tml::graphic::AtlasRect atlas_rect;
 
 private:
 	void Release(void);
