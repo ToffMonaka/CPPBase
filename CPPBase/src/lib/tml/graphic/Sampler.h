@@ -62,6 +62,7 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE::BASE);
 
 private:
+	tml::graphic::Sampler *current_;
 	ID3D11SamplerState *samp_;
 	CD3D11_SAMPLER_DESC samp_desc_;
 
@@ -89,7 +90,7 @@ public:
  */
 inline ID3D11SamplerState *tml::graphic::Sampler::GetSampler(void)
 {
-	return (this->samp_);
+	return (this->current_->samp_);
 }
 
 
@@ -99,7 +100,7 @@ inline ID3D11SamplerState *tml::graphic::Sampler::GetSampler(void)
  */
 inline const CD3D11_SAMPLER_DESC &tml::graphic::Sampler::GetSamplerDesc(void) const
 {
-	return (this->samp_desc_);
+	return (this->current_->samp_desc_);
 }
 
 
@@ -109,5 +110,5 @@ inline const CD3D11_SAMPLER_DESC &tml::graphic::Sampler::GetSamplerDesc(void) co
  */
 inline ID3D11SamplerState *tml::graphic::Sampler::GetSR(void)
 {
-	return (this->samp_);
+	return (this->current_->samp_);
 }

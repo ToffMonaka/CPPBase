@@ -9,6 +9,7 @@
 #include "../math/XNAMathUINT.h"
 #include "../math/XNAMathFLOAT.h"
 #include "ShaderStructuredBuffer.h"
+#include "Map.h"
 
 
 namespace tml {

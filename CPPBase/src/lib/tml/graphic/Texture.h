@@ -105,8 +105,6 @@ namespace graphic {
 class TextureDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
-	IDXGISwapChain *swap_chain;
-	std::vector<tml::BinaryFileReadDesc> image_file_read_desc_container;
 	CD3D11_TEXTURE2D_DESC texture_desc;
 	bool cpu_buffer_flag;
 	DXGI_FORMAT render_target_format;
@@ -119,6 +117,8 @@ public:
 	bool uasr_desc_null_flag;
 	tml::graphic::TextureRect rect;
 	bool rect_auto_flag;
+	IDXGISwapChain *swap_chain;
+	std::vector<tml::BinaryFileReadDesc> image_file_read_desc_container;
 	tml::shared_ptr<tml::graphic::Texture> atlas_texture;
 	tml::graphic::AtlasRect atlas_rect;
 
@@ -165,6 +165,7 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::BASE);
 
 private:
+	tml::graphic::Texture *current_;
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;
 	tml::graphic::TextureRect rect_;
@@ -193,6 +194,7 @@ public:
 	ID3D11Texture2D *GetTexture(void);
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
 	const tml::graphic::TextureRect &GetRect(void) const;
+	void SetRect(const tml::graphic::TextureRect &);
 	UINT GetArrayCount(void) const;
 	UINT GetMipmapCount(void) const;
 	const tml::XMUINT2EX *GetMipmapSizeArray(void) const;
@@ -229,11 +231,7 @@ public:
  */
 inline ID3D11Texture2D *tml::graphic::Texture::GetTexture(void)
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetTexture());
-	}
-
-	return (this->tex_);
+	return (this->current_->tex_);
 }
 
 
@@ -243,11 +241,7 @@ inline ID3D11Texture2D *tml::graphic::Texture::GetTexture(void)
  */
 inline const CD3D11_TEXTURE2D_DESC &tml::graphic::Texture::GetTextureDesc(void) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetTextureDesc());
-	}
-
-	return (this->tex_desc_);
+	return (this->current_->tex_desc_);
 }
 
 
@@ -262,16 +256,24 @@ inline const tml::graphic::TextureRect &tml::graphic::Texture::GetRect(void) con
 
 
 /**
+ * @brief SetRectŠÖ”
+ * @param rect (rect)
+ */
+inline void tml::graphic::Texture::SetRect(const tml::graphic::TextureRect &rect)
+{
+	this->rect_ = rect;
+
+	return;
+}
+
+
+/**
  * @brief GetArrayCountŠÖ”
  * @return ary_cnt (array_cnt)
  */
 inline UINT tml::graphic::Texture::GetArrayCount(void) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetArrayCount());
-	}
-
-	return (this->tex_desc_.ArraySize);
+	return (this->current_->tex_desc_.ArraySize);
 }
 
 
@@ -281,11 +283,7 @@ inline UINT tml::graphic::Texture::GetArrayCount(void) const
  */
 inline UINT tml::graphic::Texture::GetMipmapCount(void) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetMipmapCount());
-	}
-
-	return (this->tex_desc_.MipLevels);
+	return (this->current_->tex_desc_.MipLevels);
 }
 
 
@@ -295,11 +293,7 @@ inline UINT tml::graphic::Texture::GetMipmapCount(void) const
  */
 inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSizeArray(void) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetMipmapSizeArray());
-	}
-
-	return (this->mm_size_cont_.data());
+	return (this->current_->mm_size_cont_.data());
 }
 
 
@@ -311,15 +305,11 @@ inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSizeArray(void) con
  */
 inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSize(const UINT mm_index) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetMipmapSize(mm_index));
-	}
-
-	if (mm_index >= this->mm_size_cont_.size()) {
+	if (mm_index >= this->current_->mm_size_cont_.size()) {
 		return (nullptr);
 	}
 
-	return (&this->mm_size_cont_[mm_index]);
+	return (&this->current_->mm_size_cont_[mm_index]);
 }
 
 
@@ -331,11 +321,7 @@ inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSize(const UINT mm_
  */
 inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSizeFast(const UINT mm_index) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetMipmapSizeFast(mm_index));
-	}
-
-	return (&this->mm_size_cont_[mm_index]);
+	return (&this->current_->mm_size_cont_[mm_index]);
 }
 
 
@@ -345,11 +331,7 @@ inline const tml::XMUINT2EX *tml::graphic::Texture::GetMipmapSizeFast(const UINT
  */
 inline UINT tml::graphic::Texture::GetCPUBufferCount(void) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetCPUBufferCount());
-	}
-
-	return (this->cpu_buf_cont_.size());
+	return (this->current_->cpu_buf_cont_.size());
 }
 
 
@@ -359,11 +341,7 @@ inline UINT tml::graphic::Texture::GetCPUBufferCount(void) const
  */
 inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferArray(void)
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetCPUBufferArray());
-	}
-
-	return (this->cpu_buf_cont_.data());
+	return (this->current_->cpu_buf_cont_.data());
 }
 
 
@@ -376,17 +354,13 @@ inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferArray(void)
  */
 inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBuffer(const UINT ary_index, const UINT mm_index)
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetCPUBuffer(ary_index, mm_index));
-	}
+	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->current_->tex_desc_.MipLevels);
 
-	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels);
-
-	if (cpu_buf_index >= this->cpu_buf_cont_.size()) {
+	if (cpu_buf_index >= this->current_->cpu_buf_cont_.size()) {
 		return (nullptr);
 	}
 
-	return (&this->cpu_buf_cont_[cpu_buf_index]);
+	return (&this->current_->cpu_buf_cont_[cpu_buf_index]);
 }
 
 
@@ -399,13 +373,9 @@ inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBuffer(const UINT ary_in
  */
 inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferFast(const UINT ary_index, const UINT mm_index)
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetCPUBufferFast(ary_index, mm_index));
-	}
+	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->current_->tex_desc_.MipLevels);
 
-	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels);
-
-	return (&this->cpu_buf_cont_[cpu_buf_index]);
+	return (&this->current_->cpu_buf_cont_[cpu_buf_index]);
 }
 
 
@@ -415,11 +385,7 @@ inline tml::DynamicBuffer *tml::graphic::Texture::GetCPUBufferFast(const UINT ar
  */
 inline UINT tml::graphic::Texture::GetMappedSubresourceCount(void) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetMappedSubresourceCount());
-	}
-
-	return (this->msr_cont_.size());
+	return (this->current_->msr_cont_.size());
 }
 
 
@@ -429,11 +395,7 @@ inline UINT tml::graphic::Texture::GetMappedSubresourceCount(void) const
  */
 inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresourceArray(void) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetMappedSubresourceArray());
-	}
-
-	return (this->msr_cont_.data());
+	return (this->current_->msr_cont_.data());
 }
 
 
@@ -446,17 +408,13 @@ inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresour
  */
 inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresource(const UINT ary_index, const UINT mm_index) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetMappedSubresource(ary_index, mm_index));
-	}
+	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->current_->tex_desc_.MipLevels);
 
-	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels);
-
-	if (cpu_buf_index >= this->msr_cont_.size()) {
+	if (cpu_buf_index >= this->current_->msr_cont_.size()) {
 		return (nullptr);
 	}
 
-	return (&this->msr_cont_[cpu_buf_index]);
+	return (&this->current_->msr_cont_[cpu_buf_index]);
 }
 
 
@@ -469,13 +427,9 @@ inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresour
  */
 inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresourceFast(const UINT ary_index, const UINT mm_index) const
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetMappedSubresourceFast(ary_index, mm_index));
-	}
+	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->current_->tex_desc_.MipLevels);
 
-	UINT cpu_buf_index = D3D11CalcSubresource(mm_index, ary_index, this->tex_desc_.MipLevels);
-
-	return (&this->msr_cont_[cpu_buf_index]);
+	return (&this->current_->msr_cont_[cpu_buf_index]);
 }
 
 
@@ -485,11 +439,7 @@ inline const D3D11_MAPPED_SUBRESOURCE *tml::graphic::Texture::GetMappedSubresour
  */
 inline ID3D11RenderTargetView *tml::graphic::Texture::GetRenderTarget(void)
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetRenderTarget());
-	}
-
-	return (this->rt_);
+	return (this->current_->rt_);
 }
 
 
@@ -499,11 +449,7 @@ inline ID3D11RenderTargetView *tml::graphic::Texture::GetRenderTarget(void)
  */
 inline ID3D11DepthStencilView *tml::graphic::Texture::GetDepthTarget(void)
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetDepthTarget());
-	}
-
-	return (this->dt_);
+	return (this->current_->dt_);
 }
 
 
@@ -513,11 +459,7 @@ inline ID3D11DepthStencilView *tml::graphic::Texture::GetDepthTarget(void)
  */
 inline ID3D11ShaderResourceView *tml::graphic::Texture::GetSR(void)
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetSR());
-	}
-
-	return (this->sr_);
+	return (this->current_->sr_);
 }
 
 
@@ -527,11 +469,7 @@ inline ID3D11ShaderResourceView *tml::graphic::Texture::GetSR(void)
  */
 inline ID3D11UnorderedAccessView *tml::graphic::Texture::GetUASR(void)
 {
-	if (this->atlas_tex_ != nullptr) {
-		return (this->atlas_tex_->GetUASR());
-	}
-
-	return (this->uasr_);
+	return (this->current_->uasr_);
 }
 
 
