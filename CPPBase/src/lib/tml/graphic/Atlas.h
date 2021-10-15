@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <map>
-#include "../math/XNAMathUINT.h"
+#include "../math/XNAMathVector.h"
 #include "../file/XMLFile.h"
 #include "ManagerResource.h"
 

@@ -133,11 +133,11 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		tml::graphic::TextureDesc tex_desc;
 
 		tex_desc.SetManager(this->mgr_);
-		tex_desc.swap_chain = this->mgr_->GetSwapChain();
 		tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::RENDER_TARGET | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR | tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::UASR);
 		tex_desc.render_target_desc_null_flag = true;
 		tex_desc.sr_desc_null_flag = true;
 		tex_desc.uasr_desc_null_flag = true;
+		tex_desc.swap_chain = this->mgr_->GetSwapChain();
 
 		if (this->mgr_->GetResource<tml::graphic::Texture>(this->main_render_target_texture, tex_desc) == nullptr) {
 			this->Init();

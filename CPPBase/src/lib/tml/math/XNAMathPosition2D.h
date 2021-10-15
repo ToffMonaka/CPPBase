@@ -6,7 +6,8 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "XNAMathFLOAT.h"
+#include "XNAMathVectorFLOAT.h"
+#include "XNAMathMatrixFLOAT.h"
 
 
 namespace tml {

@@ -7,7 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantInclude_Direct3DBase.h"
-#include "../math/XNAMathFLOAT.h"
+#include "../math/XNAMathVector.h"
 
 
 namespace tml {

@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../../lib/tml/math/XNAMathUINT.h"
+#include "../../lib/tml/math/XNAMathVector.h"
 #include "../../lib/tml/file/INIFile.h"
 
 

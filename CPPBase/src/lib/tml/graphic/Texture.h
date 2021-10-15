@@ -7,9 +7,6 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
-#include "../math/XNAMathINT.h"
-#include "../math/XNAMathUINT.h"
-#include "../math/XNAMathFLOAT.h"
 #include "ManagerResource.h"
 #include "Font.h"
 #include "Atlas.h"

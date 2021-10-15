@@ -6,8 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMathINT.h"
-#include "../math/XNAMathFLOAT.h"
+#include "../math/XNAMathVector.h"
 #include "DeviceEvent.h"
 
 

@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMathUINT.h"
+#include "../math/XNAMathVector.h"
 #include "Thread.h"
 
 

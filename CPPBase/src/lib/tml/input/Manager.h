@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMathINT.h"
+#include "../math/XNAMathVector.h"
 #include "../manager/Manager.h"
 #include "ManagerCommon.h"
 
