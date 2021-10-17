@@ -15,7 +15,6 @@ namespace FILE_PATH {
 	const WCHAR BACKGROUND_IMAGE[] = L"res/bg_img.png";
 	const WCHAR EMPTY_BACKGROUND_IMAGE[] = L"res/empty_bg_img.png";
 	const WCHAR TITLE_BACKGROUND_IMAGE[] = L"res/title_bg_img.png";
-	const WCHAR TITLE_LOGO_IMAGE[] = L"res/title_logo_img.png";
 	const WCHAR COMMON_ATLAS[] = L"res/common_atlas.plist";
 	const WCHAR GROUND_2D_MAP[] = L"res/ground_2d_map.tmx";
 	const WCHAR TITLE_BGM_SOUND[] = L"res/title_bgm_sound.mp3";

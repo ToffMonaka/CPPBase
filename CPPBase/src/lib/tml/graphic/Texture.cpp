@@ -102,6 +102,7 @@ void tml::graphic::TextureDesc::Init(void)
 	this->image_file_read_desc_container.clear();
 	this->image_file_read_desc_container.resize(this->texture_desc.ArraySize);
 	this->atlas_texture.reset();
+	this->atlas_texture_desc.reset();
 	this->atlas_rect.Init();
 
 	tml::graphic::ManagerResourceDesc::Init();
@@ -290,13 +291,32 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	}
 
 	if (desc.atlas_texture != nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->atlas_tex_, desc.atlas_texture) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		if (this->atlas_tex_->GetTexture() == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->atlas_rect_ = desc.atlas_rect;
+	} else if (desc.atlas_texture_desc != nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->atlas_tex_, (*desc.atlas_texture_desc)) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
 		if (desc.atlas_texture->GetTexture() == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 
-		this->atlas_tex_ = desc.atlas_texture;
 		this->atlas_rect_ = desc.atlas_rect;
 	} else if (desc.swap_chain != nullptr) {
 		if (FAILED(desc.swap_chain->GetBuffer(0U, IID_PPV_ARGS(&this->tex_)))) {

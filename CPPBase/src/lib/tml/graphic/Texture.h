@@ -10,6 +10,7 @@
 #include "ManagerResource.h"
 #include "Font.h"
 #include "Atlas.h"
+#include "Map.h"
 
 
 namespace tml {
@@ -117,6 +118,7 @@ public:
 	IDXGISwapChain *swap_chain;
 	std::vector<tml::BinaryFileReadDesc> image_file_read_desc_container;
 	tml::shared_ptr<tml::graphic::Texture> atlas_texture;
+	tml::shared_ptr<tml::graphic::TextureDesc> atlas_texture_desc;
 	tml::graphic::AtlasRect atlas_rect;
 
 private:

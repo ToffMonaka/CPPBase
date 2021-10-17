@@ -255,7 +255,10 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 		model_desc.SetManager(this->GetGraphicManager());
 		model_desc.position = tml::XMFLOAT2EX(0.0f, 32.0f);
-		model_desc.image_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_LOGO_IMAGE;
+		model_desc.diffuse_texture_desc = tml::make_shared<tml::graphic::TextureDesc>(1U);
+		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
+		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
+		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"title_logo_img.png"));
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->logo_model, model_desc) == nullptr) {
 			this->Init();

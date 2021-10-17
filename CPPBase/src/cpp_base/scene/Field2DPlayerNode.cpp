@@ -145,8 +145,10 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 
 		model_desc.SetManager(this->GetGraphicManager());
 		model_desc.position = tml::XMFLOAT2EX(0.0f, -128.0f);
-		model_desc.atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
-		model_desc.atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"pl_2d_img.png"));
+		model_desc.diffuse_texture_desc = tml::make_shared<tml::graphic::TextureDesc>(1U);
+		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
+		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
+		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"pl_2d_img.png"));
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, model_desc) == nullptr) {
 			this->Init();
@@ -163,8 +165,10 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		model_desc.size = tml::XMFLOAT2EX(96.0f, 64.0f);
 		model_desc.size_auto_flag = false;
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 0.5f);
-		model_desc.atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
-		model_desc.atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"shadow_2d_img.png"));
+		model_desc.diffuse_texture_desc = tml::make_shared<tml::graphic::TextureDesc>(1U);
+		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
+		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
+		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"shadow_2d_img.png"));
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->shadow_model, model_desc) == nullptr) {
 			this->Init();

@@ -175,9 +175,8 @@ void tml::graphic::FigureModel2DDesc::Init(void)
 {
 	this->Release();
 
-	this->image_file_read_desc.Init();
-	this->atlas_texture.reset();
-	this->atlas_rect.Init();
+	this->diffuse_texture.reset();
+	this->diffuse_texture_desc.reset();
 
 	tml::graphic::Model2DDesc::Init();
 
@@ -274,8 +273,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		return (-1);
 	}
 
-	auto img_file_read_desc_dat = desc.image_file_read_desc.GetDataByParent();
-
 	tml::XMFLOAT2EX size;
 
 	{// Forward2DStage Create
@@ -366,15 +363,10 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			}
 
 			// DiffuseTexture Create
-			if (!img_file_read_desc_dat->IsEmpty()) {
+			if (desc.diffuse_texture != nullptr) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
-				tml::graphic::TextureDesc tex_desc;
 
-				tex_desc.SetManager(this->GetManager());
-				tex_desc.SetTextureDesc(tml::ConstantUtil::GRAPHIC::TEXTURE_DESC_BIND_FLAG::SR);
-				tex_desc.image_file_read_desc_container[0].parent_data = img_file_read_desc_dat;
-
-				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc.diffuse_texture) == nullptr) {
 					this->Init();
 
 					return (-1);
@@ -383,15 +375,10 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
 				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
-			} else if (desc.atlas_texture != nullptr) {
+			} else if (desc.diffuse_texture_desc != nullptr) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
-				tml::graphic::TextureDesc tex_desc;
 
-				tex_desc.SetManager(this->GetManager());
-				tex_desc.atlas_texture = desc.atlas_texture;
-				tex_desc.atlas_rect = desc.atlas_rect;
-
-				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, (*desc.diffuse_texture_desc)) == nullptr) {
 					this->Init();
 
 					return (-1);

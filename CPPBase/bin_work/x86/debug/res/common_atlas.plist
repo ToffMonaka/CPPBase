@@ -30,7 +30,7 @@
                 <key>spriteSourceSize</key>
                 <string>{32,64}</string>
                 <key>textureRect</key>
-                <string>{{0,66},{32,64}}</string>
+                <string>{{34,0},{32,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -45,7 +45,22 @@
                 <key>spriteSourceSize</key>
                 <string>{32,32}</string>
                 <key>textureRect</key>
-                <string>{{0,132},{32,32}}</string>
+                <string>{{68,0},{32,32}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>title_logo_img.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{480,256}</string>
+                <key>spriteSourceSize</key>
+                <string>{480,256}</string>
+                <key>textureRect</key>
+                <string>{{102,0},{480,256}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -61,9 +76,9 @@
             <key>realTextureFileName</key>
             <string>common_atlas_img.png</string>
             <key>size</key>
-            <string>{32,164}</string>
+            <string>{582,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:e7b6b7947581dedfd73b411f2f34bb61:d2d25a7486ffaf9d8e9cbabb2f0702af:ea0086f88adb7a078e64ab94f1a453b5$</string>
+            <string>$TexturePacker:SmartUpdate:5443ce6ef2aac46ef79975ea3ffae19c:4bce6f6aaff5f063a8149fd8b236501c:ea0086f88adb7a078e64ab94f1a453b5$</string>
             <key>textureFileName</key>
             <string>common_atlas_img.png</string>
         </dict>
