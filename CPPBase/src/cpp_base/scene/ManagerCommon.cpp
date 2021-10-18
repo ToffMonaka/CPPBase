@@ -7,18 +7,7 @@
 #include "ManagerCommon.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "Manager.h"
-#include "Scene.h"
-#include "InitScene.h"
-#include "TitleScene.h"
-#include "SelectScene.h"
-#include "StageScene.h"
-#include "Node.h"
 #include "DebugNode.h"
-#include "Test2DStageNode.h"
-#include "Field2DNode.h"
-#include "Field2DGroundNode.h"
-#include "Field2DPlayerNode.h"
-#include "Field2DMobNode.h"
 
 
 /**

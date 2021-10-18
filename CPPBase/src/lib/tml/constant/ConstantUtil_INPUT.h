@@ -179,5 +179,11 @@ TML_ENUM_CLASS_FLAG_OPERATOR(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DAT
 namespace tml {
 namespace input {
 class Manager;
+class DeviceEvent;
+class DeviceEventDesc;
+class MouseDeviceEvent;
+class MouseDeviceEventDesc;
+class KeyboardDeviceEvent;
+class KeyboardDeviceEventDesc;
 }
 }

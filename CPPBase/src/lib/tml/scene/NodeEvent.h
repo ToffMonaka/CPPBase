@@ -57,6 +57,9 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	NodeEventDesc();
 	virtual ~NodeEventDesc();

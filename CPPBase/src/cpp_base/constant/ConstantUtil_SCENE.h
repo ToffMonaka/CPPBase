@@ -45,16 +45,28 @@ namespace cpp_base {
 namespace scene {
 class Manager;
 class Scene;
+class SceneDesc;
 class InitScene;
+class InitSceneDesc;
 class TitleScene;
+class TitleSceneDesc;
 class SelectScene;
+class SelectSceneDesc;
 class StageScene;
+class StageSceneDesc;
 class Node;
+class NodeDesc;
 class DebugNode;
+class DebugNodeDesc;
 class Test2DStageNode;
+class Test2DStageNodeDesc;
 class Field2DNode;
+class Field2DNodeDesc;
 class Field2DGroundNode;
+class Field2DGroundNodeDesc;
 class Field2DPlayerNode;
+class Field2DPlayerNodeDesc;
 class Field2DMobNode;
+class Field2DMobNodeDesc;
 }
 }

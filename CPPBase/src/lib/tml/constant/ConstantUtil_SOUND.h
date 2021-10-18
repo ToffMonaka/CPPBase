@@ -49,7 +49,10 @@ namespace tml {
 namespace sound {
 class Manager;
 class Sound;
+class SoundDesc;
 class BGMSound;
+class BGMSoundDesc;
 class SESound;
+class SESoundDesc;
 }
 }

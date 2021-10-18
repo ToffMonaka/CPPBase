@@ -80,6 +80,34 @@ void tml::scene::SceneEventDesc::Init(void)
 
 
 /**
+ * @brief ReadValue関数
+ * @param conf_file (config_file)
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::scene::SceneEventDesc::ReadValue(const tml::INIFile &conf_file)
+{
+	if (tml::scene::ManagerEventDesc::ReadValue(conf_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// SceneEvent Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"SCENE_EVENT");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::scene::SceneEvent::SceneEvent() :

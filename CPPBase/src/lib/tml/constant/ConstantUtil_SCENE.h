@@ -82,6 +82,12 @@ namespace tml {
 namespace scene {
 class Manager;
 class Scene;
+class SceneDesc;
 class Node;
+class NodeDesc;
+class SceneEvent;
+class SceneEventDesc;
+class NodeEvent;
+class NodeEventDesc;
 }
 }

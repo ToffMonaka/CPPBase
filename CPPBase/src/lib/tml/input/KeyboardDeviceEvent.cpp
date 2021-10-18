@@ -93,6 +93,34 @@ void tml::input::KeyboardDeviceEventDesc::Init(void)
 
 
 /**
+ * @brief ReadValue関数
+ * @param conf_file (config_file)
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::input::KeyboardDeviceEventDesc::ReadValue(const tml::INIFile &conf_file)
+{
+	if (tml::input::DeviceEventDesc::ReadValue(conf_file) < 0) {
+		return (-1);
+	}
+
+	/*
+	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
+	const std::wstring *val = nullptr;
+
+	{// KeyboardDeviceEvent Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"KEYBOARD_DEVICE_EVENT");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	return (0);
+}
+
+
+/**
  * @brief コンストラクタ
  */
 tml::input::KeyboardDeviceEvent::KeyboardDeviceEvent()

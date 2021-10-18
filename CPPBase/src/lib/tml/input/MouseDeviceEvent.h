@@ -60,6 +60,9 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT ReadValue(const tml::INIFile &);
+
 public:
 	MouseDeviceEventDesc();
 	virtual ~MouseDeviceEventDesc();

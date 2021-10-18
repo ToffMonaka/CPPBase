@@ -5,6 +5,7 @@
 
 
 #include "Manager.h"
+#include "DeviceEvent.h"
 #include "MouseDeviceEvent.h"
 #include "KeyboardDeviceEvent.h"
 
