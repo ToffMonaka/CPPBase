@@ -124,7 +124,6 @@ INT tml::graphic::AtlasDesc::ReadValue(const tml::INIFile &conf_file)
 		return (-1);
 	}
 
-	/*
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
@@ -132,9 +131,19 @@ INT tml::graphic::AtlasDesc::ReadValue(const tml::INIFile &conf_file)
 		val_name_cont = conf_file.data.GetValueNameContainer(L"ATLAS");
 
 		if (val_name_cont != nullptr) {
+			val = conf_file.data.GetValue((*val_name_cont), L"ATLAS_FILE_PATH");
+
+			if (val != nullptr) {
+				this->atlas_file_read_desc.data.file_path = (*val);
+			}
+
+			val = conf_file.data.GetValue((*val_name_cont), L"ATLAS_DIR_PATH");
+
+			if (val != nullptr) {
+				this->atlas_directory_path = (*val);
+			}
 		}
 	}
-	*/
 
 	return (0);
 }

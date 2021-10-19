@@ -114,7 +114,6 @@ INT tml::graphic::MapDesc::ReadValue(const tml::INIFile &conf_file)
 		return (-1);
 	}
 
-	/*
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
@@ -122,9 +121,19 @@ INT tml::graphic::MapDesc::ReadValue(const tml::INIFile &conf_file)
 		val_name_cont = conf_file.data.GetValueNameContainer(L"MAP");
 
 		if (val_name_cont != nullptr) {
+			val = conf_file.data.GetValue((*val_name_cont), L"MAP_FILE_PATH");
+
+			if (val != nullptr) {
+				this->map_file_read_desc.data.file_path = (*val);
+			}
+
+			val = conf_file.data.GetValue((*val_name_cont), L"MAP_DIR_PATH");
+
+			if (val != nullptr) {
+				this->map_directory_path = (*val);
+			}
 		}
 	}
-	*/
 
 	return (0);
 }

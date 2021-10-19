@@ -19,6 +19,7 @@ class SoundDesc : public tml::sound::ManagerResourceDesc
 {
 public:
 	tml::BinaryFileReadDesc sound_file_read_desc;
+	std::wstring sound_directory_path;
 
 private:
 	void Release(void);

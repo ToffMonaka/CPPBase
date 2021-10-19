@@ -134,6 +134,7 @@ void tml::graphic::ModelStage::Init(void)
 	this->bs_index_ = 0U;
 	this->ds_index_ = 0U;
 	this->shader_index_ = 0U;
+	this->layer_cont_.clear();
 	this->layer_cont_.resize(0U);
 
 	return;
@@ -287,6 +288,7 @@ void tml::graphic::Model::Init(void)
 	this->mesh_cont_.clear();
 	this->tex_cont_.clear();
 	this->samp_cont_.clear();
+	this->stage_cont_.clear();
 	this->stage_cont_.resize(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT);
 
 	tml::graphic::ManagerResource::Init();

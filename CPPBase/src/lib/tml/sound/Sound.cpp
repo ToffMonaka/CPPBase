@@ -39,6 +39,7 @@ void tml::sound::SoundDesc::Init(void)
 	this->Release();
 
 	this->sound_file_read_desc.Init();
+	this->sound_directory_path.clear();
 
 	tml::sound::ManagerResourceDesc::Init();
 
@@ -58,7 +59,6 @@ INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &conf_file)
 		return (-1);
 	}
 
-	/*
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
@@ -66,9 +66,19 @@ INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &conf_file)
 		val_name_cont = conf_file.data.GetValueNameContainer(L"SOUND");
 
 		if (val_name_cont != nullptr) {
+			val = conf_file.data.GetValue((*val_name_cont), L"SOUND_FILE_PATH");
+
+			if (val != nullptr) {
+				this->sound_file_read_desc.data.file_path = (*val);
+			}
+
+			val = conf_file.data.GetValue((*val_name_cont), L"SOUND_DIR_PATH");
+
+			if (val != nullptr) {
+				this->sound_directory_path = (*val);
+			}
 		}
 	}
-	*/
 
 	return (0);
 }

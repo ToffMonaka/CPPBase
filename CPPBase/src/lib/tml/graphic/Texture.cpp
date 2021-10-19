@@ -48,6 +48,7 @@ void tml::graphic::TextureRect::Init(void)
  * @brief コンストラクタ
  */
 tml::graphic::TextureDesc::TextureDesc() :
+	texture_desc(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
 	cpu_buffer_flag(false),
 	render_target_format(DXGI_FORMAT_UNKNOWN),
 	render_target_desc_null_flag(false),
@@ -60,8 +61,6 @@ tml::graphic::TextureDesc::TextureDesc() :
 	rect_auto_flag(true),
 	swap_chain(nullptr)
 {
-	this->texture_desc = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
-	this->image_file_read_desc_container.clear();
 	this->image_file_read_desc_container.resize(this->texture_desc.ArraySize);
 
 	return;
@@ -188,13 +187,13 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
  */
 tml::graphic::Texture::Texture() :
 	tex_(nullptr),
+	tex_desc_(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
 	rt_(nullptr),
 	dt_(nullptr),
 	sr_(nullptr),
 	uasr_(nullptr)
 {
 	this->current_ = this;
-	this->tex_desc_ = CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U);
 
 	return;
 }

@@ -110,8 +110,10 @@ void tml::graphic::FigureModel2DLayerShaderStructuredBuffer::SetElement(const UI
 		return;
 	}
 
+	element->texture_flag = 0U;
+
 	if (diffuse_tex != nullptr) {
-		element->texture_flag = 1U;
+		element->texture_flag |= 1U;
 		element->diffuse_texture_rect_position = diffuse_tex->GetRect().GetPosition();
 		element->diffuse_texture_rect_size = diffuse_tex->GetRect().GetSize();
 	}

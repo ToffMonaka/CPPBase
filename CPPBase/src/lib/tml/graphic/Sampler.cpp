@@ -11,9 +11,9 @@
 /**
  * @brief コンストラクタ
  */
-tml::graphic::SamplerDesc::SamplerDesc()
+tml::graphic::SamplerDesc::SamplerDesc() :
+	sampler_desc(CD3D11_DEFAULT())
 {
-	this->sampler_desc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
 	this->sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 
 	return;
@@ -162,7 +162,6 @@ tml::graphic::Sampler::Sampler() :
 	samp_desc_(CD3D11_DEFAULT())
 {
 	this->current_ = this;
-	this->samp_desc_ = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT());
 	this->samp_desc_.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 
 	return;
