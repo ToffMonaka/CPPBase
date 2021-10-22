@@ -7,7 +7,6 @@
 #include "Field2DGroundNode.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/GroundModel2D.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
@@ -111,7 +110,6 @@ void cpp_base::scene::Field2DGroundNode::Init(void)
 {
 	this->Release();
 
-	this->canvas_2d.reset();
 	this->model.reset();
 
 	cpp_base::scene::Node::Init();
@@ -153,6 +151,8 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 		}
 	}
 
+	this->SetModel2D(0U, this->model);
+
 	return (0);
 }
 
@@ -164,12 +164,6 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
  */
 INT cpp_base::scene::Field2DGroundNode::OnStart(void)
 {
-	{// Canvas2D Create
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
-			return (-1);
-		}
-	}
-
 	return (0);
 }
 
@@ -188,7 +182,5 @@ void cpp_base::scene::Field2DGroundNode::OnEnd(void)
  */
 void cpp_base::scene::Field2DGroundNode::OnUpdate(void)
 {
-	this->canvas_2d->SetDrawModel(this->model.get());
-
 	return;
 }

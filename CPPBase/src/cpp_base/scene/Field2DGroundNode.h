@@ -56,7 +56,6 @@ public: cpp_base::scene::Field2DGroundNode &operator =(const cpp_base::scene::Fi
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::GroundModel2D> model;
 
 private:

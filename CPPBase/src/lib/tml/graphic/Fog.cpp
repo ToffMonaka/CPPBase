@@ -91,7 +91,8 @@ INT tml::graphic::FogDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Fog::Fog() :
 	effect_type_(tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE::NONE),
-	col_(1.0f)
+	col_(1.0f),
+	draw_set_flg_(false)
 	/*
 	,
 	mul_val_(0.0f),
@@ -126,6 +127,7 @@ void tml::graphic::Fog::Init(void)
 	this->position.Init();
 	this->effect_type_ = tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE::NONE;
 	this->col_ = 1.0f;
+	this->draw_set_flg_ = false;
 	/*
 	this->mul_val_ = 0.0f;
 	this->near_rng_ = 0.0f;

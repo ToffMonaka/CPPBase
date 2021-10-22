@@ -193,6 +193,9 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		}
 	}
 
+	this->SetCanvas2D(this->canvas_2d);
+	this->SetCamera2D(this->camera_2d);
+
 	return (0);
 }
 
@@ -253,10 +256,6 @@ void cpp_base::scene::StageScene::OnUpdate(void)
 		break;
 	}
 	}
-
-	this->canvas_2d->SetDrawCamera(this->camera_2d.get());
-
-	this->GetGraphicManager()->SetDrawCanvas(this->canvas_2d.get());
 
 	return;
 }

@@ -220,8 +220,8 @@ public:
 	void SetDrawTargetTexture(tml::graphic::Texture *, tml::graphic::Texture *);
 	void SetDrawTargetTexture(const UINT, tml::graphic::Texture **, tml::graphic::Texture *);
 	void ClearDrawTargetTexture(void);
-	void SetDrawViewport(tml::graphic::Viewport *);
-	void SetDrawViewport(const UINT, tml::graphic::Viewport *);
+	void SetDrawViewport(const tml::graphic::Viewport &);
+	void SetDrawViewport(const UINT, const tml::graphic::Viewport *);
 	void ClearDrawViewport(void);
 	void SetDrawRasterizerState(tml::graphic::RasterizerState *);
 	void ClearDrawRasterizerState(void);
@@ -481,34 +481,6 @@ inline void tml::graphic::Manager::SetDrawStageData(tml::graphic::DRAW_STAGE_DAT
 inline void tml::graphic::Manager::ClearDrawStageData(void)
 {
 	this->draw_stage_dat_ = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief SetDrawCanvasŠÖ”
- * @param canvas (canvas)
- */
-inline void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
-{
-	if ((canvas == nullptr)
-	|| (this->draw_canvas_cnt_ >= tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT)) {
-		return;
-	}
-
-	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
-
-	return;
-}
-
-
-/**
- * @brief ClearDrawCanvasŠÖ”
- */
-inline void tml::graphic::Manager::ClearDrawCanvas(void)
-{
-	this->draw_canvas_cnt_ = 0U;
 
 	return;
 }

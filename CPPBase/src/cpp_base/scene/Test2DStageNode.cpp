@@ -5,7 +5,6 @@
 
 
 #include "Test2DStageNode.h"
-#include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/scene/Node.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
@@ -110,7 +109,6 @@ void cpp_base::scene::Test2DStageNode::Init(void)
 {
 	this->Release();
 
-	this->canvas_2d.reset();
 	this->field_layout_node.reset();
 	this->field_node.reset();
 
@@ -147,12 +145,6 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
  */
 INT cpp_base::scene::Test2DStageNode::OnStart(void)
 {
-	{// Canvas2D Create
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
-			return (-1);
-		}
-	}
-
 	{// FieldLayoutNode Create
 		this->field_layout_node = this->GetChildNode(L"field_layout");
 

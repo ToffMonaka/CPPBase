@@ -177,12 +177,11 @@ void tml::graphic::Canvas2D::Draw(void)
 	if (this->draw_camera_ != nullptr) {
 		auto rt_tex = this->GetRenderTargetTexture().get();
 		auto rt_tex_clear_flg = this->GetRenderTargetTextureClearFlag();
-		auto vp = &this->vp_;
 
-		vp->SetX(static_cast<FLOAT>(rt_tex->GetRect().GetSize().x) * this->GetViewportX());
-		vp->SetY(static_cast<FLOAT>(rt_tex->GetRect().GetSize().y) * this->GetViewportY());
-		vp->SetWidth(static_cast<FLOAT>(rt_tex->GetRect().GetSize().x) * this->GetViewportWidth());
-		vp->SetHeight(static_cast<FLOAT>(rt_tex->GetRect().GetSize().y) * this->GetViewportHeight());
+		this->vp_.SetX(static_cast<FLOAT>(rt_tex->GetRect().GetSize().x) * this->GetViewportX());
+		this->vp_.SetY(static_cast<FLOAT>(rt_tex->GetRect().GetSize().y) * this->GetViewportY());
+		this->vp_.SetWidth(static_cast<FLOAT>(rt_tex->GetRect().GetSize().x) * this->GetViewportWidth());
+		this->vp_.SetHeight(static_cast<FLOAT>(rt_tex->GetRect().GetSize().y) * this->GetViewportHeight());
 
 		DirectX::XMMATRIX v_mat;
 		DirectX::XMMATRIX inv_v_mat;
@@ -234,7 +233,7 @@ void tml::graphic::Canvas2D::Draw(void)
 			}
 			case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
 				this->GetManager()->SetDrawTargetTexture(rt_tex, nullptr);
-				this->GetManager()->SetDrawViewport(vp);
+				this->GetManager()->SetDrawViewport(this->vp_);
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 					this->draw_model_ary_[draw_model_i]->DrawStageForward2D();
@@ -260,6 +259,149 @@ void tml::graphic::Canvas2D::Draw(void)
 	this->ClearDrawLight();
 	this->ClearDrawFog();
 	this->ClearDrawModel();
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawCameraä÷êî
+ * @param camera (camera)
+ */
+void tml::graphic::Canvas2D::SetDrawCamera(tml::graphic::Camera2D *camera)
+{
+	if ((camera == nullptr)
+	|| (camera->GetDrawSetFlag())) {
+		return;
+	}
+
+	if (this->draw_camera_ != nullptr) {
+		this->draw_camera_->SetDrawSetFlag(false);
+	}
+
+	this->draw_camera_ = camera;
+
+	camera->SetDrawSetFlag(true);
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawCameraä÷êî
+ */
+void tml::graphic::Canvas2D::ClearDrawCamera(void)
+{
+	if (this->draw_camera_ != nullptr) {
+		this->draw_camera_->SetDrawSetFlag(false);
+	}
+
+	this->draw_camera_ = nullptr;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawLightä÷êî
+ * @param light (light)
+ */
+void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light *light)
+{
+	if ((light == nullptr)
+	|| (light->GetDrawSetFlag())
+	|| (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT)) {
+		return;
+	}
+
+	this->draw_light_ary_[this->draw_light_cnt_++] = light;
+
+	light->SetDrawSetFlag(true);
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawLightä÷êî
+ */
+void tml::graphic::Canvas2D::ClearDrawLight(void)
+{
+	for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
+		this->draw_light_ary_[draw_light_i]->SetDrawSetFlag(false);
+	}
+
+	this->draw_light_cnt_ = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawFogä÷êî
+ * @param fog (fog)
+ */
+void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog *fog)
+{
+	if ((fog == nullptr)
+	|| (fog->GetDrawSetFlag())
+	|| (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::FOG_LIMIT)) {
+		return;
+	}
+
+	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
+
+	fog->SetDrawSetFlag(true);
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawFogä÷êî
+ */
+void tml::graphic::Canvas2D::ClearDrawFog(void)
+{
+	for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
+		this->draw_fog_ary_[draw_fog_i]->SetDrawSetFlag(false);
+	}
+
+	this->draw_fog_cnt_ = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawModelä÷êî
+ * @param model (model)
+ */
+void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model)
+{
+	if ((model == nullptr)
+	|| (model->GetDrawSetFlag())
+	|| (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::MODEL_LIMIT)) {
+		return;
+	}
+
+	this->draw_model_ary_[this->draw_model_cnt_++] = model;
+
+	model->SetDrawSetFlag(true);
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawModelä÷êî
+ */
+void tml::graphic::Canvas2D::ClearDrawModel(void)
+{
+	for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
+		this->draw_model_ary_[draw_model_i]->SetDrawSetFlag(false);
+	}
+
+	this->draw_model_cnt_ = 0U;
 
 	return;
 }

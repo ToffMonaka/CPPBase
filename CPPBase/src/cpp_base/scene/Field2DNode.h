@@ -56,7 +56,6 @@ public: cpp_base::scene::Field2DNode &operator =(const cpp_base::scene::Field2DN
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::scene::Node> ground_layout_node;
 	tml::shared_ptr<tml::scene::Node> ground_node;
 	tml::shared_ptr<tml::scene::Node> player_layout_node;

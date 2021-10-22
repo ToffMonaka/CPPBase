@@ -61,6 +61,7 @@ public:
 
 private:
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE type_;
+	bool draw_set_flg_;
 
 private:
 	void Release(void);
@@ -73,6 +74,8 @@ public:
 	INT Create(const tml::graphic::CanvasDesc &);
 
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE GetType(void) const;
+	bool GetDrawSetFlag(void) const;
+	void SetDrawSetFlag(const bool);
 
 	virtual void Draw(void);
 };
@@ -96,4 +99,26 @@ inline void tml::graphic::Canvas::Release(void)
 inline tml::ConstantUtil::GRAPHIC::CANVAS_TYPE tml::graphic::Canvas::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetDrawSetFlagŠÖ”
+ * @return draw_set_flg (draw_set_flag)
+ */
+inline bool tml::graphic::Canvas::GetDrawSetFlag(void) const
+{
+	return (this->draw_set_flg_);
+}
+
+
+/**
+ * @brief SetDrawSetFlagŠÖ”
+ * @param draw_set_flg (draw_set_flag)
+ */
+inline void tml::graphic::Canvas::SetDrawSetFlag(const bool draw_set_flg)
+{
+	this->draw_set_flg_ = draw_set_flg;
+
+	return;
 }

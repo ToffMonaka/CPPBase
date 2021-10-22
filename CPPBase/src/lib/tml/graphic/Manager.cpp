@@ -824,11 +824,11 @@ void tml::graphic::Manager::ClearDrawTargetTexture(void)
  * @brief SetDrawViewportä÷êî
  * @param vp (viewport)
  */
-void tml::graphic::Manager::SetDrawViewport(tml::graphic::Viewport *vp)
+void tml::graphic::Manager::SetDrawViewport(const tml::graphic::Viewport &vp)
 {
 	this->draw_vp_cnt_ = 1U;
 
-	this->draw_vp_ary_[0] = vp->Get();
+	this->draw_vp_ary_[0] = vp.Get();
 
 	this->device_context_->RSSetViewports(this->draw_vp_cnt_, this->draw_vp_ary_.data());
 
@@ -841,7 +841,7 @@ void tml::graphic::Manager::SetDrawViewport(tml::graphic::Viewport *vp)
  * @param vp_cnt (viewport_count)
  * @param vp_ary (viewport_array)
  */
-void tml::graphic::Manager::SetDrawViewport(const UINT vp_cnt, tml::graphic::Viewport *vp_ary)
+void tml::graphic::Manager::SetDrawViewport(const UINT vp_cnt, const tml::graphic::Viewport *vp_ary)
 {
 	this->draw_vp_cnt_ = vp_cnt;
 
@@ -1508,6 +1508,41 @@ void tml::graphic::Manager::ClearDrawSamplerSR(const UINT index, const UINT samp
 	}
 
 	this->device_context_->PSSetSamplers(index, samp_cnt, &this->draw_samp_sr_ary_[index]);
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawCanvasä÷êî
+ * @param canvas (canvas)
+ */
+void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
+{
+	if ((canvas == nullptr)
+	|| (canvas->GetDrawSetFlag())
+	|| (this->draw_canvas_cnt_ >= tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT)) {
+		return;
+	}
+
+	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
+
+	canvas->SetDrawSetFlag(true);
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawCanvasä÷êî
+ */
+void tml::graphic::Manager::ClearDrawCanvas(void)
+{
+	for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
+		this->draw_canvas_ary_[draw_canvas_i]->SetDrawSetFlag(false);
+	}
+
+	this->draw_canvas_cnt_ = 0U;
 
 	return;
 }

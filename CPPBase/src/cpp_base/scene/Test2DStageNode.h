@@ -56,7 +56,6 @@ public: cpp_base::scene::Test2DStageNode &operator =(const cpp_base::scene::Test
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::scene::Node> field_layout_node;
 	tml::shared_ptr<tml::scene::Node> field_node;
 

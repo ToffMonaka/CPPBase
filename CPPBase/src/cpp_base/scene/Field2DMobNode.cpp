@@ -8,7 +8,6 @@
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/FigureModel2D.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
@@ -112,7 +111,6 @@ void cpp_base::scene::Field2DMobNode::Init(void)
 {
 	this->Release();
 
-	this->canvas_2d.reset();
 	this->model.reset();
 	this->shadow_model.reset();
 
@@ -175,6 +173,9 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 		}
 	}
 
+	this->SetModel2D(0U, this->shadow_model);
+	this->SetModel2D(1U, this->model);
+
 	return (0);
 }
 
@@ -186,12 +187,6 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
  */
 INT cpp_base::scene::Field2DMobNode::OnStart(void)
 {
-	{// Canvas2D Create
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
-			return (-1);
-		}
-	}
-
 	return (0);
 }
 
@@ -210,8 +205,5 @@ void cpp_base::scene::Field2DMobNode::OnEnd(void)
  */
 void cpp_base::scene::Field2DMobNode::OnUpdate(void)
 {
-	this->canvas_2d->SetDrawModel(this->shadow_model.get());
-	this->canvas_2d->SetDrawModel(this->model.get());
-
 	return;
 }

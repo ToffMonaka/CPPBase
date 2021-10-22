@@ -9,7 +9,6 @@
 #include "../../lib/tml/input/KeyboardDeviceEvent.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/FigureModel2D.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../input/Manager.h"
@@ -114,7 +113,6 @@ void cpp_base::scene::Field2DPlayerNode::Init(void)
 {
 	this->Release();
 
-	this->canvas_2d.reset();
 	this->model.reset();
 	this->shadow_model.reset();
 
@@ -177,6 +175,9 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		}
 	}
 
+	this->SetModel2D(0U, this->shadow_model);
+	this->SetModel2D(1U, this->model);
+
 	return (0);
 }
 
@@ -188,12 +189,6 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
  */
 INT cpp_base::scene::Field2DPlayerNode::OnStart(void)
 {
-	{// Canvas2D Create
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
-			return (-1);
-		}
-	}
-
 	return (0);
 }
 
@@ -227,9 +222,6 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 		this->model->position.SetX(this->model->position.GetX() + 2.0f);
 		this->shadow_model->position.SetX(this->model->position.GetX());
 	}
-
-	this->canvas_2d->SetDrawModel(this->shadow_model.get());
-	this->canvas_2d->SetDrawModel(this->model.get());
 
 	return;
 }

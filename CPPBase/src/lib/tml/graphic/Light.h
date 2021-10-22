@@ -76,6 +76,7 @@ public:
 private:
 	tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE effect_type_;
 	tml::XMFLOAT3EX col_;
+	bool draw_set_flg_;
 	/*
 	FLOAT mul_val_;
 	FLOAT add_val_;
@@ -106,6 +107,8 @@ public:
 	tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE GetEffectType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;
 	void SetColor(const tml::XMFLOAT3EX &);
+	bool GetDrawSetFlag(void) const;
+	void SetDrawSetFlag(const bool);
 	/*
 	FLOAT GetMulValue(void) const;
 	void SetMulValue(const FLOAT);
@@ -167,6 +170,28 @@ inline const tml::XMFLOAT3EX &tml::graphic::Light::GetColor(void) const
 inline void tml::graphic::Light::SetColor(const tml::XMFLOAT3EX &col)
 {
 	this->col_ = col;
+
+	return;
+}
+
+
+/**
+ * @brief GetDrawSetFlagŠÖ”
+ * @return draw_set_flg (draw_set_flag)
+ */
+inline bool tml::graphic::Light::GetDrawSetFlag(void) const
+{
+	return (this->draw_set_flg_);
+}
+
+
+/**
+ * @brief SetDrawSetFlagŠÖ”
+ * @param draw_set_flg (draw_set_flag)
+ */
+inline void tml::graphic::Light::SetDrawSetFlag(const bool draw_set_flg)
+{
+	this->draw_set_flg_ = draw_set_flg;
 
 	return;
 }

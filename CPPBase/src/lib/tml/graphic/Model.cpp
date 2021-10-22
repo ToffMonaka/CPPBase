@@ -241,7 +241,8 @@ INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Model::Model() :
-	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE)
+	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE),
+	draw_set_flg_(false)
 {
 	this->stage_cont_.resize(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT);
 
@@ -290,6 +291,7 @@ void tml::graphic::Model::Init(void)
 	this->samp_cont_.clear();
 	this->stage_cont_.clear();
 	this->stage_cont_.resize(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT);
+	this->draw_set_flg_ = false;
 
 	tml::graphic::ManagerResource::Init();
 

@@ -5,7 +5,6 @@
 
 
 #include "Field2DNode.h"
-#include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/scene/Node.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
@@ -111,7 +110,6 @@ void cpp_base::scene::Field2DNode::Init(void)
 {
 	this->Release();
 
-	this->canvas_2d.reset();
 	this->ground_layout_node.reset();
 	this->ground_node.reset();
 	this->player_layout_node.reset();
@@ -152,12 +150,6 @@ INT cpp_base::scene::Field2DNode::Create(const cpp_base::scene::Field2DNodeDesc 
  */
 INT cpp_base::scene::Field2DNode::OnStart(void)
 {
-	{// Canvas2D Create
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
-			return (-1);
-		}
-	}
-
 	{// GroundLayoutNode Create
 		this->ground_layout_node = this->GetChildNode(L"ground_layout");
 

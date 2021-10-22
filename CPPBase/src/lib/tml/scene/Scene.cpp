@@ -7,6 +7,9 @@
 #include "Scene.h"
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
+#include "../graphic/Canvas2D.h"
+#include "../graphic/Camera2D.h"
+#include "../graphic/Model2D.h"
 #include "../sound/Manager.h"
 #include "Manager.h"
 #include "Node.h"
@@ -136,6 +139,9 @@ void tml::scene::Scene::Init(void)
 	this->run_flg_ = false;
 	this->start_flg_ = false;
 	this->started_flg_ = false;
+	this->canvas_2d_.reset();
+	this->camera_2d_.reset();
+	this->model_2d_cont_.clear();
 
 	tml::scene::ManagerResource::Init();
 
@@ -200,6 +206,14 @@ INT tml::scene::Scene::Start(void)
 	}
 
 	if (this->root_node_ != nullptr) {
+		if (this->root_node_->GetCanvas2D() == nullptr) {
+			this->root_node_->SetCanvas2D(this->canvas_2d_);
+		}
+
+		if (this->root_node_->GetCamera2D() == nullptr) {
+			this->root_node_->SetCamera2D(this->camera_2d_);
+		}
+
 		this->root_node_->Start();
 	}
 
@@ -261,9 +275,27 @@ void tml::scene::Scene::Update(void)
 
 	this->OnUpdate();
 
+	if (this->canvas_2d_ != nullptr) {
+		this->canvas_2d_->SetDrawCamera(this->camera_2d_.get());
+
+		for (auto &model_2d : this->model_2d_cont_) {
+			this->canvas_2d_->SetDrawModel(model_2d.get());
+		}
+
+		this->GetGraphicManager()->SetDrawCanvas(this->canvas_2d_.get());
+	}
+
 	if (this->root_node_ != nullptr) {
 		if (!this->root_node_->IsStarted()) {
 			if (this->root_node_->GetStartFlag()) {
+				if (this->root_node_->GetCanvas2D() == nullptr) {
+					this->root_node_->SetCanvas2D(this->canvas_2d_);
+				}
+
+				if (this->root_node_->GetCamera2D() == nullptr) {
+					this->root_node_->SetCamera2D(this->camera_2d_);
+				}
+
 				this->root_node_->Start();
 			}
 		}
@@ -324,6 +356,47 @@ void tml::scene::Scene::SetRootNode(void)
 	node_desc.name = L"root";
 
 	this->GetManager()->GetResource<tml::scene::Node>(this->root_node_, node_desc);
+
+	return;
+}
+
+
+/**
+ * @brief SetCanvas2Dä÷êî
+ * @param canvas_2d (canvas_2d)
+ */
+void tml::scene::Scene::SetCanvas2D(const tml::shared_ptr<tml::graphic::Canvas2D> &canvas_2d)
+{
+	this->canvas_2d_ = canvas_2d;
+
+	return;
+}
+
+
+/**
+ * @brief SetCamera2Dä÷êî
+ * @param camera_2d (camera_2d)
+ */
+void tml::scene::Scene::SetCamera2D(const tml::shared_ptr<tml::graphic::Camera2D> &camera_2d)
+{
+	this->camera_2d_ = camera_2d;
+
+	return;
+}
+
+
+/**
+ * @brief SetModel2Dä÷êî
+ * @param index (index)
+ * @param model_2d (model_2d)
+ */
+void tml::scene::Scene::SetModel2D(const UINT index, const tml::shared_ptr<tml::graphic::Model2D> &model_2d)
+{
+	if (index >= this->model_2d_cont_.size()) {
+		this->model_2d_cont_.resize(index + 1U);
+	}
+
+	this->model_2d_cont_[index] = model_2d;
 
 	return;
 }

@@ -62,6 +62,7 @@ public:
 
 private:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type_;
+	bool draw_set_flg_;
 
 private:
 	void Release(void);
@@ -76,6 +77,8 @@ public:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE GetType(void) const;
 	virtual DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &) = 0;
 	virtual DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &) = 0;
+	bool GetDrawSetFlag(void) const;
+	void SetDrawSetFlag(const bool);
 };
 }
 }
@@ -97,4 +100,26 @@ inline void tml::graphic::Camera::Release(void)
 inline tml::ConstantUtil::GRAPHIC::CAMERA_TYPE tml::graphic::Camera::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetDrawSetFlagŠÖ”
+ * @return draw_set_flg (draw_set_flag)
+ */
+inline bool tml::graphic::Camera::GetDrawSetFlag(void) const
+{
+	return (this->draw_set_flg_);
+}
+
+
+/**
+ * @brief SetDrawSetFlagŠÖ”
+ * @param draw_set_flg (draw_set_flag)
+ */
+inline void tml::graphic::Camera::SetDrawSetFlag(const bool draw_set_flg)
+{
+	this->draw_set_flg_ = draw_set_flg;
+
+	return;
 }

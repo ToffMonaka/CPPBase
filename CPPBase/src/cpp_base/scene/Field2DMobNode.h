@@ -56,7 +56,6 @@ public: cpp_base::scene::Field2DMobNode &operator =(const cpp_base::scene::Field
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
 	tml::shared_ptr<tml::graphic::FigureModel2D> model;
 	tml::shared_ptr<tml::graphic::FigureModel2D> shadow_model;
 

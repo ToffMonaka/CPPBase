@@ -103,7 +103,8 @@ INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Light::Light() :
 	effect_type_(tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE),
-	col_(1.0f)
+	col_(1.0f),
+	draw_set_flg_(false)
 	/*
 	,
 	mul_val_(0.0f),
@@ -144,6 +145,7 @@ void tml::graphic::Light::Init(void)
 	this->position.Init();
 	this->effect_type_ = tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE;
 	this->col_ = 1.0f;
+	this->draw_set_flg_ = false;
 	/*
 	this->mul_val_ = 0.0f;
 	this->add_val_ = 0.0f;
