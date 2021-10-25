@@ -59,6 +59,7 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_2D);
 
 private:
+	tml::shared_ptr<tml::graphic::Camera2D> camera_;
 	tml::shared_ptr<tml::graphic::Texture> rt_tex_;
 	bool rt_tex_clear_flg_;
 	FLOAT vp_x_;
@@ -66,7 +67,6 @@ private:
 	FLOAT vp_w_;
 	FLOAT vp_h_;
 
-	tml::graphic::Camera2D *draw_camera_;
 	UINT draw_light_cnt_;
 	std::array<tml::graphic::Light *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
 	UINT draw_fog_cnt_;
@@ -87,6 +87,8 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::Canvas2DDesc &);
 
+	const tml::shared_ptr<tml::graphic::Camera2D> &GetCamera(void);
+	void SetCamera(const tml::shared_ptr<tml::graphic::Camera2D> &);
 	const tml::shared_ptr<tml::graphic::Texture> &GetRenderTargetTexture(void);
 	void SetRenderTargetTexture(const tml::shared_ptr<tml::graphic::Texture> &);
 	bool GetRenderTargetTextureClearFlag(void) const;
@@ -101,8 +103,6 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawCamera(tml::graphic::Camera2D *);
-	void ClearDrawCamera(void);
 	void SetDrawLight(tml::graphic::Light *);
 	void ClearDrawLight(void);
 	void SetDrawFog(tml::graphic::Fog *);
@@ -120,6 +120,16 @@ public:
 inline void tml::graphic::Canvas2D::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetCameraä÷êî
+ * @return camera (camera)
+ */
+inline const tml::shared_ptr<tml::graphic::Camera2D> &tml::graphic::Canvas2D::GetCamera(void)
+{
+	return (this->camera_);
 }
 
 

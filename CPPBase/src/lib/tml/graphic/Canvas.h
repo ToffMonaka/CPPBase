@@ -74,8 +74,9 @@ public:
 	INT Create(const tml::graphic::CanvasDesc &);
 
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE GetType(void) const;
-	bool GetDrawSetFlag(void) const;
-	void SetDrawSetFlag(const bool);
+	bool IsDrawSet(void) const;
+	void SetDrawSet(void);
+	void ClearDrawSet(void);
 
 	virtual void Draw(void);
 };
@@ -103,22 +104,33 @@ inline tml::ConstantUtil::GRAPHIC::CANVAS_TYPE tml::graphic::Canvas::GetType(voi
 
 
 /**
- * @brief GetDrawSetFlag関数
- * @return draw_set_flg (draw_set_flag)
+ * @brief IsDrawSet関数
+ * @return result_flg (result_flag)<br>
+ * false=セット無し,true=セット有り
  */
-inline bool tml::graphic::Canvas::GetDrawSetFlag(void) const
+inline bool tml::graphic::Canvas::IsDrawSet(void) const
 {
 	return (this->draw_set_flg_);
 }
 
 
 /**
- * @brief SetDrawSetFlag関数
- * @param draw_set_flg (draw_set_flag)
+ * @brief SetDrawSet関数
  */
-inline void tml::graphic::Canvas::SetDrawSetFlag(const bool draw_set_flg)
+inline void tml::graphic::Canvas::SetDrawSet(void)
 {
-	this->draw_set_flg_ = draw_set_flg;
+	this->draw_set_flg_ = true;
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawSet関数
+ */
+inline void tml::graphic::Canvas::ClearDrawSet(void)
+{
+	this->draw_set_flg_ = false;
 
 	return;
 }

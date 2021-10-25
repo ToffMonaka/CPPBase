@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <vector>
 #include "../math/XNAMathPosition.h"
 #include "ManagerResource.h"
 
@@ -76,7 +77,8 @@ public:
 private:
 	tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE effect_type_;
 	tml::XMFLOAT3EX col_;
-	bool draw_set_flg_;
+	UINT draw_set_canvas_cnt_;
+	std::vector<const tml::graphic::Canvas *> draw_set_canvas_cont_;
 	/*
 	FLOAT mul_val_;
 	FLOAT add_val_;
@@ -107,8 +109,9 @@ public:
 	tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE GetEffectType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;
 	void SetColor(const tml::XMFLOAT3EX &);
-	bool GetDrawSetFlag(void) const;
-	void SetDrawSetFlag(const bool);
+	bool IsDrawSet(const tml::graphic::Canvas *) const;
+	void SetDrawSet(const tml::graphic::Canvas *);
+	void ClearDrawSet(void);
 	/*
 	FLOAT GetMulValue(void) const;
 	void SetMulValue(const FLOAT);
@@ -176,22 +179,45 @@ inline void tml::graphic::Light::SetColor(const tml::XMFLOAT3EX &col)
 
 
 /**
- * @brief GetDrawSetFlag関数
- * @return draw_set_flg (draw_set_flag)
+ * @brief IsDrawSet関数
+ * @param draw_set_canvas (draw_set_canvas)
+ * @return result_flg (result_flag)<br>
+ * false=セット無し,true=セット有り
  */
-inline bool tml::graphic::Light::GetDrawSetFlag(void) const
+inline bool tml::graphic::Light::IsDrawSet(const tml::graphic::Canvas *draw_set_canvas) const
 {
-	return (this->draw_set_flg_);
+	for (UINT draw_set_canvas_i = 0U; draw_set_canvas_i < this->draw_set_canvas_cnt_; ++draw_set_canvas_i) {
+		if (this->draw_set_canvas_cont_[draw_set_canvas_i] == draw_set_canvas) {
+			return (true);
+		}
+	}
+
+	return (false);
 }
 
 
 /**
- * @brief SetDrawSetFlag関数
- * @param draw_set_flg (draw_set_flag)
+ * @brief SetDrawSet関数
+ * @param draw_set_canvas (draw_set_canvas)
  */
-inline void tml::graphic::Light::SetDrawSetFlag(const bool draw_set_flg)
+inline void tml::graphic::Light::SetDrawSet(const tml::graphic::Canvas *draw_set_canvas)
 {
-	this->draw_set_flg_ = draw_set_flg;
+	if (this->draw_set_canvas_cnt_ >= this->draw_set_canvas_cont_.size()) {
+		this->draw_set_canvas_cont_.resize(this->draw_set_canvas_cnt_ + 1U);
+	}
+
+	this->draw_set_canvas_cont_[this->draw_set_canvas_cnt_++] = draw_set_canvas;
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawSet関数
+ */
+inline void tml::graphic::Light::ClearDrawSet(void)
+{
+	this->draw_set_canvas_cnt_ = 0U;
 
 	return;
 }

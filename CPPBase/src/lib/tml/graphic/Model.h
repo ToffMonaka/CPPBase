@@ -366,7 +366,8 @@ private:
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
 	tml::shared_ptr<tml::graphic::Sampler> empty_samp_;
 	std::vector<tml::unique_ptr<tml::graphic::ModelStage>> stage_cont_;
-	bool draw_set_flg_;
+	UINT draw_set_canvas_cnt_;
+	std::vector<const tml::graphic::Canvas *> draw_set_canvas_cont_;
 
 private:
 	void Release(void);
@@ -412,8 +413,9 @@ public:
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSamplerFast(const UINT);
 	void SetSampler(const UINT, const tml::shared_ptr<tml::graphic::Sampler> &);
 	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &) = 0;
-	bool GetDrawSetFlag(void) const;
-	void SetDrawSetFlag(const bool);
+	bool IsDrawSet(const tml::graphic::Canvas *) const;
+	void SetDrawSet(const tml::graphic::Canvas *);
+	void ClearDrawSet(void);
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
 
@@ -715,22 +717,45 @@ inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::Consta
 
 
 /**
- * @brief GetDrawSetFlag関数
- * @return draw_set_flg (draw_set_flag)
+ * @brief IsDrawSet関数
+ * @param draw_set_canvas (draw_set_canvas)
+ * @return result_flg (result_flag)<br>
+ * false=セット無し,true=セット有り
  */
-inline bool tml::graphic::Model::GetDrawSetFlag(void) const
+inline bool tml::graphic::Model::IsDrawSet(const tml::graphic::Canvas *draw_set_canvas) const
 {
-	return (this->draw_set_flg_);
+	for (UINT draw_set_canvas_i = 0U; draw_set_canvas_i < this->draw_set_canvas_cnt_; ++draw_set_canvas_i) {
+		if (this->draw_set_canvas_cont_[draw_set_canvas_i] == draw_set_canvas) {
+			return (true);
+		}
+	}
+
+	return (false);
 }
 
 
 /**
- * @brief SetDrawSetFlag関数
- * @param draw_set_flg (draw_set_flag)
+ * @brief SetDrawSet関数
+ * @param draw_set_canvas (draw_set_canvas)
  */
-inline void tml::graphic::Model::SetDrawSetFlag(const bool draw_set_flg)
+inline void tml::graphic::Model::SetDrawSet(const tml::graphic::Canvas *draw_set_canvas)
 {
-	this->draw_set_flg_ = draw_set_flg;
+	if (this->draw_set_canvas_cnt_ >= this->draw_set_canvas_cont_.size()) {
+		this->draw_set_canvas_cont_.resize(this->draw_set_canvas_cnt_ + 1U);
+	}
+
+	this->draw_set_canvas_cont_[this->draw_set_canvas_cnt_++] = draw_set_canvas;
+
+	return;
+}
+
+
+/**
+ * @brief ClearDrawSet関数
+ */
+inline void tml::graphic::Model::ClearDrawSet(void)
+{
+	this->draw_set_canvas_cnt_ = 0U;
 
 	return;
 }

@@ -13,6 +13,7 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
+#include "Canvas.h"
 
 
 /**
@@ -242,7 +243,7 @@ INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Model::Model() :
 	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE),
-	draw_set_flg_(false)
+	draw_set_canvas_cnt_(0U)
 {
 	this->stage_cont_.resize(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT);
 
@@ -291,7 +292,8 @@ void tml::graphic::Model::Init(void)
 	this->samp_cont_.clear();
 	this->stage_cont_.clear();
 	this->stage_cont_.resize(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE_COUNT);
-	this->draw_set_flg_ = false;
+	this->draw_set_canvas_cnt_ = 0U;
+	this->draw_set_canvas_cont_.clear();
 
 	tml::graphic::ManagerResource::Init();
 

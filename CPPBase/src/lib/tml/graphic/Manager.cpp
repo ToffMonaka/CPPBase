@@ -1520,14 +1520,14 @@ void tml::graphic::Manager::ClearDrawSamplerSR(const UINT index, const UINT samp
 void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
 {
 	if ((canvas == nullptr)
-	|| (canvas->GetDrawSetFlag())
+	|| (canvas->IsDrawSet())
 	|| (this->draw_canvas_cnt_ >= tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT)) {
 		return;
 	}
 
 	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 
-	canvas->SetDrawSetFlag(true);
+	canvas->SetDrawSet();
 
 	return;
 }
@@ -1539,7 +1539,7 @@ void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
 void tml::graphic::Manager::ClearDrawCanvas(void)
 {
 	for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
-		this->draw_canvas_ary_[draw_canvas_i]->SetDrawSetFlag(false);
+		this->draw_canvas_ary_[draw_canvas_i]->ClearDrawSet();
 	}
 
 	this->draw_canvas_cnt_ = 0U;

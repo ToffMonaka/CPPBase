@@ -17,7 +17,6 @@ class Manager;
 namespace graphic {
 class Manager;
 class Canvas2D;
-class Camera2D;
 class Model2D;
 }
 namespace sound {
@@ -89,9 +88,9 @@ private:
 	std::list<tml::shared_ptr<tml::scene::Node>> child_node_cont_;
 	tml::shared_ptr<tml::scene::Node> empty_child_node_;
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d_;
-	tml::shared_ptr<tml::graphic::Camera2D> camera_2d_;
 	std::vector<tml::shared_ptr<tml::graphic::Model2D>> model_2d_cont_;
 	tml::shared_ptr<tml::graphic::Model2D> empty_model_2d_;
+	tml::graphic::Canvas2D *draw_canvas_2d_;
 
 private:
 	void Release(void);
@@ -135,12 +134,12 @@ public:
 	void RemoveChildNodeFromParentNode(const bool event_flg = true);
 	const tml::shared_ptr<tml::graphic::Canvas2D> &GetCanvas2D(void);
 	void SetCanvas2D(const tml::shared_ptr<tml::graphic::Canvas2D> &);
-	const tml::shared_ptr<tml::graphic::Camera2D> &GetCamera2D(void);
-	void SetCamera2D(const tml::shared_ptr<tml::graphic::Camera2D> &);
 	UINT GetModel2DCount(void) const;
 	const tml::shared_ptr<tml::graphic::Model2D> &GetModel2D(const UINT);
 	const tml::shared_ptr<tml::graphic::Model2D> &GetModel2DFast(const UINT);
 	void SetModel2D(const UINT, const tml::shared_ptr<tml::graphic::Model2D> &);
+	tml::graphic::Canvas2D *GetDrawCanvas2D(void);
+	void SetDrawCanvas2D(tml::graphic::Canvas2D *);
 };
 }
 }
@@ -299,16 +298,6 @@ inline const tml::shared_ptr<tml::graphic::Canvas2D> &tml::scene::Node::GetCanva
 
 
 /**
- * @brief GetCamera2Dä÷êî
- * @return camera_2d (camera_2d)
- */
-inline const tml::shared_ptr<tml::graphic::Camera2D> &tml::scene::Node::GetCamera2D(void)
-{
-	return (this->camera_2d_);
-}
-
-
-/**
  * @brief GetModel2DCountä÷êî
  * @return model_2d_cnt (model_2d_count)
  */
@@ -343,4 +332,26 @@ inline const tml::shared_ptr<tml::graphic::Model2D> &tml::scene::Node::GetModel2
 inline const tml::shared_ptr<tml::graphic::Model2D> &tml::scene::Node::GetModel2DFast(const UINT index)
 {
 	return (this->model_2d_cont_[index]);
+}
+
+
+/**
+ * @brief GetDrawCanvas2Dä÷êî
+ * @return draw_canvas_2d (draw_canvas_2d)
+ */
+inline tml::graphic::Canvas2D *tml::scene::Node::GetDrawCanvas2D(void)
+{
+	return (this->draw_canvas_2d_);
+}
+
+
+/**
+ * @brief SetDrawCanvas2Dä÷êî
+ * @param draw_canvas_2d (draw_canvas_2d)
+ */
+inline void tml::scene::Node::SetDrawCanvas2D(tml::graphic::Canvas2D *draw_canvas_2d)
+{
+	this->draw_canvas_2d_ = draw_canvas_2d;
+
+	return;
 }

@@ -162,22 +162,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 	this->deferred_create_res_cont_.push_back(this->GetSoundManager()->common2.select_bgm_sound);
 	this->deferred_create_res_cont_.push_back(this->GetSoundManager()->common2.start_se_sound);
 
-	{// Canvas2D Create
-		tml::graphic::Canvas2DDesc canvas_desc;
-
-		canvas_desc.SetManager(this->GetGraphicManager());
-		canvas_desc.resource_name = L"Canvas2D";
-
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-
-		this->canvas_2d->SetRenderTargetTexture(this->GetGraphicManager()->common.main_render_target_texture);
-		this->canvas_2d->SetRenderTargetTextureClearFlag(true);
-	}
-
 	{// Camera2D Create
 		tml::graphic::Camera2DDesc camera_desc;
 
@@ -190,6 +174,22 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 
 			return (-1);
 		}
+	}
+
+	{// Canvas2D Create
+		tml::graphic::Canvas2DDesc canvas_desc;
+
+		canvas_desc.SetManager(this->GetGraphicManager());
+
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->canvas_2d->SetCamera(this->camera_2d);
+		this->canvas_2d->SetRenderTargetTexture(this->GetGraphicManager()->common.main_render_target_texture);
+		this->canvas_2d->SetRenderTargetTextureClearFlag(true);
 	}
 
 	{// Camera3D Create
@@ -304,6 +304,10 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		tex->UploadCPUBuffer();
 	}
 
+	this->SetCanvas2D(this->canvas_2d);
+	this->SetModel2D(0U, this->bg_model);
+	this->SetModel2D(1U, this->wait_model);
+
 	return (0);
 }
 
@@ -410,12 +414,6 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 		break;
 	}
 	}
-
-	this->canvas_2d->SetDrawCamera(this->camera_2d.get());
-	this->canvas_2d->SetDrawModel(this->bg_model.get());
-	this->canvas_2d->SetDrawModel(this->wait_model.get());
-
-	this->GetGraphicManager()->SetDrawCanvas(this->canvas_2d.get());
 
 	return;
 }

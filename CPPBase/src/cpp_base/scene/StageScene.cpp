@@ -146,22 +146,6 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		return (-1);
 	}
 
-	{// Canvas2D Create
-		tml::graphic::Canvas2DDesc canvas_desc;
-
-		canvas_desc.SetManager(this->GetGraphicManager());
-		canvas_desc.resource_name = L"Canvas2D";
-
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
-			this->Init();
-
-			return (-1);
-		}
-
-		this->canvas_2d->SetRenderTargetTexture(this->GetGraphicManager()->common.main_render_target_texture);
-		this->canvas_2d->SetRenderTargetTextureClearFlag(true);
-	}
-
 	{// Camera2D Create
 		tml::graphic::Camera2DDesc camera_desc;
 
@@ -174,6 +158,22 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 
 			return (-1);
 		}
+	}
+
+	{// Canvas2D Create
+		tml::graphic::Canvas2DDesc canvas_desc;
+
+		canvas_desc.SetManager(this->GetGraphicManager());
+
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->canvas_2d->SetCamera(this->camera_2d);
+		this->canvas_2d->SetRenderTargetTexture(this->GetGraphicManager()->common.main_render_target_texture);
+		this->canvas_2d->SetRenderTargetTextureClearFlag(true);
 	}
 
 	{// Camera3D Create
@@ -194,7 +194,6 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 	}
 
 	this->SetCanvas2D(this->canvas_2d);
-	this->SetCamera2D(this->camera_2d);
 
 	return (0);
 }

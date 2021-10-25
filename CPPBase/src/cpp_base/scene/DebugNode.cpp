@@ -8,7 +8,6 @@
 #include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/Canvas2D.h"
 #include "../../lib/tml/graphic/FigureModel2D.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
@@ -112,7 +111,6 @@ void cpp_base::scene::DebugNode::Init(void)
 {
 	this->Release();
 
-	this->canvas_2d.reset();
 	this->update_time = tml::TIME_REAL(0.0);
 	this->font.reset();
 	this->model.reset();
@@ -195,6 +193,8 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 		}
 	}
 
+	this->SetModel2D(0U, this->model);
+
 	return (0);
 }
 
@@ -206,12 +206,6 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
  */
 INT cpp_base::scene::DebugNode::OnStart(void)
 {
-	{// Canvas2D Create
-		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, L"Canvas2D") == nullptr) {
-			return (-1);
-		}
-	}
-
 	return (0);
 }
 
@@ -250,8 +244,6 @@ void cpp_base::scene::DebugNode::OnUpdate(void)
 
 		this->update_time = tml::TIME_REAL(0.0);
 	}
-
-	this->canvas_2d->SetDrawModel(this->model.get());
 
 	return;
 }

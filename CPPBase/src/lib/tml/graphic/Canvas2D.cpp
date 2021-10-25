@@ -89,7 +89,6 @@ tml::graphic::Canvas2D::Canvas2D() :
 	vp_y_(0.0f),
 	vp_w_(1.0f),
 	vp_h_(1.0f),
-	draw_camera_(nullptr),
 	draw_light_cnt_(0U),
 	draw_light_ary_{},
 	draw_fog_cnt_(0U),
@@ -119,6 +118,7 @@ void tml::graphic::Canvas2D::Init(void)
 {
 	this->Release();
 
+	this->camera_.reset();
 	this->rt_tex_.reset();
 	this->rt_tex_clear_flg_ = false;
 	this->vp_.Init();
@@ -126,7 +126,6 @@ void tml::graphic::Canvas2D::Init(void)
 	this->vp_y_ = 0.0f;
 	this->vp_w_ = 1.0f;
 	this->vp_h_ = 1.0f;
-	this->draw_camera_ = nullptr;
 	this->draw_light_cnt_ = 0U;
 	this->draw_fog_cnt_ = 0U;
 	this->draw_model_cnt_ = 0U;
@@ -158,6 +157,18 @@ INT tml::graphic::Canvas2D::Create(const tml::graphic::Canvas2DDesc &desc)
 
 
 /**
+ * @brief SetCameraä÷êî
+ * @param camera (camera)
+ */
+void tml::graphic::Canvas2D::SetCamera(const tml::shared_ptr<tml::graphic::Camera2D> &camera)
+{
+	this->camera_ = camera;
+
+	return;
+}
+
+
+/**
  * @brief SetRenderTargetTextureä÷êî
  * @param rt_tex (render_target_texture)
  */
@@ -174,7 +185,7 @@ void tml::graphic::Canvas2D::SetRenderTargetTexture(const tml::shared_ptr<tml::g
  */
 void tml::graphic::Canvas2D::Draw(void)
 {
-	if (this->draw_camera_ != nullptr) {
+	if (this->camera_ != nullptr) {
 		auto rt_tex = this->GetRenderTargetTexture().get();
 		auto rt_tex_clear_flg = this->GetRenderTargetTextureClearFlag();
 
@@ -187,9 +198,9 @@ void tml::graphic::Canvas2D::Draw(void)
 		DirectX::XMMATRIX inv_v_mat;
 		DirectX::XMMATRIX p_mat;
 
-		this->draw_camera_->GetViewMatrix(v_mat);
+		this->camera_->GetViewMatrix(v_mat);
 		inv_v_mat = DirectX::XMMatrixInverse(nullptr, v_mat);
-		this->draw_camera_->GetProjectionMatrix(p_mat);
+		this->camera_->GetProjectionMatrix(p_mat);
 
 		tml::graphic::DRAW_STAGE_DATA draw_stage_dat(v_mat, inv_v_mat, p_mat);
 
@@ -255,48 +266,9 @@ void tml::graphic::Canvas2D::Draw(void)
 		this->GetManager()->ClearDrawStageData();
 	}
 
-	this->ClearDrawCamera();
 	this->ClearDrawLight();
 	this->ClearDrawFog();
 	this->ClearDrawModel();
-
-	return;
-}
-
-
-/**
- * @brief SetDrawCameraä÷êî
- * @param camera (camera)
- */
-void tml::graphic::Canvas2D::SetDrawCamera(tml::graphic::Camera2D *camera)
-{
-	if ((camera == nullptr)
-	|| (camera->GetDrawSetFlag())) {
-		return;
-	}
-
-	if (this->draw_camera_ != nullptr) {
-		this->draw_camera_->SetDrawSetFlag(false);
-	}
-
-	this->draw_camera_ = camera;
-
-	camera->SetDrawSetFlag(true);
-
-	return;
-}
-
-
-/**
- * @brief ClearDrawCameraä÷êî
- */
-void tml::graphic::Canvas2D::ClearDrawCamera(void)
-{
-	if (this->draw_camera_ != nullptr) {
-		this->draw_camera_->SetDrawSetFlag(false);
-	}
-
-	this->draw_camera_ = nullptr;
 
 	return;
 }
@@ -309,14 +281,14 @@ void tml::graphic::Canvas2D::ClearDrawCamera(void)
 void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light *light)
 {
 	if ((light == nullptr)
-	|| (light->GetDrawSetFlag())
+	|| (light->IsDrawSet(this))
 	|| (this->draw_light_cnt_ >= tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT)) {
 		return;
 	}
 
 	this->draw_light_ary_[this->draw_light_cnt_++] = light;
 
-	light->SetDrawSetFlag(true);
+	light->SetDrawSet(this);
 
 	return;
 }
@@ -328,7 +300,7 @@ void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light *light)
 void tml::graphic::Canvas2D::ClearDrawLight(void)
 {
 	for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
-		this->draw_light_ary_[draw_light_i]->SetDrawSetFlag(false);
+		this->draw_light_ary_[draw_light_i]->ClearDrawSet();
 	}
 
 	this->draw_light_cnt_ = 0U;
@@ -344,14 +316,14 @@ void tml::graphic::Canvas2D::ClearDrawLight(void)
 void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog *fog)
 {
 	if ((fog == nullptr)
-	|| (fog->GetDrawSetFlag())
+	|| (fog->IsDrawSet(this))
 	|| (this->draw_fog_cnt_ >= tml::ConstantUtil::GRAPHIC::FOG_LIMIT)) {
 		return;
 	}
 
 	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 
-	fog->SetDrawSetFlag(true);
+	fog->SetDrawSet(this);
 
 	return;
 }
@@ -363,7 +335,7 @@ void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog *fog)
 void tml::graphic::Canvas2D::ClearDrawFog(void)
 {
 	for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
-		this->draw_fog_ary_[draw_fog_i]->SetDrawSetFlag(false);
+		this->draw_fog_ary_[draw_fog_i]->ClearDrawSet();
 	}
 
 	this->draw_fog_cnt_ = 0U;
@@ -379,14 +351,14 @@ void tml::graphic::Canvas2D::ClearDrawFog(void)
 void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model)
 {
 	if ((model == nullptr)
-	|| (model->GetDrawSetFlag())
+	|| (model->IsDrawSet(this))
 	|| (this->draw_model_cnt_ >= tml::ConstantUtil::GRAPHIC::MODEL_LIMIT)) {
 		return;
 	}
 
 	this->draw_model_ary_[this->draw_model_cnt_++] = model;
 
-	model->SetDrawSetFlag(true);
+	model->SetDrawSet(this);
 
 	return;
 }
@@ -398,7 +370,7 @@ void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model)
 void tml::graphic::Canvas2D::ClearDrawModel(void)
 {
 	for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-		this->draw_model_ary_[draw_model_i]->SetDrawSetFlag(false);
+		this->draw_model_ary_[draw_model_i]->ClearDrawSet();
 	}
 
 	this->draw_model_cnt_ = 0U;
