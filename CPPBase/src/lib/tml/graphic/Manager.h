@@ -145,7 +145,7 @@ private:
 	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> draw_rt_ary_;
 	ID3D11DepthStencilView *draw_dt_;
 	UINT draw_vp_cnt_;
-	std::array<D3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> draw_vp_ary_;
+	std::array<CD3D11_VIEWPORT, tml::ConstantUtil::GRAPHIC::VIEWPORT_LIMIT> draw_vp_ary_;
 	ID3D11RasterizerState *draw_rs_;
 	ID3D11BlendState *draw_bs_;
 	ID3D11DepthStencilState *draw_ds_;
@@ -220,8 +220,8 @@ public:
 	void SetDrawTargetTexture(tml::graphic::Texture *, tml::graphic::Texture *);
 	void SetDrawTargetTexture(const UINT, tml::graphic::Texture **, tml::graphic::Texture *);
 	void ClearDrawTargetTexture(void);
-	void SetDrawViewport(const tml::graphic::Viewport &);
-	void SetDrawViewport(const UINT, const tml::graphic::Viewport *);
+	void SetDrawViewport(tml::graphic::Viewport *);
+	void SetDrawViewport(const UINT, tml::graphic::Viewport **);
 	void ClearDrawViewport(void);
 	void SetDrawRasterizerState(tml::graphic::RasterizerState *);
 	void ClearDrawRasterizerState(void);

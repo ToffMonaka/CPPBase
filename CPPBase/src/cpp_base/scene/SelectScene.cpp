@@ -313,10 +313,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		}
 	}
 
-	this->SetCanvas2D(this->canvas_2d);
-	this->SetModel2D(0U, this->bg_model);
-	this->SetModel2D(1U, this->stage_model);
-
 	return (0);
 }
 
@@ -339,6 +335,10 @@ INT cpp_base::scene::SelectScene::OnStart(void)
 			return (-1);
 		}
 	}
+
+	this->SetCanvas2D(0U, this->canvas_2d);
+	this->SetModel2D(0U, this->bg_model);
+	this->SetModel2D(1U, this->stage_model);
 
 	return (0);
 }

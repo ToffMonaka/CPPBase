@@ -193,8 +193,6 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		}
 	}
 
-	this->SetCanvas2D(this->canvas_2d);
-
 	return (0);
 }
 
@@ -231,6 +229,8 @@ INT cpp_base::scene::StageScene::OnStart(void)
 
 		this->stage_layout_node->AddChildNode(this->stage_node);
 	}
+
+	this->SetCanvas2D(0U, this->canvas_2d);
 
 	return (0);
 }

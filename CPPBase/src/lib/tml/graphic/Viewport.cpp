@@ -10,15 +10,9 @@
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Viewport::Viewport()
+tml::graphic::Viewport::Viewport() :
+	vp_(0.0f, 0.0f, 1.0f, 1.0f)
 {
-	this->vp_.TopLeftX = 0.0f;
-	this->vp_.TopLeftY = 0.0f;
-	this->vp_.Width = 0.0f;
-	this->vp_.Height = 0.0f;
-	this->vp_.MinDepth = D3D11_MIN_DEPTH;
-	this->vp_.MaxDepth = D3D11_MAX_DEPTH;
-
 	return;
 }
 
@@ -27,7 +21,7 @@ tml::graphic::Viewport::Viewport()
  * @brief コンストラクタ
  * @param vp (viewport)
  */
-tml::graphic::Viewport::Viewport(const D3D11_VIEWPORT &vp)
+tml::graphic::Viewport::Viewport(const CD3D11_VIEWPORT &vp)
 {
 	this->vp_ = vp;
 
@@ -42,15 +36,9 @@ tml::graphic::Viewport::Viewport(const D3D11_VIEWPORT &vp)
  * @param w (width)
  * @param h (height)
  */
-tml::graphic::Viewport::Viewport(const FLOAT x, const FLOAT y, const FLOAT w, const FLOAT h)
+tml::graphic::Viewport::Viewport(const FLOAT x, const FLOAT y, const FLOAT w, const FLOAT h) :
+	vp_(x, y, w, h)
 {
-	this->vp_.TopLeftX = x;
-	this->vp_.TopLeftY = y;
-	this->vp_.Width = w;
-	this->vp_.Height = h;
-	this->vp_.MinDepth = D3D11_MIN_DEPTH;
-	this->vp_.MaxDepth = D3D11_MAX_DEPTH;
-
 	return;
 }
 
@@ -64,15 +52,9 @@ tml::graphic::Viewport::Viewport(const FLOAT x, const FLOAT y, const FLOAT w, co
  * @param min_depth (min_depth)
  * @param max_depth (max_depth)
  */
-tml::graphic::Viewport::Viewport(const FLOAT x, const FLOAT y, const FLOAT w, const FLOAT h, const FLOAT min_depth, const FLOAT max_depth)
+tml::graphic::Viewport::Viewport(const FLOAT x, const FLOAT y, const FLOAT w, const FLOAT h, const FLOAT min_depth, const FLOAT max_depth) :
+	vp_(x, y, w, h, min_depth, max_depth)
 {
-	this->vp_.TopLeftX = x;
-	this->vp_.TopLeftY = y;
-	this->vp_.Width = w;
-	this->vp_.Height = h;
-	this->vp_.MinDepth = min_depth;
-	this->vp_.MaxDepth = max_depth;
-
 	return;
 }
 
@@ -161,12 +143,7 @@ void tml::graphic::Viewport::Init(void)
 {
 	this->Release();
 
-	this->vp_.TopLeftX = 0.0f;
-	this->vp_.TopLeftY = 0.0f;
-	this->vp_.Width = 0.0f;
-	this->vp_.Height = 0.0f;
-	this->vp_.MinDepth = D3D11_MIN_DEPTH;
-	this->vp_.MaxDepth = D3D11_MAX_DEPTH;
+	this->vp_ = CD3D11_VIEWPORT(0.0f, 0.0f, 1.0f, 1.0f);
 
 	return;
 }
@@ -176,7 +153,7 @@ void tml::graphic::Viewport::Init(void)
  * @brief Init関数
  * @param vp (viewport)
  */
-void tml::graphic::Viewport::Init(const D3D11_VIEWPORT &vp)
+void tml::graphic::Viewport::Init(const CD3D11_VIEWPORT &vp)
 {
 	this->Release();
 
@@ -197,12 +174,7 @@ void tml::graphic::Viewport::Init(const FLOAT x, const FLOAT y, const FLOAT w, c
 {
 	this->Release();
 
-	this->vp_.TopLeftX = x;
-	this->vp_.TopLeftY = y;
-	this->vp_.Width = w;
-	this->vp_.Height = h;
-	this->vp_.MinDepth = D3D11_MIN_DEPTH;
-	this->vp_.MaxDepth = D3D11_MAX_DEPTH;
+	this->vp_ = CD3D11_VIEWPORT(x, y, w, h);
 
 	return;
 }
@@ -221,12 +193,7 @@ void tml::graphic::Viewport::Init(const FLOAT x, const FLOAT y, const FLOAT w, c
 {
 	this->Release();
 
-	this->vp_.TopLeftX = x;
-	this->vp_.TopLeftY = y;
-	this->vp_.Width = w;
-	this->vp_.Height = h;
-	this->vp_.MinDepth = min_depth;
-	this->vp_.MaxDepth = max_depth;
+	this->vp_ = CD3D11_VIEWPORT(x, y, w, h, min_depth, max_depth);
 
 	return;
 }

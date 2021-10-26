@@ -7,7 +7,6 @@
 
 #include "../constant/ConstantUtil.h"
 #include "../constant/ConstantInclude_Direct3DBase.h"
-#include "../math/XNAMathVector.h"
 
 
 namespace tml {
@@ -18,14 +17,14 @@ namespace graphic {
 class Viewport
 {
 private:
-	D3D11_VIEWPORT vp_;
+	CD3D11_VIEWPORT vp_;
 
 private:
 	void Release(void);
 
 public:
 	Viewport();
-	Viewport(const D3D11_VIEWPORT &);
+	Viewport(const CD3D11_VIEWPORT &);
 	Viewport(const FLOAT, const FLOAT, const FLOAT, const FLOAT);
 	Viewport(const FLOAT, const FLOAT, const FLOAT, const FLOAT, const FLOAT, const FLOAT);
 	Viewport(const tml::graphic::Viewport &);
@@ -35,12 +34,12 @@ public:
 	virtual ~Viewport();
 
 	virtual void Init(void);
-	virtual void Init(const D3D11_VIEWPORT &);
+	virtual void Init(const CD3D11_VIEWPORT &);
 	virtual void Init(const FLOAT, const FLOAT, const FLOAT, const FLOAT);
 	virtual void Init(const FLOAT, const FLOAT, const FLOAT, const FLOAT, const FLOAT, const FLOAT);
 
-	const D3D11_VIEWPORT &Get(void) const;
-	void Set(const D3D11_VIEWPORT &);
+	const CD3D11_VIEWPORT &Get(void) const;
+	void Set(const CD3D11_VIEWPORT &);
 	FLOAT GetX(void) const;
 	void SetX(const FLOAT);
 	FLOAT GetY(void) const;
@@ -71,7 +70,7 @@ inline void tml::graphic::Viewport::Release(void)
  * @brief GetŠÖ”
  * @return vp (viewport)
  */
-inline const D3D11_VIEWPORT &tml::graphic::Viewport::Get(void) const
+inline const CD3D11_VIEWPORT &tml::graphic::Viewport::Get(void) const
 {
 	return (this->vp_);
 }
@@ -81,7 +80,7 @@ inline const D3D11_VIEWPORT &tml::graphic::Viewport::Get(void) const
  * @brief SetŠÖ”
  * @param vp (viewport)
  */
-inline void tml::graphic::Viewport::Set(const D3D11_VIEWPORT &vp)
+inline void tml::graphic::Viewport::Set(const CD3D11_VIEWPORT &vp)
 {
 	this->vp_ = vp;
 

@@ -304,10 +304,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		tex->UploadCPUBuffer();
 	}
 
-	this->SetCanvas2D(this->canvas_2d);
-	this->SetModel2D(0U, this->bg_model);
-	this->SetModel2D(1U, this->wait_model);
-
 	return (0);
 }
 
@@ -332,6 +328,10 @@ INT cpp_base::scene::InitScene::OnStart(void)
 			return (-1);
 		}
 	}
+
+	this->SetCanvas2D(0U, this->canvas_2d);
+	this->SetModel2D(0U, this->bg_model);
+	this->SetModel2D(1U, this->wait_model);
 
 	return (0);
 }

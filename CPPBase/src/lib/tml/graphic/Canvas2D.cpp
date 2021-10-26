@@ -85,6 +85,7 @@ INT tml::graphic::Canvas2DDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Canvas2D::Canvas2D() :
 	rt_tex_clear_flg_(false),
+	vp_(0.0f, 0.0f, 1.0f, 1.0f),
 	vp_x_(0.0f),
 	vp_y_(0.0f),
 	vp_w_(1.0f),
@@ -188,11 +189,12 @@ void tml::graphic::Canvas2D::Draw(void)
 	if (this->camera_ != nullptr) {
 		auto rt_tex = this->GetRenderTargetTexture().get();
 		auto rt_tex_clear_flg = this->GetRenderTargetTextureClearFlag();
+		auto vp = &this->vp_;
 
-		this->vp_.SetX(static_cast<FLOAT>(rt_tex->GetRect().GetSize().x) * this->GetViewportX());
-		this->vp_.SetY(static_cast<FLOAT>(rt_tex->GetRect().GetSize().y) * this->GetViewportY());
-		this->vp_.SetWidth(static_cast<FLOAT>(rt_tex->GetRect().GetSize().x) * this->GetViewportWidth());
-		this->vp_.SetHeight(static_cast<FLOAT>(rt_tex->GetRect().GetSize().y) * this->GetViewportHeight());
+		vp->SetX(static_cast<FLOAT>(rt_tex->GetRect().GetSize().x) * this->vp_x_);
+		vp->SetY(static_cast<FLOAT>(rt_tex->GetRect().GetSize().y) * this->vp_y_);
+		vp->SetWidth(static_cast<FLOAT>(rt_tex->GetRect().GetSize().x) * this->vp_w_);
+		vp->SetHeight(static_cast<FLOAT>(rt_tex->GetRect().GetSize().y) * this->vp_h_);
 
 		DirectX::XMMATRIX v_mat;
 		DirectX::XMMATRIX inv_v_mat;
@@ -244,7 +246,7 @@ void tml::graphic::Canvas2D::Draw(void)
 			}
 			case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
 				this->GetManager()->SetDrawTargetTexture(rt_tex, nullptr);
-				this->GetManager()->SetDrawViewport(this->vp_);
+				this->GetManager()->SetDrawViewport(vp);
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 					this->draw_model_ary_[draw_model_i]->DrawStageForward2D();

@@ -409,12 +409,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tex->UploadCPUBuffer();
 	}
 
-	this->SetCanvas2D(this->canvas_2d);
-	this->SetModel2D(0U, this->bg_model);
-	this->SetModel2D(1U, this->logo_model);
-	this->SetModel2D(2U, this->start_model);
-	this->SetModel2D(3U, this->footer_model);
-
 	return (0);
 }
 
@@ -437,6 +431,12 @@ INT cpp_base::scene::TitleScene::OnStart(void)
 			return (-1);
 		}
 	}
+
+	this->SetCanvas2D(0U, this->canvas_2d);
+	this->SetModel2D(0U, this->bg_model);
+	this->SetModel2D(1U, this->logo_model);
+	this->SetModel2D(2U, this->start_model);
+	this->SetModel2D(3U, this->footer_model);
 
 	return (0);
 }

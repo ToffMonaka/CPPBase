@@ -824,11 +824,11 @@ void tml::graphic::Manager::ClearDrawTargetTexture(void)
  * @brief SetDrawViewportŠÖ”
  * @param vp (viewport)
  */
-void tml::graphic::Manager::SetDrawViewport(const tml::graphic::Viewport &vp)
+void tml::graphic::Manager::SetDrawViewport(tml::graphic::Viewport *vp)
 {
 	this->draw_vp_cnt_ = 1U;
 
-	this->draw_vp_ary_[0] = vp.Get();
+	this->draw_vp_ary_[0] = (vp != nullptr) ? vp->Get() : CD3D11_VIEWPORT(0.0f, 0.0f, 1.0f, 1.0f);
 
 	this->device_context_->RSSetViewports(this->draw_vp_cnt_, this->draw_vp_ary_.data());
 
@@ -841,12 +841,12 @@ void tml::graphic::Manager::SetDrawViewport(const tml::graphic::Viewport &vp)
  * @param vp_cnt (viewport_count)
  * @param vp_ary (viewport_array)
  */
-void tml::graphic::Manager::SetDrawViewport(const UINT vp_cnt, const tml::graphic::Viewport *vp_ary)
+void tml::graphic::Manager::SetDrawViewport(const UINT vp_cnt, tml::graphic::Viewport **vp_ary)
 {
 	this->draw_vp_cnt_ = vp_cnt;
 
 	for (UINT vp_i = 0U; vp_i < vp_cnt; ++vp_i) {
-		this->draw_vp_ary_[vp_i] = vp_ary[vp_i].Get();
+		this->draw_vp_ary_[vp_i] = (vp_ary[vp_i] != nullptr) ? vp_ary[vp_i]->Get() : CD3D11_VIEWPORT(0.0f, 0.0f, 1.0f, 1.0f);
 	}
 
 	this->device_context_->RSSetViewports(this->draw_vp_cnt_, (this->draw_vp_cnt_ > 0U) ? this->draw_vp_ary_.data() : nullptr);

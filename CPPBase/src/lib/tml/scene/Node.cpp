@@ -92,7 +92,7 @@ tml::scene::Node::Node() :
 	start_flg_(false),
 	started_flg_(false),
 	parent_node_(nullptr),
-	draw_canvas_2d_(nullptr)
+	draw_canvas_2d_cont_(nullptr)
 {
 	return;
 }
@@ -142,9 +142,9 @@ void tml::scene::Node::Init(void)
 	this->start_flg_ = false;
 	this->started_flg_ = false;
 	this->parent_node_ = nullptr;
-	this->canvas_2d_.reset();
-	this->draw_canvas_2d_ = nullptr;
+	this->canvas_2d_cont_.clear();
 	this->model_2d_cont_.clear();
+	this->draw_canvas_2d_cont_ = nullptr;
 
 	tml::scene::ManagerResource::Init();
 
@@ -262,15 +262,23 @@ void tml::scene::Node::Update(void)
 
 	this->OnUpdate();
 
-	if (this->canvas_2d_ != nullptr) {
-		this->GetGraphicManager()->SetDrawCanvas(this->canvas_2d_.get());
+	if (!this->canvas_2d_cont_.empty()) {
+		for (auto &canvas_2d : this->canvas_2d_cont_) {
+			this->GetGraphicManager()->SetDrawCanvas(canvas_2d.get());
+		}
 
-		this->draw_canvas_2d_ = this->canvas_2d_.get();
+		this->draw_canvas_2d_cont_ = &this->canvas_2d_cont_;
 	}
 
-	if (this->draw_canvas_2d_ != nullptr) {
-		for (auto &model_2d : this->model_2d_cont_) {
-			this->draw_canvas_2d_->SetDrawModel(model_2d.get());
+	if (this->draw_canvas_2d_cont_ != nullptr) {
+		for (auto &draw_canvas_2d : (*this->draw_canvas_2d_cont_)) {
+			if (draw_canvas_2d == nullptr) {
+				continue;
+			}
+
+			for (auto &model_2d : this->model_2d_cont_) {
+				draw_canvas_2d->SetDrawModel(model_2d.get());
+			}
 		}
 	}
 
@@ -282,11 +290,11 @@ void tml::scene::Node::Update(void)
 		}
 
 		if (child_node->GetStartFlag()) {
-			child_node->SetDrawCanvas2D(this->draw_canvas_2d_);
+			child_node->SetDrawCanvas2DContainer(this->draw_canvas_2d_cont_);
 
 			child_node->Update();
 
-			child_node->SetDrawCanvas2D(nullptr);
+			child_node->ClearDrawCanvas2DContainer();
 		}
 
 		if (!child_node->GetStartFlag()) {
@@ -527,11 +535,16 @@ void tml::scene::Node::RemoveChildNodeFromParentNode(const bool event_flg)
 
 /**
  * @brief SetCanvas2Dä÷êî
+ * @param index (index)
  * @param canvas_2d (canvas_2d)
  */
-void tml::scene::Node::SetCanvas2D(const tml::shared_ptr<tml::graphic::Canvas2D> &canvas_2d)
+void tml::scene::Node::SetCanvas2D(const UINT index, const tml::shared_ptr<tml::graphic::Canvas2D> &canvas_2d)
 {
-	this->canvas_2d_ = canvas_2d;
+	if (index >= this->canvas_2d_cont_.size()) {
+		this->canvas_2d_cont_.resize(index + 1U);
+	}
+
+	this->canvas_2d_cont_[index] = canvas_2d;
 
 	return;
 }
