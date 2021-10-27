@@ -74,6 +74,7 @@ INT tml::graphic::CanvasDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Canvas::Canvas() :
 	type_(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE),
+	draw_priority_(0U),
 	draw_set_flg_(false)
 {
 	return;
@@ -99,6 +100,7 @@ void tml::graphic::Canvas::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE;
+	this->draw_priority_ = 0U;
 	this->draw_set_flg_ = false;
 
 	tml::graphic::ManagerResource::Init();

@@ -162,7 +162,7 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
  */
 INT cpp_base::scene::Field2DGroundNode::OnStart(void)
 {
-	this->SetModel2D(0U, this->model);
+	this->SetModel(0U, this->model);
 
 	return (0);
 }

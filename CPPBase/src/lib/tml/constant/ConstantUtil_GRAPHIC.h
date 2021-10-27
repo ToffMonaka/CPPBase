@@ -403,6 +403,8 @@ class Canvas;
 class CanvasDesc;
 class Canvas2D;
 class Canvas2DDesc;
+class Canvas3D;
+class Canvas3DDesc;
 class Camera;
 class CameraDesc;
 class Camera2D;
@@ -421,5 +423,7 @@ class FigureModel2D;
 class FigureModel2DDesc;
 class GroundModel2D;
 class GroundModel2DDesc;
+class Model3D;
+class Model3DDesc;
 }
 }

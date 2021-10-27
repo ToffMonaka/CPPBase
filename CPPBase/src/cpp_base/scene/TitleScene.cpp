@@ -10,6 +10,7 @@
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
 #include "../../lib/tml/graphic/Canvas2D.h"
+#include "../../lib/tml/graphic/Canvas3D.h"
 #include "../../lib/tml/graphic/Camera2D.h"
 #include "../../lib/tml/graphic/Camera3D.h"
 #include "../../lib/tml/graphic/FigureModel2D.h"
@@ -124,6 +125,7 @@ void cpp_base::scene::TitleScene::Init(void)
 	this->progress_type_ = 0U;
 
 	this->canvas_2d.reset();
+	this->canvas_3d.reset();
 	this->camera_2d.reset();
 	this->camera_3d.reset();
 	this->bg_model.reset();
@@ -203,6 +205,24 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 			return (-1);
 		}
+	}
+
+	{// Canvas3D Create
+		tml::graphic::Canvas3DDesc canvas_desc;
+
+		canvas_desc.SetManager(this->GetGraphicManager());
+
+		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas3D>(this->canvas_3d, canvas_desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->canvas_3d->SetCamera(this->camera_3d);
+		this->canvas_3d->SetRenderTargetTexture(this->GetGraphicManager()->common.main_render_target_texture);
+		this->canvas_3d->SetRenderTargetTextureClearFlag(true);
+		this->canvas_3d->SetDepthTargetTexture(this->GetGraphicManager()->common.main_depth_target_texture);
+		this->canvas_3d->SetDepthTargetTextureClearFlag(true);
 	}
 
 	{// BackgroundModel Create
@@ -432,11 +452,12 @@ INT cpp_base::scene::TitleScene::OnStart(void)
 		}
 	}
 
-	this->SetCanvas2D(0U, this->canvas_2d);
-	this->SetModel2D(0U, this->bg_model);
-	this->SetModel2D(1U, this->logo_model);
-	this->SetModel2D(2U, this->start_model);
-	this->SetModel2D(3U, this->footer_model);
+	this->SetCanvas(0U, this->canvas_2d);
+	this->SetCanvas(1U, this->canvas_3d);
+	this->SetModel(0U, this->bg_model);
+	this->SetModel(1U, this->logo_model);
+	this->SetModel(2U, this->start_model);
+	this->SetModel(3U, this->footer_model);
 
 	return (0);
 }

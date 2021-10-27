@@ -16,8 +16,12 @@ class Manager;
 }
 namespace graphic {
 class Manager;
+class Canvas;
 class Canvas2D;
+class Canvas3D;
+class Model;
 class Model2D;
+class Model3D;
 }
 namespace sound {
 class Manager;
@@ -87,13 +91,17 @@ private:
 	tml::scene::Node *parent_node_;
 	std::list<tml::shared_ptr<tml::scene::Node>> child_node_cont_;
 	tml::shared_ptr<tml::scene::Node> empty_child_node_;
-	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d_;
-	std::vector<tml::shared_ptr<tml::graphic::Canvas2D>> canvas_2d_cont_;
-	tml::shared_ptr<tml::graphic::Canvas2D> empty_canvas_2d_;
-	std::vector<tml::shared_ptr<tml::graphic::Model2D>> model_2d_cont_;
-	tml::shared_ptr<tml::graphic::Model2D> empty_model_2d_;
+	std::vector<tml::shared_ptr<tml::graphic::Canvas>> canvas_cont_;
+	tml::shared_ptr<tml::graphic::Canvas> empty_canvas_;
+	std::list<tml::graphic::Canvas2D *> canvas_2d_cont_;
+	std::list<tml::graphic::Canvas3D *> canvas_3d_cont_;
+	std::vector<tml::shared_ptr<tml::graphic::Model>> model_cont_;
+	tml::shared_ptr<tml::graphic::Model> empty_model_;
+	std::list<tml::graphic::Model2D *> model_2d_cont_;
+	std::list<tml::graphic::Model3D *> model_3d_cont_;
 
-	std::vector<tml::shared_ptr<tml::graphic::Canvas2D>> *draw_canvas_2d_cont_;
+	std::list<tml::graphic::Canvas2D *> *draw_canvas_2d_cont_;
+	std::list<tml::graphic::Canvas3D *> *draw_canvas_3d_cont_;
 
 private:
 	void Release(void);
@@ -135,17 +143,17 @@ public:
 	void RemoveChildNode(const bool event_flg = true);
 	void RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
 	void RemoveChildNodeFromParentNode(const bool event_flg = true);
-	UINT GetCanvas2DCount(void) const;
-	const tml::shared_ptr<tml::graphic::Canvas2D> &GetCanvas2D(const UINT);
-	const tml::shared_ptr<tml::graphic::Canvas2D> &GetCanvas2DFast(const UINT);
-	void SetCanvas2D(const UINT, const tml::shared_ptr<tml::graphic::Canvas2D> &);
-	UINT GetModel2DCount(void) const;
-	const tml::shared_ptr<tml::graphic::Model2D> &GetModel2D(const UINT);
-	const tml::shared_ptr<tml::graphic::Model2D> &GetModel2DFast(const UINT);
-	void SetModel2D(const UINT, const tml::shared_ptr<tml::graphic::Model2D> &);
+	UINT GetCanvasCount(void) const;
+	const tml::shared_ptr<tml::graphic::Canvas> &GetCanvas(const UINT);
+	const tml::shared_ptr<tml::graphic::Canvas> &GetCanvasFast(const UINT);
+	void SetCanvas(const UINT, const tml::shared_ptr<tml::graphic::Canvas> &);
+	UINT GetModelCount(void) const;
+	const tml::shared_ptr<tml::graphic::Model> &GetModel(const UINT);
+	const tml::shared_ptr<tml::graphic::Model> &GetModelFast(const UINT);
+	void SetModel(const UINT, const tml::shared_ptr<tml::graphic::Model> &);
 
-	void SetDrawCanvas2DContainer(std::vector<tml::shared_ptr<tml::graphic::Canvas2D>> *);
-	void ClearDrawCanvas2DContainer(void);
+	void SetDrawCanvas(std::list<tml::graphic::Canvas2D *> *, std::list<tml::graphic::Canvas3D *> *);
+	void ClearDrawCanvas(void);
 };
 }
 }
@@ -294,99 +302,102 @@ inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Node::GetChildNode(c
 
 
 /**
- * @brief GetCanvas2DCountŠÖ”
- * @return canvas_2d_cnt (canvas_2d_count)
+ * @brief GetCanvasCountŠÖ”
+ * @return canvas_cnt (canvas_count)
  */
-inline UINT tml::scene::Node::GetCanvas2DCount(void) const
+inline UINT tml::scene::Node::GetCanvasCount(void) const
 {
-	return (this->canvas_2d_cont_.size());
+	return (this->canvas_cont_.size());
 }
 
 
 /**
- * @brief GetCanvas2DŠÖ”
+ * @brief GetCanvasŠÖ”
  * @param index (index)
- * @return canvas_2d (canvas_2d)<br>
+ * @return canvas (canvas)<br>
  * nullptr=Ž¸”s
  */
-inline const tml::shared_ptr<tml::graphic::Canvas2D> &tml::scene::Node::GetCanvas2D(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Canvas> &tml::scene::Node::GetCanvas(const UINT index)
 {
-	if (index >= this->canvas_2d_cont_.size()) {
-		return (this->empty_canvas_2d_);
+	if (index >= this->canvas_cont_.size()) {
+		return (this->empty_canvas_);
 	}
 
-	return (this->canvas_2d_cont_[index]);
+	return (this->canvas_cont_[index]);
 }
 
 
 /**
- * @brief GetCanvas2DFastŠÖ”
+ * @brief GetCanvasFastŠÖ”
  * @param index (index)
- * @return canvas_2d (canvas_2d)<br>
+ * @return canvas (canvas)<br>
  * nullptr=Ž¸”s
  */
-inline const tml::shared_ptr<tml::graphic::Canvas2D> &tml::scene::Node::GetCanvas2DFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Canvas> &tml::scene::Node::GetCanvasFast(const UINT index)
 {
-	return (this->canvas_2d_cont_[index]);
+	return (this->canvas_cont_[index]);
 }
 
 
 /**
- * @brief GetModel2DCountŠÖ”
- * @return model_2d_cnt (model_2d_count)
+ * @brief GetModelCountŠÖ”
+ * @return model_cnt (model_count)
  */
-inline UINT tml::scene::Node::GetModel2DCount(void) const
+inline UINT tml::scene::Node::GetModelCount(void) const
 {
-	return (this->model_2d_cont_.size());
+	return (this->model_cont_.size());
 }
 
 
 /**
- * @brief GetModel2DŠÖ”
+ * @brief GetModelŠÖ”
  * @param index (index)
- * @return model_2d (model_2d)<br>
+ * @return model (model)<br>
  * nullptr=Ž¸”s
  */
-inline const tml::shared_ptr<tml::graphic::Model2D> &tml::scene::Node::GetModel2D(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Model> &tml::scene::Node::GetModel(const UINT index)
 {
-	if (index >= this->model_2d_cont_.size()) {
-		return (this->empty_model_2d_);
+	if (index >= this->model_cont_.size()) {
+		return (this->empty_model_);
 	}
 
-	return (this->model_2d_cont_[index]);
+	return (this->model_cont_[index]);
 }
 
 
 /**
- * @brief GetModel2DFastŠÖ”
+ * @brief GetModelFastŠÖ”
  * @param index (index)
- * @return model_2d (model_2d)<br>
+ * @return model (model)<br>
  * nullptr=Ž¸”s
  */
-inline const tml::shared_ptr<tml::graphic::Model2D> &tml::scene::Node::GetModel2DFast(const UINT index)
+inline const tml::shared_ptr<tml::graphic::Model> &tml::scene::Node::GetModelFast(const UINT index)
 {
-	return (this->model_2d_cont_[index]);
+	return (this->model_cont_[index]);
 }
 
 
 /**
- * @brief SetDrawCanvas2DContainerŠÖ”
+ * @brief SetDrawCanvasŠÖ”
  * @param draw_canvas_2d_cont (draw_canvas_2d_container)
+ * @param draw_canvas_3d_cont (draw_canvas_3d_container)
  */
-inline void tml::scene::Node::SetDrawCanvas2DContainer(std::vector<tml::shared_ptr<tml::graphic::Canvas2D>> *draw_canvas_2d_cont)
+inline void tml::scene::Node::SetDrawCanvas(std::list<tml::graphic::Canvas2D *> *draw_canvas_2d_cont, std::list<tml::graphic::Canvas3D *> *draw_canvas_3d_cont)
 {
 	this->draw_canvas_2d_cont_ = draw_canvas_2d_cont;
+	this->draw_canvas_3d_cont_ = draw_canvas_3d_cont;
 
 	return;
 }
 
 
 /**
- * @brief ClearDrawCanvas2DContainerŠÖ”
+ * @brief ClearDrawCanvasŠÖ”
  */
-inline void tml::scene::Node::ClearDrawCanvas2DContainer(void)
+inline void tml::scene::Node::ClearDrawCanvas(void)
 {
 	this->draw_canvas_2d_cont_ = nullptr;
+	this->draw_canvas_3d_cont_ = nullptr;
 
 	return;
 }

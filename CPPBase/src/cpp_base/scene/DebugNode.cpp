@@ -204,7 +204,7 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
  */
 INT cpp_base::scene::DebugNode::OnStart(void)
 {
-	this->SetModel2D(0U, this->model);
+	this->SetModel(0U, this->model);
 
 	return (0);
 }

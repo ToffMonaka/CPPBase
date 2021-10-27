@@ -184,8 +184,8 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
  */
 INT cpp_base::scene::Field2DMobNode::OnStart(void)
 {
-	this->SetModel2D(0U, this->shadow_model);
-	this->SetModel2D(1U, this->model);
+	this->SetModel(0U, this->shadow_model);
+	this->SetModel(1U, this->model);
 
 	return (0);
 }

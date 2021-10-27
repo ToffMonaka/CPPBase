@@ -210,6 +210,7 @@
     <ClCompile Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Canvas.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Canvas2D.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Canvas3D.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\DepthState.cpp" />
     <ClCompile Include="src\lib\tml\graphic\FigureModel2D.cpp" />
@@ -233,6 +234,7 @@
     <ClCompile Include="src\lib\tml\graphic\Mesh.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Model.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Model2D.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Model3D.cpp" />
     <ClCompile Include="src\lib\tml\graphic\RasterizerState.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Sampler.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Shader.cpp" />
@@ -388,6 +390,7 @@
     <ClInclude Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Canvas.h" />
     <ClInclude Include="src\lib\tml\graphic\Canvas2D.h" />
+    <ClInclude Include="src\lib\tml\graphic\Canvas3D.h" />
     <ClInclude Include="src\lib\tml\graphic\ConfigShaderConstantBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\DepthState.h" />
     <ClInclude Include="src\lib\tml\graphic\FigureModel2D.h" />
@@ -411,6 +414,7 @@
     <ClInclude Include="src\lib\tml\graphic\Mesh.h" />
     <ClInclude Include="src\lib\tml\graphic\Model.h" />
     <ClInclude Include="src\lib\tml\graphic\Model2D.h" />
+    <ClInclude Include="src\lib\tml\graphic\Model3D.h" />
     <ClInclude Include="src\lib\tml\graphic\RasterizerState.h" />
     <ClInclude Include="src\lib\tml\graphic\Sampler.h" />
     <ClInclude Include="src\lib\tml\graphic\Shader.h" />

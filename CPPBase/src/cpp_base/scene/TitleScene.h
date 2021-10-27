@@ -61,6 +61,7 @@ private:
 
 public:
 	tml::shared_ptr<tml::graphic::Canvas2D> canvas_2d;
+	tml::shared_ptr<tml::graphic::Canvas3D> canvas_3d;
 	tml::shared_ptr<tml::graphic::Camera2D> camera_2d;
 	tml::shared_ptr<tml::graphic::Camera3D> camera_3d;
 	tml::shared_ptr<tml::graphic::FigureModel2D> bg_model;

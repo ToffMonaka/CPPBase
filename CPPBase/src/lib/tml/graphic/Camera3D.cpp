@@ -13,8 +13,8 @@
  */
 tml::graphic::Camera3DDesc::Camera3DDesc() :
 	projection_type(tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE),
-	fov_angle(0.0f),
 	fov_size(0.0f),
+	fov_angle(0.0f),
 	near_clip(0.0f),
 	far_clip(0.0f)
 {
@@ -42,8 +42,8 @@ void tml::graphic::Camera3DDesc::Init(void)
 
 	this->position.Init();
 	this->projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE;
-	this->fov_angle = 0.0f;
 	this->fov_size = 0.0f;
+	this->fov_angle = 0.0f;
 	this->near_clip = 0.0f;
 	this->far_clip = 0.0f;
 
@@ -86,8 +86,8 @@ INT tml::graphic::Camera3DDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Camera3D::Camera3D() :
 	proj_type_(tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE),
-	fov_angle_(0.0f),
 	fov_size_(0.0f),
+	fov_angle_(0.0f),
 	near_clip_(0.0f),
 	far_clip_(0.0f)
 {
@@ -115,8 +115,8 @@ void tml::graphic::Camera3D::Init(void)
 
 	this->position.Init();
 	this->proj_type_ = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE;
-	this->fov_angle_ = 0.0f;
 	this->fov_size_ = 0.0f;
+	this->fov_angle_ = 0.0f;
 	this->near_clip_ = 0.0f;
 	this->far_clip_ = 0.0f;
 
@@ -144,8 +144,8 @@ INT tml::graphic::Camera3D::Create(const tml::graphic::Camera3DDesc &desc)
 
 	this->position = desc.position;
 	this->proj_type_ = desc.projection_type;
-	this->fov_angle_ = desc.fov_angle;
 	this->fov_size_ = desc.fov_size;
+	this->fov_angle_ = desc.fov_angle;
 	this->near_clip_ = desc.near_clip;
 	this->far_clip_ = desc.far_clip;
 

@@ -29,6 +29,7 @@
 #include "Map.h"
 #include "Canvas.h"
 #include "Canvas2D.h"
+#include "Canvas3D.h"
 #include "Camera.h"
 #include "Camera2D.h"
 #include "Camera3D.h"
@@ -38,6 +39,7 @@
 #include "Model2D.h"
 #include "FigureModel2D.h"
 #include "GroundModel2D.h"
+#include "Model3D.h"
 
 
 /**

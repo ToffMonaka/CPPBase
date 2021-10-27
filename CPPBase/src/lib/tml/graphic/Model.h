@@ -366,6 +366,7 @@ private:
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
 	tml::shared_ptr<tml::graphic::Sampler> empty_samp_;
 	std::vector<tml::unique_ptr<tml::graphic::ModelStage>> stage_cont_;
+	UINT draw_priority_;
 	UINT draw_set_canvas_cnt_;
 	std::vector<const tml::graphic::Canvas *> draw_set_canvas_cont_;
 
@@ -413,6 +414,8 @@ public:
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSamplerFast(const UINT);
 	void SetSampler(const UINT, const tml::shared_ptr<tml::graphic::Sampler> &);
 	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &) = 0;
+	UINT GetDrawPriority(void) const;
+	void SetDrawPriority(const UINT);
 	bool IsDrawSet(const tml::graphic::Canvas *) const;
 	void SetDrawSet(const tml::graphic::Canvas *);
 	void ClearDrawSet(void);
@@ -713,6 +716,28 @@ inline const tml::shared_ptr<tml::graphic::Sampler> &tml::graphic::Model::GetSam
 inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type)
 {
 	return (this->stage_cont_[static_cast<UINT>(type)].get());
+}
+
+
+/**
+ * @brief GetDrawPriorityŠÖ”
+ * @return draw_priority (draw_priority)
+ */
+inline UINT tml::graphic::Model::GetDrawPriority(void) const
+{
+	return (this->draw_priority_);
+}
+
+
+/**
+ * @brief SetDrawPriorityŠÖ”
+ * @param draw_priority (draw_priority)
+ */
+inline void tml::graphic::Model::SetDrawPriority(const UINT draw_priority)
+{
+	this->draw_priority_ = draw_priority;
+
+	return;
 }
 
 

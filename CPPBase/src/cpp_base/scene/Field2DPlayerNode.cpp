@@ -186,8 +186,8 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
  */
 INT cpp_base::scene::Field2DPlayerNode::OnStart(void)
 {
-	this->SetModel2D(0U, this->shadow_model);
-	this->SetModel2D(1U, this->model);
+	this->SetModel(0U, this->shadow_model);
+	this->SetModel(1U, this->model);
 
 	return (0);
 }

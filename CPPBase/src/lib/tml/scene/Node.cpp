@@ -8,7 +8,9 @@
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
 #include "../graphic/Canvas2D.h"
+#include "../graphic/Canvas3D.h"
 #include "../graphic/Model2D.h"
+#include "../graphic/Model3D.h"
 #include "../sound/Manager.h"
 #include "Manager.h"
 #include "NodeEvent.h"
@@ -92,7 +94,8 @@ tml::scene::Node::Node() :
 	start_flg_(false),
 	started_flg_(false),
 	parent_node_(nullptr),
-	draw_canvas_2d_cont_(nullptr)
+	draw_canvas_2d_cont_(nullptr),
+	draw_canvas_3d_cont_(nullptr)
 {
 	return;
 }
@@ -142,9 +145,14 @@ void tml::scene::Node::Init(void)
 	this->start_flg_ = false;
 	this->started_flg_ = false;
 	this->parent_node_ = nullptr;
+	this->canvas_cont_.clear();
 	this->canvas_2d_cont_.clear();
+	this->canvas_3d_cont_.clear();
+	this->model_cont_.clear();
 	this->model_2d_cont_.clear();
+	this->model_3d_cont_.clear();
 	this->draw_canvas_2d_cont_ = nullptr;
+	this->draw_canvas_3d_cont_ = nullptr;
 
 	tml::scene::ManagerResource::Init();
 
@@ -262,22 +270,27 @@ void tml::scene::Node::Update(void)
 
 	this->OnUpdate();
 
-	if (!this->canvas_2d_cont_.empty()) {
-		for (auto &canvas_2d : this->canvas_2d_cont_) {
-			this->GetGraphicManager()->SetDrawCanvas(canvas_2d.get());
+	if (!this->canvas_cont_.empty()) {
+		for (auto &canvas : this->canvas_cont_) {
+			this->GetGraphicManager()->SetDrawCanvas(canvas.get());
 		}
 
 		this->draw_canvas_2d_cont_ = &this->canvas_2d_cont_;
+		this->draw_canvas_3d_cont_ = &this->canvas_3d_cont_;
 	}
 
 	if (this->draw_canvas_2d_cont_ != nullptr) {
-		for (auto &draw_canvas_2d : (*this->draw_canvas_2d_cont_)) {
-			if (draw_canvas_2d == nullptr) {
-				continue;
+		for (auto draw_canvas_2d : (*this->draw_canvas_2d_cont_)) {
+			for (auto model_2d : this->model_2d_cont_) {
+				draw_canvas_2d->SetDrawModel(model_2d);
 			}
+		}
+	}
 
-			for (auto &model_2d : this->model_2d_cont_) {
-				draw_canvas_2d->SetDrawModel(model_2d.get());
+	if (this->draw_canvas_3d_cont_ != nullptr) {
+		for (auto draw_canvas_3d : (*this->draw_canvas_3d_cont_)) {
+			for (auto model_3d : this->model_3d_cont_) {
+				draw_canvas_3d->SetDrawModel(model_3d);
 			}
 		}
 	}
@@ -290,11 +303,11 @@ void tml::scene::Node::Update(void)
 		}
 
 		if (child_node->GetStartFlag()) {
-			child_node->SetDrawCanvas2DContainer(this->draw_canvas_2d_cont_);
+			child_node->SetDrawCanvas(this->draw_canvas_2d_cont_, this->draw_canvas_3d_cont_);
 
 			child_node->Update();
 
-			child_node->ClearDrawCanvas2DContainer();
+			child_node->ClearDrawCanvas();
 		}
 
 		if (!child_node->GetStartFlag()) {
@@ -534,34 +547,98 @@ void tml::scene::Node::RemoveChildNodeFromParentNode(const bool event_flg)
 
 
 /**
- * @brief SetCanvas2Dä÷êî
+ * @brief SetCanvasä÷êî
  * @param index (index)
- * @param canvas_2d (canvas_2d)
+ * @param canvas (canvas)
  */
-void tml::scene::Node::SetCanvas2D(const UINT index, const tml::shared_ptr<tml::graphic::Canvas2D> &canvas_2d)
+void tml::scene::Node::SetCanvas(const UINT index, const tml::shared_ptr<tml::graphic::Canvas> &canvas)
 {
-	if (index >= this->canvas_2d_cont_.size()) {
-		this->canvas_2d_cont_.resize(index + 1U);
+	if (index >= this->canvas_cont_.size()) {
+		this->canvas_cont_.resize(index + 1U);
 	}
 
-	this->canvas_2d_cont_[index] = canvas_2d;
+	auto &old_canvas = this->canvas_cont_[index];
+
+	if (old_canvas != nullptr) {
+		switch (old_canvas->GetType()) {
+		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_2D: {
+			this->canvas_2d_cont_.remove(reinterpret_cast<tml::graphic::Canvas2D *>(old_canvas.get()));
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_3D: {
+			this->canvas_3d_cont_.remove(reinterpret_cast<tml::graphic::Canvas3D *>(old_canvas.get()));
+
+			break;
+		}
+		}
+	}
+
+	this->canvas_cont_[index] = canvas;
+
+	if (canvas != nullptr) {
+		switch (canvas->GetType()) {
+		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_2D: {
+			this->canvas_2d_cont_.push_back(reinterpret_cast<tml::graphic::Canvas2D *>(canvas.get()));
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_3D: {
+			this->canvas_3d_cont_.push_back(reinterpret_cast<tml::graphic::Canvas3D *>(canvas.get()));
+
+			break;
+		}
+		}
+	}
 
 	return;
 }
 
 
 /**
- * @brief SetModel2Dä÷êî
+ * @brief SetModelä÷êî
  * @param index (index)
- * @param model_2d (model_2d)
+ * @param model (model)
  */
-void tml::scene::Node::SetModel2D(const UINT index, const tml::shared_ptr<tml::graphic::Model2D> &model_2d)
+void tml::scene::Node::SetModel(const UINT index, const tml::shared_ptr<tml::graphic::Model> &model)
 {
-	if (index >= this->model_2d_cont_.size()) {
-		this->model_2d_cont_.resize(index + 1U);
+	if (index >= this->model_cont_.size()) {
+		this->model_cont_.resize(index + 1U);
 	}
 
-	this->model_2d_cont_[index] = model_2d;
+	auto &old_model = this->model_cont_[index];
+
+	if (old_model != nullptr) {
+		switch (old_model->GetType()) {
+		case tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D: {
+			this->model_2d_cont_.remove(reinterpret_cast<tml::graphic::Model2D *>(old_model.get()));
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_3D: {
+			this->model_3d_cont_.remove(reinterpret_cast<tml::graphic::Model3D *>(old_model.get()));
+
+			break;
+		}
+		}
+	}
+
+	this->model_cont_[index] = model;
+
+	if (model != nullptr) {
+		switch (model->GetType()) {
+		case tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D: {
+			this->model_2d_cont_.push_back(reinterpret_cast<tml::graphic::Model2D *>(model.get()));
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_3D: {
+			this->model_3d_cont_.push_back(reinterpret_cast<tml::graphic::Model3D *>(model.get()));
+
+			break;
+		}
+		}
+	}
 
 	return;
 }
