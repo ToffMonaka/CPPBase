@@ -418,7 +418,7 @@ public:
 	void SetDrawPriority(const UINT);
 	bool IsDrawSet(const tml::graphic::Canvas *) const;
 	void SetDrawSet(const tml::graphic::Canvas *);
-	void ClearDrawSet(void);
+	void ClearDrawSet(const tml::graphic::Canvas *);
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
 
@@ -778,9 +778,17 @@ inline void tml::graphic::Model::SetDrawSet(const tml::graphic::Canvas *draw_set
 /**
  * @brief ClearDrawSetŠÖ”
  */
-inline void tml::graphic::Model::ClearDrawSet(void)
+inline void tml::graphic::Model::ClearDrawSet(const tml::graphic::Canvas *draw_set_canvas)
 {
-	this->draw_set_canvas_cnt_ = 0U;
+	for (UINT draw_set_canvas_i = 0U; draw_set_canvas_i < this->draw_set_canvas_cnt_; ++draw_set_canvas_i) {
+		if (this->draw_set_canvas_cont_[draw_set_canvas_i] == draw_set_canvas) {
+			--this->draw_set_canvas_cnt_;
+
+			this->draw_set_canvas_cont_[draw_set_canvas_i] = this->draw_set_canvas_cont_[this->draw_set_canvas_cnt_];
+
+			break;
+		}
+	}
 
 	return;
 }

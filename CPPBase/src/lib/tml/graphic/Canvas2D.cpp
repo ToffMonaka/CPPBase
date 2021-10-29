@@ -302,7 +302,7 @@ void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light *light)
 void tml::graphic::Canvas2D::ClearDrawLight(void)
 {
 	for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
-		this->draw_light_ary_[draw_light_i]->ClearDrawSet();
+		this->draw_light_ary_[draw_light_i]->ClearDrawSet(this);
 	}
 
 	this->draw_light_cnt_ = 0U;
@@ -337,7 +337,7 @@ void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog *fog)
 void tml::graphic::Canvas2D::ClearDrawFog(void)
 {
 	for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
-		this->draw_fog_ary_[draw_fog_i]->ClearDrawSet();
+		this->draw_fog_ary_[draw_fog_i]->ClearDrawSet(this);
 	}
 
 	this->draw_fog_cnt_ = 0U;
@@ -358,7 +358,22 @@ void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model)
 		return;
 	}
 
-	this->draw_model_ary_[this->draw_model_cnt_++] = model;
+	if ((this->draw_model_cnt_ <= 0U)
+	|| (model->GetDrawPriority() >= this->draw_model_ary_[this->draw_model_cnt_ - 1U]->GetDrawPriority())) {
+		this->draw_model_ary_[this->draw_model_cnt_++] = model;
+	} else {
+		for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
+			if (model->GetDrawPriority() < this->draw_model_ary_[draw_model_i]->GetDrawPriority()) {
+				memmove(&this->draw_model_ary_[draw_model_i + 1U], &this->draw_model_ary_[draw_model_i], sizeof(this->draw_model_ary_[0]) * (this->draw_model_cnt_ - draw_model_i));
+
+				this->draw_model_ary_[draw_model_i] = model;
+
+				++this->draw_model_cnt_;
+
+				break;
+			}
+		}
+	}
 
 	model->SetDrawSet(this);
 
@@ -372,7 +387,7 @@ void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model)
 void tml::graphic::Canvas2D::ClearDrawModel(void)
 {
 	for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-		this->draw_model_ary_[draw_model_i]->ClearDrawSet();
+		this->draw_model_ary_[draw_model_i]->ClearDrawSet(this);
 	}
 
 	this->draw_model_cnt_ = 0U;

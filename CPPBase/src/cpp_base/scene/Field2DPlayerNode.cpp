@@ -153,6 +153,8 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 
 			return (-1);
 		}
+
+		this->model->SetDrawPriority(1U);
 	}
 
 	{// ShadowModel Create
@@ -173,6 +175,8 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 
 			return (-1);
 		}
+
+		this->shadow_model->SetDrawPriority(0U);
 	}
 
 	return (0);
@@ -186,8 +190,8 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
  */
 INT cpp_base::scene::Field2DPlayerNode::OnStart(void)
 {
-	this->SetModel(0U, this->shadow_model);
-	this->SetModel(1U, this->model);
+	this->SetModel(0U, this->model);
+	this->SetModel(1U, this->shadow_model);
 
 	return (0);
 }

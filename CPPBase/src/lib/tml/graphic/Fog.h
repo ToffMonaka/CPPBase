@@ -99,7 +99,7 @@ public:
 	void SetColor(const tml::XMFLOAT3EX &);
 	bool IsDrawSet(const tml::graphic::Canvas *) const;
 	void SetDrawSet(const tml::graphic::Canvas *);
-	void ClearDrawSet(void);
+	void ClearDrawSet(const tml::graphic::Canvas *);
 	/*
 	FLOAT GetMulValue(void) const;
 	void SetMulValue(const FLOAT);
@@ -193,9 +193,17 @@ inline void tml::graphic::Fog::SetDrawSet(const tml::graphic::Canvas *draw_set_c
 /**
  * @brief ClearDrawSetŠÖ”
  */
-inline void tml::graphic::Fog::ClearDrawSet(void)
+inline void tml::graphic::Fog::ClearDrawSet(const tml::graphic::Canvas *draw_set_canvas)
 {
-	this->draw_set_canvas_cnt_ = 0U;
+	for (UINT draw_set_canvas_i = 0U; draw_set_canvas_i < this->draw_set_canvas_cnt_; ++draw_set_canvas_i) {
+		if (this->draw_set_canvas_cont_[draw_set_canvas_i] == draw_set_canvas) {
+			--this->draw_set_canvas_cnt_;
+
+			this->draw_set_canvas_cont_[draw_set_canvas_i] = this->draw_set_canvas_cont_[this->draw_set_canvas_cnt_];
+
+			break;
+		}
+	}
 
 	return;
 }

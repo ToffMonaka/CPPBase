@@ -1527,7 +1527,22 @@ void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
 		return;
 	}
 
-	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
+	if ((this->draw_canvas_cnt_ <= 0U)
+	|| (canvas->GetDrawPriority() >= this->draw_canvas_ary_[this->draw_canvas_cnt_ - 1U]->GetDrawPriority())) {
+		this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
+	} else {
+		for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
+			if (canvas->GetDrawPriority() < this->draw_canvas_ary_[draw_canvas_i]->GetDrawPriority()) {
+				memmove(&this->draw_canvas_ary_[draw_canvas_i + 1U], &this->draw_canvas_ary_[draw_canvas_i], sizeof(this->draw_canvas_ary_[0]) * (this->draw_canvas_cnt_ - draw_canvas_i));
+
+				this->draw_canvas_ary_[draw_canvas_i] = canvas;
+
+				++this->draw_canvas_cnt_;
+
+				break;
+			}
+		}
+	}
 
 	canvas->SetDrawSet();
 
