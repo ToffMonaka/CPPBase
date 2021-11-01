@@ -47,8 +47,8 @@
  */
 tml::graphic::ManagerDesc::ManagerDesc() :
 	size(0U),
-	vsync_flag(true),
-	frame_rate_limit(60U)
+	frame_rate_limit(60U),
+	vsync_flag(true)
 {
 	this->InitResourceCount();
 	this->InitEventCount();
@@ -76,8 +76,8 @@ void tml::graphic::ManagerDesc::Init(void)
 	this->Release();
 
 	this->size = 0U;
-	this->vsync_flag = true;
 	this->frame_rate_limit = 60U;
+	this->vsync_flag = true;
 
 	tml::ManagerDesc::Init();
 
@@ -144,8 +144,8 @@ tml::graphic::Manager::Manager() :
 	swap_chain_(nullptr),
 	swap_chain_desc_{},
 	size_(0U),
-	vsync_flg_(true),
 	frame_rate_limit_(60U),
+	vsync_flg_(true),
 	samp_quality_type_(tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE),
 	motion_quality_type_(tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE),
 	motion_frame_rate_limit_(0U),
@@ -288,8 +288,8 @@ void tml::graphic::Manager::Init(void)
 	this->device_future_lv_ = static_cast<D3D_FEATURE_LEVEL>(0);
 	tml::Clear(&this->swap_chain_desc_, 1U);
 	this->size_ = 0U;
-	this->vsync_flg_ = true;
 	this->frame_rate_limit_ = 60U;
+	this->vsync_flg_ = true;
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::NONE;
 	this->motion_quality_type_ = tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE::NONE;
 	this->motion_frame_rate_limit_ = 0U;
@@ -474,8 +474,8 @@ INT tml::graphic::Manager::Create(const tml::graphic::ManagerDesc &desc)
 	}
 
 	this->size_ = tml::XMUINT2EX(this->swap_chain_desc_.BufferDesc.Width, this->swap_chain_desc_.BufferDesc.Height);
-	this->vsync_flg_ = desc.vsync_flag;
 	this->frame_rate_limit_ = desc.frame_rate_limit;
+	this->vsync_flg_ = desc.vsync_flag;
 
 	this->samp_quality_type_ = tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE::ANISOTROPIC4;
 

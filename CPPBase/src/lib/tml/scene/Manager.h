@@ -38,6 +38,7 @@ private:
 	tml::sound::Manager *sound_mgr_;
 
 public:
+	UINT frame_rate_limit;
 
 private:
 	void Release(void);
@@ -118,6 +119,7 @@ private:
 	tml::graphic::Manager *graphic_mgr_;
 	tml::sound::Manager *sound_mgr_;
 	tml::FrameRate frame_rate_;
+	UINT frame_rate_limit_;
 	tml::shared_ptr<tml::scene::Scene> scene_;
 
 public:
@@ -143,6 +145,7 @@ public:
 	tml::graphic::Manager *GetGraphicManager(void);
 	tml::sound::Manager *GetSoundManager(void);
 	const tml::FrameRate &GetFrameRate(void) const;
+	UINT GetFrameRateLimit(void) const;
 
 	tml::shared_ptr<tml::scene::Scene> &GetScene(tml::shared_ptr<tml::scene::Scene> &, const tml::XMLFileReadDesc &, INT *dst_result = nullptr);
 	const tml::shared_ptr<tml::scene::Scene> &GetScene(void);
@@ -191,6 +194,16 @@ inline tml::sound::Manager *tml::scene::Manager::GetSoundManager(void)
 inline const tml::FrameRate &tml::scene::Manager::GetFrameRate(void) const
 {
 	return (this->frame_rate_);
+}
+
+
+/**
+ * @brief GetFrameRateLimitŠÖ”
+ * @return frame_rate_limit (frame_rate_limit)
+ */
+inline UINT tml::scene::Manager::GetFrameRateLimit(void) const
+{
+	return (this->frame_rate_limit_);
 }
 
 

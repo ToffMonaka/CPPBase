@@ -14,10 +14,11 @@
 cpp_base::SystemConfigFileData::SystemConfigFileData() :
 	application_memory_allocator_size(1048576U),
 	application_locale_name("Japanese"),
+	application_frame_rate_limit(60U),
 	window_position(0U),
 	window_size(1280U, 800U),
-	graphic_vsync_flag(true),
 	graphic_frame_rate_limit(60U),
+	graphic_vsync_flag(true),
 	sound_bgm_volume(0.5f),
 	sound_bgm_mute_flag(false),
 	sound_se_volume(0.5f),
@@ -47,10 +48,11 @@ void cpp_base::SystemConfigFileData::Init(void)
 
 	this->application_memory_allocator_size = 1048576U;
 	this->application_locale_name = "Japanese";
+	this->application_frame_rate_limit = 60U;
 	this->window_position = 0U;
 	this->window_size = tml::XMUINT2EX(1280U, 800U);
-	this->graphic_vsync_flag = true;
 	this->graphic_frame_rate_limit = 60U;
+	this->graphic_vsync_flag = true;
 	this->sound_bgm_volume = 0.5f;
 	this->sound_bgm_mute_flag = false;
 	this->sound_se_volume = 0.5f;
@@ -138,6 +140,12 @@ INT cpp_base::SystemConfigFile::Read(void)
 			if (val != nullptr) {
 				tml::StringUtil::GetString(this->data.application_locale_name, val->c_str());
 			}
+
+			val = conf_file.data.GetValue((*val_name_cont), L"FRAME_RATE_LIMIT");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.application_frame_rate_limit, val->c_str());
+			}
 		}
 	}
 
@@ -175,16 +183,16 @@ INT cpp_base::SystemConfigFile::Read(void)
 		val_name_cont = conf_file.data.GetValueNameContainer(L"GRAPHIC");
 
 		if (val_name_cont != nullptr) {
-			val = conf_file.data.GetValue((*val_name_cont), L"VSYNC_FLG");
-
-			if (val != nullptr) {
-				tml::StringUtil::GetValue(this->data.graphic_vsync_flag, val->c_str());
-			}
-
 			val = conf_file.data.GetValue((*val_name_cont), L"FRAME_RATE_LIMIT");
 
 			if (val != nullptr) {
 				tml::StringUtil::GetValue(this->data.graphic_frame_rate_limit, val->c_str());
+			}
+
+			val = conf_file.data.GetValue((*val_name_cont), L"VSYNC_FLG");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.graphic_vsync_flag, val->c_str());
 			}
 		}
 	}

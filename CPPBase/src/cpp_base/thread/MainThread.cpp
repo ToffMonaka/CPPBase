@@ -157,8 +157,8 @@ INT cpp_base::MainThread::OnStart(void)
 		mgr_desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
 		mgr_desc.factory = &this->mgr_factory_;
 		mgr_desc.size = this->sys_conf_file_.data.window_size;
-		mgr_desc.vsync_flag = this->sys_conf_file_.data.graphic_vsync_flag;
 		mgr_desc.frame_rate_limit = this->sys_conf_file_.data.graphic_frame_rate_limit;
+		mgr_desc.vsync_flag = this->sys_conf_file_.data.graphic_vsync_flag;
 
 		if (this->graphic_mgr_.Create(mgr_desc) < 0) {
 			return (-1);
@@ -190,6 +190,7 @@ INT cpp_base::MainThread::OnStart(void)
 		mgr_desc.SetInputManager(&this->input_mgr_);
 		mgr_desc.SetGraphicManager(&this->graphic_mgr_);
 		mgr_desc.SetSoundManager(&this->sound_mgr_);
+		mgr_desc.frame_rate_limit = this->sys_conf_file_.data.application_frame_rate_limit;
 
 		if (this->scene_mgr_.Create(mgr_desc) < 0) {
 			return (-1);

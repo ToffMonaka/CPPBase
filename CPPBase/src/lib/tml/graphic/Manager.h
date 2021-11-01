@@ -52,8 +52,8 @@ class ManagerDesc : public tml::ManagerDesc
 {
 public:
 	tml::XMUINT2EX size;
-	bool vsync_flag;
 	UINT frame_rate_limit;
+	bool vsync_flag;
 
 private:
 	void Release(void);
@@ -102,8 +102,8 @@ private:
 	IDXGISwapChain *swap_chain_;
 	DXGI_SWAP_CHAIN_DESC swap_chain_desc_;
 	tml::XMUINT2EX size_;
-	bool vsync_flg_;
 	UINT frame_rate_limit_;
+	bool vsync_flg_;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE samp_quality_type_;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE motion_quality_type_;
 	UINT motion_frame_rate_limit_;
@@ -202,8 +202,8 @@ public:
 	ID3D11DeviceContext *GetDeviceContext(void);
 	D3D_FEATURE_LEVEL GetDeviceFeatureLevel(void) const;
 	const tml::XMUINT2EX &GetSize(void) const;
-	bool GetVsyncFlag(void) const;
 	UINT GetFrameRateLimit(void) const;
+	bool GetVsyncFlag(void) const;
 	tml::ConstantUtil::GRAPHIC::SAMPLER_QUALITY_TYPE GetSamplerQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::MOTION_QUALITY_TYPE GetMotionQualityType(void) const;
 	tml::ConstantUtil::GRAPHIC::SHADOW_QUALITY_TYPE GetShadowQualityType(void) const;
@@ -374,22 +374,22 @@ inline const tml::XMUINT2EX &tml::graphic::Manager::GetSize(void) const
 
 
 /**
- * @brief GetVsyncFlagŠÖ”
- * @return vsync_flg (vsync_flag)
- */
-inline bool tml::graphic::Manager::GetVsyncFlag(void) const
-{
-	return (this->vsync_flg_);
-}
-
-
-/**
  * @brief GetFrameRateLimitŠÖ”
  * @return frame_rate_limit (frame_rate_limit)
  */
 inline UINT tml::graphic::Manager::GetFrameRateLimit(void) const
 {
 	return (this->frame_rate_limit_);
+}
+
+
+/**
+ * @brief GetVsyncFlagŠÖ”
+ * @return vsync_flg (vsync_flag)
+ */
+inline bool tml::graphic::Manager::GetVsyncFlag(void) const
+{
+	return (this->vsync_flg_);
 }
 
 

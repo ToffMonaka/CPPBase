@@ -20,8 +20,8 @@
 tml::scene::ManagerDesc::ManagerDesc() :
 	input_mgr_(nullptr),
 	graphic_mgr_(nullptr),
-	sound_mgr_(nullptr)
-
+	sound_mgr_(nullptr),
+	frame_rate_limit(60U)
 {
 	this->InitResourceCount();
 	this->InitEventCount();
@@ -51,6 +51,7 @@ void tml::scene::ManagerDesc::Init(void)
 	this->input_mgr_ = nullptr;
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
+	this->frame_rate_limit = 60U;
 
 	tml::ManagerDesc::Init();
 
@@ -133,7 +134,8 @@ void tml::scene::ManagerDesc::SetSoundManager(tml::sound::Manager *sound_mgr)
 tml::scene::Manager::Manager() :
 	input_mgr_(nullptr),
 	graphic_mgr_(nullptr),
-	sound_mgr_(nullptr)
+	sound_mgr_(nullptr),
+	frame_rate_limit_(60U)
 {
 	return;
 }
@@ -182,6 +184,7 @@ void tml::scene::Manager::Init(void)
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
 	this->frame_rate_.Init();
+	this->frame_rate_limit_ = 60U;
 
 	tml::Manager::Init();
 
@@ -216,6 +219,7 @@ INT tml::scene::Manager::Create(const tml::scene::ManagerDesc &desc)
 	this->input_mgr_ = desc.GetInputManager();
 	this->graphic_mgr_ = desc.GetGraphicManager();
 	this->sound_mgr_ = desc.GetSoundManager();
+	this->frame_rate_limit_ = desc.frame_rate_limit;
 
 	{// ResourceFactory Set
 		this->factory->AddResourceFunction(tml::ConstantUtil::SCENE::CLASS_NAME::SCENE,
@@ -353,7 +357,7 @@ void tml::scene::Manager::Update(void)
 
 					return;
 				} else {
-					this->frame_rate_.Start(this->graphic_mgr_->GetFrameRateLimit());
+					this->frame_rate_.Start(this->frame_rate_limit_);
 				}
 			}
 		}
