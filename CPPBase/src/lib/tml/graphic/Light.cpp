@@ -13,10 +13,8 @@
  * @brief コンストラクタ
  */
 tml::graphic::LightDesc::LightDesc() :
-	effect_type(tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE),
-	color(1.0f)
+	draw_priority(0)
 	/*
-	,
 	mul_value(0.0f),
 	add_value(0.0f),
 	exp_value(1.0f),
@@ -50,9 +48,6 @@ void tml::graphic::LightDesc::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
-	this->effect_type = tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE;
-	this->color = 1.0f;
 	/*
 	this->mul_value = 0.0f;
 	this->add_value = 0.0f;
@@ -103,11 +98,10 @@ INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Light::Light() :
-	effect_type_(tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE),
-	col_(1.0f),
+	type_(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE),
+	draw_priority_(0),
 	draw_set_canvas_cnt_(0U)
 	/*
-	,
 	mul_val_(0.0f),
 	add_val_(0.0f),
 	exp_val_(1.0f),
@@ -143,9 +137,8 @@ void tml::graphic::Light::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
-	this->effect_type_ = tml::ConstantUtil::GRAPHIC::LIGHT_EFFECT_TYPE::NONE;
-	this->col_ = 1.0f;
+	this->type_ = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
+	this->draw_priority_ = 0;
 	this->draw_set_canvas_cnt_ = 0U;
 	this->draw_set_canvas_cont_.clear();
 	/*
@@ -176,17 +169,12 @@ void tml::graphic::Light::Init(void)
  */
 INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc)
 {
-	this->Init();
-
 	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
 		return (-1);
 	}
 
-	this->position = desc.position;
-	this->effect_type_ = desc.effect_type;
-	this->col_ = desc.color;
+	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::LIGHT_TYPE>(this->GetResourceSubIndex());
+	this->draw_priority_ = desc.draw_priority;
 	/*
 	this->mul_val_ = desc.mul_value;
 	this->add_val_ = desc.add_value;

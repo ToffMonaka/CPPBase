@@ -147,14 +147,13 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
 		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
 		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"pl_2d_img.png"));
+		model_desc.draw_priority = 1;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, model_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
-
-		this->model->SetDrawPriority(1U);
 	}
 
 	{// ShadowModel Create
@@ -169,14 +168,13 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
 		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
 		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"shadow_2d_img.png"));
+		model_desc.draw_priority = 0;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->shadow_model, model_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
-
-		this->shadow_model->SetDrawPriority(0U);
 	}
 
 	return (0);

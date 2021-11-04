@@ -17,6 +17,7 @@ namespace graphic {
 class CanvasDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
+	INT draw_priority;
 
 private:
 	void Release(void);
@@ -61,7 +62,7 @@ public:
 
 private:
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE type_;
-	UINT draw_priority_;
+	INT draw_priority_;
 	bool draw_set_flg_;
 
 private:
@@ -75,8 +76,8 @@ public:
 	INT Create(const tml::graphic::CanvasDesc &);
 
 	tml::ConstantUtil::GRAPHIC::CANVAS_TYPE GetType(void) const;
-	UINT GetDrawPriority(void) const;
-	void SetDrawPriority(const UINT);
+	INT GetDrawPriority(void) const;
+	void SetDrawPriority(const INT);
 	bool IsDrawSet(void) const;
 	void SetDrawSet(void);
 	void ClearDrawSet(void);
@@ -110,7 +111,7 @@ inline tml::ConstantUtil::GRAPHIC::CANVAS_TYPE tml::graphic::Canvas::GetType(voi
  * @brief GetDrawPriorityŠÖ”
  * @return draw_priority (draw_priority)
  */
-inline UINT tml::graphic::Canvas::GetDrawPriority(void) const
+inline INT tml::graphic::Canvas::GetDrawPriority(void) const
 {
 	return (this->draw_priority_);
 }
@@ -120,7 +121,7 @@ inline UINT tml::graphic::Canvas::GetDrawPriority(void) const
  * @brief SetDrawPriorityŠÖ”
  * @param draw_priority (draw_priority)
  */
-inline void tml::graphic::Canvas::SetDrawPriority(const UINT draw_priority)
+inline void tml::graphic::Canvas::SetDrawPriority(const INT draw_priority)
 {
 	this->draw_priority_ = draw_priority;
 

@@ -19,9 +19,7 @@ namespace graphic {
 class FogDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
-	tml::XMPosition3D position;
-	tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE effect_type;
-	tml::XMFLOAT3EX color;
+	INT draw_priority;
 	/*
 	FLOAT mul_value;
 	FLOAT near_range;
@@ -57,20 +55,21 @@ namespace tml {
 namespace graphic {
 /**
  * @brief Fogクラス
+ *
+ * インターフェースパターン
  */
 class Fog : public tml::graphic::ManagerResource
 {
 public: Fog(const tml::graphic::Fog &) = delete;
 public: tml::graphic::Fog &operator =(const tml::graphic::Fog &) = delete;
-protected: virtual void InterfaceDummy(void) {return;};
+protected: virtual void InterfaceDummy(void) = 0;
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::BASE);
 
 private:
-	tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE effect_type_;
-	tml::XMFLOAT3EX col_;
+	tml::ConstantUtil::GRAPHIC::FOG_TYPE type_;
+	INT draw_priority_;
 	UINT draw_set_canvas_cnt_;
 	std::vector<const tml::graphic::Canvas *> draw_set_canvas_cont_;
 	/*
@@ -80,9 +79,6 @@ private:
 	FLOAT rng_val1_;
 	FLOAT rng_val2_;
 	*/
-
-public:
-	tml::XMPosition3D position;
 
 private:
 	void Release(void);
@@ -94,9 +90,9 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::graphic::FogDesc &);
 
-	tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE GetEffectType(void) const;
-	const tml::XMFLOAT3EX &GetColor(void) const;
-	void SetColor(const tml::XMFLOAT3EX &);
+	tml::ConstantUtil::GRAPHIC::FOG_TYPE GetType(void) const;
+	INT GetDrawPriority(void) const;
+	void SetDrawPriority(const INT);
 	bool IsDrawSet(const tml::graphic::Canvas *) const;
 	void SetDrawSet(const tml::graphic::Canvas *);
 	void ClearDrawSet(const tml::graphic::Canvas *);
@@ -125,32 +121,32 @@ inline void tml::graphic::Fog::Release(void)
 
 
 /**
- * @brief GetEffectType関数
- * @return effect_type (effect_type)
+ * @brief GetType関数
+ * @return type (type)
  */
-inline tml::ConstantUtil::GRAPHIC::FOG_EFFECT_TYPE tml::graphic::Fog::GetEffectType(void) const
+inline tml::ConstantUtil::GRAPHIC::FOG_TYPE tml::graphic::Fog::GetType(void) const
 {
-	return (this->effect_type_);
+	return (this->type_);
 }
 
 
 /**
- * @brief GetColor関数
- * @return col (color)
+ * @brief GetDrawPriority関数
+ * @return draw_priority (draw_priority)
  */
-inline const tml::XMFLOAT3EX &tml::graphic::Fog::GetColor(void) const
+inline INT tml::graphic::Fog::GetDrawPriority(void) const
 {
-	return (this->col_);
+	return (this->draw_priority_);
 }
 
 
 /**
- * @brief SetColor関数
- * @param col (color)
+ * @brief SetDrawPriority関数
+ * @param draw_priority (draw_priority)
  */
-inline void tml::graphic::Fog::SetColor(const tml::XMFLOAT3EX &col)
+inline void tml::graphic::Fog::SetDrawPriority(const INT draw_priority)
 {
-	this->col_ = col;
+	this->draw_priority_ = draw_priority;
 
 	return;
 }

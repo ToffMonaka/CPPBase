@@ -288,7 +288,22 @@ void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light *light)
 		return;
 	}
 
-	this->draw_light_ary_[this->draw_light_cnt_++] = light;
+	if ((this->draw_light_cnt_ <= 0U)
+	|| (light->GetDrawPriority() >= this->draw_light_ary_[this->draw_light_cnt_ - 1U]->GetDrawPriority())) {
+		this->draw_light_ary_[this->draw_light_cnt_++] = light;
+	} else {
+		for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
+			if (light->GetDrawPriority() < this->draw_light_ary_[draw_light_i]->GetDrawPriority()) {
+				memmove(&this->draw_light_ary_[draw_light_i + 1U], &this->draw_light_ary_[draw_light_i], sizeof(this->draw_light_ary_[0]) * (this->draw_light_cnt_ - draw_light_i));
+
+				this->draw_light_ary_[draw_light_i] = light;
+
+				++this->draw_light_cnt_;
+
+				break;
+			}
+		}
+	}
 
 	light->SetDrawSet(this);
 
@@ -323,7 +338,22 @@ void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog *fog)
 		return;
 	}
 
-	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
+	if ((this->draw_fog_cnt_ <= 0U)
+	|| (fog->GetDrawPriority() >= this->draw_fog_ary_[this->draw_fog_cnt_ - 1U]->GetDrawPriority())) {
+		this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
+	} else {
+		for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
+			if (fog->GetDrawPriority() < this->draw_fog_ary_[draw_fog_i]->GetDrawPriority()) {
+				memmove(&this->draw_fog_ary_[draw_fog_i + 1U], &this->draw_fog_ary_[draw_fog_i], sizeof(this->draw_fog_ary_[0]) * (this->draw_fog_cnt_ - draw_fog_i));
+
+				this->draw_fog_ary_[draw_fog_i] = fog;
+
+				++this->draw_fog_cnt_;
+
+				break;
+			}
+		}
+	}
 
 	fog->SetDrawSet(this);
 

@@ -175,6 +175,7 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		tml::graphic::Canvas2DDesc canvas_desc;
 
 		canvas_desc.SetManager(this->GetGraphicManager());
+		canvas_desc.draw_priority = 1;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
 			this->Init();
@@ -185,7 +186,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		this->canvas_2d->SetCamera(this->camera_2d);
 		this->canvas_2d->SetRenderTargetTexture(this->GetGraphicManager()->common.main_render_target_texture);
 		this->canvas_2d->SetRenderTargetTextureClearFlag(true);
-		this->canvas_2d->SetDrawPriority(1U);
 	}
 
 	{// Camera3D Create
@@ -209,6 +209,7 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		tml::graphic::Canvas3DDesc canvas_desc;
 
 		canvas_desc.SetManager(this->GetGraphicManager());
+		canvas_desc.draw_priority = 0;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas3D>(this->canvas_3d, canvas_desc) == nullptr) {
 			this->Init();
@@ -221,7 +222,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		this->canvas_3d->SetRenderTargetTextureClearFlag(true);
 		this->canvas_3d->SetDepthTargetTexture(this->GetGraphicManager()->common.main_depth_target_texture);
 		this->canvas_3d->SetDepthTargetTextureClearFlag(true);
-		this->canvas_3d->SetDrawPriority(0U);
 	}
 
 	{// BackgroundModel Create

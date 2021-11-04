@@ -307,6 +307,7 @@ namespace graphic {
 class ModelDesc : public tml::graphic::ManagerResourceDesc
 {
 public:
+	INT draw_priority;
 
 private:
 	void Release(void);
@@ -366,7 +367,7 @@ private:
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
 	tml::shared_ptr<tml::graphic::Sampler> empty_samp_;
 	std::vector<tml::unique_ptr<tml::graphic::ModelStage>> stage_cont_;
-	UINT draw_priority_;
+	INT draw_priority_;
 	UINT draw_set_canvas_cnt_;
 	std::vector<const tml::graphic::Canvas *> draw_set_canvas_cont_;
 
@@ -414,8 +415,8 @@ public:
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSamplerFast(const UINT);
 	void SetSampler(const UINT, const tml::shared_ptr<tml::graphic::Sampler> &);
 	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &) = 0;
-	UINT GetDrawPriority(void) const;
-	void SetDrawPriority(const UINT);
+	INT GetDrawPriority(void) const;
+	void SetDrawPriority(const INT);
 	bool IsDrawSet(const tml::graphic::Canvas *) const;
 	void SetDrawSet(const tml::graphic::Canvas *);
 	void ClearDrawSet(const tml::graphic::Canvas *);
@@ -723,7 +724,7 @@ inline tml::graphic::ModelStage *tml::graphic::Model::GetStage(const tml::Consta
  * @brief GetDrawPriorityŠÖ”
  * @return draw_priority (draw_priority)
  */
-inline UINT tml::graphic::Model::GetDrawPriority(void) const
+inline INT tml::graphic::Model::GetDrawPriority(void) const
 {
 	return (this->draw_priority_);
 }
@@ -733,7 +734,7 @@ inline UINT tml::graphic::Model::GetDrawPriority(void) const
  * @brief SetDrawPriorityŠÖ”
  * @param draw_priority (draw_priority)
  */
-inline void tml::graphic::Model::SetDrawPriority(const UINT draw_priority)
+inline void tml::graphic::Model::SetDrawPriority(const INT draw_priority)
 {
 	this->draw_priority_ = draw_priority;
 

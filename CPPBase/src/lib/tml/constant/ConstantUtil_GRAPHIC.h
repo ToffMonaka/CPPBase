@@ -145,6 +145,8 @@ namespace GRAPHIC {
 	enum class LIGHT_TYPE : UINT {
 		NONE = 0U,
 		BASE,
+		_2D,
+		_3D,
 		USER,
 		COUNT
 	};
@@ -152,6 +154,8 @@ namespace GRAPHIC {
 	enum class FOG_TYPE : UINT {
 		NONE = 0U,
 		BASE,
+		_2D,
+		_3D,
 		USER,
 		COUNT
 	};
@@ -311,14 +315,26 @@ namespace GRAPHIC {
 		PERSPECTIVE,
 		ORTHOGRAPHIC
 	};
-	enum class LIGHT_EFFECT_TYPE : UINT {
+	enum class LIGHT_2D_EFFECT_TYPE : UINT {
 		NONE = 0U,
 		AMBIENT,
 		DIRECTIONAL,
 		POINT,
 		SPOT
 	};
-	enum class FOG_EFFECT_TYPE : UINT {
+	enum class LIGHT_3D_EFFECT_TYPE : UINT {
+		NONE = 0U,
+		AMBIENT,
+		DIRECTIONAL,
+		POINT,
+		SPOT
+	};
+	enum class FOG_2D_EFFECT_TYPE : UINT {
+		NONE = 0U,
+		WIDTH,
+		HEIGHT
+	};
+	enum class FOG_3D_EFFECT_TYPE : UINT {
 		NONE = 0U,
 		WIDTH,
 		HEIGHT
@@ -413,8 +429,16 @@ class Camera3D;
 class Camera3DDesc;
 class Light;
 class LightDesc;
+class Light2D;
+class Light2DDesc;
+class Light3D;
+class Light3DDesc;
 class Fog;
 class FogDesc;
+class Fog2D;
+class Fog2DDesc;
+class Fog3D;
+class Fog3DDesc;
 class Model;
 class ModelDesc;
 class Model2D;
