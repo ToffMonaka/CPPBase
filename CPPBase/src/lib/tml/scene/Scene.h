@@ -19,6 +19,12 @@ class Manager;
 class Canvas;
 class Canvas2D;
 class Canvas3D;
+class Light;
+class Light2D;
+class Light3D;
+class Fog;
+class Fog2D;
+class Fog3D;
 class Model;
 class Model2D;
 class Model3D;
@@ -93,6 +99,14 @@ private:
 	tml::shared_ptr<tml::graphic::Canvas> empty_canvas_;
 	std::list<tml::graphic::Canvas2D *> canvas_2d_cont_;
 	std::list<tml::graphic::Canvas3D *> canvas_3d_cont_;
+	std::vector<tml::shared_ptr<tml::graphic::Light>> light_cont_;
+	tml::shared_ptr<tml::graphic::Light> empty_light_;
+	std::list<tml::graphic::Light2D *> light_2d_cont_;
+	std::list<tml::graphic::Light3D *> light_3d_cont_;
+	std::vector<tml::shared_ptr<tml::graphic::Fog>> fog_cont_;
+	tml::shared_ptr<tml::graphic::Fog> empty_fog_;
+	std::list<tml::graphic::Fog2D *> fog_2d_cont_;
+	std::list<tml::graphic::Fog3D *> fog_3d_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Model>> model_cont_;
 	tml::shared_ptr<tml::graphic::Model> empty_model_;
 	std::list<tml::graphic::Model2D *> model_2d_cont_;
@@ -137,6 +151,14 @@ public:
 	const tml::shared_ptr<tml::graphic::Canvas> &GetCanvas(const UINT);
 	const tml::shared_ptr<tml::graphic::Canvas> &GetCanvasFast(const UINT);
 	void SetCanvas(const UINT, const tml::shared_ptr<tml::graphic::Canvas> &);
+	UINT GetLightCount(void) const;
+	const tml::shared_ptr<tml::graphic::Light> &GetLight(const UINT);
+	const tml::shared_ptr<tml::graphic::Light> &GetLightFast(const UINT);
+	void SetLight(const UINT, const tml::shared_ptr<tml::graphic::Light> &);
+	UINT GetFogCount(void) const;
+	const tml::shared_ptr<tml::graphic::Fog> &GetFog(const UINT);
+	const tml::shared_ptr<tml::graphic::Fog> &GetFogFast(const UINT);
+	void SetFog(const UINT, const tml::shared_ptr<tml::graphic::Fog> &);
 	UINT GetModelCount(void) const;
 	const tml::shared_ptr<tml::graphic::Model> &GetModel(const UINT);
 	const tml::shared_ptr<tml::graphic::Model> &GetModelFast(const UINT);
@@ -299,6 +321,82 @@ inline const tml::shared_ptr<tml::graphic::Canvas> &tml::scene::Scene::GetCanvas
 inline const tml::shared_ptr<tml::graphic::Canvas> &tml::scene::Scene::GetCanvasFast(const UINT index)
 {
 	return (this->canvas_cont_[index]);
+}
+
+
+/**
+ * @brief GetLightCountŠÖ”
+ * @return light_cnt (light_count)
+ */
+inline UINT tml::scene::Scene::GetLightCount(void) const
+{
+	return (this->light_cont_.size());
+}
+
+
+/**
+ * @brief GetLightŠÖ”
+ * @param index (index)
+ * @return light (light)<br>
+ * nullptr=Ž¸”s
+ */
+inline const tml::shared_ptr<tml::graphic::Light> &tml::scene::Scene::GetLight(const UINT index)
+{
+	if (index >= this->light_cont_.size()) {
+		return (this->empty_light_);
+	}
+
+	return (this->light_cont_[index]);
+}
+
+
+/**
+ * @brief GetLightFastŠÖ”
+ * @param index (index)
+ * @return light (light)<br>
+ * nullptr=Ž¸”s
+ */
+inline const tml::shared_ptr<tml::graphic::Light> &tml::scene::Scene::GetLightFast(const UINT index)
+{
+	return (this->light_cont_[index]);
+}
+
+
+/**
+ * @brief GetFogCountŠÖ”
+ * @return fog_cnt (fog_count)
+ */
+inline UINT tml::scene::Scene::GetFogCount(void) const
+{
+	return (this->fog_cont_.size());
+}
+
+
+/**
+ * @brief GetFogŠÖ”
+ * @param index (index)
+ * @return fog (fog)<br>
+ * nullptr=Ž¸”s
+ */
+inline const tml::shared_ptr<tml::graphic::Fog> &tml::scene::Scene::GetFog(const UINT index)
+{
+	if (index >= this->fog_cont_.size()) {
+		return (this->empty_fog_);
+	}
+
+	return (this->fog_cont_[index]);
+}
+
+
+/**
+ * @brief GetFogFastŠÖ”
+ * @param index (index)
+ * @return fog (fog)<br>
+ * nullptr=Ž¸”s
+ */
+inline const tml::shared_ptr<tml::graphic::Fog> &tml::scene::Scene::GetFogFast(const UINT index)
+{
+	return (this->fog_cont_[index]);
 }
 
 

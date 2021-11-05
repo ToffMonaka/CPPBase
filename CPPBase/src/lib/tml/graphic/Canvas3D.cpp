@@ -14,8 +14,8 @@
 #include "Texture.h"
 #include "Sampler.h"
 #include "Camera3D.h"
-#include "Light.h"
-#include "Fog.h"
+#include "Light3D.h"
+#include "Fog3D.h"
 #include "Model3D.h"
 
 
@@ -242,11 +242,11 @@ void tml::graphic::Canvas3D::Draw(void)
 				this->GetManager()->common.camera_shader_structured_buffer->UploadCPUBuffer();
 
 				this->GetManager()->common.light_shader_structured_buffer->SetElementCount(0U);
-				this->GetManager()->common.light_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
+				//this->GetManager()->common.light_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
 				this->GetManager()->common.light_shader_structured_buffer->UploadCPUBuffer();
 
 				this->GetManager()->common.fog_shader_structured_buffer->SetElementCount(0U);
-				this->GetManager()->common.fog_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
+				//this->GetManager()->common.fog_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
 				this->GetManager()->common.fog_shader_structured_buffer->UploadCPUBuffer();
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
@@ -297,7 +297,7 @@ void tml::graphic::Canvas3D::Draw(void)
  * @brief SetDrawLightŠÖ”
  * @param light (light)
  */
-void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light *light)
+void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light)
 {
 	if ((light == nullptr)
 	|| (light->IsDrawSet(this))
@@ -347,7 +347,7 @@ void tml::graphic::Canvas3D::ClearDrawLight(void)
  * @brief SetDrawFogŠÖ”
  * @param fog (fog)
  */
-void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog *fog)
+void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog)
 {
 	if ((fog == nullptr)
 	|| (fog->IsDrawSet(this))

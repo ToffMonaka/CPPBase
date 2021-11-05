@@ -9,6 +9,10 @@
 #include "../graphic/Manager.h"
 #include "../graphic/Canvas2D.h"
 #include "../graphic/Canvas3D.h"
+#include "../graphic/Light2D.h"
+#include "../graphic/Light3D.h"
+#include "../graphic/Fog2D.h"
+#include "../graphic/Fog3D.h"
 #include "../graphic/Model2D.h"
 #include "../graphic/Model3D.h"
 #include "../sound/Manager.h"
@@ -145,6 +149,12 @@ void tml::scene::Scene::Init(void)
 	this->canvas_cont_.clear();
 	this->canvas_2d_cont_.clear();
 	this->canvas_3d_cont_.clear();
+	this->light_cont_.clear();
+	this->light_2d_cont_.clear();
+	this->light_3d_cont_.clear();
+	this->fog_cont_.clear();
+	this->fog_2d_cont_.clear();
+	this->fog_3d_cont_.clear();
 	this->model_cont_.clear();
 	this->model_2d_cont_.clear();
 	this->model_3d_cont_.clear();
@@ -286,6 +296,14 @@ void tml::scene::Scene::Update(void)
 
 	if (this->draw_canvas_2d_cont_ != nullptr) {
 		for (auto draw_canvas_2d : (*this->draw_canvas_2d_cont_)) {
+			for (auto light_2d : this->light_2d_cont_) {
+				draw_canvas_2d->SetDrawLight(light_2d);
+			}
+
+			for (auto fog_2d : this->fog_2d_cont_) {
+				draw_canvas_2d->SetDrawFog(fog_2d);
+			}
+
 			for (auto model_2d : this->model_2d_cont_) {
 				draw_canvas_2d->SetDrawModel(model_2d);
 			}
@@ -294,6 +312,14 @@ void tml::scene::Scene::Update(void)
 
 	if (this->draw_canvas_3d_cont_ != nullptr) {
 		for (auto draw_canvas_3d : (*this->draw_canvas_3d_cont_)) {
+			for (auto light_3d : this->light_3d_cont_) {
+				draw_canvas_3d->SetDrawLight(light_3d);
+			}
+
+			for (auto fog_3d : this->fog_3d_cont_) {
+				draw_canvas_3d->SetDrawFog(fog_3d);
+			}
+
 			for (auto model_3d : this->model_3d_cont_) {
 				draw_canvas_3d->SetDrawModel(model_3d);
 			}
@@ -411,6 +437,104 @@ void tml::scene::Scene::SetCanvas(const UINT index, const tml::shared_ptr<tml::g
 		}
 		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_3D: {
 			this->canvas_3d_cont_.push_back(reinterpret_cast<tml::graphic::Canvas3D *>(canvas.get()));
+
+			break;
+		}
+		}
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetLightä÷êî
+ * @param index (index)
+ * @param light (light)
+ */
+void tml::scene::Scene::SetLight(const UINT index, const tml::shared_ptr<tml::graphic::Light> &light)
+{
+	if (index >= this->light_cont_.size()) {
+		this->light_cont_.resize(index + 1U);
+	}
+
+	auto &old_light = this->light_cont_[index];
+
+	if (old_light != nullptr) {
+		switch (old_light->GetType()) {
+		case tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_2D: {
+			this->light_2d_cont_.remove(reinterpret_cast<tml::graphic::Light2D *>(old_light.get()));
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_3D: {
+			this->light_3d_cont_.remove(reinterpret_cast<tml::graphic::Light3D *>(old_light.get()));
+
+			break;
+		}
+		}
+	}
+
+	this->light_cont_[index] = light;
+
+	if (light != nullptr) {
+		switch (light->GetType()) {
+		case tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_2D: {
+			this->light_2d_cont_.push_back(reinterpret_cast<tml::graphic::Light2D *>(light.get()));
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_3D: {
+			this->light_3d_cont_.push_back(reinterpret_cast<tml::graphic::Light3D *>(light.get()));
+
+			break;
+		}
+		}
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetFogä÷êî
+ * @param index (index)
+ * @param fog (fog)
+ */
+void tml::scene::Scene::SetFog(const UINT index, const tml::shared_ptr<tml::graphic::Fog> &fog)
+{
+	if (index >= this->fog_cont_.size()) {
+		this->fog_cont_.resize(index + 1U);
+	}
+
+	auto &old_fog = this->fog_cont_[index];
+
+	if (old_fog != nullptr) {
+		switch (old_fog->GetType()) {
+		case tml::ConstantUtil::GRAPHIC::FOG_TYPE::_2D: {
+			this->fog_2d_cont_.remove(reinterpret_cast<tml::graphic::Fog2D *>(old_fog.get()));
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::FOG_TYPE::_3D: {
+			this->fog_3d_cont_.remove(reinterpret_cast<tml::graphic::Fog3D *>(old_fog.get()));
+
+			break;
+		}
+		}
+	}
+
+	this->fog_cont_[index] = fog;
+
+	if (fog != nullptr) {
+		switch (fog->GetType()) {
+		case tml::ConstantUtil::GRAPHIC::FOG_TYPE::_2D: {
+			this->fog_2d_cont_.push_back(reinterpret_cast<tml::graphic::Fog2D *>(fog.get()));
+
+			break;
+		}
+		case tml::ConstantUtil::GRAPHIC::FOG_TYPE::_3D: {
+			this->fog_3d_cont_.push_back(reinterpret_cast<tml::graphic::Fog3D *>(fog.get()));
 
 			break;
 		}

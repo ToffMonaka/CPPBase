@@ -68,9 +68,9 @@ private:
 	FLOAT vp_h_;
 
 	UINT draw_light_cnt_;
-	std::array<tml::graphic::Light *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
+	std::array<tml::graphic::Light2D *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
 	UINT draw_fog_cnt_;
-	std::array<tml::graphic::Fog *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
+	std::array<tml::graphic::Fog2D *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
 	UINT draw_model_cnt_;
 	std::array<tml::graphic::Model2D *, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_ary_;
 
@@ -103,9 +103,9 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawLight(tml::graphic::Light *);
+	void SetDrawLight(tml::graphic::Light2D *);
 	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog *);
+	void SetDrawFog(tml::graphic::Fog2D *);
 	void ClearDrawFog(void);
 	void SetDrawModel(tml::graphic::Model2D *);
 	void ClearDrawModel(void);
