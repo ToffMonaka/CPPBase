@@ -206,8 +206,9 @@
     <ClCompile Include="src\lib\tml\graphic\BlendState.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Camera.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Camera2D.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Camera2DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Camera3D.cpp" />
-    <ClCompile Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Camera3DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Canvas.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Canvas2D.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Canvas3D.cpp" />
@@ -218,8 +219,9 @@
     <ClCompile Include="src\lib\tml\graphic\FigureModel2DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Fog.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Fog2D.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Fog2DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Fog3D.cpp" />
-    <ClCompile Include="src\lib\tml\graphic\FogShaderStructuredBuffer.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Fog3DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Font.cpp" />
     <ClCompile Include="src\lib\tml\graphic\GroundModel2D.cpp" />
     <ClCompile Include="src\lib\tml\graphic\GroundModel2DBlockShaderStructuredBuffer.cpp" />
@@ -227,8 +229,9 @@
     <ClCompile Include="src\lib\tml\graphic\GroundModel2DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\HeaderShaderConstantBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Light2D.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Light2DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Light3D.cpp" />
-    <ClCompile Include="src\lib\tml\graphic\LightShaderStructuredBuffer.cpp" />
+    <ClCompile Include="src\lib\tml\graphic\Light3DShaderStructuredBuffer.cpp" />
     <ClCompile Include="src\lib\tml\graphic\Manager.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ManagerCommon.cpp" />
     <ClCompile Include="src\lib\tml\graphic\ManagerEvent.cpp" />
@@ -390,8 +393,9 @@
     <ClInclude Include="src\lib\tml\graphic\BlendState.h" />
     <ClInclude Include="src\lib\tml\graphic\Camera.h" />
     <ClInclude Include="src\lib\tml\graphic\Camera2D.h" />
+    <ClInclude Include="src\lib\tml\graphic\Camera2DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Camera3D.h" />
-    <ClInclude Include="src\lib\tml\graphic\CameraShaderStructuredBuffer.h" />
+    <ClInclude Include="src\lib\tml\graphic\Camera3DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Canvas.h" />
     <ClInclude Include="src\lib\tml\graphic\Canvas2D.h" />
     <ClInclude Include="src\lib\tml\graphic\Canvas3D.h" />
@@ -402,8 +406,9 @@
     <ClInclude Include="src\lib\tml\graphic\FigureModel2DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Fog.h" />
     <ClInclude Include="src\lib\tml\graphic\Fog2D.h" />
+    <ClInclude Include="src\lib\tml\graphic\Fog2DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Fog3D.h" />
-    <ClInclude Include="src\lib\tml\graphic\FogShaderStructuredBuffer.h" />
+    <ClInclude Include="src\lib\tml\graphic\Fog3DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Font.h" />
     <ClInclude Include="src\lib\tml\graphic\GroundModel2D.h" />
     <ClInclude Include="src\lib\tml\graphic\GroundModel2DBlockShaderStructuredBuffer.h" />
@@ -411,8 +416,9 @@
     <ClInclude Include="src\lib\tml\graphic\GroundModel2DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\HeaderShaderConstantBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Light2D.h" />
+    <ClInclude Include="src\lib\tml\graphic\Light2DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Light3D.h" />
-    <ClInclude Include="src\lib\tml\graphic\LightShaderStructuredBuffer.h" />
+    <ClInclude Include="src\lib\tml\graphic\Light3DShaderStructuredBuffer.h" />
     <ClInclude Include="src\lib\tml\graphic\Manager.h" />
     <ClInclude Include="src\lib\tml\graphic\ManagerCommon.h" />
     <ClInclude Include="src\lib\tml\graphic\ManagerEvent.h" />

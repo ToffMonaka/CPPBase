@@ -8,9 +8,9 @@
 #include "Manager.h"
 #include "ConfigShaderConstantBuffer.h"
 #include "HeaderShaderConstantBuffer.h"
-#include "CameraShaderStructuredBuffer.h"
-#include "LightShaderStructuredBuffer.h"
-#include "FogShaderStructuredBuffer.h"
+#include "Camera2DShaderStructuredBuffer.h"
+#include "Light2DShaderStructuredBuffer.h"
+#include "Fog2DShaderStructuredBuffer.h"
 #include "Texture.h"
 #include "Sampler.h"
 #include "Camera2D.h"
@@ -209,7 +209,7 @@ void tml::graphic::Canvas2D::Draw(void)
 		this->GetManager()->SetDrawStageData(&draw_stage_dat);
 
 		std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->GetManager()->common.config_shader_constant_buffer.get(), this->GetManager()->common.header_shader_constant_buffer.get()};
-		std::array<tml::graphic::ShaderStructuredBuffer *, 5U> sys_ssb_ary = {this->GetManager()->common.camera_shader_structured_buffer.get(), this->GetManager()->common.light_shader_structured_buffer.get(), this->GetManager()->common.fog_shader_structured_buffer.get(), nullptr, nullptr};
+		std::array<tml::graphic::ShaderStructuredBuffer *, 5U> sys_ssb_ary = {this->GetManager()->common.camera_2d_shader_structured_buffer.get(), this->GetManager()->common.light_2d_shader_structured_buffer.get(), this->GetManager()->common.fog_2d_shader_structured_buffer.get(), nullptr, nullptr};
 
 		while (draw_stage_dat.type != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
 			switch (draw_stage_dat.type) {
@@ -221,17 +221,17 @@ void tml::graphic::Canvas2D::Draw(void)
 				this->GetManager()->common.header_shader_constant_buffer->SetElement(2U, this->draw_light_cnt_, this->draw_fog_cnt_, this->draw_model_cnt_);
 				this->GetManager()->common.header_shader_constant_buffer->UploadCPUBuffer();
 
-				this->GetManager()->common.camera_shader_structured_buffer->SetElementCount(0U);
-				this->GetManager()->common.camera_shader_structured_buffer->SetElement(0U, draw_stage_dat.view_matrix, draw_stage_dat.inverse_view_matrix, draw_stage_dat.projection_matrix);
-				this->GetManager()->common.camera_shader_structured_buffer->UploadCPUBuffer();
+				this->GetManager()->common.camera_2d_shader_structured_buffer->SetElementCount(0U);
+				this->GetManager()->common.camera_2d_shader_structured_buffer->SetElement(0U, draw_stage_dat.view_matrix, draw_stage_dat.inverse_view_matrix, draw_stage_dat.projection_matrix);
+				this->GetManager()->common.camera_2d_shader_structured_buffer->UploadCPUBuffer();
 
-				this->GetManager()->common.light_shader_structured_buffer->SetElementCount(0U);
-				//this->GetManager()->common.light_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
-				this->GetManager()->common.light_shader_structured_buffer->UploadCPUBuffer();
+				this->GetManager()->common.light_2d_shader_structured_buffer->SetElementCount(0U);
+				this->GetManager()->common.light_2d_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
+				this->GetManager()->common.light_2d_shader_structured_buffer->UploadCPUBuffer();
 
-				this->GetManager()->common.fog_shader_structured_buffer->SetElementCount(0U);
-				//this->GetManager()->common.fog_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
-				this->GetManager()->common.fog_shader_structured_buffer->UploadCPUBuffer();
+				this->GetManager()->common.fog_2d_shader_structured_buffer->SetElementCount(0U);
+				this->GetManager()->common.fog_2d_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
+				this->GetManager()->common.fog_2d_shader_structured_buffer->UploadCPUBuffer();
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 					this->draw_model_ary_[draw_model_i]->DrawStageInit();

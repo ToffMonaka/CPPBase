@@ -1,18 +1,18 @@
 /**
  * @file
- * @brief LightShaderStructuredBufferコードファイル
+ * @brief Light3DShaderStructuredBufferコードファイル
  */
 
 
-#include "LightShaderStructuredBuffer.h"
+#include "Light3DShaderStructuredBuffer.h"
 #include "Manager.h"
-#include "Light.h"
+#include "Light3D.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::LightShaderStructuredBufferDesc::LightShaderStructuredBufferDesc()
+tml::graphic::Light3DShaderStructuredBufferDesc::Light3DShaderStructuredBufferDesc()
 {
 	return;
 }
@@ -21,7 +21,7 @@ tml::graphic::LightShaderStructuredBufferDesc::LightShaderStructuredBufferDesc()
 /**
  * @brief デストラクタ
  */
-tml::graphic::LightShaderStructuredBufferDesc::~LightShaderStructuredBufferDesc()
+tml::graphic::Light3DShaderStructuredBufferDesc::~Light3DShaderStructuredBufferDesc()
 {
 	this->Release();
 
@@ -32,7 +32,7 @@ tml::graphic::LightShaderStructuredBufferDesc::~LightShaderStructuredBufferDesc(
 /**
  * @brief Init関数
  */
-void tml::graphic::LightShaderStructuredBufferDesc::Init(void)
+void tml::graphic::Light3DShaderStructuredBufferDesc::Init(void)
 {
 	this->Release();
 
@@ -45,7 +45,7 @@ void tml::graphic::LightShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::LightShaderStructuredBuffer::LightShaderStructuredBuffer()
+tml::graphic::Light3DShaderStructuredBuffer::Light3DShaderStructuredBuffer()
 {
 	return;
 }
@@ -54,7 +54,7 @@ tml::graphic::LightShaderStructuredBuffer::LightShaderStructuredBuffer()
 /**
  * @brief デストラクタ
  */
-tml::graphic::LightShaderStructuredBuffer::~LightShaderStructuredBuffer()
+tml::graphic::Light3DShaderStructuredBuffer::~Light3DShaderStructuredBuffer()
 {
 	this->Release();
 
@@ -65,7 +65,7 @@ tml::graphic::LightShaderStructuredBuffer::~LightShaderStructuredBuffer()
 /**
  * @brief Init関数
  */
-void tml::graphic::LightShaderStructuredBuffer::Init(void)
+void tml::graphic::Light3DShaderStructuredBuffer::Init(void)
 {
 	this->Release();
 
@@ -81,7 +81,7 @@ void tml::graphic::LightShaderStructuredBuffer::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::LightShaderStructuredBuffer::Create(const tml::graphic::LightShaderStructuredBufferDesc &desc)
+INT tml::graphic::Light3DShaderStructuredBuffer::Create(const tml::graphic::Light3DShaderStructuredBufferDesc &desc)
 {
 	this->Init();
 
@@ -100,7 +100,7 @@ INT tml::graphic::LightShaderStructuredBuffer::Create(const tml::graphic::LightS
  * @param index (index)
  * @param light (light)
  */
-void tml::graphic::LightShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Light *light)
+void tml::graphic::Light3DShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Light3D *light)
 {
 	auto element = this->GetElement(index);
 
@@ -118,7 +118,7 @@ void tml::graphic::LightShaderStructuredBuffer::SetElement(const UINT index, con
  * @param light_cnt (light_count)
  * @param light_ary (light_array)
  */
-void tml::graphic::LightShaderStructuredBuffer::SetElement(const UINT index, const UINT light_cnt, const tml::graphic::Light *const *light_ary)
+void tml::graphic::Light3DShaderStructuredBuffer::SetElement(const UINT index, const UINT light_cnt, const tml::graphic::Light3D *const *light_ary)
 {
 	for (UINT light_i = 0U; light_i < light_cnt; ++light_i) {
 		auto element = this->GetElement(index + light_i);

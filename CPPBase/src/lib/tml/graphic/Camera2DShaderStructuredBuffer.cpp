@@ -1,19 +1,18 @@
 /**
  * @file
- * @brief CameraShaderStructuredBufferコードファイル
+ * @brief Camera2DShaderStructuredBufferコードファイル
  */
 
 
-#include "CameraShaderStructuredBuffer.h"
+#include "Camera2DShaderStructuredBuffer.h"
 #include "Manager.h"
 #include "Camera2D.h"
-#include "Camera3D.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::CameraShaderStructuredBufferDesc::CameraShaderStructuredBufferDesc()
+tml::graphic::Camera2DShaderStructuredBufferDesc::Camera2DShaderStructuredBufferDesc()
 {
 	return;
 }
@@ -22,7 +21,7 @@ tml::graphic::CameraShaderStructuredBufferDesc::CameraShaderStructuredBufferDesc
 /**
  * @brief デストラクタ
  */
-tml::graphic::CameraShaderStructuredBufferDesc::~CameraShaderStructuredBufferDesc()
+tml::graphic::Camera2DShaderStructuredBufferDesc::~Camera2DShaderStructuredBufferDesc()
 {
 	this->Release();
 
@@ -33,7 +32,7 @@ tml::graphic::CameraShaderStructuredBufferDesc::~CameraShaderStructuredBufferDes
 /**
  * @brief Init関数
  */
-void tml::graphic::CameraShaderStructuredBufferDesc::Init(void)
+void tml::graphic::Camera2DShaderStructuredBufferDesc::Init(void)
 {
 	this->Release();
 
@@ -46,7 +45,7 @@ void tml::graphic::CameraShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::CameraShaderStructuredBuffer::CameraShaderStructuredBuffer()
+tml::graphic::Camera2DShaderStructuredBuffer::Camera2DShaderStructuredBuffer()
 {
 	return;
 }
@@ -55,7 +54,7 @@ tml::graphic::CameraShaderStructuredBuffer::CameraShaderStructuredBuffer()
 /**
  * @brief デストラクタ
  */
-tml::graphic::CameraShaderStructuredBuffer::~CameraShaderStructuredBuffer()
+tml::graphic::Camera2DShaderStructuredBuffer::~Camera2DShaderStructuredBuffer()
 {
 	this->Release();
 
@@ -66,7 +65,7 @@ tml::graphic::CameraShaderStructuredBuffer::~CameraShaderStructuredBuffer()
 /**
  * @brief Init関数
  */
-void tml::graphic::CameraShaderStructuredBuffer::Init(void)
+void tml::graphic::Camera2DShaderStructuredBuffer::Init(void)
 {
 	this->Release();
 
@@ -82,7 +81,7 @@ void tml::graphic::CameraShaderStructuredBuffer::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::CameraShaderStructuredBuffer::Create(const tml::graphic::CameraShaderStructuredBufferDesc &desc)
+INT tml::graphic::Camera2DShaderStructuredBuffer::Create(const tml::graphic::Camera2DShaderStructuredBufferDesc &desc)
 {
 	this->Init();
 
@@ -103,7 +102,7 @@ INT tml::graphic::CameraShaderStructuredBuffer::Create(const tml::graphic::Camer
  * @param inv_v_mat (inverse_view_matrix)
  * @param p_mat (projection_matrix)
  */
-void tml::graphic::CameraShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &inv_v_mat, const DirectX::XMMATRIX &p_mat)
+void tml::graphic::Camera2DShaderStructuredBuffer::SetElement(const UINT index, const DirectX::XMMATRIX &v_mat, const DirectX::XMMATRIX &inv_v_mat, const DirectX::XMMATRIX &p_mat)
 {
 	auto element = this->GetElement(index);
 

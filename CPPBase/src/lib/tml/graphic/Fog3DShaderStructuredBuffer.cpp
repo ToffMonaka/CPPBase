@@ -1,18 +1,18 @@
 /**
  * @file
- * @brief FogShaderStructuredBufferコードファイル
+ * @brief Fog3DShaderStructuredBufferコードファイル
  */
 
 
-#include "FogShaderStructuredBuffer.h"
+#include "Fog3DShaderStructuredBuffer.h"
 #include "Manager.h"
-#include "Fog.h"
+#include "Fog3D.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::graphic::FogShaderStructuredBufferDesc::FogShaderStructuredBufferDesc()
+tml::graphic::Fog3DShaderStructuredBufferDesc::Fog3DShaderStructuredBufferDesc()
 {
 	return;
 }
@@ -21,7 +21,7 @@ tml::graphic::FogShaderStructuredBufferDesc::FogShaderStructuredBufferDesc()
 /**
  * @brief デストラクタ
  */
-tml::graphic::FogShaderStructuredBufferDesc::~FogShaderStructuredBufferDesc()
+tml::graphic::Fog3DShaderStructuredBufferDesc::~Fog3DShaderStructuredBufferDesc()
 {
 	this->Release();
 
@@ -32,7 +32,7 @@ tml::graphic::FogShaderStructuredBufferDesc::~FogShaderStructuredBufferDesc()
 /**
  * @brief Init関数
  */
-void tml::graphic::FogShaderStructuredBufferDesc::Init(void)
+void tml::graphic::Fog3DShaderStructuredBufferDesc::Init(void)
 {
 	this->Release();
 
@@ -45,7 +45,7 @@ void tml::graphic::FogShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::FogShaderStructuredBuffer::FogShaderStructuredBuffer()
+tml::graphic::Fog3DShaderStructuredBuffer::Fog3DShaderStructuredBuffer()
 {
 	return;
 }
@@ -54,7 +54,7 @@ tml::graphic::FogShaderStructuredBuffer::FogShaderStructuredBuffer()
 /**
  * @brief デストラクタ
  */
-tml::graphic::FogShaderStructuredBuffer::~FogShaderStructuredBuffer()
+tml::graphic::Fog3DShaderStructuredBuffer::~Fog3DShaderStructuredBuffer()
 {
 	this->Release();
 
@@ -65,7 +65,7 @@ tml::graphic::FogShaderStructuredBuffer::~FogShaderStructuredBuffer()
 /**
  * @brief Init関数
  */
-void tml::graphic::FogShaderStructuredBuffer::Init(void)
+void tml::graphic::Fog3DShaderStructuredBuffer::Init(void)
 {
 	this->Release();
 
@@ -81,7 +81,7 @@ void tml::graphic::FogShaderStructuredBuffer::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::FogShaderStructuredBuffer::Create(const tml::graphic::FogShaderStructuredBufferDesc &desc)
+INT tml::graphic::Fog3DShaderStructuredBuffer::Create(const tml::graphic::Fog3DShaderStructuredBufferDesc &desc)
 {
 	this->Init();
 
@@ -100,7 +100,7 @@ INT tml::graphic::FogShaderStructuredBuffer::Create(const tml::graphic::FogShade
  * @param index (index)
  * @param fog (fog)
  */
-void tml::graphic::FogShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Fog *fog)
+void tml::graphic::Fog3DShaderStructuredBuffer::SetElement(const UINT index, const tml::graphic::Fog3D *fog)
 {
 	auto element = this->GetElement(index);
 
@@ -118,7 +118,7 @@ void tml::graphic::FogShaderStructuredBuffer::SetElement(const UINT index, const
  * @param fog_cnt (fog_count)
  * @param fog_ary (fog_array)
  */
-void tml::graphic::FogShaderStructuredBuffer::SetElement(const UINT index, const UINT fog_cnt, const tml::graphic::Fog *const *fog_ary)
+void tml::graphic::Fog3DShaderStructuredBuffer::SetElement(const UINT index, const UINT fog_cnt, const tml::graphic::Fog3D *const *fog_ary)
 {
 	for (UINT fog_i = 0U; fog_i < fog_cnt; ++fog_i) {
 		auto element = this->GetElement(index + fog_i);

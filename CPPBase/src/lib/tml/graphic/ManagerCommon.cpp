@@ -13,9 +13,12 @@
 #include "Shader.h"
 #include "ConfigShaderConstantBuffer.h"
 #include "HeaderShaderConstantBuffer.h"
-#include "CameraShaderStructuredBuffer.h"
-#include "LightShaderStructuredBuffer.h"
-#include "FogShaderStructuredBuffer.h"
+#include "Camera2DShaderStructuredBuffer.h"
+#include "Camera3DShaderStructuredBuffer.h"
+#include "Light2DShaderStructuredBuffer.h"
+#include "Light3DShaderStructuredBuffer.h"
+#include "Fog2DShaderStructuredBuffer.h"
+#include "Fog3DShaderStructuredBuffer.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
@@ -78,9 +81,12 @@ void tml::graphic::ManagerCommon::Init(void)
 	this->ground_model_3d_shader.reset();
 	this->config_shader_constant_buffer.reset();
 	this->header_shader_constant_buffer.reset();
-	this->camera_shader_structured_buffer.reset();
-	this->light_shader_structured_buffer.reset();
-	this->fog_shader_structured_buffer.reset();
+	this->camera_2d_shader_structured_buffer.reset();
+	this->camera_3d_shader_structured_buffer.reset();
+	this->light_2d_shader_structured_buffer.reset();
+	this->light_3d_shader_structured_buffer.reset();
+	this->fog_2d_shader_structured_buffer.reset();
+	this->fog_3d_shader_structured_buffer.reset();
 	this->figure_model_2d_mesh.reset();
 	this->figure_model_3d_mesh.reset();
 	this->cc_sampler.reset();
@@ -374,39 +380,78 @@ INT tml::graphic::ManagerCommon::Create(tml::graphic::Manager *mgr)
 		}
 	}
 
-	{// CameraShaderStructuredBuffer Create
-		tml::graphic::CameraShaderStructuredBufferDesc ssb_desc;
+	{// Camera2DShaderStructuredBuffer Create
+		tml::graphic::Camera2DShaderStructuredBufferDesc ssb_desc;
 
 		ssb_desc.SetManager(this->mgr_);
-		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::CameraShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Camera2DShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT);
 
-		if (this->mgr_->GetResource<tml::graphic::CameraShaderStructuredBuffer>(this->camera_shader_structured_buffer, ssb_desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Camera2DShaderStructuredBuffer>(this->camera_2d_shader_structured_buffer, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// LightShaderStructuredBuffer Create
-		tml::graphic::LightShaderStructuredBufferDesc ssb_desc;
+	{// Camera3DShaderStructuredBuffer Create
+		tml::graphic::Camera3DShaderStructuredBufferDesc ssb_desc;
 
 		ssb_desc.SetManager(this->mgr_);
-		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::LightShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Camera3DShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::CAMERA_LIMIT);
 
-		if (this->mgr_->GetResource<tml::graphic::LightShaderStructuredBuffer>(this->light_shader_structured_buffer, ssb_desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Camera3DShaderStructuredBuffer>(this->camera_3d_shader_structured_buffer, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
 		}
 	}
 
-	{// FogShaderStructuredBuffer Create
-		tml::graphic::FogShaderStructuredBufferDesc ssb_desc;
+	{// Light2DShaderStructuredBuffer Create
+		tml::graphic::Light2DShaderStructuredBufferDesc ssb_desc;
 
 		ssb_desc.SetManager(this->mgr_);
-		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FogShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Light2DShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT);
 
-		if (this->mgr_->GetResource<tml::graphic::FogShaderStructuredBuffer>(this->fog_shader_structured_buffer, ssb_desc) == nullptr) {
+		if (this->mgr_->GetResource<tml::graphic::Light2DShaderStructuredBuffer>(this->light_2d_shader_structured_buffer, ssb_desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// Light3DShaderStructuredBuffer Create
+		tml::graphic::Light3DShaderStructuredBufferDesc ssb_desc;
+
+		ssb_desc.SetManager(this->mgr_);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Light3DShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT);
+
+		if (this->mgr_->GetResource<tml::graphic::Light3DShaderStructuredBuffer>(this->light_3d_shader_structured_buffer, ssb_desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// Fog2DShaderStructuredBuffer Create
+		tml::graphic::Fog2DShaderStructuredBufferDesc ssb_desc;
+
+		ssb_desc.SetManager(this->mgr_);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Fog2DShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT);
+
+		if (this->mgr_->GetResource<tml::graphic::Fog2DShaderStructuredBuffer>(this->fog_2d_shader_structured_buffer, ssb_desc) == nullptr) {
+			this->Init();
+
+			return (-1);
+		}
+	}
+
+	{// Fog3DShaderStructuredBuffer Create
+		tml::graphic::Fog3DShaderStructuredBufferDesc ssb_desc;
+
+		ssb_desc.SetManager(this->mgr_);
+		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::Fog3DShaderStructuredBuffer::ELEMENT), tml::ConstantUtil::GRAPHIC::FOG_LIMIT);
+
+		if (this->mgr_->GetResource<tml::graphic::Fog3DShaderStructuredBuffer>(this->fog_3d_shader_structured_buffer, ssb_desc) == nullptr) {
 			this->Init();
 
 			return (-1);

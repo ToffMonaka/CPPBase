@@ -424,10 +424,10 @@ public:
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
 
 	virtual void DrawStageInit(void);
+	virtual void DrawStageForward2D(void);
+	virtual void DrawStageForward3D(void);
 	virtual void DrawStageDeferred3D(void);
 	virtual void DrawStageDeferred3DShadow(void);
-	virtual void DrawStageForward3D(void);
-	virtual void DrawStageForward2D(void);
 };
 }
 }

@@ -476,18 +476,9 @@ void tml::graphic::Model::DrawStageInit(void)
 
 
 /**
- * @brief DrawStageDeferred3Dä÷êî
+ * @brief DrawStageForward2Dä÷êî
  */
-void tml::graphic::Model::DrawStageDeferred3D(void)
-{
-	return;
-}
-
-
-/**
- * @brief DrawStageDeferred3DShadowä÷êî
- */
-void tml::graphic::Model::DrawStageDeferred3DShadow(void)
+void tml::graphic::Model::DrawStageForward2D(void)
 {
 	return;
 }
@@ -503,9 +494,18 @@ void tml::graphic::Model::DrawStageForward3D(void)
 
 
 /**
- * @brief DrawStageForward2Dä÷êî
+ * @brief DrawStageDeferred3Dä÷êî
  */
-void tml::graphic::Model::DrawStageForward2D(void)
+void tml::graphic::Model::DrawStageDeferred3D(void)
+{
+	return;
+}
+
+
+/**
+ * @brief DrawStageDeferred3DShadowä÷êî
+ */
+void tml::graphic::Model::DrawStageDeferred3DShadow(void)
 {
 	return;
 }
