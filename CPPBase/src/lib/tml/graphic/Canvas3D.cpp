@@ -202,7 +202,6 @@ void tml::graphic::Canvas3D::SetDepthTargetTexture(const tml::shared_ptr<tml::gr
 void tml::graphic::Canvas3D::Draw(void)
 {
 	if (this->camera_ != nullptr) {
-		/*
 		auto rt_tex = this->GetRenderTargetTexture().get();
 		auto rt_tex_clear_flg = this->GetRenderTargetTextureClearFlag();
 		auto vp = &this->vp_;
@@ -256,16 +255,16 @@ void tml::graphic::Canvas3D::Draw(void)
 				this->GetManager()->SetDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM, sys_scb_ary.size(), sys_scb_ary.data());
 				this->GetManager()->SetDrawShaderStructuredBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_INDEX::SYSTEM, sys_ssb_ary.size(), sys_ssb_ary.data());
 
-				draw_stage_dat.type = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D;
+				draw_stage_dat.type = tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_3D;
 
 				break;
 			}
-			case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D: {
+			case tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_3D: {
 				this->GetManager()->SetDrawTargetTexture(rt_tex, nullptr);
 				this->GetManager()->SetDrawViewport(vp);
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-					this->draw_model_ary_[draw_model_i]->DrawStageForward2D();
+					this->draw_model_ary_[draw_model_i]->DrawStageForward3D();
 				}
 
 				this->GetManager()->ClearDrawTargetTexture();
@@ -282,7 +281,6 @@ void tml::graphic::Canvas3D::Draw(void)
 		}
 
 		this->GetManager()->ClearDrawStageData();
-		*/
 	}
 
 	this->ClearDrawLight();

@@ -104,9 +104,10 @@ void tml::graphic::Fog3D::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
 	this->effect_type_ = tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE::NONE;
 	this->col_ = 1.0f;
+
+	this->position.Init();
 
 	tml::graphic::Fog::Init();
 
@@ -130,9 +131,10 @@ INT tml::graphic::Fog3D::Create(const tml::graphic::Fog3DDesc &desc)
 		return (-1);
 	}
 
-	this->position = desc.position;
 	this->effect_type_ = desc.effect_type;
 	this->col_ = desc.color;
+
+	this->position = desc.position;
 
 	return (0);
 }

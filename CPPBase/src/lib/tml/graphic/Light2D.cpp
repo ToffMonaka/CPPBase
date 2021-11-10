@@ -104,9 +104,10 @@ void tml::graphic::Light2D::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
 	this->effect_type_ = tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE::NONE;
 	this->col_ = 1.0f;
+
+	this->position.Init();
 
 	tml::graphic::Light::Init();
 
@@ -130,9 +131,10 @@ INT tml::graphic::Light2D::Create(const tml::graphic::Light2DDesc &desc)
 		return (-1);
 	}
 
-	this->position = desc.position;
 	this->effect_type_ = desc.effect_type;
 	this->col_ = desc.color;
+
+	this->position = desc.position;
 
 	return (0);
 }

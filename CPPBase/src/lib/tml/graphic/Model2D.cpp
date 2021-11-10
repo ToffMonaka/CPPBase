@@ -135,9 +135,9 @@ INT tml::graphic::Model2DStage::Create(tml::graphic::Manager *mgr)
  * @brief コンストラクタ
  */
 tml::graphic::Model2DDesc::Model2DDesc() :
+	scale(1.0f),
 	size(0.0f),
 	size_auto_flag(true),
-	scale(1.0f),
 	color(1.0f)
 {
 	return;
@@ -163,9 +163,9 @@ void tml::graphic::Model2DDesc::Init(void)
 	this->Release();
 
 	this->position.Init();
+	this->scale = 1.0f;
 	this->size = 0.0f;
 	this->size_auto_flag = true;
-	this->scale = 1.0f;
 	this->color = 1.0f;
 
 	tml::graphic::ModelDesc::Init();
@@ -206,8 +206,8 @@ INT tml::graphic::Model2DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Model2D::Model2D() :
-	size(0.0f),
 	scale(1.0f),
+	size(0.0f),
 	color(1.0f)
 {
 	return;
@@ -242,8 +242,8 @@ void tml::graphic::Model2D::Init(void)
 	this->Release();
 
 	this->position.Init();
-	this->size = 0.0f;
 	this->scale = 1.0f;
+	this->size = 0.0f;
 	this->color = 1.0f;
 
 	tml::graphic::Model::Init();
@@ -265,8 +265,8 @@ INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 	}
 
 	this->position = desc.position;
-	this->size = desc.size;
 	this->scale = desc.scale;
+	this->size = desc.size;
 	this->color = desc.color;
 
 	return (0);

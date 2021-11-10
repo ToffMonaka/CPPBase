@@ -113,12 +113,13 @@ void tml::graphic::Camera3D::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
 	this->proj_type_ = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE;
 	this->fov_size_ = 0.0f;
 	this->fov_angle_ = 0.0f;
 	this->near_clip_ = 0.0f;
 	this->far_clip_ = 0.0f;
+
+	this->position.Init();
 
 	tml::graphic::Camera::Init();
 
@@ -142,12 +143,13 @@ INT tml::graphic::Camera3D::Create(const tml::graphic::Camera3DDesc &desc)
 		return (-1);
 	}
 
-	this->position = desc.position;
 	this->proj_type_ = desc.projection_type;
 	this->fov_size_ = desc.fov_size;
 	this->fov_angle_ = desc.fov_angle;
 	this->near_clip_ = desc.near_clip;
 	this->far_clip_ = desc.far_clip;
+
+	this->position = desc.position;
 
 	return (0);
 }

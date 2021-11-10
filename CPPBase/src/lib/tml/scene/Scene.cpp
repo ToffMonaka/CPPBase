@@ -48,6 +48,8 @@ void tml::scene::SceneDesc::Init(void)
 	this->Release();
 
 	this->name.clear();
+	this->position_2d.Init();
+	this->position_3d.Init();
 
 	tml::scene::ManagerResourceDesc::Init();
 
@@ -161,6 +163,9 @@ void tml::scene::Scene::Init(void)
 	this->draw_canvas_2d_cont_ = nullptr;
 	this->draw_canvas_3d_cont_ = nullptr;
 
+	this->position_2d.Init();
+	this->position_3d.Init();
+
 	tml::scene::ManagerResource::Init();
 
 	return;
@@ -189,6 +194,9 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc)
 	this->name_ = desc.name;
 	this->type_ = static_cast<tml::ConstantUtil::SCENE::SCENE_TYPE>(this->GetResourceSubIndex());
 	this->start_flg_ = true;
+
+	this->position_2d = desc.position_2d;
+	this->position_3d = desc.position_3d;
 
 	this->SetRootNode();
 

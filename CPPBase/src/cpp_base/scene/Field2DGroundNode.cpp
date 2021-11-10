@@ -138,7 +138,6 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 		tml::graphic::GroundModel2DDesc model_desc;
 
 		model_desc.SetManager(this->GetGraphicManager());
-		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
 		model_desc.map_desc = tml::make_shared<tml::graphic::MapDesc>(1U);
 		model_desc.map_desc->SetManager(this->GetGraphicManager());
 		model_desc.map_desc->map_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_MAP;

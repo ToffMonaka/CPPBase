@@ -77,9 +77,9 @@ class Model2DDesc : public tml::graphic::ModelDesc
 {
 public:
 	tml::XMPosition2D position;
+	tml::XMFLOAT2EX scale;
 	tml::XMFLOAT2EX size;
 	bool size_auto_flag;
-	tml::XMFLOAT2EX scale;
 	tml::XMFLOAT4EX color;
 
 private:
@@ -125,8 +125,8 @@ public:
 
 public:
 	tml::XMPosition2D position;
-	tml::XMFLOAT2EX size;
 	tml::XMFLOAT2EX scale;
+	tml::XMFLOAT2EX size;
 	tml::XMFLOAT4EX color;
 
 private:

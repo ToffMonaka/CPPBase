@@ -104,9 +104,10 @@ void tml::graphic::Camera2D::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
 	this->proj_type_ = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::NONE;
 	this->fov_size_ = 0.0f;
+
+	this->position.Init();
 
 	tml::graphic::Camera::Init();
 
@@ -130,9 +131,10 @@ INT tml::graphic::Camera2D::Create(const tml::graphic::Camera2DDesc &desc)
 		return (-1);
 	}
 
-	this->position = desc.position;
 	this->proj_type_ = desc.projection_type;
 	this->fov_size_ = desc.fov_size;
+
+	this->position = desc.position;
 
 	return (0);
 }

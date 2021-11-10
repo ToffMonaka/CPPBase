@@ -77,9 +77,9 @@ class Model3DDesc : public tml::graphic::ModelDesc
 {
 public:
 	tml::XMPosition3D position;
+	tml::XMFLOAT3EX scale;
 	tml::XMFLOAT3EX size;
 	bool size_auto_flag;
-	tml::XMFLOAT3EX scale;
 	tml::XMFLOAT4EX color;
 
 private:
@@ -125,8 +125,8 @@ public:
 
 public:
 	tml::XMPosition3D position;
-	tml::XMFLOAT3EX size;
 	tml::XMFLOAT3EX scale;
+	tml::XMFLOAT3EX size;
 	tml::XMFLOAT4EX color;
 
 private:
