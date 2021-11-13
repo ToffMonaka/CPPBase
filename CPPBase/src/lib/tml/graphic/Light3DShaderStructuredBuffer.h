@@ -90,7 +90,6 @@ public:
 	tml::graphic::Light3DShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::Light3DShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
 	void SetElement(const UINT, const tml::graphic::Light3D *);
-	void SetElement(const UINT, const UINT, const tml::graphic::Light3D *const *);
 };
 }
 }

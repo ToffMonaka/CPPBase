@@ -169,6 +169,7 @@ private:
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> draw_samp_sr_ary_;
 	UINT draw_canvas_cnt_;
 	std::array<tml::graphic::Canvas *, tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT> draw_canvas_ary_;
+	std::array<UINT, tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT> draw_canvas_index_ary_;
 
 	ID3D11ComputeShader *cmp_shader_cs_;
 	std::array<ID3D11Buffer *, tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_LIMIT> cmp_scb_sr_ary_;

@@ -208,6 +208,7 @@ tml::graphic::Manager::Manager() :
 	draw_samp_sr_ary_{},
 	draw_canvas_cnt_(0U),
 	draw_canvas_ary_{},
+	draw_canvas_index_ary_{},
 	cmp_shader_cs_(nullptr),
 	cmp_scb_sr_ary_{},
 	cmp_ssb_sr_ary_{},
@@ -617,7 +618,7 @@ void tml::graphic::Manager::Update(void)
 	tml::Manager::Update();
 
 	for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
-		this->draw_canvas_ary_[draw_canvas_i]->Draw();
+		this->draw_canvas_ary_[this->draw_canvas_index_ary_[draw_canvas_i]]->Draw();
 	}
 
 	this->ClearDrawCanvas();
@@ -1535,16 +1536,16 @@ void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
 	}
 
 	if ((this->draw_canvas_cnt_ <= 0U)
-	|| (canvas->GetDrawPriority() >= this->draw_canvas_ary_[this->draw_canvas_cnt_ - 1U]->GetDrawPriority())) {
+	|| (canvas->GetDrawPriority() >= this->draw_canvas_ary_[this->draw_canvas_index_ary_[this->draw_canvas_cnt_ - 1U]]->GetDrawPriority())) {
+		this->draw_canvas_index_ary_[this->draw_canvas_cnt_] = this->draw_canvas_cnt_;
 		this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 	} else {
 		for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
-			if (canvas->GetDrawPriority() < this->draw_canvas_ary_[draw_canvas_i]->GetDrawPriority()) {
-				memmove(&this->draw_canvas_ary_[draw_canvas_i + 1U], &this->draw_canvas_ary_[draw_canvas_i], sizeof(this->draw_canvas_ary_[0]) * (this->draw_canvas_cnt_ - draw_canvas_i));
+			if (canvas->GetDrawPriority() < this->draw_canvas_ary_[this->draw_canvas_index_ary_[draw_canvas_i]]->GetDrawPriority()) {
+				memmove(&this->draw_canvas_index_ary_[draw_canvas_i + 1U], &this->draw_canvas_index_ary_[draw_canvas_i], sizeof(this->draw_canvas_index_ary_[0]) * (this->draw_canvas_cnt_ - draw_canvas_i));
 
-				this->draw_canvas_ary_[draw_canvas_i] = canvas;
-
-				++this->draw_canvas_cnt_;
+				this->draw_canvas_index_ary_[draw_canvas_i] = this->draw_canvas_cnt_;
+				this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 
 				break;
 			}
@@ -1563,7 +1564,7 @@ void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
 void tml::graphic::Manager::ClearDrawCanvas(void)
 {
 	for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
-		this->draw_canvas_ary_[draw_canvas_i]->ClearDrawSet();
+		this->draw_canvas_ary_[this->draw_canvas_index_ary_[draw_canvas_i]]->ClearDrawSet();
 	}
 
 	this->draw_canvas_cnt_ = 0U;

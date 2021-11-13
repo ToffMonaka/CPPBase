@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/Transform.h"
 #include "ManagerResource.h"
 
 

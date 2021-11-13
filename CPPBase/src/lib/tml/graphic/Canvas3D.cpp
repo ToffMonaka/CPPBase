@@ -93,10 +93,13 @@ tml::graphic::Canvas3D::Canvas3D() :
 	vp_h_(1.0f),
 	draw_light_cnt_(0U),
 	draw_light_ary_{},
+	draw_light_index_ary_{},
 	draw_fog_cnt_(0U),
 	draw_fog_ary_{},
+	draw_fog_index_ary_{},
 	draw_model_cnt_(0U),
-	draw_model_ary_{}
+	draw_model_ary_{},
+	draw_model_index_ary_{}
 {
 	return;
 }
@@ -241,15 +244,23 @@ void tml::graphic::Canvas3D::Draw(void)
 				this->GetManager()->common.camera_3d_shader_structured_buffer->UploadCPUBuffer();
 
 				this->GetManager()->common.light_3d_shader_structured_buffer->SetElementCount(0U);
-				this->GetManager()->common.light_3d_shader_structured_buffer->SetElement(0U, this->draw_light_cnt_, this->draw_light_ary_.data());
+
+				for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
+					this->GetManager()->common.light_3d_shader_structured_buffer->SetElement(draw_light_i, this->draw_light_ary_[this->draw_light_index_ary_[draw_light_i]]);
+				}
+
 				this->GetManager()->common.light_3d_shader_structured_buffer->UploadCPUBuffer();
 
 				this->GetManager()->common.fog_3d_shader_structured_buffer->SetElementCount(0U);
-				this->GetManager()->common.fog_3d_shader_structured_buffer->SetElement(0U, this->draw_fog_cnt_, this->draw_fog_ary_.data());
+
+				for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
+					this->GetManager()->common.fog_3d_shader_structured_buffer->SetElement(draw_fog_i, this->draw_fog_ary_[this->draw_fog_index_ary_[draw_fog_i]]);
+				}
+
 				this->GetManager()->common.fog_3d_shader_structured_buffer->UploadCPUBuffer();
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-					this->draw_model_ary_[draw_model_i]->DrawStageInit();
+					this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]]->DrawStageInit();
 				}
 
 				this->GetManager()->SetDrawShaderConstantBufferSR(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_SR_INDEX::SYSTEM, sys_scb_ary.size(), sys_scb_ary.data());
@@ -264,7 +275,7 @@ void tml::graphic::Canvas3D::Draw(void)
 				this->GetManager()->SetDrawViewport(vp);
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-					this->draw_model_ary_[draw_model_i]->DrawStageForward3D();
+					this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]]->DrawStageForward3D();
 				}
 
 				this->GetManager()->ClearDrawTargetTexture();
@@ -304,16 +315,16 @@ void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light)
 	}
 
 	if ((this->draw_light_cnt_ <= 0U)
-	|| (light->GetDrawPriority() >= this->draw_light_ary_[this->draw_light_cnt_ - 1U]->GetDrawPriority())) {
+	|| (light->GetDrawPriority() >= this->draw_light_ary_[this->draw_light_index_ary_[this->draw_light_cnt_ - 1U]]->GetDrawPriority())) {
+		this->draw_light_index_ary_[this->draw_light_cnt_] = this->draw_light_cnt_;
 		this->draw_light_ary_[this->draw_light_cnt_++] = light;
 	} else {
 		for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
-			if (light->GetDrawPriority() < this->draw_light_ary_[draw_light_i]->GetDrawPriority()) {
-				memmove(&this->draw_light_ary_[draw_light_i + 1U], &this->draw_light_ary_[draw_light_i], sizeof(this->draw_light_ary_[0]) * (this->draw_light_cnt_ - draw_light_i));
+			if (light->GetDrawPriority() < this->draw_light_ary_[this->draw_light_index_ary_[draw_light_i]]->GetDrawPriority()) {
+				memmove(&this->draw_light_index_ary_[draw_light_i + 1U], &this->draw_light_index_ary_[draw_light_i], sizeof(this->draw_light_index_ary_[0]) * (this->draw_light_cnt_ - draw_light_i));
 
-				this->draw_light_ary_[draw_light_i] = light;
-
-				++this->draw_light_cnt_;
+				this->draw_light_index_ary_[draw_light_i] = this->draw_light_cnt_;
+				this->draw_light_ary_[this->draw_light_cnt_++] = light;
 
 				break;
 			}
@@ -332,7 +343,7 @@ void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light)
 void tml::graphic::Canvas3D::ClearDrawLight(void)
 {
 	for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
-		this->draw_light_ary_[draw_light_i]->ClearDrawSet(this);
+		this->draw_light_ary_[this->draw_light_index_ary_[draw_light_i]]->ClearDrawSet(this);
 	}
 
 	this->draw_light_cnt_ = 0U;
@@ -354,16 +365,16 @@ void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog)
 	}
 
 	if ((this->draw_fog_cnt_ <= 0U)
-	|| (fog->GetDrawPriority() >= this->draw_fog_ary_[this->draw_fog_cnt_ - 1U]->GetDrawPriority())) {
+	|| (fog->GetDrawPriority() >= this->draw_fog_ary_[this->draw_fog_index_ary_[this->draw_fog_cnt_ - 1U]]->GetDrawPriority())) {
+		this->draw_fog_index_ary_[this->draw_fog_cnt_] = this->draw_fog_cnt_;
 		this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 	} else {
 		for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
-			if (fog->GetDrawPriority() < this->draw_fog_ary_[draw_fog_i]->GetDrawPriority()) {
-				memmove(&this->draw_fog_ary_[draw_fog_i + 1U], &this->draw_fog_ary_[draw_fog_i], sizeof(this->draw_fog_ary_[0]) * (this->draw_fog_cnt_ - draw_fog_i));
+			if (fog->GetDrawPriority() < this->draw_fog_ary_[this->draw_fog_index_ary_[draw_fog_i]]->GetDrawPriority()) {
+				memmove(&this->draw_fog_index_ary_[draw_fog_i + 1U], &this->draw_fog_index_ary_[draw_fog_i], sizeof(this->draw_fog_index_ary_[0]) * (this->draw_fog_cnt_ - draw_fog_i));
 
-				this->draw_fog_ary_[draw_fog_i] = fog;
-
-				++this->draw_fog_cnt_;
+				this->draw_fog_index_ary_[draw_fog_i] = this->draw_fog_cnt_;
+				this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 
 				break;
 			}
@@ -382,7 +393,7 @@ void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog)
 void tml::graphic::Canvas3D::ClearDrawFog(void)
 {
 	for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
-		this->draw_fog_ary_[draw_fog_i]->ClearDrawSet(this);
+		this->draw_fog_ary_[this->draw_fog_index_ary_[draw_fog_i]]->ClearDrawSet(this);
 	}
 
 	this->draw_fog_cnt_ = 0U;
@@ -404,16 +415,16 @@ void tml::graphic::Canvas3D::SetDrawModel(tml::graphic::Model3D *model)
 	}
 
 	if ((this->draw_model_cnt_ <= 0U)
-	|| (model->GetDrawPriority() >= this->draw_model_ary_[this->draw_model_cnt_ - 1U]->GetDrawPriority())) {
+	|| (model->GetDrawPriority() >= this->draw_model_ary_[this->draw_model_index_ary_[this->draw_model_cnt_ - 1U]]->GetDrawPriority())) {
+		this->draw_model_index_ary_[this->draw_model_cnt_] = this->draw_model_cnt_;
 		this->draw_model_ary_[this->draw_model_cnt_++] = model;
 	} else {
 		for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-			if (model->GetDrawPriority() < this->draw_model_ary_[draw_model_i]->GetDrawPriority()) {
-				memmove(&this->draw_model_ary_[draw_model_i + 1U], &this->draw_model_ary_[draw_model_i], sizeof(this->draw_model_ary_[0]) * (this->draw_model_cnt_ - draw_model_i));
+			if (model->GetDrawPriority() < this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]]->GetDrawPriority()) {
+				memmove(&this->draw_model_index_ary_[draw_model_i + 1U], &this->draw_model_index_ary_[draw_model_i], sizeof(this->draw_model_index_ary_[0]) * (this->draw_model_cnt_ - draw_model_i));
 
-				this->draw_model_ary_[draw_model_i] = model;
-
-				++this->draw_model_cnt_;
+				this->draw_model_index_ary_[draw_model_i] = this->draw_model_cnt_;
+				this->draw_model_ary_[this->draw_model_cnt_++] = model;
 
 				break;
 			}
@@ -432,7 +443,7 @@ void tml::graphic::Canvas3D::SetDrawModel(tml::graphic::Model3D *model)
 void tml::graphic::Canvas3D::ClearDrawModel(void)
 {
 	for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-		this->draw_model_ary_[draw_model_i]->ClearDrawSet(this);
+		this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]]->ClearDrawSet(this);
 	}
 
 	this->draw_model_cnt_ = 0U;

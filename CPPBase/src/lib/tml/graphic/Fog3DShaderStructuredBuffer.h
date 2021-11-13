@@ -90,7 +90,6 @@ public:
 	tml::graphic::Fog3DShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::Fog3DShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
 	void SetElement(const UINT, const tml::graphic::Fog3D *);
-	void SetElement(const UINT, const UINT, const tml::graphic::Fog3D *const *);
 };
 }
 }

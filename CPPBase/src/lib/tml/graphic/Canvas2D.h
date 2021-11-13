@@ -13,6 +13,112 @@
 namespace tml {
 namespace graphic {
 /**
+ * @brief DRAW_STAGE_2D_DATA構造体
+ */
+typedef struct DRAW_STAGE_2D_DATA_
+{
+	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type;
+	DirectX::XMMATRIX &view_matrix;
+	DirectX::XMMATRIX &inverse_view_matrix;
+	DirectX::XMMATRIX &projection_matrix;
+
+	/**
+	 * @brief コンストラクタ
+	 * @param v_mat (view_matrix_2d)
+	 * @param inv_v_mat (inverse_view_matrix)
+	 * @param p_mat (projection_matrix)
+	 */
+	DRAW_STAGE_2D_DATA_(DirectX::XMMATRIX &v_mat, DirectX::XMMATRIX &inv_v_mat, DirectX::XMMATRIX &p_mat) :
+		type(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT),
+		view_matrix(v_mat),
+		inverse_view_matrix(inv_v_mat),
+		projection_matrix(p_mat)
+	{
+		return;
+	};
+} DRAW_STAGE_2D_DATA;
+
+
+/**
+ * @brief DRAW_CANVAS_2D_DATA構造体
+ */
+typedef struct DRAW_CANVAS_2D_DATA_
+{
+	tml::graphic::DRAW_STAGE_2D_DATA *stage;
+
+	/**
+	 * @brief コンストラクタ
+	 */
+	DRAW_CANVAS_2D_DATA_() :
+		stage(nullptr)
+	{
+		return;
+	};
+} DRAW_CANVAS_2D_DATA;
+
+
+/**
+ * @brief DRAW_LIGHT_2D_DATA構造体
+ */
+typedef struct DRAW_LIGHT_2D_DATA_
+{
+	tml::graphic::DRAW_CANVAS_2D_DATA *canvas;
+	tml::Transform2D transform;
+
+	/**
+	 * @brief コンストラクタ
+	 */
+	DRAW_LIGHT_2D_DATA_() :
+		canvas(nullptr)
+	{
+		return;
+	};
+} DRAW_LIGHT_2D_DATA;
+
+
+/**
+ * @brief DRAW_FOG_2D_DATA構造体
+ */
+typedef struct DRAW_FOG_2D_DATA_
+{
+	tml::graphic::DRAW_CANVAS_2D_DATA *canvas;
+	tml::Transform2D transform;
+
+	/**
+	 * @brief コンストラクタ
+	 */
+	DRAW_FOG_2D_DATA_() :
+		canvas(nullptr)
+	{
+		return;
+	};
+} DRAW_FOG_2D_DATA;
+
+
+/**
+ * @brief DRAW_MODEL_2D_DATA構造体
+ */
+typedef struct DRAW_MODEL_2D_DATA_
+{
+	tml::graphic::DRAW_CANVAS_2D_DATA *canvas;
+	tml::Transform2D transform;
+
+	/**
+	 * @brief コンストラクタ
+	 */
+	DRAW_MODEL_2D_DATA_() :
+		canvas(nullptr)
+	{
+		return;
+	};
+} DRAW_MODEL_2D_DATA;
+}
+}
+
+
+namespace tml {
+namespace graphic {
+/**
  * @brief Canvas2DDescクラス
  */
 class Canvas2DDesc : public tml::graphic::CanvasDesc
@@ -69,10 +175,13 @@ private:
 
 	UINT draw_light_cnt_;
 	std::array<tml::graphic::Light2D *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
+	std::array<UINT, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_index_ary_;
 	UINT draw_fog_cnt_;
 	std::array<tml::graphic::Fog2D *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
+	std::array<UINT, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_index_ary_;
 	UINT draw_model_cnt_;
 	std::array<tml::graphic::Model2D *, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_ary_;
+	std::array<UINT, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_index_ary_;
 
 protected:
 	tml::graphic::Viewport vp_;

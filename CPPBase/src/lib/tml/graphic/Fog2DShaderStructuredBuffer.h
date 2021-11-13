@@ -90,7 +90,6 @@ public:
 	tml::graphic::Fog2DShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::Fog2DShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
 	void SetElement(const UINT, const tml::graphic::Fog2D *);
-	void SetElement(const UINT, const UINT, const tml::graphic::Fog2D *const *);
 };
 }
 }

@@ -90,7 +90,6 @@ public:
 	tml::graphic::Light2DShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::Light2DShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
 	void SetElement(const UINT, const tml::graphic::Light2D *);
-	void SetElement(const UINT, const UINT, const tml::graphic::Light2D *const *);
 };
 }
 }
