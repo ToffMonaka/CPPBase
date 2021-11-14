@@ -128,6 +128,8 @@ public:
 	FLOAT GetCutValue(void) const;
 	FLOAT GetSoftValue(void) const;
 	*/
+
+	virtual void DrawStageInit(void);
 };
 }
 }

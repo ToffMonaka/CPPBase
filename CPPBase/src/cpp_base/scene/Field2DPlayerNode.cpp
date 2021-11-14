@@ -138,7 +138,7 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		return (-1);
 	}
 
-	this->position_2d = tml::XMPosition2D(tml::XMFLOAT2EX(0.0f, -128.0f));
+	this->transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, -128.0f));
 
 	{// Model Create
 		tml::graphic::FigureModel2DDesc model_desc;
@@ -212,15 +212,15 @@ void cpp_base::scene::Field2DPlayerNode::OnEnd(void)
 void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 {
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W)) {
-		this->position_2d.SetY(this->position_2d.GetY() + 2.0f);
+		this->transform_2d.position.y += 2.0f;
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S)) {
-		this->position_2d.SetY(this->position_2d.GetY() - 2.0f);
+		this->transform_2d.position.y -= 2.0f;
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A)) {
-		this->position_2d.SetX(this->position_2d.GetX() - 2.0f);
+		this->transform_2d.position.x -= 2.0f;
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D)) {
-		this->position_2d.SetX(this->position_2d.GetX() + 2.0f);
+		this->transform_2d.position.x += 2.0f;
 	}
 
 	return;

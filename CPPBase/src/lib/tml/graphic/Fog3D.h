@@ -11,6 +11,14 @@
 
 namespace tml {
 namespace graphic {
+struct DRAW_FOG_3D_DATA_;
+typedef DRAW_FOG_3D_DATA_ DRAW_FOG_3D_DATA;
+}
+}
+
+
+namespace tml {
+namespace graphic {
 /**
  * @brief Fog3DDescƒNƒ‰ƒX
  */
@@ -66,6 +74,7 @@ private:
 
 public:
 	tml::XMPosition3D position;
+	tml::graphic::DRAW_FOG_3D_DATA *draw_data;
 
 private:
 	void Release(void);
@@ -80,6 +89,8 @@ public:
 	tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE GetEffectType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;
 	void SetColor(const tml::XMFLOAT3EX &);
+
+	virtual void DrawStageInit(void);
 };
 }
 }

@@ -15,6 +15,7 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
+#include "Canvas2D.h"
 
 
 const D3D11_INPUT_ELEMENT_DESC tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_ARRAY[tml::graphic::FigureModel2D::INPUT_ELEMENT_DESC_COUNT] = {
@@ -446,22 +447,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 
 
 /**
- * @brief GetWorldMatrixŠÖ”
- * @param dst_mat (dst_matrix)
- * @return dst_mat (dst_matrix)
- */
-DirectX::XMMATRIX &tml::graphic::FigureModel2D::GetWorldMatrix(DirectX::XMMATRIX &dst_mat)
-{
-	auto scale_x = this->size.x * this->scale.x;
-	auto scale_y = this->size.y * this->scale.y;
-
-	dst_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale_x, scale_y, 0.0f, 0.0f), DirectX::g_XMZero, this->position.GetAngle(), DirectX::XMVectorSet(this->position.GetX(), this->position.GetY(), 0.0f, 0.0f));
-
-	return (dst_mat);
-}
-
-
-/**
  * @brief IsHitByMouseDeviceŠÖ”
  * @param mouse_device_pos (mouse_device_position)
  * @return hit_flg (hit_flag)
@@ -493,11 +478,11 @@ void tml::graphic::FigureModel2D::DrawStageInit(void)
 	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 	auto layer = stage->GetLayer(0U);
 
-	DirectX::XMMATRIX w_mat;
+	auto scale_x = this->size.x * this->scale.x;
+	auto scale_y = this->size.y * this->scale.y;
+	DirectX::XMMATRIX w_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale_x, scale_y, 0.0f, 0.0f), DirectX::g_XMZero, this->position.GetAngle(), DirectX::XMVectorSet(this->position.GetX() + this->draw_data->transform.position.x, this->position.GetY() + this->draw_data->transform.position.y, 0.0f, 0.0f));
 
-	this->GetWorldMatrix(w_mat);
-
-	this->ssb_->SetElement(0U, w_mat, this->GetManager()->GetDrawStageData()->view_matrix, this->GetManager()->GetDrawStageData()->projection_matrix, this->color);
+	this->ssb_->SetElement(0U, w_mat, this->draw_data->canvas->stage->view_matrix, this->draw_data->canvas->stage->projection_matrix, this->color);
 	this->ssb_->UploadCPUBuffer();
 
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());

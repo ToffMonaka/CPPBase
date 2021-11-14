@@ -207,7 +207,6 @@ public:
 
 	tml::graphic::GroundModel2DStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::GroundModel2DStage> &);
-	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &);
 	const tml::XMUINT2EX &GetTileCount(void) const;
 	const UINT *GetTileType(const UINT, const UINT) const;
 	const UINT *GetTileTypeFast(const UINT, const UINT) const;

@@ -106,6 +106,8 @@ public:
 	FLOAT GetRangeValue1(void) const;
 	FLOAT GetRangeValue2(void) const;
 	*/
+
+	virtual void DrawStageInit(void);
 };
 }
 }

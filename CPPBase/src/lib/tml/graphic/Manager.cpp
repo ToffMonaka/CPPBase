@@ -179,7 +179,6 @@ tml::graphic::Manager::Manager() :
 	bloom_blur_weight_cnt_(0U),
 	bloom_blur_dispersion_val_(0.0f),
 	aa_quality_type_(tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE),
-	draw_stage_dat_(nullptr),
 	draw_rt_cnt_(0U),
 	draw_rt_ary_{},
 	draw_dt_(nullptr),
@@ -325,7 +324,6 @@ void tml::graphic::Manager::Init(void)
 	this->bloom_blur_weight_cnt_ = 0U;
 	this->bloom_blur_dispersion_val_ = 0.0f;
 	this->aa_quality_type_ = tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE::NONE;
-	this->draw_stage_dat_ = nullptr;
 	this->draw_rt_cnt_ = 0U;
 	this->draw_dt_ = nullptr;
 	this->draw_vp_cnt_ = 0U;

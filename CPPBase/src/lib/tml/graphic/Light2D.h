@@ -11,6 +11,14 @@
 
 namespace tml {
 namespace graphic {
+struct DRAW_LIGHT_2D_DATA_;
+typedef DRAW_LIGHT_2D_DATA_ DRAW_LIGHT_2D_DATA;
+}
+}
+
+
+namespace tml {
+namespace graphic {
 /**
  * @brief Light2DDescƒNƒ‰ƒX
  */
@@ -66,6 +74,7 @@ private:
 
 public:
 	tml::XMPosition2D position;
+	tml::graphic::DRAW_LIGHT_2D_DATA *draw_data;
 
 private:
 	void Release(void);
@@ -80,6 +89,8 @@ public:
 	tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE GetEffectType(void) const;
 	const tml::XMFLOAT3EX &GetColor(void) const;
 	void SetColor(const tml::XMFLOAT3EX &);
+
+	virtual void DrawStageInit(void);
 };
 }
 }

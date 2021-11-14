@@ -7,8 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
-#include "../math/XNAMathVector.h"
-#include "../math/XNAMathPosition.h"
+#include "../math/Transform.h"
 #include "ManagerResource.h"
 
 
@@ -46,8 +45,8 @@ class NodeDesc : public tml::scene::ManagerResourceDesc
 {
 public:
 	std::wstring name;
-	tml::XMPosition2D position_2d;
-	tml::XMPosition3D position_3d;
+	tml::Transform2D transform_2d;
+	tml::Transform3D transform_3d;
 
 private:
 	void Release(void);
@@ -122,8 +121,8 @@ private:
 	std::list<tml::graphic::Canvas3D *> *draw_canvas_3d_cont_;
 
 public:
-	tml::XMPosition2D position_2d;
-	tml::XMPosition3D position_3d;
+	tml::Transform2D transform_2d;
+	tml::Transform3D transform_3d;
 
 private:
 	void Release(void);

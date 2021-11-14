@@ -244,3 +244,12 @@ void tml::graphic::Light::SetSoftAngle(const FLOAT soft_angle)
 	return;
 }
 #endif
+
+
+/**
+ * @brief DrawStageInitä÷êî
+ */
+void tml::graphic::Light::DrawStageInit(void)
+{
+	return;
+}

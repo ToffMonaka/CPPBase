@@ -414,7 +414,6 @@ public:
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSampler(const UINT);
 	const tml::shared_ptr<tml::graphic::Sampler> &GetSamplerFast(const UINT);
 	void SetSampler(const UINT, const tml::shared_ptr<tml::graphic::Sampler> &);
-	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &) = 0;
 	INT GetDrawPriority(void) const;
 	void SetDrawPriority(const INT);
 	bool IsDrawSet(const tml::graphic::Canvas *) const;

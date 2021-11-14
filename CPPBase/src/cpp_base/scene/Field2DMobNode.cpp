@@ -136,7 +136,7 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 		return (-1);
 	}
 
-	this->position_2d = tml::XMPosition2D(tml::XMFLOAT2EX(0.0f, 128.0f));
+	this->transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, 128.0f));
 
 	{// Model Create
 		tml::graphic::FigureModel2DDesc model_desc;

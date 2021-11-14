@@ -225,3 +225,12 @@ void tml::graphic::Fog::SetFarRange(const FLOAT far_rng)
 	return;
 }
 #endif
+
+
+/**
+ * @brief DrawStageInitä÷êî
+ */
+void tml::graphic::Fog::DrawStageInit(void)
+{
+	return;
+}

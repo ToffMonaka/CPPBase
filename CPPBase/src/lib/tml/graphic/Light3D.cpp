@@ -6,6 +6,8 @@
 
 #include "Light3D.h"
 #include "Manager.h"
+#include "Light3DShaderStructuredBuffer.h"
+#include "Canvas3D.h"
 
 
 /**
@@ -80,7 +82,8 @@ INT tml::graphic::Light3DDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Light3D::Light3D() :
 	effect_type_(tml::ConstantUtil::GRAPHIC::LIGHT_3D_EFFECT_TYPE::NONE),
-	col_(1.0f)
+	col_(1.0f),
+	draw_data(nullptr)
 {
 	return;
 }
@@ -108,6 +111,7 @@ void tml::graphic::Light3D::Init(void)
 	this->col_ = 1.0f;
 
 	this->position.Init();
+	this->draw_data = nullptr;
 
 	tml::graphic::Light::Init();
 
@@ -137,4 +141,15 @@ INT tml::graphic::Light3D::Create(const tml::graphic::Light3DDesc &desc)
 	this->position = desc.position;
 
 	return (0);
+}
+
+
+/**
+ * @brief DrawStageInitŠÖ”
+ */
+void tml::graphic::Light3D::DrawStageInit(void)
+{
+	this->draw_data->shader_structured_buffer->SetElement(this->draw_data->shader_structured_buffer_element_index, this);
+
+	return;
 }

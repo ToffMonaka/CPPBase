@@ -13,6 +13,7 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "Sampler.h"
+#include "Canvas3D.h"
 
 
 /**
@@ -208,7 +209,8 @@ INT tml::graphic::Model3DDesc::ReadValue(const tml::INIFile &conf_file)
 tml::graphic::Model3D::Model3D() :
 	scale(1.0f),
 	size(0.0f),
-	color(1.0f)
+	color(1.0f),
+	draw_data(nullptr)
 {
 	return;
 }
@@ -245,6 +247,7 @@ void tml::graphic::Model3D::Init(void)
 	this->scale = 1.0f;
 	this->size = 0.0f;
 	this->color = 1.0f;
+	this->draw_data = nullptr;
 
 	tml::graphic::Model::Init();
 

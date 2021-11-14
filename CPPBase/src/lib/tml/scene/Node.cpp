@@ -48,8 +48,8 @@ void tml::scene::NodeDesc::Init(void)
 	this->Release();
 
 	this->name.clear();
-	this->position_2d.Init();
-	this->position_3d.Init();
+	this->transform_2d.Init();
+	this->transform_3d.Init();
 
 	tml::scene::ManagerResourceDesc::Init();
 
@@ -166,8 +166,8 @@ void tml::scene::Node::Init(void)
 	this->draw_canvas_2d_cont_ = nullptr;
 	this->draw_canvas_3d_cont_ = nullptr;
 
-	this->position_2d.Init();
-	this->position_3d.Init();
+	this->transform_2d.Init();
+	this->transform_3d.Init();
 
 	tml::scene::ManagerResource::Init();
 
@@ -198,8 +198,8 @@ INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc)
 	this->type_ = static_cast<tml::ConstantUtil::SCENE::NODE_TYPE>(this->GetResourceSubIndex());
 	this->start_flg_ = true;
 
-	this->position_2d = desc.position_2d;
-	this->position_3d = desc.position_3d;
+	this->transform_2d = desc.transform_2d;
+	this->transform_3d = desc.transform_3d;
 
 	return (0);
 }
@@ -300,15 +300,15 @@ void tml::scene::Node::Update(void)
 	if (this->draw_canvas_2d_cont_ != nullptr) {
 		for (auto draw_canvas_2d : (*this->draw_canvas_2d_cont_)) {
 			for (auto light_2d : this->light_2d_cont_) {
-				draw_canvas_2d->SetDrawLight(light_2d);
+				draw_canvas_2d->SetDrawLight(light_2d, this->transform_2d);
 			}
 
 			for (auto fog_2d : this->fog_2d_cont_) {
-				draw_canvas_2d->SetDrawFog(fog_2d);
+				draw_canvas_2d->SetDrawFog(fog_2d, this->transform_2d);
 			}
 
 			for (auto model_2d : this->model_2d_cont_) {
-				draw_canvas_2d->SetDrawModel(model_2d);
+				draw_canvas_2d->SetDrawModel(model_2d, this->transform_2d);
 			}
 		}
 	}
@@ -316,15 +316,15 @@ void tml::scene::Node::Update(void)
 	if (this->draw_canvas_3d_cont_ != nullptr) {
 		for (auto draw_canvas_3d : (*this->draw_canvas_3d_cont_)) {
 			for (auto light_3d : this->light_3d_cont_) {
-				draw_canvas_3d->SetDrawLight(light_3d);
+				draw_canvas_3d->SetDrawLight(light_3d, this->transform_3d);
 			}
 
 			for (auto fog_3d : this->fog_3d_cont_) {
-				draw_canvas_3d->SetDrawFog(fog_3d);
+				draw_canvas_3d->SetDrawFog(fog_3d, this->transform_3d);
 			}
 
 			for (auto model_3d : this->model_3d_cont_) {
-				draw_canvas_3d->SetDrawModel(model_3d);
+				draw_canvas_3d->SetDrawModel(model_3d, this->transform_3d);
 			}
 		}
 	}

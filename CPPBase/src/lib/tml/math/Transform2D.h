@@ -26,9 +26,17 @@ private:
 
 public:
 	Transform2D();
+	Transform2D(const tml::XMFLOAT2EX &);
+	Transform2D(const tml::XMFLOAT2EX &, const FLOAT);
+	Transform2D(const tml::Transform2D &);
+	tml::Transform2D &operator =(const tml::Transform2D &);
+	Transform2D(tml::Transform2D &&) noexcept;
+	tml::Transform2D &operator =(tml::Transform2D &&) noexcept;
 	virtual ~Transform2D();
 
 	virtual void Init(void);
+	virtual void Init(const tml::XMFLOAT2EX &);
+	virtual void Init(const tml::XMFLOAT2EX &, const FLOAT);
 };
 }
 

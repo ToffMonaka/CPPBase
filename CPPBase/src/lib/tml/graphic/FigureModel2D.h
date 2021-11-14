@@ -194,7 +194,6 @@ public:
 
 	tml::graphic::FigureModel2DStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::FigureModel2DStage> &);
-	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &);
 
 	virtual bool IsHitByMouseDevice(const tml::XMINT2EX &);
 

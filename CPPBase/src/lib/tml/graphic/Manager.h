@@ -15,37 +15,6 @@
 namespace tml {
 namespace graphic {
 /**
- * @brief DRAW_STAGE_DATA構造体
- */
-typedef struct DRAW_STAGE_DATA_
-{
-	tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE type;
-	DirectX::XMMATRIX &view_matrix;
-	DirectX::XMMATRIX &inverse_view_matrix;
-	DirectX::XMMATRIX &projection_matrix;
-
-	/**
-	 * @brief コンストラクタ
-	 * @param v_mat (view_matrix_2d)
-	 * @param inv_v_mat (inverse_view_matrix)
-	 * @param p_mat (projection_matrix)
-	 */
-	DRAW_STAGE_DATA_(DirectX::XMMATRIX &v_mat, DirectX::XMMATRIX &inv_v_mat, DirectX::XMMATRIX &p_mat) :
-		type(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::INIT),
-		view_matrix(v_mat),
-		inverse_view_matrix(inv_v_mat),
-		projection_matrix(p_mat)
-	{
-		return;
-	};
-} DRAW_STAGE_DATA;
-}
-}
-
-
-namespace tml {
-namespace graphic {
-/**
  * @brief ManagerDescクラス
  */
 class ManagerDesc : public tml::ManagerDesc
@@ -140,7 +109,6 @@ private:
 	std::array<UINT, tml::ConstantUtil::GRAPHIC::TEXTURE_UASR_LIMIT> null_tex_uasr_init_cnt_ary_;
 	std::array<ID3D11SamplerState *, tml::ConstantUtil::GRAPHIC::SAMPLER_SR_LIMIT> null_samp_sr_ary_;
 
-	tml::graphic::DRAW_STAGE_DATA *draw_stage_dat_;
 	UINT draw_rt_cnt_;
 	std::array<ID3D11RenderTargetView *, tml::ConstantUtil::GRAPHIC::RENDER_TARGET_LIMIT> draw_rt_ary_;
 	ID3D11DepthStencilView *draw_dt_;
@@ -215,9 +183,6 @@ public:
 	std::vector<tml::DynamicBuffer> &GetCPUBuffer(std::vector<tml::DynamicBuffer> &, std::vector<D3D11_MAPPED_SUBRESOURCE> &, ID3D11Texture2D *, INT *dst_result = nullptr);
 
 	void Draw(const UINT);
-	tml::graphic::DRAW_STAGE_DATA *GetDrawStageData(void);
-	void SetDrawStageData(tml::graphic::DRAW_STAGE_DATA *);
-	void ClearDrawStageData(void);
 	void SetDrawTargetTexture(tml::graphic::Texture *, tml::graphic::Texture *);
 	void SetDrawTargetTexture(const UINT, tml::graphic::Texture **, tml::graphic::Texture *);
 	void ClearDrawTargetTexture(void);
@@ -451,37 +416,4 @@ inline tml::ConstantUtil::GRAPHIC::BLOOM_QUALITY_TYPE tml::graphic::Manager::Get
 inline tml::ConstantUtil::GRAPHIC::AA_QUALITY_TYPE tml::graphic::Manager::GetAAQualityType(void) const
 {
 	return (this->aa_quality_type_);
-}
-
-
-/**
- * @brief GetDrawStageData関数
- * @return draw_stage_dat (draw_stage_data)
- */
-inline tml::graphic::DRAW_STAGE_DATA *tml::graphic::Manager::GetDrawStageData(void)
-{
-	return (this->draw_stage_dat_);
-}
-
-
-/**
- * @brief SetDrawStageData関数
- * @param draw_stage_dat (draw_stage_data)
- */
-inline void tml::graphic::Manager::SetDrawStageData(tml::graphic::DRAW_STAGE_DATA *draw_stage_dat)
-{
-	this->draw_stage_dat_ = draw_stage_dat;
-
-	return;
-}
-
-
-/**
- * @brief ClearDrawStageData関数
- */
-inline void tml::graphic::Manager::ClearDrawStageData(void)
-{
-	this->draw_stage_dat_ = nullptr;
-
-	return;
 }

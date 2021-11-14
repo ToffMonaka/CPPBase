@@ -6,6 +6,8 @@
 
 #include "Fog2D.h"
 #include "Manager.h"
+#include "Fog2DShaderStructuredBuffer.h"
+#include "Canvas2D.h"
 
 
 /**
@@ -80,7 +82,8 @@ INT tml::graphic::Fog2DDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Fog2D::Fog2D() :
 	effect_type_(tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE::NONE),
-	col_(1.0f)
+	col_(1.0f),
+	draw_data(nullptr)
 {
 	return;
 }
@@ -108,6 +111,7 @@ void tml::graphic::Fog2D::Init(void)
 	this->col_ = 1.0f;
 
 	this->position.Init();
+	this->draw_data = nullptr;
 
 	tml::graphic::Fog::Init();
 
@@ -137,4 +141,15 @@ INT tml::graphic::Fog2D::Create(const tml::graphic::Fog2DDesc &desc)
 	this->position = desc.position;
 
 	return (0);
+}
+
+
+/**
+ * @brief DrawStageInitŠÖ”
+ */
+void tml::graphic::Fog2D::DrawStageInit(void)
+{
+	this->draw_data->shader_structured_buffer->SetElement(this->draw_data->shader_structured_buffer_element_index, this);
+
+	return;
 }

@@ -11,6 +11,14 @@
 
 namespace tml {
 namespace graphic {
+struct DRAW_MODEL_2D_DATA_;
+typedef DRAW_MODEL_2D_DATA_ DRAW_MODEL_2D_DATA;
+}
+}
+
+
+namespace tml {
+namespace graphic {
 /**
  * @brief Model2DLayerƒNƒ‰ƒX
  *
@@ -128,6 +136,7 @@ public:
 	tml::XMFLOAT2EX scale;
 	tml::XMFLOAT2EX size;
 	tml::XMFLOAT4EX color;
+	tml::graphic::DRAW_MODEL_2D_DATA *draw_data;
 
 private:
 	void Release(void);
@@ -138,8 +147,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::graphic::Model2DDesc &);
-
-	virtual DirectX::XMMATRIX &GetWorldMatrix(DirectX::XMMATRIX &) = 0;
 };
 }
 }

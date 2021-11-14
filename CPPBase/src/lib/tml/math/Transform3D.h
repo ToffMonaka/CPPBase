@@ -26,9 +26,17 @@ private:
 
 public:
 	Transform3D();
+	Transform3D(const tml::XMFLOAT3EX &);
+	Transform3D(const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &);
+	Transform3D(const tml::Transform3D &);
+	tml::Transform3D &operator =(const tml::Transform3D &);
+	Transform3D(tml::Transform3D &&) noexcept;
+	tml::Transform3D &operator =(tml::Transform3D &&) noexcept;
 	virtual ~Transform3D();
 
 	virtual void Init(void);
+	virtual void Init(const tml::XMFLOAT3EX &);
+	virtual void Init(const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &);
 };
 }
 

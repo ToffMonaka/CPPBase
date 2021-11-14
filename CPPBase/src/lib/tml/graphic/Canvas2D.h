@@ -64,12 +64,16 @@ typedef struct DRAW_LIGHT_2D_DATA_
 {
 	tml::graphic::DRAW_CANVAS_2D_DATA *canvas;
 	tml::Transform2D transform;
+	tml::graphic::Light2DShaderStructuredBuffer *shader_structured_buffer;
+	UINT shader_structured_buffer_element_index;
 
 	/**
 	 * @brief コンストラクタ
 	 */
 	DRAW_LIGHT_2D_DATA_() :
-		canvas(nullptr)
+		canvas(nullptr),
+		shader_structured_buffer(nullptr),
+		shader_structured_buffer_element_index(0U)
 	{
 		return;
 	};
@@ -83,12 +87,16 @@ typedef struct DRAW_FOG_2D_DATA_
 {
 	tml::graphic::DRAW_CANVAS_2D_DATA *canvas;
 	tml::Transform2D transform;
+	tml::graphic::Fog2DShaderStructuredBuffer *shader_structured_buffer;
+	UINT shader_structured_buffer_element_index;
 
 	/**
 	 * @brief コンストラクタ
 	 */
 	DRAW_FOG_2D_DATA_() :
-		canvas(nullptr)
+		canvas(nullptr),
+		shader_structured_buffer(nullptr),
+		shader_structured_buffer_element_index(0U)
 	{
 		return;
 	};
@@ -168,6 +176,7 @@ private:
 	tml::shared_ptr<tml::graphic::Camera2D> camera_;
 	tml::shared_ptr<tml::graphic::Texture> rt_tex_;
 	bool rt_tex_clear_flg_;
+	tml::graphic::Viewport vp_;
 	FLOAT vp_x_;
 	FLOAT vp_y_;
 	FLOAT vp_w_;
@@ -175,16 +184,19 @@ private:
 
 	UINT draw_light_cnt_;
 	std::array<tml::graphic::Light2D *, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_ary_;
+	std::array<tml::graphic::DRAW_LIGHT_2D_DATA, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_dat_ary_;
 	std::array<UINT, tml::ConstantUtil::GRAPHIC::LIGHT_LIMIT> draw_light_index_ary_;
 	UINT draw_fog_cnt_;
 	std::array<tml::graphic::Fog2D *, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_ary_;
+	std::array<tml::graphic::DRAW_FOG_2D_DATA, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_dat_ary_;
 	std::array<UINT, tml::ConstantUtil::GRAPHIC::FOG_LIMIT> draw_fog_index_ary_;
 	UINT draw_model_cnt_;
 	std::array<tml::graphic::Model2D *, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_ary_;
+	std::array<tml::graphic::DRAW_MODEL_2D_DATA, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_dat_ary_;
 	std::array<UINT, tml::ConstantUtil::GRAPHIC::MODEL_LIMIT> draw_model_index_ary_;
 
-protected:
-	tml::graphic::Viewport vp_;
+public:
+	tml::graphic::DRAW_CANVAS_2D_DATA draw_data;
 
 private:
 	void Release(void);
@@ -212,11 +224,11 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawLight(tml::graphic::Light2D *);
+	void SetDrawLight(tml::graphic::Light2D *, const tml::Transform2D &);
 	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog2D *);
+	void SetDrawFog(tml::graphic::Fog2D *, const tml::Transform2D &);
 	void ClearDrawFog(void);
-	void SetDrawModel(tml::graphic::Model2D *);
+	void SetDrawModel(tml::graphic::Model2D *, const tml::Transform2D &);
 	void ClearDrawModel(void);
 };
 }
