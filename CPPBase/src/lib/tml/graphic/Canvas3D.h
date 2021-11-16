@@ -54,6 +54,14 @@ typedef struct DRAW_CANVAS_3D_DATA_
 	{
 		return;
 	};
+
+	/**
+	 * @brief SetDrawSetŠÖ”
+	 */
+	void SetDrawSet(void)
+	{
+		return;
+	};
 } DRAW_CANVAS_3D_DATA;
 
 
@@ -75,6 +83,17 @@ typedef struct DRAW_LIGHT_3D_DATA_
 		shader_structured_buffer(nullptr),
 		shader_structured_buffer_element_index(0U)
 	{
+		return;
+	};
+
+	/**
+	 * @brief SetDrawSetŠÖ”
+	 * @param transform (transform)
+	 */
+	void SetDrawSet(const tml::Transform3D &transform = tml::Transform3D())
+	{
+		this->transform = transform;
+
 		return;
 	};
 } DRAW_LIGHT_3D_DATA;
@@ -100,6 +119,17 @@ typedef struct DRAW_FOG_3D_DATA_
 	{
 		return;
 	};
+
+	/**
+	 * @brief SetDrawSetŠÖ”
+	 * @param transform (transform)
+	 */
+	void SetDrawSet(const tml::Transform3D &transform = tml::Transform3D())
+	{
+		this->transform = transform;
+
+		return;
+	};
 } DRAW_FOG_3D_DATA;
 
 
@@ -117,6 +147,17 @@ typedef struct DRAW_MODEL_3D_DATA_
 	DRAW_MODEL_3D_DATA_() :
 		canvas(nullptr)
 	{
+		return;
+	};
+
+	/**
+	 * @brief SetDrawSetŠÖ”
+	 * @param transform (transform)
+	 */
+	void SetDrawSet(const tml::Transform3D &transform = tml::Transform3D())
+	{
+		this->transform = transform;
+
 		return;
 	};
 } DRAW_MODEL_3D_DATA;
@@ -230,11 +271,11 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawLight(tml::graphic::Light3D *, const tml::Transform3D &);
+	void SetDrawLight(tml::graphic::Light3D *, const tml::Transform3D &transform = tml::Transform3D());
 	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog3D *, const tml::Transform3D &);
+	void SetDrawFog(tml::graphic::Fog3D *, const tml::Transform3D &transform = tml::Transform3D());
 	void ClearDrawFog(void);
-	void SetDrawModel(tml::graphic::Model3D *, const tml::Transform3D &);
+	void SetDrawModel(tml::graphic::Model3D *, const tml::Transform3D &transform = tml::Transform3D());
 	void ClearDrawModel(void);
 };
 }

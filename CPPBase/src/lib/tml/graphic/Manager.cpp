@@ -1525,7 +1525,7 @@ void tml::graphic::Manager::ClearDrawSamplerSR(const UINT index, const UINT samp
  * @brief SetDrawCanvasŠÖ”
  * @param canvas (canvas)
  */
-void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
+void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas2D *canvas)
 {
 	if ((canvas == nullptr)
 	|| (canvas->IsDrawSet())
@@ -1536,14 +1536,12 @@ void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
 	if ((this->draw_canvas_cnt_ <= 0U)
 	|| (canvas->GetDrawPriority() >= this->draw_canvas_ary_[this->draw_canvas_index_ary_[this->draw_canvas_cnt_ - 1U]]->GetDrawPriority())) {
 		this->draw_canvas_index_ary_[this->draw_canvas_cnt_] = this->draw_canvas_cnt_;
-		this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 	} else {
 		for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
 			if (canvas->GetDrawPriority() < this->draw_canvas_ary_[this->draw_canvas_index_ary_[draw_canvas_i]]->GetDrawPriority()) {
 				memmove(&this->draw_canvas_index_ary_[draw_canvas_i + 1U], &this->draw_canvas_index_ary_[draw_canvas_i], sizeof(this->draw_canvas_index_ary_[0]) * (this->draw_canvas_cnt_ - draw_canvas_i));
 
 				this->draw_canvas_index_ary_[draw_canvas_i] = this->draw_canvas_cnt_;
-				this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 
 				break;
 			}
@@ -1551,6 +1549,45 @@ void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas *canvas)
 	}
 
 	canvas->SetDrawSet();
+	canvas->draw_data.SetDrawSet();
+
+	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
+
+	return;
+}
+
+
+/**
+ * @brief SetDrawCanvasŠÖ”
+ * @param canvas (canvas)
+ */
+void tml::graphic::Manager::SetDrawCanvas(tml::graphic::Canvas3D *canvas)
+{
+	if ((canvas == nullptr)
+	|| (canvas->IsDrawSet())
+	|| (this->draw_canvas_cnt_ >= tml::ConstantUtil::GRAPHIC::CANVAS_LIMIT)) {
+		return;
+	}
+
+	if ((this->draw_canvas_cnt_ <= 0U)
+	|| (canvas->GetDrawPriority() >= this->draw_canvas_ary_[this->draw_canvas_index_ary_[this->draw_canvas_cnt_ - 1U]]->GetDrawPriority())) {
+		this->draw_canvas_index_ary_[this->draw_canvas_cnt_] = this->draw_canvas_cnt_;
+	} else {
+		for (UINT draw_canvas_i = 0U; draw_canvas_i < this->draw_canvas_cnt_; ++draw_canvas_i) {
+			if (canvas->GetDrawPriority() < this->draw_canvas_ary_[this->draw_canvas_index_ary_[draw_canvas_i]]->GetDrawPriority()) {
+				memmove(&this->draw_canvas_index_ary_[draw_canvas_i + 1U], &this->draw_canvas_index_ary_[draw_canvas_i], sizeof(this->draw_canvas_index_ary_[0]) * (this->draw_canvas_cnt_ - draw_canvas_i));
+
+				this->draw_canvas_index_ary_[draw_canvas_i] = this->draw_canvas_cnt_;
+
+				break;
+			}
+		}
+	}
+
+	canvas->SetDrawSet();
+	canvas->draw_data.SetDrawSet();
+
+	this->draw_canvas_ary_[this->draw_canvas_cnt_++] = canvas;
 
 	return;
 }

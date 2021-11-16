@@ -37,6 +37,11 @@ public:
 	virtual void Init(void);
 	virtual void Init(const tml::XMFLOAT3EX &);
 	virtual void Init(const tml::XMFLOAT3EX &, const tml::XMFLOAT4EX &);
+
+	void Move(const tml::XMFLOAT3EX &);
+	void Move(const tml::XMFLOAT3EX &, const FLOAT);
+	void Rotation(const tml::XMFLOAT4EX &);
+	void Zoom(const tml::XMFLOAT3EX &);
 };
 }
 
@@ -46,5 +51,54 @@ public:
  */
 inline void tml::Transform3D::Release(void)
 {
+	return;
+}
+
+
+/**
+ * @brief MoveŠÖ”
+ * @param pos (position)
+ */
+inline void tml::Transform3D::Move(const tml::XMFLOAT3EX &pos)
+{
+	this->position += pos;
+
+	return;
+}
+
+
+/**
+ * @brief MoveŠÖ”
+ * @param axis_vec (axis_vector)
+ * @param len (length)
+ */
+inline void tml::Transform3D::Move(const tml::XMFLOAT3EX &axis_vec, const FLOAT len)
+{
+	this->position += axis_vec * len;
+
+	return;
+}
+
+
+/**
+ * @brief RotationŠÖ”
+ * @param quat (quaternion)
+ */
+inline void tml::Transform3D::Rotation(const tml::XMFLOAT4EX &quat)
+{
+	DirectX::XMStoreFloat4(&this->quaternion, DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&this->quaternion), DirectX::XMLoadFloat4(&quat)));
+
+	return;
+}
+
+
+/**
+ * @brief ZoomŠÖ”
+ * @param scale (scale)
+ */
+inline void tml::Transform3D::Zoom(const tml::XMFLOAT3EX &scale)
+{
+	this->scale += scale;
+
 	return;
 }

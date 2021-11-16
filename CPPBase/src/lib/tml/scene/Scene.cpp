@@ -295,7 +295,18 @@ void tml::scene::Scene::Update(void)
 
 	if (!this->canvas_cont_.empty()) {
 		for (auto &canvas : this->canvas_cont_) {
-			this->GetGraphicManager()->SetDrawCanvas(canvas.get());
+			switch (canvas->GetType()) {
+			case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_2D: {
+				this->GetGraphicManager()->SetDrawCanvas(reinterpret_cast<tml::graphic::Canvas2D *>(canvas.get()));
+
+				break;
+			}
+			case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_3D: {
+				this->GetGraphicManager()->SetDrawCanvas(reinterpret_cast<tml::graphic::Canvas3D *>(canvas.get()));
+
+				break;
+			}
+			}
 		}
 
 		this->draw_canvas_2d_cont_ = &this->canvas_2d_cont_;

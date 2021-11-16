@@ -215,7 +215,8 @@ public:
 	void SetDrawSamplerSR(const UINT, const UINT, tml::graphic::Sampler **);
 	void ClearDrawSamplerSR(const UINT);
 	void ClearDrawSamplerSR(const UINT, const UINT);
-	void SetDrawCanvas(tml::graphic::Canvas *);
+	void SetDrawCanvas(tml::graphic::Canvas2D *);
+	void SetDrawCanvas(tml::graphic::Canvas3D *);
 	void ClearDrawCanvas(void);
 
 	void SetComputeShader(tml::graphic::Shader *);

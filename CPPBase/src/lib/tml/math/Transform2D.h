@@ -37,6 +37,11 @@ public:
 	virtual void Init(void);
 	virtual void Init(const tml::XMFLOAT2EX &);
 	virtual void Init(const tml::XMFLOAT2EX &, const FLOAT);
+
+	void Move(const tml::XMFLOAT2EX &);
+	void Move(const tml::XMFLOAT2EX &, const FLOAT);
+	void Rotation(const FLOAT);
+	void Zoom(const tml::XMFLOAT2EX &);
 };
 }
 
@@ -46,5 +51,54 @@ public:
  */
 inline void tml::Transform2D::Release(void)
 {
+	return;
+}
+
+
+/**
+ * @brief MoveŠÖ”
+ * @param pos (position)
+ */
+inline void tml::Transform2D::Move(const tml::XMFLOAT2EX &pos)
+{
+	this->position += pos;
+
+	return;
+}
+
+
+/**
+ * @brief MoveŠÖ”
+ * @param axis_vec (axis_vector)
+ * @param len (length)
+ */
+inline void tml::Transform2D::Move(const tml::XMFLOAT2EX &axis_vec, const FLOAT len)
+{
+	this->position += axis_vec * len;
+
+	return;
+}
+
+
+/**
+ * @brief RotationŠÖ”
+ * @param angle (angle)
+ */
+inline void tml::Transform2D::Rotation(const FLOAT angle)
+{
+	this->angle += angle;
+
+	return;
+}
+
+
+/**
+ * @brief ZoomŠÖ”
+ * @param scale (scale)
+ */
+inline void tml::Transform2D::Zoom(const tml::XMFLOAT2EX &scale)
+{
+	this->scale += scale;
+
 	return;
 }

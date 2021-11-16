@@ -54,6 +54,14 @@ typedef struct DRAW_CANVAS_2D_DATA_
 	{
 		return;
 	};
+
+	/**
+	 * @brief SetDrawSetŠÖ”
+	 */
+	void SetDrawSet(void)
+	{
+		return;
+	};
 } DRAW_CANVAS_2D_DATA;
 
 
@@ -75,6 +83,17 @@ typedef struct DRAW_LIGHT_2D_DATA_
 		shader_structured_buffer(nullptr),
 		shader_structured_buffer_element_index(0U)
 	{
+		return;
+	};
+
+	/**
+	 * @brief SetDrawSetŠÖ”
+	 * @param transform (transform)
+	 */
+	void SetDrawSet(const tml::Transform2D &transform = tml::Transform2D())
+	{
+		this->transform = transform;
+
 		return;
 	};
 } DRAW_LIGHT_2D_DATA;
@@ -100,6 +119,17 @@ typedef struct DRAW_FOG_2D_DATA_
 	{
 		return;
 	};
+
+	/**
+	 * @brief SetDrawSetŠÖ”
+	 * @param transform (transform)
+	 */
+	void SetDrawSet(const tml::Transform2D &transform = tml::Transform2D())
+	{
+		this->transform = transform;
+
+		return;
+	};
 } DRAW_FOG_2D_DATA;
 
 
@@ -117,6 +147,17 @@ typedef struct DRAW_MODEL_2D_DATA_
 	DRAW_MODEL_2D_DATA_() :
 		canvas(nullptr)
 	{
+		return;
+	};
+
+	/**
+	 * @brief SetDrawSetŠÖ”
+	 * @param transform (transform)
+	 */
+	void SetDrawSet(const tml::Transform2D &transform = tml::Transform2D())
+	{
+		this->transform = transform;
+
 		return;
 	};
 } DRAW_MODEL_2D_DATA;
@@ -224,11 +265,11 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawLight(tml::graphic::Light2D *, const tml::Transform2D &);
+	void SetDrawLight(tml::graphic::Light2D *, const tml::Transform2D &transform = tml::Transform2D());
 	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog2D *, const tml::Transform2D &);
+	void SetDrawFog(tml::graphic::Fog2D *, const tml::Transform2D &transform = tml::Transform2D());
 	void ClearDrawFog(void);
-	void SetDrawModel(tml::graphic::Model2D *, const tml::Transform2D &);
+	void SetDrawModel(tml::graphic::Model2D *, const tml::Transform2D &transform = tml::Transform2D());
 	void ClearDrawModel(void);
 };
 }

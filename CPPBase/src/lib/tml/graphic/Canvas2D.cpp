@@ -225,6 +225,9 @@ void tml::graphic::Canvas2D::Draw(void)
 
 		std::array<tml::graphic::ShaderConstantBuffer *, 2U> sys_scb_ary = {this->GetManager()->common.config_shader_constant_buffer.get(), this->GetManager()->common.header_shader_constant_buffer.get()};
 		std::array<tml::graphic::ShaderStructuredBuffer *, 5U> sys_ssb_ary = {this->GetManager()->common.camera_2d_shader_structured_buffer.get(), this->GetManager()->common.light_2d_shader_structured_buffer.get(), this->GetManager()->common.fog_2d_shader_structured_buffer.get(), nullptr, nullptr};
+		tml::graphic::Light2D *draw_light = nullptr;
+		tml::graphic::Fog2D *draw_fog = nullptr;
+		tml::graphic::Model2D *draw_model = nullptr;
 
 		while (draw_stage_dat.type != tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::NONE) {
 			switch (draw_stage_dat.type) {
@@ -243,7 +246,7 @@ void tml::graphic::Canvas2D::Draw(void)
 				this->GetManager()->common.light_2d_shader_structured_buffer->SetElementCount(0U);
 
 				for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
-					auto draw_light = this->draw_light_ary_[this->draw_light_index_ary_[draw_light_i]];
+					draw_light = this->draw_light_ary_[this->draw_light_index_ary_[draw_light_i]];
 
 					draw_light->draw_data = &this->draw_light_dat_ary_[this->draw_light_index_ary_[draw_light_i]];
 					draw_light->draw_data->shader_structured_buffer = this->GetManager()->common.light_2d_shader_structured_buffer.get();
@@ -257,7 +260,7 @@ void tml::graphic::Canvas2D::Draw(void)
 				this->GetManager()->common.fog_2d_shader_structured_buffer->SetElementCount(0U);
 
 				for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
-					auto draw_fog = this->draw_fog_ary_[this->draw_fog_index_ary_[draw_fog_i]];
+					draw_fog = this->draw_fog_ary_[this->draw_fog_index_ary_[draw_fog_i]];
 
 					draw_fog->draw_data = &this->draw_fog_dat_ary_[this->draw_fog_index_ary_[draw_fog_i]];
 					draw_fog->draw_data->shader_structured_buffer = this->GetManager()->common.fog_2d_shader_structured_buffer.get();
@@ -269,7 +272,7 @@ void tml::graphic::Canvas2D::Draw(void)
 				this->GetManager()->common.fog_2d_shader_structured_buffer->UploadCPUBuffer();
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-					auto draw_model = this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]];
+					draw_model = this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]];
 
 					draw_model->draw_data = &this->draw_model_dat_ary_[this->draw_model_index_ary_[draw_model_i]];
 
@@ -288,7 +291,7 @@ void tml::graphic::Canvas2D::Draw(void)
 				this->GetManager()->SetDrawViewport(vp);
 
 				for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
-					auto draw_model = this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]];
+					draw_model = this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]];
 
 					draw_model->DrawStageForward2D();
 				}
@@ -331,16 +334,12 @@ void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light2D *light, const tm
 	if ((this->draw_light_cnt_ <= 0U)
 	|| (light->GetDrawPriority() >= this->draw_light_ary_[this->draw_light_index_ary_[this->draw_light_cnt_ - 1U]]->GetDrawPriority())) {
 		this->draw_light_index_ary_[this->draw_light_cnt_] = this->draw_light_cnt_;
-		this->draw_light_dat_ary_[this->draw_light_cnt_].transform = transform;
-		this->draw_light_ary_[this->draw_light_cnt_++] = light;
 	} else {
 		for (UINT draw_light_i = 0U; draw_light_i < this->draw_light_cnt_; ++draw_light_i) {
 			if (light->GetDrawPriority() < this->draw_light_ary_[this->draw_light_index_ary_[draw_light_i]]->GetDrawPriority()) {
 				memmove(&this->draw_light_index_ary_[draw_light_i + 1U], &this->draw_light_index_ary_[draw_light_i], sizeof(this->draw_light_index_ary_[0]) * (this->draw_light_cnt_ - draw_light_i));
 
 				this->draw_light_index_ary_[draw_light_i] = this->draw_light_cnt_;
-				this->draw_light_dat_ary_[this->draw_light_cnt_].transform = transform;
-				this->draw_light_ary_[this->draw_light_cnt_++] = light;
 
 				break;
 			}
@@ -348,6 +347,9 @@ void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light2D *light, const tm
 	}
 
 	light->SetDrawSet(this);
+	this->draw_light_dat_ary_[this->draw_light_cnt_].SetDrawSet(transform);
+
+	this->draw_light_ary_[this->draw_light_cnt_++] = light;
 
 	return;
 }
@@ -384,16 +386,12 @@ void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog2D *fog, const tml::Tra
 	if ((this->draw_fog_cnt_ <= 0U)
 	|| (fog->GetDrawPriority() >= this->draw_fog_ary_[this->draw_fog_index_ary_[this->draw_fog_cnt_ - 1U]]->GetDrawPriority())) {
 		this->draw_fog_index_ary_[this->draw_fog_cnt_] = this->draw_fog_cnt_;
-		this->draw_fog_dat_ary_[this->draw_fog_cnt_].transform = transform;
-		this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 	} else {
 		for (UINT draw_fog_i = 0U; draw_fog_i < this->draw_fog_cnt_; ++draw_fog_i) {
 			if (fog->GetDrawPriority() < this->draw_fog_ary_[this->draw_fog_index_ary_[draw_fog_i]]->GetDrawPriority()) {
 				memmove(&this->draw_fog_index_ary_[draw_fog_i + 1U], &this->draw_fog_index_ary_[draw_fog_i], sizeof(this->draw_fog_index_ary_[0]) * (this->draw_fog_cnt_ - draw_fog_i));
 
 				this->draw_fog_index_ary_[draw_fog_i] = this->draw_fog_cnt_;
-				this->draw_fog_dat_ary_[this->draw_fog_cnt_].transform = transform;
-				this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 
 				break;
 			}
@@ -401,6 +399,9 @@ void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog2D *fog, const tml::Tra
 	}
 
 	fog->SetDrawSet(this);
+	this->draw_fog_dat_ary_[this->draw_fog_cnt_].SetDrawSet(transform);
+
+	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 
 	return;
 }
@@ -437,16 +438,12 @@ void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model, const tm
 	if ((this->draw_model_cnt_ <= 0U)
 	|| (model->GetDrawPriority() >= this->draw_model_ary_[this->draw_model_index_ary_[this->draw_model_cnt_ - 1U]]->GetDrawPriority())) {
 		this->draw_model_index_ary_[this->draw_model_cnt_] = this->draw_model_cnt_;
-		this->draw_model_dat_ary_[this->draw_model_cnt_].transform = transform;
-		this->draw_model_ary_[this->draw_model_cnt_++] = model;
 	} else {
 		for (UINT draw_model_i = 0U; draw_model_i < this->draw_model_cnt_; ++draw_model_i) {
 			if (model->GetDrawPriority() < this->draw_model_ary_[this->draw_model_index_ary_[draw_model_i]]->GetDrawPriority()) {
 				memmove(&this->draw_model_index_ary_[draw_model_i + 1U], &this->draw_model_index_ary_[draw_model_i], sizeof(this->draw_model_index_ary_[0]) * (this->draw_model_cnt_ - draw_model_i));
 
 				this->draw_model_index_ary_[draw_model_i] = this->draw_model_cnt_;
-				this->draw_model_dat_ary_[this->draw_model_cnt_].transform = transform;
-				this->draw_model_ary_[this->draw_model_cnt_++] = model;
 
 				break;
 			}
@@ -454,6 +451,9 @@ void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model, const tm
 	}
 
 	model->SetDrawSet(this);
+	this->draw_model_dat_ary_[this->draw_model_cnt_].SetDrawSet(transform);
+
+	this->draw_model_ary_[this->draw_model_cnt_++] = model;
 
 	return;
 }
