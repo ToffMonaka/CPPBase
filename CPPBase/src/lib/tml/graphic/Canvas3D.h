@@ -88,11 +88,11 @@ typedef struct DRAW_LIGHT_3D_DATA_
 
 	/**
 	 * @brief SetDrawSetŠÖ”
-	 * @param transform (transform)
+	 * @param trans (transform)
 	 */
-	void SetDrawSet(const tml::Transform3D &transform = tml::Transform3D())
+	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D())
 	{
-		this->transform = transform;
+		this->transform = trans;
 
 		return;
 	};
@@ -122,11 +122,11 @@ typedef struct DRAW_FOG_3D_DATA_
 
 	/**
 	 * @brief SetDrawSetŠÖ”
-	 * @param transform (transform)
+	 * @param trans (transform)
 	 */
-	void SetDrawSet(const tml::Transform3D &transform = tml::Transform3D())
+	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D())
 	{
-		this->transform = transform;
+		this->transform = trans;
 
 		return;
 	};
@@ -152,11 +152,11 @@ typedef struct DRAW_MODEL_3D_DATA_
 
 	/**
 	 * @brief SetDrawSetŠÖ”
-	 * @param transform (transform)
+	 * @param trans (transform)
 	 */
-	void SetDrawSet(const tml::Transform3D &transform = tml::Transform3D())
+	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D())
 	{
-		this->transform = transform;
+		this->transform = trans;
 
 		return;
 	};
@@ -271,11 +271,11 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawLight(tml::graphic::Light3D *, const tml::Transform3D &transform = tml::Transform3D());
+	void SetDrawLight(tml::graphic::Light3D *, const tml::Transform3D &trans = tml::Transform3D());
 	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog3D *, const tml::Transform3D &transform = tml::Transform3D());
+	void SetDrawFog(tml::graphic::Fog3D *, const tml::Transform3D &trans = tml::Transform3D());
 	void ClearDrawFog(void);
-	void SetDrawModel(tml::graphic::Model3D *, const tml::Transform3D &transform = tml::Transform3D());
+	void SetDrawModel(tml::graphic::Model3D *, const tml::Transform3D &trans = tml::Transform3D());
 	void ClearDrawModel(void);
 };
 }

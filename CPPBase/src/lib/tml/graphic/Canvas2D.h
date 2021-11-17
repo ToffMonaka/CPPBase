@@ -88,11 +88,11 @@ typedef struct DRAW_LIGHT_2D_DATA_
 
 	/**
 	 * @brief SetDrawSetŠÖ”
-	 * @param transform (transform)
+	 * @param trans (transform)
 	 */
-	void SetDrawSet(const tml::Transform2D &transform = tml::Transform2D())
+	void SetDrawSet(const tml::Transform2D &trans = tml::Transform2D())
 	{
-		this->transform = transform;
+		this->transform = trans;
 
 		return;
 	};
@@ -122,11 +122,11 @@ typedef struct DRAW_FOG_2D_DATA_
 
 	/**
 	 * @brief SetDrawSetŠÖ”
-	 * @param transform (transform)
+	 * @param trans (transform)
 	 */
-	void SetDrawSet(const tml::Transform2D &transform = tml::Transform2D())
+	void SetDrawSet(const tml::Transform2D &trans = tml::Transform2D())
 	{
-		this->transform = transform;
+		this->transform = trans;
 
 		return;
 	};
@@ -152,11 +152,11 @@ typedef struct DRAW_MODEL_2D_DATA_
 
 	/**
 	 * @brief SetDrawSetŠÖ”
-	 * @param transform (transform)
+	 * @param trans (transform)
 	 */
-	void SetDrawSet(const tml::Transform2D &transform = tml::Transform2D())
+	void SetDrawSet(const tml::Transform2D &trans = tml::Transform2D())
 	{
-		this->transform = transform;
+		this->transform = trans;
 
 		return;
 	};
@@ -265,11 +265,11 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawLight(tml::graphic::Light2D *, const tml::Transform2D &transform = tml::Transform2D());
+	void SetDrawLight(tml::graphic::Light2D *, const tml::Transform2D &trans = tml::Transform2D());
 	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog2D *, const tml::Transform2D &transform = tml::Transform2D());
+	void SetDrawFog(tml::graphic::Fog2D *, const tml::Transform2D &trans = tml::Transform2D());
 	void ClearDrawFog(void);
-	void SetDrawModel(tml::graphic::Model2D *, const tml::Transform2D &transform = tml::Transform2D());
+	void SetDrawModel(tml::graphic::Model2D *, const tml::Transform2D &trans = tml::Transform2D());
 	void ClearDrawModel(void);
 };
 }

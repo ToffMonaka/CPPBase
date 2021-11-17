@@ -336,9 +336,9 @@ void tml::graphic::Canvas3D::Draw(void)
 /**
  * @brief SetDrawLightŠÖ”
  * @param light (light)
- * @param transform (transform)
+ * @param trans (transform)
  */
-void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light, const tml::Transform3D &transform)
+void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light, const tml::Transform3D &trans)
 {
 	if ((light == nullptr)
 	|| (light->IsDrawSet(this))
@@ -362,7 +362,7 @@ void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light, const tm
 	}
 
 	light->SetDrawSet(this);
-	this->draw_light_dat_ary_[this->draw_light_cnt_].SetDrawSet(transform);
+	this->draw_light_dat_ary_[this->draw_light_cnt_].SetDrawSet(trans);
 
 	this->draw_light_ary_[this->draw_light_cnt_++] = light;
 
@@ -388,9 +388,9 @@ void tml::graphic::Canvas3D::ClearDrawLight(void)
 /**
  * @brief SetDrawFogŠÖ”
  * @param fog (fog)
- * @param transform (transform)
+ * @param trans (transform)
  */
-void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog, const tml::Transform3D &transform)
+void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog, const tml::Transform3D &trans)
 {
 	if ((fog == nullptr)
 	|| (fog->IsDrawSet(this))
@@ -414,7 +414,7 @@ void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog, const tml::Tra
 	}
 
 	fog->SetDrawSet(this);
-	this->draw_fog_dat_ary_[this->draw_fog_cnt_].SetDrawSet(transform);
+	this->draw_fog_dat_ary_[this->draw_fog_cnt_].SetDrawSet(trans);
 
 	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 
@@ -440,9 +440,9 @@ void tml::graphic::Canvas3D::ClearDrawFog(void)
 /**
  * @brief SetDrawModelŠÖ”
  * @param model (model)
- * @param transform (transform)
+ * @param trans (transform)
  */
-void tml::graphic::Canvas3D::SetDrawModel(tml::graphic::Model3D *model, const tml::Transform3D &transform)
+void tml::graphic::Canvas3D::SetDrawModel(tml::graphic::Model3D *model, const tml::Transform3D &trans)
 {
 	if ((model == nullptr)
 	|| (model->IsDrawSet(this))
@@ -466,7 +466,7 @@ void tml::graphic::Canvas3D::SetDrawModel(tml::graphic::Model3D *model, const tm
 	}
 
 	model->SetDrawSet(this);
-	this->draw_model_dat_ary_[this->draw_model_cnt_].SetDrawSet(transform);
+	this->draw_model_dat_ary_[this->draw_model_cnt_].SetDrawSet(trans);
 
 	this->draw_model_ary_[this->draw_model_cnt_++] = model;
 
