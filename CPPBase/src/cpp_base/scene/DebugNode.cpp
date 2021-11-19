@@ -159,7 +159,7 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 		tml::graphic::FigureModel2DDesc model_desc;
 
 		model_desc.SetManager(this->GetGraphicManager());
-		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
+		model_desc.transform.position = tml::XMFLOAT2EX(0.0f, 0.0f);
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, model_desc) == nullptr) {

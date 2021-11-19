@@ -84,8 +84,7 @@ namespace graphic {
 class Model3DDesc : public tml::graphic::ModelDesc
 {
 public:
-	tml::XMPosition3D position;
-	tml::XMFLOAT3EX scale;
+	tml::Transform3D transform;
 	tml::XMFLOAT3EX size;
 	bool size_auto_flag;
 	tml::XMFLOAT4EX color;
@@ -132,8 +131,7 @@ public:
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_3D);
 
 public:
-	tml::XMPosition3D position;
-	tml::XMFLOAT3EX scale;
+	tml::Transform3D transform;
 	tml::XMFLOAT3EX size;
 	tml::XMFLOAT4EX color;
 	tml::graphic::DRAW_MODEL_3D_DATA *draw_data;

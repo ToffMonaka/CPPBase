@@ -40,7 +40,7 @@ void tml::graphic::Camera3DDesc::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
+	this->transform.Init();
 	this->projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE;
 	this->fov_size = 0.0f;
 	this->fov_angle = 0.0f;
@@ -119,7 +119,7 @@ void tml::graphic::Camera3D::Init(void)
 	this->near_clip_ = 0.0f;
 	this->far_clip_ = 0.0f;
 
-	this->position.Init();
+	this->transform.Init();
 
 	tml::graphic::Camera::Init();
 
@@ -149,7 +149,7 @@ INT tml::graphic::Camera3D::Create(const tml::graphic::Camera3DDesc &desc)
 	this->near_clip_ = desc.near_clip;
 	this->far_clip_ = desc.far_clip;
 
-	this->position = desc.position;
+	this->transform = desc.transform;
 
 	return (0);
 }
@@ -162,7 +162,10 @@ INT tml::graphic::Camera3D::Create(const tml::graphic::Camera3DDesc &desc)
  */
 DirectX::XMMATRIX &tml::graphic::Camera3D::GetViewMatrix(DirectX::XMMATRIX &dst_mat)
 {
-	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&this->position.Get()), DirectX::XMLoadFloat3(&this->position.GetZAxisVector()), DirectX::XMLoadFloat3(&this->position.GetYAxisVector()));
+	auto y_axis_vec = this->transform.GetYAxisVector();
+	auto z_axis_vec = this->transform.GetZAxisVector();
+
+	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&this->transform.position), DirectX::XMLoadFloat3(&z_axis_vec), DirectX::XMLoadFloat3(&y_axis_vec));
 
 	return (dst_mat);
 }

@@ -562,10 +562,10 @@ bool tml::graphic::GroundModel2D::IsHitByMouseDevice(const tml::XMINT2EX &mouse_
 	tmp_mouse_device_pos.x = static_cast<FLOAT>(mouse_device_pos.x - static_cast<INT>(this->GetManager()->GetSize().GetHalfX()));
 	tmp_mouse_device_pos.y = static_cast<FLOAT>(-mouse_device_pos.y + static_cast<INT>(this->GetManager()->GetSize().GetHalfY()));
 
-	if ((tmp_mouse_device_pos.x >= (this->position.GetX() - (this->size.GetHalfX() * this->scale.x)))
-	&& (tmp_mouse_device_pos.x <= (this->position.GetX() + (this->size.GetHalfX() * this->scale.x)))
-	&& (tmp_mouse_device_pos.y >= (this->position.GetY() - (this->size.GetHalfY() * this->scale.y)))
-	&& (tmp_mouse_device_pos.y <= (this->position.GetY() + (this->size.GetHalfY() * this->scale.y)))
+	if ((tmp_mouse_device_pos.x >= (this->transform.position.x - (this->size.GetHalfX() * this->transform.scale.x)))
+	&& (tmp_mouse_device_pos.x <= (this->transform.position.x + (this->size.GetHalfX() * this->transform.scale.x)))
+	&& (tmp_mouse_device_pos.y >= (this->transform.position.y - (this->size.GetHalfY() * this->transform.scale.y)))
+	&& (tmp_mouse_device_pos.y <= (this->transform.position.y + (this->size.GetHalfY() * this->transform.scale.y)))
 	) {
 		return (true);
 	}
@@ -582,9 +582,10 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
 	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 	auto layer = stage->GetLayer(0U);
 
-	auto scale_x = this->size.x / static_cast<FLOAT>(this->map_->GetTileCount().x) * this->scale.x;
-	auto scale_y = this->size.y / static_cast<FLOAT>(this->map_->GetTileCount().y) * this->scale.y;
-	DirectX::XMMATRIX w_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale_x, scale_y, 0.0f, 0.0f), DirectX::g_XMZero, this->position.GetAngle(), DirectX::XMVectorSet(this->position.GetX() + this->draw_data->transform.position.x, this->position.GetY() + this->draw_data->transform.position.y, 0.0f, 0.0f));
+	auto trans = this->draw_data->transform + this->transform;
+	auto scale_x = this->size.x / static_cast<FLOAT>(this->map_->GetTileCount().x) * trans.scale.x;
+	auto scale_y = this->size.y / static_cast<FLOAT>(this->map_->GetTileCount().y) * trans.scale.y;
+	DirectX::XMMATRIX w_mat = DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(scale_x, scale_y, 0.0f, 0.0f), DirectX::g_XMZero, trans.angle, DirectX::XMVectorSet(trans.position.x, trans.position.y, 0.0f, 0.0f));
 
 	this->ssb_->SetElement(0U, w_mat, this->draw_data->canvas->stage->view_matrix, this->draw_data->canvas->stage->projection_matrix, this->color, this->map_->GetTilesetTileCount());
 	this->ssb_->UploadCPUBuffer();

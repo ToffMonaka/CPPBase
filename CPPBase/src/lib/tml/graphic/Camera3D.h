@@ -17,7 +17,7 @@ namespace graphic {
 class Camera3DDesc : public tml::graphic::CameraDesc
 {
 public:
-	tml::XMPosition3D position;
+	tml::Transform3D transform;
 	tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE projection_type;
 	tml::XMFLOAT2EX fov_size;
 	FLOAT fov_angle;
@@ -71,7 +71,7 @@ private:
 	FLOAT far_clip_;
 
 public:
-	tml::XMPosition3D position;
+	tml::Transform3D transform;
 
 private:
 	void Release(void);

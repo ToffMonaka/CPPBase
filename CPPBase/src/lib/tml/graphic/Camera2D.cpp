@@ -37,7 +37,7 @@ void tml::graphic::Camera2DDesc::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
+	this->transform.Init();
 	this->projection_type = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::NONE;
 	this->fov_size = 0.0f;
 
@@ -107,7 +107,7 @@ void tml::graphic::Camera2D::Init(void)
 	this->proj_type_ = tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE::NONE;
 	this->fov_size_ = 0.0f;
 
-	this->position.Init();
+	this->transform.Init();
 
 	tml::graphic::Camera::Init();
 
@@ -134,7 +134,7 @@ INT tml::graphic::Camera2D::Create(const tml::graphic::Camera2DDesc &desc)
 	this->proj_type_ = desc.projection_type;
 	this->fov_size_ = desc.fov_size;
 
-	this->position = desc.position;
+	this->transform = desc.transform;
 
 	return (0);
 }
@@ -147,7 +147,9 @@ INT tml::graphic::Camera2D::Create(const tml::graphic::Camera2DDesc &desc)
  */
 DirectX::XMMATRIX &tml::graphic::Camera2D::GetViewMatrix(DirectX::XMMATRIX &dst_mat)
 {
-	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat2(&this->position.Get()), DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), DirectX::XMLoadFloat2(&this->position.GetYAxisVector()));
+	auto y_axis_vec = this->transform.GetYAxisVector();
+
+	dst_mat = DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat2(&this->transform.position), DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), DirectX::XMLoadFloat2(&y_axis_vec));
 
 	return (dst_mat);
 }

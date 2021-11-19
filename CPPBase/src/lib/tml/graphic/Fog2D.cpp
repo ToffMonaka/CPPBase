@@ -39,7 +39,7 @@ void tml::graphic::Fog2DDesc::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
+	this->transform.Init();
 	this->effect_type = tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE::NONE;
 	this->color = 1.0f;
 
@@ -110,7 +110,7 @@ void tml::graphic::Fog2D::Init(void)
 	this->effect_type_ = tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE::NONE;
 	this->col_ = 1.0f;
 
-	this->position.Init();
+	this->transform.Init();
 	this->draw_data = nullptr;
 
 	tml::graphic::Fog::Init();
@@ -138,7 +138,7 @@ INT tml::graphic::Fog2D::Create(const tml::graphic::Fog2DDesc &desc)
 	this->effect_type_ = desc.effect_type;
 	this->col_ = desc.color;
 
-	this->position = desc.position;
+	this->transform = desc.transform;
 
 	return (0);
 }

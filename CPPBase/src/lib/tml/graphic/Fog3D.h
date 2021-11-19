@@ -25,7 +25,7 @@ namespace graphic {
 class Fog3DDesc : public tml::graphic::FogDesc
 {
 public:
-	tml::XMPosition3D position;
+	tml::Transform3D transform;
 	tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE effect_type;
 	tml::XMFLOAT3EX color;
 
@@ -73,7 +73,7 @@ private:
 	tml::XMFLOAT3EX col_;
 
 public:
-	tml::XMPosition3D position;
+	tml::Transform3D transform;
 	tml::graphic::DRAW_FOG_3D_DATA *draw_data;
 
 private:

@@ -17,7 +17,7 @@ namespace graphic {
 class Camera2DDesc : public tml::graphic::CameraDesc
 {
 public:
-	tml::XMPosition2D position;
+	tml::Transform2D transform;
 	tml::ConstantUtil::GRAPHIC::CAMERA_2D_PROJECTION_TYPE projection_type;
 	tml::XMFLOAT2EX fov_size;
 
@@ -65,7 +65,7 @@ private:
 	tml::XMFLOAT2EX fov_size_;
 
 public:
-	tml::XMPosition2D position;
+	tml::Transform2D transform;
 
 private:
 	void Release(void);

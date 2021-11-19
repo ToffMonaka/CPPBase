@@ -6,7 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
-#include "../math/XNAMathPosition.h"
+#include "../math/Transform.h"
 #include "ManagerResource.h"
 
 

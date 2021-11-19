@@ -231,7 +231,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::FigureModel2DDesc model_desc;
 
 		model_desc.SetManager(this->GetGraphicManager());
-		model_desc.position = tml::XMFLOAT2EX(0.0f, 0.0f);
+		model_desc.transform.position = tml::XMFLOAT2EX(0.0f, 0.0f);
 		model_desc.size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 		model_desc.size_auto_flag = false;
 
@@ -276,7 +276,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::FigureModel2DDesc model_desc;
 
 		model_desc.SetManager(this->GetGraphicManager());
-		model_desc.position = tml::XMFLOAT2EX(0.0f, 32.0f);
+		model_desc.transform.position = tml::XMFLOAT2EX(0.0f, 32.0f);
 		model_desc.diffuse_texture_desc = tml::make_shared<tml::graphic::TextureDesc>(1U);
 		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
 		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
@@ -309,7 +309,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::FigureModel2DDesc model_desc;
 
 		model_desc.SetManager(this->GetGraphicManager());
-		model_desc.position = tml::XMFLOAT2EX(0.0f, -192.0f);
+		model_desc.transform.position = tml::XMFLOAT2EX(0.0f, -192.0f);
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->start_model, model_desc) == nullptr) {
@@ -379,7 +379,7 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tml::graphic::FigureModel2DDesc model_desc;
 
 		model_desc.SetManager(this->GetGraphicManager());
-		model_desc.position = tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(this->GetGraphicManager()->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_model_size.y >> 1));
+		model_desc.transform.position = tml::XMFLOAT2EX(0.0f, -static_cast<FLOAT>(this->GetGraphicManager()->GetSize().GetHalfY()) + static_cast<FLOAT>(footer_model_size.y >> 1));
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->footer_model, model_desc) == nullptr) {
@@ -535,10 +535,10 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 	}
 
 	if (this->start_model->IsHitByMouseDevice(this->GetInputManager()->GetMouseDevicePosition())) {
-		this->start_model->scale = tml::XMFLOAT2EX(1.2f, 1.2f);
+		this->start_model->transform.scale = tml::XMFLOAT2EX(1.2f, 1.2f);
 		this->start_model->color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), 1.0f);
 	} else {
-		this->start_model->scale = tml::XMFLOAT2EX(1.0f, 1.0f);
+		this->start_model->transform.scale = tml::XMFLOAT2EX(1.0f, 1.0f);
 		this->start_model->color = tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 

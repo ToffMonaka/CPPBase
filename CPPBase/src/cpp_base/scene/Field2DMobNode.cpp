@@ -154,7 +154,7 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 			return (-1);
 		}
 
-		this->model->position = tml::XMFLOAT2EX(0.0f, this->model->size.GetHalfY());
+		this->model->transform.position = tml::XMFLOAT2EX(0.0f, this->model->size.GetHalfY());
 	}
 
 	{// ShadowModel Create

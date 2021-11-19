@@ -136,7 +136,6 @@ INT tml::graphic::Model3DStage::Create(tml::graphic::Manager *mgr)
  * @brief コンストラクタ
  */
 tml::graphic::Model3DDesc::Model3DDesc() :
-	scale(1.0f),
 	size(0.0f),
 	size_auto_flag(true),
 	color(1.0f)
@@ -163,8 +162,7 @@ void tml::graphic::Model3DDesc::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
-	this->scale = 1.0f;
+	this->transform.Init();
 	this->size = 0.0f;
 	this->size_auto_flag = true;
 	this->color = 1.0f;
@@ -207,7 +205,6 @@ INT tml::graphic::Model3DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Model3D::Model3D() :
-	scale(1.0f),
 	size(0.0f),
 	color(1.0f),
 	draw_data(nullptr)
@@ -243,8 +240,7 @@ void tml::graphic::Model3D::Init(void)
 {
 	this->Release();
 
-	this->position.Init();
-	this->scale = 1.0f;
+	this->transform.Init();
 	this->size = 0.0f;
 	this->color = 1.0f;
 	this->draw_data = nullptr;
@@ -267,8 +263,7 @@ INT tml::graphic::Model3D::Create(const tml::graphic::Model3DDesc &desc)
 		return (-1);
 	}
 
-	this->position = desc.position;
-	this->scale = desc.scale;
+	this->transform = desc.transform;
 	this->size = desc.size;
 	this->color = desc.color;
 

@@ -159,7 +159,7 @@ tml::Transform3D tml::Transform3D::operator +(const tml::Transform3D &trans) con
 
 	tmp_pos += trans.position;
 	DirectX::XMStoreFloat4(&tmp_quat, DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&tmp_quat), DirectX::XMLoadFloat4(&trans.quaternion)));
-	tmp_scale += trans.scale;
+	tmp_scale *= trans.scale;
 
 	return (tml::Transform3D(tmp_pos, tmp_quat, tmp_scale));
 }
@@ -174,7 +174,7 @@ tml::Transform3D &tml::Transform3D::operator +=(const tml::Transform3D &trans)
 {
 	this->position += trans.position;
 	DirectX::XMStoreFloat4(&this->quaternion, DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&this->quaternion), DirectX::XMLoadFloat4(&trans.quaternion)));
-	this->scale += trans.scale;
+	this->scale *= trans.scale;
 
 	return ((*this));
 }

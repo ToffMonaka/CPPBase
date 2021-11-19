@@ -159,7 +159,7 @@ tml::Transform2D tml::Transform2D::operator +(const tml::Transform2D &trans) con
 
 	tmp_pos += trans.position;
 	tmp_angle += trans.angle;
-	tmp_scale += trans.scale;
+	tmp_scale *= trans.scale;
 
 	return (tml::Transform2D(tmp_pos, tmp_angle, tmp_scale));
 }
@@ -174,7 +174,7 @@ tml::Transform2D &tml::Transform2D::operator +=(const tml::Transform2D &trans)
 {
 	this->position += trans.position;
 	this->angle += trans.angle;
-	this->scale += trans.scale;
+	this->scale *= trans.scale;
 
 	return ((*this));
 }

@@ -25,7 +25,7 @@ namespace graphic {
 class Light3DDesc : public tml::graphic::LightDesc
 {
 public:
-	tml::XMPosition3D position;
+	tml::Transform3D transform;
 	tml::ConstantUtil::GRAPHIC::LIGHT_3D_EFFECT_TYPE effect_type;
 	tml::XMFLOAT3EX color;
 
@@ -73,7 +73,7 @@ private:
 	tml::XMFLOAT3EX col_;
 
 public:
-	tml::XMPosition3D position;
+	tml::Transform3D transform;
 	tml::graphic::DRAW_LIGHT_3D_DATA *draw_data;
 
 private:
