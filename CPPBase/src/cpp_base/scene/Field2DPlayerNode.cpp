@@ -223,5 +223,46 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 		this->transform_2d.position.x += 2.0f;
 	}
 
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUMPAD_NUM8)) {
+		this->model->transform.position.y += 2.0f;
+	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUMPAD_NUM5)) {
+		this->model->transform.position.y -= 2.0f;
+	}
+
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUMPAD_NUM4)) {
+		this->model->transform.position.x -= 2.0f;
+	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUMPAD_NUM6)) {
+		this->model->transform.position.x += 2.0f;
+	}
+
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Q)) {
+		this->transform_2d.angle += tml::MathUtil::GetAngleRadian(1.0f);
+	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::E)) {
+		this->transform_2d.angle -= tml::MathUtil::GetAngleRadian(1.0f);
+	}
+
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUMPAD_NUM7)) {
+		this->model->transform.angle += tml::MathUtil::GetAngleRadian(1.0f);
+	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUMPAD_NUM9)) {
+		this->model->transform.angle -= tml::MathUtil::GetAngleRadian(1.0f);
+	}
+
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Z)) {
+		this->transform_2d.scale += 0.1f;
+	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::C)) {
+		this->transform_2d.scale -= 0.1f;
+	}
+
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUMPAD_NUM1)) {
+		this->model->transform.scale += 0.1f;
+	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUMPAD_NUM3)) {
+		this->model->transform.scale -= 0.1f;
+	}
+
+	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::SPACE)) {
+		this->transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, -128.0f));
+		this->model->transform= tml::Transform2D(tml::XMFLOAT2EX(0.0f, this->model->size.GetHalfY()));
+	}
+
 	return;
 }
