@@ -252,7 +252,7 @@ void tml::Transform2D::Init(const tml::XMFLOAT2EX &pos, const FLOAT angle, const
  */
 void tml::Transform2D::Look(const tml::XMFLOAT2EX &pos)
 {
-	this->angle = DirectX::XMVectorGetX(DirectX::XMVector2AngleBetweenVectors(DirectX::XMLoadFloat2(&this->position), DirectX::XMLoadFloat2(&pos)));
+	this->angle = -DirectX::XMVectorGetX(DirectX::XMVectorATan2(DirectX::XMVectorSet(pos.x - this->position.x, 0.0f, 0.0f, 0.0f), DirectX::XMVectorSet(pos.y - this->position.y, 0.0f, 0.0f, 0.0f)));
 
 	return;
 }
