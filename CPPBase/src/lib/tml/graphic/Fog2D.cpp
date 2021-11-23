@@ -129,7 +129,7 @@ INT tml::graphic::Fog2D::Create(const tml::graphic::Fog2DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Fog::Create(desc) < 0) {
+	if (tml::graphic::Fog::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2) < 0) {
 		this->Init();
 
 		return (-1);

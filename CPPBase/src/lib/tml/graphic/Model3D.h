@@ -128,9 +128,6 @@ public: tml::graphic::Model3D &operator =(const tml::graphic::Model3D &) = delet
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_3D);
-
-public:
 	tml::Transform3D transform;
 	tml::XMFLOAT3EX size;
 	tml::XMFLOAT4EX color;

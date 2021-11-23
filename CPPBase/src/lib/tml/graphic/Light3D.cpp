@@ -129,7 +129,7 @@ INT tml::graphic::Light3D::Create(const tml::graphic::Light3DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Light::Create(desc) < 0) {
+	if (tml::graphic::Light::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3) < 0) {
 		this->Init();
 
 		return (-1);

@@ -65,9 +65,6 @@ public: Fog2D(const tml::graphic::Fog2D &) = delete;
 public: tml::graphic::Fog2D &operator =(const tml::graphic::Fog2D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::_2D);
-
 private:
 	tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE effect_type_;
 	tml::XMFLOAT3EX col_;

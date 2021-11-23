@@ -295,13 +295,13 @@ void tml::scene::Scene::Update(void)
 
 	if (!this->canvas_cont_.empty()) {
 		for (auto &canvas : this->canvas_cont_) {
-			switch (canvas->GetType()) {
-			case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_2D: {
+			switch (canvas->GetDimensionType()) {
+			case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 				this->GetGraphicManager()->SetDrawCanvas(reinterpret_cast<tml::graphic::Canvas2D *>(canvas.get()));
 
 				break;
 			}
-			case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_3D: {
+			case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 				this->GetGraphicManager()->SetDrawCanvas(reinterpret_cast<tml::graphic::Canvas3D *>(canvas.get()));
 
 				break;
@@ -431,13 +431,13 @@ void tml::scene::Scene::SetCanvas(const UINT index, const tml::shared_ptr<tml::g
 	auto &old_canvas = this->canvas_cont_[index];
 
 	if (old_canvas != nullptr) {
-		switch (old_canvas->GetType()) {
-		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_2D: {
+		switch (old_canvas->GetDimensionType()) {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 			this->canvas_2d_cont_.remove(reinterpret_cast<tml::graphic::Canvas2D *>(old_canvas.get()));
 
 			break;
 		}
-		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_3D: {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 			this->canvas_3d_cont_.remove(reinterpret_cast<tml::graphic::Canvas3D *>(old_canvas.get()));
 
 			break;
@@ -448,13 +448,13 @@ void tml::scene::Scene::SetCanvas(const UINT index, const tml::shared_ptr<tml::g
 	this->canvas_cont_[index] = canvas;
 
 	if (canvas != nullptr) {
-		switch (canvas->GetType()) {
-		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_2D: {
+		switch (canvas->GetDimensionType()) {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 			this->canvas_2d_cont_.push_back(reinterpret_cast<tml::graphic::Canvas2D *>(canvas.get()));
 
 			break;
 		}
-		case tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_3D: {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 			this->canvas_3d_cont_.push_back(reinterpret_cast<tml::graphic::Canvas3D *>(canvas.get()));
 
 			break;
@@ -480,13 +480,13 @@ void tml::scene::Scene::SetLight(const UINT index, const tml::shared_ptr<tml::gr
 	auto &old_light = this->light_cont_[index];
 
 	if (old_light != nullptr) {
-		switch (old_light->GetType()) {
-		case tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_2D: {
+		switch (old_light->GetDimensionType()) {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 			this->light_2d_cont_.remove(reinterpret_cast<tml::graphic::Light2D *>(old_light.get()));
 
 			break;
 		}
-		case tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_3D: {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 			this->light_3d_cont_.remove(reinterpret_cast<tml::graphic::Light3D *>(old_light.get()));
 
 			break;
@@ -497,13 +497,13 @@ void tml::scene::Scene::SetLight(const UINT index, const tml::shared_ptr<tml::gr
 	this->light_cont_[index] = light;
 
 	if (light != nullptr) {
-		switch (light->GetType()) {
-		case tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_2D: {
+		switch (light->GetDimensionType()) {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 			this->light_2d_cont_.push_back(reinterpret_cast<tml::graphic::Light2D *>(light.get()));
 
 			break;
 		}
-		case tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_3D: {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 			this->light_3d_cont_.push_back(reinterpret_cast<tml::graphic::Light3D *>(light.get()));
 
 			break;
@@ -529,13 +529,13 @@ void tml::scene::Scene::SetFog(const UINT index, const tml::shared_ptr<tml::grap
 	auto &old_fog = this->fog_cont_[index];
 
 	if (old_fog != nullptr) {
-		switch (old_fog->GetType()) {
-		case tml::ConstantUtil::GRAPHIC::FOG_TYPE::_2D: {
+		switch (old_fog->GetDimensionType()) {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 			this->fog_2d_cont_.remove(reinterpret_cast<tml::graphic::Fog2D *>(old_fog.get()));
 
 			break;
 		}
-		case tml::ConstantUtil::GRAPHIC::FOG_TYPE::_3D: {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 			this->fog_3d_cont_.remove(reinterpret_cast<tml::graphic::Fog3D *>(old_fog.get()));
 
 			break;
@@ -546,13 +546,13 @@ void tml::scene::Scene::SetFog(const UINT index, const tml::shared_ptr<tml::grap
 	this->fog_cont_[index] = fog;
 
 	if (fog != nullptr) {
-		switch (fog->GetType()) {
-		case tml::ConstantUtil::GRAPHIC::FOG_TYPE::_2D: {
+		switch (fog->GetDimensionType()) {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 			this->fog_2d_cont_.push_back(reinterpret_cast<tml::graphic::Fog2D *>(fog.get()));
 
 			break;
 		}
-		case tml::ConstantUtil::GRAPHIC::FOG_TYPE::_3D: {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 			this->fog_3d_cont_.push_back(reinterpret_cast<tml::graphic::Fog3D *>(fog.get()));
 
 			break;
@@ -578,13 +578,13 @@ void tml::scene::Scene::SetModel(const UINT index, const tml::shared_ptr<tml::gr
 	auto &old_model = this->model_cont_[index];
 
 	if (old_model != nullptr) {
-		switch (old_model->GetType()) {
-		case tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D: {
+		switch (old_model->GetDimensionType()) {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 			this->model_2d_cont_.remove(reinterpret_cast<tml::graphic::Model2D *>(old_model.get()));
 
 			break;
 		}
-		case tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_3D: {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 			this->model_3d_cont_.remove(reinterpret_cast<tml::graphic::Model3D *>(old_model.get()));
 
 			break;
@@ -595,13 +595,13 @@ void tml::scene::Scene::SetModel(const UINT index, const tml::shared_ptr<tml::gr
 	this->model_cont_[index] = model;
 
 	if (model != nullptr) {
-		switch (model->GetType()) {
-		case tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D: {
+		switch (model->GetDimensionType()) {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2: {
 			this->model_2d_cont_.push_back(reinterpret_cast<tml::graphic::Model2D *>(model.get()));
 
 			break;
 		}
-		case tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_3D: {
+		case tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3: {
 			this->model_3d_cont_.push_back(reinterpret_cast<tml::graphic::Model3D *>(model.get()));
 
 			break;

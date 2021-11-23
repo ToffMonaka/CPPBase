@@ -129,7 +129,7 @@ INT tml::graphic::Light2D::Create(const tml::graphic::Light2DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Light::Create(desc) < 0) {
+	if (tml::graphic::Light::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2) < 0) {
 		this->Init();
 
 		return (-1);

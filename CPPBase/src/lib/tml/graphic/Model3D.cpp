@@ -259,7 +259,7 @@ void tml::graphic::Model3D::Init(void)
  */
 INT tml::graphic::Model3D::Create(const tml::graphic::Model3DDesc &desc)
 {
-	if (tml::graphic::Model::Create(desc) < 0) {
+	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3) < 0) {
 		return (-1);
 	}
 

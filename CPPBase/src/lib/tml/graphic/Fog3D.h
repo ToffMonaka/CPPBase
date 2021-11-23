@@ -65,9 +65,6 @@ public: Fog3D(const tml::graphic::Fog3D &) = delete;
 public: tml::graphic::Fog3D &operator =(const tml::graphic::Fog3D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::_3D);
-
 private:
 	tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE effect_type_;
 	tml::XMFLOAT3EX col_;

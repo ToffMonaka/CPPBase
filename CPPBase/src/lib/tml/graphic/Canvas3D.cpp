@@ -165,7 +165,7 @@ INT tml::graphic::Canvas3D::Create(const tml::graphic::Canvas3DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Canvas::Create(desc) < 0) {
+	if (tml::graphic::Canvas::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3) < 0) {
 		this->Init();
 
 		return (-1);

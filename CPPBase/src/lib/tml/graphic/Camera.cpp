@@ -74,6 +74,7 @@ INT tml::graphic::CameraDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Camera::Camera() :
 	type_(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE),
+	dimension_type_(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE),
 	draw_set_flg_(false)
 {
 	return;
@@ -99,6 +100,7 @@ void tml::graphic::Camera::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::NONE;
+	this->dimension_type_ = tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE;
 	this->draw_set_flg_ = false;
 
 	tml::graphic::ManagerResource::Init();
@@ -110,16 +112,18 @@ void tml::graphic::Camera::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
+ * @param dimension_type (dimension_type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc)
+INT tml::graphic::Camera::Create(const tml::graphic::CameraDesc &desc, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
 {
 	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
 	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::CAMERA_TYPE>(this->GetResourceSubIndex());
+	this->dimension_type_ = dimension_type;
 
 	return (0);
 }

@@ -59,9 +59,11 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::BASE);
 
 private:
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type_;
+	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type_;
 	bool draw_set_flg_;
 
 private:
@@ -72,9 +74,10 @@ public:
 	virtual ~Camera();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::CameraDesc &);
+	INT Create(const tml::graphic::CameraDesc &, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
 
 	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE GetType(void) const;
+	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE GetDimensionType(void) const;
 	virtual DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &) = 0;
 	virtual DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &) = 0;
 	bool GetDrawSetFlag(void) const;
@@ -100,6 +103,16 @@ inline void tml::graphic::Camera::Release(void)
 inline tml::ConstantUtil::GRAPHIC::CAMERA_TYPE tml::graphic::Camera::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetDimensionTypeŠÖ”
+ * @return dimension_type (dimension_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE tml::graphic::Camera::GetDimensionType(void) const
+{
+	return (this->dimension_type_);
 }
 
 

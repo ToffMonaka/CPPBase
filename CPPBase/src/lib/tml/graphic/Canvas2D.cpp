@@ -162,7 +162,7 @@ INT tml::graphic::Canvas2D::Create(const tml::graphic::Canvas2DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Canvas::Create(desc) < 0) {
+	if (tml::graphic::Canvas::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2) < 0) {
 		this->Init();
 
 		return (-1);

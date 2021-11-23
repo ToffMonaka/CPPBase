@@ -244,6 +244,7 @@ INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Model::Model() :
 	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE),
+	dimension_type_(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE),
 	draw_priority_(0),
 	draw_set_canvas_cnt_(0U)
 {
@@ -285,6 +286,7 @@ void tml::graphic::Model::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE;
+	this->dimension_type_ = tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE;
 	this->rs_cont_.clear();
 	this->bs_cont_.clear();
 	this->ds_cont_.clear();
@@ -307,16 +309,18 @@ void tml::graphic::Model::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
+ * @param dimension_type (dimension_type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc)
+INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
 {
 	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
 	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::MODEL_TYPE>(this->GetResourceSubIndex());
+	this->dimension_type_ = dimension_type;
 	this->draw_priority_ = desc.draw_priority;
 
 	return (0);

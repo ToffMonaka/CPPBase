@@ -128,9 +128,6 @@ public: tml::graphic::Model2D &operator =(const tml::graphic::Model2D &) = delet
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::_2D);
-
-public:
 	tml::Transform2D transform;
 	tml::XMFLOAT2EX size;
 	tml::XMFLOAT4EX color;

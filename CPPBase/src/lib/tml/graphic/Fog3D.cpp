@@ -129,7 +129,7 @@ INT tml::graphic::Fog3D::Create(const tml::graphic::Fog3DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Fog::Create(desc) < 0) {
+	if (tml::graphic::Fog::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3) < 0) {
 		this->Init();
 
 		return (-1);

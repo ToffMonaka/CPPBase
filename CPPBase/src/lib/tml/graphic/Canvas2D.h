@@ -210,9 +210,6 @@ public: Canvas2D(const tml::graphic::Canvas2D &) = delete;
 public: tml::graphic::Canvas2D &operator =(const tml::graphic::Canvas2D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_2D);
-
 private:
 	tml::shared_ptr<tml::graphic::Camera2D> camera_;
 	tml::shared_ptr<tml::graphic::Texture> rt_tex_;

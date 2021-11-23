@@ -65,9 +65,6 @@ public: Light2D(const tml::graphic::Light2D &) = delete;
 public: tml::graphic::Light2D &operator =(const tml::graphic::Light2D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_2D);
-
 private:
 	tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE effect_type_;
 	tml::XMFLOAT3EX col_;

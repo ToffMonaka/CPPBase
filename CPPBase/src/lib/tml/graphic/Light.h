@@ -72,9 +72,11 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::BASE);
 
 private:
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type_;
+	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type_;
 	INT draw_priority_;
 	UINT draw_set_canvas_cnt_;
 	std::vector<const tml::graphic::Canvas *> draw_set_canvas_cont_;
@@ -100,9 +102,10 @@ public:
 	virtual ~Light();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::LightDesc &);
+	INT Create(const tml::graphic::LightDesc &, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
 
 	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE GetType(void) const;
+	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE GetDimensionType(void) const;
 	INT GetDrawPriority(void) const;
 	void SetDrawPriority(const INT);
 	bool IsDrawSet(const tml::graphic::Canvas *) const;
@@ -151,6 +154,16 @@ inline void tml::graphic::Light::Release(void)
 inline tml::ConstantUtil::GRAPHIC::LIGHT_TYPE tml::graphic::Light::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetDimensionTypeŠÖ”
+ * @return dimension_type (dimension_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE tml::graphic::Light::GetDimensionType(void) const
+{
+	return (this->dimension_type_);
 }
 
 

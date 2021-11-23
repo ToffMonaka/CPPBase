@@ -99,6 +99,7 @@ INT tml::graphic::LightDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Light::Light() :
 	type_(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE),
+	dimension_type_(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE),
 	draw_priority_(0),
 	draw_set_canvas_cnt_(0U)
 	/*
@@ -138,6 +139,7 @@ void tml::graphic::Light::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::NONE;
+	this->dimension_type_ = tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE;
 	this->draw_priority_ = 0;
 	this->draw_set_canvas_cnt_ = 0U;
 	this->draw_set_canvas_cont_.clear();
@@ -164,16 +166,18 @@ void tml::graphic::Light::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
+ * @param dimension_type (dimension_type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc)
+INT tml::graphic::Light::Create(const tml::graphic::LightDesc &desc, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
 {
 	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
 	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::LIGHT_TYPE>(this->GetResourceSubIndex());
+	this->dimension_type_ = dimension_type;
 	this->draw_priority_ = desc.draw_priority;
 	/*
 	this->mul_val_ = desc.mul_value;

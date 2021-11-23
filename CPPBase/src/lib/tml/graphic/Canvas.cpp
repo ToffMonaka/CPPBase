@@ -75,6 +75,7 @@ INT tml::graphic::CanvasDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Canvas::Canvas() :
 	type_(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE),
+	dimension_type_(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE),
 	draw_priority_(0),
 	draw_set_flg_(false)
 {
@@ -101,6 +102,7 @@ void tml::graphic::Canvas::Init(void)
 	this->Release();
 
 	this->type_ = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::NONE;
+	this->dimension_type_ = tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE;
 	this->draw_priority_ = 0;
 	this->draw_set_flg_ = false;
 
@@ -113,16 +115,18 @@ void tml::graphic::Canvas::Init(void)
 /**
  * @brief Createä÷êî
  * @param desc (desc)
+ * @param dimension_type (dimension_type)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::graphic::Canvas::Create(const tml::graphic::CanvasDesc &desc)
+INT tml::graphic::Canvas::Create(const tml::graphic::CanvasDesc &desc, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
 {
 	if (tml::graphic::ManagerResource::Create(desc) < 0) {
 		return (-1);
 	}
 
 	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::CANVAS_TYPE>(this->GetResourceSubIndex());
+	this->dimension_type_ = dimension_type;
 	this->draw_priority_ = desc.draw_priority;
 
 	return (0);

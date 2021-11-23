@@ -127,8 +127,6 @@ namespace GRAPHIC {
 	enum class CANVAS_TYPE : UINT {
 		NONE = 0U,
 		BASE,
-		_2D,
-		_3D,
 		USER,
 		COUNT
 	};
@@ -136,8 +134,6 @@ namespace GRAPHIC {
 	enum class CAMERA_TYPE : UINT {
 		NONE = 0U,
 		BASE,
-		_2D,
-		_3D,
 		USER,
 		COUNT
 	};
@@ -145,8 +141,6 @@ namespace GRAPHIC {
 	enum class LIGHT_TYPE : UINT {
 		NONE = 0U,
 		BASE,
-		_2D,
-		_3D,
 		USER,
 		COUNT
 	};
@@ -154,8 +148,6 @@ namespace GRAPHIC {
 	enum class FOG_TYPE : UINT {
 		NONE = 0U,
 		BASE,
-		_2D,
-		_3D,
 		USER,
 		COUNT
 	};
@@ -163,8 +155,6 @@ namespace GRAPHIC {
 	enum class MODEL_TYPE : UINT {
 		NONE = 0U,
 		BASE,
-		_2D,
-		_3D,
 		USER,
 		COUNT
 	};
@@ -339,11 +329,12 @@ namespace GRAPHIC {
 		WIDTH,
 		HEIGHT
 	};
-	enum class STRING_ALIGNMENT_TYPE : UINT {
+	enum class DIMENSION_TYPE : UINT {
 		NONE = 0U,
-		LEFT,
-		CENTER,
-		RIGHT
+		_1,
+		_2,
+		_3,
+		_4
 	};
 	enum class POSITION_FIT_TYPE : UINT {
 		NONE = 0U,
@@ -356,6 +347,12 @@ namespace GRAPHIC {
 		BOTTOM_LEFT,
 		BOTTOM_CENTER,
 		BOTTOM_RIGHT
+	};
+	enum class STRING_ALIGNMENT_TYPE : UINT {
+		NONE = 0U,
+		LEFT,
+		CENTER,
+		RIGHT
 	};
 }
 }

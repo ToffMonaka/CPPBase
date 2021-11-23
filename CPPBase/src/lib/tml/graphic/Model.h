@@ -349,9 +349,11 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL);
+	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::BASE);
 
 private:
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE type_;
+	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type_;
 	std::vector<tml::shared_ptr<tml::graphic::RasterizerState>> rs_cont_;
 	tml::shared_ptr<tml::graphic::RasterizerState> empty_rs_;
 	std::vector<tml::shared_ptr<tml::graphic::BlendState>> bs_cont_;
@@ -383,9 +385,10 @@ public:
 	virtual ~Model();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::ModelDesc &);
+	INT Create(const tml::graphic::ModelDesc &, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
 
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
+	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE GetDimensionType(void) const;
 	UINT GetRasterizerStateCount(void) const;
 	const tml::shared_ptr<tml::graphic::RasterizerState> &GetRasterizerState(const UINT);
 	const tml::shared_ptr<tml::graphic::RasterizerState> &GetRasterizerStateFast(const UINT);
@@ -439,6 +442,16 @@ public:
 inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void) const
 {
 	return (this->type_);
+}
+
+
+/**
+ * @brief GetDimensionTypeŠÖ”
+ * @return dimension_type (dimension_type)
+ */
+inline tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE tml::graphic::Model::GetDimensionType(void) const
+{
+	return (this->dimension_type_);
 }
 
 

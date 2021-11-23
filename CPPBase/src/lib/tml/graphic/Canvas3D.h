@@ -210,9 +210,6 @@ public: Canvas3D(const tml::graphic::Canvas3D &) = delete;
 public: tml::graphic::Canvas3D &operator =(const tml::graphic::Canvas3D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::_3D);
-
 private:
 	tml::shared_ptr<tml::graphic::Camera3D> camera_;
 	tml::shared_ptr<tml::graphic::Texture> rt_tex_;

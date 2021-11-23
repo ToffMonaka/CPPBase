@@ -65,9 +65,6 @@ public: Light3D(const tml::graphic::Light3D &) = delete;
 public: tml::graphic::Light3D &operator =(const tml::graphic::Light3D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
-public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::_3D);
-
 private:
 	tml::ConstantUtil::GRAPHIC::LIGHT_3D_EFFECT_TYPE effect_type_;
 	tml::XMFLOAT3EX col_;
