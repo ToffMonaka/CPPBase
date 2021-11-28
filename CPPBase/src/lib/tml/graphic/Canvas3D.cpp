@@ -441,8 +441,9 @@ void tml::graphic::Canvas3D::ClearDrawFog(void)
  * @brief SetDrawModelŠÖ”
  * @param model (model)
  * @param trans (transform)
+ * @param col (color)
  */
-void tml::graphic::Canvas3D::SetDrawModel(tml::graphic::Model3D *model, const tml::Transform3D &trans)
+void tml::graphic::Canvas3D::SetDrawModel(tml::graphic::Model3D *model, const tml::Transform3D &trans, const tml::XMFLOAT4EX &col)
 {
 	if ((model == nullptr)
 	|| (model->IsDrawSet(this))
@@ -466,7 +467,7 @@ void tml::graphic::Canvas3D::SetDrawModel(tml::graphic::Model3D *model, const tm
 	}
 
 	model->SetDrawSet(this);
-	this->draw_model_dat_ary_[this->draw_model_cnt_].SetDrawSet(trans);
+	this->draw_model_dat_ary_[this->draw_model_cnt_].SetDrawSet(trans, col);
 
 	this->draw_model_ary_[this->draw_model_cnt_++] = model;
 

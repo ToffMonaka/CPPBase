@@ -426,8 +426,9 @@ void tml::graphic::Canvas2D::ClearDrawFog(void)
  * @brief SetDrawModelŠÖ”
  * @param model (model)
  * @param trans (transform)
+ * @param col (color)
  */
-void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model, const tml::Transform2D &trans)
+void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model, const tml::Transform2D &trans, const tml::XMFLOAT4EX &col)
 {
 	if ((model == nullptr)
 	|| (model->IsDrawSet(this))
@@ -451,7 +452,7 @@ void tml::graphic::Canvas2D::SetDrawModel(tml::graphic::Model2D *model, const tm
 	}
 
 	model->SetDrawSet(this);
-	this->draw_model_dat_ary_[this->draw_model_cnt_].SetDrawSet(trans);
+	this->draw_model_dat_ary_[this->draw_model_cnt_].SetDrawSet(trans, col);
 
 	this->draw_model_ary_[this->draw_model_cnt_++] = model;
 

@@ -47,6 +47,7 @@ public:
 	std::wstring name;
 	tml::Transform2D transform_2d;
 	tml::Transform3D transform_3d;
+	tml::XMFLOAT4EX color;
 
 private:
 	void Release(void);
@@ -123,6 +124,7 @@ private:
 public:
 	tml::Transform2D transform_2d;
 	tml::Transform3D transform_3d;
+	tml::XMFLOAT4EX color;
 
 private:
 	void Release(void);

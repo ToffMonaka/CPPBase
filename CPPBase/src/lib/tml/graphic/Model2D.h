@@ -85,9 +85,9 @@ class Model2DDesc : public tml::graphic::ModelDesc
 {
 public:
 	tml::Transform2D transform;
+	tml::XMFLOAT4EX color;
 	tml::XMFLOAT2EX size;
 	bool size_auto_flag;
-	tml::XMFLOAT4EX color;
 
 private:
 	void Release(void);
@@ -129,8 +129,8 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 public:
 	tml::Transform2D transform;
-	tml::XMFLOAT2EX size;
 	tml::XMFLOAT4EX color;
+	tml::XMFLOAT2EX size;
 	tml::graphic::DRAW_MODEL_2D_DATA *draw_data;
 
 private:

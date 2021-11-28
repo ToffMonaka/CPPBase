@@ -23,7 +23,8 @@
 /**
  * @brief コンストラクタ
  */
-tml::scene::SceneDesc::SceneDesc()
+tml::scene::SceneDesc::SceneDesc() :
+	color(1.0f)
 {
 	return;
 }
@@ -50,6 +51,7 @@ void tml::scene::SceneDesc::Init(void)
 	this->name.clear();
 	this->transform_2d.Init();
 	this->transform_3d.Init();
+	this->color = 1.0f;
 
 	tml::scene::ManagerResourceDesc::Init();
 
@@ -100,7 +102,8 @@ tml::scene::Scene::Scene() :
 	start_flg_(false),
 	started_flg_(false),
 	draw_canvas_2d_cont_(nullptr),
-	draw_canvas_3d_cont_(nullptr)
+	draw_canvas_3d_cont_(nullptr),
+	color(1.0f)
 {
 	return;
 }
@@ -165,6 +168,7 @@ void tml::scene::Scene::Init(void)
 
 	this->transform_2d.Init();
 	this->transform_3d.Init();
+	this->color = 1.0f;
 
 	tml::scene::ManagerResource::Init();
 
@@ -197,6 +201,7 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc)
 
 	this->transform_2d = desc.transform_2d;
 	this->transform_3d = desc.transform_3d;
+	this->color = desc.color;
 
 	this->SetRootNode();
 
@@ -324,7 +329,7 @@ void tml::scene::Scene::Update(void)
 			}
 
 			for (auto model_2d : this->model_2d_cont_) {
-				draw_canvas_2d->SetDrawModel(model_2d, this->transform_2d);
+				draw_canvas_2d->SetDrawModel(model_2d, this->transform_2d, this->color);
 			}
 		}
 	}
@@ -340,7 +345,7 @@ void tml::scene::Scene::Update(void)
 			}
 
 			for (auto model_3d : this->model_3d_cont_) {
-				draw_canvas_3d->SetDrawModel(model_3d, this->transform_3d);
+				draw_canvas_3d->SetDrawModel(model_3d, this->transform_3d, this->color);
 			}
 		}
 	}

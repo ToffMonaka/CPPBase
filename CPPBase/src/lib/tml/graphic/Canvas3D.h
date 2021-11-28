@@ -140,12 +140,14 @@ typedef struct DRAW_MODEL_3D_DATA_
 {
 	tml::graphic::DRAW_CANVAS_3D_DATA *canvas;
 	tml::Transform3D transform;
+	tml::XMFLOAT4EX color;
 
 	/**
 	 * @brief コンストラクタ
 	 */
 	DRAW_MODEL_3D_DATA_() :
-		canvas(nullptr)
+		canvas(nullptr),
+		color(1.0f)
 	{
 		return;
 	};
@@ -153,10 +155,12 @@ typedef struct DRAW_MODEL_3D_DATA_
 	/**
 	 * @brief SetDrawSet関数
 	 * @param trans (transform)
+	 * @param col (color)
 	 */
-	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D())
+	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f))
 	{
 		this->transform = trans;
+		this->color = col;
 
 		return;
 	};
@@ -272,7 +276,7 @@ public:
 	void ClearDrawLight(void);
 	void SetDrawFog(tml::graphic::Fog3D *, const tml::Transform3D &trans = tml::Transform3D());
 	void ClearDrawFog(void);
-	void SetDrawModel(tml::graphic::Model3D *, const tml::Transform3D &trans = tml::Transform3D());
+	void SetDrawModel(tml::graphic::Model3D *, const tml::Transform3D &trans = tml::Transform3D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f));
 	void ClearDrawModel(void);
 };
 }

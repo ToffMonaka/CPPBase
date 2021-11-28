@@ -582,12 +582,13 @@ void tml::graphic::GroundModel2D::DrawStageInit(void)
 	auto stage = this->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D);
 	auto layer = stage->GetLayer(0U);
 
-	DirectX::XMMATRIX w_mat = DirectX::XMMatrixMultiply(
+	auto w_mat = DirectX::XMMatrixMultiply(
 		DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(this->size.x / static_cast<FLOAT>(this->map_->GetTileCount().x) * this->transform.scale.x, this->size.y / static_cast<FLOAT>(this->map_->GetTileCount().y) * this->transform.scale.y, 0.0f, 0.0f), DirectX::g_XMZero, this->transform.angle, DirectX::XMVectorSet(this->transform.position.x, this->transform.position.y, 0.0f, 0.0f)),
 		DirectX::XMMatrixTransformation2D(DirectX::g_XMZero, 0.0f, DirectX::XMVectorSet(this->draw_data->transform.scale.x, this->draw_data->transform.scale.y, 0.0f, 0.0f), DirectX::g_XMZero, this->draw_data->transform.angle, DirectX::XMVectorSet(this->draw_data->transform.position.x, this->draw_data->transform.position.y, 0.0f, 0.0f))
 	);
+	auto col = this->color * this->draw_data->color;
 
-	this->ssb_->SetElement(0U, w_mat, this->draw_data->canvas->stage->view_matrix, this->draw_data->canvas->stage->projection_matrix, this->color, this->map_->GetTilesetTileCount());
+	this->ssb_->SetElement(0U, w_mat, this->draw_data->canvas->stage->view_matrix, this->draw_data->canvas->stage->projection_matrix, col, this->map_->GetTilesetTileCount());
 	this->ssb_->UploadCPUBuffer();
 
 	this->layer_ssb_->SetElement(0U, this->GetTexture(layer->GetDiffuseTextureIndex()).get());
