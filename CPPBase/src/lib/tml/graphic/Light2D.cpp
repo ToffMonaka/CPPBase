@@ -14,8 +14,8 @@
  * @brief コンストラクタ
  */
 tml::graphic::Light2DDesc::Light2DDesc() :
-	effect_type(tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE::NONE),
-	color(1.0f)
+	color(1.0f),
+	effect_type(tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE::NONE)
 {
 	return;
 }
@@ -40,8 +40,8 @@ void tml::graphic::Light2DDesc::Init(void)
 	this->Release();
 
 	this->transform.Init();
-	this->effect_type = tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE::NONE;
 	this->color = 1.0f;
+	this->effect_type = tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE::NONE;
 
 	tml::graphic::LightDesc::Init();
 
@@ -82,7 +82,7 @@ INT tml::graphic::Light2DDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Light2D::Light2D() :
 	effect_type_(tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE::NONE),
-	col_(1.0f),
+	color(1.0f),
 	draw_data(nullptr)
 {
 	return;
@@ -108,9 +108,9 @@ void tml::graphic::Light2D::Init(void)
 	this->Release();
 
 	this->effect_type_ = tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE::NONE;
-	this->col_ = 1.0f;
 
 	this->transform.Init();
+	this->color = 1.0f;
 	this->draw_data = nullptr;
 
 	tml::graphic::Light::Init();
@@ -129,16 +129,16 @@ INT tml::graphic::Light2D::Create(const tml::graphic::Light2DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Light::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2) < 0) {
+	if (tml::graphic::Light::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2D) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
 	this->effect_type_ = desc.effect_type;
-	this->col_ = desc.color;
 
 	this->transform = desc.transform;
+	this->color = desc.color;
 
 	return (0);
 }

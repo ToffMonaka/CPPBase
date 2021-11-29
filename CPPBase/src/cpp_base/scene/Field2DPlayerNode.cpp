@@ -230,9 +230,11 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Z)) {
-		this->transform_2d.scale -= 0.1f;
+		this->transform_2d.scale.x = tml::Max(this->transform_2d.scale.x - 0.1f, 0.0f);
+		this->transform_2d.scale.y = this->transform_2d.scale.x;
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::C)) {
-		this->transform_2d.scale += 0.1f;
+		this->transform_2d.scale.x = tml::Min(this->transform_2d.scale.x + 0.1f, 1.0f);
+		this->transform_2d.scale.y = this->transform_2d.scale.x;
 	}
 
 	if (this->GetInputManager()->GetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::LEFT)) {
@@ -244,17 +246,17 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUM1)) {
-		this->color.y -= 0.01f;
-		this->color.z -= 0.01f;
+		this->color.y = tml::Max(this->color.y - 0.01f, 0.0f);
+		this->color.z = this->color.y;
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUM2)) {
-		this->color.y += 0.01f;
-		this->color.z += 0.01f;
+		this->color.y = tml::Min(this->color.y + 0.01f, 1.0f);
+		this->color.z = this->color.y;
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUM3)) {
-		this->color.w -= 0.01f;
+		this->color.w = tml::Max(this->color.w - 0.01f, 0.0f);
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUM4)) {
-		this->color.w += 0.01f;
+		this->color.w = tml::Min(this->color.w + 0.01f, 1.0f);
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::SPACE)) {

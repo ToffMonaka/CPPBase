@@ -26,8 +26,8 @@ class Fog2DDesc : public tml::graphic::FogDesc
 {
 public:
 	tml::Transform2D transform;
+	tml::XMFLOAT4EX color;
 	tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE effect_type;
-	tml::XMFLOAT3EX color;
 
 private:
 	void Release(void);
@@ -67,10 +67,10 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE effect_type_;
-	tml::XMFLOAT3EX col_;
 
 public:
 	tml::Transform2D transform;
+	tml::XMFLOAT4EX color;
 	tml::graphic::DRAW_FOG_2D_DATA *draw_data;
 
 private:
@@ -84,8 +84,6 @@ public:
 	INT Create(const tml::graphic::Fog2DDesc &);
 
 	tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE GetEffectType(void) const;
-	const tml::XMFLOAT3EX &GetColor(void) const;
-	void SetColor(const tml::XMFLOAT3EX &);
 
 	virtual void DrawStageInit(void);
 };
@@ -109,26 +107,4 @@ inline void tml::graphic::Fog2D::Release(void)
 inline tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE tml::graphic::Fog2D::GetEffectType(void) const
 {
 	return (this->effect_type_);
-}
-
-
-/**
- * @brief GetColorŠÖ”
- * @return col (color)
- */
-inline const tml::XMFLOAT3EX &tml::graphic::Fog2D::GetColor(void) const
-{
-	return (this->col_);
-}
-
-
-/**
- * @brief SetColorŠÖ”
- * @param col (color)
- */
-inline void tml::graphic::Fog2D::SetColor(const tml::XMFLOAT3EX &col)
-{
-	this->col_ = col;
-
-	return;
 }

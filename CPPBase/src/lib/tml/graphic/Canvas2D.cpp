@@ -162,7 +162,7 @@ INT tml::graphic::Canvas2D::Create(const tml::graphic::Canvas2DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Canvas::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2) < 0) {
+	if (tml::graphic::Canvas::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2D) < 0) {
 		this->Init();
 
 		return (-1);
@@ -322,8 +322,9 @@ void tml::graphic::Canvas2D::Draw(void)
  * @brief SetDrawLightŠÖ”
  * @param light (light)
  * @param trans (transform)
+ * @param col (color)
  */
-void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light2D *light, const tml::Transform2D &trans)
+void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light2D *light, const tml::Transform2D &trans, const tml::XMFLOAT4EX &col)
 {
 	if ((light == nullptr)
 	|| (light->IsDrawSet(this))
@@ -347,7 +348,7 @@ void tml::graphic::Canvas2D::SetDrawLight(tml::graphic::Light2D *light, const tm
 	}
 
 	light->SetDrawSet(this);
-	this->draw_light_dat_ary_[this->draw_light_cnt_].SetDrawSet(trans);
+	this->draw_light_dat_ary_[this->draw_light_cnt_].SetDrawSet(trans, col);
 
 	this->draw_light_ary_[this->draw_light_cnt_++] = light;
 
@@ -374,8 +375,9 @@ void tml::graphic::Canvas2D::ClearDrawLight(void)
  * @brief SetDrawFogŠÖ”
  * @param fog (fog)
  * @param trans (transform)
+ * @param col (color)
  */
-void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog2D *fog, const tml::Transform2D &trans)
+void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog2D *fog, const tml::Transform2D &trans, const tml::XMFLOAT4EX &col)
 {
 	if ((fog == nullptr)
 	|| (fog->IsDrawSet(this))
@@ -399,7 +401,7 @@ void tml::graphic::Canvas2D::SetDrawFog(tml::graphic::Fog2D *fog, const tml::Tra
 	}
 
 	fog->SetDrawSet(this);
-	this->draw_fog_dat_ary_[this->draw_fog_cnt_].SetDrawSet(trans);
+	this->draw_fog_dat_ary_[this->draw_fog_cnt_].SetDrawSet(trans, col);
 
 	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 

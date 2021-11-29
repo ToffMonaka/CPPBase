@@ -125,7 +125,7 @@ INT tml::graphic::Camera2D::Create(const tml::graphic::Camera2DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Camera::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2) < 0) {
+	if (tml::graphic::Camera::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2D) < 0) {
 		this->Init();
 
 		return (-1);

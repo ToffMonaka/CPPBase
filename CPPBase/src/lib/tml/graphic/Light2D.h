@@ -26,8 +26,8 @@ class Light2DDesc : public tml::graphic::LightDesc
 {
 public:
 	tml::Transform2D transform;
+	tml::XMFLOAT4EX color;
 	tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE effect_type;
-	tml::XMFLOAT3EX color;
 
 private:
 	void Release(void);
@@ -67,10 +67,10 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 private:
 	tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE effect_type_;
-	tml::XMFLOAT3EX col_;
 
 public:
 	tml::Transform2D transform;
+	tml::XMFLOAT4EX color;
 	tml::graphic::DRAW_LIGHT_2D_DATA *draw_data;
 
 private:
@@ -84,8 +84,6 @@ public:
 	INT Create(const tml::graphic::Light2DDesc &);
 
 	tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE GetEffectType(void) const;
-	const tml::XMFLOAT3EX &GetColor(void) const;
-	void SetColor(const tml::XMFLOAT3EX &);
 
 	virtual void DrawStageInit(void);
 };
@@ -109,26 +107,4 @@ inline void tml::graphic::Light2D::Release(void)
 inline tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE tml::graphic::Light2D::GetEffectType(void) const
 {
 	return (this->effect_type_);
-}
-
-
-/**
- * @brief GetColorŠÖ”
- * @return col (color)
- */
-inline const tml::XMFLOAT3EX &tml::graphic::Light2D::GetColor(void) const
-{
-	return (this->col_);
-}
-
-
-/**
- * @brief SetColorŠÖ”
- * @param col (color)
- */
-inline void tml::graphic::Light2D::SetColor(const tml::XMFLOAT3EX &col)
-{
-	this->col_ = col;
-
-	return;
 }

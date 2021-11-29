@@ -137,7 +137,7 @@ INT tml::graphic::Camera3D::Create(const tml::graphic::Camera3DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Camera::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3) < 0) {
+	if (tml::graphic::Camera::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D) < 0) {
 		this->Init();
 
 		return (-1);

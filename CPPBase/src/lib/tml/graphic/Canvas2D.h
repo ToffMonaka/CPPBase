@@ -72,6 +72,7 @@ typedef struct DRAW_LIGHT_2D_DATA_
 {
 	tml::graphic::DRAW_CANVAS_2D_DATA *canvas;
 	tml::Transform2D transform;
+	tml::XMFLOAT4EX color;
 	tml::graphic::Light2DShaderStructuredBuffer *shader_structured_buffer;
 	UINT shader_structured_buffer_element_index;
 
@@ -80,6 +81,7 @@ typedef struct DRAW_LIGHT_2D_DATA_
 	 */
 	DRAW_LIGHT_2D_DATA_() :
 		canvas(nullptr),
+		color(1.0f),
 		shader_structured_buffer(nullptr),
 		shader_structured_buffer_element_index(0U)
 	{
@@ -89,10 +91,12 @@ typedef struct DRAW_LIGHT_2D_DATA_
 	/**
 	 * @brief SetDrawSetŠÖ”
 	 * @param trans (transform)
+	 * @param col (color)
 	 */
-	void SetDrawSet(const tml::Transform2D &trans = tml::Transform2D())
+	void SetDrawSet(const tml::Transform2D &trans = tml::Transform2D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f))
 	{
 		this->transform = trans;
+		this->color = col;
 
 		return;
 	};
@@ -106,6 +110,7 @@ typedef struct DRAW_FOG_2D_DATA_
 {
 	tml::graphic::DRAW_CANVAS_2D_DATA *canvas;
 	tml::Transform2D transform;
+	tml::XMFLOAT4EX color;
 	tml::graphic::Fog2DShaderStructuredBuffer *shader_structured_buffer;
 	UINT shader_structured_buffer_element_index;
 
@@ -114,6 +119,7 @@ typedef struct DRAW_FOG_2D_DATA_
 	 */
 	DRAW_FOG_2D_DATA_() :
 		canvas(nullptr),
+		color(1.0f),
 		shader_structured_buffer(nullptr),
 		shader_structured_buffer_element_index(0U)
 	{
@@ -123,10 +129,12 @@ typedef struct DRAW_FOG_2D_DATA_
 	/**
 	 * @brief SetDrawSetŠÖ”
 	 * @param trans (transform)
+	 * @param col (color)
 	 */
-	void SetDrawSet(const tml::Transform2D &trans = tml::Transform2D())
+	void SetDrawSet(const tml::Transform2D &trans = tml::Transform2D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f))
 	{
 		this->transform = trans;
+		this->color = col;
 
 		return;
 	};
@@ -266,9 +274,9 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawLight(tml::graphic::Light2D *, const tml::Transform2D &trans = tml::Transform2D());
+	void SetDrawLight(tml::graphic::Light2D *, const tml::Transform2D &trans = tml::Transform2D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f));
 	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog2D *, const tml::Transform2D &trans = tml::Transform2D());
+	void SetDrawFog(tml::graphic::Fog2D *, const tml::Transform2D &trans = tml::Transform2D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f));
 	void ClearDrawFog(void);
 	void SetDrawModel(tml::graphic::Model2D *, const tml::Transform2D &trans = tml::Transform2D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f));
 	void ClearDrawModel(void);

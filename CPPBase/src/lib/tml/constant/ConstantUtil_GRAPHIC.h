@@ -331,10 +331,10 @@ namespace GRAPHIC {
 	};
 	enum class DIMENSION_TYPE : UINT {
 		NONE = 0U,
-		_1,
-		_2,
-		_3,
-		_4
+		_1D,
+		_2D,
+		_3D,
+		_4D
 	};
 	enum class POSITION_FIT_TYPE : UINT {
 		NONE = 0U,

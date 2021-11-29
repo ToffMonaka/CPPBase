@@ -72,6 +72,7 @@ typedef struct DRAW_LIGHT_3D_DATA_
 {
 	tml::graphic::DRAW_CANVAS_3D_DATA *canvas;
 	tml::Transform3D transform;
+	tml::XMFLOAT4EX color;
 	tml::graphic::Light3DShaderStructuredBuffer *shader_structured_buffer;
 	UINT shader_structured_buffer_element_index;
 
@@ -80,6 +81,7 @@ typedef struct DRAW_LIGHT_3D_DATA_
 	 */
 	DRAW_LIGHT_3D_DATA_() :
 		canvas(nullptr),
+		color(1.0f),
 		shader_structured_buffer(nullptr),
 		shader_structured_buffer_element_index(0U)
 	{
@@ -89,10 +91,12 @@ typedef struct DRAW_LIGHT_3D_DATA_
 	/**
 	 * @brief SetDrawSetŠÖ”
 	 * @param trans (transform)
+	 * @param col (color)
 	 */
-	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D())
+	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f))
 	{
 		this->transform = trans;
+		this->color = col;
 
 		return;
 	};
@@ -106,6 +110,7 @@ typedef struct DRAW_FOG_3D_DATA_
 {
 	tml::graphic::DRAW_CANVAS_3D_DATA *canvas;
 	tml::Transform3D transform;
+	tml::XMFLOAT4EX color;
 	tml::graphic::Fog3DShaderStructuredBuffer *shader_structured_buffer;
 	UINT shader_structured_buffer_element_index;
 
@@ -114,6 +119,7 @@ typedef struct DRAW_FOG_3D_DATA_
 	 */
 	DRAW_FOG_3D_DATA_() :
 		canvas(nullptr),
+		color(1.0f),
 		shader_structured_buffer(nullptr),
 		shader_structured_buffer_element_index(0U)
 	{
@@ -123,10 +129,12 @@ typedef struct DRAW_FOG_3D_DATA_
 	/**
 	 * @brief SetDrawSetŠÖ”
 	 * @param trans (transform)
+	 * @param col (color)
 	 */
-	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D())
+	void SetDrawSet(const tml::Transform3D &trans = tml::Transform3D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f))
 	{
 		this->transform = trans;
+		this->color = col;
 
 		return;
 	};
@@ -272,9 +280,9 @@ public:
 	void SetViewportHeight(const FLOAT);
 
 	virtual void Draw(void);
-	void SetDrawLight(tml::graphic::Light3D *, const tml::Transform3D &trans = tml::Transform3D());
+	void SetDrawLight(tml::graphic::Light3D *, const tml::Transform3D &trans = tml::Transform3D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f));
 	void ClearDrawLight(void);
-	void SetDrawFog(tml::graphic::Fog3D *, const tml::Transform3D &trans = tml::Transform3D());
+	void SetDrawFog(tml::graphic::Fog3D *, const tml::Transform3D &trans = tml::Transform3D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f));
 	void ClearDrawFog(void);
 	void SetDrawModel(tml::graphic::Model3D *, const tml::Transform3D &trans = tml::Transform3D(), const tml::XMFLOAT4EX &col = tml::XMFLOAT4EX(1.0f));
 	void ClearDrawModel(void);

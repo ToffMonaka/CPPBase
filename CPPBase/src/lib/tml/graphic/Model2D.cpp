@@ -259,7 +259,7 @@ void tml::graphic::Model2D::Init(void)
  */
 INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
 {
-	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2) < 0) {
+	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2D) < 0) {
 		return (-1);
 	}
 

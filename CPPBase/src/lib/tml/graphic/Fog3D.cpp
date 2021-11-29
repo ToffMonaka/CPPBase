@@ -14,8 +14,8 @@
  * @brief コンストラクタ
  */
 tml::graphic::Fog3DDesc::Fog3DDesc() :
-	effect_type(tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE::NONE),
-	color(1.0f)
+	color(1.0f),
+	effect_type(tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE::NONE)
 {
 	return;
 }
@@ -40,8 +40,8 @@ void tml::graphic::Fog3DDesc::Init(void)
 	this->Release();
 
 	this->transform.Init();
-	this->effect_type = tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE::NONE;
 	this->color = 1.0f;
+	this->effect_type = tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE::NONE;
 
 	tml::graphic::FogDesc::Init();
 
@@ -82,7 +82,7 @@ INT tml::graphic::Fog3DDesc::ReadValue(const tml::INIFile &conf_file)
  */
 tml::graphic::Fog3D::Fog3D() :
 	effect_type_(tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE::NONE),
-	col_(1.0f),
+	color(1.0f),
 	draw_data(nullptr)
 {
 	return;
@@ -108,9 +108,9 @@ void tml::graphic::Fog3D::Init(void)
 	this->Release();
 
 	this->effect_type_ = tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE::NONE;
-	this->col_ = 1.0f;
 
 	this->transform.Init();
+	this->color = 1.0f;
 	this->draw_data = nullptr;
 
 	tml::graphic::Fog::Init();
@@ -129,16 +129,16 @@ INT tml::graphic::Fog3D::Create(const tml::graphic::Fog3DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Fog::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3) < 0) {
+	if (tml::graphic::Fog::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D) < 0) {
 		this->Init();
 
 		return (-1);
 	}
 
 	this->effect_type_ = desc.effect_type;
-	this->col_ = desc.color;
 
 	this->transform = desc.transform;
+	this->color = desc.color;
 
 	return (0);
 }

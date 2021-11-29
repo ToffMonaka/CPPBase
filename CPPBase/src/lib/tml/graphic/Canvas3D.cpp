@@ -165,7 +165,7 @@ INT tml::graphic::Canvas3D::Create(const tml::graphic::Canvas3DDesc &desc)
 {
 	this->Init();
 
-	if (tml::graphic::Canvas::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3) < 0) {
+	if (tml::graphic::Canvas::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D) < 0) {
 		this->Init();
 
 		return (-1);
@@ -337,8 +337,9 @@ void tml::graphic::Canvas3D::Draw(void)
  * @brief SetDrawLightŠÖ”
  * @param light (light)
  * @param trans (transform)
+ * @param col (color)
  */
-void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light, const tml::Transform3D &trans)
+void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light, const tml::Transform3D &trans, const tml::XMFLOAT4EX &col)
 {
 	if ((light == nullptr)
 	|| (light->IsDrawSet(this))
@@ -362,7 +363,7 @@ void tml::graphic::Canvas3D::SetDrawLight(tml::graphic::Light3D *light, const tm
 	}
 
 	light->SetDrawSet(this);
-	this->draw_light_dat_ary_[this->draw_light_cnt_].SetDrawSet(trans);
+	this->draw_light_dat_ary_[this->draw_light_cnt_].SetDrawSet(trans, col);
 
 	this->draw_light_ary_[this->draw_light_cnt_++] = light;
 
@@ -389,8 +390,9 @@ void tml::graphic::Canvas3D::ClearDrawLight(void)
  * @brief SetDrawFogŠÖ”
  * @param fog (fog)
  * @param trans (transform)
+ * @param col (color)
  */
-void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog, const tml::Transform3D &trans)
+void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog, const tml::Transform3D &trans, const tml::XMFLOAT4EX &col)
 {
 	if ((fog == nullptr)
 	|| (fog->IsDrawSet(this))
@@ -414,7 +416,7 @@ void tml::graphic::Canvas3D::SetDrawFog(tml::graphic::Fog3D *fog, const tml::Tra
 	}
 
 	fog->SetDrawSet(this);
-	this->draw_fog_dat_ary_[this->draw_fog_cnt_].SetDrawSet(trans);
+	this->draw_fog_dat_ary_[this->draw_fog_cnt_].SetDrawSet(trans, col);
 
 	this->draw_fog_ary_[this->draw_fog_cnt_++] = fog;
 
