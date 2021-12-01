@@ -11,3 +11,4 @@
 
 
 using DOUBLE = double;
+using LONGDOUBLE = long double;

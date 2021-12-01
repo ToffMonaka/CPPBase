@@ -163,9 +163,9 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		tml::graphic::FigureModel2DDesc model_desc;
 
 		model_desc.SetManager(this->GetGraphicManager());
+		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 0.5f);
 		model_desc.size = tml::XMFLOAT2EX(96.0f, 64.0f);
 		model_desc.size_auto_flag = false;
-		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), tml::MathUtil::GetColor1(0U), 0.5f);
 		model_desc.diffuse_texture_desc = tml::make_shared<tml::graphic::TextureDesc>(1U);
 		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
 		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
@@ -224,9 +224,9 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Q)) {
-		this->transform_2d.angle += tml::MathUtil::GetAngleRadian(1.0f);
+		this->transform_2d.angle = tml::Repeat(this->transform_2d.angle + tml::MathUtil::GetAngleRadian(1.0f), tml::ConstantUtil::MATH::PI * 2.0f);
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::E)) {
-		this->transform_2d.angle -= tml::MathUtil::GetAngleRadian(1.0f);
+		this->transform_2d.angle = tml::Repeat(this->transform_2d.angle - tml::MathUtil::GetAngleRadian(1.0f), tml::ConstantUtil::MATH::PI * 2.0f);
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Z)) {

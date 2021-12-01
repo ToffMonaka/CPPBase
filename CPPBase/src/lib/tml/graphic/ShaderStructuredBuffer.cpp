@@ -191,7 +191,7 @@ void tml::graphic::ShaderStructuredBuffer::Init(void)
 INT tml::graphic::ShaderStructuredBuffer::Create(const tml::graphic::ShaderStructuredBufferDesc &desc)
 {
 	if (((desc.element_size * desc.element_limit) <= 0U)
-	|| ((desc.element_size % 16) > 0)) {
+	|| ((desc.element_size % 16U) > 0)) {
 		return (-1);
 	}
 

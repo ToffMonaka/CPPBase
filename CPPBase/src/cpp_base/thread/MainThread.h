@@ -108,7 +108,3 @@ inline cpp_base::scene::Manager &cpp_base::MainThread::GetSceneManager(void)
 {
 	return (this->scene_mgr_);
 }
-
-
-#if 0
-#endif

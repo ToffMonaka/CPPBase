@@ -39,6 +39,12 @@ template <typename T>
 T Div(const T &, const T &, const T &);
 template <typename T>
 T Mod(const T &, const T &);
+template <>
+FLOAT Mod(const FLOAT &, const FLOAT &);
+template <>
+DOUBLE Mod(const DOUBLE &, const DOUBLE &);
+template <>
+LONGDOUBLE Mod(const LONGDOUBLE &, const LONGDOUBLE &);
 template <typename T>
 T Mod(const T &, const T &, const T &);
 template <typename T>
@@ -47,6 +53,8 @@ template <typename T>
 const T &Max(const T &, const T &);
 template <typename T>
 const T &Clamp(const T &, const T &, const T &);
+template <typename T>
+T Repeat(const T &, const T &);
 template <typename T1, typename T2>
 T1 CastTime(const T2 &time);
 bool CheckResult(const INT *);
@@ -171,13 +179,52 @@ inline T tml::Mod(const T &val1, const T &val2)
  * @brief Modä÷êî
  * @param val1 (value1)
  * @param val2 (value2)
+ * @return val (value)
+ */
+template <>
+inline FLOAT tml::Mod(const FLOAT &val1, const FLOAT &val2)
+{
+	return (std::fmod(val1, val2));
+}
+
+
+/**
+ * @brief Modä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
+ * @return val (value)
+ */
+template <>
+inline DOUBLE tml::Mod(const DOUBLE &val1, const DOUBLE &val2)
+{
+	return (std::fmod(val1, val2));
+}
+
+
+/**
+ * @brief Modä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
+ * @return val (value)
+ */
+template <>
+inline LONGDOUBLE tml::Mod(const LONGDOUBLE &val1, const LONGDOUBLE &val2)
+{
+	return (std::fmod(val1, val2));
+}
+
+
+/**
+ * @brief Modä÷êî
+ * @param val1 (value1)
+ * @param val2 (value2)
  * @param zero_val (zero_value)
  * @return val (value)
  */
 template <typename T>
 inline T tml::Mod(const T &val1, const T &val2, const T &zero_val)
 {
-	return ((val2 == static_cast<T>(0)) ? zero_val : (val1 % val2));
+	return ((val2 == static_cast<T>(0)) ? zero_val : tml::Mod(val1, val2));
 }
 
 
@@ -218,6 +265,29 @@ template <typename T>
 inline const T &tml::Clamp(const T &val, const T &min_val, const T &max_val)
 {
 	return ((val < min_val) ? min_val : (val > max_val) ? max_val : val);
+}
+
+
+/**
+ * @brief Repeatä÷êî
+ * @param val (value)
+ * @param len (length)
+ * @return val (value)
+ */
+template <typename T>
+inline T tml::Repeat(const T &val, const T &len)
+{
+	if (len <= static_cast<T>(0)) {
+		return (static_cast<T>(0));
+	}
+
+	T tmp_val = tml::Mod(val, len);
+
+	if (tmp_val < static_cast<T>(0)) {
+		tmp_val += len;
+	}
+
+	return (tmp_val);
 }
 
 

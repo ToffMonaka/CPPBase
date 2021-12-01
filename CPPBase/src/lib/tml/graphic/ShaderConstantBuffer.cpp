@@ -165,7 +165,7 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
 INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstantBufferDesc &desc)
 {
 	if ((desc.element_size <= 0U)
-	|| ((desc.element_size % 16) > 0)) {
+	|| ((desc.element_size % 16U) > 0)) {
 		return (-1);
 	}
 
