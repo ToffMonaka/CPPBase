@@ -38,7 +38,7 @@ void tml::scene::NodeEventData::Init(void)
 	this->Release();
 
 	this->type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::NONE;
-	this->parent_node.reset();
+	this->node.reset();
 	this->child_node.reset();
 
 	return;

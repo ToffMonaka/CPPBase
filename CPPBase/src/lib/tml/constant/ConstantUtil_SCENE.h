@@ -70,8 +70,8 @@ namespace SCENE {
 	};
 	enum class NODE_EVENT_DATA_TYPE : UINT {
 		NONE = 0U,
-		ADD,
-		REMOVE
+		ADD_CHILD_NODE,
+		REMOVE_CHILD_NODE
 	};
 }
 }

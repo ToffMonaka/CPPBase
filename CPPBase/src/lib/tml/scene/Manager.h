@@ -130,6 +130,7 @@ private:
 
 	tml::shared_ptr<tml::scene::Scene> &GetSceneGetPart(tml::shared_ptr<tml::scene::Scene> &, const tml::shared_ptr<tml::XMLFileDataNode> &, INT *dst_result = nullptr);
 	tml::shared_ptr<tml::scene::Node> &GetNodeGetPart(tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &, INT *dst_result = nullptr);
+	void GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Scene> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
 	void GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileDataNode> &);
 
 public:

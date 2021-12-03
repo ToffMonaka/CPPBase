@@ -93,7 +93,6 @@ private:
 	tml::input::Manager *input_mgr_;
 	tml::graphic::Manager *graphic_mgr_;
 	tml::sound::Manager *sound_mgr_;
-	std::wstring name_;
 	tml::ConstantUtil::SCENE::NODE_TYPE type_;
 	bool run_flg_;
 	bool start_flg_;
@@ -122,6 +121,7 @@ private:
 	std::list<tml::graphic::Canvas3D *> *draw_canvas_3d_cont_;
 
 public:
+	std::wstring name;
 	tml::Transform2D transform_2d;
 	tml::Transform3D transform_3d;
 	tml::XMFLOAT4EX color;
@@ -150,8 +150,6 @@ public:
 	tml::input::Manager *GetInputManager(void);
 	tml::graphic::Manager *GetGraphicManager(void);
 	tml::sound::Manager *GetSoundManager(void);
-	const std::wstring &GetName(void) const;
-	void SetName(const WCHAR *);
 	tml::ConstantUtil::SCENE::NODE_TYPE GetType(void) const;
 	bool GetRunFlag(void) const;
 	void SetRunFlag(const bool);
@@ -221,28 +219,6 @@ inline tml::sound::Manager *tml::scene::Node::GetSoundManager(void)
 
 
 /**
- * @brief GetNameŠÖ”
- * @return name (name)
- */
-inline const std::wstring &tml::scene::Node::GetName(void) const
-{
-	return (this->name_);
-}
-
-
-/**
- * @brief SetNameŠÖ”
- * @param name (name)
- */
-inline void tml::scene::Node::SetName(const WCHAR *name)
-{
-	this->name_ = name;
-
-	return;
-}
-
-
-/**
  * @brief GetTypeŠÖ”
  * @return type (type)
  */
@@ -302,6 +278,22 @@ inline bool tml::scene::Node::IsStarted(void) const
 inline tml::scene::Node *tml::scene::Node::GetParentNode(void)
 {
 	return (this->parent_node_);
+}
+
+
+/**
+ * @brief SetParentNodeŠÖ”
+ * @param parent_node (parent_node)
+ */
+inline void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
+{
+	if (parent_node == this) {
+		return;
+	}
+
+	this->parent_node_ = parent_node;
+
+	return;
 }
 
 

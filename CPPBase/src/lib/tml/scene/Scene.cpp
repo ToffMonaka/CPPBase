@@ -146,7 +146,6 @@ void tml::scene::Scene::Init(void)
 	this->input_mgr_ = nullptr;
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
-	this->name_.clear();
 	this->type_ = tml::ConstantUtil::SCENE::SCENE_TYPE::NONE;
 	this->run_flg_ = false;
 	this->start_flg_ = false;
@@ -166,6 +165,7 @@ void tml::scene::Scene::Init(void)
 	this->draw_canvas_2d_cont_ = nullptr;
 	this->draw_canvas_3d_cont_ = nullptr;
 
+	this->name.clear();
 	this->transform_2d.Init();
 	this->transform_3d.Init();
 	this->color = 1.0f;
@@ -195,21 +195,15 @@ INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc)
 	this->input_mgr_ = desc.GetManager()->GetInputManager();
 	this->graphic_mgr_ = desc.GetManager()->GetGraphicManager();
 	this->sound_mgr_ = desc.GetManager()->GetSoundManager();
-	this->name_ = desc.name;
 	this->type_ = static_cast<tml::ConstantUtil::SCENE::SCENE_TYPE>(this->GetResourceSubIndex());
 	this->start_flg_ = true;
 
+	this->name = desc.name;
 	this->transform_2d = desc.transform_2d;
 	this->transform_3d = desc.transform_3d;
 	this->color = desc.color;
 
 	this->SetRootNode();
-
-	if (this->root_node_ == nullptr) {
-		this->Init();
-
-		return (-1);
-	}
 
 	return (0);
 }
@@ -405,18 +399,16 @@ void tml::scene::Scene::SetRunFlag(const bool run_flg)
 void tml::scene::Scene::SetRootNode(void)
 {
 	if (this->root_node_ != nullptr) {
-		this->root_node_->End();
-		this->root_node_->SetRunFlag(false);
-
-		this->root_node_.reset();
+		return;
 	}
 
 	tml::scene::NodeDesc node_desc;
 
 	node_desc.SetManager(this->GetManager());
-	node_desc.name = L"root";
 
 	this->GetManager()->GetResource<tml::scene::Node>(this->root_node_, node_desc);
+
+	this->root_node_->name = L"root";
 
 	return;
 }

@@ -93,7 +93,6 @@ private:
 	tml::input::Manager *input_mgr_;
 	tml::graphic::Manager *graphic_mgr_;
 	tml::sound::Manager *sound_mgr_;
-	std::wstring name_;
 	tml::ConstantUtil::SCENE::SCENE_TYPE type_;
 	bool run_flg_;
 	bool start_flg_;
@@ -120,6 +119,7 @@ private:
 	std::list<tml::graphic::Canvas3D *> *draw_canvas_3d_cont_;
 
 public:
+	std::wstring name;
 	tml::Transform2D transform_2d;
 	tml::Transform3D transform_3d;
 	tml::XMFLOAT4EX color;
@@ -146,8 +146,6 @@ public:
 	tml::input::Manager *GetInputManager(void);
 	tml::graphic::Manager *GetGraphicManager(void);
 	tml::sound::Manager *GetSoundManager(void);
-	const std::wstring &GetName(void) const;
-	void SetName(const WCHAR *);
 	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
 	bool GetRunFlag(void) const;
 	void SetRunFlag(const bool);
@@ -207,28 +205,6 @@ inline tml::graphic::Manager *tml::scene::Scene::GetGraphicManager(void)
 inline tml::sound::Manager *tml::scene::Scene::GetSoundManager(void)
 {
 	return (this->sound_mgr_);
-}
-
-
-/**
- * @brief GetNameŠÖ”
- * @return name (name)
- */
-inline const std::wstring &tml::scene::Scene::GetName(void) const
-{
-	return (this->name_);
-}
-
-
-/**
- * @brief SetNameŠÖ”
- * @param name (name)
- */
-inline void tml::scene::Scene::SetName(const WCHAR *name)
-{
-	this->name_ = name;
-
-	return;
 }
 
 

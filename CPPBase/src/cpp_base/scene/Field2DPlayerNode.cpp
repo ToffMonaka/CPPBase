@@ -230,10 +230,10 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Z)) {
-		this->transform_2d.scale.x = tml::Max(this->transform_2d.scale.x - 0.1f, 0.0f);
+		this->transform_2d.scale.x = tml::Max(this->transform_2d.scale.x - 0.01f, 0.0f);
 		this->transform_2d.scale.y = this->transform_2d.scale.x;
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::C)) {
-		this->transform_2d.scale.x = tml::Min(this->transform_2d.scale.x + 0.1f, 1.0f);
+		this->transform_2d.scale.x = tml::Min(this->transform_2d.scale.x + 0.01f, 2.0f);
 		this->transform_2d.scale.y = this->transform_2d.scale.x;
 	}
 

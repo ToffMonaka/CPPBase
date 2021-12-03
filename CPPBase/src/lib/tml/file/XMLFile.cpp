@@ -61,22 +61,6 @@ void tml::XMLFileDataNode::Init(void)
 
 
 /**
- * @brief SetParentNodeä÷êî
- * @param parent_node (parent_node)
- */
-void tml::XMLFileDataNode::SetParentNode(tml::XMLFileDataNode *parent_node)
-{
-	if (parent_node == this) {
-		return;
-	}
-
-	this->parent_node_ = parent_node;
-
-	return;
-}
-
-
-/**
  * @brief GetChildNodeRecursivePartä÷êî
  * @param child_node_cont (child_node_container)
  * @param child_node_name (child_node_name)
@@ -255,7 +239,7 @@ void tml::XMLFileData::Init(void)
 void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
 {
 	if (this->root_node_ != nullptr) {
-		this->root_node_.reset();
+		return;
 	}
 
 	this->root_node_ = tml::make_shared<tml::XMLFileDataNode>(1U);
@@ -441,10 +425,6 @@ INT tml::XMLFile::Read(void)
 	if (txt_file.data.line_string_container.empty()) {
 		this->data.SetRootNode(nullptr);
 
-		if (this->data.GetRootNode() == nullptr) {
-			return (-1);
-		}
-
 		return (0);
 	}
 
@@ -479,10 +459,6 @@ INT tml::XMLFile::Read(void)
 	}
 
 	this->data.SetRootNode(xml_doc.get());
-
-	if (this->data.GetRootNode() == nullptr) {
-		return (-1);
-	}
 
 	return (0);
 }

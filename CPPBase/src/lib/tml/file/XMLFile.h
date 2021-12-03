@@ -83,6 +83,22 @@ inline tml::XMLFileDataNode *tml::XMLFileDataNode::GetParentNode(void)
 
 
 /**
+ * @brief SetParentNodeŠÖ”
+ * @param parent_node (parent_node)
+ */
+inline void tml::XMLFileDataNode::SetParentNode(tml::XMLFileDataNode *parent_node)
+{
+	if (parent_node == this) {
+		return;
+	}
+
+	this->parent_node_ = parent_node;
+
+	return;
+}
+
+
+/**
  * @brief GetChildNodeContainerŠÖ”
  * @return child_node_container (child_node_container)
  */

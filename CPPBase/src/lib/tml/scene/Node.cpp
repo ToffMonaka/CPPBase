@@ -148,7 +148,6 @@ void tml::scene::Node::Init(void)
 	this->input_mgr_ = nullptr;
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
-	this->name_.clear();
 	this->type_ = tml::ConstantUtil::SCENE::NODE_TYPE::NONE;
 	this->run_flg_ = false;
 	this->start_flg_ = false;
@@ -169,6 +168,7 @@ void tml::scene::Node::Init(void)
 	this->draw_canvas_2d_cont_ = nullptr;
 	this->draw_canvas_3d_cont_ = nullptr;
 
+	this->name.clear();
 	this->transform_2d.Init();
 	this->transform_3d.Init();
 	this->color = 1.0f;
@@ -198,10 +198,10 @@ INT tml::scene::Node::Create(const tml::scene::NodeDesc &desc)
 	this->input_mgr_ = desc.GetManager()->GetInputManager();
 	this->graphic_mgr_ = desc.GetManager()->GetGraphicManager();
 	this->sound_mgr_ = desc.GetManager()->GetSoundManager();
-	this->name_ = desc.name;
 	this->type_ = static_cast<tml::ConstantUtil::SCENE::NODE_TYPE>(this->GetResourceSubIndex());
 	this->start_flg_ = true;
 
+	this->name = desc.name;
 	this->transform_2d = desc.transform_2d;
 	this->transform_3d = desc.transform_3d;
 	this->color = desc.color;
@@ -395,22 +395,6 @@ void tml::scene::Node::SetRunFlag(const bool run_flg)
 
 
 /**
- * @brief SetParentNodeä÷êî
- * @param parent_node (parent_node)
- */
-void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
-{
-	if (parent_node == this) {
-		return;
-	}
-
-	this->parent_node_ = parent_node;
-
-	return;
-}
-
-
-/**
  * @brief GetChildNodeRecursivePartä÷êî
  * @param child_node_cont (child_node_container)
  * @param child_node_name (child_node_name)
@@ -419,7 +403,7 @@ void tml::scene::Node::SetParentNode(tml::scene::Node *parent_node)
 const tml::shared_ptr<tml::scene::Node> &tml::scene::Node::GetChildNodeRecursivePart(const std::list<tml::shared_ptr<tml::scene::Node>> &child_node_cont, const WCHAR *child_node_name)
 {
 	for (auto &child_node : child_node_cont) {
-		if (child_node->GetName() == child_node_name) {
+		if (child_node->name == child_node_name) {
 			return (child_node);
 		}
 
@@ -452,8 +436,8 @@ INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &chil
 		tml::scene::NodeEventDesc event_desc;
 
 		event_desc.SetManager(this->GetManager());
-		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD;
-		event_desc.data.parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD_CHILD_NODE;
+		event_desc.data.node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
 		event_desc.data.child_node = child_node;
 
 		if (this->GetManager()->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
@@ -491,8 +475,8 @@ void tml::scene::Node::RemoveChildNode(const bool event_flg)
 		tml::scene::NodeEventDesc event_desc;
 
 		event_desc.SetManager(this->GetManager());
-		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE;
-		event_desc.data.parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE_CHILD_NODE;
+		event_desc.data.node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
 
 		if (this->GetManager()->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
 			return;
@@ -525,8 +509,8 @@ void tml::scene::Node::RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &
 		tml::scene::NodeEventDesc event_desc;
 
 		event_desc.SetManager(this->GetManager());
-		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE;
-		event_desc.data.parent_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE_CHILD_NODE;
+		event_desc.data.node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
 		event_desc.data.child_node = child_node;
 
 		if (this->GetManager()->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {
@@ -564,7 +548,7 @@ void tml::scene::Node::RemoveChildNodeFromParentNode(const bool event_flg)
 		tml::scene::NodeEventDesc event_desc;
 
 		event_desc.SetManager(this->GetManager());
-		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE;
+		event_desc.data.type = tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE_CHILD_NODE;
 		event_desc.data.child_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
 
 		if (this->GetManager()->AddEvent<tml::scene::NodeEvent>(event_desc) < 0) {

@@ -19,7 +19,7 @@ class NodeEventData
 {
 public:
 	tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE type;
-	tml::shared_ptr<tml::scene::Node> parent_node;
+	tml::shared_ptr<tml::scene::Node> node;
 	tml::shared_ptr<tml::scene::Node> child_node;
 
 private:
