@@ -135,7 +135,10 @@ tml::scene::Manager::Manager() :
 	input_mgr_(nullptr),
 	graphic_mgr_(nullptr),
 	sound_mgr_(nullptr),
-	frame_rate_limit_(60U)
+	frame_rate_limit_(60U),
+	elapsed_time_(0.0),
+	cpu_elapsed_time_(0.0),
+	gpu_elapsed_time_(0.0)
 {
 	return;
 }
@@ -185,6 +188,11 @@ void tml::scene::Manager::Init(void)
 	this->sound_mgr_ = nullptr;
 	this->frame_rate_.Init();
 	this->frame_rate_limit_ = 60U;
+	this->elapsed_time_ = tml::TIME_REAL(0.0);
+	this->cpu_start_time_ = std::chrono::steady_clock::time_point();
+	this->cpu_elapsed_time_ = tml::TIME_REAL(0.0);
+	this->gpu_start_time_ = std::chrono::steady_clock::time_point();
+	this->gpu_elapsed_time_ = tml::TIME_REAL(0.0);
 
 	tml::Manager::Init();
 
@@ -363,6 +371,8 @@ void tml::scene::Manager::Update(void)
 		}
 
 		if (this->scene_->GetStartFlag()) {
+			this->cpu_start_time_ = std::chrono::steady_clock::now();
+
 			this->input_mgr_->Update();
 
 			this->scene_->Update();
@@ -371,7 +381,17 @@ void tml::scene::Manager::Update(void)
 
 			this->sound_mgr_->Update();
 
+			this->cpu_elapsed_time_ = tml::CastTime<tml::TIME_REAL>(std::chrono::steady_clock::now() - this->cpu_start_time_);
+
+			this->gpu_start_time_ = std::chrono::steady_clock::now();
+
+			this->graphic_mgr_->UpdateSwapChain();
+
+			this->gpu_elapsed_time_ = tml::CastTime<tml::TIME_REAL>(std::chrono::steady_clock::now() - this->gpu_start_time_);
+
 			this->frame_rate_.Update();
+
+			this->elapsed_time_ = this->frame_rate_.GetElapsedTime();
 		}
 
 		if (!this->scene_->GetStartFlag()) {

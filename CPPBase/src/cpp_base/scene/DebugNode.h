@@ -56,9 +56,13 @@ public: cpp_base::scene::DebugNode &operator =(const cpp_base::scene::DebugNode 
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	tml::TIME_REAL update_time_;
+	tml::TIME_REAL cpu_elapsed_time_;
+	UINT cpu_elapsed_cnt_;
+	tml::TIME_REAL gpu_elapsed_time_;
+	UINT gpu_elapsed_cnt_;
 
 public:
-	tml::TIME_REAL update_time;
 	tml::shared_ptr<tml::graphic::Font> font;
 	tml::shared_ptr<tml::graphic::FigureModel2D> model;
 

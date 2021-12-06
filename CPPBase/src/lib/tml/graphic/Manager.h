@@ -166,6 +166,7 @@ public:
 	IDXGIAdapter1 *GetAdapter(void);
 	const DXGI_ADAPTER_DESC1 &GetAdapterDesc(void) const;
 	IDXGISwapChain *GetSwapChain(void);
+	void UpdateSwapChain(void);
 	const DXGI_SWAP_CHAIN_DESC &GetSwapChainDesc(void) const;
 	ID3D11Device *GetDevice(void);
 	ID3D11DeviceContext *GetDeviceContext(void);
@@ -287,6 +288,19 @@ inline const DXGI_ADAPTER_DESC1 &tml::graphic::Manager::GetAdapterDesc(void) con
 inline IDXGISwapChain *tml::graphic::Manager::GetSwapChain(void)
 {
 	return (this->swap_chain_);
+}
+
+
+/**
+ * @brief UpdateSwapChainŠÖ”
+ *
+ * Vsync—L‚è
+ */
+inline void tml::graphic::Manager::UpdateSwapChain(void)
+{
+	this->swap_chain_->Present(this->vsync_flg_, 0U);
+
+	return;
 }
 
 

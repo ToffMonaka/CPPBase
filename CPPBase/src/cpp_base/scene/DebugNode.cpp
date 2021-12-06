@@ -78,7 +78,11 @@ INT cpp_base::scene::DebugNodeDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 cpp_base::scene::DebugNode::DebugNode() :
-	update_time(0.0)
+	update_time_(0.0),
+	cpu_elapsed_time_(0.0),
+	cpu_elapsed_cnt_(0U),
+	gpu_elapsed_time_(0.0),
+	gpu_elapsed_cnt_(0U)
 {
 	return;
 }
@@ -111,7 +115,11 @@ void cpp_base::scene::DebugNode::Init(void)
 {
 	this->Release();
 
-	this->update_time = tml::TIME_REAL(0.0);
+	this->update_time_ = tml::TIME_REAL(0.0);
+	this->cpu_elapsed_time_ = tml::TIME_REAL(0.0);
+	this->cpu_elapsed_cnt_ = 0U;
+	this->gpu_elapsed_time_ = tml::TIME_REAL(0.0);
+	this->gpu_elapsed_cnt_ = 0U;
 	this->font.reset();
 	this->model.reset();
 
@@ -136,8 +144,6 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
 
 		return (-1);
 	}
-
-	this->update_time = tml::TIME_REAL(1.0);
 
 	tml::XMUINT2EX font_size = tml::XMUINT2EX(0U, 16U);
 	tml::XMUINT2EX model_size = this->GetGraphicManager()->GetSize();
@@ -204,6 +210,12 @@ INT cpp_base::scene::DebugNode::Create(const cpp_base::scene::DebugNodeDesc &des
  */
 INT cpp_base::scene::DebugNode::OnStart(void)
 {
+	this->update_time_ = tml::TIME_REAL(1.0);
+	this->cpu_elapsed_time_ = tml::TIME_REAL(0.0);
+	this->cpu_elapsed_cnt_ = 0U;
+	this->gpu_elapsed_time_ = tml::TIME_REAL(0.0);
+	this->gpu_elapsed_cnt_ = 0U;
+
 	this->SetModel(0U, this->model);
 
 	return (0);
@@ -224,16 +236,26 @@ void cpp_base::scene::DebugNode::OnEnd(void)
  */
 void cpp_base::scene::DebugNode::OnUpdate(void)
 {
-	this->update_time += this->GetManager()->GetFrameRate().GetElapsedTime();
+	this->update_time_ += this->GetManager()->GetFrameRate().GetElapsedTime();
+	this->cpu_elapsed_time_ += this->GetManager()->GetCPUElapsedTime();
+	++this->cpu_elapsed_cnt_;
+	this->gpu_elapsed_time_ += this->GetManager()->GetGPUElapsedTime();
+	++this->gpu_elapsed_cnt_;
 
-	if (this->update_time.count() >= 1.0) {
+	if (this->update_time_.count() >= 1.0) {
 		{// ModelTexture Update
 			auto &frame_rate = this->GetManager()->GetFrameRate();
+			auto cpu_elapsed_time = this->cpu_elapsed_time_ / this->cpu_elapsed_cnt_;
+			auto gpu_elapsed_time = this->gpu_elapsed_time_ / this->gpu_elapsed_cnt_;
 			auto mem_allocator_info = tml::MemoryUtil::GetAllocatorInfo();
 
 			WCHAR sys_str[1024];
 
-			_snwprintf_s(sys_str, sizeof(sys_str) >> 1, _TRUNCATE, L"FPS=%.2f/%u\nMEM=%u/%u/%u", frame_rate.GetFPS(), frame_rate.GetLimit(), mem_allocator_info.use_size, mem_allocator_info.size, mem_allocator_info.use_count);
+			_snwprintf_s(sys_str, sizeof(sys_str) >> 1, _TRUNCATE, L"F=%.2f/%u\nT=%f/%f\nM=%u/%u/%u",
+				frame_rate.GetFPS(), frame_rate.GetLimit(),
+				cpu_elapsed_time.count(), gpu_elapsed_time.count(),
+				mem_allocator_info.use_size, mem_allocator_info.size, mem_allocator_info.use_count
+			);
 
 			auto &tex = this->model->GetTexture(this->model->GetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D)->GetLayer(0U)->GetDiffuseTextureIndex());
 
@@ -242,7 +264,11 @@ void cpp_base::scene::DebugNode::OnUpdate(void)
 			tex->UploadCPUBuffer();
 		}
 
-		this->update_time = tml::TIME_REAL(0.0);
+		this->update_time_ = tml::TIME_REAL(0.0);
+		this->cpu_elapsed_time_ = tml::TIME_REAL(0.0);
+		this->cpu_elapsed_cnt_ = 0U;
+		this->gpu_elapsed_time_ = tml::TIME_REAL(0.0);
+		this->gpu_elapsed_cnt_ = 0U;
 	}
 
 	return;

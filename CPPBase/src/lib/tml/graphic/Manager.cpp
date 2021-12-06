@@ -627,8 +627,6 @@ void tml::graphic::Manager::Update(void)
 	this->ClearDrawShader();
 	this->ClearDrawMesh();
 
-	this->swap_chain_->Present(this->vsync_flg_, 0U);
-
 	return;
 }
 

@@ -120,6 +120,11 @@ private:
 	tml::sound::Manager *sound_mgr_;
 	tml::FrameRate frame_rate_;
 	UINT frame_rate_limit_;
+	tml::TIME_REAL elapsed_time_;
+	std::chrono::steady_clock::time_point cpu_start_time_;
+	tml::TIME_REAL cpu_elapsed_time_;
+	std::chrono::steady_clock::time_point gpu_start_time_;
+	tml::TIME_REAL gpu_elapsed_time_;
 	tml::shared_ptr<tml::scene::Scene> scene_;
 
 public:
@@ -147,6 +152,9 @@ public:
 	tml::sound::Manager *GetSoundManager(void);
 	const tml::FrameRate &GetFrameRate(void) const;
 	UINT GetFrameRateLimit(void) const;
+	const tml::TIME_REAL &GetElapsedTime(void) const;
+	const tml::TIME_REAL &GetCPUElapsedTime(void) const;
+	const tml::TIME_REAL &GetGPUElapsedTime(void) const;
 
 	tml::shared_ptr<tml::scene::Scene> &GetScene(tml::shared_ptr<tml::scene::Scene> &, const tml::XMLFileReadDesc &, INT *dst_result = nullptr);
 	const tml::shared_ptr<tml::scene::Scene> &GetScene(void);
@@ -205,6 +213,36 @@ inline const tml::FrameRate &tml::scene::Manager::GetFrameRate(void) const
 inline UINT tml::scene::Manager::GetFrameRateLimit(void) const
 {
 	return (this->frame_rate_limit_);
+}
+
+
+/**
+ * @brief GetElapsedTimeŠÖ”
+ * @return elapsed_time (elapsed_time)
+ */
+inline const tml::TIME_REAL &tml::scene::Manager::GetElapsedTime(void) const
+{
+	return (this->elapsed_time_);
+}
+
+
+/**
+ * @brief GetCPUElapsedTimeŠÖ”
+ * @return cpu_elapsed_time (cpu_elapsed_time)
+ */
+inline const tml::TIME_REAL &tml::scene::Manager::GetCPUElapsedTime(void) const
+{
+	return (this->cpu_elapsed_time_);
+}
+
+
+/**
+ * @brief GetGPUElapsedTimeŠÖ”
+ * @return gpu_elapsed_time (gpu_elapsed_time)
+ */
+inline const tml::TIME_REAL &tml::scene::Manager::GetGPUElapsedTime(void) const
+{
+	return (this->gpu_elapsed_time_);
 }
 
 
