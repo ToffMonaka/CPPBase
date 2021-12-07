@@ -1,13 +1,14 @@
 /**
  * @file
- * @brief Field2DGroundNodeコードファイル
+ * @brief Field2DBulletNodeコードファイル
  */
 
 
-#include "Field2DGroundNode.h"
+#include "Field2DBulletNode.h"
+#include "../../lib/tml/math/MathUtil.h"
 #include "../../lib/tml/graphic/Texture.h"
 #include "../../lib/tml/graphic/Sampler.h"
-#include "../../lib/tml/graphic/GroundModel2D.h"
+#include "../../lib/tml/graphic/FigureModel2D.h"
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
@@ -16,7 +17,7 @@
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::Field2DGroundNodeDesc::Field2DGroundNodeDesc()
+cpp_base::scene::Field2DBulletNodeDesc::Field2DBulletNodeDesc()
 {
 	return;
 }
@@ -25,7 +26,7 @@ cpp_base::scene::Field2DGroundNodeDesc::Field2DGroundNodeDesc()
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::Field2DGroundNodeDesc::~Field2DGroundNodeDesc()
+cpp_base::scene::Field2DBulletNodeDesc::~Field2DBulletNodeDesc()
 {
 	this->Release();
 
@@ -36,7 +37,7 @@ cpp_base::scene::Field2DGroundNodeDesc::~Field2DGroundNodeDesc()
 /**
  * @brief Init関数
  */
-void cpp_base::scene::Field2DGroundNodeDesc::Init(void)
+void cpp_base::scene::Field2DBulletNodeDesc::Init(void)
 {
 	this->Release();
 
@@ -52,7 +53,7 @@ void cpp_base::scene::Field2DGroundNodeDesc::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::Field2DGroundNodeDesc::ReadValue(const tml::INIFile &conf_file)
+INT cpp_base::scene::Field2DBulletNodeDesc::ReadValue(const tml::INIFile &conf_file)
 {
 	if (cpp_base::scene::NodeDesc::ReadValue(conf_file) < 0) {
 		return (-1);
@@ -62,8 +63,8 @@ INT cpp_base::scene::Field2DGroundNodeDesc::ReadValue(const tml::INIFile &conf_f
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// Field2DGroundNode Section Read
-		val_name_cont = conf_file.data.GetValueNameContainer(L"FIELD_2D_GROUND_NODE");
+	{// Field2DBulletNode Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"FIELD_2D_MOB_NODE");
 
 		if (val_name_cont != nullptr) {
 		}
@@ -77,7 +78,7 @@ INT cpp_base::scene::Field2DGroundNodeDesc::ReadValue(const tml::INIFile &conf_f
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::Field2DGroundNode::Field2DGroundNode()
+cpp_base::scene::Field2DBulletNode::Field2DBulletNode()
 {
 	return;
 }
@@ -86,7 +87,7 @@ cpp_base::scene::Field2DGroundNode::Field2DGroundNode()
 /**
  * @brief デストラクタ
  */
-cpp_base::scene::Field2DGroundNode::~Field2DGroundNode()
+cpp_base::scene::Field2DBulletNode::~Field2DBulletNode()
 {
 	this->Release();
 
@@ -97,7 +98,7 @@ cpp_base::scene::Field2DGroundNode::~Field2DGroundNode()
 /**
  * @brief Release関数
  */
-void cpp_base::scene::Field2DGroundNode::Release(void)
+void cpp_base::scene::Field2DBulletNode::Release(void)
 {
 	return;
 }
@@ -106,7 +107,7 @@ void cpp_base::scene::Field2DGroundNode::Release(void)
 /**
  * @brief Init関数
  */
-void cpp_base::scene::Field2DGroundNode::Init(void)
+void cpp_base::scene::Field2DBulletNode::Init(void)
 {
 	this->Release();
 
@@ -124,7 +125,7 @@ void cpp_base::scene::Field2DGroundNode::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGroundNodeDesc &desc)
+INT cpp_base::scene::Field2DBulletNode::Create(const cpp_base::scene::Field2DBulletNodeDesc &desc)
 {
 	this->Init();
 
@@ -134,17 +135,19 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
 		return (-1);
 	}
 
+	this->transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, 0.0f));
+
 	{// Model Create
-		tml::graphic::GroundModel2DDesc model_desc;
+		tml::graphic::FigureModel2DDesc model_desc;
 
 		model_desc.SetManager(this->GetGraphicManager());
-		model_desc.map_desc = tml::make_shared<tml::graphic::MapDesc>(1U);
-		model_desc.map_desc->SetManager(this->GetGraphicManager());
-		model_desc.map_desc->map_file_read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::GROUND_2D_MAP;
-		model_desc.map_desc->map_directory_path = L"res";
-		model_desc.draw_priority = 0;
+		model_desc.diffuse_texture_desc = tml::make_shared<tml::graphic::TextureDesc>(1U);
+		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
+		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
+		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"bullet_2d_img.png"));
+		model_desc.draw_priority = 4;
 
-		if (this->GetGraphicManager()->GetResource<tml::graphic::GroundModel2D>(this->model, model_desc) == nullptr) {
+		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, model_desc) == nullptr) {
 			this->Init();
 
 			return (-1);
@@ -160,7 +163,7 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::Field2DGroundNode::OnStart(void)
+INT cpp_base::scene::Field2DBulletNode::OnStart(void)
 {
 	this->SetModel(0U, this->model);
 
@@ -171,7 +174,7 @@ INT cpp_base::scene::Field2DGroundNode::OnStart(void)
 /**
  * @brief OnEnd関数
  */
-void cpp_base::scene::Field2DGroundNode::OnEnd(void)
+void cpp_base::scene::Field2DBulletNode::OnEnd(void)
 {
 	return;
 }
@@ -180,7 +183,7 @@ void cpp_base::scene::Field2DGroundNode::OnEnd(void)
 /**
  * @brief OnUpdate関数
  */
-void cpp_base::scene::Field2DGroundNode::OnUpdate(void)
+void cpp_base::scene::Field2DBulletNode::OnUpdate(void)
 {
 	return;
 }

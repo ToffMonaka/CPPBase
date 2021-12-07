@@ -62,6 +62,8 @@ public:
 	tml::shared_ptr<tml::scene::Node> player_node;
 	tml::shared_ptr<tml::scene::Node> mob_layout_node;
 	tml::shared_ptr<tml::scene::Node> mob_node;
+	tml::shared_ptr<tml::scene::Node> bullet_layout_node;
+	tml::shared_ptr<tml::scene::Node> bullet_node;
 
 private:
 	void Release(void);

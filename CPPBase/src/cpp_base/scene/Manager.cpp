@@ -20,6 +20,7 @@
 #include "Field2DGroundNode.h"
 #include "Field2DPlayerNode.h"
 #include "Field2DMobNode.h"
+#include "Field2DBulletNode.h"
 
 
 /**
@@ -385,6 +386,22 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 				node_desc.Read(conf_file_read_desc);
 
 				if (this->GetResource<cpp_base::scene::Field2DMobNode>(node, node_desc, dst_result) == nullptr) {
+					return (node);
+				}
+
+				return (node);
+			}
+		);
+
+		this->factory->AddResourceFunction(cpp_base::ConstantUtil::SCENE::CLASS_NAME::FIELD_2D_BULLET_NODE,
+			[this] (const tml::INIFileReadDesc &conf_file_read_desc, INT *dst_result) -> tml::shared_ptr<tml::ManagerResource> {
+				tml::shared_ptr<cpp_base::scene::Field2DBulletNode> node;
+				cpp_base::scene::Field2DBulletNodeDesc node_desc;
+
+				node_desc.SetManager(this);
+				node_desc.Read(conf_file_read_desc);
+
+				if (this->GetResource<cpp_base::scene::Field2DBulletNode>(node, node_desc, dst_result) == nullptr) {
 					return (node);
 				}
 

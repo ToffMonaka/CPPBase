@@ -120,6 +120,7 @@ void cpp_base::scene::DebugNode::Init(void)
 	this->cpu_elapsed_cnt_ = 0U;
 	this->gpu_elapsed_time_ = tml::TIME_REAL(0.0);
 	this->gpu_elapsed_cnt_ = 0U;
+
 	this->font.reset();
 	this->model.reset();
 

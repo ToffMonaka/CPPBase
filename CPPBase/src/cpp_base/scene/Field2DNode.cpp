@@ -11,6 +11,7 @@
 #include "Field2DGroundNode.h"
 #include "Field2DPlayerNode.h"
 #include "Field2DMobNode.h"
+#include "Field2DBulletNode.h"
 
 
 /**
@@ -116,6 +117,8 @@ void cpp_base::scene::Field2DNode::Init(void)
 	this->player_node.reset();
 	this->mob_layout_node.reset();
 	this->mob_node.reset();
+	this->bullet_layout_node.reset();
+	this->bullet_node.reset();
 
 	cpp_base::scene::Node::Init();
 
@@ -208,6 +211,26 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
 		}
 
 		this->mob_layout_node->AddChildNode(this->mob_node);
+	}
+
+	{// BulletLayoutNode Create
+		this->bullet_layout_node = this->GetChildNode(L"bullet_layout");
+
+		if (this->bullet_layout_node == nullptr) {
+			return (-1);
+		}
+	}
+
+	{// BulletNode Create
+		cpp_base::scene::Field2DBulletNodeDesc node_desc;
+
+		node_desc.SetManager(this->GetManager());
+
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DBulletNode>(this->bullet_node, node_desc) == nullptr) {
+			return (-1);
+		}
+
+		this->bullet_layout_node->AddChildNode(this->bullet_node);
 	}
 
 	return (0);

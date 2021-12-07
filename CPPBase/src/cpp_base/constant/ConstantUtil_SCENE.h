@@ -22,6 +22,7 @@ namespace SCENE {
 		const WCHAR FIELD_2D_GROUND_NODE[] = L"Field2DGroundNode";
 		const WCHAR FIELD_2D_PLAYER_NODE[] = L"Field2DPlayerNode";
 		const WCHAR FIELD_2D_MOB_NODE[] = L"Field2DMobNode";
+		const WCHAR FIELD_2D_BULLET_NODE[] = L"Field2DBulletNode";
 	}
 	namespace RESOURCE_NAME {
 		const WCHAR DEBUG_NODE[] = L"DebugNode";
@@ -68,5 +69,7 @@ class Field2DPlayerNode;
 class Field2DPlayerNodeDesc;
 class Field2DMobNode;
 class Field2DMobNodeDesc;
+class Field2DBulletNode;
+class Field2DBulletNodeDesc;
 }
 }

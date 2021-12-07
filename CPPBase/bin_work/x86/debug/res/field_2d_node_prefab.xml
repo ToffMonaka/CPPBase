@@ -8,10 +8,14 @@
 	</node>
 	<node class_name="Node">
 		[NODE]
+		NAME=pl_layout
+	</node>
+	<node class_name="Node">
+		[NODE]
 		NAME=mob_layout
 	</node>
 	<node class_name="Node">
 		[NODE]
-		NAME=pl_layout
+		NAME=bullet_layout
 	</node>
 </node>

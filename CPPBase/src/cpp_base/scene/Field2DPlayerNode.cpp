@@ -148,7 +148,7 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
 		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
 		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"pl_2d_img.png"));
-		model_desc.draw_priority = 1;
+		model_desc.draw_priority = 3;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, model_desc) == nullptr) {
 			this->Init();
@@ -170,7 +170,7 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 		model_desc.diffuse_texture_desc->SetManager(this->GetGraphicManager());
 		model_desc.diffuse_texture_desc->atlas_texture = this->GetGraphicManager()->common2.common_atlas->GetTexture();
 		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"shadow_2d_img.png"));
-		model_desc.draw_priority = 0;
+		model_desc.draw_priority = 1;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->shadow_model, model_desc) == nullptr) {
 			this->Init();
@@ -223,45 +223,7 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 		this->transform_2d.position.x += 2.0f;
 	}
 
-	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Q)) {
-		this->transform_2d.angle = tml::Repeat(this->transform_2d.angle + tml::MathUtil::GetAngleRadian(1.0f), tml::ConstantUtil::MATH::PI * 2.0f);
-	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::E)) {
-		this->transform_2d.angle = tml::Repeat(this->transform_2d.angle - tml::MathUtil::GetAngleRadian(1.0f), tml::ConstantUtil::MATH::PI * 2.0f);
-	}
-
-	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::Z)) {
-		this->transform_2d.scale.x = tml::Max(this->transform_2d.scale.x - 0.01f, 0.0f);
-		this->transform_2d.scale.y = this->transform_2d.scale.x;
-	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::C)) {
-		this->transform_2d.scale.x = tml::Min(this->transform_2d.scale.x + 0.01f, 2.0f);
-		this->transform_2d.scale.y = this->transform_2d.scale.x;
-	}
-
 	if (this->GetInputManager()->GetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::LEFT)) {
-		this->transform_2d.SetDistance(tml::XMFLOAT2EX(0.0f, 128.0f), 256.0f);
-	}
-
-	if (this->GetInputManager()->GetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::RIGHT)) {
-		this->transform_2d.Look(tml::XMFLOAT2EX(0.0f, 128.0f));
-	}
-
-	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUM1)) {
-		this->color.y = tml::Max(this->color.y - 0.01f, 0.0f);
-		this->color.z = this->color.y;
-	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUM2)) {
-		this->color.y = tml::Min(this->color.y + 0.01f, 1.0f);
-		this->color.z = this->color.y;
-	}
-
-	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUM3)) {
-		this->color.w = tml::Max(this->color.w - 0.01f, 0.0f);
-	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NUM4)) {
-		this->color.w = tml::Min(this->color.w + 0.01f, 1.0f);
-	}
-
-	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::SPACE)) {
-		this->transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, -128.0f));
-		this->color = tml::XMFLOAT4EX(1.0f);
 	}
 
 	return;
