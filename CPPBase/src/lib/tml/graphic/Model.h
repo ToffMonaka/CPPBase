@@ -351,23 +351,25 @@ public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL);
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::BASE);
 
+public:
+	static const tml::shared_ptr<tml::graphic::RasterizerState> empty_rasterizer_state;
+	static const tml::shared_ptr<tml::graphic::BlendState> empty_blend_state;
+	static const tml::shared_ptr<tml::graphic::DepthState> empty_depth_state;
+	static const tml::shared_ptr<tml::graphic::Shader> empty_shader;
+	static const tml::shared_ptr<tml::graphic::Mesh> empty_mesh;
+	static const tml::shared_ptr<tml::graphic::Texture> empty_texture;
+	static const tml::shared_ptr<tml::graphic::Sampler> empty_sampler;
+
 private:
 	tml::ConstantUtil::GRAPHIC::MODEL_TYPE type_;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type_;
 	std::vector<tml::shared_ptr<tml::graphic::RasterizerState>> rs_cont_;
-	tml::shared_ptr<tml::graphic::RasterizerState> empty_rs_;
 	std::vector<tml::shared_ptr<tml::graphic::BlendState>> bs_cont_;
-	tml::shared_ptr<tml::graphic::BlendState> empty_bs_;
 	std::vector<tml::shared_ptr<tml::graphic::DepthState>> ds_cont_;
-	tml::shared_ptr<tml::graphic::DepthState> empty_ds_;
 	std::vector<tml::shared_ptr<tml::graphic::Shader>> shader_cont_;
-	tml::shared_ptr<tml::graphic::Shader> empty_shader_;
 	std::vector<tml::shared_ptr<tml::graphic::Mesh>> mesh_cont_;
-	tml::shared_ptr<tml::graphic::Mesh> empty_mesh_;
 	std::vector<tml::shared_ptr<tml::graphic::Texture>> tex_cont_;
-	tml::shared_ptr<tml::graphic::Texture> empty_tex_;
 	std::vector<tml::shared_ptr<tml::graphic::Sampler>> samp_cont_;
-	tml::shared_ptr<tml::graphic::Sampler> empty_samp_;
 	std::vector<tml::unique_ptr<tml::graphic::ModelStage>> stage_cont_;
 	INT draw_priority_;
 	UINT draw_set_canvas_cnt_;
@@ -474,7 +476,7 @@ inline UINT tml::graphic::Model::GetRasterizerStateCount(void) const
 inline const tml::shared_ptr<tml::graphic::RasterizerState> &tml::graphic::Model::GetRasterizerState(const UINT index)
 {
 	if (index >= this->rs_cont_.size()) {
-		return (this->empty_rs_);
+		return (this->empty_rasterizer_state);
 	}
 
 	return (this->rs_cont_[index]);
@@ -512,7 +514,7 @@ inline UINT tml::graphic::Model::GetBlendStateCount(void) const
 inline const tml::shared_ptr<tml::graphic::BlendState> &tml::graphic::Model::GetBlendState(const UINT index)
 {
 	if (index >= this->bs_cont_.size()) {
-		return (this->empty_bs_);
+		return (this->empty_blend_state);
 	}
 
 	return (this->bs_cont_[index]);
@@ -550,7 +552,7 @@ inline UINT tml::graphic::Model::GetDepthStateCount(void) const
 inline const tml::shared_ptr<tml::graphic::DepthState> &tml::graphic::Model::GetDepthState(const UINT index)
 {
 	if (index >= this->ds_cont_.size()) {
-		return (this->empty_ds_);
+		return (this->empty_depth_state);
 	}
 
 	return (this->ds_cont_[index]);
@@ -588,7 +590,7 @@ inline UINT tml::graphic::Model::GetShaderCount(void) const
 inline const tml::shared_ptr<tml::graphic::Shader> &tml::graphic::Model::GetShader(const UINT index)
 {
 	if (index >= this->shader_cont_.size()) {
-		return (this->empty_shader_);
+		return (this->empty_shader);
 	}
 
 	return (this->shader_cont_[index]);
@@ -626,7 +628,7 @@ inline UINT tml::graphic::Model::GetMeshCount(void) const
 inline const tml::shared_ptr<tml::graphic::Mesh> &tml::graphic::Model::GetMesh(const UINT index)
 {
 	if (index >= this->mesh_cont_.size()) {
-		return (this->empty_mesh_);
+		return (this->empty_mesh);
 	}
 
 	return (this->mesh_cont_[index]);
@@ -664,7 +666,7 @@ inline UINT tml::graphic::Model::GetTextureCount(void) const
 inline const tml::shared_ptr<tml::graphic::Texture> &tml::graphic::Model::GetTexture(const UINT index)
 {
 	if (index >= this->tex_cont_.size()) {
-		return (this->empty_tex_);
+		return (this->empty_texture);
 	}
 
 	return (this->tex_cont_[index]);
@@ -702,7 +704,7 @@ inline UINT tml::graphic::Model::GetSamplerCount(void) const
 inline const tml::shared_ptr<tml::graphic::Sampler> &tml::graphic::Model::GetSampler(const UINT index)
 {
 	if (index >= this->samp_cont_.size()) {
-		return (this->empty_samp_);
+		return (this->empty_sampler);
 	}
 
 	return (this->samp_cont_[index]);

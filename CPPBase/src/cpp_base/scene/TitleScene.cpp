@@ -497,7 +497,7 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 
 							if (this->GetManager()->GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::SELECT_SCENE_PREFAB)) == nullptr) {
 								if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-									OutputDebugString(L"Error: SelectScene Create\n");
+									tml::Log(L"Error: SelectScene Create\n");
 								}
 
 								this->GetManager()->EndScene();
@@ -507,7 +507,7 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 
 							if (this->GetManager()->StartScene(scene) < 0) {
 								if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-									OutputDebugString(L"Error: SelectScene Start\n");
+									tml::Log(L"Error: SelectScene Start\n");
 								}
 
 								this->GetManager()->EndScene();

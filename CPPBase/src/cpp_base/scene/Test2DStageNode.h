@@ -55,9 +55,10 @@ public: Test2DStageNode(const cpp_base::scene::Test2DStageNode &) = delete;
 public: cpp_base::scene::Test2DStageNode &operator =(const cpp_base::scene::Test2DStageNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+private:
+	tml::shared_ptr<tml::scene::Node> field_layout_node_;
+
 public:
-	tml::shared_ptr<tml::scene::Node> field_layout_node;
-	tml::shared_ptr<tml::scene::Node> field_node;
 
 private:
 	void Release(void);
@@ -73,6 +74,21 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::Test2DStageNodeDesc &);
+
+	const tml::shared_ptr<tml::scene::Node> &GetFieldNode(void);
+	INT AddFieldNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
+	void RemoveFieldNode(const bool event_flg = true);
 };
 }
+}
+
+
+/**
+ * @brief GetFieldNodeä÷êî
+ * @return field_node (field_node)<br>
+ * nullptr=é∏îs
+ */
+inline const tml::shared_ptr<tml::scene::Node> &cpp_base::scene::Test2DStageNode::GetFieldNode(void)
+{
+	return (this->field_layout_node_->GetChildNode());
 }

@@ -383,7 +383,7 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 				++this->deferred_create_res_itr_;
 			} else if (!res->IsDeferredCreating()) {
 				if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-					OutputDebugString(L"Error: Resource Deferred Create\n");
+					tml::Log(L"Error: Resource Deferred Create\n");
 				}
 
 				this->GetManager()->EndScene();
@@ -409,7 +409,7 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 
 				if (this->GetManager()->GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::TITLE_SCENE_PREFAB)) == nullptr) {
 					if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-						OutputDebugString(L"Error: TitleScene Create\n");
+						tml::Log(L"Error: TitleScene Create\n");
 					}
 
 					this->GetManager()->EndScene();
@@ -419,7 +419,7 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 
 				if (this->GetManager()->StartScene(scene) < 0) {
 					if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-						OutputDebugString(L"Error: TitleScene Start\n");
+						tml::Log(L"Error: TitleScene Start\n");
 					}
 
 					this->GetManager()->EndScene();

@@ -231,7 +231,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 		if (reinterpret_cast<cpp_base::MainThread *>(th.get())->Create(instance_handle, cpp_base::ConstantUtil::WINDOW::NAME, wnd_show_type) < 0) {
 			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-				OutputDebugString(L"Error: MainThread Create\n");
+				tml::Log(L"Error: MainThread Create\n");
 			}
 
 			cpp_base::InitMain();
@@ -241,7 +241,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 		if (tml::ThreadUtil::Start(th) < 0) {
 			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-				OutputDebugString(L"Error: MainThread Start\n");
+				tml::Log(L"Error: MainThread Start\n");
 			}
 
 			cpp_base::InitMain();

@@ -597,7 +597,7 @@ ID3DBlob *tml::graphic::Shader::GetBlob(const tml::DynamicBuffer &shader_file_bu
 	if (FAILED(D3DX11CompileFromMemory(reinterpret_cast<LPCSTR>(shader_file_buf.Get()), shader_file_buf.GetLength(), nullptr, macro_ary, &inc, tmp_func_name.c_str(), tmp_model_name.c_str(), compile_flg, 0U, nullptr, &blob, &err_blob, nullptr))) {
 		if ((tml::ConstantUtil::LIBRARY::DEBUG_FLAG)
 		&& (err_blob != nullptr)) {
-			OutputDebugStringA(reinterpret_cast<CHAR *>(err_blob->GetBufferPointer()));
+			tml::Log(reinterpret_cast<CHAR *>(err_blob->GetBufferPointer()));
 		}
 
 		this->ReleaseBlob(&err_blob);
@@ -607,7 +607,7 @@ ID3DBlob *tml::graphic::Shader::GetBlob(const tml::DynamicBuffer &shader_file_bu
 
 	if ((tml::ConstantUtil::LIBRARY::DEBUG_FLAG)
 	&& (err_blob != nullptr)) {
-		OutputDebugStringA(reinterpret_cast<CHAR *>(err_blob->GetBufferPointer()));
+		tml::Log(reinterpret_cast<CHAR *>(err_blob->GetBufferPointer()));
 	}
 
 	this->ReleaseBlob(&err_blob);

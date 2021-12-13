@@ -20,6 +20,12 @@
 #include "Node.h"
 
 
+const tml::shared_ptr<tml::graphic::Canvas> tml::scene::Scene::empty_canvas;
+const tml::shared_ptr<tml::graphic::Light> tml::scene::Scene::empty_light;
+const tml::shared_ptr<tml::graphic::Fog> tml::scene::Scene::empty_fog;
+const tml::shared_ptr<tml::graphic::Model> tml::scene::Scene::empty_model;
+
+
 /**
  * @brief コンストラクタ
  */

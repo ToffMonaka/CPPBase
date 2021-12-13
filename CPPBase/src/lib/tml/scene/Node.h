@@ -89,6 +89,13 @@ public:
 	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE);
 	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_TYPE::BASE);
 
+public:
+	static const tml::shared_ptr<tml::scene::Node> empty_child_node;
+	static const tml::shared_ptr<tml::graphic::Canvas> empty_canvas;
+	static const tml::shared_ptr<tml::graphic::Light> empty_light;
+	static const tml::shared_ptr<tml::graphic::Fog> empty_fog;
+	static const tml::shared_ptr<tml::graphic::Model> empty_model;
+
 private:
 	tml::input::Manager *input_mgr_;
 	tml::graphic::Manager *graphic_mgr_;
@@ -99,21 +106,16 @@ private:
 	bool started_flg_;
 	tml::scene::Node *parent_node_;
 	std::list<tml::shared_ptr<tml::scene::Node>> child_node_cont_;
-	tml::shared_ptr<tml::scene::Node> empty_child_node_;
 	std::vector<tml::shared_ptr<tml::graphic::Canvas>> canvas_cont_;
-	tml::shared_ptr<tml::graphic::Canvas> empty_canvas_;
 	std::list<tml::graphic::Canvas2D *> canvas_2d_cont_;
 	std::list<tml::graphic::Canvas3D *> canvas_3d_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Light>> light_cont_;
-	tml::shared_ptr<tml::graphic::Light> empty_light_;
 	std::list<tml::graphic::Light2D *> light_2d_cont_;
 	std::list<tml::graphic::Light3D *> light_3d_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Fog>> fog_cont_;
-	tml::shared_ptr<tml::graphic::Fog> empty_fog_;
 	std::list<tml::graphic::Fog2D *> fog_2d_cont_;
 	std::list<tml::graphic::Fog3D *> fog_3d_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::Model>> model_cont_;
-	tml::shared_ptr<tml::graphic::Model> empty_model_;
 	std::list<tml::graphic::Model2D *> model_2d_cont_;
 	std::list<tml::graphic::Model3D *> model_3d_cont_;
 
@@ -159,6 +161,7 @@ public:
 	tml::scene::Node *GetParentNode(void);
 	void SetParentNode(tml::scene::Node *);
 	const std::list<tml::shared_ptr<tml::scene::Node>> &GetChildNodeContainer(void);
+	const tml::shared_ptr<tml::scene::Node> &GetChildNode(void);
 	const tml::shared_ptr<tml::scene::Node> &GetChildNode(const WCHAR *);
 	INT AddChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
 	void RemoveChildNode(const bool event_flg = true);
@@ -309,6 +312,21 @@ inline const std::list<tml::shared_ptr<tml::scene::Node>> &tml::scene::Node::Get
 
 /**
  * @brief GetChildNodeä÷êî
+ * @return child_node (child_node)<br>
+ * nullptr=é∏îs
+ */
+inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Node::GetChildNode(void)
+{
+	if (this->child_node_cont_.empty()) {
+		return (this->empty_child_node);
+	}
+
+	return (this->child_node_cont_.front());
+}
+
+
+/**
+ * @brief GetChildNodeä÷êî
  * @param child_node_name (child_node_name)
  * @return child_node (child_node)<br>
  * nullptr=é∏îs
@@ -317,7 +335,7 @@ inline const tml::shared_ptr<tml::scene::Node> &tml::scene::Node::GetChildNode(c
 {
 	if ((child_node_name == nullptr)
 	|| (child_node_name[0] == 0)) {
-		return (this->empty_child_node_);
+		return (this->empty_child_node);
 	}
 
 	return (this->GetChildNodeRecursivePart(this->child_node_cont_, child_node_name));
@@ -343,7 +361,7 @@ inline UINT tml::scene::Node::GetCanvasCount(void) const
 inline const tml::shared_ptr<tml::graphic::Canvas> &tml::scene::Node::GetCanvas(const UINT index)
 {
 	if (index >= this->canvas_cont_.size()) {
-		return (this->empty_canvas_);
+		return (this->empty_canvas);
 	}
 
 	return (this->canvas_cont_[index]);
@@ -381,7 +399,7 @@ inline UINT tml::scene::Node::GetLightCount(void) const
 inline const tml::shared_ptr<tml::graphic::Light> &tml::scene::Node::GetLight(const UINT index)
 {
 	if (index >= this->light_cont_.size()) {
-		return (this->empty_light_);
+		return (this->empty_light);
 	}
 
 	return (this->light_cont_[index]);
@@ -419,7 +437,7 @@ inline UINT tml::scene::Node::GetFogCount(void) const
 inline const tml::shared_ptr<tml::graphic::Fog> &tml::scene::Node::GetFog(const UINT index)
 {
 	if (index >= this->fog_cont_.size()) {
-		return (this->empty_fog_);
+		return (this->empty_fog);
 	}
 
 	return (this->fog_cont_[index]);
@@ -457,7 +475,7 @@ inline UINT tml::scene::Node::GetModelCount(void) const
 inline const tml::shared_ptr<tml::graphic::Model> &tml::scene::Node::GetModel(const UINT index)
 {
 	if (index >= this->model_cont_.size()) {
-		return (this->empty_model_);
+		return (this->empty_model);
 	}
 
 	return (this->model_cont_[index]);

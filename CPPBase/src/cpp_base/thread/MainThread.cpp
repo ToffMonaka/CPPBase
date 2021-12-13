@@ -202,7 +202,7 @@ INT cpp_base::MainThread::OnStart(void)
 
 		if (this->scene_mgr_.GetScene(scene, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::INIT_SCENE_PREFAB)) == nullptr) {
 			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-				OutputDebugString(L"Error: InitScene Create\n");
+				tml::Log(L"Error: InitScene Create\n");
 			}
 
 			return (-1);
@@ -210,7 +210,7 @@ INT cpp_base::MainThread::OnStart(void)
 
 		if (this->scene_mgr_.StartScene(scene) < 0) {
 			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-				OutputDebugString(L"Error: InitScene Start\n");
+				tml::Log(L"Error: InitScene Start\n");
 			}
 
 			return (-1);
@@ -222,7 +222,7 @@ INT cpp_base::MainThread::OnStart(void)
 
 		if (reinterpret_cast<cpp_base::TestThread *>(th.get())->Create() < 0) {
 			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-				OutputDebugString(L"Error: TestThread Create\n");
+				tml::Log(L"Error: TestThread Create\n");
 			}
 
 			return (-1);
@@ -230,7 +230,7 @@ INT cpp_base::MainThread::OnStart(void)
 
 		if (tml::ThreadUtil::Start(th) < 0) {
 			if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-				OutputDebugString(L"Error: TestThread Start\n");
+				tml::Log(L"Error: TestThread Start\n");
 			}
 
 			return (-1);

@@ -59,6 +59,8 @@ template <typename T1, typename T2>
 T1 CastTime(const T2 &time);
 bool CheckResult(const INT *);
 void SetResult(INT *, const INT);
+void Log(const CHAR *);
+void Log(const WCHAR *);
 }
 
 
@@ -325,6 +327,34 @@ inline void tml::SetResult(INT *dst_result, const INT result)
 	if (dst_result != nullptr) {
 		(*dst_result) = result;
 	}
+
+	return;
+}
+
+
+/**
+ * @brief Logä÷êî
+ * @param msg (message)
+ */
+inline void tml::Log(const CHAR *msg)
+{
+#if defined(DEBUG) || defined(_DEBUG)
+	OutputDebugStringA(msg);
+#endif
+
+	return;
+}
+
+
+/**
+ * @brief Logä÷êî
+ * @param msg (message)
+ */
+inline void tml::Log(const WCHAR *msg)
+{
+#if defined(DEBUG) || defined(_DEBUG)
+	OutputDebugStringW(msg);
+#endif
 
 	return;
 }

@@ -20,10 +20,12 @@ class XMLFileDataNode
 public: XMLFileDataNode(const tml::XMLFileDataNode &) = delete;
 public: tml::XMLFileDataNode &operator =(const tml::XMLFileDataNode &) = delete;
 
+public:
+	static const tml::shared_ptr<tml::XMLFileDataNode> empty_child_node;
+
 private:
 	tml::XMLFileDataNode *parent_node_;
 	std::list<tml::shared_ptr<tml::XMLFileDataNode>> child_node_cont_;
-	tml::shared_ptr<tml::XMLFileDataNode> empty_child_node_;
 
 public:
 	std::wstring name;
@@ -45,6 +47,7 @@ public:
 	tml::XMLFileDataNode *GetParentNode(void);
 	void SetParentNode(tml::XMLFileDataNode *);
 	const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &GetChildNodeContainer(void);
+	const tml::shared_ptr<tml::XMLFileDataNode> &GetChildNode(void);
 	const tml::shared_ptr<tml::XMLFileDataNode> &GetChildNode(const WCHAR *);
 	INT AddChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &);
 	void RemoveChildNode(void);
@@ -110,6 +113,21 @@ inline const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &tml::XMLFileDataN
 
 /**
  * @brief GetChildNodeä÷êî
+ * @return child_node (child_node)<br>
+ * nullptr=é∏îs
+ */
+inline const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileDataNode::GetChildNode(void)
+{
+	if (this->child_node_cont_.empty()) {
+		return (this->empty_child_node);
+	}
+
+	return (this->child_node_cont_.front());
+}
+
+
+/**
+ * @brief GetChildNodeä÷êî
  * @param child_node_name (child_node_name)
  * @return child_node (child_node)<br>
  * nullptr=é∏îs
@@ -118,7 +136,7 @@ inline const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileDataNode::GetChi
 {
 	if ((child_node_name == nullptr)
 	|| (child_node_name[0] == 0)) {
-		return (this->empty_child_node_);
+		return (this->empty_child_node);
 	}
 
 	return (this->GetChildNodeRecursivePart(this->child_node_cont_, child_node_name));

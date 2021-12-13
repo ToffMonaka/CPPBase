@@ -16,6 +16,15 @@
 #include "Canvas.h"
 
 
+const tml::shared_ptr<tml::graphic::RasterizerState> tml::graphic::Model::empty_rasterizer_state;
+const tml::shared_ptr<tml::graphic::BlendState> tml::graphic::Model::empty_blend_state;
+const tml::shared_ptr<tml::graphic::DepthState> tml::graphic::Model::empty_depth_state;
+const tml::shared_ptr<tml::graphic::Shader> tml::graphic::Model::empty_shader;
+const tml::shared_ptr<tml::graphic::Mesh> tml::graphic::Model::empty_mesh;
+const tml::shared_ptr<tml::graphic::Texture> tml::graphic::Model::empty_texture;
+const tml::shared_ptr<tml::graphic::Sampler> tml::graphic::Model::empty_sampler;
+
+
 /**
  * @brief コンストラクタ
  */

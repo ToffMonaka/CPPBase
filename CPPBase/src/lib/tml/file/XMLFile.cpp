@@ -8,6 +8,9 @@
 #include "../string/StringUtil.h"
 
 
+const tml::shared_ptr<tml::XMLFileDataNode> tml::XMLFileDataNode::empty_child_node;
+
+
 /**
  * @brief コンストラクタ
  */
@@ -80,7 +83,7 @@ const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileDataNode::GetChildNodeR
 		}
 	}
 
-	return (this->empty_child_node_);
+	return (this->empty_child_node);
 }
 
 
@@ -450,7 +453,7 @@ INT tml::XMLFile::Read(void)
 		xml_doc->parse<rapidxml::parse_no_data_nodes | rapidxml::parse_trim_whitespace>(xml_str);
 	} catch (rapidxml::parse_error &err) {
 		if (tml::ConstantUtil::LIBRARY::DEBUG_FLAG) {
-			OutputDebugString(L"Error: XML Parse\n");
+			tml::Log(L"Error: XML Parse\n");
 
 			std::cout << err.what() << std::endl;
 		}

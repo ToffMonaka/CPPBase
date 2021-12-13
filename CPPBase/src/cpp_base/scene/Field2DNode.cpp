@@ -111,14 +111,10 @@ void cpp_base::scene::Field2DNode::Init(void)
 {
 	this->Release();
 
-	this->ground_layout_node.reset();
-	this->ground_node.reset();
-	this->player_layout_node.reset();
-	this->player_node.reset();
-	this->mob_layout_node.reset();
-	this->mob_node.reset();
-	this->bullet_layout_node.reset();
-	this->bullet_node.reset();
+	this->ground_layout_node_.reset();
+	this->pl_layout_node_.reset();
+	this->mob_layout_node_.reset();
+	this->bullet_layout_node_.reset();
 
 	cpp_base::scene::Node::Init();
 
@@ -154,84 +150,78 @@ INT cpp_base::scene::Field2DNode::Create(const cpp_base::scene::Field2DNodeDesc 
 INT cpp_base::scene::Field2DNode::OnStart(void)
 {
 	{// GroundLayoutNode Create
-		this->ground_layout_node = this->GetChildNode(L"ground_layout");
+		this->ground_layout_node_ = this->GetChildNode(L"ground_layout");
 
-		if (this->ground_layout_node == nullptr) {
+		if (this->ground_layout_node_ == nullptr) {
 			return (-1);
 		}
 	}
+
+	{// PlayerLayoutNode Create
+		this->pl_layout_node_ = this->GetChildNode(L"pl_layout");
+
+		if (this->pl_layout_node_ == nullptr) {
+			return (-1);
+		}
+	}
+
+	{// MobLayoutNode Create
+		this->mob_layout_node_ = this->GetChildNode(L"mob_layout");
+
+		if (this->mob_layout_node_ == nullptr) {
+			return (-1);
+		}
+	}
+
+	{// BulletLayoutNode Create
+		this->bullet_layout_node_ = this->GetChildNode(L"bullet_layout");
+
+		if (this->bullet_layout_node_ == nullptr) {
+			return (-1);
+		}
+	}
+
+	tml::shared_ptr<tml::scene::Node> ground_node;
 
 	{// GroundNode Create
 		cpp_base::scene::Field2DGroundNodeDesc node_desc;
 
 		node_desc.SetManager(this->GetManager());
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DGroundNode>(this->ground_node, node_desc) == nullptr) {
-			return (-1);
-		}
-
-		this->ground_layout_node->AddChildNode(this->ground_node);
-	}
-
-	{// PlayerLayoutNode Create
-		this->player_layout_node = this->GetChildNode(L"pl_layout");
-
-		if (this->player_layout_node == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DGroundNode>(ground_node, node_desc) == nullptr) {
 			return (-1);
 		}
 	}
+
+	this->AddGroundNode(ground_node);
+
+	tml::shared_ptr<tml::scene::Node> pl_node;
 
 	{// PlayerNode Create
 		cpp_base::scene::Field2DPlayerNodeDesc node_desc;
 
 		node_desc.SetManager(this->GetManager());
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DPlayerNode>(this->player_node, node_desc) == nullptr) {
-			return (-1);
-		}
-
-		this->player_layout_node->AddChildNode(this->player_node);
-	}
-
-	{// MobLayoutNode Create
-		this->mob_layout_node = this->GetChildNode(L"mob_layout");
-
-		if (this->mob_layout_node == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DPlayerNode>(pl_node, node_desc) == nullptr) {
 			return (-1);
 		}
 	}
+
+	this->AddPlayerNode(pl_node);
+
+	tml::shared_ptr<tml::scene::Node> mob_node;
 
 	{// MobNode Create
 		cpp_base::scene::Field2DMobNodeDesc node_desc;
 
 		node_desc.SetManager(this->GetManager());
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DMobNode>(this->mob_node, node_desc) == nullptr) {
-			return (-1);
-		}
-
-		this->mob_layout_node->AddChildNode(this->mob_node);
-	}
-
-	{// BulletLayoutNode Create
-		this->bullet_layout_node = this->GetChildNode(L"bullet_layout");
-
-		if (this->bullet_layout_node == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DMobNode>(mob_node, node_desc) == nullptr) {
 			return (-1);
 		}
 	}
 
-	{// BulletNode Create
-		cpp_base::scene::Field2DBulletNodeDesc node_desc;
-
-		node_desc.SetManager(this->GetManager());
-
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DBulletNode>(this->bullet_node, node_desc) == nullptr) {
-			return (-1);
-		}
-
-		this->bullet_layout_node->AddChildNode(this->bullet_node);
-	}
+	this->AddMobNode(mob_node);
 
 	return (0);
 }
@@ -242,6 +232,11 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
  */
 void cpp_base::scene::Field2DNode::OnEnd(void)
 {
+	this->ground_layout_node_.reset();
+	this->pl_layout_node_.reset();
+	this->mob_layout_node_.reset();
+	this->bullet_layout_node_.reset();
+
 	return;
 }
 
@@ -251,5 +246,109 @@ void cpp_base::scene::Field2DNode::OnEnd(void)
  */
 void cpp_base::scene::Field2DNode::OnUpdate(void)
 {
+	return;
+}
+
+
+/**
+ * @brief AddGroundNodeŠÖ”
+ * @param ground_node (ground_node)
+ * @param event_flg (event_flag)
+ * @return result (result)<br>
+ * 0–¢–ž=Ž¸”s
+ */
+INT cpp_base::scene::Field2DNode::AddGroundNode(const tml::shared_ptr<tml::scene::Node> &ground_node, const bool event_flg)
+{
+	this->ground_layout_node_->RemoveChildNode(event_flg);
+
+	return (this->ground_layout_node_->AddChildNode(ground_node, event_flg));
+}
+
+
+/**
+ * @brief RemoveGroundNodeŠÖ”
+ * @param event_flg (event_flag)
+ */
+void cpp_base::scene::Field2DNode::RemoveGroundNode(const bool event_flg)
+{
+	this->ground_layout_node_->RemoveChildNode(event_flg);
+
+	return;
+}
+
+
+/**
+ * @brief AddPlayerNodeŠÖ”
+ * @param pl_node (player_node)
+ * @param event_flg (event_flag)
+ * @return result (result)<br>
+ * 0–¢–ž=Ž¸”s
+ */
+INT cpp_base::scene::Field2DNode::AddPlayerNode(const tml::shared_ptr<tml::scene::Node> &pl_node, const bool event_flg)
+{
+	this->pl_layout_node_->RemoveChildNode(event_flg);
+
+	return (this->pl_layout_node_->AddChildNode(pl_node, event_flg));
+}
+
+
+/**
+ * @brief RemovePlayerNodeŠÖ”
+ * @param event_flg (event_flag)
+ */
+void cpp_base::scene::Field2DNode::RemovePlayerNode(const bool event_flg)
+{
+	this->pl_layout_node_->RemoveChildNode(event_flg);
+
+	return;
+}
+
+
+/**
+ * @brief AddMobNodeŠÖ”
+ * @param mob_node (mob_node)
+ * @param event_flg (event_flag)
+ * @return result (result)<br>
+ * 0–¢–ž=Ž¸”s
+ */
+INT cpp_base::scene::Field2DNode::AddMobNode(const tml::shared_ptr<tml::scene::Node> &mob_node, const bool event_flg)
+{
+	return (this->mob_layout_node_->AddChildNode(mob_node, event_flg));
+}
+
+
+/**
+ * @brief RemoveMobNodeŠÖ”
+ * @param event_flg (event_flag)
+ */
+void cpp_base::scene::Field2DNode::RemoveMobNode(const bool event_flg)
+{
+	this->mob_layout_node_->RemoveChildNode(event_flg);
+
+	return;
+}
+
+
+/**
+ * @brief AddBulletNodeŠÖ”
+ * @param bullet_node (bullet_node)
+ * @param event_flg (event_flag)
+ * @return result (result)<br>
+ * 0–¢–ž=Ž¸”s
+ */
+INT cpp_base::scene::Field2DNode::AddBulletNode(const tml::shared_ptr<tml::scene::Node> &bullet_node, const bool event_flg)
+{
+	return (this->bullet_layout_node_->AddChildNode(bullet_node, event_flg));
+}
+
+
+/**
+ * @brief RemoveBulletNodeŠÖ”
+ * @param event_flg (event_flag)
+ */
+void cpp_base::scene::Field2DNode::RemoveBulletNode(const bool event_flg)
+{
+	this->bullet_layout_node_->RemoveChildNode(event_flg);
+
 	return;
 }

@@ -109,8 +109,7 @@ void cpp_base::scene::Test2DStageNode::Init(void)
 {
 	this->Release();
 
-	this->field_layout_node.reset();
-	this->field_node.reset();
+	this->field_layout_node_.reset();
 
 	cpp_base::scene::Node::Init();
 
@@ -146,20 +145,22 @@ INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageN
 INT cpp_base::scene::Test2DStageNode::OnStart(void)
 {
 	{// FieldLayoutNode Create
-		this->field_layout_node = this->GetChildNode(L"field_layout");
+		this->field_layout_node_ = this->GetChildNode(L"field_layout");
 
-		if (this->field_layout_node == nullptr) {
+		if (this->field_layout_node_ == nullptr) {
 			return (-1);
 		}
 	}
+
+	tml::shared_ptr<tml::scene::Node> field_node;
 
 	{// FieldNode Create
-		if (this->GetManager()->GetNode(this->field_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE_PREFAB)) == nullptr) {
+		if (this->GetManager()->GetNode(field_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE_PREFAB)) == nullptr) {
 			return (-1);
 		}
-
-		this->field_layout_node->AddChildNode(this->field_node);
 	}
+
+	this->AddFieldNode(field_node);
 
 	return (0);
 }
@@ -170,6 +171,8 @@ INT cpp_base::scene::Test2DStageNode::OnStart(void)
  */
 void cpp_base::scene::Test2DStageNode::OnEnd(void)
 {
+	this->field_layout_node_.reset();
+
 	return;
 }
 
@@ -179,5 +182,32 @@ void cpp_base::scene::Test2DStageNode::OnEnd(void)
  */
 void cpp_base::scene::Test2DStageNode::OnUpdate(void)
 {
+	return;
+}
+
+
+/**
+ * @brief AddFieldNodeä÷êî
+ * @param field_node (field_node)
+ * @param event_flg (event_flag)
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::scene::Test2DStageNode::AddFieldNode(const tml::shared_ptr<tml::scene::Node> &field_node, const bool event_flg)
+{
+	this->field_layout_node_->RemoveChildNode(event_flg);
+
+	return (this->field_layout_node_->AddChildNode(field_node, event_flg));
+}
+
+
+/**
+ * @brief RemoveFieldNodeä÷êî
+ * @param event_flg (event_flag)
+ */
+void cpp_base::scene::Test2DStageNode::RemoveFieldNode(const bool event_flg)
+{
+	this->field_layout_node_->RemoveChildNode(event_flg);
+
 	return;
 }

@@ -20,6 +20,13 @@
 #include "NodeEvent.h"
 
 
+const tml::shared_ptr<tml::scene::Node> tml::scene::Node::empty_child_node;
+const tml::shared_ptr<tml::graphic::Canvas> tml::scene::Node::empty_canvas;
+const tml::shared_ptr<tml::graphic::Light> tml::scene::Node::empty_light;
+const tml::shared_ptr<tml::graphic::Fog> tml::scene::Node::empty_fog;
+const tml::shared_ptr<tml::graphic::Model> tml::scene::Node::empty_model;
+
+
 /**
  * @brief コンストラクタ
  */
@@ -414,7 +421,7 @@ const tml::shared_ptr<tml::scene::Node> &tml::scene::Node::GetChildNodeRecursive
 		}
 	}
 
-	return (this->empty_child_node_);
+	return (this->empty_child_node);
 }
 
 
