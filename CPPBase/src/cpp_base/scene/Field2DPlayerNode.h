@@ -55,6 +55,10 @@ public: Field2DPlayerNode(const cpp_base::scene::Field2DPlayerNode &) = delete;
 public: cpp_base::scene::Field2DPlayerNode &operator =(const cpp_base::scene::Field2DPlayerNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+private:
+	cpp_base::scene::Field2DNode *field_node_;
+	tml::TIME_REAL attack_cool_time_;
+
 public:
 	tml::shared_ptr<tml::graphic::FigureModel2D> model;
 	tml::shared_ptr<tml::graphic::FigureModel2D> shadow_model;
@@ -73,6 +77,9 @@ public:
 
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::Field2DPlayerNodeDesc &);
+
+	void Move(const tml::XMFLOAT2EX &);
+	void Attack(void);
 };
 }
 }

@@ -181,47 +181,46 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
 		}
 	}
 
-	tml::shared_ptr<tml::scene::Node> ground_node;
-
 	{// GroundNode Create
+		tml::shared_ptr<tml::scene::Node> node;
 		cpp_base::scene::Field2DGroundNodeDesc node_desc;
 
 		node_desc.SetManager(this->GetManager());
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DGroundNode>(ground_node, node_desc) == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DGroundNode>(node, node_desc) == nullptr) {
 			return (-1);
 		}
+
+		this->AddGroundNode(node);
 	}
 
-	this->AddGroundNode(ground_node);
-
-	tml::shared_ptr<tml::scene::Node> pl_node;
-
 	{// PlayerNode Create
+		tml::shared_ptr<tml::scene::Node> node;
 		cpp_base::scene::Field2DPlayerNodeDesc node_desc;
 
 		node_desc.SetManager(this->GetManager());
+		node_desc.transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, -128.0f));
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DPlayerNode>(pl_node, node_desc) == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DPlayerNode>(node, node_desc) == nullptr) {
 			return (-1);
 		}
+
+		this->AddPlayerNode(node);
 	}
 
-	this->AddPlayerNode(pl_node);
-
-	tml::shared_ptr<tml::scene::Node> mob_node;
-
 	{// MobNode Create
+		tml::shared_ptr<tml::scene::Node> node;
 		cpp_base::scene::Field2DMobNodeDesc node_desc;
 
 		node_desc.SetManager(this->GetManager());
+		node_desc.transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, 128.0f));
 
-		if (this->GetManager()->GetResource<cpp_base::scene::Field2DMobNode>(mob_node, node_desc) == nullptr) {
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DMobNode>(node, node_desc) == nullptr) {
 			return (-1);
 		}
-	}
 
-	this->AddMobNode(mob_node);
+		this->AddMobNode(node);
+	}
 
 	return (0);
 }
@@ -232,11 +231,6 @@ INT cpp_base::scene::Field2DNode::OnStart(void)
  */
 void cpp_base::scene::Field2DNode::OnEnd(void)
 {
-	this->ground_layout_node_.reset();
-	this->pl_layout_node_.reset();
-	this->mob_layout_node_.reset();
-	this->bullet_layout_node_.reset();
-
 	return;
 }
 

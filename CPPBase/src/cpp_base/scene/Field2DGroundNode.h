@@ -55,6 +55,9 @@ public: Field2DGroundNode(const cpp_base::scene::Field2DGroundNode &) = delete;
 public: cpp_base::scene::Field2DGroundNode &operator =(const cpp_base::scene::Field2DGroundNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+private:
+	cpp_base::scene::Field2DNode *field_node_;
+
 public:
 	tml::shared_ptr<tml::graphic::GroundModel2D> model;
 

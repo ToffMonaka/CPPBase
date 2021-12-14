@@ -14,6 +14,8 @@
 #include "../input/Manager.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
+#include "Field2DNode.h"
+#include "Field2DBulletNode.h"
 
 
 /**
@@ -80,7 +82,9 @@ INT cpp_base::scene::Field2DPlayerNodeDesc::ReadValue(const tml::INIFile &conf_f
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::Field2DPlayerNode::Field2DPlayerNode()
+cpp_base::scene::Field2DPlayerNode::Field2DPlayerNode() :
+	field_node_(nullptr),
+	attack_cool_time_(0.0)
 {
 	return;
 }
@@ -113,6 +117,9 @@ void cpp_base::scene::Field2DPlayerNode::Init(void)
 {
 	this->Release();
 
+	this->field_node_ = nullptr;
+	this->attack_cool_time_ = tml::TIME_REAL(0.0);
+
 	this->model.reset();
 	this->shadow_model.reset();
 
@@ -137,8 +144,6 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
 
 		return (-1);
 	}
-
-	this->transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, -128.0f));
 
 	{// Model Create
 		tml::graphic::FigureModel2DDesc model_desc;
@@ -190,6 +195,14 @@ INT cpp_base::scene::Field2DPlayerNode::Create(const cpp_base::scene::Field2DPla
  */
 INT cpp_base::scene::Field2DPlayerNode::OnStart(void)
 {
+	this->field_node_ = dynamic_cast<cpp_base::scene::Field2DNode *>(this->GetParentNode(L"field"));
+
+	if (this->field_node_ == nullptr) {
+		return (-1);
+	}
+
+	this->attack_cool_time_ = tml::TIME_REAL(0.0);
+
 	this->SetModel(0U, this->model);
 	this->SetModel(1U, this->shadow_model);
 
@@ -211,20 +224,64 @@ void cpp_base::scene::Field2DPlayerNode::OnEnd(void)
  */
 void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 {
+	this->attack_cool_time_ = tml::Max(this->attack_cool_time_ - this->GetManager()->GetFrameRate().GetElapsedTime(), tml::TIME_REAL(0.0));
+
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::W)) {
-		this->transform_2d.position.y += 2.0f;
+		this->Move(tml::XMFLOAT2EX(0.0f, 2.0f));
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::S)) {
-		this->transform_2d.position.y -= 2.0f;
+		this->Move(tml::XMFLOAT2EX(0.0f, -2.0f));
 	}
 
 	if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::A)) {
-		this->transform_2d.position.x -= 2.0f;
+		this->Move(tml::XMFLOAT2EX(-2.0f, 0.0f));
 	} else if (this->GetInputManager()->GetKeyboardDeviceCodeState(tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::D)) {
-		this->transform_2d.position.x += 2.0f;
+		this->Move(tml::XMFLOAT2EX(2.0f, 0.0f));
 	}
 
 	if (this->GetInputManager()->GetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::LEFT)) {
+		this->Attack();
 	}
+
+	return;
+}
+
+
+/**
+ * @brief Move関数
+ * @param pos (position)
+ */
+void cpp_base::scene::Field2DPlayerNode::Move(const tml::XMFLOAT2EX &pos)
+{
+	this->transform_2d.position += pos;
+
+	return;
+}
+
+
+/**
+ * @brief Attack関数
+ */
+void cpp_base::scene::Field2DPlayerNode::Attack(void)
+{
+	if (this->attack_cool_time_.count() > 0.0) {
+		return;
+	}
+
+	{// BulletNode Create
+		tml::shared_ptr<tml::scene::Node> node;
+		cpp_base::scene::Field2DBulletNodeDesc node_desc;
+
+		node_desc.SetManager(this->GetManager());
+		node_desc.transform_2d = tml::Transform2D(this->transform_2d.position);
+
+		if (this->GetManager()->GetResource<cpp_base::scene::Field2DBulletNode>(node, node_desc) == nullptr) {
+			return;
+		}
+
+		this->field_node_->AddBulletNode(node);
+	}
+
+	this->attack_cool_time_ = tml::TIME_REAL(0.5);
 
 	return;
 }

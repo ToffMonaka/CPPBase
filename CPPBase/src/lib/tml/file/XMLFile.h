@@ -45,6 +45,7 @@ public:
 
 	const std::wstring *GetValue(const WCHAR *) const;
 	tml::XMLFileDataNode *GetParentNode(void);
+	tml::XMLFileDataNode *GetParentNode(const WCHAR *);
 	void SetParentNode(tml::XMLFileDataNode *);
 	const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &GetChildNodeContainer(void);
 	const tml::shared_ptr<tml::XMLFileDataNode> &GetChildNode(void);
@@ -82,6 +83,27 @@ inline const std::wstring *tml::XMLFileDataNode::GetValue(const WCHAR *val_name)
 inline tml::XMLFileDataNode *tml::XMLFileDataNode::GetParentNode(void)
 {
 	return (this->parent_node_);
+}
+
+
+/**
+ * @brief GetParentNodeŠÖ”
+ * @param parent_node_name (parent_node_name)
+ * @return parent_node (parent_node)
+ */
+inline tml::XMLFileDataNode *tml::XMLFileDataNode::GetParentNode(const WCHAR *parent_node_name)
+{
+	auto parent_node = this->parent_node_;
+
+	while (parent_node != nullptr) {
+		if (parent_node->name == parent_node_name) {
+			break;
+		}
+
+		parent_node = parent_node->GetParentNode();
+	}
+
+	return (parent_node);
 }
 
 

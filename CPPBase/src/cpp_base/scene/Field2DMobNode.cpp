@@ -12,6 +12,8 @@
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
+#include "Field2DNode.h"
+#include "Field2DBulletNode.h"
 
 
 /**
@@ -78,7 +80,8 @@ INT cpp_base::scene::Field2DMobNodeDesc::ReadValue(const tml::INIFile &conf_file
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::Field2DMobNode::Field2DMobNode()
+cpp_base::scene::Field2DMobNode::Field2DMobNode() :
+	field_node_(nullptr)
 {
 	return;
 }
@@ -111,6 +114,8 @@ void cpp_base::scene::Field2DMobNode::Init(void)
 {
 	this->Release();
 
+	this->field_node_ = nullptr;
+
 	this->model.reset();
 	this->shadow_model.reset();
 
@@ -135,8 +140,6 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 
 		return (-1);
 	}
-
-	this->transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, 128.0f));
 
 	{// Model Create
 		tml::graphic::FigureModel2DDesc model_desc;
@@ -188,6 +191,12 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
  */
 INT cpp_base::scene::Field2DMobNode::OnStart(void)
 {
+	this->field_node_ = dynamic_cast<cpp_base::scene::Field2DNode *>(this->GetParentNode(L"field"));
+
+	if (this->field_node_ == nullptr) {
+		return (-1);
+	}
+
 	this->SetModel(0U, this->model);
 	this->SetModel(1U, this->shadow_model);
 

@@ -55,6 +55,9 @@ public: Field2DMobNode(const cpp_base::scene::Field2DMobNode &) = delete;
 public: cpp_base::scene::Field2DMobNode &operator =(const cpp_base::scene::Field2DMobNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+private:
+	cpp_base::scene::Field2DNode *field_node_;
+
 public:
 	tml::shared_ptr<tml::graphic::FigureModel2D> model;
 	tml::shared_ptr<tml::graphic::FigureModel2D> shadow_model;

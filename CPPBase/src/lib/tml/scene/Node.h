@@ -159,6 +159,7 @@ public:
 	void SetStartFlag(const bool);
 	bool IsStarted(void) const;
 	tml::scene::Node *GetParentNode(void);
+	tml::scene::Node *GetParentNode(const WCHAR *);
 	void SetParentNode(tml::scene::Node *);
 	const std::list<tml::shared_ptr<tml::scene::Node>> &GetChildNodeContainer(void);
 	const tml::shared_ptr<tml::scene::Node> &GetChildNode(void);
@@ -281,6 +282,27 @@ inline bool tml::scene::Node::IsStarted(void) const
 inline tml::scene::Node *tml::scene::Node::GetParentNode(void)
 {
 	return (this->parent_node_);
+}
+
+
+/**
+ * @brief GetParentNodeŠÖ”
+ * @param parent_node_name (parent_node_name)
+ * @return parent_node (parent_node)
+ */
+inline tml::scene::Node *tml::scene::Node::GetParentNode(const WCHAR *parent_node_name)
+{
+	auto parent_node = this->parent_node_;
+
+	while (parent_node != nullptr) {
+		if (parent_node->name == parent_node_name) {
+			break;
+		}
+
+		parent_node = parent_node->GetParentNode();
+	}
+
+	return (parent_node);
 }
 
 

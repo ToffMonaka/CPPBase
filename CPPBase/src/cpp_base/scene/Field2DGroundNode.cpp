@@ -11,6 +11,7 @@
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
+#include "Field2DNode.h"
 
 
 /**
@@ -77,7 +78,8 @@ INT cpp_base::scene::Field2DGroundNodeDesc::ReadValue(const tml::INIFile &conf_f
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::Field2DGroundNode::Field2DGroundNode()
+cpp_base::scene::Field2DGroundNode::Field2DGroundNode() :
+	field_node_(nullptr)
 {
 	return;
 }
@@ -109,6 +111,8 @@ void cpp_base::scene::Field2DGroundNode::Release(void)
 void cpp_base::scene::Field2DGroundNode::Init(void)
 {
 	this->Release();
+
+	this->field_node_ = nullptr;
 
 	this->model.reset();
 
@@ -162,6 +166,12 @@ INT cpp_base::scene::Field2DGroundNode::Create(const cpp_base::scene::Field2DGro
  */
 INT cpp_base::scene::Field2DGroundNode::OnStart(void)
 {
+	this->field_node_ = dynamic_cast<cpp_base::scene::Field2DNode *>(this->GetParentNode(L"field"));
+
+	if (this->field_node_ == nullptr) {
+		return (-1);
+	}
+
 	this->SetModel(0U, this->model);
 
 	return (0);

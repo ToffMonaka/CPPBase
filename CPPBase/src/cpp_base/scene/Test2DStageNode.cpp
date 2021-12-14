@@ -152,15 +152,15 @@ INT cpp_base::scene::Test2DStageNode::OnStart(void)
 		}
 	}
 
-	tml::shared_ptr<tml::scene::Node> field_node;
-
 	{// FieldNode Create
-		if (this->GetManager()->GetNode(field_node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE_PREFAB)) == nullptr) {
+		tml::shared_ptr<tml::scene::Node> node;
+
+		if (this->GetManager()->GetNode(node, tml::XMLFileReadDesc(cpp_base::ConstantUtil::FILE_PATH::FIELD_2D_NODE_PREFAB)) == nullptr) {
 			return (-1);
 		}
-	}
 
-	this->AddFieldNode(field_node);
+		this->AddFieldNode(node);
+	}
 
 	return (0);
 }

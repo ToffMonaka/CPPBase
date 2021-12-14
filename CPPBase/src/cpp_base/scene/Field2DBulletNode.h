@@ -55,6 +55,10 @@ public: Field2DBulletNode(const cpp_base::scene::Field2DBulletNode &) = delete;
 public: cpp_base::scene::Field2DBulletNode &operator =(const cpp_base::scene::Field2DBulletNode &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
+private:
+	cpp_base::scene::Field2DNode *field_node_;
+	tml::TIME_REAL update_time_;
+
 public:
 	tml::shared_ptr<tml::graphic::FigureModel2D> model;
 

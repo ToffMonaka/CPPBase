@@ -12,6 +12,7 @@
 #include "../constant/ConstantUtil_FILE_PATH.h"
 #include "../graphic/Manager.h"
 #include "Manager.h"
+#include "Field2DNode.h"
 
 
 /**
@@ -78,7 +79,9 @@ INT cpp_base::scene::Field2DBulletNodeDesc::ReadValue(const tml::INIFile &conf_f
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::Field2DBulletNode::Field2DBulletNode()
+cpp_base::scene::Field2DBulletNode::Field2DBulletNode() :
+	field_node_(nullptr),
+	update_time_(0.0)
 {
 	return;
 }
@@ -111,6 +114,9 @@ void cpp_base::scene::Field2DBulletNode::Init(void)
 {
 	this->Release();
 
+	this->field_node_ = nullptr;
+	this->update_time_ = tml::TIME_REAL(0.0);
+
 	this->model.reset();
 
 	cpp_base::scene::Node::Init();
@@ -134,8 +140,6 @@ INT cpp_base::scene::Field2DBulletNode::Create(const cpp_base::scene::Field2DBul
 
 		return (-1);
 	}
-
-	this->transform_2d = tml::Transform2D(tml::XMFLOAT2EX(0.0f, 0.0f));
 
 	{// Model Create
 		tml::graphic::FigureModel2DDesc model_desc;
@@ -165,6 +169,14 @@ INT cpp_base::scene::Field2DBulletNode::Create(const cpp_base::scene::Field2DBul
  */
 INT cpp_base::scene::Field2DBulletNode::OnStart(void)
 {
+	this->field_node_ = dynamic_cast<cpp_base::scene::Field2DNode *>(this->GetParentNode(L"field"));
+
+	if (this->field_node_ == nullptr) {
+		return (-1);
+	}
+
+	this->update_time_ = tml::TIME_REAL(0.0);
+
 	this->SetModel(0U, this->model);
 
 	return (0);
@@ -185,5 +197,13 @@ void cpp_base::scene::Field2DBulletNode::OnEnd(void)
  */
 void cpp_base::scene::Field2DBulletNode::OnUpdate(void)
 {
+	this->update_time_ += this->GetManager()->GetFrameRate().GetElapsedTime();
+
+	if (this->update_time_.count() >= 3.0) {
+		this->RemoveChildNodeFromParentNode();
+	}
+
+	this->transform_2d.position += tml::XMFLOAT2EX(0.0f, 5.0f);
+
 	return;
 }
