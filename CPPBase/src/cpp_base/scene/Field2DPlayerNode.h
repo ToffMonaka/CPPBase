@@ -79,7 +79,7 @@ public:
 	INT Create(const cpp_base::scene::Field2DPlayerNodeDesc &);
 
 	void Move(const tml::XMFLOAT2EX &);
-	void Attack(void);
+	void Attack(const tml::XMFLOAT2EX &);
 };
 }
 }

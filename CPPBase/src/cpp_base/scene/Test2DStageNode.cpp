@@ -171,8 +171,6 @@ INT cpp_base::scene::Test2DStageNode::OnStart(void)
  */
 void cpp_base::scene::Test2DStageNode::OnEnd(void)
 {
-	this->field_layout_node_.reset();
-
 	return;
 }
 

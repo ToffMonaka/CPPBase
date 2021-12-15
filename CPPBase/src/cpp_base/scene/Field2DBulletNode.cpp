@@ -203,7 +203,7 @@ void cpp_base::scene::Field2DBulletNode::OnUpdate(void)
 		this->RemoveChildNodeFromParentNode();
 	}
 
-	this->transform_2d.position += tml::XMFLOAT2EX(0.0f, 5.0f);
+	this->transform_2d.Move(this->transform_2d.GetYAxisVector(), 5.0f);
 
 	return;
 }

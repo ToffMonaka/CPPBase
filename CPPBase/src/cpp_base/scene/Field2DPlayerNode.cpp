@@ -239,7 +239,10 @@ void cpp_base::scene::Field2DPlayerNode::OnUpdate(void)
 	}
 
 	if (this->GetInputManager()->GetMouseDeviceCodeState(tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE::LEFT)) {
-		this->Attack();
+		this->Attack(tml::XMFLOAT2EX(
+			static_cast<FLOAT>(this->GetInputManager()->GetMouseDevicePosition().x - static_cast<INT>(this->GetGraphicManager()->GetSize().GetHalfX())),
+			static_cast<FLOAT>(-this->GetInputManager()->GetMouseDevicePosition().y + static_cast<INT>(this->GetGraphicManager()->GetSize().GetHalfY()))
+		));
 	}
 
 	return;
@@ -260,8 +263,9 @@ void cpp_base::scene::Field2DPlayerNode::Move(const tml::XMFLOAT2EX &pos)
 
 /**
  * @brief AttackŠÖ”
+ * @param pos (position)
  */
-void cpp_base::scene::Field2DPlayerNode::Attack(void)
+void cpp_base::scene::Field2DPlayerNode::Attack(const tml::XMFLOAT2EX &pos)
 {
 	if (this->attack_cool_time_.count() > 0.0) {
 		return;
@@ -273,6 +277,7 @@ void cpp_base::scene::Field2DPlayerNode::Attack(void)
 
 		node_desc.SetManager(this->GetManager());
 		node_desc.transform_2d = tml::Transform2D(this->transform_2d.position);
+		node_desc.transform_2d.Look(pos);
 
 		if (this->GetManager()->GetResource<cpp_base::scene::Field2DBulletNode>(node, node_desc) == nullptr) {
 			return;
