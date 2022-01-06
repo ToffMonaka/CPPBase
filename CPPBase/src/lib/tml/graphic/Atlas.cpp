@@ -229,8 +229,8 @@ INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
 		return (-1);
 	}
 
-	tml::XMLFileDataNode *atlas_file_frames_dict_node = nullptr;
-	tml::XMLFileDataNode *atlas_file_metadata_dict_node = nullptr;
+	tml::XMLFileNode *atlas_file_frames_dict_node = nullptr;
+	tml::XMLFileNode *atlas_file_metadata_dict_node = nullptr;
 
 	for (auto node_itr = atlas_file_root_dict_node->GetChildNodeContainer().begin(), node_end_itr = atlas_file_root_dict_node->GetChildNodeContainer().end(); node_itr != node_end_itr; ++node_itr) {
 		if ((*node_itr)->name != L"key") {

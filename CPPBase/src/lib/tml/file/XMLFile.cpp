@@ -8,189 +8,6 @@
 #include "../string/StringUtil.h"
 
 
-const tml::shared_ptr<tml::XMLFileDataNode> tml::XMLFileDataNode::empty_child_node;
-
-
-/**
- * @brief コンストラクタ
- */
-tml::XMLFileDataNode::XMLFileDataNode() :
-	parent_node_(nullptr)
-{
-	return;
-}
-
-
-/**
- * @brief デストラクタ
- */
-tml::XMLFileDataNode::~XMLFileDataNode()
-{
-	this->Release();
-
-	return;
-}
-
-
-/**
- * @brief Release関数
- */
-void tml::XMLFileDataNode::Release(void)
-{
-	for (auto &child_node : this->child_node_cont_) {
-		child_node->SetParentNode(nullptr);
-	}
-
-	this->child_node_cont_.clear();
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::XMLFileDataNode::Init(void)
-{
-	this->Release();
-
-	this->name.clear();
-	this->value_container.clear();
-	this->string.clear();
-	this->parent_node_ = nullptr;
-
-	return;
-}
-
-
-/**
- * @brief GetChildNodeRecursivePart関数
- * @param child_node_cont (child_node_container)
- * @param child_node_name (child_node_name)
- * @return child_node (child_node)
- */
-const tml::shared_ptr<tml::XMLFileDataNode> &tml::XMLFileDataNode::GetChildNodeRecursivePart(const std::list<tml::shared_ptr<tml::XMLFileDataNode>> &child_node_cont, const WCHAR *child_node_name)
-{
-	for (auto &child_node : child_node_cont) {
-		if (child_node->name == child_node_name) {
-			return (child_node);
-		}
-
-		auto &child_child_node = this->GetChildNodeRecursivePart(child_node->GetChildNodeContainer(), child_node_name);
-
-		if (child_child_node != nullptr) {
-			return (child_child_node);
-		}
-	}
-
-	return (this->empty_child_node);
-}
-
-
-/**
- * @brief AddChildNode関数
- * @param child_node (child_node)
- * @return result (result)<br>
- * 0未満=失敗
- */
-INT tml::XMLFileDataNode::AddChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &child_node)
-{
-	if ((child_node == nullptr)
-	|| (child_node.get() == this)) {
-		return (-1);
-	}
-
-	if (child_node->GetParentNode() != nullptr) {
-		return (-1);
-	}
-
-	auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
-
-	if (child_node_itr != this->child_node_cont_.end()) {
-		return (-1);
-	}
-
-	child_node->SetParentNode(this);
-
-	this->child_node_cont_.push_back(child_node);
-
-	return (0);
-}
-
-
-/**
- * @brief RemoveChildNode関数
- */
-void tml::XMLFileDataNode::RemoveChildNode(void)
-{
-	std::list<tml::shared_ptr<tml::XMLFileDataNode>> child_node_cont = this->child_node_cont_;
-
-	for (auto &child_node : child_node_cont) {
-		this->RemoveChildNode(child_node);
-	}
-
-	return;
-}
-
-
-/**
- * @brief RemoveChildNode関数
- * @param child_node (child_node)
- */
-void tml::XMLFileDataNode::RemoveChildNode(const tml::shared_ptr<tml::XMLFileDataNode> &child_node)
-{
-	if ((child_node == nullptr)
-	|| (child_node.get() == this)) {
-		return;
-	}
-
-	if (child_node->GetParentNode() == nullptr) {
-		return;
-	}
-
-	auto child_node_itr = std::find(this->child_node_cont_.begin(), this->child_node_cont_.end(), child_node);
-
-	if (child_node_itr == this->child_node_cont_.end()) {
-		return;
-	}
-
-	child_node->SetParentNode(nullptr);
-
-	this->child_node_cont_.erase(child_node_itr);
-
-	return;
-}
-
-
-/**
- * @brief RemoveChildNodeFromParentNode関数
- */
-void tml::XMLFileDataNode::RemoveChildNodeFromParentNode(void)
-{
-	if (this->parent_node_ == nullptr) {
-		return;
-	}
-
-	tml::shared_ptr<tml::XMLFileDataNode> tmp_child_node;
-
-	for (auto &child_node : this->parent_node_->child_node_cont_) {
-		if (child_node.get() == this) {
-			tmp_child_node = child_node;
-
-			break;
-		}
-	}
-
-	if (tmp_child_node == nullptr) {
-		return;
-	}
-
-	this->parent_node_->RemoveChildNode(tmp_child_node);
-
-	return;
-}
-
-
 /**
  * @brief コンストラクタ
  */
@@ -245,7 +62,7 @@ void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
 		return;
 	}
 
-	this->root_node_ = tml::make_shared<tml::XMLFileDataNode>(1U);
+	this->root_node_ = tml::make_shared<tml::XMLFileNode>(1U);
 
 	this->root_node_->name = L"root";
 
@@ -262,7 +79,7 @@ void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
  * @param parent_node (parent_node)
  * @param xml_node (xml_node)
  */
-void tml::XMLFileData::SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFileDataNode> &parent_node, const rapidxml::xml_node<> *xml_node)
+void tml::XMLFileData::SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFileNode> &parent_node, const rapidxml::xml_node<> *xml_node)
 {
 	static const std::wstring newline_code_str = L"\r\n";
 	static const std::wstring old_newline_code_str = L"\t";
@@ -271,7 +88,7 @@ void tml::XMLFileData::SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFi
 		return;
 	}
 
-	tml::shared_ptr<tml::XMLFileDataNode> child_node = tml::make_shared<tml::XMLFileDataNode>(1U);
+	tml::shared_ptr<tml::XMLFileNode> child_node = tml::make_shared<tml::XMLFileNode>(1U);
 
 	tml::StringUtil::GetString(child_node->name, xml_node->name());
 
@@ -513,7 +330,7 @@ INT tml::XMLFile::Write(void)
  * @param node (node)
  * @param tab_cnt (tab_count)
  */
-void tml::XMLFile::WriteRecursivePart(tml::TextFile &txt_file, const tml::shared_ptr<tml::XMLFileDataNode> &node, const size_t tab_cnt)
+void tml::XMLFile::WriteRecursivePart(tml::TextFile &txt_file, const tml::shared_ptr<tml::XMLFileNode> &node, const size_t tab_cnt)
 {
 	static const std::wstring tab_str = L"\t";
 	static const std::wstring node_start_start_str = L"<";

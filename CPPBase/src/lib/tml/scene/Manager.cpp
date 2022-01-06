@@ -474,7 +474,7 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetScene(tml::shared_pt
  * @param prefab_file_node (prefab_file_node)
  * @param dst_result (dst_result)
  */
-tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::shared_ptr<tml::scene::Scene> &dst_scene, const tml::shared_ptr<tml::XMLFileDataNode> &prefab_file_node, INT *dst_result)
+tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::shared_ptr<tml::scene::Scene> &dst_scene, const tml::shared_ptr<tml::XMLFileNode> &prefab_file_node, INT *dst_result)
 {
 	auto class_name = prefab_file_node->GetValue(L"class_name");
 	auto conf_file_path = prefab_file_node->GetValue(L"conf_file_path");
@@ -623,7 +623,7 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNode(tml::shared_ptr<
  * @param prefab_file_node (prefab_file_node)
  * @param dst_result (dst_result)
  */
-tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shared_ptr<tml::scene::Node> &dst_node, const tml::shared_ptr<tml::XMLFileDataNode> &prefab_file_node, INT *dst_result)
+tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shared_ptr<tml::scene::Node> &dst_node, const tml::shared_ptr<tml::XMLFileNode> &prefab_file_node, INT *dst_result)
 {
 	auto class_name = prefab_file_node->GetValue(L"class_name");
 	auto conf_file_path = prefab_file_node->GetValue(L"conf_file_path");
@@ -667,7 +667,7 @@ tml::shared_ptr<tml::scene::Node> &tml::scene::Manager::GetNodeGetPart(tml::shar
  * @param parent_node (parent_node)
  * @param prefab_file_node (prefab_file_node)
  */
-void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &parent_node, const tml::shared_ptr<tml::XMLFileDataNode> &prefab_file_node)
+void tml::scene::Manager::GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &parent_node, const tml::shared_ptr<tml::XMLFileNode> &prefab_file_node)
 {
 	tml::shared_ptr<tml::scene::Node> child_node;
 
