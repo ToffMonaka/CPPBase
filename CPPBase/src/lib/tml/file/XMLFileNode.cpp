@@ -13,6 +13,41 @@ const tml::shared_ptr<tml::XMLFileNode> tml::XMLFileNode::empty_child_node;
 /**
  * @brief コンストラクタ
  */
+tml::XMLFileNodeDesc::XMLFileNodeDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::XMLFileNodeDesc::~XMLFileNodeDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::XMLFileNodeDesc::Init(void)
+{
+	this->Release();
+
+	this->name.clear();
+	this->value_container.clear();
+	this->string.clear();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::XMLFileNode::XMLFileNode() :
 	parent_node_(nullptr)
 {
@@ -53,12 +88,31 @@ void tml::XMLFileNode::Init(void)
 {
 	this->Release();
 
+	this->parent_node_ = nullptr;
+
 	this->name.clear();
 	this->value_container.clear();
 	this->string.clear();
-	this->parent_node_ = nullptr;
 
 	return;
+}
+
+
+/**
+ * @brief Create関数
+ * @param desc (desc)
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::XMLFileNode::Create(const tml::XMLFileNodeDesc &desc)
+{
+	this->Init();
+
+	this->name = desc.name;
+	this->value_container = desc.value_container;
+	this->string = desc.string;
+
+	return (0);
 }
 
 

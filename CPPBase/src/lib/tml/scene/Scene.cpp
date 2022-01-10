@@ -411,10 +411,9 @@ void tml::scene::Scene::SetRootNode(void)
 	tml::scene::NodeDesc node_desc;
 
 	node_desc.SetManager(this->GetManager());
+	node_desc.name = L"root";
 
 	this->GetManager()->GetResource<tml::scene::Node>(this->root_node_, node_desc);
-
-	this->root_node_->name = L"root";
 
 	return;
 }

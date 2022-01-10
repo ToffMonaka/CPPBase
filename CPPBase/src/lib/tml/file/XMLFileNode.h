@@ -13,6 +13,38 @@
 
 namespace tml {
 /**
+ * @brief NodeDescクラス
+ */
+class XMLFileNodeDesc
+{
+public:
+	std::wstring name;
+	std::map<std::wstring, std::wstring> value_container;
+	std::wstring string;
+
+private:
+	void Release(void);
+
+public:
+	XMLFileNodeDesc();
+	virtual ~XMLFileNodeDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::XMLFileNodeDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief XMLFileNodeクラス
  */
 class XMLFileNode
@@ -42,6 +74,7 @@ public:
 	virtual ~XMLFileNode();
 
 	virtual void Init(void);
+	INT Create(const tml::XMLFileNodeDesc &);
 
 	const std::wstring *GetValue(const WCHAR *) const;
 	tml::XMLFileNode *GetParentNode(void);

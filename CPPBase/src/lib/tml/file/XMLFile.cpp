@@ -62,9 +62,13 @@ void tml::XMLFileData::SetRootNode(const rapidxml::xml_document<> *xml_doc)
 		return;
 	}
 
+	tml::XMLFileNodeDesc node_desc;
+
+	node_desc.name = L"root";
+
 	this->root_node_ = tml::make_shared<tml::XMLFileNode>(1U);
 
-	this->root_node_->name = L"root";
+	this->root_node_->Create(node_desc);
 
 	if (xml_doc != nullptr) {
 		this->SetRootNodeRecursivePart(this->root_node_, xml_doc->first_node());
@@ -88,9 +92,9 @@ void tml::XMLFileData::SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFi
 		return;
 	}
 
-	tml::shared_ptr<tml::XMLFileNode> child_node = tml::make_shared<tml::XMLFileNode>(1U);
+	tml::XMLFileNodeDesc node_desc;
 
-	tml::StringUtil::GetString(child_node->name, xml_node->name());
+	tml::StringUtil::GetString(node_desc.name, xml_node->name());
 
 	for (rapidxml::xml_attribute<> *xml_node_attr = xml_node->first_attribute(); xml_node_attr; xml_node_attr = xml_node_attr->next_attribute()) {
 		std::pair<std::wstring, std::wstring> val;
@@ -98,18 +102,27 @@ void tml::XMLFileData::SetRootNodeRecursivePart(const tml::shared_ptr<tml::XMLFi
 		tml::StringUtil::GetString(val.first, xml_node_attr->name());
 		tml::StringUtil::GetString(val.second, xml_node_attr->value());
 
-		child_node->value_container.insert(val);
+		node_desc.value_container.insert(val);
 	}
 
-	tml::StringUtil::GetString(child_node->string, xml_node->value());
+	CHAR *xml_node_val = xml_node->value();
 
-	size_t child_node_str_index = child_node->string.find(old_newline_code_str);
+	if ((xml_node_val != nullptr)
+	&& (xml_node_val[0] != 0)) {
+		tml::StringUtil::GetString(node_desc.string, xml_node_val);
 
-	while (child_node_str_index != std::wstring::npos) {
-		child_node->string.replace(child_node_str_index, old_newline_code_str.length(), newline_code_str);
+		size_t child_node_str_index = node_desc.string.find(old_newline_code_str);
 
-		child_node_str_index = child_node->string.find(old_newline_code_str, child_node_str_index + newline_code_str.length());
+		while (child_node_str_index != std::wstring::npos) {
+			node_desc.string.replace(child_node_str_index, old_newline_code_str.length(), newline_code_str);
+
+			child_node_str_index = node_desc.string.find(old_newline_code_str, child_node_str_index + newline_code_str.length());
+		}
 	}
+
+	tml::shared_ptr<tml::XMLFileNode> child_node = tml::make_shared<tml::XMLFileNode>(1U);
+
+	child_node->Create(node_desc);
 
 	parent_node->AddChildNode(child_node);
 
