@@ -11,6 +11,7 @@
 namespace cpp_base {
 namespace ConstantUtil {
 namespace FILE_PATH {
+	const WCHAR UTIL_CONFIG[] = L"dat/util_conf.ini";
 	const WCHAR SYSTEM_CONFIG[] = L"dat/sys_conf.ini";
 	const WCHAR BACKGROUND_IMAGE[] = L"res/bg_img.png";
 	const WCHAR EMPTY_BACKGROUND_IMAGE[] = L"res/empty_bg_img.png";

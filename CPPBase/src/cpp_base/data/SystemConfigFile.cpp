@@ -12,8 +12,6 @@
  * @brief コンストラクタ
  */
 cpp_base::SystemConfigFileData::SystemConfigFileData() :
-	application_memory_allocator_size(1048576U),
-	application_locale_name("Japanese"),
 	application_frame_rate_limit(60U),
 	window_position(0U),
 	window_size(1280U, 800U),
@@ -46,8 +44,6 @@ void cpp_base::SystemConfigFileData::Init(void)
 {
 	this->Release();
 
-	this->application_memory_allocator_size = 1048576U;
-	this->application_locale_name = "Japanese";
 	this->application_frame_rate_limit = 60U;
 	this->window_position = 0U;
 	this->window_size = tml::XMUINT2EX(1280U, 800U);
@@ -129,18 +125,6 @@ INT cpp_base::SystemConfigFile::Read(void)
 		val_name_cont = conf_file.data.GetValueNameContainer(L"APP");
 
 		if (val_name_cont != nullptr) {
-			val = conf_file.data.GetValue((*val_name_cont), L"MEM_ALLOCATOR_SIZE");
-
-			if (val != nullptr) {
-				tml::StringUtil::GetValue(this->data.application_memory_allocator_size, val->c_str());
-			}
-
-			val = conf_file.data.GetValue((*val_name_cont), L"LOCALE_NAME");
-
-			if (val != nullptr) {
-				tml::StringUtil::GetString(this->data.application_locale_name, val->c_str());
-			}
-
 			val = conf_file.data.GetValue((*val_name_cont), L"FRAME_RATE_LIMIT");
 
 			if (val != nullptr) {
@@ -253,19 +237,34 @@ INT cpp_base::SystemConfigFile::Write(void)
 
 	std::wstring val;
 
-	{// APPLICATION Section Write
+	{// Application Section Write
 		conf_file.data.line_string_container.push_back(section_start_str + L"APPLICATION" + section_end_str);
-		conf_file.data.line_string_container.push_back(L"MEM_ALLOCATOR_SIZE" + equal_str + tml::StringUtil::GetString(val, this->data.application_memory_allocator_size));
-		conf_file.data.line_string_container.push_back(L"LOCALE_NAME" + equal_str + tml::StringUtil::GetString(val, this->data.application_locale_name.c_str()));
+		conf_file.data.line_string_container.push_back(L"FRAME_RATE_LIMIT" + equal_str + tml::StringUtil::GetString(val, this->data.application_frame_rate_limit));
 		conf_file.data.line_string_container.push_back(empty_str);
 	}
 
-	{// WINDOW Section Write
+	{// Window Section Write
 		conf_file.data.line_string_container.push_back(section_start_str + L"WINDOW" + section_end_str);
 		conf_file.data.line_string_container.push_back(L"X" + equal_str + tml::StringUtil::GetString(val, this->data.window_position.x));
 		conf_file.data.line_string_container.push_back(L"Y" + equal_str + tml::StringUtil::GetString(val, this->data.window_position.y));
 		conf_file.data.line_string_container.push_back(L"W" + equal_str + tml::StringUtil::GetString(val, this->data.window_size.x));
 		conf_file.data.line_string_container.push_back(L"H" + equal_str + tml::StringUtil::GetString(val, this->data.window_size.y));
+		conf_file.data.line_string_container.push_back(empty_str);
+	}
+
+	{// Graphic Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"GRAPHIC" + section_end_str);
+		conf_file.data.line_string_container.push_back(L"FRAME_RATE_LIMIT" + equal_str + tml::StringUtil::GetString(val, this->data.graphic_frame_rate_limit));
+		conf_file.data.line_string_container.push_back(L"VSYNC_FLG" + equal_str + tml::StringUtil::GetString(val, this->data.graphic_vsync_flag));
+		conf_file.data.line_string_container.push_back(empty_str);
+	}
+
+	{// Sound Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"SOUND" + section_end_str);
+		conf_file.data.line_string_container.push_back(L"BGM_VOLUME" + equal_str + tml::StringUtil::GetString(val, this->data.sound_bgm_volume));
+		conf_file.data.line_string_container.push_back(L"BGM_MUTE_FLG" + equal_str + tml::StringUtil::GetString(val, this->data.sound_bgm_mute_flag));
+		conf_file.data.line_string_container.push_back(L"SE_VOLUME" + equal_str + tml::StringUtil::GetString(val, this->data.sound_se_volume));
+		conf_file.data.line_string_container.push_back(L"SE_MUTE_FLG" + equal_str + tml::StringUtil::GetString(val, this->data.sound_se_mute_flag));
 		conf_file.data.line_string_container.push_back(empty_str);
 	}
 

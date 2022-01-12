@@ -21,6 +21,7 @@
 #include "../lib/tml/thread/DefaultThreadUtilEngine.h"
 #include "constant/ConstantUtil_FILE_PATH.h"
 #include "constant/ConstantUtil_WINDOW.h"
+#include "data/UtilConfigFile.h"
 #include "thread/MainThread.h"
 
 
@@ -78,9 +79,9 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 {
 	cpp_base::InitMain();
 
-	cpp_base::SystemConfigFile sys_conf_file;
+	cpp_base::UtilConfigFile util_conf_file;
 
-	{// SystemConfigFile Read
+	{// UtilConfigFile Read
 		{// MemoryUtil Create
 			std::unique_ptr<tml::MemoryUtilEngine> engine = std::make_unique<tml::DefaultMemoryUtilEngine>();
 
@@ -97,9 +98,9 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 			}
 		}
 
-		sys_conf_file.read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SYSTEM_CONFIG;
+		util_conf_file.read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::UTIL_CONFIG;
 
-		if (sys_conf_file.Read() < 0) {
+		if (util_conf_file.Read() < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -117,7 +118,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// MemoryUtil Create
 		std::unique_ptr<tml::MemoryUtilEngine> engine = std::make_unique<tml::DefaultMemoryUtilEngine>();
 
-		if (reinterpret_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC, sys_conf_file.data.application_memory_allocator_size) < 0) {
+		if (reinterpret_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC, util_conf_file.data.util_memory_allocator_size) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -133,7 +134,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// StringUtil Create
 		std::unique_ptr<tml::StringUtilEngine> engine = std::make_unique<tml::DefaultStringUtilEngine>();
 
-		if (reinterpret_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(sys_conf_file.data.application_locale_name.c_str()) < 0) {
+		if (reinterpret_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(util_conf_file.data.util_locale_name.c_str()) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);

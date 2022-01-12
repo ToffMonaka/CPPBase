@@ -22,8 +22,6 @@ public: cpp_base::SystemConfigFileData &operator =(const cpp_base::SystemConfigF
 private:
 
 public:
-	size_t application_memory_allocator_size;
-	std::string application_locale_name;
 	UINT application_frame_rate_limit;
 	tml::XMUINT2EX window_position;
 	tml::XMUINT2EX window_size;
