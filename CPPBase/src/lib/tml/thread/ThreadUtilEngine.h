@@ -75,9 +75,9 @@ public:
 	INT StartAll(void);
 	void End(const bool finish_flg = false);
 	void EndAll(const bool finish_flg = false);
-	INT GetExitCode(void);
 	INT CreateCOM(const DWORD);
 	void DeleteCOM(void);
+	INT GetExitCode(void);
 };
 }
 

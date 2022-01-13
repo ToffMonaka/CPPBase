@@ -37,9 +37,9 @@ public:
 	static INT StartAll(void);
 	static void End(const bool finish_flg = false);
 	static void EndAll(const bool finish_flg = false);
-	static INT GetExitCode(void);
 	static INT CreateCOM(const DWORD);
 	static void DeleteCOM(void);
+	static INT GetExitCode(void);
 };
 }
 
@@ -62,10 +62,6 @@ inline bool tml::ThreadUtil::CheckFixedThread(void)
  */
 inline tml::Thread *tml::ThreadUtil::Get(void)
 {
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return (nullptr);
-	}
-
 	return (tml::ThreadUtil::engine_->Get());
 }
 
@@ -78,10 +74,6 @@ inline tml::Thread *tml::ThreadUtil::Get(void)
  */
 inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::MainThread> &th)
 {
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return (-1);
-	}
-
 	return (tml::ThreadUtil::engine_->Start(th));
 }
 
@@ -94,10 +86,6 @@ inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::MainThread> &th)
  */
 inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::SubThread> &th)
 {
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return (-1);
-	}
-
 	return (tml::ThreadUtil::engine_->Start(th));
 }
 
@@ -109,10 +97,6 @@ inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::SubThread> &th)
  */
 inline INT tml::ThreadUtil::StartAll(void)
 {
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return (-1);
-	}
-
 	return (tml::ThreadUtil::engine_->StartAll());
 }
 
@@ -123,10 +107,6 @@ inline INT tml::ThreadUtil::StartAll(void)
  */
 inline void tml::ThreadUtil::End(const bool finish_flg)
 {
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return;
-	}
-
 	tml::ThreadUtil::engine_->End(finish_flg);
 
 	return;
@@ -139,28 +119,9 @@ inline void tml::ThreadUtil::End(const bool finish_flg)
  */
 inline void tml::ThreadUtil::EndAll(const bool finish_flg)
 {
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return;
-	}
-
 	tml::ThreadUtil::engine_->EndAll(finish_flg);
 
 	return;
-}
-
-
-/**
- * @brief GetExitCode関数
- * @return exit_code (exit_code)<br>
- * 0以外=失敗
- */
-inline INT tml::ThreadUtil::GetExitCode(void)
-{
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return (0);
-	}
-
-	return (tml::ThreadUtil::engine_->GetExitCode());
 }
 
 
@@ -172,10 +133,6 @@ inline INT tml::ThreadUtil::GetExitCode(void)
  */
 inline INT tml::ThreadUtil::CreateCOM(const DWORD init_flg)
 {
-	if (tml::ThreadUtil::engine_ == nullptr) {
-		return (-1);
-	}
-
 	return (tml::ThreadUtil::engine_->CreateCOM(init_flg));
 }
 
@@ -185,9 +142,23 @@ inline INT tml::ThreadUtil::CreateCOM(const DWORD init_flg)
  */
 inline void tml::ThreadUtil::DeleteCOM(void)
 {
+	return (tml::ThreadUtil::engine_->DeleteCOM());
+}
+
+
+/**
+ * @brief GetExitCode関数
+ *
+ * Create関数不要
+ *
+ * @return exit_code (exit_code)<br>
+ * 0以外=失敗
+ */
+inline INT tml::ThreadUtil::GetExitCode(void)
+{
 	if (tml::ThreadUtil::engine_ == nullptr) {
-		return;
+		return (0);
 	}
 
-	return (tml::ThreadUtil::engine_->DeleteCOM());
+	return (tml::ThreadUtil::engine_->GetExitCode());
 }

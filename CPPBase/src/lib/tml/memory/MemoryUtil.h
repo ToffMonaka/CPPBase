@@ -109,10 +109,6 @@ inline bool tml::MemoryUtil::CheckFixedThread(void)
 template <typename T, typename... ARGS>
 inline T *tml::MemoryUtil::Get(const size_t cnt, ARGS&&... args)
 {
-	if (tml::MemoryUtil::engine_ == nullptr) {
-		return (nullptr);
-	}
-
 	return (tml::MemoryUtil::engine_->Get<T>(cnt, std::forward<ARGS>(args)...));
 }
 
@@ -124,12 +120,6 @@ inline T *tml::MemoryUtil::Get(const size_t cnt, ARGS&&... args)
 template <typename T>
 inline void tml::MemoryUtil::Release(T **pp)
 {
-	if (tml::MemoryUtil::engine_ == nullptr) {
-		(*pp) = nullptr;
-
-		return;
-	}
-
 	tml::MemoryUtil::engine_->Release(pp);
 
 	return;
@@ -138,6 +128,9 @@ inline void tml::MemoryUtil::Release(T **pp)
 
 /**
  * @brief GetAllocatorInfoä÷êî
+ *
+ * Createä÷êîïsóv
+ *
  * @return allocator_info (allocator_info)
  */
 inline tml::MemoryAllocator::INFO tml::MemoryUtil::GetAllocatorInfo(void)
@@ -152,14 +145,35 @@ inline tml::MemoryAllocator::INFO tml::MemoryUtil::GetAllocatorInfo(void)
 
 namespace tml {
 template <class _Ty>
-struct default_delete
+struct default_memory_get
 {
-	constexpr default_delete() noexcept = default;
+	constexpr default_memory_get() noexcept = default;
 
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	default_delete(const default_delete<_Ty2> &) noexcept {};
+	default_memory_get(const default_memory_get<_Ty2> &) noexcept {};
 
-	void operator()(_Ty *_Ptr) const noexcept {
+	_NODISCARD _Ty *operator()(const size_t cnt) const {
+		if (cnt <= 0U) {
+			return (nullptr);
+		}
+
+		return (tml::MemoryUtil::Get<_Ty>(cnt));
+	};
+};
+
+template <class _Ty>
+struct default_memory_release
+{
+	constexpr default_memory_release() noexcept = default;
+
+	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
+	default_memory_release(const default_memory_release<_Ty2> &) noexcept {};
+
+	void operator()(_Ty *_Ptr) const {
+		if (_Ptr == nullptr) {
+			return;
+		}
+
 		auto p = _Ptr;
 
 		tml::MemoryUtil::Release(&p);
@@ -169,25 +183,45 @@ struct default_delete
 };
 
 template <class _Ty>
-struct default_delete<_Ty[]>
+struct raw_memory_get
 {
-	constexpr default_delete() noexcept = default;
+	constexpr raw_memory_get() noexcept = default;
 
-	template <class _Uty, std::enable_if_t<std::is_convertible_v<_Uty (*)[], _Ty (*)[]>, int> = 0>
-	default_delete(const default_delete<_Uty[]> &) noexcept {};
+	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
+	raw_memory_get(const raw_memory_get<_Ty2> &) noexcept {};
 
-	template <class _Uty, std::enable_if_t<std::is_convertible_v<_Uty (*)[], _Ty (*)[]>, int> = 0>
-	void operator()(_Uty *_Ptr) const noexcept {
+	_NODISCARD _Ty *operator()(const size_t cnt) const {
+		if (cnt <= 0U) {
+			return (nullptr);
+		}
+
+		return (new _Ty[cnt]);
+	};
+};
+
+template <class _Ty>
+struct raw_memory_release
+{
+	constexpr raw_memory_release() noexcept = default;
+
+	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
+	raw_memory_release(const raw_memory_release<_Ty2> &) noexcept {};
+
+	void operator()(_Ty *_Ptr) const {
+		if (_Ptr == nullptr) {
+			return;
+		}
+
 		auto p = _Ptr;
 
-		tml::MemoryUtil::Release(&p);
+		delete [] p;
 
 		return;
 	};
 };
 
 template <typename T>
-using unique_ptr = std::unique_ptr<T, tml::default_delete<T>>;
+using unique_ptr = std::unique_ptr<T, tml::default_memory_release<T>>;
 
 template <typename T>
 _NODISCARD tml::unique_ptr<T> make_unique(void)
@@ -196,9 +230,9 @@ _NODISCARD tml::unique_ptr<T> make_unique(void)
 };
 
 template <typename T, typename... ARGS>
-_NODISCARD tml::unique_ptr<T> make_unique(const size_t size, ARGS&&... args)
+_NODISCARD tml::unique_ptr<T> make_unique(const size_t cnt, ARGS&&... args)
 {
-	return (tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...)));
+	return (tml::unique_ptr<T>(tml::MemoryUtil::Get<T>(cnt, std::forward<ARGS>(args)...)));
 };
 
 template <typename T>
@@ -207,12 +241,12 @@ using shared_ptr = std::shared_ptr<T>;
 template <typename T>
 _NODISCARD tml::shared_ptr<T> make_shared(void)
 {
-	return (tml::shared_ptr<T>(nullptr, tml::default_delete<T>()));
+	return (tml::shared_ptr<T>(nullptr, tml::default_memory_release<T>()));
 };
 
 template <typename T, typename... ARGS>
-_NODISCARD tml::shared_ptr<T> make_shared(const size_t size, ARGS&&... args)
+_NODISCARD tml::shared_ptr<T> make_shared(const size_t cnt, ARGS&&... args)
 {
-	return (tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(size, std::forward<ARGS>(args)...), tml::default_delete<T>()));
+	return (tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(cnt, std::forward<ARGS>(args)...), tml::default_memory_release<T>()));
 };
 }
