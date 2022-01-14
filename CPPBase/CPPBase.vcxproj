@@ -284,6 +284,8 @@
     <ClCompile Include="src\lib\tml\memory\MemoryUtil.cpp" />
     <ClCompile Include="src\lib\tml\memory\MemoryUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\memory\NewMemoryAllocator.cpp" />
+    <ClCompile Include="src\lib\tml\memory\RawDynamicBuffer.cpp" />
+    <ClCompile Include="src\lib\tml\memory\RawStaticBuffer.cpp" />
     <ClCompile Include="src\lib\tml\memory\StaticBuffer.cpp" />
     <ClCompile Include="src\lib\tml\random\DefaultRandomUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\random\RandomSeed.cpp" />
@@ -474,6 +476,8 @@
     <ClInclude Include="src\lib\tml\memory\MemoryUtil.h" />
     <ClInclude Include="src\lib\tml\memory\MemoryUtilEngine.h" />
     <ClInclude Include="src\lib\tml\memory\NewMemoryAllocator.h" />
+    <ClInclude Include="src\lib\tml\memory\RawDynamicBuffer.h" />
+    <ClInclude Include="src\lib\tml\memory\RawStaticBuffer.h" />
     <ClInclude Include="src\lib\tml\memory\StaticBuffer.h" />
     <ClInclude Include="src\lib\tml\random\DefaultRandomUtilEngine.h" />
     <ClInclude Include="src\lib\tml\random\RandomSeed.h" />
