@@ -202,6 +202,7 @@
     <ClCompile Include="src\lib\tml\file\FileUtil.cpp" />
     <ClCompile Include="src\lib\tml\file\FileUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\file\INIFile.cpp" />
+    <ClCompile Include="src\lib\tml\file\RawBinaryFile.cpp" />
     <ClCompile Include="src\lib\tml\file\TextFile.cpp" />
     <ClCompile Include="src\lib\tml\file\XMLFile.cpp" />
     <ClCompile Include="src\lib\tml\file\XMLFileNode.cpp" />
@@ -394,6 +395,7 @@
     <ClInclude Include="src\lib\tml\file\FileUtil.h" />
     <ClInclude Include="src\lib\tml\file\FileUtilEngine.h" />
     <ClInclude Include="src\lib\tml\file\INIFile.h" />
+    <ClInclude Include="src\lib\tml\file\RawBinaryFile.h" />
     <ClInclude Include="src\lib\tml\file\TextFile.h" />
     <ClInclude Include="src\lib\tml\file\XMLFile.h" />
     <ClInclude Include="src\lib\tml\file\XMLFileNode.h" />

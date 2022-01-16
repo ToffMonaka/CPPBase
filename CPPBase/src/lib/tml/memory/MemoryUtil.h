@@ -148,11 +148,11 @@ template <class _Ty>
 struct default_memory_get
 {
 	constexpr default_memory_get() noexcept = default;
-
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
 	default_memory_get(const default_memory_get<_Ty2> &) noexcept {};
 
-	_NODISCARD _Ty *operator()(const size_t cnt) const {
+	_NODISCARD _Ty *operator()(const size_t cnt) const
+	{
 		if (cnt <= 0U) {
 			return (nullptr);
 		}
@@ -165,11 +165,11 @@ template <class _Ty>
 struct default_memory_release
 {
 	constexpr default_memory_release() noexcept = default;
-
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
 	default_memory_release(const default_memory_release<_Ty2> &) noexcept {};
 
-	void operator()(_Ty *_Ptr) const {
+	void operator()(_Ty *_Ptr) const
+	{
 		if (_Ptr == nullptr) {
 			return;
 		}
@@ -186,11 +186,11 @@ template <class _Ty>
 struct raw_memory_get
 {
 	constexpr raw_memory_get() noexcept = default;
-
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
 	raw_memory_get(const raw_memory_get<_Ty2> &) noexcept {};
 
-	_NODISCARD _Ty *operator()(const size_t cnt) const {
+	_NODISCARD _Ty *operator()(const size_t cnt) const
+	{
 		if (cnt <= 0U) {
 			return (nullptr);
 		}
@@ -203,11 +203,11 @@ template <class _Ty>
 struct raw_memory_release
 {
 	constexpr raw_memory_release() noexcept = default;
-
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
 	raw_memory_release(const raw_memory_release<_Ty2> &) noexcept {};
 
-	void operator()(_Ty *_Ptr) const {
+	void operator()(_Ty *_Ptr) const
+	{
 		if (_Ptr == nullptr) {
 			return;
 		}
