@@ -13,7 +13,7 @@ namespace tml {
 /**
  * @brief BaseStaticBufferクラス
  */
-template <size_t N>
+template <size_t N, bool R>
 class BaseStaticBuffer
 {
 private:
@@ -32,10 +32,10 @@ public:
 	BaseStaticBuffer();
 	BaseStaticBuffer(const size_t);
 	BaseStaticBuffer(const BYTE *, const size_t);
-	BaseStaticBuffer(const tml::BaseStaticBuffer<N> &);
-	tml::BaseStaticBuffer<N> &operator =(const tml::BaseStaticBuffer<N> &);
-	BaseStaticBuffer(tml::BaseStaticBuffer<N> &&) noexcept;
-	tml::BaseStaticBuffer<N> &operator =(tml::BaseStaticBuffer<N> &&) noexcept;
+	BaseStaticBuffer(const tml::BaseStaticBuffer<N, R> &);
+	tml::BaseStaticBuffer<N, R> &operator =(const tml::BaseStaticBuffer<N, R> &);
+	BaseStaticBuffer(tml::BaseStaticBuffer<N, R> &&) noexcept;
+	tml::BaseStaticBuffer<N, R> &operator =(tml::BaseStaticBuffer<N, R> &&) noexcept;
 	virtual ~BaseStaticBuffer();
 
 	virtual void Init(void);
@@ -114,8 +114,8 @@ public:
 /**
  * @brief コンストラクタ
  */
-template <size_t N>
-inline tml::BaseStaticBuffer<N>::BaseStaticBuffer() :
+template <size_t N, bool R>
+inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer() :
 	size_(N),
 	len_(0U),
 	read_index_(0U),
@@ -131,8 +131,8 @@ inline tml::BaseStaticBuffer<N>::BaseStaticBuffer() :
  * @brief コンストラクタ
  * @param size (size)
  */
-template <size_t N>
-inline tml::BaseStaticBuffer<N>::BaseStaticBuffer(const size_t size) :
+template <size_t N, bool R>
+inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer(const size_t size) :
 	size_(N),
 	len_(0U),
 	read_index_(0U),
@@ -155,8 +155,8 @@ inline tml::BaseStaticBuffer<N>::BaseStaticBuffer(const size_t size) :
  * @param p (pointer)
  * @param size (size)
  */
-template <size_t N>
-inline tml::BaseStaticBuffer<N>::BaseStaticBuffer(const BYTE *p, const size_t size) :
+template <size_t N, bool R>
+inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer(const BYTE *p, const size_t size) :
 	size_(N),
 	len_(0U),
 	read_index_(0U),
@@ -182,8 +182,8 @@ inline tml::BaseStaticBuffer<N>::BaseStaticBuffer(const BYTE *p, const size_t si
  * @brief コンストラクタ
  * @param src (src)
  */
-template <size_t N>
-inline tml::BaseStaticBuffer<N>::BaseStaticBuffer(const tml::BaseStaticBuffer<N> &src)
+template <size_t N, bool R>
+inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer(const tml::BaseStaticBuffer<N, R> &src)
 {
 	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
@@ -202,8 +202,8 @@ inline tml::BaseStaticBuffer<N>::BaseStaticBuffer(const tml::BaseStaticBuffer<N>
  * @param src (src)
  * @return this (this)
  */
-template <size_t N>
-inline tml::BaseStaticBuffer<N> &tml::BaseStaticBuffer<N>::operator =(const tml::BaseStaticBuffer<N> &src)
+template <size_t N, bool R>
+inline tml::BaseStaticBuffer<N, R> &tml::BaseStaticBuffer<N, R>::operator =(const tml::BaseStaticBuffer<N, R> &src)
 {
 	if (this == &src) {
 		return ((*this));
@@ -227,8 +227,8 @@ inline tml::BaseStaticBuffer<N> &tml::BaseStaticBuffer<N>::operator =(const tml:
  * @brief コンストラクタ
  * @param src (src)
  */
-template <size_t N>
-inline tml::BaseStaticBuffer<N>::BaseStaticBuffer(tml::BaseStaticBuffer<N> &&src) noexcept
+template <size_t N, bool R>
+inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer(tml::BaseStaticBuffer<N, R> &&src) noexcept
 {
 	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
@@ -249,8 +249,8 @@ inline tml::BaseStaticBuffer<N>::BaseStaticBuffer(tml::BaseStaticBuffer<N> &&src
  * @param src (src)
  * @return this (this)
  */
-template <size_t N>
-inline tml::BaseStaticBuffer<N> &tml::BaseStaticBuffer<N>::operator =(tml::BaseStaticBuffer<N> &&src) noexcept
+template <size_t N, bool R>
+inline tml::BaseStaticBuffer<N, R> &tml::BaseStaticBuffer<N, R>::operator =(tml::BaseStaticBuffer<N, R> &&src) noexcept
 {
 	if (this == &src) {
 		return ((*this));
@@ -275,8 +275,8 @@ inline tml::BaseStaticBuffer<N> &tml::BaseStaticBuffer<N>::operator =(tml::BaseS
 /**
  * @brief デストラクタ
  */
-template <size_t N>
-inline tml::BaseStaticBuffer<N>::~BaseStaticBuffer()
+template <size_t N, bool R>
+inline tml::BaseStaticBuffer<N, R>::~BaseStaticBuffer()
 {
 	this->Release();
 
@@ -287,8 +287,8 @@ inline tml::BaseStaticBuffer<N>::~BaseStaticBuffer()
 /**
  * @brief Release関数
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::Release(void)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::Release(void)
 {
 	return;
 }
@@ -297,8 +297,8 @@ inline void tml::BaseStaticBuffer<N>::Release(void)
 /**
  * @brief Init関数
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::Init(void)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::Init(void)
 {
 	this->Release();
 
@@ -317,8 +317,8 @@ inline void tml::BaseStaticBuffer<N>::Init(void)
  * @brief Init関数
  * @param size (size)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::Init(const size_t size)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::Init(const size_t size)
 {
 	this->Release();
 
@@ -344,8 +344,8 @@ inline void tml::BaseStaticBuffer<N>::Init(const size_t size)
  * @param p (pointer)
  * @param size (size)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::Init(const BYTE *p, const size_t size)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::Init(const BYTE *p, const size_t size)
 {
 	this->Release();
 
@@ -374,8 +374,8 @@ inline void tml::BaseStaticBuffer<N>::Init(const BYTE *p, const size_t size)
  * @brief Get関数
  * @return p (pointer)
  */
-template <size_t N>
-inline BYTE *tml::BaseStaticBuffer<N>::Get(void)
+template <size_t N, bool R>
+inline BYTE *tml::BaseStaticBuffer<N, R>::Get(void)
 {
 	return (this->p_);
 }
@@ -385,8 +385,8 @@ inline BYTE *tml::BaseStaticBuffer<N>::Get(void)
  * @brief Get関数
  * @return p (pointer)
  */
-template <size_t N>
-inline const BYTE *tml::BaseStaticBuffer<N>::Get(void) const
+template <size_t N, bool R>
+inline const BYTE *tml::BaseStaticBuffer<N, R>::Get(void) const
 {
 	return (this->p_);
 }
@@ -396,8 +396,8 @@ inline const BYTE *tml::BaseStaticBuffer<N>::Get(void) const
  * @brief Set関数
  * @param size (size)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::Set(const size_t size)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::Set(const size_t size)
 {
 	if (size > N) {
 		return;
@@ -417,8 +417,8 @@ inline void tml::BaseStaticBuffer<N>::Set(const size_t size)
  * @param p (pointer)
  * @param size (size)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::Set(const BYTE *p, const size_t size)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::Set(const BYTE *p, const size_t size)
 {
 	if (size > N) {
 		return;
@@ -437,8 +437,8 @@ inline void tml::BaseStaticBuffer<N>::Set(const BYTE *p, const size_t size)
 /**
  * @brief Clear関数
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::Clear(void)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::Clear(void)
 {
 	this->size_ = N;
 	this->len_ = 0U;
@@ -455,8 +455,8 @@ inline void tml::BaseStaticBuffer<N>::Clear(void)
  * @brief GetSize関数
  * @return size (size)
  */
-template <size_t N>
-inline size_t tml::BaseStaticBuffer<N>::GetSize(void) const
+template <size_t N, bool R>
+inline size_t tml::BaseStaticBuffer<N, R>::GetSize(void) const
 {
 	return (this->size_);
 }
@@ -466,8 +466,8 @@ inline size_t tml::BaseStaticBuffer<N>::GetSize(void) const
  * @brief SetSize関数
  * @param size (size)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::SetSize(const size_t size)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::SetSize(const size_t size)
 {
 	this->Set(size);
 
@@ -479,8 +479,8 @@ inline void tml::BaseStaticBuffer<N>::SetSize(const size_t size)
  * @brief GetLength関数
  * @return len (length)
  */
-template <size_t N>
-inline size_t tml::BaseStaticBuffer<N>::GetLength(void) const
+template <size_t N, bool R>
+inline size_t tml::BaseStaticBuffer<N, R>::GetLength(void) const
 {
 	return (this->len_);
 }
@@ -490,8 +490,8 @@ inline size_t tml::BaseStaticBuffer<N>::GetLength(void) const
  * @brief SetLength関数
  * @param len (length)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::SetLength(const size_t len)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::SetLength(const size_t len)
 {
 	this->len_ = tml::Min(len, this->size_);
 	this->read_index_ = tml::Min(this->read_index_, this->len_);
@@ -505,8 +505,8 @@ inline void tml::BaseStaticBuffer<N>::SetLength(const size_t len)
  * @brief GetReadIndex関数
  * @return read_index (read_index)
  */
-template <size_t N>
-inline size_t tml::BaseStaticBuffer<N>::GetReadIndex(void) const
+template <size_t N, bool R>
+inline size_t tml::BaseStaticBuffer<N, R>::GetReadIndex(void) const
 {
 	return (this->read_index_);
 }
@@ -516,8 +516,8 @@ inline size_t tml::BaseStaticBuffer<N>::GetReadIndex(void) const
  * @brief SetReadIndex関数
  * @param index (index)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::SetReadIndex(const size_t index)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::SetReadIndex(const size_t index)
 {
 	tml::MemoryUtil::SetBufferIndex(this->len_, this->read_index_, index, &this->read_result_);
 
@@ -529,8 +529,8 @@ inline void tml::BaseStaticBuffer<N>::SetReadIndex(const size_t index)
  * @brief AddReadIndex関数
  * @param add_index (add_index)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::AddReadIndex(const INT add_index)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::AddReadIndex(const INT add_index)
 {
 	tml::MemoryUtil::AddBufferIndex(this->len_, this->read_index_, add_index, &this->read_result_);
 
@@ -543,8 +543,8 @@ inline void tml::BaseStaticBuffer<N>::AddReadIndex(const INT add_index)
  * @return read_result (read_result)<br>
  * 0未満=失敗
  */
-template <size_t N>
-inline INT tml::BaseStaticBuffer<N>::GetReadResult(void) const
+template <size_t N, bool R>
+inline INT tml::BaseStaticBuffer<N, R>::GetReadResult(void) const
 {
 	return (this->read_result_);
 }
@@ -553,8 +553,8 @@ inline INT tml::BaseStaticBuffer<N>::GetReadResult(void) const
 /**
  * @brief InitReadResult関数
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::InitReadResult(void)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::InitReadResult(void)
 {
 	this->read_result_ = 0;
 
@@ -566,8 +566,8 @@ inline void tml::BaseStaticBuffer<N>::InitReadResult(void)
  * @brief GetWriteIndex関数
  * @return write_index (write_index)
  */
-template <size_t N>
-inline size_t tml::BaseStaticBuffer<N>::GetWriteIndex(void) const
+template <size_t N, bool R>
+inline size_t tml::BaseStaticBuffer<N, R>::GetWriteIndex(void) const
 {
 	return (this->write_index_);
 }
@@ -577,8 +577,8 @@ inline size_t tml::BaseStaticBuffer<N>::GetWriteIndex(void) const
  * @brief SetWriteIndex関数
  * @param index (index)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::SetWriteIndex(const size_t index)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::SetWriteIndex(const size_t index)
 {
 	tml::MemoryUtil::SetBufferIndex(this->size_, this->write_index_, index, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -591,8 +591,8 @@ inline void tml::BaseStaticBuffer<N>::SetWriteIndex(const size_t index)
  * @brief AddWriteIndex関数
  * @param add_index (add_index)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::AddWriteIndex(const INT add_index)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::AddWriteIndex(const INT add_index)
 {
 	tml::MemoryUtil::AddBufferIndex(this->size_, this->write_index_, add_index, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -606,8 +606,8 @@ inline void tml::BaseStaticBuffer<N>::AddWriteIndex(const INT add_index)
  * @return write_result (write_result)<br>
  * 0未満=失敗
  */
-template <size_t N>
-inline INT tml::BaseStaticBuffer<N>::GetWriteResult(void) const
+template <size_t N, bool R>
+inline INT tml::BaseStaticBuffer<N, R>::GetWriteResult(void) const
 {
 	return (this->write_result_);
 }
@@ -616,8 +616,8 @@ inline INT tml::BaseStaticBuffer<N>::GetWriteResult(void) const
 /**
  * @brief InitWriteResult関数
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::InitWriteResult(void)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::InitWriteResult(void)
 {
 	this->write_result_ = 0;
 
@@ -629,8 +629,8 @@ inline void tml::BaseStaticBuffer<N>::InitWriteResult(void)
  * @brief ReadChar関数
  * @return val (value)
  */
-template <size_t N>
-inline CHAR tml::BaseStaticBuffer<N>::ReadChar(void)
+template <size_t N, bool R>
+inline CHAR tml::BaseStaticBuffer<N, R>::ReadChar(void)
 {
 	return (tml::MemoryUtil::ReadBufferChar(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -640,8 +640,8 @@ inline CHAR tml::BaseStaticBuffer<N>::ReadChar(void)
  * @brief ReadUChar関数
  * @return val (value)
  */
-template <size_t N>
-inline UCHAR tml::BaseStaticBuffer<N>::ReadUChar(void)
+template <size_t N, bool R>
+inline UCHAR tml::BaseStaticBuffer<N, R>::ReadUChar(void)
 {
 	return (tml::MemoryUtil::ReadBufferUChar(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -651,8 +651,8 @@ inline UCHAR tml::BaseStaticBuffer<N>::ReadUChar(void)
  * @brief ReadShortB関数
  * @return val (value)
  */
-template <size_t N>
-inline SHORT tml::BaseStaticBuffer<N>::ReadShortB(void)
+template <size_t N, bool R>
+inline SHORT tml::BaseStaticBuffer<N, R>::ReadShortB(void)
 {
 	return (tml::MemoryUtil::ReadBufferShortB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -662,8 +662,8 @@ inline SHORT tml::BaseStaticBuffer<N>::ReadShortB(void)
  * @brief ReadShortL関数
  * @return val (value)
  */
-template <size_t N>
-inline SHORT tml::BaseStaticBuffer<N>::ReadShortL(void)
+template <size_t N, bool R>
+inline SHORT tml::BaseStaticBuffer<N, R>::ReadShortL(void)
 {
 	return (tml::MemoryUtil::ReadBufferShortL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -673,8 +673,8 @@ inline SHORT tml::BaseStaticBuffer<N>::ReadShortL(void)
  * @brief ReadUShortB関数
  * @return val (value)
  */
-template <size_t N>
-inline USHORT tml::BaseStaticBuffer<N>::ReadUShortB(void)
+template <size_t N, bool R>
+inline USHORT tml::BaseStaticBuffer<N, R>::ReadUShortB(void)
 {
 	return (tml::MemoryUtil::ReadBufferUShortB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -684,8 +684,8 @@ inline USHORT tml::BaseStaticBuffer<N>::ReadUShortB(void)
  * @brief ReadUShortL関数
  * @return val (value)
  */
-template <size_t N>
-inline USHORT tml::BaseStaticBuffer<N>::ReadUShortL(void)
+template <size_t N, bool R>
+inline USHORT tml::BaseStaticBuffer<N, R>::ReadUShortL(void)
 {
 	return (tml::MemoryUtil::ReadBufferUShortL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -695,8 +695,8 @@ inline USHORT tml::BaseStaticBuffer<N>::ReadUShortL(void)
  * @brief ReadIntB関数
  * @return val (value)
  */
-template <size_t N>
-inline INT tml::BaseStaticBuffer<N>::ReadIntB(void)
+template <size_t N, bool R>
+inline INT tml::BaseStaticBuffer<N, R>::ReadIntB(void)
 {
 	return (tml::MemoryUtil::ReadBufferIntB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -706,8 +706,8 @@ inline INT tml::BaseStaticBuffer<N>::ReadIntB(void)
  * @brief ReadIntL関数
  * @return val (value)
  */
-template <size_t N>
-inline INT tml::BaseStaticBuffer<N>::ReadIntL(void)
+template <size_t N, bool R>
+inline INT tml::BaseStaticBuffer<N, R>::ReadIntL(void)
 {
 	return (tml::MemoryUtil::ReadBufferIntL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -717,8 +717,8 @@ inline INT tml::BaseStaticBuffer<N>::ReadIntL(void)
  * @brief ReadUIntB関数
  * @return val (value)
  */
-template <size_t N>
-inline UINT tml::BaseStaticBuffer<N>::ReadUIntB(void)
+template <size_t N, bool R>
+inline UINT tml::BaseStaticBuffer<N, R>::ReadUIntB(void)
 {
 	return (tml::MemoryUtil::ReadBufferUIntB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -728,8 +728,8 @@ inline UINT tml::BaseStaticBuffer<N>::ReadUIntB(void)
  * @brief ReadUIntL関数
  * @return val (value)
  */
-template <size_t N>
-inline UINT tml::BaseStaticBuffer<N>::ReadUIntL(void)
+template <size_t N, bool R>
+inline UINT tml::BaseStaticBuffer<N, R>::ReadUIntL(void)
 {
 	return (tml::MemoryUtil::ReadBufferUIntL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -739,8 +739,8 @@ inline UINT tml::BaseStaticBuffer<N>::ReadUIntL(void)
  * @brief ReadLongLongB関数
  * @return val (value)
  */
-template <size_t N>
-inline LONGLONG tml::BaseStaticBuffer<N>::ReadLongLongB(void)
+template <size_t N, bool R>
+inline LONGLONG tml::BaseStaticBuffer<N, R>::ReadLongLongB(void)
 {
 	return (tml::MemoryUtil::ReadBufferLongLongB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -750,8 +750,8 @@ inline LONGLONG tml::BaseStaticBuffer<N>::ReadLongLongB(void)
  * @brief ReadLongLongL関数
  * @return val (value)
  */
-template <size_t N>
-inline LONGLONG tml::BaseStaticBuffer<N>::ReadLongLongL(void)
+template <size_t N, bool R>
+inline LONGLONG tml::BaseStaticBuffer<N, R>::ReadLongLongL(void)
 {
 	return (tml::MemoryUtil::ReadBufferLongLongL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -761,8 +761,8 @@ inline LONGLONG tml::BaseStaticBuffer<N>::ReadLongLongL(void)
  * @brief ReadULongLongB関数
  * @return val (value)
  */
-template <size_t N>
-inline ULONGLONG tml::BaseStaticBuffer<N>::ReadULongLongB(void)
+template <size_t N, bool R>
+inline ULONGLONG tml::BaseStaticBuffer<N, R>::ReadULongLongB(void)
 {
 	return (tml::MemoryUtil::ReadBufferULongLongB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -772,8 +772,8 @@ inline ULONGLONG tml::BaseStaticBuffer<N>::ReadULongLongB(void)
  * @brief ReadULongLongL関数
  * @return val (value)
  */
-template <size_t N>
-inline ULONGLONG tml::BaseStaticBuffer<N>::ReadULongLongL(void)
+template <size_t N, bool R>
+inline ULONGLONG tml::BaseStaticBuffer<N, R>::ReadULongLongL(void)
 {
 	return (tml::MemoryUtil::ReadBufferULongLongL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -783,8 +783,8 @@ inline ULONGLONG tml::BaseStaticBuffer<N>::ReadULongLongL(void)
  * @brief ReadFloatB関数
  * @return val (value)
  */
-template <size_t N>
-inline FLOAT tml::BaseStaticBuffer<N>::ReadFloatB(void)
+template <size_t N, bool R>
+inline FLOAT tml::BaseStaticBuffer<N, R>::ReadFloatB(void)
 {
 	return (tml::MemoryUtil::ReadBufferFloatB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -794,8 +794,8 @@ inline FLOAT tml::BaseStaticBuffer<N>::ReadFloatB(void)
  * @brief ReadFloatL関数
  * @return val (value)
  */
-template <size_t N>
-inline FLOAT tml::BaseStaticBuffer<N>::ReadFloatL(void)
+template <size_t N, bool R>
+inline FLOAT tml::BaseStaticBuffer<N, R>::ReadFloatL(void)
 {
 	return (tml::MemoryUtil::ReadBufferFloatL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -805,8 +805,8 @@ inline FLOAT tml::BaseStaticBuffer<N>::ReadFloatL(void)
  * @brief ReadDoubleB関数
  * @return val (value)
  */
-template <size_t N>
-inline DOUBLE tml::BaseStaticBuffer<N>::ReadDoubleB(void)
+template <size_t N, bool R>
+inline DOUBLE tml::BaseStaticBuffer<N, R>::ReadDoubleB(void)
 {
 	return (tml::MemoryUtil::ReadBufferDoubleB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -816,8 +816,8 @@ inline DOUBLE tml::BaseStaticBuffer<N>::ReadDoubleB(void)
  * @brief ReadDoubleL関数
  * @return val (value)
  */
-template <size_t N>
-inline DOUBLE tml::BaseStaticBuffer<N>::ReadDoubleL(void)
+template <size_t N, bool R>
+inline DOUBLE tml::BaseStaticBuffer<N, R>::ReadDoubleL(void)
 {
 	return (tml::MemoryUtil::ReadBufferDoubleL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -830,8 +830,8 @@ inline DOUBLE tml::BaseStaticBuffer<N>::ReadDoubleL(void)
  * @param read_size (read_size)
  * @return dst_ary (dst_array)
  */
-template <size_t N>
-inline BYTE *tml::BaseStaticBuffer<N>::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const size_t read_size)
+template <size_t N, bool R>
+inline BYTE *tml::BaseStaticBuffer<N, R>::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const size_t read_size)
 {
 	return (tml::MemoryUtil::ReadBufferArray(dst_ary, dst_ary_size, this->p_, this->len_, this->read_index_, read_size, &this->read_result_));
 }
@@ -843,8 +843,8 @@ inline BYTE *tml::BaseStaticBuffer<N>::ReadArray(BYTE *dst_ary, const size_t dst
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-template <size_t N>
-inline CHAR *tml::BaseStaticBuffer<N>::ReadStringB(CHAR *dst_str, const size_t dst_str_size)
+template <size_t N, bool R>
+inline CHAR *tml::BaseStaticBuffer<N, R>::ReadStringB(CHAR *dst_str, const size_t dst_str_size)
 {
 	return (tml::MemoryUtil::ReadBufferStringB(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -856,8 +856,8 @@ inline CHAR *tml::BaseStaticBuffer<N>::ReadStringB(CHAR *dst_str, const size_t d
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-template <size_t N>
-inline CHAR *tml::BaseStaticBuffer<N>::ReadStringL(CHAR *dst_str, const size_t dst_str_size)
+template <size_t N, bool R>
+inline CHAR *tml::BaseStaticBuffer<N, R>::ReadStringL(CHAR *dst_str, const size_t dst_str_size)
 {
 	return (tml::MemoryUtil::ReadBufferStringL(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -869,8 +869,8 @@ inline CHAR *tml::BaseStaticBuffer<N>::ReadStringL(CHAR *dst_str, const size_t d
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-template <size_t N>
-inline WCHAR *tml::BaseStaticBuffer<N>::ReadStringB(WCHAR *dst_str, const size_t dst_str_size)
+template <size_t N, bool R>
+inline WCHAR *tml::BaseStaticBuffer<N, R>::ReadStringB(WCHAR *dst_str, const size_t dst_str_size)
 {
 	return (tml::MemoryUtil::ReadBufferStringB(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -882,8 +882,8 @@ inline WCHAR *tml::BaseStaticBuffer<N>::ReadStringB(WCHAR *dst_str, const size_t
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-template <size_t N>
-inline WCHAR *tml::BaseStaticBuffer<N>::ReadStringL(WCHAR *dst_str, const size_t dst_str_size)
+template <size_t N, bool R>
+inline WCHAR *tml::BaseStaticBuffer<N, R>::ReadStringL(WCHAR *dst_str, const size_t dst_str_size)
 {
 	return (tml::MemoryUtil::ReadBufferStringL(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -893,8 +893,8 @@ inline WCHAR *tml::BaseStaticBuffer<N>::ReadStringL(WCHAR *dst_str, const size_t
  * @brief WriteChar関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteChar(const CHAR val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteChar(const CHAR val)
 {
 	tml::MemoryUtil::WriteBufferChar(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -907,8 +907,8 @@ inline void tml::BaseStaticBuffer<N>::WriteChar(const CHAR val)
  * @brief WriteUChar関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteUChar(const UCHAR val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteUChar(const UCHAR val)
 {
 	tml::MemoryUtil::WriteBufferUChar(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -921,8 +921,8 @@ inline void tml::BaseStaticBuffer<N>::WriteUChar(const UCHAR val)
  * @brief WriteShortB関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteShortB(const SHORT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteShortB(const SHORT val)
 {
 	tml::MemoryUtil::WriteBufferShortB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -935,8 +935,8 @@ inline void tml::BaseStaticBuffer<N>::WriteShortB(const SHORT val)
  * @brief WriteShortL関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteShortL(const SHORT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteShortL(const SHORT val)
 {
 	tml::MemoryUtil::WriteBufferShortL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -949,8 +949,8 @@ inline void tml::BaseStaticBuffer<N>::WriteShortL(const SHORT val)
  * @brief WriteUShortB関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteUShortB(const USHORT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteUShortB(const USHORT val)
 {
 	tml::MemoryUtil::WriteBufferUShortB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -963,8 +963,8 @@ inline void tml::BaseStaticBuffer<N>::WriteUShortB(const USHORT val)
  * @brief WriteUShortL関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteUShortL(const USHORT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteUShortL(const USHORT val)
 {
 	tml::MemoryUtil::WriteBufferUShortL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -977,8 +977,8 @@ inline void tml::BaseStaticBuffer<N>::WriteUShortL(const USHORT val)
  * @brief WriteIntB関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteIntB(const INT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteIntB(const INT val)
 {
 	tml::MemoryUtil::WriteBufferIntB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -991,8 +991,8 @@ inline void tml::BaseStaticBuffer<N>::WriteIntB(const INT val)
  * @brief WriteIntL関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteIntL(const INT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteIntL(const INT val)
 {
 	tml::MemoryUtil::WriteBufferIntL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1005,8 +1005,8 @@ inline void tml::BaseStaticBuffer<N>::WriteIntL(const INT val)
  * @brief WriteUIntB関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteUIntB(const UINT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteUIntB(const UINT val)
 {
 	tml::MemoryUtil::WriteBufferUIntB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1019,8 +1019,8 @@ inline void tml::BaseStaticBuffer<N>::WriteUIntB(const UINT val)
  * @brief WriteUIntL関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteUIntL(const UINT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteUIntL(const UINT val)
 {
 	tml::MemoryUtil::WriteBufferUIntL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1033,8 +1033,8 @@ inline void tml::BaseStaticBuffer<N>::WriteUIntL(const UINT val)
  * @brief WriteLongLongB関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteLongLongB(const LONGLONG val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteLongLongB(const LONGLONG val)
 {
 	tml::MemoryUtil::WriteBufferLongLongB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1047,8 +1047,8 @@ inline void tml::BaseStaticBuffer<N>::WriteLongLongB(const LONGLONG val)
  * @brief WriteLongLongL関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteLongLongL(const LONGLONG val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteLongLongL(const LONGLONG val)
 {
 	tml::MemoryUtil::WriteBufferLongLongL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1061,8 +1061,8 @@ inline void tml::BaseStaticBuffer<N>::WriteLongLongL(const LONGLONG val)
  * @brief WriteULongLongB関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteULongLongB(const ULONGLONG val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteULongLongB(const ULONGLONG val)
 {
 	tml::MemoryUtil::WriteBufferULongLongB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1075,8 +1075,8 @@ inline void tml::BaseStaticBuffer<N>::WriteULongLongB(const ULONGLONG val)
  * @brief WriteULongLongL関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteULongLongL(const ULONGLONG val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteULongLongL(const ULONGLONG val)
 {
 	tml::MemoryUtil::WriteBufferULongLongL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1089,8 +1089,8 @@ inline void tml::BaseStaticBuffer<N>::WriteULongLongL(const ULONGLONG val)
  * @brief WriteFloatB関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteFloatB(const FLOAT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteFloatB(const FLOAT val)
 {
 	tml::MemoryUtil::WriteBufferFloatB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1103,8 +1103,8 @@ inline void tml::BaseStaticBuffer<N>::WriteFloatB(const FLOAT val)
  * @brief WriteFloatL関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteFloatL(const FLOAT val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteFloatL(const FLOAT val)
 {
 	tml::MemoryUtil::WriteBufferFloatL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1117,8 +1117,8 @@ inline void tml::BaseStaticBuffer<N>::WriteFloatL(const FLOAT val)
  * @brief WriteDoubleB関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteDoubleB(const DOUBLE val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteDoubleB(const DOUBLE val)
 {
 	tml::MemoryUtil::WriteBufferDoubleB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1131,8 +1131,8 @@ inline void tml::BaseStaticBuffer<N>::WriteDoubleB(const DOUBLE val)
  * @brief WriteDoubleL関数
  * @param val (value)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteDoubleL(const DOUBLE val)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteDoubleL(const DOUBLE val)
 {
 	tml::MemoryUtil::WriteBufferDoubleL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1147,8 +1147,8 @@ inline void tml::BaseStaticBuffer<N>::WriteDoubleL(const DOUBLE val)
  * @param ary_size (array_size)
  * @param write_size (write_size)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteArray(const BYTE *ary, const size_t ary_size, const size_t write_size)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteArray(const BYTE *ary, const size_t ary_size, const size_t write_size)
 {
 	tml::MemoryUtil::WriteBufferArray(this->p_, this->size_, this->write_index_, ary, ary_size, write_size, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1161,8 +1161,8 @@ inline void tml::BaseStaticBuffer<N>::WriteArray(const BYTE *ary, const size_t a
  * @brief WriteStringB関数
  * @param str (string)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteStringB(const CHAR *str)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteStringB(const CHAR *str)
 {
 	tml::MemoryUtil::WriteBufferStringB(this->p_, this->size_, this->write_index_, str, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1175,8 +1175,8 @@ inline void tml::BaseStaticBuffer<N>::WriteStringB(const CHAR *str)
  * @brief WriteStringL関数
  * @param str (string)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteStringL(const CHAR *str)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteStringL(const CHAR *str)
 {
 	tml::MemoryUtil::WriteBufferStringL(this->p_, this->size_, this->write_index_, str, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1189,8 +1189,8 @@ inline void tml::BaseStaticBuffer<N>::WriteStringL(const CHAR *str)
  * @brief WriteStringB関数
  * @param str (string)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteStringB(const WCHAR *str)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteStringB(const WCHAR *str)
 {
 	tml::MemoryUtil::WriteBufferStringB(this->p_, this->size_, this->write_index_, str, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1203,8 +1203,8 @@ inline void tml::BaseStaticBuffer<N>::WriteStringB(const WCHAR *str)
  * @brief WriteStringL関数
  * @param str (string)
  */
-template <size_t N>
-inline void tml::BaseStaticBuffer<N>::WriteStringL(const WCHAR *str)
+template <size_t N, bool R>
+inline void tml::BaseStaticBuffer<N, R>::WriteStringL(const WCHAR *str)
 {
 	tml::MemoryUtil::WriteBufferStringL(this->p_, this->size_, this->write_index_, str, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1215,5 +1215,8 @@ inline void tml::BaseStaticBuffer<N>::WriteStringL(const WCHAR *str)
 
 namespace tml {
 template <size_t N>
-using StaticBuffer = tml::BaseStaticBuffer<N>;
+using StaticBuffer = tml::BaseStaticBuffer<N, false>;
+
+template <size_t N>
+using RawStaticBuffer = tml::BaseStaticBuffer<N, true>;
 }

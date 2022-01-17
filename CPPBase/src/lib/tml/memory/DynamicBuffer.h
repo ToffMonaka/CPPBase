@@ -13,7 +13,7 @@ namespace tml {
 /**
  * @brief BaseDynamicBufferクラス
  */
-template <typename MG, typename MR>
+template <bool R>
 class BaseDynamicBuffer
 {
 private:
@@ -24,20 +24,21 @@ private:
 	INT read_result_;
 	size_t write_index_;
 	INT write_result_;
-	MG mem_get_;
-	MR mem_release_;
 
 private:
 	void Release(void);
+
+	BYTE *GetMemory(const size_t);
+	void ReleaseMemory(BYTE *);
 
 public:
 	BaseDynamicBuffer();
 	BaseDynamicBuffer(const size_t);
 	BaseDynamicBuffer(const BYTE *, const size_t);
-	BaseDynamicBuffer(const tml::BaseDynamicBuffer<MG, MR> &);
-	tml::BaseDynamicBuffer<MG, MR> &operator =(const tml::BaseDynamicBuffer<MG, MR> &);
-	BaseDynamicBuffer(tml::BaseDynamicBuffer<MG, MR> &&) noexcept;
-	tml::BaseDynamicBuffer<MG, MR> &operator =(tml::BaseDynamicBuffer<MG, MR> &&) noexcept;
+	BaseDynamicBuffer(const tml::BaseDynamicBuffer<R> &);
+	tml::BaseDynamicBuffer<R> &operator =(const tml::BaseDynamicBuffer<R> &);
+	BaseDynamicBuffer(tml::BaseDynamicBuffer<R> &&) noexcept;
+	tml::BaseDynamicBuffer<R> &operator =(tml::BaseDynamicBuffer<R> &&) noexcept;
 	virtual ~BaseDynamicBuffer();
 
 	virtual void Init(void);
@@ -116,8 +117,8 @@ public:
 /**
  * @brief コンストラクタ
  */
-template <typename MG, typename MR>
-inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer() :
+template <bool R>
+inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer() :
 	p_(nullptr),
 	size_(0U),
 	len_(0U),
@@ -134,13 +135,13 @@ inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer() :
  * @brief コンストラクタ
  * @param size (size)
  */
-template <typename MG, typename MR>
-inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer(const size_t size) :
+template <bool R>
+inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer(const size_t size) :
 	p_(nullptr),
 	read_result_(0),
 	write_result_(0)
 {
-	this->p_ = this->mem_get_(size);
+	this->p_ = this->GetMemory(size);
 	this->size_ = size;
 	this->len_ = 0U;
 	this->read_index_ = 0U;
@@ -155,13 +156,13 @@ inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer(const size_t size) :
  * @param p (pointer)
  * @param size (size)
  */
-template <typename MG, typename MR>
-inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer(const BYTE *p, const size_t size) :
+template <bool R>
+inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer(const BYTE *p, const size_t size) :
 	p_(nullptr),
 	read_result_(0),
 	write_result_(0)
 {
-	this->p_ = this->mem_get_(size);
+	this->p_ = this->GetMemory(size);
 	tml::Copy(this->p_, p, size);
 	this->size_ = size;
 	this->len_ = this->size_;
@@ -176,10 +177,10 @@ inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer(const BYTE *p, const si
  * @brief コンストラクタ
  * @param src (src)
  */
-template <typename MG, typename MR>
-inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer(const tml::BaseDynamicBuffer<MG, MR> &src)
+template <bool R>
+inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer(const tml::BaseDynamicBuffer<R> &src)
 {
-	this->p_ = this->mem_get_(src.size_);
+	this->p_ = this->GetMemory(src.size_);
 	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
@@ -197,8 +198,8 @@ inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer(const tml::BaseDynamicB
  * @param src (src)
  * @return this (this)
  */
-template <typename MG, typename MR>
-inline tml::BaseDynamicBuffer<MG, MR> &tml::BaseDynamicBuffer<MG, MR>::operator =(const tml::BaseDynamicBuffer<MG, MR> &src)
+template <bool R>
+inline tml::BaseDynamicBuffer<R> &tml::BaseDynamicBuffer<R>::operator =(const tml::BaseDynamicBuffer<R> &src)
 {
 	if (this == &src) {
 		return ((*this));
@@ -206,7 +207,7 @@ inline tml::BaseDynamicBuffer<MG, MR> &tml::BaseDynamicBuffer<MG, MR>::operator 
 
 	this->Release();
 
-	this->p_ = this->mem_get_(src.size_);
+	this->p_ = this->GetMemory(src.size_);
 	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
@@ -223,8 +224,8 @@ inline tml::BaseDynamicBuffer<MG, MR> &tml::BaseDynamicBuffer<MG, MR>::operator 
  * @brief コンストラクタ
  * @param src (src)
  */
-template <typename MG, typename MR>
-inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer(tml::BaseDynamicBuffer<MG, MR> &&src) noexcept
+template <bool R>
+inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer(tml::BaseDynamicBuffer<R> &&src) noexcept
 {
 	this->p_ = src.p_;
 	this->size_ = src.size_;
@@ -246,8 +247,8 @@ inline tml::BaseDynamicBuffer<MG, MR>::BaseDynamicBuffer(tml::BaseDynamicBuffer<
  * @param src (src)
  * @return this (this)
  */
-template <typename MG, typename MR>
-inline tml::BaseDynamicBuffer<MG, MR> &tml::BaseDynamicBuffer<MG, MR>::operator =(tml::BaseDynamicBuffer<MG, MR> &&src) noexcept
+template <bool R>
+inline tml::BaseDynamicBuffer<R> &tml::BaseDynamicBuffer<R>::operator =(tml::BaseDynamicBuffer<R> &&src) noexcept
 {
 	if (this == &src) {
 		return ((*this));
@@ -273,8 +274,8 @@ inline tml::BaseDynamicBuffer<MG, MR> &tml::BaseDynamicBuffer<MG, MR>::operator 
 /**
  * @brief デストラクタ
  */
-template <typename MG, typename MR>
-inline tml::BaseDynamicBuffer<MG, MR>::~BaseDynamicBuffer()
+template <bool R>
+inline tml::BaseDynamicBuffer<R>::~BaseDynamicBuffer()
 {
 	this->Release();
 
@@ -285,10 +286,10 @@ inline tml::BaseDynamicBuffer<MG, MR>::~BaseDynamicBuffer()
 /**
  * @brief Release関数
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::Release(void)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::Release(void)
 {
-	this->mem_release_(this->p_);
+	this->ReleaseMemory(this->p_);
 
 	this->p_ = nullptr;
 
@@ -299,8 +300,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::Release(void)
 /**
  * @brief Init関数
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::Init(void)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::Init(void)
 {
 	this->Release();
 
@@ -319,15 +320,15 @@ inline void tml::BaseDynamicBuffer<MG, MR>::Init(void)
  * @brief Init関数
  * @param size (size)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::Init(const size_t size)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::Init(const size_t size)
 {
 	this->Release();
 
 	this->read_result_ = 0;
 	this->write_result_ = 0;
 
-	this->p_ = this->mem_get_(size);
+	this->p_ = this->GetMemory(size);
 	this->size_ = size;
 	this->len_ = 0U;
 	this->read_index_ = 0U;
@@ -342,15 +343,15 @@ inline void tml::BaseDynamicBuffer<MG, MR>::Init(const size_t size)
  * @param p (pointer)
  * @param size (size)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::Init(const BYTE *p, const size_t size)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::Init(const BYTE *p, const size_t size)
 {
 	this->Release();
 
 	this->read_result_ = 0;
 	this->write_result_ = 0;
 
-	this->p_ = this->mem_get_(size);
+	this->p_ = this->GetMemory(size);
 	tml::Copy(this->p_, p, size);
 	this->size_ = size;
 	this->len_ = this->size_;
@@ -362,11 +363,54 @@ inline void tml::BaseDynamicBuffer<MG, MR>::Init(const BYTE *p, const size_t siz
 
 
 /**
+ * @brief GetMemory関数
+ * @param size (size)
+ * @return p (pointer)
+ */
+template <bool R>
+inline BYTE *tml::BaseDynamicBuffer<R>::GetMemory(const size_t size)
+{
+	if (R) {
+		tml::MemoryGetRaw<BYTE> mem_get;
+
+		return (mem_get(size));
+	}
+
+	tml::MemoryGet<BYTE> mem_get;
+
+	return (mem_get(size));
+}
+
+
+/**
+ * @brief ReleaseMemory関数
+ * @param p (pointer)
+ */
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::ReleaseMemory(BYTE *p)
+{
+	if (R) {
+		tml::MemoryReleaseRaw<BYTE> mem_release;
+
+		mem_release(p);
+
+		return;
+	}
+
+	tml::MemoryRelease<BYTE> mem_release;
+
+	mem_release(p);
+
+	return;
+}
+
+
+/**
  * @brief Get関数
  * @return p (pointer)
  */
-template <typename MG, typename MR>
-inline BYTE *tml::BaseDynamicBuffer<MG, MR>::Get(void)
+template <bool R>
+inline BYTE *tml::BaseDynamicBuffer<R>::Get(void)
 {
 	return (this->p_);
 }
@@ -376,8 +420,8 @@ inline BYTE *tml::BaseDynamicBuffer<MG, MR>::Get(void)
  * @brief Get関数
  * @return p (pointer)
  */
-template <typename MG, typename MR>
-inline const BYTE *tml::BaseDynamicBuffer<MG, MR>::Get(void) const
+template <bool R>
+inline const BYTE *tml::BaseDynamicBuffer<R>::Get(void) const
 {
 	return (this->p_);
 }
@@ -387,15 +431,15 @@ inline const BYTE *tml::BaseDynamicBuffer<MG, MR>::Get(void) const
  * @brief Set関数
  * @param size (size)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::Set(const size_t size)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::Set(const size_t size)
 {
 	if (size > this->size_) {
-		auto new_p = this->mem_get_(size);
+		auto new_p = this->GetMemory(size);
 
 		tml::Copy(new_p, this->p_, this->size_);
 
-		this->mem_release_(this->p_);
+		this->ReleaseMemory(this->p_);
 
 		this->p_ = new_p;
 	}
@@ -414,13 +458,13 @@ inline void tml::BaseDynamicBuffer<MG, MR>::Set(const size_t size)
  * @param p (pointer)
  * @param size (size)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::Set(const BYTE *p, const size_t size)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::Set(const BYTE *p, const size_t size)
 {
 	if (size > this->size_) {
-		auto new_p = this->mem_get_(size);
+		auto new_p = this->GetMemory(size);
 
-		this->mem_release_(this->p_);
+		this->ReleaseMemory(this->p_);
 
 		this->p_ = new_p;
 	}
@@ -438,8 +482,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::Set(const BYTE *p, const size_t size
 /**
  * @brief Clear関数
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::Clear(void)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::Clear(void)
 {
 	this->p_ = nullptr;
 	this->size_ = 0U;
@@ -457,8 +501,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::Clear(void)
  * @brief GetSize関数
  * @return size (size)
  */
-template <typename MG, typename MR>
-inline size_t tml::BaseDynamicBuffer<MG, MR>::GetSize(void) const
+template <bool R>
+inline size_t tml::BaseDynamicBuffer<R>::GetSize(void) const
 {
 	return (this->size_);
 }
@@ -468,8 +512,8 @@ inline size_t tml::BaseDynamicBuffer<MG, MR>::GetSize(void) const
  * @brief SetSize関数
  * @param size (size)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::SetSize(const size_t size)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::SetSize(const size_t size)
 {
 	this->Set(size);
 
@@ -481,8 +525,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::SetSize(const size_t size)
  * @brief GetLength関数
  * @return len (length)
  */
-template <typename MG, typename MR>
-inline size_t tml::BaseDynamicBuffer<MG, MR>::GetLength(void) const
+template <bool R>
+inline size_t tml::BaseDynamicBuffer<R>::GetLength(void) const
 {
 	return (this->len_);
 }
@@ -492,8 +536,8 @@ inline size_t tml::BaseDynamicBuffer<MG, MR>::GetLength(void) const
  * @brief SetLength関数
  * @param len (length)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::SetLength(const size_t len)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::SetLength(const size_t len)
 {
 	this->len_ = tml::Min(len, this->size_);
 	this->read_index_ = tml::Min(this->read_index_, this->len_);
@@ -507,8 +551,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::SetLength(const size_t len)
  * @brief GetReadIndex関数
  * @return read_index (read_index)
  */
-template <typename MG, typename MR>
-inline size_t tml::BaseDynamicBuffer<MG, MR>::GetReadIndex(void) const
+template <bool R>
+inline size_t tml::BaseDynamicBuffer<R>::GetReadIndex(void) const
 {
 	return (this->read_index_);
 }
@@ -518,8 +562,8 @@ inline size_t tml::BaseDynamicBuffer<MG, MR>::GetReadIndex(void) const
  * @brief SetReadIndex関数
  * @param index (index)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::SetReadIndex(const size_t index)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::SetReadIndex(const size_t index)
 {
 	tml::MemoryUtil::SetBufferIndex(this->len_, this->read_index_, index, &this->read_result_);
 
@@ -531,8 +575,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::SetReadIndex(const size_t index)
  * @brief AddReadIndex関数
  * @param add_index (add_index)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::AddReadIndex(const INT add_index)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::AddReadIndex(const INT add_index)
 {
 	tml::MemoryUtil::AddBufferIndex(this->len_, this->read_index_, add_index, &this->read_result_);
 
@@ -545,8 +589,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::AddReadIndex(const INT add_index)
  * @return read_result (read_result)<br>
  * 0未満=失敗
  */
-template <typename MG, typename MR>
-inline INT tml::BaseDynamicBuffer<MG, MR>::GetReadResult(void) const
+template <bool R>
+inline INT tml::BaseDynamicBuffer<R>::GetReadResult(void) const
 {
 	return (this->read_result_);
 }
@@ -555,8 +599,8 @@ inline INT tml::BaseDynamicBuffer<MG, MR>::GetReadResult(void) const
 /**
  * @brief InitReadResult関数
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::InitReadResult(void)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::InitReadResult(void)
 {
 	this->read_result_ = 0;
 
@@ -568,8 +612,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::InitReadResult(void)
  * @brief GetWriteIndex関数
  * @return write_index (write_index)
  */
-template <typename MG, typename MR>
-inline size_t tml::BaseDynamicBuffer<MG, MR>::GetWriteIndex(void) const
+template <bool R>
+inline size_t tml::BaseDynamicBuffer<R>::GetWriteIndex(void) const
 {
 	return (this->write_index_);
 }
@@ -579,8 +623,8 @@ inline size_t tml::BaseDynamicBuffer<MG, MR>::GetWriteIndex(void) const
  * @brief SetWriteIndex関数
  * @param index (index)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::SetWriteIndex(const size_t index)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::SetWriteIndex(const size_t index)
 {
 	tml::MemoryUtil::SetBufferIndex(this->size_, this->write_index_, index, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -593,8 +637,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::SetWriteIndex(const size_t index)
  * @brief AddWriteIndex関数
  * @param add_index (add_index)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::AddWriteIndex(const INT add_index)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::AddWriteIndex(const INT add_index)
 {
 	tml::MemoryUtil::AddBufferIndex(this->size_, this->write_index_, add_index, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -608,8 +652,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::AddWriteIndex(const INT add_index)
  * @return write_result (write_result)<br>
  * 0未満=失敗
  */
-template <typename MG, typename MR>
-inline INT tml::BaseDynamicBuffer<MG, MR>::GetWriteResult(void) const
+template <bool R>
+inline INT tml::BaseDynamicBuffer<R>::GetWriteResult(void) const
 {
 	return (this->write_result_);
 }
@@ -618,8 +662,8 @@ inline INT tml::BaseDynamicBuffer<MG, MR>::GetWriteResult(void) const
 /**
  * @brief InitWriteResult関数
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::InitWriteResult(void)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::InitWriteResult(void)
 {
 	this->write_result_ = 0;
 
@@ -631,8 +675,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::InitWriteResult(void)
  * @brief ReadChar関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline CHAR tml::BaseDynamicBuffer<MG, MR>::ReadChar(void)
+template <bool R>
+inline CHAR tml::BaseDynamicBuffer<R>::ReadChar(void)
 {
 	return (tml::MemoryUtil::ReadBufferChar(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -642,8 +686,8 @@ inline CHAR tml::BaseDynamicBuffer<MG, MR>::ReadChar(void)
  * @brief ReadUChar関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline UCHAR tml::BaseDynamicBuffer<MG, MR>::ReadUChar(void)
+template <bool R>
+inline UCHAR tml::BaseDynamicBuffer<R>::ReadUChar(void)
 {
 	return (tml::MemoryUtil::ReadBufferUChar(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -653,8 +697,8 @@ inline UCHAR tml::BaseDynamicBuffer<MG, MR>::ReadUChar(void)
  * @brief ReadShortB関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline SHORT tml::BaseDynamicBuffer<MG, MR>::ReadShortB(void)
+template <bool R>
+inline SHORT tml::BaseDynamicBuffer<R>::ReadShortB(void)
 {
 	return (tml::MemoryUtil::ReadBufferShortB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -664,8 +708,8 @@ inline SHORT tml::BaseDynamicBuffer<MG, MR>::ReadShortB(void)
  * @brief ReadShortL関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline SHORT tml::BaseDynamicBuffer<MG, MR>::ReadShortL(void)
+template <bool R>
+inline SHORT tml::BaseDynamicBuffer<R>::ReadShortL(void)
 {
 	return (tml::MemoryUtil::ReadBufferShortL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -675,8 +719,8 @@ inline SHORT tml::BaseDynamicBuffer<MG, MR>::ReadShortL(void)
  * @brief ReadUShortB関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline USHORT tml::BaseDynamicBuffer<MG, MR>::ReadUShortB(void)
+template <bool R>
+inline USHORT tml::BaseDynamicBuffer<R>::ReadUShortB(void)
 {
 	return (tml::MemoryUtil::ReadBufferUShortB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -686,8 +730,8 @@ inline USHORT tml::BaseDynamicBuffer<MG, MR>::ReadUShortB(void)
  * @brief ReadUShortL関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline USHORT tml::BaseDynamicBuffer<MG, MR>::ReadUShortL(void)
+template <bool R>
+inline USHORT tml::BaseDynamicBuffer<R>::ReadUShortL(void)
 {
 	return (tml::MemoryUtil::ReadBufferUShortL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -697,8 +741,8 @@ inline USHORT tml::BaseDynamicBuffer<MG, MR>::ReadUShortL(void)
  * @brief ReadIntB関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline INT tml::BaseDynamicBuffer<MG, MR>::ReadIntB(void)
+template <bool R>
+inline INT tml::BaseDynamicBuffer<R>::ReadIntB(void)
 {
 	return (tml::MemoryUtil::ReadBufferIntB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -708,8 +752,8 @@ inline INT tml::BaseDynamicBuffer<MG, MR>::ReadIntB(void)
  * @brief ReadIntL関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline INT tml::BaseDynamicBuffer<MG, MR>::ReadIntL(void)
+template <bool R>
+inline INT tml::BaseDynamicBuffer<R>::ReadIntL(void)
 {
 	return (tml::MemoryUtil::ReadBufferIntL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -719,8 +763,8 @@ inline INT tml::BaseDynamicBuffer<MG, MR>::ReadIntL(void)
  * @brief ReadUIntB関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline UINT tml::BaseDynamicBuffer<MG, MR>::ReadUIntB(void)
+template <bool R>
+inline UINT tml::BaseDynamicBuffer<R>::ReadUIntB(void)
 {
 	return (tml::MemoryUtil::ReadBufferUIntB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -730,8 +774,8 @@ inline UINT tml::BaseDynamicBuffer<MG, MR>::ReadUIntB(void)
  * @brief ReadUIntL関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline UINT tml::BaseDynamicBuffer<MG, MR>::ReadUIntL(void)
+template <bool R>
+inline UINT tml::BaseDynamicBuffer<R>::ReadUIntL(void)
 {
 	return (tml::MemoryUtil::ReadBufferUIntL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -741,8 +785,8 @@ inline UINT tml::BaseDynamicBuffer<MG, MR>::ReadUIntL(void)
  * @brief ReadLongLongB関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline LONGLONG tml::BaseDynamicBuffer<MG, MR>::ReadLongLongB(void)
+template <bool R>
+inline LONGLONG tml::BaseDynamicBuffer<R>::ReadLongLongB(void)
 {
 	return (tml::MemoryUtil::ReadBufferLongLongB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -752,8 +796,8 @@ inline LONGLONG tml::BaseDynamicBuffer<MG, MR>::ReadLongLongB(void)
  * @brief ReadLongLongL関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline LONGLONG tml::BaseDynamicBuffer<MG, MR>::ReadLongLongL(void)
+template <bool R>
+inline LONGLONG tml::BaseDynamicBuffer<R>::ReadLongLongL(void)
 {
 	return (tml::MemoryUtil::ReadBufferLongLongL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -763,8 +807,8 @@ inline LONGLONG tml::BaseDynamicBuffer<MG, MR>::ReadLongLongL(void)
  * @brief ReadULongLongB関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline ULONGLONG tml::BaseDynamicBuffer<MG, MR>::ReadULongLongB(void)
+template <bool R>
+inline ULONGLONG tml::BaseDynamicBuffer<R>::ReadULongLongB(void)
 {
 	return (tml::MemoryUtil::ReadBufferULongLongB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -774,8 +818,8 @@ inline ULONGLONG tml::BaseDynamicBuffer<MG, MR>::ReadULongLongB(void)
  * @brief ReadULongLongL関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline ULONGLONG tml::BaseDynamicBuffer<MG, MR>::ReadULongLongL(void)
+template <bool R>
+inline ULONGLONG tml::BaseDynamicBuffer<R>::ReadULongLongL(void)
 {
 	return (tml::MemoryUtil::ReadBufferULongLongL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -785,8 +829,8 @@ inline ULONGLONG tml::BaseDynamicBuffer<MG, MR>::ReadULongLongL(void)
  * @brief ReadFloatB関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline FLOAT tml::BaseDynamicBuffer<MG, MR>::ReadFloatB(void)
+template <bool R>
+inline FLOAT tml::BaseDynamicBuffer<R>::ReadFloatB(void)
 {
 	return (tml::MemoryUtil::ReadBufferFloatB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -796,8 +840,8 @@ inline FLOAT tml::BaseDynamicBuffer<MG, MR>::ReadFloatB(void)
  * @brief ReadFloatL関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline FLOAT tml::BaseDynamicBuffer<MG, MR>::ReadFloatL(void)
+template <bool R>
+inline FLOAT tml::BaseDynamicBuffer<R>::ReadFloatL(void)
 {
 	return (tml::MemoryUtil::ReadBufferFloatL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -807,8 +851,8 @@ inline FLOAT tml::BaseDynamicBuffer<MG, MR>::ReadFloatL(void)
  * @brief ReadDoubleB関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline DOUBLE tml::BaseDynamicBuffer<MG, MR>::ReadDoubleB(void)
+template <bool R>
+inline DOUBLE tml::BaseDynamicBuffer<R>::ReadDoubleB(void)
 {
 	return (tml::MemoryUtil::ReadBufferDoubleB(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -818,8 +862,8 @@ inline DOUBLE tml::BaseDynamicBuffer<MG, MR>::ReadDoubleB(void)
  * @brief ReadDoubleL関数
  * @return val (value)
  */
-template <typename MG, typename MR>
-inline DOUBLE tml::BaseDynamicBuffer<MG, MR>::ReadDoubleL(void)
+template <bool R>
+inline DOUBLE tml::BaseDynamicBuffer<R>::ReadDoubleL(void)
 {
 	return (tml::MemoryUtil::ReadBufferDoubleL(this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -832,8 +876,8 @@ inline DOUBLE tml::BaseDynamicBuffer<MG, MR>::ReadDoubleL(void)
  * @param read_size (read_size)
  * @return dst_ary (dst_array)
  */
-template <typename MG, typename MR>
-inline BYTE *tml::BaseDynamicBuffer<MG, MR>::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const size_t read_size)
+template <bool R>
+inline BYTE *tml::BaseDynamicBuffer<R>::ReadArray(BYTE *dst_ary, const size_t dst_ary_size, const size_t read_size)
 {
 	return (tml::MemoryUtil::ReadBufferArray(dst_ary, dst_ary_size, this->p_, this->len_, this->read_index_, read_size, &this->read_result_));
 }
@@ -845,8 +889,8 @@ inline BYTE *tml::BaseDynamicBuffer<MG, MR>::ReadArray(BYTE *dst_ary, const size
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-template <typename MG, typename MR>
-inline CHAR *tml::BaseDynamicBuffer<MG, MR>::ReadStringB(CHAR *dst_str, const size_t dst_str_size)
+template <bool R>
+inline CHAR *tml::BaseDynamicBuffer<R>::ReadStringB(CHAR *dst_str, const size_t dst_str_size)
 {
 	return (tml::MemoryUtil::ReadBufferStringB(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -858,8 +902,8 @@ inline CHAR *tml::BaseDynamicBuffer<MG, MR>::ReadStringB(CHAR *dst_str, const si
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-template <typename MG, typename MR>
-inline CHAR *tml::BaseDynamicBuffer<MG, MR>::ReadStringL(CHAR *dst_str, const size_t dst_str_size)
+template <bool R>
+inline CHAR *tml::BaseDynamicBuffer<R>::ReadStringL(CHAR *dst_str, const size_t dst_str_size)
 {
 	return (tml::MemoryUtil::ReadBufferStringL(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -871,8 +915,8 @@ inline CHAR *tml::BaseDynamicBuffer<MG, MR>::ReadStringL(CHAR *dst_str, const si
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-template <typename MG, typename MR>
-inline WCHAR *tml::BaseDynamicBuffer<MG, MR>::ReadStringB(WCHAR *dst_str, const size_t dst_str_size)
+template <bool R>
+inline WCHAR *tml::BaseDynamicBuffer<R>::ReadStringB(WCHAR *dst_str, const size_t dst_str_size)
 {
 	return (tml::MemoryUtil::ReadBufferStringB(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -884,8 +928,8 @@ inline WCHAR *tml::BaseDynamicBuffer<MG, MR>::ReadStringB(WCHAR *dst_str, const 
  * @param dst_str_size (dst_string_size)
  * @return dst_str (dst_string)
  */
-template <typename MG, typename MR>
-inline WCHAR *tml::BaseDynamicBuffer<MG, MR>::ReadStringL(WCHAR *dst_str, const size_t dst_str_size)
+template <bool R>
+inline WCHAR *tml::BaseDynamicBuffer<R>::ReadStringL(WCHAR *dst_str, const size_t dst_str_size)
 {
 	return (tml::MemoryUtil::ReadBufferStringL(dst_str, dst_str_size, this->p_, this->len_, this->read_index_, &this->read_result_));
 }
@@ -895,8 +939,8 @@ inline WCHAR *tml::BaseDynamicBuffer<MG, MR>::ReadStringL(WCHAR *dst_str, const 
  * @brief WriteChar関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteChar(const CHAR val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteChar(const CHAR val)
 {
 	tml::MemoryUtil::WriteBufferChar(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -909,8 +953,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteChar(const CHAR val)
  * @brief WriteUChar関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteUChar(const UCHAR val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteUChar(const UCHAR val)
 {
 	tml::MemoryUtil::WriteBufferUChar(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -923,8 +967,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteUChar(const UCHAR val)
  * @brief WriteShortB関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteShortB(const SHORT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteShortB(const SHORT val)
 {
 	tml::MemoryUtil::WriteBufferShortB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -937,8 +981,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteShortB(const SHORT val)
  * @brief WriteShortL関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteShortL(const SHORT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteShortL(const SHORT val)
 {
 	tml::MemoryUtil::WriteBufferShortL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -951,8 +995,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteShortL(const SHORT val)
  * @brief WriteUShortB関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteUShortB(const USHORT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteUShortB(const USHORT val)
 {
 	tml::MemoryUtil::WriteBufferUShortB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -965,8 +1009,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteUShortB(const USHORT val)
  * @brief WriteUShortL関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteUShortL(const USHORT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteUShortL(const USHORT val)
 {
 	tml::MemoryUtil::WriteBufferUShortL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -979,8 +1023,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteUShortL(const USHORT val)
  * @brief WriteIntB関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteIntB(const INT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteIntB(const INT val)
 {
 	tml::MemoryUtil::WriteBufferIntB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -993,8 +1037,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteIntB(const INT val)
  * @brief WriteIntL関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteIntL(const INT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteIntL(const INT val)
 {
 	tml::MemoryUtil::WriteBufferIntL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1007,8 +1051,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteIntL(const INT val)
  * @brief WriteUIntB関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteUIntB(const UINT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteUIntB(const UINT val)
 {
 	tml::MemoryUtil::WriteBufferUIntB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1021,8 +1065,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteUIntB(const UINT val)
  * @brief WriteUIntL関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteUIntL(const UINT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteUIntL(const UINT val)
 {
 	tml::MemoryUtil::WriteBufferUIntL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1035,8 +1079,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteUIntL(const UINT val)
  * @brief WriteLongLongB関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteLongLongB(const LONGLONG val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteLongLongB(const LONGLONG val)
 {
 	tml::MemoryUtil::WriteBufferLongLongB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1049,8 +1093,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteLongLongB(const LONGLONG val)
  * @brief WriteLongLongL関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteLongLongL(const LONGLONG val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteLongLongL(const LONGLONG val)
 {
 	tml::MemoryUtil::WriteBufferLongLongL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1063,8 +1107,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteLongLongL(const LONGLONG val)
  * @brief WriteULongLongB関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteULongLongB(const ULONGLONG val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteULongLongB(const ULONGLONG val)
 {
 	tml::MemoryUtil::WriteBufferULongLongB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1077,8 +1121,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteULongLongB(const ULONGLONG val)
  * @brief WriteULongLongL関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteULongLongL(const ULONGLONG val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteULongLongL(const ULONGLONG val)
 {
 	tml::MemoryUtil::WriteBufferULongLongL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1091,8 +1135,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteULongLongL(const ULONGLONG val)
  * @brief WriteFloatB関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteFloatB(const FLOAT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteFloatB(const FLOAT val)
 {
 	tml::MemoryUtil::WriteBufferFloatB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1105,8 +1149,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteFloatB(const FLOAT val)
  * @brief WriteFloatL関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteFloatL(const FLOAT val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteFloatL(const FLOAT val)
 {
 	tml::MemoryUtil::WriteBufferFloatL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1119,8 +1163,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteFloatL(const FLOAT val)
  * @brief WriteDoubleB関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteDoubleB(const DOUBLE val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteDoubleB(const DOUBLE val)
 {
 	tml::MemoryUtil::WriteBufferDoubleB(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1133,8 +1177,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteDoubleB(const DOUBLE val)
  * @brief WriteDoubleL関数
  * @param val (value)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteDoubleL(const DOUBLE val)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteDoubleL(const DOUBLE val)
 {
 	tml::MemoryUtil::WriteBufferDoubleL(this->p_, this->size_, this->write_index_, val, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1149,8 +1193,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteDoubleL(const DOUBLE val)
  * @param ary_size (array_size)
  * @param write_size (write_size)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteArray(const BYTE *ary, const size_t ary_size, const size_t write_size)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteArray(const BYTE *ary, const size_t ary_size, const size_t write_size)
 {
 	tml::MemoryUtil::WriteBufferArray(this->p_, this->size_, this->write_index_, ary, ary_size, write_size, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1163,8 +1207,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteArray(const BYTE *ary, const si
  * @brief WriteStringB関数
  * @param str (string)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteStringB(const CHAR *str)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteStringB(const CHAR *str)
 {
 	tml::MemoryUtil::WriteBufferStringB(this->p_, this->size_, this->write_index_, str, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1177,8 +1221,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteStringB(const CHAR *str)
  * @brief WriteStringL関数
  * @param str (string)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteStringL(const CHAR *str)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteStringL(const CHAR *str)
 {
 	tml::MemoryUtil::WriteBufferStringL(this->p_, this->size_, this->write_index_, str, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1191,8 +1235,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteStringL(const CHAR *str)
  * @brief WriteStringB関数
  * @param str (string)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteStringB(const WCHAR *str)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteStringB(const WCHAR *str)
 {
 	tml::MemoryUtil::WriteBufferStringB(this->p_, this->size_, this->write_index_, str, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1205,8 +1249,8 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteStringB(const WCHAR *str)
  * @brief WriteStringL関数
  * @param str (string)
  */
-template <typename MG, typename MR>
-inline void tml::BaseDynamicBuffer<MG, MR>::WriteStringL(const WCHAR *str)
+template <bool R>
+inline void tml::BaseDynamicBuffer<R>::WriteStringL(const WCHAR *str)
 {
 	tml::MemoryUtil::WriteBufferStringL(this->p_, this->size_, this->write_index_, str, &this->write_result_);
 	this->len_ = tml::Max(this->len_, this->write_index_);
@@ -1216,5 +1260,7 @@ inline void tml::BaseDynamicBuffer<MG, MR>::WriteStringL(const WCHAR *str)
 
 
 namespace tml {
-using DynamicBuffer = tml::BaseDynamicBuffer<tml::default_memory_get<BYTE>, tml::default_memory_release<BYTE>>;
+using DynamicBuffer = tml::BaseDynamicBuffer<false>;
+
+using RawDynamicBuffer = tml::BaseDynamicBuffer<true>;
 }

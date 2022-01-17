@@ -145,11 +145,11 @@ inline tml::MemoryAllocator::INFO tml::MemoryUtil::GetAllocatorInfo(void)
 
 namespace tml {
 template <class _Ty>
-struct default_memory_get
+struct MemoryGet
 {
-	constexpr default_memory_get() noexcept = default;
+	constexpr MemoryGet() noexcept = default;
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	default_memory_get(const default_memory_get<_Ty2> &) noexcept {};
+	MemoryGet(const MemoryGet<_Ty2> &) noexcept {};
 
 	_NODISCARD _Ty *operator()(const size_t cnt) const
 	{
@@ -162,11 +162,11 @@ struct default_memory_get
 };
 
 template <class _Ty>
-struct default_memory_release
+struct MemoryRelease
 {
-	constexpr default_memory_release() noexcept = default;
+	constexpr MemoryRelease() noexcept = default;
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	default_memory_release(const default_memory_release<_Ty2> &) noexcept {};
+	MemoryRelease(const MemoryRelease<_Ty2> &) noexcept {};
 
 	void operator()(_Ty *_Ptr) const
 	{
@@ -183,11 +183,11 @@ struct default_memory_release
 };
 
 template <class _Ty>
-struct raw_memory_get
+struct MemoryGetRaw
 {
-	constexpr raw_memory_get() noexcept = default;
+	constexpr MemoryGetRaw() noexcept = default;
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	raw_memory_get(const raw_memory_get<_Ty2> &) noexcept {};
+	MemoryGetRaw(const MemoryGetRaw<_Ty2> &) noexcept {};
 
 	_NODISCARD _Ty *operator()(const size_t cnt) const
 	{
@@ -200,11 +200,11 @@ struct raw_memory_get
 };
 
 template <class _Ty>
-struct raw_memory_release
+struct MemoryReleaseRaw
 {
-	constexpr raw_memory_release() noexcept = default;
+	constexpr MemoryReleaseRaw() noexcept = default;
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	raw_memory_release(const raw_memory_release<_Ty2> &) noexcept {};
+	MemoryReleaseRaw(const MemoryReleaseRaw<_Ty2> &) noexcept {};
 
 	void operator()(_Ty *_Ptr) const
 	{
@@ -221,7 +221,7 @@ struct raw_memory_release
 };
 
 template <typename T>
-using unique_ptr = std::unique_ptr<T, tml::default_memory_release<T>>;
+using unique_ptr = std::unique_ptr<T, tml::MemoryRelease<T>>;
 
 template <typename T>
 _NODISCARD tml::unique_ptr<T> make_unique(void)
@@ -241,12 +241,12 @@ using shared_ptr = std::shared_ptr<T>;
 template <typename T>
 _NODISCARD tml::shared_ptr<T> make_shared(void)
 {
-	return (tml::shared_ptr<T>(nullptr, tml::default_memory_release<T>()));
+	return (tml::shared_ptr<T>(nullptr, tml::MemoryRelease<T>()));
 };
 
 template <typename T, typename... ARGS>
 _NODISCARD tml::shared_ptr<T> make_shared(const size_t cnt, ARGS&&... args)
 {
-	return (tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(cnt, std::forward<ARGS>(args)...), tml::default_memory_release<T>()));
+	return (tml::shared_ptr<T>(tml::MemoryUtil::Get<T>(cnt, std::forward<ARGS>(args)...), tml::MemoryRelease<T>()));
 };
 }
