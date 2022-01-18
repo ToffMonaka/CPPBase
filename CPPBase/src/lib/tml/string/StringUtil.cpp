@@ -6,7 +6,6 @@
 
 #include "StringUtil.h"
 #include <locale>
-#include "../memory/MemoryUtil.h"
 
 
 std::unique_ptr<tml::StringUtilEngine> tml::StringUtil::engine_;
@@ -455,70 +454,6 @@ std::wstring &tml::StringUtil::Join(std::wstring &dst_str, const std::list<std::
 
 		++str_i;
 	}
-
-	return (dst_str);
-}
-
-
-/**
- * @brief GetString関数
- *
- * Create関数不要
- *
- * @param dst_str (dst_string)
- * @param str (string)
- * @return dst_str (dst_string)
- */
-std::string &tml::StringUtil::GetString(std::string &dst_str, const WCHAR *str)
-{
-	dst_str.clear();
-
-	if ((str == nullptr)
-	|| (str[0] == 0)) {
-		return (dst_str);
-	}
-
-	size_t tmp_str_size = (wcslen(str) << 1) + 1U;
-	CHAR *tmp_str = tml::MemoryUtil::Get<CHAR>(tmp_str_size);
-
-	if (wcstombs_s(nullptr, tmp_str, tmp_str_size, str, _TRUNCATE) == 0) {
-		dst_str = tmp_str;
-	}
-
-	tml::MemoryUtil::Release(&tmp_str);
-	tmp_str_size = 0U;
-
-	return (dst_str);
-}
-
-
-/**
- * @brief GetString関数
- *
- * Create関数不要
- *
- * @param dst_str (dst_string)
- * @param str (string)
- * @return dst_str (dst_string)
- */
-std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const CHAR *str)
-{
-	dst_str.clear();
-
-	if ((str == nullptr)
-	|| (str[0] == 0)) {
-		return (dst_str);
-	}
-
-	size_t tmp_str_size = strlen(str) + 1U;
-	WCHAR *tmp_str = tml::MemoryUtil::Get<WCHAR>(tmp_str_size);
-
-	if (mbstowcs_s(nullptr, tmp_str, tmp_str_size, str, _TRUNCATE) == 0) {
-		dst_str = tmp_str;
-	}
-
-	tml::MemoryUtil::Release(&tmp_str);
-	tmp_str_size = 0U;
 
 	return (dst_str);
 }

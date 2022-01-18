@@ -370,13 +370,7 @@ inline void tml::BaseDynamicBuffer<R>::Init(const BYTE *p, const size_t size)
 template <bool R>
 inline BYTE *tml::BaseDynamicBuffer<R>::GetMemory(const size_t size)
 {
-	if (R) {
-		tml::MemoryGetRaw<BYTE> mem_get;
-
-		return (mem_get(size));
-	}
-
-	tml::MemoryGet<BYTE> mem_get;
+	tml::MemoryGetBase<BYTE, R> mem_get;
 
 	return (mem_get(size));
 }
@@ -389,15 +383,7 @@ inline BYTE *tml::BaseDynamicBuffer<R>::GetMemory(const size_t size)
 template <bool R>
 inline void tml::BaseDynamicBuffer<R>::ReleaseMemory(BYTE *p)
 {
-	if (R) {
-		tml::MemoryReleaseRaw<BYTE> mem_release;
-
-		mem_release(p);
-
-		return;
-	}
-
-	tml::MemoryRelease<BYTE> mem_release;
+	tml::MemoryReleaseBase<BYTE, R> mem_release;
 
 	mem_release(p);
 

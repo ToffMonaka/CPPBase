@@ -144,12 +144,12 @@ inline tml::MemoryAllocator::INFO tml::MemoryUtil::GetAllocatorInfo(void)
 
 
 namespace tml {
-template <class _Ty>
-struct MemoryGet
+template <class _Ty, bool R>
+struct MemoryGetBase
 {
-	constexpr MemoryGet() noexcept = default;
+	constexpr MemoryGetBase() noexcept = default;
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	MemoryGet(const MemoryGet<_Ty2> &) noexcept {};
+	MemoryGetBase(const MemoryGetBase<_Ty2, R> &) noexcept {};
 
 	_NODISCARD _Ty *operator()(const size_t cnt) const
 	{
@@ -161,12 +161,12 @@ struct MemoryGet
 	};
 };
 
-template <class _Ty>
-struct MemoryRelease
+template <class _Ty, bool R>
+struct MemoryReleaseBase
 {
-	constexpr MemoryRelease() noexcept = default;
+	constexpr MemoryReleaseBase() noexcept = default;
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	MemoryRelease(const MemoryRelease<_Ty2> &) noexcept {};
+	MemoryReleaseBase(const MemoryReleaseBase<_Ty2, R> &) noexcept {};
 
 	void operator()(_Ty *_Ptr) const
 	{
@@ -183,11 +183,11 @@ struct MemoryRelease
 };
 
 template <class _Ty>
-struct MemoryGetRaw
+struct MemoryGetBase<_Ty, true>
 {
-	constexpr MemoryGetRaw() noexcept = default;
+	constexpr MemoryGetBase() noexcept = default;
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	MemoryGetRaw(const MemoryGetRaw<_Ty2> &) noexcept {};
+	MemoryGetBase(const MemoryGetBase<_Ty2, true> &) noexcept {};
 
 	_NODISCARD _Ty *operator()(const size_t cnt) const
 	{
@@ -200,11 +200,11 @@ struct MemoryGetRaw
 };
 
 template <class _Ty>
-struct MemoryReleaseRaw
+struct MemoryReleaseBase<_Ty, true>
 {
-	constexpr MemoryReleaseRaw() noexcept = default;
+	constexpr MemoryReleaseBase() noexcept = default;
 	template <class _Ty2, std::enable_if_t<std::is_convertible_v<_Ty2 *, _Ty *>, int> = 0>
-	MemoryReleaseRaw(const MemoryReleaseRaw<_Ty2> &) noexcept {};
+	MemoryReleaseBase(const MemoryReleaseBase<_Ty2, true> &) noexcept {};
 
 	void operator()(_Ty *_Ptr) const
 	{
@@ -219,6 +219,18 @@ struct MemoryReleaseRaw
 		return;
 	};
 };
+
+template <class _Ty>
+using MemoryGet = tml::MemoryGetBase<_Ty, false>;
+
+template <class _Ty>
+using MemoryRelease = tml::MemoryReleaseBase<_Ty, false>;
+
+template <class _Ty>
+using MemoryGetRaw = tml::MemoryGetBase<_Ty, true>;
+
+template <class _Ty>
+using MemoryReleaseRaw = tml::MemoryReleaseBase<_Ty, true>;
 
 template <typename T>
 using unique_ptr = std::unique_ptr<T, tml::MemoryRelease<T>>;

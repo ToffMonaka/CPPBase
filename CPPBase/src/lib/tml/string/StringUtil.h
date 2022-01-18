@@ -9,6 +9,7 @@
 #include <vector>
 #include <list>
 #include "../util/Util.h"
+#include "../memory/MemoryUtil.h"
 #include "StringUtilEngine.h"
 
 
@@ -91,8 +92,14 @@ public:
 	static std::wstring &GetString(std::wstring &, const DOUBLE);
 	static std::string &GetString(std::string &, const bool);
 	static std::wstring &GetString(std::wstring &, const bool);
+	template <bool R>
+	static std::string &GetStringBase(std::string &, const WCHAR *);
 	static std::string &GetString(std::string &, const WCHAR *);
+	static std::string &GetStringRaw(std::string &, const WCHAR *);
+	template <bool R>
+	static std::wstring &GetStringBase(std::wstring &, const CHAR *);
 	static std::wstring &GetString(std::wstring &, const CHAR *);
+	static std::wstring &GetStringRaw(std::wstring &, const CHAR *);
 };
 }
 
@@ -937,4 +944,132 @@ inline std::string &tml::StringUtil::GetString(std::string &dst_str, const bool 
 inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const bool val)
 {
 	return (tml::StringUtil::GetString(dst_str, static_cast<INT>(val)));
+}
+
+
+/**
+ * @brief GetStringBase関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param str (string)
+ * @return dst_str (dst_string)
+ */
+template <bool R>
+inline std::string &tml::StringUtil::GetStringBase(std::string &dst_str, const WCHAR *str)
+{
+	dst_str.clear();
+
+	if ((str == nullptr)
+	|| (str[0] == 0)) {
+		return (dst_str);
+	}
+
+	tml::MemoryGetBase<CHAR, R> mem_get;
+	tml::MemoryReleaseBase<CHAR, R> mem_release;
+	size_t tmp_str_size = (wcslen(str) << 1) + 1U;
+	CHAR *tmp_str = mem_get(tmp_str_size);
+
+	if (wcstombs_s(nullptr, tmp_str, tmp_str_size, str, _TRUNCATE) == 0) {
+		dst_str = tmp_str;
+	}
+
+	mem_release(tmp_str);
+
+	return (dst_str);
+}
+
+
+/**
+ * @brief GetString関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param str (string)
+ * @return dst_str (dst_string)
+ */
+inline std::string &tml::StringUtil::GetString(std::string &dst_str, const WCHAR *str)
+{
+	return (tml::StringUtil::GetStringBase<false>(dst_str, str));
+}
+
+
+/**
+ * @brief GetStringRaw関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param str (string)
+ * @return dst_str (dst_string)
+ */
+inline std::string &tml::StringUtil::GetStringRaw(std::string &dst_str, const WCHAR *str)
+{
+	return (tml::StringUtil::GetStringBase<true>(dst_str, str));
+}
+
+
+/**
+ * @brief GetStringBase関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param str (string)
+ * @return dst_str (dst_string)
+ */
+template <bool R>
+inline std::wstring &tml::StringUtil::GetStringBase(std::wstring &dst_str, const CHAR *str)
+{
+	dst_str.clear();
+
+	if ((str == nullptr)
+	|| (str[0] == 0)) {
+		return (dst_str);
+	}
+
+	tml::MemoryGetBase<WCHAR, R> mem_get;
+	tml::MemoryReleaseBase<WCHAR, R> mem_release;
+	size_t tmp_str_size = strlen(str) + 1U;
+	WCHAR *tmp_str = mem_get(tmp_str_size);
+
+	if (mbstowcs_s(nullptr, tmp_str, tmp_str_size, str, _TRUNCATE) == 0) {
+		dst_str = tmp_str;
+	}
+
+	mem_release(tmp_str);
+
+	return (dst_str);
+}
+
+
+/**
+ * @brief GetString関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param str (string)
+ * @return dst_str (dst_string)
+ */
+inline std::wstring &tml::StringUtil::GetString(std::wstring &dst_str, const CHAR *str)
+{
+	return (tml::StringUtil::GetStringBase<false>(dst_str, str));
+}
+
+
+/**
+ * @brief GetStringRaw関数
+ *
+ * Create関数不要
+ *
+ * @param dst_str (dst_string)
+ * @param str (string)
+ * @return dst_str (dst_string)
+ */
+inline std::wstring &tml::StringUtil::GetStringRaw(std::wstring &dst_str, const CHAR *str)
+{
+	return (tml::StringUtil::GetStringBase<true>(dst_str, str));
 }
