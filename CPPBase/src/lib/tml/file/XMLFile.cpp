@@ -5,6 +5,7 @@
 
 
 #include "XMLFile.h"
+#include <regex>
 
 
 /**

@@ -90,7 +90,7 @@ namespace tml {
  * @brief BaseTextFileReadDescDataクラス
  */
 template <bool R>
-class BaseTextFileReadDescData : public tml::BinaryFileReadDescData
+class BaseTextFileReadDescData : public tml::BaseBinaryFileReadDescData<R>
 {
 public:
 	std::wstring string;
@@ -157,7 +157,7 @@ inline void tml::BaseTextFileReadDescData<R>::Init(void)
 	this->string.clear();
 	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
 
-	tml::BinaryFileReadDescData::Init();
+	tml::BaseBinaryFileReadDescData<R>::Init();
 
 	return;
 }
@@ -175,7 +175,7 @@ inline bool tml::BaseTextFileReadDescData<R>::IsEmpty(void) const
 		return (false);
 	}
 
-	return (tml::BinaryFileReadDescData::IsEmpty());
+	return (tml::BaseBinaryFileReadDescData<R>::IsEmpty());
 }
 
 
@@ -184,7 +184,7 @@ namespace tml {
  * @brief BaseTextFileWriteDescDataクラス
  */
 template <bool R>
-class BaseTextFileWriteDescData : public tml::BinaryFileWriteDescData
+class BaseTextFileWriteDescData : public tml::BaseBinaryFileWriteDescData<R>
 {
 public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
@@ -252,7 +252,7 @@ inline void tml::BaseTextFileWriteDescData<R>::Init(void)
 	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
 	this->add_newline_code_count = 1U;
 
-	tml::BinaryFileWriteDescData::Init();
+	tml::BaseBinaryFileWriteDescData<R>::Init();
 
 	return;
 }
@@ -266,7 +266,7 @@ inline void tml::BaseTextFileWriteDescData<R>::Init(void)
 template <bool R>
 inline bool tml::BaseTextFileWriteDescData<R>::IsEmpty(void) const
 {
-	return (tml::BinaryFileWriteDescData::IsEmpty());
+	return (tml::BaseBinaryFileWriteDescData<R>::IsEmpty());
 }
 
 
@@ -377,7 +377,7 @@ inline INT tml::BaseTextFile<R>::Read(void)
 		}
 	}
 
-	tml::BinaryFile bin_file;
+	tml::BaseBinaryFile<R> bin_file;
 
 	bin_file.read_desc.parent_data = read_desc_dat;
 
@@ -441,7 +441,7 @@ inline INT tml::BaseTextFile<R>::Write(void)
 
 	tml::StringUtil::GetStringBase<R>(str, tmp_str.c_str());
 
-	tml::BinaryFile bin_file;
+	tml::BaseBinaryFile<R> bin_file;
 
 	bin_file.data.buffer.SetSize(str.length());
 	bin_file.data.buffer.WriteArray(reinterpret_cast<const BYTE *>(str.c_str()), str.length(), str.length());
