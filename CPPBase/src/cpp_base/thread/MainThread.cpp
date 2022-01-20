@@ -18,6 +18,7 @@
 #include "../resource/resource.h"
 #include "../thread/TestThread.h"
 #include "../scene/InitScene.h"
+#include "../Global.h"
 
 
 /**
@@ -56,8 +57,6 @@ void cpp_base::MainThread::Init(void)
 {
 	this->Release();
 
-	this->sys_conf_file_.Init();
-
 	tml::MainThread::Init();
 
 	return;
@@ -80,16 +79,6 @@ INT cpp_base::MainThread::Create(const HINSTANCE instance_handle, const WCHAR *w
 		this->Init();
 
 		return (-1);
-	}
-
-	{// SystemConfigFile Read
-		this->sys_conf_file_.read_desc.data.file_path = cpp_base::ConstantUtil::FILE_PATH::SYSTEM_CONFIG;
-
-		if (this->sys_conf_file_.Read() < 0) {
-			this->Init();
-
-			return (-1);
-		}
 	}
 
 	return (0);
@@ -125,7 +114,7 @@ INT cpp_base::MainThread::OnStart(void)
 		wnd_class.lpszClassName = cpp_base::ConstantUtil::WINDOW::CLASS_NAME;
 		wnd_class.hIconSm = nullptr;
 
-		if (this->CreateWindow_(wnd_class, this->sys_conf_file_.data.window_position, this->sys_conf_file_.data.window_size) < 0) {
+		if (this->CreateWindow_(wnd_class, cpp_base::Global::system_config_file.data.window_position, cpp_base::Global::system_config_file.data.window_size) < 0) {
 			return (-1);
 		}
 	}
@@ -156,9 +145,9 @@ INT cpp_base::MainThread::OnStart(void)
 		mgr_desc.window_handle = this->GetWindowHandle();
 		mgr_desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
 		mgr_desc.factory = &this->mgr_factory_;
-		mgr_desc.size = this->sys_conf_file_.data.window_size;
-		mgr_desc.frame_rate_limit = this->sys_conf_file_.data.graphic_frame_rate_limit;
-		mgr_desc.vsync_flag = this->sys_conf_file_.data.graphic_vsync_flag;
+		mgr_desc.size = cpp_base::Global::system_config_file.data.window_size;
+		mgr_desc.frame_rate_limit = cpp_base::Global::system_config_file.data.graphic_frame_rate_limit;
+		mgr_desc.vsync_flag = cpp_base::Global::system_config_file.data.graphic_vsync_flag;
 
 		if (this->graphic_mgr_.Create(mgr_desc) < 0) {
 			return (-1);
@@ -171,10 +160,10 @@ INT cpp_base::MainThread::OnStart(void)
 		mgr_desc.window_handle = this->GetWindowHandle();
 		mgr_desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
 		mgr_desc.factory = &this->mgr_factory_;
-		mgr_desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_volume);
-		mgr_desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, this->sys_conf_file_.data.sound_bgm_mute_flag);
-		mgr_desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_volume);
-		mgr_desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, this->sys_conf_file_.data.sound_se_mute_flag);
+		mgr_desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, cpp_base::Global::system_config_file.data.sound_bgm_volume);
+		mgr_desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, cpp_base::Global::system_config_file.data.sound_bgm_mute_flag);
+		mgr_desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, cpp_base::Global::system_config_file.data.sound_se_volume);
+		mgr_desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, cpp_base::Global::system_config_file.data.sound_se_mute_flag);
 
 		if (this->sound_mgr_.Create(mgr_desc) < 0) {
 			return (-1);
@@ -190,7 +179,7 @@ INT cpp_base::MainThread::OnStart(void)
 		mgr_desc.SetInputManager(&this->input_mgr_);
 		mgr_desc.SetGraphicManager(&this->graphic_mgr_);
 		mgr_desc.SetSoundManager(&this->sound_mgr_);
-		mgr_desc.frame_rate_limit = this->sys_conf_file_.data.application_frame_rate_limit;
+		mgr_desc.frame_rate_limit = cpp_base::Global::system_config_file.data.application_frame_rate_limit;
 
 		if (this->scene_mgr_.Create(mgr_desc) < 0) {
 			return (-1);

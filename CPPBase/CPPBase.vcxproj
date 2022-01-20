@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClCompile Include="src\cpp_base\data\SystemConfigFile.cpp" />
     <ClCompile Include="src\cpp_base\data\UtilConfigFile.cpp" />
+    <ClCompile Include="src\cpp_base\Global.cpp" />
     <ClCompile Include="src\cpp_base\graphic\Manager.cpp" />
     <ClCompile Include="src\cpp_base\graphic\ManagerCommon.cpp" />
     <ClCompile Include="src\cpp_base\input\Manager.cpp" />
@@ -338,6 +339,7 @@
     <ClInclude Include="src\cpp_base\constant\ConstantUtil_WINDOW.h" />
     <ClInclude Include="src\cpp_base\data\SystemConfigFile.h" />
     <ClInclude Include="src\cpp_base\data\UtilConfigFile.h" />
+    <ClInclude Include="src\cpp_base\Global.h" />
     <ClInclude Include="src\cpp_base\graphic\Manager.h" />
     <ClInclude Include="src\cpp_base\graphic\ManagerCommon.h" />
     <ClInclude Include="src\cpp_base\input\Manager.h" />

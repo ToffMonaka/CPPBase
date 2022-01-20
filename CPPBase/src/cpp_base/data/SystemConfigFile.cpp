@@ -104,7 +104,7 @@ INT cpp_base::SystemConfigFile::Read(void)
 {
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
-	tml::INIFile conf_file;
+	tml::RawINIFile conf_file;
 
 	conf_file.read_desc.parent_data = read_desc_dat;
 
@@ -233,7 +233,7 @@ INT cpp_base::SystemConfigFile::Write(void)
 		return (-1);
 	}
 
-	tml::TextFile conf_file;
+	tml::RawTextFile conf_file;
 
 	std::wstring val;
 

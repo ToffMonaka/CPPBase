@@ -90,7 +90,7 @@ INT cpp_base::UtilConfigFile::Read(void)
 {
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
-	tml::INIFile conf_file;
+	tml::RawINIFile conf_file;
 
 	conf_file.read_desc.parent_data = read_desc_dat;
 
@@ -120,7 +120,7 @@ INT cpp_base::UtilConfigFile::Read(void)
 			val = conf_file.data.GetValue((*val_name_cont), L"LOCALE_NAME");
 
 			if (val != nullptr) {
-				tml::StringUtil::GetString(this->data.util_locale_name, val->c_str());
+				tml::StringUtil::GetStringRaw(this->data.util_locale_name, val->c_str());
 			}
 		}
 	}
@@ -147,14 +147,14 @@ INT cpp_base::UtilConfigFile::Write(void)
 		return (-1);
 	}
 
-	tml::TextFile conf_file;
+	tml::RawTextFile conf_file;
 
 	std::wstring val;
 
 	{// Util Section Write
 		conf_file.data.line_string_container.push_back(section_start_str + L"UTIL" + section_end_str);
 		conf_file.data.line_string_container.push_back(L"MEM_ALLOCATOR_SIZE" + equal_str + tml::StringUtil::GetString(val, this->data.util_memory_allocator_size));
-		conf_file.data.line_string_container.push_back(L"LOCALE_NAME" + equal_str + tml::StringUtil::GetString(val, this->data.util_locale_name.c_str()));
+		conf_file.data.line_string_container.push_back(L"LOCALE_NAME" + equal_str + tml::StringUtil::GetStringRaw(val, this->data.util_locale_name.c_str()));
 		conf_file.data.line_string_container.push_back(empty_str);
 	}
 

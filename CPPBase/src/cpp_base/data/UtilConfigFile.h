@@ -13,6 +13,8 @@
 namespace cpp_base {
 /**
  * @brief UtilConfigFileDataクラス
+ *
+ * Rawタイプ
  */
 class UtilConfigFileData
 {
@@ -49,6 +51,8 @@ inline void cpp_base::UtilConfigFileData::Release(void)
 namespace cpp_base {
 /**
  * @brief UtilConfigFileクラス
+ *
+ * Rawタイプ
  */
 class UtilConfigFile : public tml::File
 {
@@ -58,8 +62,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	cpp_base::UtilConfigFileData data;
-	tml::INIFileReadDesc read_desc;
-	tml::INIFileWriteDesc write_desc;
+	tml::RawINIFileReadDesc read_desc;
+	tml::RawINIFileWriteDesc write_desc;
 
 private:
 	void Release(void);

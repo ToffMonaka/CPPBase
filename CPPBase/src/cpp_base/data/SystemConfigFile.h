@@ -13,6 +13,8 @@
 namespace cpp_base {
 /**
  * @brief SystemConfigFileDataクラス
+ *
+ * Rawタイプ
  */
 class SystemConfigFileData
 {
@@ -56,6 +58,8 @@ inline void cpp_base::SystemConfigFileData::Release(void)
 namespace cpp_base {
 /**
  * @brief SystemConfigFileクラス
+ *
+ * Rawタイプ
  */
 class SystemConfigFile : public tml::File
 {
@@ -65,8 +69,8 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	cpp_base::SystemConfigFileData data;
-	tml::INIFileReadDesc read_desc;
-	tml::INIFileWriteDesc write_desc;
+	tml::RawINIFileReadDesc read_desc;
+	tml::RawINIFileWriteDesc write_desc;
 
 private:
 	void Release(void);
