@@ -278,6 +278,7 @@
     <ClCompile Include="src\lib\tml\math\XNAMathVectorFLOAT.cpp" />
     <ClCompile Include="src\lib\tml\math\XNAMathVectorINT.cpp" />
     <ClCompile Include="src\lib\tml\math\XNAMathVectorUINT.cpp" />
+    <ClCompile Include="src\lib\tml\memory\Buffer.cpp" />
     <ClCompile Include="src\lib\tml\memory\DynamicBuffer.cpp" />
     <ClCompile Include="src\lib\tml\memory\MemoryAllocator.cpp" />
     <ClCompile Include="src\lib\tml\memory\DefaultMemoryUtilEngine.cpp" />
@@ -469,6 +470,7 @@
     <ClInclude Include="src\lib\tml\math\XNAMathVectorFLOAT.h" />
     <ClInclude Include="src\lib\tml\math\XNAMathVectorINT.h" />
     <ClInclude Include="src\lib\tml\math\XNAMathVectorUINT.h" />
+    <ClInclude Include="src\lib\tml\memory\Buffer.h" />
     <ClInclude Include="src\lib\tml\memory\DynamicBuffer.h" />
     <ClInclude Include="src\lib\tml\memory\MemoryAllocator.h" />
     <ClInclude Include="src\lib\tml\memory\DefaultMemoryUtilEngine.h" />
