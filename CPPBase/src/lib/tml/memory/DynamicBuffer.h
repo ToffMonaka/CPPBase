@@ -29,7 +29,6 @@ private:
 protected:
 	virtual void OnSet(const size_t);
 	virtual void OnSet(const BYTE *, const size_t);
-	virtual void OnClear(void);
 
 public:
 	BaseDynamicBuffer();
@@ -317,24 +316,6 @@ inline void tml::BaseDynamicBuffer<R>::OnSet(const BYTE *p, const size_t size)
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
 	this->write_index_ = this->size_;
-
-	return;
-}
-
-
-/**
- * @brief OnClearä÷êî
- */
-template <bool R>
-inline void tml::BaseDynamicBuffer<R>::OnClear(void)
-{
-	this->p_ = nullptr;
-	this->size_ = 0U;
-	this->len_ = 0U;
-	this->read_index_ = 0U;
-	this->read_result_ = 0;
-	this->write_index_ = 0U;
-	this->write_result_ = 0;
 
 	return;
 }

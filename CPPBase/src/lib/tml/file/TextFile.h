@@ -92,6 +92,8 @@ namespace tml {
 template <bool R>
 class BaseTextFileReadDescData : public tml::BaseBinaryFileReadDescData<R>
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 	std::wstring string;
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
@@ -186,6 +188,8 @@ namespace tml {
 template <bool R>
 class BaseTextFileWriteDescData : public tml::BaseBinaryFileWriteDescData<R>
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
 	size_t add_newline_code_count;
@@ -289,14 +293,15 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnRead(void);
+	virtual INT OnWrite(void);
+
 public:
 	BaseTextFile();
 	virtual ~BaseTextFile();
 
 	virtual void Init(void);
-
-	virtual INT Read(void);
-	virtual INT Write(void);
 };
 }
 
@@ -352,12 +357,12 @@ inline void tml::BaseTextFile<R>::Init(void)
 
 
 /**
- * @brief Readä÷êî
+ * @brief OnReadä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <bool R>
-inline INT tml::BaseTextFile<R>::Read(void)
+inline INT tml::BaseTextFile<R>::OnRead(void)
 {
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
@@ -407,12 +412,12 @@ inline INT tml::BaseTextFile<R>::Read(void)
 
 
 /**
- * @brief Writeä÷êî
+ * @brief OnWriteä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <bool R>
-inline INT tml::BaseTextFile<R>::Write(void)
+inline INT tml::BaseTextFile<R>::OnWrite(void)
 {
 	auto write_desc_dat = this->write_desc.GetDataByParent();
 

@@ -27,7 +27,6 @@ private:
 protected:
 	virtual void OnSet(const size_t);
 	virtual void OnSet(const BYTE *, const size_t);
-	virtual void OnClear(void);
 
 public:
 	BaseStaticBuffer();
@@ -333,24 +332,6 @@ inline void tml::BaseStaticBuffer<N, R>::OnSet(const BYTE *p, const size_t size)
 	this->len_ = this->size_;
 	this->read_index_ = 0U;
 	this->write_index_ = this->size_;
-
-	return;
-}
-
-
-/**
- * @brief OnClearä÷êî
- */
-template <size_t N, bool R>
-inline void tml::BaseStaticBuffer<N, R>::OnClear(void)
-{
-	this->p_ = this->ary_;
-	this->size_ = N;
-	this->len_ = 0U;
-	this->read_index_ = 0U;
-	this->read_result_ = 0;
-	this->write_index_ = 0U;
-	this->write_result_ = 0;
 
 	return;
 }

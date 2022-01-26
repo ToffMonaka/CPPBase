@@ -7,6 +7,7 @@
 
 #include "../constant/ConstantUtil.h"
 #include <vector>
+#include <regex>
 #include "TextFile.h"
 
 
@@ -107,6 +108,8 @@ namespace tml {
  */
 class CSVFileReadDescData : public tml::TextFileReadDescData
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 
 private:
@@ -138,6 +141,8 @@ namespace tml {
  */
 class CSVFileWriteDescData : public tml::TextFileWriteDescData
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 
 private:
@@ -181,14 +186,15 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnRead(void);
+	virtual INT OnWrite(void);
+
 public:
 	CSVFile();
 	virtual ~CSVFile();
 
 	virtual void Init(void);
-
-	virtual INT Read(void);
-	virtual INT Write(void);
 };
 }
 

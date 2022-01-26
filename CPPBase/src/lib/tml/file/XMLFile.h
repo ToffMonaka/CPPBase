@@ -58,6 +58,8 @@ namespace tml {
  */
 class XMLFileReadDescData : public tml::TextFileReadDescData
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 
 private:
@@ -89,6 +91,8 @@ namespace tml {
  */
 class XMLFileWriteDescData : public tml::TextFileWriteDescData
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 
 private:
@@ -130,19 +134,19 @@ public:
 	tml::XMLFileWriteDesc write_desc;
 
 private:
+	void Release(void);
+
 	void WriteRecursivePart(tml::TextFile &, const tml::shared_ptr<tml::XMLFileNode> &, const size_t);
 
-private:
-	void Release(void);
+protected:
+	virtual INT OnRead(void);
+	virtual INT OnWrite(void);
 
 public:
 	XMLFile();
 	virtual ~XMLFile();
 
 	virtual void Init(void);
-
-	virtual INT Read(void);
-	virtual INT Write(void);
 };
 }
 

@@ -36,7 +36,6 @@ private:
 protected:
 	virtual void OnSet(const size_t) = 0;
 	virtual void OnSet(const BYTE *, const size_t) = 0;
-	virtual void OnClear(void) = 0;
 
 public:
 	Buffer();
@@ -172,7 +171,13 @@ inline void tml::Buffer::Set(const BYTE *p, const size_t size)
  */
 inline void tml::Buffer::Clear(void)
 {
-	this->OnClear();
+	this->p_ = nullptr;
+	this->size_ = 0U;
+	this->len_ = 0U;
+	this->read_index_ = 0U;
+	this->read_result_ = 0;
+	this->write_index_ = 0U;
+	this->write_result_ = 0;
 
 	return;
 }

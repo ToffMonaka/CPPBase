@@ -112,6 +112,8 @@ namespace tml {
 template <bool R>
 class BaseConfigFileReadDescData : public tml::BaseTextFileReadDescData<R>
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 
 private:
@@ -182,6 +184,8 @@ namespace tml {
 template <bool R>
 class BaseConfigFileWriteDescData : public tml::BaseTextFileWriteDescData<R>
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 
 private:
@@ -264,14 +268,15 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnRead(void);
+	virtual INT OnWrite(void);
+
 public:
 	BaseConfigFile();
 	virtual ~BaseConfigFile();
 
 	virtual void Init(void);
-
-	virtual INT Read(void);
-	virtual INT Write(void);
 };
 }
 
@@ -327,12 +332,12 @@ inline void tml::BaseConfigFile<R>::Init(void)
 
 
 /**
- * @brief Readä÷êî
+ * @brief OnReadä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <bool R>
-inline INT tml::BaseConfigFile<R>::Read(void)
+inline INT tml::BaseConfigFile<R>::OnRead(void)
 {
 	static const std::wstring empty_str = L"";
 	static const std::wstring equal_str = L"=";
@@ -411,7 +416,7 @@ inline INT tml::BaseConfigFile<R>::Read(void)
  * 0ñ¢ñû=é∏îs
  */
 template <bool R>
-inline INT tml::BaseConfigFile<R>::Write(void)
+inline INT tml::BaseConfigFile<R>::OnWrite(void)
 {
 	static const std::wstring empty_str = L"";
 	static const std::wstring equal_str = L"=";

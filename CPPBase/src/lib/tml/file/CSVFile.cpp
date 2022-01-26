@@ -5,7 +5,6 @@
 
 
 #include "CSVFile.h"
-#include <regex>
 
 
 /**
@@ -145,11 +144,11 @@ void tml::CSVFile::Init(void)
 
 
 /**
- * @brief Readä÷êî
+ * @brief OnReadä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::CSVFile::Read(void)
+INT tml::CSVFile::OnRead(void)
 {
 	static const std::wstring empty_str = L"";
 	static const std::wstring comma_str = L",";
@@ -314,11 +313,11 @@ INT tml::CSVFile::Read(void)
 
 
 /**
- * @brief Writeä÷êî
+ * @brief OnWriteä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::CSVFile::Write(void)
+INT tml::CSVFile::OnWrite(void)
 {
 	static const std::wstring empty_str = L"";
 	static const std::wstring comma_str = L",";

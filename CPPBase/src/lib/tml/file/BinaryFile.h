@@ -287,14 +287,15 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnRead(void);
+	virtual INT OnWrite(void);
+
 public:
 	BaseBinaryFile();
 	virtual ~BaseBinaryFile();
 
 	virtual void Init(void);
-
-	virtual INT Read(void);
-	virtual INT Write(void);
 };
 }
 
@@ -350,12 +351,12 @@ inline void tml::BaseBinaryFile<R>::Init(void)
 
 
 /**
- * @brief Readä÷êî
+ * @brief OnReadä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <bool R>
-inline INT tml::BaseBinaryFile<R>::Read(void)
+inline INT tml::BaseBinaryFile<R>::OnRead(void)
 {
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
@@ -416,12 +417,12 @@ inline INT tml::BaseBinaryFile<R>::Read(void)
 
 
 /**
- * @brief Writeä÷êî
+ * @brief OnWriteä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <bool R>
-inline INT tml::BaseBinaryFile<R>::Write(void)
+inline INT tml::BaseBinaryFile<R>::OnWrite(void)
 {
 	auto write_desc_dat = this->write_desc.GetDataByParent();
 

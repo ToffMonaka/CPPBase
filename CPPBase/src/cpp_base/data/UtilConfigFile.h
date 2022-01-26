@@ -68,14 +68,15 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnRead(void);
+	virtual INT OnWrite(void);
+
 public:
 	UtilConfigFile();
 	virtual ~UtilConfigFile();
 
 	virtual void Init(void);
-
-	virtual INT Read(void);
-	virtual INT Write(void);
 };
 }
 

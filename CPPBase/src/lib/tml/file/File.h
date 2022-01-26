@@ -351,14 +351,18 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnRead(void) = 0;
+	virtual INT OnWrite(void) = 0;
+
 public:
 	File();
 	virtual ~File();
 
 	virtual void Init(void);
 
-	virtual INT Read(void) = 0;
-	virtual INT Write(void) = 0;
+	INT Read(void);
+	INT Write(void);
 };
 }
 
@@ -369,4 +373,26 @@ public:
 inline void tml::File::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief Readä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+inline INT tml::File::Read(void)
+{
+	return (this->OnRead());
+}
+
+
+/**
+ * @brief Writeä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+inline INT tml::File::Write(void)
+{
+	return (this->OnWrite());
 }

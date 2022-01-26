@@ -160,6 +160,8 @@ namespace tml {
 template <bool R>
 class BaseINIFileReadDescData : public tml::BaseTextFileReadDescData<R>
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 
 private:
@@ -230,6 +232,8 @@ namespace tml {
 template <bool R>
 class BaseINIFileWriteDescData : public tml::BaseTextFileWriteDescData<R>
 {
+protected: virtual void InterfaceDummy(void) {return;};
+
 public:
 
 private:
@@ -312,14 +316,15 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnRead(void);
+	virtual INT OnWrite(void);
+
 public:
 	BaseINIFile();
 	virtual ~BaseINIFile();
 
 	virtual void Init(void);
-
-	virtual INT Read(void);
-	virtual INT Write(void);
 };
 }
 
@@ -375,12 +380,12 @@ inline void tml::BaseINIFile<R>::Init(void)
 
 
 /**
- * @brief Readä÷êî
+ * @brief OnReadä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
 template <bool R>
-inline INT tml::BaseINIFile<R>::Read(void)
+inline INT tml::BaseINIFile<R>::OnRead(void)
 {
 	static const std::wstring empty_str = L"";
 	static const std::wstring section_start_str = L"[";
@@ -497,7 +502,7 @@ inline INT tml::BaseINIFile<R>::Read(void)
  * 0ñ¢ñû=é∏îs
  */
 template <bool R>
-inline INT tml::BaseINIFile<R>::Write(void)
+inline INT tml::BaseINIFile<R>::OnWrite(void)
 {
 	static const std::wstring empty_str = L"";
 	static const std::wstring section_start_str = L"[";

@@ -82,11 +82,11 @@ void cpp_base::UtilConfigFile::Init(void)
 
 
 /**
- * @brief Readä÷êî
+ * @brief OnReadä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::UtilConfigFile::Read(void)
+INT cpp_base::UtilConfigFile::OnRead(void)
 {
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
@@ -130,11 +130,11 @@ INT cpp_base::UtilConfigFile::Read(void)
 
 
 /**
- * @brief Writeä÷êî
+ * @brief OnWriteä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::UtilConfigFile::Write(void)
+INT cpp_base::UtilConfigFile::OnWrite(void)
 {
 	static const std::wstring empty_str = L"";
 	static const std::wstring section_start_str = L"[";

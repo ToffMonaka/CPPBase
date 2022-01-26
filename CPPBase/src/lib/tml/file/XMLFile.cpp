@@ -5,7 +5,6 @@
 
 
 #include "XMLFile.h"
-#include <regex>
 
 
 /**
@@ -237,11 +236,11 @@ void tml::XMLFile::Init(void)
 
 
 /**
- * @brief Readä÷êî
+ * @brief OnReadä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::XMLFile::Read(void)
+INT tml::XMLFile::OnRead(void)
 {
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
@@ -298,11 +297,11 @@ INT tml::XMLFile::Read(void)
 
 
 /**
- * @brief Writeä÷êî
+ * @brief OnWriteä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::XMLFile::Write(void)
+INT tml::XMLFile::OnWrite(void)
 {
 	static const std::wstring empty_str = L"";
 	static const std::wstring header_str = L"<?xml version=\"1.0\" encoding=\"shift_jis\" ?>";
