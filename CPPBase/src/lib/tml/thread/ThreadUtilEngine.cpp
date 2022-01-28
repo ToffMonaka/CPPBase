@@ -10,6 +10,37 @@
 /**
  * @brief コンストラクタ
  */
+tml::ThreadUtilEngineDesc::ThreadUtilEngineDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::ThreadUtilEngineDesc::~ThreadUtilEngineDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::ThreadUtilEngineDesc::Init(void)
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::ThreadUtilEngine::ThreadUtilEngine()
 {
 	return;
@@ -55,10 +86,11 @@ void tml::ThreadUtilEngine::Init(void)
 
 /**
  * @brief Create関数
+ * @param desc (desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::ThreadUtilEngine::Create(void)
+INT tml::ThreadUtilEngine::Create(const tml::ThreadUtilEngineDesc &desc)
 {
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		this->stat_ = tml::ThreadUtilEngine::STATE();

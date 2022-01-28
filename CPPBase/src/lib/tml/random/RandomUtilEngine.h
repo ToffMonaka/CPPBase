@@ -12,6 +12,35 @@
 
 namespace tml {
 /**
+ * @brief RandomUtilEngineDescクラス
+ */
+class RandomUtilEngineDesc
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	RandomUtilEngineDesc();
+	virtual ~RandomUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::RandomUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief RandomUtilEngineクラス
  *
  * インターフェースパターン
@@ -30,7 +59,7 @@ public:
 	virtual ~RandomUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::RandomUtilEngineDesc &);
 };
 }
 

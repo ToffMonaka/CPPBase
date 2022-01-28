@@ -11,6 +11,35 @@
 
 namespace tml {
 /**
+ * @brief DefaultThreadUtilEngineDescクラス
+ */
+class DefaultThreadUtilEngineDesc : public tml::ThreadUtilEngineDesc
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	DefaultThreadUtilEngineDesc();
+	virtual ~DefaultThreadUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::DefaultThreadUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief DefaultThreadUtilEngineクラス
  */
 class DefaultThreadUtilEngine : public tml::ThreadUtilEngine
@@ -27,7 +56,7 @@ public:
 	virtual ~DefaultThreadUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::DefaultThreadUtilEngineDesc &);
 };
 }
 

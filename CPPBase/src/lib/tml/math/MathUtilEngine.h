@@ -12,6 +12,35 @@
 
 namespace tml {
 /**
+ * @brief MathUtilEngineDescクラス
+ */
+class MathUtilEngineDesc
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	MathUtilEngineDesc();
+	virtual ~MathUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::MathUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief MathUtilEngineクラス
  *
  * インターフェースパターン
@@ -30,7 +59,7 @@ public:
 	virtual ~MathUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::MathUtilEngineDesc &);
 };
 }
 

@@ -10,6 +10,39 @@
 /**
  * @brief コンストラクタ
  */
+tml::DefaultTimeUtilEngineDesc::DefaultTimeUtilEngineDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::DefaultTimeUtilEngineDesc::~DefaultTimeUtilEngineDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::DefaultTimeUtilEngineDesc::Init(void)
+{
+	this->Release();
+
+	tml::TimeUtilEngineDesc::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::DefaultTimeUtilEngine::DefaultTimeUtilEngine()
 {
 	return;
@@ -42,14 +75,15 @@ void tml::DefaultTimeUtilEngine::Init(void)
 
 /**
  * @brief Create関数
+ * @param desc (desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::DefaultTimeUtilEngine::Create(void)
+INT tml::DefaultTimeUtilEngine::Create(const tml::DefaultTimeUtilEngineDesc &desc)
 {
 	this->Init();
 
-	if (tml::TimeUtilEngine::Create() < 0) {
+	if (tml::TimeUtilEngine::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

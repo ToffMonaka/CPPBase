@@ -17,6 +17,35 @@
 
 namespace tml {
 /**
+ * @brief ThreadUtilEngineDescクラス
+ */
+class ThreadUtilEngineDesc
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	ThreadUtilEngineDesc();
+	virtual ~ThreadUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::ThreadUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief ThreadUtilEngineクラス
  *
  * インターフェースパターン
@@ -67,7 +96,7 @@ public:
 	virtual ~ThreadUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::ThreadUtilEngineDesc &);
 
 	tml::Thread *Get(void);
 	INT Start(std::unique_ptr<tml::MainThread> &);

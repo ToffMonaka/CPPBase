@@ -101,8 +101,12 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 	{// MemoryUtil Create
 		std::unique_ptr<tml::MemoryUtilEngine> engine = std::make_unique<tml::DefaultMemoryUtilEngine>();
+		tml::DefaultMemoryUtilEngineDesc engine_desc;
 
-		if (reinterpret_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC, cpp_base::Global::util_config_file.data.util_memory_allocator_size) < 0) {
+		engine_desc.allocator_type = tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC;
+		engine_desc.allocator_size = cpp_base::Global::util_config_file.data.util_memory_allocator_size;
+
+		if (reinterpret_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -117,8 +121,11 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 	{// StringUtil Create
 		std::unique_ptr<tml::StringUtilEngine> engine = std::make_unique<tml::DefaultStringUtilEngine>();
+		tml::DefaultStringUtilEngineDesc engine_desc;
 
-		if (reinterpret_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(cpp_base::Global::util_config_file.data.util_locale_name.c_str()) < 0) {
+		engine_desc.locale_name = cpp_base::Global::util_config_file.data.util_locale_name;
+
+		if (reinterpret_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -133,8 +140,9 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 	{// TimeUtil Create
 		std::unique_ptr<tml::TimeUtilEngine> engine = std::make_unique<tml::DefaultTimeUtilEngine>();
+		tml::DefaultTimeUtilEngineDesc engine_desc;
 
-		if (reinterpret_cast<tml::DefaultTimeUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultTimeUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -149,8 +157,9 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 	{// MathUtil Create
 		std::unique_ptr<tml::MathUtilEngine> engine = std::make_unique<tml::DefaultMathUtilEngine>();
+		tml::DefaultMathUtilEngineDesc engine_desc;
 
-		if (reinterpret_cast<tml::DefaultMathUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultMathUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -165,8 +174,9 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 	{// RandomUtil Create
 		std::unique_ptr<tml::RandomUtilEngine> engine = std::make_unique<tml::DefaultRandomUtilEngine>();
+		tml::DefaultRandomUtilEngineDesc engine_desc;
 
-		if (reinterpret_cast<tml::DefaultRandomUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultRandomUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -181,8 +191,9 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 	{// FileUtil Create
 		std::unique_ptr<tml::FileUtilEngine> engine = std::make_unique<tml::DefaultFileUtilEngine>();
+		tml::DefaultFileUtilEngineDesc engine_desc;
 
-		if (reinterpret_cast<tml::DefaultFileUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultFileUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);
@@ -197,8 +208,9 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 
 	{// ThreadUtil Create
 		std::unique_ptr<tml::ThreadUtilEngine> engine = std::make_unique<tml::DefaultThreadUtilEngine>();
+		tml::DefaultThreadUtilEngineDesc engine_desc;
 
-		if (reinterpret_cast<tml::DefaultThreadUtilEngine *>(engine.get())->Create() < 0) {
+		if (reinterpret_cast<tml::DefaultThreadUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
 
 			return (-1);

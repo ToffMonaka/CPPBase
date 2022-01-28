@@ -12,6 +12,36 @@
 
 namespace tml {
 /**
+ * @brief StringUtilEngineDescクラス
+ */
+class StringUtilEngineDesc
+{
+public:
+	std::string locale_name;
+
+private:
+	void Release(void);
+
+public:
+	StringUtilEngineDesc();
+	virtual ~StringUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::StringUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief StringUtilEngineクラス
  *
  * インターフェースパターン
@@ -33,7 +63,7 @@ public:
 	virtual ~StringUtilEngine();
 
 	virtual void Init(void);
-	INT Create(const CHAR *);
+	INT Create(const tml::StringUtilEngineDesc &);
 
 	const std::string &GetLocaleName(void) const;
 };

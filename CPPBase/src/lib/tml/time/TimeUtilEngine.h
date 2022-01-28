@@ -12,6 +12,35 @@
 
 namespace tml {
 /**
+ * @brief TimeUtilEngineDescクラス
+ */
+class TimeUtilEngineDesc
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	TimeUtilEngineDesc();
+	virtual ~TimeUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::TimeUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief TimeUtilEngineクラス
  *
  * インターフェースパターン
@@ -30,7 +59,7 @@ public:
 	virtual ~TimeUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::TimeUtilEngineDesc &);
 };
 }
 

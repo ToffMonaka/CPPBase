@@ -11,6 +11,35 @@
 
 namespace tml {
 /**
+ * @brief DefaultMathUtilEngineDescクラス
+ */
+class DefaultMathUtilEngineDesc : public tml::MathUtilEngineDesc
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	DefaultMathUtilEngineDesc();
+	virtual ~DefaultMathUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::DefaultMathUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief DefaultMathUtilEngineクラス
  */
 class DefaultMathUtilEngine : public tml::MathUtilEngine
@@ -27,7 +56,7 @@ public:
 	virtual ~DefaultMathUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::DefaultMathUtilEngineDesc &);
 };
 }
 

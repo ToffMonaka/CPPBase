@@ -10,6 +10,42 @@
 /**
  * @brief コンストラクタ
  */
+tml::MemoryUtilEngineDesc::MemoryUtilEngineDesc() :
+	allocator_type(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE),
+	allocator_size(0U)
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::MemoryUtilEngineDesc::~MemoryUtilEngineDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::MemoryUtilEngineDesc::Init(void)
+{
+	this->Release();
+
+	this->allocator_type = tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE;
+	this->allocator_size = 0U;
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::MemoryUtilEngine::MemoryUtilEngine() :
 	allocator_type_(tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NONE)
 {
@@ -56,15 +92,14 @@ void tml::MemoryUtilEngine::Init(void)
 
 /**
  * @brief Create関数
- * @param allocator_type (allocator_type)
- * @param allocator_size (allocator_size)
+ * @param desc (desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::MemoryUtilEngine::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE allocator_type, const size_t allocator_size)
+INT tml::MemoryUtilEngine::Create(const tml::MemoryUtilEngineDesc &desc)
 {
 	{tml::ThreadLockBlock th_lock_block(this->allocator_th_lock_);
-		this->allocator_type_ = allocator_type;
+		this->allocator_type_ = desc.allocator_type;
 
 		switch (this->allocator_type_) {
 		case tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::NEW: {
@@ -79,7 +114,7 @@ INT tml::MemoryUtilEngine::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYP
 		case tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC: {
 			this->dlmalloc_allocator_ = std::make_unique<tml::DlmallocMemoryAllocator>();
 
-			if (this->dlmalloc_allocator_->Create(allocator_size) < 0) {
+			if (this->dlmalloc_allocator_->Create(desc.allocator_size) < 0) {
 				return (-1);
 			}
 

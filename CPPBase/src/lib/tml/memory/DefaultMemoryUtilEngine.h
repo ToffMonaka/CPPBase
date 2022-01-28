@@ -11,6 +11,35 @@
 
 namespace tml {
 /**
+ * @brief DefaultMemoryUtilEngineDescクラス
+ */
+class DefaultMemoryUtilEngineDesc : public tml::MemoryUtilEngineDesc
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	DefaultMemoryUtilEngineDesc();
+	virtual ~DefaultMemoryUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::DefaultMemoryUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief DefaultMemoryUtilEngineクラス
  */
 class DefaultMemoryUtilEngine : public tml::MemoryUtilEngine
@@ -27,7 +56,7 @@ public:
 	virtual ~DefaultMemoryUtilEngine();
 
 	virtual void Init(void);
-	INT Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE, const size_t);
+	INT Create(const tml::DefaultMemoryUtilEngineDesc &);
 
 	template <typename T>
 	T *Get(const size_t);

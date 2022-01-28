@@ -10,6 +10,39 @@
 /**
  * @brief コンストラクタ
  */
+tml::StringUtilEngineDesc::StringUtilEngineDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::StringUtilEngineDesc::~StringUtilEngineDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::StringUtilEngineDesc::Init(void)
+{
+	this->Release();
+
+	this->locale_name.clear();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::StringUtilEngine::StringUtilEngine()
 {
 	return;
@@ -42,13 +75,13 @@ void tml::StringUtilEngine::Init(void)
 
 /**
  * @brief Create関数
- * @param locale_name (locale_name)
+ * @param desc (desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::StringUtilEngine::Create(const CHAR *locale_name)
+INT tml::StringUtilEngine::Create(const tml::StringUtilEngineDesc &desc)
 {
-	this->locale_name_ = locale_name;
+	this->locale_name_ = desc.locale_name;
 
 	return (0);
 }

@@ -10,6 +10,39 @@
 /**
  * @brief コンストラクタ
  */
+tml::DefaultFileUtilEngineDesc::DefaultFileUtilEngineDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::DefaultFileUtilEngineDesc::~DefaultFileUtilEngineDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::DefaultFileUtilEngineDesc::Init(void)
+{
+	this->Release();
+
+	tml::FileUtilEngineDesc::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::DefaultFileUtilEngine::DefaultFileUtilEngine()
 {
 	return;
@@ -42,14 +75,15 @@ void tml::DefaultFileUtilEngine::Init(void)
 
 /**
  * @brief Create関数
+ * @param desc (desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::DefaultFileUtilEngine::Create(void)
+INT tml::DefaultFileUtilEngine::Create(const tml::DefaultFileUtilEngineDesc &desc)
 {
 	this->Init();
 
-	if (tml::FileUtilEngine::Create() < 0) {
+	if (tml::FileUtilEngine::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);

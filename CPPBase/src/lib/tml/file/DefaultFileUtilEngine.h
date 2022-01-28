@@ -11,6 +11,35 @@
 
 namespace tml {
 /**
+ * @brief DefaultFileUtilEngineDescクラス
+ */
+class DefaultFileUtilEngineDesc : public tml::FileUtilEngineDesc
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	DefaultFileUtilEngineDesc();
+	virtual ~DefaultFileUtilEngineDesc();
+
+	virtual void Init(void);
+};
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::DefaultFileUtilEngineDesc::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+/**
  * @brief DefaultFileUtilEngineクラス
  */
 class DefaultFileUtilEngine : public tml::FileUtilEngine
@@ -27,7 +56,7 @@ public:
 	virtual ~DefaultFileUtilEngine();
 
 	virtual void Init(void);
-	INT Create(void);
+	INT Create(const tml::DefaultFileUtilEngineDesc &);
 };
 }
 

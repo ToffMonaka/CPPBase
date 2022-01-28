@@ -10,6 +10,39 @@
 /**
  * @brief コンストラクタ
  */
+tml::DefaultMemoryUtilEngineDesc::DefaultMemoryUtilEngineDesc()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::DefaultMemoryUtilEngineDesc::~DefaultMemoryUtilEngineDesc()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::DefaultMemoryUtilEngineDesc::Init(void)
+{
+	this->Release();
+
+	tml::MemoryUtilEngineDesc::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::DefaultMemoryUtilEngine::DefaultMemoryUtilEngine()
 {
 	return;
@@ -42,16 +75,15 @@ void tml::DefaultMemoryUtilEngine::Init(void)
 
 /**
  * @brief Create関数
- * @param allocator_type (allocator_type)
- * @param allocator_size (allocator_size)
+ * @param desc (desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::DefaultMemoryUtilEngine::Create(const tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE allocator_type, const size_t allocator_size)
+INT tml::DefaultMemoryUtilEngine::Create(const tml::DefaultMemoryUtilEngineDesc &desc)
 {
 	this->Init();
 
-	if (tml::MemoryUtilEngine::Create(allocator_type, allocator_size) < 0) {
+	if (tml::MemoryUtilEngine::Create(desc) < 0) {
 		this->Init();
 
 		return (-1);
