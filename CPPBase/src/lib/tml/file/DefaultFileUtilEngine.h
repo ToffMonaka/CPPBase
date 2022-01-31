@@ -49,6 +49,8 @@ public: tml::DefaultFileUtilEngine &operator =(const tml::DefaultFileUtilEngine 
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+
+private:
 	void Release(void);
 
 public:

@@ -49,6 +49,8 @@ public: tml::DefaultTimeUtilEngine &operator =(const tml::DefaultTimeUtilEngine 
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+
+private:
 	void Release(void);
 
 public:

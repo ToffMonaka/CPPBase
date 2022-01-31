@@ -34,7 +34,6 @@ public:
 	static tml::Thread *Get(void);
 	static INT Start(std::unique_ptr<tml::MainThread> &);
 	static INT Start(std::unique_ptr<tml::SubThread> &);
-	static INT StartAll(void);
 	static void End(const bool finish_flg = false);
 	static void EndAll(const bool finish_flg = false);
 	static INT CreateCOM(const DWORD);
@@ -87,17 +86,6 @@ inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::MainThread> &th)
 inline INT tml::ThreadUtil::Start(std::unique_ptr<tml::SubThread> &th)
 {
 	return (tml::ThreadUtil::engine_->Start(th));
-}
-
-
-/**
- * @brief StartAllä÷êî
- * @return result (result)<br>
- * 0ñ¢ñû=é∏îs
- */
-inline INT tml::ThreadUtil::StartAll(void)
-{
-	return (tml::ThreadUtil::engine_->StartAll());
 }
 
 

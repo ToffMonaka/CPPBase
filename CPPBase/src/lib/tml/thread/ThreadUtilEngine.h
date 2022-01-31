@@ -62,16 +62,16 @@ public:
 	 */
 	typedef struct STATE_
 	{
-		bool all_started_flg;
-		bool all_ended_flg;
+		bool all_started_flag;
+		bool all_ended_flag;
 		INT exit_code;
 
 		/**
 		 * @brief コンストラクタ
 		 */
 		STATE_() :
-			all_started_flg(false),
-			all_ended_flg(false),
+			all_started_flag(false),
+			all_ended_flag(false),
 			exit_code(0)
 		{
 			return;
@@ -91,6 +91,8 @@ private:
 private:
 	void Release(void);
 
+	INT StartAll(void);
+
 public:
 	ThreadUtilEngine();
 	virtual ~ThreadUtilEngine();
@@ -101,7 +103,6 @@ public:
 	tml::Thread *Get(void);
 	INT Start(std::unique_ptr<tml::MainThread> &);
 	INT Start(std::unique_ptr<tml::SubThread> &);
-	INT StartAll(void);
 	void End(const bool finish_flg = false);
 	void EndAll(const bool finish_flg = false);
 	INT CreateCOM(const DWORD);

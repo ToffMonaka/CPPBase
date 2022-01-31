@@ -114,13 +114,13 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::MainThread> &th)
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		if ((this->main_th_ != nullptr)
-		|| (this->stat_.all_ended_flg)) {
+		|| (this->stat_.all_ended_flag)) {
 			return (-1);
 		}
 
 		auto tmp_th = th.get();
 
-		if (this->stat_.all_started_flg) {
+		if (this->stat_.all_started_flag) {
 			return (-1);
 		} else {
 			tmp_th->CreateCore();
@@ -158,13 +158,13 @@ INT tml::ThreadUtilEngine::Start(std::unique_ptr<tml::SubThread> &th)
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
 		if ((this->main_th_ == nullptr)
-		|| (this->stat_.all_ended_flg)) {
+		|| (this->stat_.all_ended_flag)) {
 			return (-1);
 		}
 
 		auto tmp_th = th.get();
 
-		if (this->stat_.all_started_flg) {
+		if (this->stat_.all_started_flag) {
 			tmp_th->CreateCore();
 
 			this->start_th_cont_.push_back(tmp_th);
@@ -197,7 +197,7 @@ INT tml::ThreadUtilEngine::StartAll(void)
 	}
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_.all_started_flg = true;
+		this->stat_.all_started_flag = true;
 
 		for (auto tmp_th : this->ready_th_cont_) {
 			tmp_th->CreateCore();
@@ -286,7 +286,7 @@ void tml::ThreadUtilEngine::EndAll(const bool finish_flg)
 	tml::ThreadUtilEngine::STATE stat;
 
 	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_.all_ended_flg = true;
+		this->stat_.all_ended_flag = true;
 
 		this->ready_th_cont_.clear();
 
@@ -316,7 +316,7 @@ void tml::ThreadUtilEngine::EndAll(const bool finish_flg)
 	}
 
 	if (main_th != nullptr) {
-		if (stat.all_started_flg) {
+		if (stat.all_started_flag) {
 			main_th->End();
 
 			this->End(true);

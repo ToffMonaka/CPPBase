@@ -52,6 +52,8 @@ public: tml::TimeUtilEngine &operator =(const tml::TimeUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+
+private:
 	void Release(void);
 
 public:

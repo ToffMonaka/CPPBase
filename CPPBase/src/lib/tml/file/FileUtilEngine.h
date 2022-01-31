@@ -52,6 +52,8 @@ public: tml::FileUtilEngine &operator =(const tml::FileUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+
+private:
 	void Release(void);
 
 public:

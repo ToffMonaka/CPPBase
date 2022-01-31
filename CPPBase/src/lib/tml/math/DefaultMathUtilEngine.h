@@ -49,6 +49,8 @@ public: tml::DefaultMathUtilEngine &operator =(const tml::DefaultMathUtilEngine 
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+
+private:
 	void Release(void);
 
 public:

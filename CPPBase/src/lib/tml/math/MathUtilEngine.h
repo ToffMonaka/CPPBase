@@ -52,6 +52,8 @@ public: tml::MathUtilEngine &operator =(const tml::MathUtilEngine &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+
+private:
 	void Release(void);
 
 public:

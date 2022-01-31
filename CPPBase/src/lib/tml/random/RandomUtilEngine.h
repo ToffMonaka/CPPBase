@@ -52,6 +52,8 @@ public: tml::RandomUtilEngine &operator =(const tml::RandomUtilEngine &) = delet
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+
+private:
 	void Release(void);
 
 public:

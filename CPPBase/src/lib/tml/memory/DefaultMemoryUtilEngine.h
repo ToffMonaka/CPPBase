@@ -49,6 +49,8 @@ public: tml::DefaultMemoryUtilEngine &operator =(const tml::DefaultMemoryUtilEng
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+
+private:
 	void Release(void);
 
 public:
