@@ -12,6 +12,13 @@
 
 namespace tml {
 namespace graphic {
+class Font;
+}
+}
+
+
+namespace tml {
+namespace graphic {
 /**
  * @brief FontBitmapƒNƒ‰ƒX
  */

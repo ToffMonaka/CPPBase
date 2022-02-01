@@ -58,7 +58,8 @@ void tml::graphic::AtlasRect::Init(void)
  */
 INT tml::graphic::AtlasRect::Create(const WCHAR *name, const tml::XMUINT2EX &pos, const tml::XMUINT2EX &size)
 {
-	if (name == nullptr) {
+	if ((name == nullptr)
+	|| (name[0] == 0)) {
 		this->Init();
 
 		return (-1);

@@ -14,6 +14,13 @@
 
 namespace tml {
 namespace graphic {
+class Atlas;
+}
+}
+
+
+namespace tml {
+namespace graphic {
 /**
  * @brief AtlasRectƒNƒ‰ƒX
  */

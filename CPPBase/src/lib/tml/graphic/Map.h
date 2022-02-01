@@ -14,6 +14,13 @@
 
 namespace tml {
 namespace graphic {
+class Map;
+}
+}
+
+
+namespace tml {
+namespace graphic {
 /**
  * @brief MapBlockƒNƒ‰ƒX
  */
