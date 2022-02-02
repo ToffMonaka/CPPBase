@@ -21,9 +21,6 @@
 #include "../Global.h"
 
 
-#include "../../lib/tml/file/FileCache.h"
-
-
 /**
  * @brief コンストラクタ
  */
@@ -207,28 +204,6 @@ INT cpp_base::MainThread::OnStart(void)
 
 			return (-1);
 		}
-	}
-
-	{// Test
-		tml::FileCache file_cache;
-		tml::FileCacheDesc file_cache_desc;
-
-		if (file_cache.Create(file_cache_desc) < 0) {
-			int a = 0;
-		} else {
-			WCHAR file_path[] = L"test";
-			tml::DynamicBuffer buf(10U);
-
-			buf.WriteChar(1);
-			buf.WriteChar(2);
-			buf.WriteChar(3);
-
-			file_cache.AddFile(file_path, buf);
-
-			int a = 0;
-		}
-
-		int a = 0;
 	}
 
 	{// TestThread Start

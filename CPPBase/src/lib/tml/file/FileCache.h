@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <list>
 #include <map>
 #include "../memory/DynamicBuffer.h"
 
@@ -79,6 +80,8 @@ namespace tml {
 class FileCacheDesc
 {
 public:
+	size_t file_limit;
+	size_t file_buffer_limit;
 
 private:
 	void Release(void);
@@ -111,7 +114,10 @@ public: FileCache(const tml::FileCache &) = delete;
 public: tml::FileCache &operator =(const tml::FileCache &) = delete;
 
 private:
-	std::map<std::wstring, tml::FileCacheFile> file_cont_;
+	size_t file_limit_;
+	size_t file_buf_limit_;
+	std::list<tml::unique_ptr<tml::FileCacheFile>> file_cont_;
+	std::map<std::wstring, tml::FileCacheFile *> file_cont_by_file_path_;
 
 private:
 	void Release(void);
@@ -147,11 +153,11 @@ inline void tml::FileCache::Release(void)
  */
 inline const tml::FileCacheFile *tml::FileCache::GetFile(const WCHAR *file_path) const
 {
-	auto file_itr = this->file_cont_.find(file_path);
+	auto file_itr = this->file_cont_by_file_path_.find(file_path);
 
-	if (file_itr == this->file_cont_.end()) {
+	if (file_itr == this->file_cont_by_file_path_.end()) {
 		return (nullptr);
 	}
 
-	return (&file_itr->second);
+	return (file_itr->second);
 }

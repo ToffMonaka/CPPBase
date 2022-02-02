@@ -69,7 +69,9 @@ INT tml::FileCacheFile::Create(const WCHAR *file_path, const tml::DynamicBuffer 
 /**
  * @brief コンストラクタ
  */
-tml::FileCacheDesc::FileCacheDesc()
+tml::FileCacheDesc::FileCacheDesc() :
+	file_limit(0U),
+	file_buffer_limit(0U)
 {
 	return;
 }
@@ -93,6 +95,9 @@ void tml::FileCacheDesc::Init(void)
 {
 	this->Release();
 
+	this->file_limit = 0U;
+	this->file_buffer_limit = 0U;
+
 	return;
 }
 
@@ -100,7 +105,9 @@ void tml::FileCacheDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::FileCache::FileCache()
+tml::FileCache::FileCache() :
+	file_limit_(0U),
+	file_buf_limit_(0U)
 {
 	return;
 }
@@ -124,7 +131,10 @@ void tml::FileCache::Init(void)
 {
 	this->Release();
 
+	this->file_limit_ = 0U;
+	this->file_buf_limit_ = 0U;
 	this->file_cont_.clear();
+	this->file_cont_by_file_path_.clear();
 
 	return;
 }
@@ -139,6 +149,9 @@ void tml::FileCache::Init(void)
 INT tml::FileCache::Create(const tml::FileCacheDesc &desc)
 {
 	this->Init();
+
+	this->file_limit_ = desc.file_limit;
+	this->file_buf_limit_ = desc.file_buffer_limit;
 
 	return (0);
 }
@@ -158,15 +171,49 @@ INT tml::FileCache::AddFile(const WCHAR *file_path, const tml::DynamicBuffer &bu
 		return (-1);
 	}
 
-	tml::FileCacheFile file;
+	if (buf.GetSize() > this->file_buf_limit_) {
+		this->RemoveFile(file_path);
 
-	auto insert_result = this->file_cont_.emplace(file_path, file);
+		return (-1);
+	}
 
-	if (insert_result.second) {
-		insert_result.first->second.file_path_ = file_path;
-		insert_result.first->second.buf_ = buf;
+	auto file_itr = this->file_cont_by_file_path_.find(file_path);
+
+	if (file_itr != this->file_cont_by_file_path_.end()) {
+		auto file = file_itr->second;
+
+		file->buf_ = buf;
+
+		for (auto file_itr2 = this->file_cont_.begin(), file_end_itr2 = this->file_cont_.end(); file_itr2 != file_end_itr2; ++file_itr2) {
+			if (file_itr2->get() == file) {
+				tml::unique_ptr<tml::FileCacheFile> file = std::move((*file_itr2));
+
+				this->file_cont_.erase(file_itr2);
+				this->file_cont_.push_back(std::move(file));
+
+				break;
+			}
+		}
 	} else {
-		insert_result.first->second.buf_ = buf;
+		if (this->file_limit_ <= 0U) {
+			return (-1);
+		}
+
+		if (this->file_cont_.size() >= this->file_limit_) {
+			auto file_itr2 = this->file_cont_.begin();
+
+			this->file_cont_by_file_path_.erase(file_itr2->get()->file_path_);
+			this->file_cont_.erase(file_itr2);
+		}
+
+		auto file = tml::make_unique<tml::FileCacheFile>(1U);
+		auto file_p = file.get();
+
+		file_p->file_path_ = file_path;
+		file_p->buf_ = buf;
+
+		this->file_cont_by_file_path_.emplace(file_path, file_p);
+		this->file_cont_.push_back(std::move(file));
 	}
 
 	return (0);
@@ -186,7 +233,21 @@ void tml::FileCache::RemoveFile(const WCHAR *file_path)
 		return;
 	}
 
-	this->file_cont_.erase(file_path);
+	auto file_itr = this->file_cont_by_file_path_.find(file_path);
+
+	if (file_itr != this->file_cont_by_file_path_.end()) {
+		auto file = file_itr->second;
+
+		this->file_cont_by_file_path_.erase(file_itr);
+
+		for (auto file_itr2 = this->file_cont_.begin(), file_end_itr2 = this->file_cont_.end(); file_itr2 != file_end_itr2; ++file_itr2) {
+			if (file_itr2->get() == file) {
+				this->file_cont_.erase(file_itr2);
+
+				break;
+			}
+		}
+	}
 
 	return;
 }
