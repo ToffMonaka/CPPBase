@@ -122,6 +122,8 @@ private:
 private:
 	void Release(void);
 
+	void UpFilePart(const tml::FileCacheFile *);
+
 public:
 	FileCache();
 	virtual ~FileCache();
@@ -129,7 +131,7 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::FileCacheDesc &);
 
-	const tml::FileCacheFile *GetFile(const WCHAR *) const;
+	const tml::FileCacheFile *GetFile(const WCHAR *);
 	INT AddFile(const WCHAR *, const tml::DynamicBuffer &);
 	void RemoveFile(const WCHAR *);
 };
@@ -151,13 +153,15 @@ inline void tml::FileCache::Release(void)
  * @return file (file)<br>
  * nullptr=Ž¸”s
  */
-inline const tml::FileCacheFile *tml::FileCache::GetFile(const WCHAR *file_path) const
+inline const tml::FileCacheFile *tml::FileCache::GetFile(const WCHAR *file_path)
 {
 	auto file_itr = this->file_cont_by_file_path_.find(file_path);
 
 	if (file_itr == this->file_cont_by_file_path_.end()) {
 		return (nullptr);
 	}
+
+	this->UpFilePart(file_itr->second);
 
 	return (file_itr->second);
 }

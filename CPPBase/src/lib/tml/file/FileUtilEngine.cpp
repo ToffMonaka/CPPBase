@@ -10,7 +10,9 @@
 /**
  * @brief コンストラクタ
  */
-tml::FileUtilEngineDesc::FileUtilEngineDesc()
+tml::FileUtilEngineDesc::FileUtilEngineDesc() :
+	cache_file_limit(0U),
+	cache_file_buffer_limit(0U)
 {
 	return;
 }
@@ -34,6 +36,9 @@ void tml::FileUtilEngineDesc::Init(void)
 {
 	this->Release();
 
+	this->cache_file_limit = 0U;
+	this->cache_file_buffer_limit = 0U;
+
 	return;
 }
 
@@ -41,7 +46,9 @@ void tml::FileUtilEngineDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::FileUtilEngine::FileUtilEngine()
+tml::FileUtilEngine::FileUtilEngine() :
+	cache_file_limit_(0U),
+	cache_file_buf_limit_(0U)
 {
 	return;
 }
@@ -65,6 +72,9 @@ void tml::FileUtilEngine::Init(void)
 {
 	this->Release();
 
+	this->cache_file_limit_ = 0U;
+	this->cache_file_buf_limit_ = 0U;
+
 	return;
 }
 
@@ -77,5 +87,8 @@ void tml::FileUtilEngine::Init(void)
  */
 INT tml::FileUtilEngine::Create(const tml::FileUtilEngineDesc &desc)
 {
+	this->cache_file_limit_ = desc.cache_file_limit;
+	this->cache_file_buf_limit_ = desc.cache_file_buffer_limit;
+
 	return (0);
 }

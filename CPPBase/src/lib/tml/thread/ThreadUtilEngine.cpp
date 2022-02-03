@@ -76,9 +76,7 @@ void tml::ThreadUtilEngine::Init(void)
 {
 	this->Release();
 
-	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_ = tml::ThreadUtilEngine::STATE();
-	}
+	this->stat_ = tml::ThreadUtilEngine::STATE();
 
 	return;
 }
@@ -92,9 +90,7 @@ void tml::ThreadUtilEngine::Init(void)
  */
 INT tml::ThreadUtilEngine::Create(const tml::ThreadUtilEngineDesc &desc)
 {
-	{tml::ThreadLockBlock th_lock_block(this->stat_th_lock_);
-		this->stat_ = tml::ThreadUtilEngine::STATE();
-	}
+	this->stat_ = tml::ThreadUtilEngine::STATE();
 
 	return (0);
 }

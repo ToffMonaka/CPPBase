@@ -12,8 +12,10 @@
  * @brief コンストラクタ
  */
 cpp_base::UtilConfigFileData::UtilConfigFileData() :
-	util_memory_allocator_size(1048576U),
-	util_locale_name("Japanese")
+	memory_allocator_size(1048576U),
+	string_locale_name("Japanese"),
+	file_cache_file_limit(128U),
+	file_cache_file_buffer_limit(10240U)
 {
 	return;
 }
@@ -37,8 +39,10 @@ void cpp_base::UtilConfigFileData::Init(void)
 {
 	this->Release();
 
-	this->util_memory_allocator_size = 1048576U;
-	this->util_locale_name = "Japanese";
+	this->memory_allocator_size = 1048576U;
+	this->string_locale_name = "Japanese";
+	this->file_cache_file_limit = 128U;
+	this->file_cache_file_buffer_limit = 10240U;
 
 	return;
 }
@@ -107,23 +111,83 @@ INT cpp_base::UtilConfigFile::OnRead(void)
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// Util Section Read
-		val_name_cont = conf_file.data.GetValueNameContainer(L"UTIL");
+	{// Memory Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"MEM");
 
 		if (val_name_cont != nullptr) {
-			val = conf_file.data.GetValue((*val_name_cont), L"MEM_ALLOCATOR_SIZE");
+			val = conf_file.data.GetValue((*val_name_cont), L"ALLOCATOR_SIZE");
 
 			if (val != nullptr) {
-				tml::StringUtil::GetValue(this->data.util_memory_allocator_size, val->c_str());
-			}
-
-			val = conf_file.data.GetValue((*val_name_cont), L"LOCALE_NAME");
-
-			if (val != nullptr) {
-				tml::StringUtil::GetStringRaw(this->data.util_locale_name, val->c_str());
+				tml::StringUtil::GetValue(this->data.memory_allocator_size, val->c_str());
 			}
 		}
 	}
+
+	{// String Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"STR");
+
+		if (val_name_cont != nullptr) {
+			val = conf_file.data.GetValue((*val_name_cont), L"LOCALE_NAME");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetStringRaw(this->data.string_locale_name, val->c_str());
+			}
+		}
+	}
+
+	/*
+	{// Time Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"TIME");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	/*
+	{// Math Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"MATH");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	/*
+	{// Random Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"RAND");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
+
+	{// File Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"FILE");
+
+		if (val_name_cont != nullptr) {
+			val = conf_file.data.GetValue((*val_name_cont), L"CACHE_FILE_LIMIT");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.file_cache_file_limit, val->c_str());
+			}
+
+			val = conf_file.data.GetValue((*val_name_cont), L"CACHE_FILE_BUFFER_LIMIT");
+
+			if (val != nullptr) {
+				tml::StringUtil::GetValue(this->data.file_cache_file_buffer_limit, val->c_str());
+			}
+		}
+	}
+
+	/*
+	{// Thread Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"TH");
+
+		if (val_name_cont != nullptr) {
+		}
+	}
+	*/
 
 	return (0);
 }
@@ -151,10 +215,42 @@ INT cpp_base::UtilConfigFile::OnWrite(void)
 
 	std::wstring val;
 
-	{// Util Section Write
-		conf_file.data.line_string_container.push_back(section_start_str + L"UTIL" + section_end_str);
-		conf_file.data.line_string_container.push_back(L"MEM_ALLOCATOR_SIZE" + equal_str + tml::StringUtil::GetString(val, this->data.util_memory_allocator_size));
-		conf_file.data.line_string_container.push_back(L"LOCALE_NAME" + equal_str + tml::StringUtil::GetStringRaw(val, this->data.util_locale_name.c_str()));
+	{// Memory Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"MEM" + section_end_str);
+		conf_file.data.line_string_container.push_back(L"ALLOCATOR_SIZE" + equal_str + tml::StringUtil::GetString(val, this->data.memory_allocator_size));
+		conf_file.data.line_string_container.push_back(empty_str);
+	}
+
+	{// String Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"STR" + section_end_str);
+		conf_file.data.line_string_container.push_back(L"LOCALE_NAME" + equal_str + tml::StringUtil::GetStringRaw(val, this->data.string_locale_name.c_str()));
+		conf_file.data.line_string_container.push_back(empty_str);
+	}
+
+	{// Time Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"TIME" + section_end_str);
+		conf_file.data.line_string_container.push_back(empty_str);
+	}
+
+	{// Math Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"MATH" + section_end_str);
+		conf_file.data.line_string_container.push_back(empty_str);
+	}
+
+	{// Random Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"RAND" + section_end_str);
+		conf_file.data.line_string_container.push_back(empty_str);
+	}
+
+	{// File Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"FILE" + section_end_str);
+		conf_file.data.line_string_container.push_back(L"CACHE_FILE_LIMIT" + equal_str + tml::StringUtil::GetString(val, this->data.file_cache_file_limit));
+		conf_file.data.line_string_container.push_back(L"CACHE_FILE_BUFFER_LIMIT" + equal_str + tml::StringUtil::GetString(val, this->data.file_cache_file_buffer_limit));
+		conf_file.data.line_string_container.push_back(empty_str);
+	}
+
+	{// Thread Section Write
+		conf_file.data.line_string_container.push_back(section_start_str + L"TH" + section_end_str);
 		conf_file.data.line_string_container.push_back(empty_str);
 	}
 

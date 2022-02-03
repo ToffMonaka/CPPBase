@@ -24,8 +24,10 @@ public: cpp_base::UtilConfigFileData &operator =(const cpp_base::UtilConfigFileD
 private:
 
 public:
-	size_t util_memory_allocator_size;
-	std::string util_locale_name;
+	size_t memory_allocator_size;
+	std::string string_locale_name;
+	size_t file_cache_file_limit;
+	size_t file_cache_file_buffer_limit;
 
 private:
 	void Release(void);

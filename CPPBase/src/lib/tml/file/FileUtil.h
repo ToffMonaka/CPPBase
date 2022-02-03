@@ -8,6 +8,7 @@
 #include "../constant/ConstantUtil.h"
 #include "../util/Util.h"
 #include "FileUtilEngine.h"
+#include "FileCache.h"
 
 
 namespace tml {
@@ -29,8 +30,8 @@ private:
 	static size_t read_buf_size_;
 	static BYTE *write_buf_;
 	static size_t write_buf_size_;
+	static tml::FileCache cache_;
 	static tml::MutexThreadLock file_th_lock_;
-	static tml::MutexThreadLock dir_th_lock_;
 
 public:
 	static void Init(void);
@@ -39,8 +40,8 @@ public:
 	static bool CheckFixedThread(void);
 	static BYTE *&GetReadBuffer(BYTE *&, size_t &);
 	static BYTE *&GetWriteBuffer(BYTE *&, size_t &);
+	static tml::FileCache &GetCache(void);
 	static tml::MutexThreadLock &GetFileThreadLock(void);
-	static tml::MutexThreadLock &GetDirectoryThreadLock(void);
 };
 }
 
@@ -57,6 +58,19 @@ inline bool tml::FileUtil::CheckFixedThread(void)
 
 
 /**
+ * @brief GetCache関数
+ *
+ * Create関数不要
+ *
+ * @return cache (cache)
+ */
+inline tml::FileCache &tml::FileUtil::GetCache(void)
+{
+	return (tml::FileUtil::cache_);
+}
+
+
+/**
  * @brief GetFileThreadLock関数
  *
  * Create関数不要
@@ -66,17 +80,4 @@ inline bool tml::FileUtil::CheckFixedThread(void)
 inline tml::MutexThreadLock &tml::FileUtil::GetFileThreadLock(void)
 {
 	return (tml::FileUtil::file_th_lock_);
-}
-
-
-/**
- * @brief GetDirectoryThreadLock関数
- *
- * Create関数不要
- *
- * @return dir_th_lock (directory_thread_lock)
- */
-inline tml::MutexThreadLock &tml::FileUtil::GetDirectoryThreadLock(void)
-{
-	return (tml::FileUtil::dir_th_lock_);
 }

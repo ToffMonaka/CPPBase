@@ -12,8 +12,8 @@ BYTE *tml::FileUtil::read_buf_ = nullptr;
 size_t tml::FileUtil::read_buf_size_ = 0U;
 BYTE *tml::FileUtil::write_buf_ = nullptr;
 size_t tml::FileUtil::write_buf_size_ = 0U;
+tml::FileCache tml::FileUtil::cache_;
 tml::MutexThreadLock tml::FileUtil::file_th_lock_;
-tml::MutexThreadLock tml::FileUtil::dir_th_lock_;
 
 
 /**
@@ -31,15 +31,15 @@ void tml::FileUtil::Init(void)
 		tml::FileUtil::read_buf_ = nullptr;
 	}
 
-	tml::FileUtil::read_buf_size_ = 0U;
-
 	if (tml::FileUtil::write_buf_ != nullptr) {
 		delete [] tml::FileUtil::write_buf_;
 
 		tml::FileUtil::write_buf_ = nullptr;
 	}
-	
+
+	tml::FileUtil::read_buf_size_ = 0U;
 	tml::FileUtil::write_buf_size_ = 0U;
+	tml::FileUtil::cache_.Init();
 
 	tml::FileUtil::engine_.reset();
 
@@ -70,6 +70,17 @@ INT tml::FileUtil::Create(std::unique_ptr<tml::FileUtilEngine> &engine)
 
 	tml::FileUtil::write_buf_size_ = 2048U;
 	tml::FileUtil::write_buf_ = new BYTE[tml::FileUtil::write_buf_size_];
+
+	tml::FileCacheDesc cache_desc;
+
+	cache_desc.file_limit = tml::FileUtil::engine_->GetCacheFileLimit();
+	cache_desc.file_buffer_limit = tml::FileUtil::engine_->GetCacheFileBufferLimit();
+
+	if (tml::FileUtil::cache_.Create(cache_desc) < 0) {
+		tml::FileUtil::Init();
+
+		return (-1);
+	}
 
 	return (0);
 }

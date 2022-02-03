@@ -104,7 +104,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 		tml::DefaultMemoryUtilEngineDesc engine_desc;
 
 		engine_desc.allocator_type = tml::ConstantUtil::MEMORY::ALLOCATOR_TYPE::DLMALLOC;
-		engine_desc.allocator_size = cpp_base::Global::util_config_file.data.util_memory_allocator_size;
+		engine_desc.allocator_size = cpp_base::Global::util_config_file.data.memory_allocator_size;
 
 		if (reinterpret_cast<tml::DefaultMemoryUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
@@ -123,7 +123,7 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 		std::unique_ptr<tml::StringUtilEngine> engine = std::make_unique<tml::DefaultStringUtilEngine>();
 		tml::DefaultStringUtilEngineDesc engine_desc;
 
-		engine_desc.locale_name = cpp_base::Global::util_config_file.data.util_locale_name;
+		engine_desc.locale_name = cpp_base::Global::util_config_file.data.string_locale_name;
 
 		if (reinterpret_cast<tml::DefaultStringUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
@@ -192,6 +192,9 @@ INT cpp_base::CreateMain(const HINSTANCE instance_handle, const HINSTANCE prev_i
 	{// FileUtil Create
 		std::unique_ptr<tml::FileUtilEngine> engine = std::make_unique<tml::DefaultFileUtilEngine>();
 		tml::DefaultFileUtilEngineDesc engine_desc;
+
+		engine_desc.cache_file_limit = cpp_base::Global::util_config_file.data.file_cache_file_limit;
+		engine_desc.cache_file_buffer_limit = cpp_base::Global::util_config_file.data.file_cache_file_buffer_limit;
 
 		if (reinterpret_cast<tml::DefaultFileUtilEngine *>(engine.get())->Create(engine_desc) < 0) {
 			cpp_base::InitMain();
