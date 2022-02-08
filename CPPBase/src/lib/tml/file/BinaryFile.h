@@ -361,15 +361,9 @@ inline INT tml::BaseBinaryFile<R>::OnRead(void)
 	auto read_desc_dat = this->read_desc.GetDataByParent();
 
 	if (read_desc_dat->file_path.empty()) {
-		if (read_desc_dat->buffer.GetLength() > 0U) {
-			this->data.Init();
-
-			this->data.buffer = read_desc_dat->buffer;
-
-			return (0);
-		}
-
 		this->data.Init();
+
+		this->data.buffer = read_desc_dat->buffer;
 
 		return (0);
 	}
@@ -380,32 +374,42 @@ inline INT tml::BaseBinaryFile<R>::OnRead(void)
 	size_t read_size = 0U;
 
 	{tml::ThreadLockBlock th_lock_block(tml::FileUtil::GetFileThreadLock());
-		std::ifstream ifs;
+		auto cache_file = (!R) ? tml::FileUtil::GetCache().GetFile(read_desc_dat->file_path.c_str()) : nullptr;
 
-		ifs.open(read_desc_dat->file_path.c_str(), std::ios_base::in | std::ios_base::binary);
+		if (cache_file != nullptr) {
+			buf.Set(cache_file->GetBuffer().Get(), cache_file->GetBuffer().GetLength());
+		} else {
+			std::ifstream ifs;
 
-		if (!ifs) {
-			return (-1);
-		}
+			ifs.open(read_desc_dat->file_path.c_str(), std::ios_base::in | std::ios_base::binary);
 
-		tml::FileUtil::GetReadBuffer(read_buf, read_buf_size);
-
-		while (1) {
-			ifs.read(reinterpret_cast<CHAR *>(read_buf), read_buf_size);
-
-			read_size = static_cast<size_t>(ifs.gcount());
-
-			if (read_size > 0U) {
-				buf.SetSize(buf.GetSize() + read_size);
-				buf.WriteArray(read_buf, read_size, read_size);
+			if (!ifs) {
+				return (-1);
 			}
 
-			if (ifs.eof()) {
-				break;
+			tml::FileUtil::GetReadBuffer(read_buf, read_buf_size);
+
+			while (1) {
+				ifs.read(reinterpret_cast<CHAR *>(read_buf), read_buf_size);
+
+				read_size = static_cast<size_t>(ifs.gcount());
+
+				if (read_size > 0U) {
+					buf.SetSize(buf.GetSize() + read_size);
+					buf.WriteArray(read_buf, read_size, read_size);
+				}
+
+				if (ifs.eof()) {
+					break;
+				}
+			}
+
+			ifs.close();
+
+			if (!R) {
+				tml::FileUtil::GetCache().AddFile(read_desc_dat->file_path.c_str(), buf.Get(), buf.GetLength());
 			}
 		}
-
-		ifs.close();
 	}
 
 	this->data.Init();
@@ -448,25 +452,21 @@ inline INT tml::BaseBinaryFile<R>::OnWrite(void)
 			return (-1);
 		}
 
-		if (this->data.buffer.GetLength() <= 0U) {
-			ofs.close();
+		if (this->data.buffer.GetLength() > 0U) {
+			tml::FileUtil::GetWriteBuffer(write_buf, write_buf_size);
 
-			return (0);
-		}
+			while (1) {
+				write_size = tml::Min(this->data.buffer.GetLength() - buf_index, write_buf_size);
 
-		tml::FileUtil::GetWriteBuffer(write_buf, write_buf_size);
+				tml::Copy(write_buf, &this->data.buffer.Get()[buf_index], write_size);
 
-		while (1) {
-			write_size = tml::Min(this->data.buffer.GetLength() - buf_index, write_buf_size);
+				ofs.write(reinterpret_cast<CHAR *>(write_buf), write_size);
 
-			tml::Copy(write_buf, &this->data.buffer.Get()[buf_index], write_size);
+				buf_index += write_size;
 
-			ofs.write(reinterpret_cast<CHAR *>(write_buf), write_size);
-
-			buf_index += write_size;
-
-			if (buf_index >= this->data.buffer.GetLength()) {
-				break;
+				if (buf_index >= this->data.buffer.GetLength()) {
+					break;
+				}
 			}
 		}
 

@@ -132,7 +132,7 @@ public:
 	INT Create(const tml::FileCacheDesc &);
 
 	const tml::FileCacheFile *GetFile(const WCHAR *);
-	INT AddFile(const WCHAR *, const tml::DynamicBuffer &);
+	INT AddFile(const WCHAR *, const BYTE *, const size_t);
 	void RemoveFile(const WCHAR *);
 };
 }

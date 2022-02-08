@@ -161,17 +161,18 @@ INT tml::FileCache::Create(const tml::FileCacheDesc &desc)
  * @brief AddFileä÷êî
  * @param file_path (file_path)
  * @param buf (buffer)
+ * @param buf_size (buffer_size)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::FileCache::AddFile(const WCHAR *file_path, const tml::DynamicBuffer &buf)
+INT tml::FileCache::AddFile(const WCHAR *file_path, const BYTE *buf, const size_t buf_size)
 {
 	if ((file_path == nullptr)
 	|| (file_path[0] == 0)) {
 		return (-1);
 	}
 
-	if (buf.GetSize() > this->file_buf_limit_) {
+	if (buf_size > this->file_buf_limit_) {
 		this->RemoveFile(file_path);
 
 		return (-1);
@@ -195,7 +196,7 @@ INT tml::FileCache::AddFile(const WCHAR *file_path, const tml::DynamicBuffer &bu
 		auto file_p = file.get();
 
 		file_p->file_path_ = file_path;
-		file_p->buf_ = buf;
+		file_p->buf_.Set(buf, buf_size);
 
 		this->file_cont_by_file_path_.emplace(file_path, file_p);
 		this->file_cont_.push_back(std::move(file));
@@ -205,7 +206,7 @@ INT tml::FileCache::AddFile(const WCHAR *file_path, const tml::DynamicBuffer &bu
 
 	auto file = file_itr->second;
 
-	file->buf_ = buf;
+	file->buf_.Set(buf, buf_size);
 
 	this->UpFilePart(file);
 
