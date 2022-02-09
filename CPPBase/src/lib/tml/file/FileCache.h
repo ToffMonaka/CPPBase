@@ -36,7 +36,7 @@ public:
 	virtual ~FileCacheFile();
 
 	virtual void Init(void);
-	INT Create(const WCHAR *, const tml::DynamicBuffer &);
+	INT Create(const WCHAR *, const BYTE *, const size_t);
 
 	const std::wstring &GetFilePath(void) const;
 	const tml::DynamicBuffer &GetBuffer(void) const;
@@ -132,7 +132,7 @@ public:
 	INT Create(const tml::FileCacheDesc &);
 
 	const tml::FileCacheFile *GetFile(const WCHAR *);
-	INT AddFile(const WCHAR *, const BYTE *, const size_t);
+	INT AddFile(const WCHAR *, const BYTE *, const size_t, const bool);
 	void RemoveFile(const WCHAR *);
 };
 }

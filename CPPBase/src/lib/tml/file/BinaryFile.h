@@ -188,7 +188,7 @@ class BaseBinaryFileWriteDescData : public tml::FileWriteDescData
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	bool add_flag;
+	bool append_flag;
 
 private:
 	void Release(void);
@@ -212,7 +212,7 @@ using BaseBinaryFileWriteDesc = tml::FileWriteDesc<tml::BaseBinaryFileWriteDescD
  */
 template <bool R>
 inline tml::BaseBinaryFileWriteDescData<R>::BaseBinaryFileWriteDescData() :
-	add_flag(false)
+	append_flag(false)
 {
 	return;
 }
@@ -248,7 +248,7 @@ inline void tml::BaseBinaryFileWriteDescData<R>::Init(void)
 {
 	this->Release();
 
-	this->add_flag = false;
+	this->append_flag = false;
 
 	tml::FileWriteDescData::Init();
 
@@ -363,7 +363,9 @@ inline INT tml::BaseBinaryFile<R>::OnRead(void)
 	if (read_desc_dat->file_path.empty()) {
 		this->data.Init();
 
-		this->data.buffer = read_desc_dat->buffer;
+		if (read_desc_dat->buffer.GetLength() > 0U) {
+			this->data.buffer = read_desc_dat->buffer;
+		}
 
 		return (0);
 	}
@@ -407,14 +409,16 @@ inline INT tml::BaseBinaryFile<R>::OnRead(void)
 			ifs.close();
 
 			if (!R) {
-				tml::FileUtil::GetCache().AddFile(read_desc_dat->file_path.c_str(), buf.Get(), buf.GetLength());
+				tml::FileUtil::GetCache().AddFile(read_desc_dat->file_path.c_str(), buf.Get(), buf.GetLength(), false);
 			}
 		}
 	}
 
 	this->data.Init();
 
-	this->data.buffer = std::move(buf);
+	if (buf.GetLength() > 0U) {
+		this->data.buffer = std::move(buf);
+	}
 
 	return (0);
 }
@@ -442,7 +446,7 @@ inline INT tml::BaseBinaryFile<R>::OnWrite(void)
 	{tml::ThreadLockBlock th_lock_block(tml::FileUtil::GetFileThreadLock());
 		std::ofstream ofs;
 
-		if (write_desc_dat->add_flag) {
+		if (write_desc_dat->append_flag) {
 			ofs.open(write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::app);
 		} else {
 			ofs.open(write_desc_dat->file_path.c_str(), std::ios_base::out | std::ios_base::binary);

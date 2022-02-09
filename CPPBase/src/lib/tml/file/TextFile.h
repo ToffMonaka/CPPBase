@@ -192,7 +192,7 @@ protected: virtual void InterfaceDummy(void) {return;};
 
 public:
 	tml::ConstantUtil::NEWLINE_CODE::TYPE newline_code_type;
-	size_t add_newline_code_count;
+	size_t append_newline_code_count;
 
 private:
 	void Release(void);
@@ -217,7 +217,7 @@ using BaseTextFileWriteDesc = tml::FileWriteDesc<tml::BaseTextFileWriteDescData<
 template <bool R>
 inline tml::BaseTextFileWriteDescData<R>::BaseTextFileWriteDescData() :
 	newline_code_type(tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF),
-	add_newline_code_count(1U)
+	append_newline_code_count(1U)
 {
 	return;
 }
@@ -254,7 +254,7 @@ inline void tml::BaseTextFileWriteDescData<R>::Init(void)
 	this->Release();
 
 	this->newline_code_type = tml::ConstantUtil::NEWLINE_CODE::TYPE::CRLF;
-	this->add_newline_code_count = 1U;
+	this->append_newline_code_count = 1U;
 
 	tml::BaseBinaryFileWriteDescData<R>::Init();
 
@@ -430,15 +430,15 @@ inline INT tml::BaseTextFile<R>::OnWrite(void)
 	tml::StringUtil::Join(tmp_str, this->data.line_string_container, tml::ConstantUtil::NEWLINE_CODE::GetStringW(write_desc_dat->newline_code_type));
 
 	if (!tmp_str.empty()) {
-		if ((write_desc_dat->add_flag)
-		&& (write_desc_dat->add_newline_code_count > 0U)) {
-			std::wstring add_newline_code_str;
+		if ((write_desc_dat->append_flag)
+		&& (write_desc_dat->append_newline_code_count > 0U)) {
+			std::wstring newline_code_str;
 
-			for (size_t add_newline_code_i = 0U; add_newline_code_i < write_desc_dat->add_newline_code_count; ++add_newline_code_i) {
-				add_newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetStringW(write_desc_dat->newline_code_type);
+			for (size_t newline_code_i = 0U; newline_code_i < write_desc_dat->append_newline_code_count; ++newline_code_i) {
+				newline_code_str += tml::ConstantUtil::NEWLINE_CODE::GetStringW(write_desc_dat->newline_code_type);
 			}
 
-			tmp_str.insert(0U, add_newline_code_str);
+			tmp_str.insert(0U, newline_code_str);
 		}
 	}
 

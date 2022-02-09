@@ -25,8 +25,10 @@ private:
 	void Release(void);
 
 protected:
-	virtual void OnSet(const size_t);
-	virtual void OnSet(const BYTE *, const size_t);
+	virtual INT OnSet(const size_t);
+	virtual INT OnSet(const BYTE *, const size_t);
+	virtual INT OnAdd(const size_t);
+	virtual INT OnAdd(const BYTE *, const size_t);
 
 public:
 	BaseStaticBuffer();
@@ -298,12 +300,14 @@ inline void tml::BaseStaticBuffer<N, R>::Init(const BYTE *p, const size_t size)
 /**
  * @brief OnSetŠÖ”
  * @param size (size)
+ * @return result (result)<br>
+ * 0–¢–ž=Ž¸”s
  */
 template <size_t N, bool R>
-inline void tml::BaseStaticBuffer<N, R>::OnSet(const size_t size)
+inline INT tml::BaseStaticBuffer<N, R>::OnSet(const size_t size)
 {
 	if (size > N) {
-		return;
+		return (-1);
 	}
 
 	this->size_ = size;
@@ -311,7 +315,7 @@ inline void tml::BaseStaticBuffer<N, R>::OnSet(const size_t size)
 	this->read_index_ = tml::Min(this->read_index_, this->len_);
 	this->write_index_ = tml::Min(this->write_index_, this->len_);
 
-	return;
+	return (0);
 }
 
 
@@ -319,12 +323,14 @@ inline void tml::BaseStaticBuffer<N, R>::OnSet(const size_t size)
  * @brief OnSetŠÖ”
  * @param p (pointer)
  * @param size (size)
+ * @return result (result)<br>
+ * 0–¢–ž=Ž¸”s
  */
 template <size_t N, bool R>
-inline void tml::BaseStaticBuffer<N, R>::OnSet(const BYTE *p, const size_t size)
+inline INT tml::BaseStaticBuffer<N, R>::OnSet(const BYTE *p, const size_t size)
 {
 	if (size > N) {
-		return;
+		return (-1);
 	}
 
 	tml::Copy(this->p_, p, size);
@@ -333,7 +339,34 @@ inline void tml::BaseStaticBuffer<N, R>::OnSet(const BYTE *p, const size_t size)
 	this->read_index_ = 0U;
 	this->write_index_ = this->size_;
 
-	return;
+	return (0);
+}
+
+
+/**
+ * @brief OnAddŠÖ”
+ * @param size (size)
+ * @return result (result)<br>
+ * 0–¢–ž=Ž¸”s
+ */
+template <size_t N, bool R>
+inline INT tml::BaseStaticBuffer<N, R>::OnAdd(const size_t size)
+{
+	return (0);
+}
+
+
+/**
+ * @brief OnAddŠÖ”
+ * @param p (pointer)
+ * @param size (size)
+ * @return result (result)<br>
+ * 0–¢–ž=Ž¸”s
+ */
+template <size_t N, bool R>
+inline INT tml::BaseStaticBuffer<N, R>::OnAdd(const BYTE *p, const size_t size)
+{
+	return (0);
 }
 
 

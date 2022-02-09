@@ -45,10 +45,11 @@ void tml::FileCacheFile::Init(void)
  * @brief Createä÷êî
  * @param file_path (file_path)
  * @param buf (buffer)
+ * @param buf_size (buffer_size)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::FileCacheFile::Create(const WCHAR *file_path, const tml::DynamicBuffer &buf)
+INT tml::FileCacheFile::Create(const WCHAR *file_path, const BYTE *buf, const size_t buf_size)
 {
 	if ((file_path == nullptr)
 	|| (file_path[0] == 0)) {
@@ -60,7 +61,7 @@ INT tml::FileCacheFile::Create(const WCHAR *file_path, const tml::DynamicBuffer 
 	this->Init();
 
 	this->file_path_ = file_path;
-	this->buf_ = buf;
+	this->buf_.Set(buf, buf_size);
 
 	return (0);
 }
@@ -162,10 +163,11 @@ INT tml::FileCache::Create(const tml::FileCacheDesc &desc)
  * @param file_path (file_path)
  * @param buf (buffer)
  * @param buf_size (buffer_size)
+ * @param append_flg (append_flag)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::FileCache::AddFile(const WCHAR *file_path, const BYTE *buf, const size_t buf_size)
+INT tml::FileCache::AddFile(const WCHAR *file_path, const BYTE *buf, const size_t buf_size, const bool append_flg)
 {
 	if ((file_path == nullptr)
 	|| (file_path[0] == 0)) {
