@@ -208,7 +208,18 @@ INT tml::FileCache::AddFile(const WCHAR *file_path, const BYTE *buf, const size_
 
 	auto file = file_itr->second;
 
-	file->buf_.Set(buf, buf_size);
+	if (append_flg) {
+		if ((file->buf_.GetLength() + buf_size) > this->file_buf_limit_) {
+			this->RemoveFile(file_path);
+
+			return (-1);
+		}
+
+		file->buf_.SetSize(file->buf_.GetLength() + buf_size);
+		file->buf_.WriteArray(buf, buf_size, buf_size);
+	} else {
+		file->buf_.Set(buf, buf_size);
+	}
 
 	this->UpFilePart(file);
 

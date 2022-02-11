@@ -25,10 +25,8 @@ private:
 	void Release(void);
 
 protected:
-	virtual INT OnSet(const size_t);
-	virtual INT OnSet(const BYTE *, const size_t);
-	virtual INT OnAdd(const size_t);
-	virtual INT OnAdd(const BYTE *, const size_t);
+	virtual void OnSet(const size_t);
+	virtual void OnSet(const BYTE *, const size_t);
 
 public:
 	BaseStaticBuffer();
@@ -54,7 +52,7 @@ template <size_t N, bool R>
 inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer()
 {
 	this->p_ = this->ary_;
-	this->size_ = N;
+	this->capacity_ = N;
 
 	return;
 }
@@ -68,9 +66,9 @@ template <size_t N, bool R>
 inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer(const size_t size)
 {
 	this->p_ = this->ary_;
-	this->size_ = N;
+	this->capacity_ = N;
 
-	if (size > N) {
+	if (size > this->capacity_) {
 		return;
 	}
 
@@ -89,9 +87,9 @@ template <size_t N, bool R>
 inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer(const BYTE *p, const size_t size)
 {
 	this->p_ = this->ary_;
-	this->size_ = N;
+	this->capacity_ = N;
 
-	if (size > N) {
+	if (size > this->capacity_) {
 		return;
 	}
 
@@ -113,7 +111,7 @@ template <size_t N, bool R>
 inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer(const tml::BaseStaticBuffer<N, R> &src)
 {
 	this->p_ = this->ary_;
-	this->size_ = N;
+	this->capacity_ = N;
 
 	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
@@ -161,7 +159,7 @@ template <size_t N, bool R>
 inline tml::BaseStaticBuffer<N, R>::BaseStaticBuffer(tml::BaseStaticBuffer<N, R> &&src) noexcept
 {
 	this->p_ = this->ary_;
-	this->size_ = N;
+	this->capacity_ = N;
 
 	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
@@ -238,7 +236,7 @@ inline void tml::BaseStaticBuffer<N, R>::Init(void)
 	tml::Buffer::Init();
 
 	this->p_ = this->ary_;
-	this->size_ = N;
+	this->capacity_ = N;
 
 	return;
 }
@@ -256,9 +254,9 @@ inline void tml::BaseStaticBuffer<N, R>::Init(const size_t size)
 	tml::Buffer::Init();
 
 	this->p_ = this->ary_;
-	this->size_ = N;
+	this->capacity_ = N;
 
-	if (size > N) {
+	if (size > this->capacity_) {
 		return;
 	}
 
@@ -281,9 +279,9 @@ inline void tml::BaseStaticBuffer<N, R>::Init(const BYTE *p, const size_t size)
 	tml::Buffer::Init();
 
 	this->p_ = this->ary_;
-	this->size_ = N;
+	this->capacity_ = N;
 
-	if (size > N) {
+	if (size > this->capacity_) {
 		return;
 	}
 
@@ -300,14 +298,12 @@ inline void tml::BaseStaticBuffer<N, R>::Init(const BYTE *p, const size_t size)
 /**
  * @brief OnSetŠÖ”
  * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
  */
 template <size_t N, bool R>
-inline INT tml::BaseStaticBuffer<N, R>::OnSet(const size_t size)
+inline void tml::BaseStaticBuffer<N, R>::OnSet(const size_t size)
 {
-	if (size > N) {
-		return (-1);
+	if (size > this->capacity_) {
+		return;
 	}
 
 	this->size_ = size;
@@ -323,14 +319,12 @@ inline INT tml::BaseStaticBuffer<N, R>::OnSet(const size_t size)
  * @brief OnSetŠÖ”
  * @param p (pointer)
  * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
  */
 template <size_t N, bool R>
-inline INT tml::BaseStaticBuffer<N, R>::OnSet(const BYTE *p, const size_t size)
+inline void tml::BaseStaticBuffer<N, R>::OnSet(const BYTE *p, const size_t size)
 {
-	if (size > N) {
-		return (-1);
+	if (size > this->capacity_) {
+		return;
 	}
 
 	tml::Copy(this->p_, p, size);
@@ -339,33 +333,6 @@ inline INT tml::BaseStaticBuffer<N, R>::OnSet(const BYTE *p, const size_t size)
 	this->read_index_ = 0U;
 	this->write_index_ = this->size_;
 
-	return (0);
-}
-
-
-/**
- * @brief OnAddŠÖ”
- * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
- */
-template <size_t N, bool R>
-inline INT tml::BaseStaticBuffer<N, R>::OnAdd(const size_t size)
-{
-	return (0);
-}
-
-
-/**
- * @brief OnAddŠÖ”
- * @param p (pointer)
- * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
- */
-template <size_t N, bool R>
-inline INT tml::BaseStaticBuffer<N, R>::OnAdd(const BYTE *p, const size_t size)
-{
 	return (0);
 }
 

@@ -397,7 +397,7 @@ inline INT tml::BaseBinaryFile<R>::OnRead(void)
 				read_size = static_cast<size_t>(ifs.gcount());
 
 				if (read_size > 0U) {
-					buf.SetSize(buf.GetSize() + read_size);
+					buf.SetSize(buf.GetLength() + read_size);
 					buf.WriteArray(read_buf, read_size, read_size);
 				}
 
@@ -475,6 +475,10 @@ inline INT tml::BaseBinaryFile<R>::OnWrite(void)
 		}
 
 		ofs.close();
+
+		if (!R) {
+			tml::FileUtil::GetCache().AddFile(write_desc_dat->file_path.c_str(), this->data.buffer.Get(), this->data.buffer.GetLength(), write_desc_dat->append_flag);
+		}
 	}
 
 	return (0);

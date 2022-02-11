@@ -23,6 +23,7 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 protected:
 	BYTE *p_;
+	size_t capacity_;
 	size_t size_;
 	size_t len_;
 	size_t read_index_;
@@ -34,10 +35,8 @@ private:
 	void Release(void);
 
 protected:
-	virtual INT OnSet(const size_t) = 0;
-	virtual INT OnSet(const BYTE *, const size_t) = 0;
-	virtual INT OnAdd(const size_t) = 0;
-	virtual INT OnAdd(const BYTE *, const size_t) = 0;
+	virtual void OnSet(const size_t) = 0;
+	virtual void OnSet(const BYTE *, const size_t) = 0;
 
 public:
 	Buffer();
@@ -47,10 +46,8 @@ public:
 
 	BYTE *Get(void);
 	const BYTE *Get(void) const;
-	INT Set(const size_t);
-	INT Set(const BYTE *, const size_t);
-	INT Add(const size_t);
-	INT Add(const BYTE *, const size_t);
+	void Set(const size_t);
+	void Set(const BYTE *, const size_t);
 	void Clear(void);
 	size_t GetSize(void) const;
 	void SetSize(const size_t);
@@ -148,12 +145,12 @@ inline const BYTE *tml::Buffer::Get(void) const
 /**
  * @brief SetŠÖ”
  * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
  */
-inline INT tml::Buffer::Set(const size_t size)
+inline void tml::Buffer::Set(const size_t size)
 {
-	return (this->OnSet(size));
+	this->OnSet(size);
+
+	return;
 }
 
 
@@ -161,37 +158,12 @@ inline INT tml::Buffer::Set(const size_t size)
  * @brief SetŠÖ”
  * @param p (pointer)
  * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
  */
-inline INT tml::Buffer::Set(const BYTE *p, const size_t size)
+inline void tml::Buffer::Set(const BYTE *p, const size_t size)
 {
-	return (this->OnSet(p, size));
-}
+	this->OnSet(p, size);
 
-
-/**
- * @brief AddŠÖ”
- * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
- */
-inline INT tml::Buffer::Add(const size_t size)
-{
-	return (this->OnAdd(size));
-}
-
-
-/**
- * @brief AddŠÖ”
- * @param p (pointer)
- * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
- */
-inline INT tml::Buffer::Add(const BYTE *p, const size_t size)
-{
-	return (this->OnAdd(p, size));
+	return;
 }
 
 
@@ -201,6 +173,7 @@ inline INT tml::Buffer::Add(const BYTE *p, const size_t size)
 inline void tml::Buffer::Clear(void)
 {
 	this->p_ = nullptr;
+	this->capacity_ = 0U;
 	this->size_ = 0U;
 	this->len_ = 0U;
 	this->read_index_ = 0U;

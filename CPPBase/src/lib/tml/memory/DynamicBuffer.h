@@ -27,10 +27,8 @@ private:
 	void ReleaseMemory(BYTE *);
 
 protected:
-	virtual INT OnSet(const size_t);
-	virtual INT OnSet(const BYTE *, const size_t);
-	virtual INT OnAdd(const size_t);
-	virtual INT OnAdd(const BYTE *, const size_t);
+	virtual void OnSet(const size_t);
+	virtual void OnSet(const BYTE *, const size_t);
 
 public:
 	BaseDynamicBuffer();
@@ -67,6 +65,8 @@ template <bool R>
 inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer(const size_t size) 
 {
 	this->p_ = this->GetMemory(size);
+	this->capacity_ = size;
+
 	this->size_ = size;
 
 	return;
@@ -82,6 +82,8 @@ template <bool R>
 inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer(const BYTE *p, const size_t size)
 {
 	this->p_ = this->GetMemory(size);
+	this->capacity_ = size;
+
 	tml::Copy(this->p_, p, size);
 	this->size_ = size;
 	this->len_ = this->size_;
@@ -100,6 +102,8 @@ template <bool R>
 inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer(const tml::BaseDynamicBuffer<R> &src)
 {
 	this->p_ = this->GetMemory(src.size_);
+	this->capacity_ = src.size_;
+
 	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
@@ -127,6 +131,8 @@ inline tml::BaseDynamicBuffer<R> &tml::BaseDynamicBuffer<R>::operator =(const tm
 	this->Release();
 
 	this->p_ = this->GetMemory(src.size_);
+	this->capacity_ = src.size_;
+
 	tml::Copy(this->p_, src.p_, src.len_);
 	this->size_ = src.size_;
 	this->len_ = src.len_;
@@ -147,6 +153,8 @@ template <bool R>
 inline tml::BaseDynamicBuffer<R>::BaseDynamicBuffer(tml::BaseDynamicBuffer<R> &&src) noexcept
 {
 	this->p_ = src.p_;
+	this->capacity_ = src.size_;
+
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -176,6 +184,8 @@ inline tml::BaseDynamicBuffer<R> &tml::BaseDynamicBuffer<R>::operator =(tml::Bas
 	this->Release();
 
 	this->p_ = src.p_;
+	this->capacity_ = src.size_;
+
 	this->size_ = src.size_;
 	this->len_ = src.len_;
 	this->read_index_ = src.read_index_;
@@ -242,6 +252,8 @@ inline void tml::BaseDynamicBuffer<R>::Init(const size_t size)
 	tml::Buffer::Init();
 
 	this->p_ = this->GetMemory(size);
+	this->capacity_ = size;
+
 	this->size_ = size;
 
 	return;
@@ -261,6 +273,8 @@ inline void tml::BaseDynamicBuffer<R>::Init(const BYTE *p, const size_t size)
 	tml::Buffer::Init();
 
 	this->p_ = this->GetMemory(size);
+	this->capacity_ = size;
+
 	tml::Copy(this->p_, p, size);
 	this->size_ = size;
 	this->len_ = this->size_;
@@ -274,13 +288,11 @@ inline void tml::BaseDynamicBuffer<R>::Init(const BYTE *p, const size_t size)
 /**
  * @brief OnSetŠÖ”
  * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
  */
 template <bool R>
-inline INT tml::BaseDynamicBuffer<R>::OnSet(const size_t size)
+inline void tml::BaseDynamicBuffer<R>::OnSet(const size_t size)
 {
-	if (size > this->size_) {
+	if (size > this->capacity_) {
 		auto new_p = this->GetMemory(size);
 
 		tml::Copy(new_p, this->p_, this->size_);
@@ -288,6 +300,7 @@ inline INT tml::BaseDynamicBuffer<R>::OnSet(const size_t size)
 		this->ReleaseMemory(this->p_);
 
 		this->p_ = new_p;
+		this->capacity_ = size;
 	}
 
 	this->size_ = size;
@@ -295,7 +308,7 @@ inline INT tml::BaseDynamicBuffer<R>::OnSet(const size_t size)
 	this->read_index_ = tml::Min(this->read_index_, this->len_);
 	this->write_index_ = tml::Min(this->write_index_, this->len_);
 
-	return (0);
+	return;
 }
 
 
@@ -303,18 +316,17 @@ inline INT tml::BaseDynamicBuffer<R>::OnSet(const size_t size)
  * @brief OnSetŠÖ”
  * @param p (pointer)
  * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
  */
 template <bool R>
-inline INT tml::BaseDynamicBuffer<R>::OnSet(const BYTE *p, const size_t size)
+inline void tml::BaseDynamicBuffer<R>::OnSet(const BYTE *p, const size_t size)
 {
-	if (size > this->size_) {
+	if (size > this->capacity_) {
 		auto new_p = this->GetMemory(size);
 
 		this->ReleaseMemory(this->p_);
 
 		this->p_ = new_p;
+		this->capacity_ = size;
 	}
 
 	tml::Copy(this->p_, p, size);
@@ -323,34 +335,7 @@ inline INT tml::BaseDynamicBuffer<R>::OnSet(const BYTE *p, const size_t size)
 	this->read_index_ = 0U;
 	this->write_index_ = this->size_;
 
-	return (0);
-}
-
-
-/**
- * @brief OnAddŠÖ”
- * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
- */
-template <bool R>
-inline INT tml::BaseDynamicBuffer<R>::OnAdd(const size_t size)
-{
-	return (0);
-}
-
-
-/**
- * @brief OnAddŠÖ”
- * @param p (pointer)
- * @param size (size)
- * @return result (result)<br>
- * 0–¢–ž=Ž¸”s
- */
-template <bool R>
-inline INT tml::BaseDynamicBuffer<R>::OnAdd(const BYTE *p, const size_t size)
-{
-	return (0);
+	return;
 }
 
 

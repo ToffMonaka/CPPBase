@@ -368,15 +368,11 @@ inline INT tml::BaseTextFile<R>::OnRead(void)
 
 	if (read_desc_dat->file_path.empty()) {
 		if (read_desc_dat->buffer.GetLength() <= 0U) {
-			if (!read_desc_dat->string.empty()) {
-				this->data.Init();
-
-				tml::StringUtil::Split(this->data.line_string_container, read_desc_dat->string.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetStringW(read_desc_dat->newline_code_type));
-
-				return (0);
-			}
-
 			this->data.Init();
+
+			if (!read_desc_dat->string.empty()) {
+				tml::StringUtil::Split(this->data.line_string_container, read_desc_dat->string.c_str(), tml::ConstantUtil::NEWLINE_CODE::GetStringW(read_desc_dat->newline_code_type));
+			}
 
 			return (0);
 		}
@@ -396,7 +392,7 @@ inline INT tml::BaseTextFile<R>::OnRead(void)
 		return (0);
 	}
 
-	bin_file.data.buffer.SetSize(bin_file.data.buffer.GetSize() + sizeof(CHAR));
+	bin_file.data.buffer.SetSize(bin_file.data.buffer.GetLength() + sizeof(CHAR));
 	bin_file.data.buffer.WriteChar(0);
 
 	CHAR *tmp_str = reinterpret_cast<CHAR *>(bin_file.data.buffer.Get());

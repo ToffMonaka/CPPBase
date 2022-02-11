@@ -12,6 +12,7 @@
  */
 tml::Buffer::Buffer() :
 	p_(nullptr),
+	capacity_(0U),
 	size_(0U),
 	len_(0U),
 	read_index_(0U),
@@ -42,6 +43,7 @@ void tml::Buffer::Init(void)
 	this->Release();
 
 	this->p_ = nullptr;
+	this->capacity_ = 0U;
 	this->size_ = 0U;
 	this->len_ = 0U;
 	this->read_index_ = 0U;
