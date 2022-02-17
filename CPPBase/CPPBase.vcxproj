@@ -265,6 +265,11 @@
     <ClCompile Include="src\lib\tml\manager\ManagerEvent.cpp" />
     <ClCompile Include="src\lib\tml\manager\ManagerFactory.cpp" />
     <ClCompile Include="src\lib\tml\manager\ManagerResource.cpp" />
+    <ClCompile Include="src\lib\tml\manager\TestManager.cpp" />
+    <ClCompile Include="src\lib\tml\manager\TestManagerEvent.cpp" />
+    <ClCompile Include="src\lib\tml\manager\TestManagerFactory.cpp" />
+    <ClCompile Include="src\lib\tml\manager\TestManagerResource.cpp" />
+    <ClCompile Include="src\lib\tml\manager\TestManagerTask.cpp" />
     <ClCompile Include="src\lib\tml\math\DefaultMathUtilEngine.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtil.cpp" />
     <ClCompile Include="src\lib\tml\math\MathUtilEngine.cpp" />
@@ -458,6 +463,11 @@
     <ClInclude Include="src\lib\tml\manager\ManagerEvent.h" />
     <ClInclude Include="src\lib\tml\manager\ManagerFactory.h" />
     <ClInclude Include="src\lib\tml\manager\ManagerResource.h" />
+    <ClInclude Include="src\lib\tml\manager\TestManager.h" />
+    <ClInclude Include="src\lib\tml\manager\TestManagerEvent.h" />
+    <ClInclude Include="src\lib\tml\manager\TestManagerFactory.h" />
+    <ClInclude Include="src\lib\tml\manager\TestManagerResource.h" />
+    <ClInclude Include="src\lib\tml\manager\TestManagerTask.h" />
     <ClInclude Include="src\lib\tml\math\DefaultMathUtilEngine.h" />
     <ClInclude Include="src\lib\tml\math\MathUtil.h" />
     <ClInclude Include="src\lib\tml\math\MathUtilEngine.h" />

@@ -187,25 +187,25 @@ void cpp_base::scene::Test2DStageNode::OnUpdate(void)
 /**
  * @brief AddFieldNodeä÷êî
  * @param field_node (field_node)
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::Test2DStageNode::AddFieldNode(const tml::shared_ptr<tml::scene::Node> &field_node, const bool event_flg)
+INT cpp_base::scene::Test2DStageNode::AddFieldNode(const tml::shared_ptr<tml::scene::Node> &field_node, const bool deferred_flg)
 {
-	this->field_layout_node_->RemoveChildNode(event_flg);
+	this->field_layout_node_->RemoveChildNode(deferred_flg);
 
-	return (this->field_layout_node_->AddChildNode(field_node, event_flg));
+	return (this->field_layout_node_->AddChildNode(field_node, deferred_flg));
 }
 
 
 /**
  * @brief RemoveFieldNodeä÷êî
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  */
-void cpp_base::scene::Test2DStageNode::RemoveFieldNode(const bool event_flg)
+void cpp_base::scene::Test2DStageNode::RemoveFieldNode(const bool deferred_flg)
 {
-	this->field_layout_node_->RemoveChildNode(event_flg);
+	this->field_layout_node_->RemoveChildNode(deferred_flg);
 
 	return;
 }

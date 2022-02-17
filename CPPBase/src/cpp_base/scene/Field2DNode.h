@@ -78,19 +78,19 @@ public:
 	virtual void Init(void);
 	INT Create(const cpp_base::scene::Field2DNodeDesc &);
 	const tml::shared_ptr<tml::scene::Node> &GetGroundNode(void);
-	INT AddGroundNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
-	void RemoveGroundNode(const bool event_flg = true);
+	INT AddGroundNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
+	void RemoveGroundNode(const bool deferred_flg = true);
 	const tml::shared_ptr<tml::scene::Node> &GetPlayerNode(void);
-	INT AddPlayerNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
-	void RemovePlayerNode(const bool event_flg = true);
+	INT AddPlayerNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
+	void RemovePlayerNode(const bool deferred_flg = true);
 	const std::list<tml::shared_ptr<tml::scene::Node>> &GetMobNodeContainer(void);
 	const tml::shared_ptr<tml::scene::Node> &GetMobNode(void);
-	INT AddMobNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
-	void RemoveMobNode(const bool event_flg = true);
+	INT AddMobNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
+	void RemoveMobNode(const bool deferred_flg = true);
 	const std::list<tml::shared_ptr<tml::scene::Node>> &GetBulletNodeContainer(void);
 	const tml::shared_ptr<tml::scene::Node> &GetBulletNode(void);
-	INT AddBulletNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
-	void RemoveBulletNode(const bool event_flg = true);
+	INT AddBulletNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
+	void RemoveBulletNode(const bool deferred_flg = true);
 };
 }
 }

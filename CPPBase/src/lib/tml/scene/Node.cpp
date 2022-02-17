@@ -428,18 +428,18 @@ const tml::shared_ptr<tml::scene::Node> &tml::scene::Node::GetChildNodeRecursive
 /**
  * @brief AddChildNodeä÷êî
  * @param child_node (child_node)
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)
+INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &child_node, const bool deferred_flg)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
 		return (-1);
 	}
 
-	if (event_flg) {
+	if (deferred_flg) {
 		tml::scene::NodeEventDesc event_desc;
 
 		event_desc.SetManager(this->GetManager());
@@ -474,11 +474,11 @@ INT tml::scene::Node::AddChildNode(const tml::shared_ptr<tml::scene::Node> &chil
 
 /**
  * @brief RemoveChildNodeä÷êî
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  */
-void tml::scene::Node::RemoveChildNode(const bool event_flg)
+void tml::scene::Node::RemoveChildNode(const bool deferred_flg)
 {
-	if (event_flg) {
+	if (deferred_flg) {
 		tml::scene::NodeEventDesc event_desc;
 
 		event_desc.SetManager(this->GetManager());
@@ -503,16 +503,16 @@ void tml::scene::Node::RemoveChildNode(const bool event_flg)
 /**
  * @brief RemoveChildNodeä÷êî
  * @param child_node (child_node)
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  */
-void tml::scene::Node::RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &child_node, const bool event_flg)
+void tml::scene::Node::RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &child_node, const bool deferred_flg)
 {
 	if ((child_node == nullptr)
 	|| (child_node.get() == this)) {
 		return;
 	}
 
-	if (event_flg) {
+	if (deferred_flg) {
 		tml::scene::NodeEventDesc event_desc;
 
 		event_desc.SetManager(this->GetManager());
@@ -547,11 +547,11 @@ void tml::scene::Node::RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &
 
 /**
  * @brief RemoveChildNodeFromParentNodeä÷êî
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  */
-void tml::scene::Node::RemoveChildNodeFromParentNode(const bool event_flg)
+void tml::scene::Node::RemoveChildNodeFromParentNode(const bool deferred_flg)
 {
-	if (event_flg) {
+	if (deferred_flg) {
 		tml::scene::NodeEventDesc event_desc;
 
 		event_desc.SetManager(this->GetManager());

@@ -247,25 +247,25 @@ void cpp_base::scene::Field2DNode::OnUpdate(void)
 /**
  * @brief AddGroundNodeŠÖ”
  * @param ground_node (ground_node)
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT cpp_base::scene::Field2DNode::AddGroundNode(const tml::shared_ptr<tml::scene::Node> &ground_node, const bool event_flg)
+INT cpp_base::scene::Field2DNode::AddGroundNode(const tml::shared_ptr<tml::scene::Node> &ground_node, const bool deferred_flg)
 {
-	this->ground_layout_node_->RemoveChildNode(event_flg);
+	this->ground_layout_node_->RemoveChildNode(deferred_flg);
 
-	return (this->ground_layout_node_->AddChildNode(ground_node, event_flg));
+	return (this->ground_layout_node_->AddChildNode(ground_node, deferred_flg));
 }
 
 
 /**
  * @brief RemoveGroundNodeŠÖ”
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  */
-void cpp_base::scene::Field2DNode::RemoveGroundNode(const bool event_flg)
+void cpp_base::scene::Field2DNode::RemoveGroundNode(const bool deferred_flg)
 {
-	this->ground_layout_node_->RemoveChildNode(event_flg);
+	this->ground_layout_node_->RemoveChildNode(deferred_flg);
 
 	return;
 }
@@ -274,25 +274,25 @@ void cpp_base::scene::Field2DNode::RemoveGroundNode(const bool event_flg)
 /**
  * @brief AddPlayerNodeŠÖ”
  * @param pl_node (player_node)
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT cpp_base::scene::Field2DNode::AddPlayerNode(const tml::shared_ptr<tml::scene::Node> &pl_node, const bool event_flg)
+INT cpp_base::scene::Field2DNode::AddPlayerNode(const tml::shared_ptr<tml::scene::Node> &pl_node, const bool deferred_flg)
 {
-	this->pl_layout_node_->RemoveChildNode(event_flg);
+	this->pl_layout_node_->RemoveChildNode(deferred_flg);
 
-	return (this->pl_layout_node_->AddChildNode(pl_node, event_flg));
+	return (this->pl_layout_node_->AddChildNode(pl_node, deferred_flg));
 }
 
 
 /**
  * @brief RemovePlayerNodeŠÖ”
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  */
-void cpp_base::scene::Field2DNode::RemovePlayerNode(const bool event_flg)
+void cpp_base::scene::Field2DNode::RemovePlayerNode(const bool deferred_flg)
 {
-	this->pl_layout_node_->RemoveChildNode(event_flg);
+	this->pl_layout_node_->RemoveChildNode(deferred_flg);
 
 	return;
 }
@@ -301,23 +301,23 @@ void cpp_base::scene::Field2DNode::RemovePlayerNode(const bool event_flg)
 /**
  * @brief AddMobNodeŠÖ”
  * @param mob_node (mob_node)
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT cpp_base::scene::Field2DNode::AddMobNode(const tml::shared_ptr<tml::scene::Node> &mob_node, const bool event_flg)
+INT cpp_base::scene::Field2DNode::AddMobNode(const tml::shared_ptr<tml::scene::Node> &mob_node, const bool deferred_flg)
 {
-	return (this->mob_layout_node_->AddChildNode(mob_node, event_flg));
+	return (this->mob_layout_node_->AddChildNode(mob_node, deferred_flg));
 }
 
 
 /**
  * @brief RemoveMobNodeŠÖ”
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  */
-void cpp_base::scene::Field2DNode::RemoveMobNode(const bool event_flg)
+void cpp_base::scene::Field2DNode::RemoveMobNode(const bool deferred_flg)
 {
-	this->mob_layout_node_->RemoveChildNode(event_flg);
+	this->mob_layout_node_->RemoveChildNode(deferred_flg);
 
 	return;
 }
@@ -326,23 +326,23 @@ void cpp_base::scene::Field2DNode::RemoveMobNode(const bool event_flg)
 /**
  * @brief AddBulletNodeŠÖ”
  * @param bullet_node (bullet_node)
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  * @return result (result)<br>
  * 0–¢–ž=Ž¸”s
  */
-INT cpp_base::scene::Field2DNode::AddBulletNode(const tml::shared_ptr<tml::scene::Node> &bullet_node, const bool event_flg)
+INT cpp_base::scene::Field2DNode::AddBulletNode(const tml::shared_ptr<tml::scene::Node> &bullet_node, const bool deferred_flg)
 {
-	return (this->bullet_layout_node_->AddChildNode(bullet_node, event_flg));
+	return (this->bullet_layout_node_->AddChildNode(bullet_node, deferred_flg));
 }
 
 
 /**
  * @brief RemoveBulletNodeŠÖ”
- * @param event_flg (event_flag)
+ * @param deferred_flg (deferred_flag)
  */
-void cpp_base::scene::Field2DNode::RemoveBulletNode(const bool event_flg)
+void cpp_base::scene::Field2DNode::RemoveBulletNode(const bool deferred_flg)
 {
-	this->bullet_layout_node_->RemoveChildNode(event_flg);
+	this->bullet_layout_node_->RemoveChildNode(deferred_flg);
 
 	return;
 }

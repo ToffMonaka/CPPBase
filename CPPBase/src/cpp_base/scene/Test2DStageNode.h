@@ -76,8 +76,8 @@ public:
 	INT Create(const cpp_base::scene::Test2DStageNodeDesc &);
 
 	const tml::shared_ptr<tml::scene::Node> &GetFieldNode(void);
-	INT AddFieldNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
-	void RemoveFieldNode(const bool event_flg = true);
+	INT AddFieldNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
+	void RemoveFieldNode(const bool deferred_flg = true);
 };
 }
 }

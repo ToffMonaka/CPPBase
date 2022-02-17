@@ -164,10 +164,10 @@ public:
 	const std::list<tml::shared_ptr<tml::scene::Node>> &GetChildNodeContainer(void);
 	const tml::shared_ptr<tml::scene::Node> &GetChildNode(void);
 	const tml::shared_ptr<tml::scene::Node> &GetChildNode(const WCHAR *);
-	INT AddChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
-	void RemoveChildNode(const bool event_flg = true);
-	void RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool event_flg = true);
-	void RemoveChildNodeFromParentNode(const bool event_flg = true);
+	INT AddChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
+	void RemoveChildNode(const bool deferred_flg = true);
+	void RemoveChildNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
+	void RemoveChildNodeFromParentNode(const bool deferred_flg = true);
 	UINT GetCanvasCount(void) const;
 	const tml::shared_ptr<tml::graphic::Canvas> &GetCanvas(const UINT);
 	const tml::shared_ptr<tml::graphic::Canvas> &GetCanvasFast(const UINT);
