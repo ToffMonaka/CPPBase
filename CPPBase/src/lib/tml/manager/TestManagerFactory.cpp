@@ -4,14 +4,13 @@
  */
 
 
-#if 0
-#include "ManagerFactory.h"
+#include "TestManagerFactory.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::ManagerFactoryDesc::ManagerFactoryDesc()
+tml::test::ManagerFactoryDesc::ManagerFactoryDesc()
 {
 	return;
 }
@@ -20,7 +19,7 @@ tml::ManagerFactoryDesc::ManagerFactoryDesc()
 /**
  * @brief デストラクタ
  */
-tml::ManagerFactoryDesc::~ManagerFactoryDesc()
+tml::test::ManagerFactoryDesc::~ManagerFactoryDesc()
 {
 	this->Release();
 
@@ -31,7 +30,7 @@ tml::ManagerFactoryDesc::~ManagerFactoryDesc()
 /**
  * @brief Init関数
  */
-void tml::ManagerFactoryDesc::Init(void)
+void tml::test::ManagerFactoryDesc::Init(void)
 {
 	this->Release();
 
@@ -42,7 +41,7 @@ void tml::ManagerFactoryDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::ManagerFactory::ManagerFactory()
+tml::test::ManagerFactory::ManagerFactory()
 {
 	return;
 }
@@ -51,7 +50,7 @@ tml::ManagerFactory::ManagerFactory()
 /**
  * @brief デストラクタ
  */
-tml::ManagerFactory::~ManagerFactory()
+tml::test::ManagerFactory::~ManagerFactory()
 {
 	this->Release();
 
@@ -62,11 +61,12 @@ tml::ManagerFactory::~ManagerFactory()
 /**
  * @brief Init関数
  */
-void tml::ManagerFactory::Init(void)
+void tml::test::ManagerFactory::Init(void)
 {
 	this->Release();
 
 	this->res_func_cont_.clear();
+	this->task_func_cont_.clear();
 	this->event_func_cont_.clear();
 	this->value_container.clear();
 
@@ -80,7 +80,7 @@ void tml::ManagerFactory::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::ManagerFactory::Create(const tml::ManagerFactoryDesc &desc)
+INT tml::test::ManagerFactory::Create(const tml::test::ManagerFactoryDesc &desc)
 {
 	this->Init();
 
@@ -95,7 +95,7 @@ INT tml::ManagerFactory::Create(const tml::ManagerFactoryDesc &desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::ManagerFactory::AddResourceFunction(const WCHAR *class_name, std::function<tml::shared_ptr<tml::ManagerResource>(const tml::INIFileReadDesc &, INT *)> res_func)
+INT tml::test::ManagerFactory::AddResourceFunction(const WCHAR *class_name, std::function<tml::shared_ptr<tml::test::ManagerResource>(const tml::INIFileReadDesc &, INT *)> res_func)
 {
 	if ((class_name == nullptr)
 	|| (class_name[0] == 0)) {
@@ -112,7 +112,7 @@ INT tml::ManagerFactory::AddResourceFunction(const WCHAR *class_name, std::funct
  * @brief RemoveResourceFunction関数
  * @param class_name (class_name)
  */
-void tml::ManagerFactory::RemoveResourceFunction(const WCHAR *class_name)
+void tml::test::ManagerFactory::RemoveResourceFunction(const WCHAR *class_name)
 {
 	if ((class_name == nullptr)
 	|| (class_name[0] == 0)) {
@@ -126,13 +126,50 @@ void tml::ManagerFactory::RemoveResourceFunction(const WCHAR *class_name)
 
 
 /**
+ * @brief AddTaskFunction関数
+ * @param class_name (class_name)
+ * @param task_func (task_function)
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::test::ManagerFactory::AddTaskFunction(const WCHAR *class_name, std::function<tml::shared_ptr<tml::test::ManagerTask>(const tml::INIFileReadDesc &, INT *)> task_func)
+{
+	if ((class_name == nullptr)
+	|| (class_name[0] == 0)) {
+		return (-1);
+	}
+
+	this->task_func_cont_[class_name] = task_func;
+
+	return (0);
+}
+
+
+/**
+ * @brief RemoveTaskFunction関数
+ * @param class_name (class_name)
+ */
+void tml::test::ManagerFactory::RemoveTaskFunction(const WCHAR *class_name)
+{
+	if ((class_name == nullptr)
+	|| (class_name[0] == 0)) {
+		return;
+	}
+
+	this->task_func_cont_.erase(class_name);
+
+	return;
+}
+
+
+/**
  * @brief AddEventFunction関数
  * @param class_name (class_name)
  * @param event_func (event_function)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::ManagerFactory::AddEventFunction(const WCHAR *class_name, std::function<tml::shared_ptr<tml::ManagerEvent>(const tml::INIFileReadDesc &, INT *)> event_func)
+INT tml::test::ManagerFactory::AddEventFunction(const WCHAR *class_name, std::function<tml::shared_ptr<tml::test::ManagerEvent>(const tml::INIFileReadDesc &, INT *)> event_func)
 {
 	if ((class_name == nullptr)
 	|| (class_name[0] == 0)) {
@@ -149,7 +186,7 @@ INT tml::ManagerFactory::AddEventFunction(const WCHAR *class_name, std::function
  * @brief RemoveEventFunction関数
  * @param class_name (class_name)
  */
-void tml::ManagerFactory::RemoveEventFunction(const WCHAR *class_name)
+void tml::test::ManagerFactory::RemoveEventFunction(const WCHAR *class_name)
 {
 	if ((class_name == nullptr)
 	|| (class_name[0] == 0)) {
@@ -160,4 +197,3 @@ void tml::ManagerFactory::RemoveEventFunction(const WCHAR *class_name)
 
 	return;
 }
-#endif
