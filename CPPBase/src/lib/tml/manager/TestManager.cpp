@@ -15,6 +15,10 @@ tml::test::ManagerDesc::ManagerDesc() :
 	window_device_context_handle(nullptr),
 	factory(nullptr)
 {
+	this->InitResourceCount();
+	this->InitTaskCount();
+	this->InitEventCount();
+
 	return;
 }
 
@@ -41,6 +45,43 @@ void tml::test::ManagerDesc::Init(void)
 	this->window_device_context_handle = nullptr;
 	this->factory = nullptr;
 
+	this->InitResourceCount();
+	this->InitTaskCount();
+	this->InitEventCount();
+
+	return;
+}
+
+
+/**
+ * @brief InitResourceCountŠÖ”
+ */
+void tml::test::ManagerDesc::InitResourceCount(void)
+{
+	this->resource_count_container.clear();
+
+	return;
+}
+
+
+/**
+ * @brief InitTaskCountŠÖ”
+ */
+void tml::test::ManagerDesc::InitTaskCount(void)
+{
+	this->task_count_container.clear();
+
+	return;
+}
+
+
+/**
+ * @brief InitEventCountŠÖ”
+ */
+void tml::test::ManagerDesc::InitEventCount(void)
+{
+	this->event_count_container.clear();
+
 	return;
 }
 
@@ -53,6 +94,9 @@ tml::test::Manager::Manager() :
 	wnd_dc_handle_(nullptr),
 	factory(nullptr)
 {
+	this->res_cont_.clear();
+	this->res_itr_ = this->res_cont_.end();
+
 	return;
 }
 
@@ -73,6 +117,8 @@ tml::test::Manager::~Manager()
  */
 void tml::test::Manager::Release(void)
 {
+	this->DeleteResourceContainer();
+
 	return;
 }
 
@@ -110,6 +156,10 @@ INT tml::test::Manager::Create(const tml::test::ManagerDesc &desc)
 	this->wnd_dc_handle_ = desc.window_device_context_handle;
 	this->factory = desc.factory;
 
+	if (this->CreateResourceContainer(desc.resource_count_container) < 0) {
+		return (-1);
+	}
+
 	return (0);
 }
 
@@ -119,5 +169,135 @@ INT tml::test::Manager::Create(const tml::test::ManagerDesc &desc)
  */
 void tml::test::Manager::Update(void)
 {
+	if (this->res_itr_ == this->res_cont_.end()) {
+		this->res_itr_ = this->res_cont_.begin();
+	}
+
+	UINT res_cnt = 0U;
+	UINT res_use_cnt = 0U;
+
+	while (this->res_itr_ != this->res_cont_.end()) {
+		res_use_cnt = 3U;
+
+		if (!(*this->res_itr_)->res_name_.empty()) {
+			++res_use_cnt;
+		}
+
+		if (this->res_itr_->use_count() <= static_cast<LONG>(res_use_cnt)) {
+			auto res = (*this->res_itr_);
+
+			res->Init();
+			res->res_shared_p_.reset();
+
+			this->res_cont_by_index_[res->res_index_].remove(res);
+
+			if (!res->res_name_.empty()) {
+				this->res_cont_by_name_.erase(res->res_name_);
+			}
+
+			this->res_itr_ = this->res_cont_.erase(this->res_itr_);
+		} else {
+			++this->res_itr_;
+		}
+
+		if (++res_cnt >= 10U) {
+			break;
+		}
+	}
+
+	if (!this->deferred_create_res_cont_.empty()) {
+		auto res_itr = this->deferred_create_res_cont_.begin();
+
+		if (((*res_itr)->CreateDeferred() < 0)
+		|| (!(*res_itr)->IsDeferredCreating())) {
+			this->deferred_create_res_cont_.erase(res_itr);
+		}
+	}
+
+	return;
+}
+
+
+/**
+ * @brief CreateResourceContainerŠÖ”
+ * @param res_cnt_cont (resource_count_container)
+ * @return result (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::test::Manager::CreateResourceContainer(const std::vector<UINT> &res_cnt_cont)
+{
+	this->DeleteResourceContainer();
+
+	this->res_cont_by_index_.resize(res_cnt_cont.size());
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteResourceContainerŠÖ”
+ */
+void tml::test::Manager::DeleteResourceContainer(void)
+{
+	for (auto &res : this->res_cont_) {
+		res->Init();
+		res->res_shared_p_.reset();
+	}
+
+	this->res_cont_.clear();
+	this->res_itr_ = this->res_cont_.end();
+	this->res_cont_by_index_.clear();
+	this->res_cont_by_name_.clear();
+	this->deferred_create_res_cont_.clear();
+
+	return;
+}
+
+
+/**
+ * @brief GetResourceInitPartŠÖ”
+ * @param res (resource)
+ */
+void tml::test::Manager::GetResourceInitPart(tml::shared_ptr<tml::test::ManagerResource> &res)
+{
+	res->deferred_create_desc_unique_p_.reset();
+	res->deferred_create_desc_ = nullptr;
+
+	res->res_shared_p_.reset();
+
+	return;
+}
+
+
+/**
+ * @brief SetResourceNameŠÖ”
+ * @param res (resource)
+ * @param res_name (resource_name)
+ */
+void tml::test::Manager::SetResourceName(tml::test::ManagerResource *res, const WCHAR *res_name)
+{
+	if ((res == nullptr)
+	|| (res_name == nullptr)) {
+		return;
+	}
+
+	if (res_name[0] != 0) {
+		auto res_itr = this->res_cont_by_name_.find(res_name);
+
+		if (res_itr != this->res_cont_by_name_.end()) {
+			return;
+		}
+	}
+
+	if (!res->res_name_.empty()) {
+		this->res_cont_by_name_.erase(res->res_name_);
+	}
+
+	res->res_name_ = res_name;
+
+	if (!res->res_name_.empty()) {
+		this->res_cont_by_name_.emplace(res->res_name_, res->res_shared_p_);
+	}
+
 	return;
 }
