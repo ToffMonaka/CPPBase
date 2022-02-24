@@ -37,6 +37,7 @@ void tml::test::ManagerEventDesc::Init(void)
 	this->Release();
 
 	this->mgr_ = nullptr;
+	this->event_name.clear();
 
 	return;
 }
@@ -80,17 +81,20 @@ INT tml::test::ManagerEventDesc::Read(const tml::INIFileReadDesc &conf_file_read
  */
 INT tml::test::ManagerEventDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	/*
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// Event Section Read
+	{// Resource Section Read
 		val_name_cont = conf_file.data.GetValueNameContainer(L"EVENT");
 
 		if (val_name_cont != nullptr) {
+			val = conf_file.data.GetValue((*val_name_cont), L"NAME");
+
+			if (val != nullptr) {
+				this->event_name = (*val);
+			}
 		}
 	}
-	*/
 
 	return (0);
 }

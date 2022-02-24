@@ -37,6 +37,7 @@ void tml::test::ManagerTaskDesc::Init(void)
 	this->Release();
 
 	this->mgr_ = nullptr;
+	this->task_name.clear();
 
 	return;
 }
@@ -80,17 +81,20 @@ INT tml::test::ManagerTaskDesc::Read(const tml::INIFileReadDesc &conf_file_read_
  */
 INT tml::test::ManagerTaskDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	/*
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// Event Section Read
-		val_name_cont = conf_file.data.GetValueNameContainer(L"EVENT");
+	{// Resource Section Read
+		val_name_cont = conf_file.data.GetValueNameContainer(L"TASK");
 
 		if (val_name_cont != nullptr) {
+			val = conf_file.data.GetValue((*val_name_cont), L"NAME");
+
+			if (val != nullptr) {
+				this->task_name = (*val);
+			}
 		}
 	}
-	*/
 
 	return (0);
 }
@@ -113,7 +117,7 @@ void tml::test::ManagerTaskDesc::SetManager(tml::test::Manager *mgr)
  */
 tml::test::ManagerTask::ManagerTask() :
 	mgr_(nullptr),
-	event_index_(0U)
+	task_index_(0U)
 {
 	return;
 }
@@ -150,7 +154,7 @@ void tml::test::ManagerTask::Init(void)
 INT tml::test::ManagerTask::Create(const tml::test::ManagerTaskDesc &desc)
 {
 	if ((desc.GetManager() == nullptr)
-	|| (this->event_index_ == 0U)) {
+	|| (this->task_index_ == 0U)) {
 		return (-1);
 	}
 

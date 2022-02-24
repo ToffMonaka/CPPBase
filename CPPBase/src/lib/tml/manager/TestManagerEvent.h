@@ -25,6 +25,7 @@ class ManagerEventDesc
 {
 private:
 	tml::test::Manager *mgr_;
+	std::wstring event_name;
 
 public:
 
@@ -86,6 +87,8 @@ protected: virtual void InterfaceDummy(void) = 0;
 private:
 	tml::test::Manager *mgr_;
 	UINT event_index_;
+	tml::shared_ptr<tml::test::ManagerEvent> event_shared_p_;
+	std::wstring event_name_;
 
 private:
 	void Release(void);
@@ -99,6 +102,8 @@ public:
 
 	tml::test::Manager *GetManager(void);
 	UINT GetEventIndex(void) const;
+	const tml::shared_ptr<tml::test::ManagerEvent> &GetEventSharedPointer(void) const;
+	const std::wstring &GetEventName(void) const;
 };
 }
 }
@@ -130,4 +135,24 @@ inline tml::test::Manager *tml::test::ManagerEvent::GetManager(void)
 inline UINT tml::test::ManagerEvent::GetEventIndex(void) const
 {
 	return (this->event_index_);
+}
+
+
+/**
+ * @brief GetEventSharedPointerŠÖ”
+ * @return event_shared_p (event_shared_pointer)
+ */
+inline const tml::shared_ptr<tml::test::ManagerEvent> &tml::test::ManagerEvent::GetEventSharedPointer(void) const
+{
+	return (this->event_shared_p_);
+}
+
+
+/**
+ * @brief GetEventNameŠÖ”
+ * @return event_name (event_name)
+ */
+inline const std::wstring &tml::test::ManagerEvent::GetEventName(void) const
+{
+	return (this->event_name_);
 }

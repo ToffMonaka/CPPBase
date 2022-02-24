@@ -74,6 +74,14 @@ private:
 	std::vector<std::list<tml::shared_ptr<tml::test::ManagerResource>>> res_cont_by_index_;
 	std::unordered_map<std::wstring, tml::shared_ptr<tml::test::ManagerResource>> res_cont_by_name_;
 	std::list<tml::shared_ptr<tml::test::ManagerResource>> deferred_create_res_cont_;
+	std::list<tml::shared_ptr<tml::test::ManagerTask>> task_cont_;
+	std::list<tml::shared_ptr<tml::test::ManagerTask>>::iterator task_itr_;
+	std::vector<std::list<tml::shared_ptr<tml::test::ManagerTask>>> task_cont_by_index_;
+	std::unordered_map<std::wstring, tml::shared_ptr<tml::test::ManagerTask>> task_cont_by_name_;
+	std::list<tml::shared_ptr<tml::test::ManagerEvent>> event_cont_;
+	std::list<tml::shared_ptr<tml::test::ManagerEvent>>::iterator event_itr_;
+	std::vector<std::list<tml::shared_ptr<tml::test::ManagerEvent>>> event_cont_by_index_;
+	std::unordered_map<std::wstring, tml::shared_ptr<tml::test::ManagerEvent>> event_cont_by_name_;
 
 public:
 	tml::test::ManagerFactory *factory;
@@ -82,10 +90,16 @@ private:
 	void Release(void);
 
 	void GetResourceInitPart(tml::shared_ptr<tml::test::ManagerResource> &);
+	void GetTaskInitPart(tml::shared_ptr<tml::test::ManagerTask> &);
+	void GetEventInitPart(tml::shared_ptr<tml::test::ManagerEvent> &);
 
 protected:
 	INT CreateResourceContainer(const std::vector<UINT> &);
 	void DeleteResourceContainer(void);
+	INT CreateTaskContainer(const std::vector<UINT> &);
+	void DeleteTaskContainer(void);
+	INT CreateEventContainer(const std::vector<UINT> &);
+	void DeleteEventContainer(void);
 
 public:
 	Manager();
@@ -106,6 +120,26 @@ public:
 	template <typename T, typename T2>
 	tml::shared_ptr<T2> &GetResource(tml::shared_ptr<T2> &, const WCHAR *, INT *dst_result = nullptr);
 	void SetResourceName(tml::test::ManagerResource *, const WCHAR *);
+	const std::list<tml::shared_ptr<tml::test::ManagerTask>> *GetTaskContainer(const UINT);
+	template <typename T, typename T2, typename D>
+	tml::shared_ptr<T2> &GetTask(tml::shared_ptr<T2> &, const D &, INT *dst_result = nullptr);
+	template <typename T, typename T2>
+	tml::shared_ptr<T2> &GetTask(tml::shared_ptr<T2> &, const tml::shared_ptr<T> &, INT *dst_result = nullptr);
+	template <typename T, typename T2>
+	tml::shared_ptr<T2> &GetTask(tml::shared_ptr<T2> &, const WCHAR *, INT *dst_result = nullptr);
+	void SetTaskName(tml::test::ManagerTask *, const WCHAR *);
+	void SetTaskRunFlag(tml::test::ManagerTask *, const bool);
+	void RunTask(void);
+	const std::list<tml::shared_ptr<tml::test::ManagerEvent>> *GetEventContainer(const UINT);
+	template <typename T, typename T2, typename D>
+	tml::shared_ptr<T2> &GetEvent(tml::shared_ptr<T2> &, const D &, INT *dst_result = nullptr);
+	template <typename T, typename T2>
+	tml::shared_ptr<T2> &GetEvent(tml::shared_ptr<T2> &, const tml::shared_ptr<T> &, INT *dst_result = nullptr);
+	template <typename T, typename T2>
+	tml::shared_ptr<T2> &GetEvent(tml::shared_ptr<T2> &, const WCHAR *, INT *dst_result = nullptr);
+	void SetEventName(tml::test::ManagerEvent *, const WCHAR *);
+	void SetEventRunFlag(tml::test::ManagerEvent *, const bool);
+	void RunEvent(const UINT);
 };
 }
 }
@@ -290,4 +324,282 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetResource(tml::shared_ptr<T2> 
 	}
 
 	return (dst_res);
+}
+
+
+/**
+ * @brief GetTaskContainerŠÖ”
+ * @param task_index (task_index)
+ * @return task_cont (task_container)<br>
+ * nullptr=¸”s
+ */
+inline const std::list<tml::shared_ptr<tml::test::ManagerTask>> *tml::test::Manager::GetTaskContainer(const UINT task_index)
+{
+	if (task_index >= this->task_cont_.size()) {
+		return (nullptr);
+	}
+
+	return (&this->task_cont_by_index_[task_index]);
+}
+
+
+/**
+ * @brief GetTaskŠÖ”
+ * @param dst_task (dst_task)
+ * @param desc (desc)
+ * @param dst_result (dst_result)
+ * @return dst_task (dst_task)
+ */
+template <typename T, typename T2, typename D>
+inline tml::shared_ptr<T2> &tml::test::Manager::GetTask(tml::shared_ptr<T2> &dst_task, const D &desc, INT *dst_result)
+{
+	dst_task.reset();
+	tml::SetResult(dst_result, 0);
+
+	const std::wstring &tmp_task_name = desc.task_name;
+
+	if (!tmp_task_name.empty()) {
+		auto task_itr = this->task_cont_by_name_.find(tmp_task_name);
+
+		if (task_itr != this->task_cont_by_name_.end()) {
+			dst_task = std::dynamic_pointer_cast<T2>(task_itr->second);
+			tml::SetResult(dst_result, (dst_task != nullptr) ? 1 : -1);
+
+			return (dst_task);
+		}
+	}
+
+	if (desc.GetManager() != this) {
+		tml::SetResult(dst_result, -1);
+
+		return (dst_task);
+	}
+
+	tml::shared_ptr<tml::test::ManagerTask> task = tml::make_shared<T>(1U);
+	UINT task_index = T::TASK_INDEX;
+
+	task->task_index_ = task_index;
+	task->task_shared_p_ = task;
+	task->task_name_ = desc.task_name;
+
+	if (reinterpret_cast<T *>(task.get())->Create(desc) < 0) {
+		this->GetTaskInitPart(task);
+
+		tml::SetResult(dst_result, -1);
+
+		return (dst_task);
+	}
+
+	this->task_cont_by_index_[task->task_index_].push_back(task);
+
+	if (!task->task_name_.empty()) {
+		this->task_cont_by_name_.emplace(task->task_name_, task->task_shared_p_);
+	}
+
+	this->task_cont_.push_back(task);
+
+	dst_task = std::dynamic_pointer_cast<T2>(task);
+
+	if (dst_task == nullptr) {
+		tml::SetResult(dst_result, -1);
+	}
+
+	return (dst_task);
+}
+
+
+/**
+ * @brief GetTaskŠÖ”
+ * @param dst_task (dst_task)
+ * @param task (task)
+ * @param dst_result (dst_result)
+ * @return dst_task (dst_task)
+ */
+template <typename T, typename T2>
+inline tml::shared_ptr<T2> &tml::test::Manager::GetTask(tml::shared_ptr<T2> &dst_task, const tml::shared_ptr<T> &task, INT *dst_result)
+{
+	dst_task = std::dynamic_pointer_cast<T2>(task);
+	tml::SetResult(dst_result, (dst_task != nullptr) ? 1 : -1);
+
+	return (dst_task);
+}
+
+
+/**
+ * @brief GetTaskŠÖ”
+ * @param dst_task (dst_task)
+ * @param task_name (task_name)
+ * @param dst_result (dst_result)
+ * @return dst_task (dst_task)
+ */
+template <typename T, typename T2>
+inline tml::shared_ptr<T2> &tml::test::Manager::GetTask(tml::shared_ptr<T2> &dst_task, const WCHAR *task_name, INT *dst_result)
+{
+	dst_task.reset();
+	tml::SetResult(dst_result, 0);
+
+	if ((task_name == nullptr)
+	|| (task_name[0] == 0)) {
+		tml::SetResult(dst_result, -1);
+
+		return (dst_task);
+	}
+
+	const std::wstring tmp_task_name = task_name;
+
+	if (!tmp_task_name.empty()) {
+		auto task_itr = this->task_cont_by_name_.find(tmp_task_name);
+
+		if (task_itr != this->task_cont_by_name_.end()) {
+			dst_task = std::dynamic_pointer_cast<T2>(task_itr->second);
+			tml::SetResult(dst_result, (dst_task != nullptr) ? 1 : -1);
+
+			return (dst_task);
+		}
+	}
+
+	if (dst_task == nullptr) {
+		tml::SetResult(dst_result, -1);
+	}
+
+	return (dst_task);
+}
+
+
+/**
+ * @brief GetEventContainerŠÖ”
+ * @param event_index (event_index)
+ * @return event_cont (event_container)<br>
+ * nullptr=¸”s
+ */
+inline const std::list<tml::shared_ptr<tml::test::ManagerEvent>> *tml::test::Manager::GetEventContainer(const UINT event_index)
+{
+	if (event_index >= this->event_cont_.size()) {
+		return (nullptr);
+	}
+
+	return (&this->event_cont_by_index_[event_index]);
+}
+
+
+/**
+ * @brief GetEventŠÖ”
+ * @param dst_event (dst_event)
+ * @param desc (desc)
+ * @param dst_result (dst_result)
+ * @return dst_event (dst_event)
+ */
+template <typename T, typename T2, typename D>
+inline tml::shared_ptr<T2> &tml::test::Manager::GetEvent(tml::shared_ptr<T2> &dst_event, const D &desc, INT *dst_result)
+{
+	dst_event.reset();
+	tml::SetResult(dst_result, 0);
+
+	const std::wstring &tmp_event_name = desc.event_name;
+
+	if (!tmp_event_name.empty()) {
+		auto event_itr = this->event_cont_by_name_.find(tmp_event_name);
+
+		if (event_itr != this->event_cont_by_name_.end()) {
+			dst_event = std::dynamic_pointer_cast<T2>(event_itr->second);
+			tml::SetResult(dst_result, (dst_event != nullptr) ? 1 : -1);
+
+			return (dst_event);
+		}
+	}
+
+	if (desc.GetManager() != this) {
+		tml::SetResult(dst_result, -1);
+
+		return (dst_event);
+	}
+
+	tml::shared_ptr<tml::test::ManagerEvent> event = tml::make_shared<T>(1U);
+	UINT event_index = T::EVENT_INDEX;
+
+	event->event_index_ = event_index;
+	event->event_shared_p_ = event;
+	event->event_name_ = desc.event_name;
+
+	if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {
+		this->GetEventInitPart(event);
+
+		tml::SetResult(dst_result, -1);
+
+		return (dst_event);
+	}
+
+	this->event_cont_by_index_[event->event_index_].push_back(event);
+
+	if (!event->event_name_.empty()) {
+		this->event_cont_by_name_.emplace(event->event_name_, event->event_shared_p_);
+	}
+
+	this->event_cont_.push_back(event);
+
+	dst_event = std::dynamic_pointer_cast<T2>(event);
+
+	if (dst_event == nullptr) {
+		tml::SetResult(dst_result, -1);
+	}
+
+	return (dst_event);
+}
+
+
+/**
+ * @brief GetEventŠÖ”
+ * @param dst_event (dst_event)
+ * @param event (event)
+ * @param dst_result (dst_result)
+ * @return dst_event (dst_event)
+ */
+template <typename T, typename T2>
+inline tml::shared_ptr<T2> &tml::test::Manager::GetEvent(tml::shared_ptr<T2> &dst_event, const tml::shared_ptr<T> &event, INT *dst_result)
+{
+	dst_event = std::dynamic_pointer_cast<T2>(event);
+	tml::SetResult(dst_result, (dst_event != nullptr) ? 1 : -1);
+
+	return (dst_event);
+}
+
+
+/**
+ * @brief GetEventŠÖ”
+ * @param dst_event (dst_event)
+ * @param event_name (event_name)
+ * @param dst_result (dst_result)
+ * @return dst_event (dst_event)
+ */
+template <typename T, typename T2>
+inline tml::shared_ptr<T2> &tml::test::Manager::GetEvent(tml::shared_ptr<T2> &dst_event, const WCHAR *event_name, INT *dst_result)
+{
+	dst_event.reset();
+	tml::SetResult(dst_result, 0);
+
+	if ((event_name == nullptr)
+	|| (event_name[0] == 0)) {
+		tml::SetResult(dst_result, -1);
+
+		return (dst_event);
+	}
+
+	const std::wstring tmp_event_name = event_name;
+
+	if (!tmp_event_name.empty()) {
+		auto event_itr = this->event_cont_by_name_.find(tmp_event_name);
+
+		if (event_itr != this->event_cont_by_name_.end()) {
+			dst_event = std::dynamic_pointer_cast<T2>(event_itr->second);
+			tml::SetResult(dst_result, (dst_event != nullptr) ? 1 : -1);
+
+			return (dst_event);
+		}
+	}
+
+	if (dst_event == nullptr) {
+		tml::SetResult(dst_result, -1);
+	}
+
+	return (dst_event);
 }

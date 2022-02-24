@@ -25,6 +25,7 @@ class ManagerTaskDesc
 {
 private:
 	tml::test::Manager *mgr_;
+	std::wstring task_name;
 
 public:
 
@@ -85,7 +86,9 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::test::Manager *mgr_;
-	UINT event_index_;
+	UINT task_index_;
+	tml::shared_ptr<tml::test::ManagerTask> task_shared_p_;
+	std::wstring task_name_;
 
 private:
 	void Release(void);
@@ -98,7 +101,9 @@ public:
 	INT Create(const tml::test::ManagerTaskDesc &);
 
 	tml::test::Manager *GetManager(void);
-	UINT GetEventIndex(void) const;
+	UINT GetTaskIndex(void) const;
+	const tml::shared_ptr<tml::test::ManagerTask> &GetTaskSharedPointer(void) const;
+	const std::wstring &GetTaskName(void) const;
 };
 }
 }
@@ -124,10 +129,30 @@ inline tml::test::Manager *tml::test::ManagerTask::GetManager(void)
 
 
 /**
- * @brief GetEventIndexŠÖ”
- * @return event_index (event_index)
+ * @brief GetTaskIndexŠÖ”
+ * @return task_index (task_index)
  */
-inline UINT tml::test::ManagerTask::GetEventIndex(void) const
+inline UINT tml::test::ManagerTask::GetTaskIndex(void) const
 {
-	return (this->event_index_);
+	return (this->task_index_);
+}
+
+
+/**
+ * @brief GetTaskSharedPointerŠÖ”
+ * @return task_shared_p (task_shared_pointer)
+ */
+inline const tml::shared_ptr<tml::test::ManagerTask> &tml::test::ManagerTask::GetTaskSharedPointer(void) const
+{
+	return (this->task_shared_p_);
+}
+
+
+/**
+ * @brief GetTaskNameŠÖ”
+ * @return task_name (task_name)
+ */
+inline const std::wstring &tml::test::ManagerTask::GetTaskName(void) const
+{
+	return (this->task_name_);
 }

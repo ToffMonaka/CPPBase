@@ -96,6 +96,10 @@ tml::test::Manager::Manager() :
 {
 	this->res_cont_.clear();
 	this->res_itr_ = this->res_cont_.end();
+	this->task_cont_.clear();
+	this->task_itr_ = this->task_cont_.end();
+	this->event_cont_.clear();
+	this->event_itr_ = this->event_cont_.end();
 
 	return;
 }
@@ -118,6 +122,8 @@ tml::test::Manager::~Manager()
 void tml::test::Manager::Release(void)
 {
 	this->DeleteResourceContainer();
+	this->DeleteTaskContainer();
+	this->DeleteEventContainer();
 
 	return;
 }
@@ -160,6 +166,14 @@ INT tml::test::Manager::Create(const tml::test::ManagerDesc &desc)
 		return (-1);
 	}
 
+	if (this->CreateTaskContainer(desc.task_count_container) < 0) {
+		return (-1);
+	}
+
+	if (this->CreateEventContainer(desc.event_count_container) < 0) {
+		return (-1);
+	}
+
 	return (0);
 }
 
@@ -173,17 +187,19 @@ void tml::test::Manager::Update(void)
 		this->res_itr_ = this->res_cont_.begin();
 	}
 
-	UINT res_cnt = 0U;
-	UINT res_use_cnt = 0U;
+	UINT loop_cnt = 0U;
+	UINT use_cnt = 0U;
+
+	loop_cnt = 0U;
 
 	while (this->res_itr_ != this->res_cont_.end()) {
-		res_use_cnt = 3U;
+		use_cnt = 3U;
 
 		if (!(*this->res_itr_)->res_name_.empty()) {
-			++res_use_cnt;
+			++use_cnt;
 		}
 
-		if (this->res_itr_->use_count() <= static_cast<LONG>(res_use_cnt)) {
+		if (this->res_itr_->use_count() <= static_cast<LONG>(use_cnt)) {
 			auto res = (*this->res_itr_);
 
 			res->Init();
@@ -200,7 +216,69 @@ void tml::test::Manager::Update(void)
 			++this->res_itr_;
 		}
 
-		if (++res_cnt >= 10U) {
+		if (++loop_cnt >= 10U) {
+			break;
+		}
+	}
+
+	loop_cnt = 0U;
+
+	while (this->task_itr_ != this->task_cont_.end()) {
+		use_cnt = 3U;
+
+		if (!(*this->task_itr_)->task_name_.empty()) {
+			++use_cnt;
+		}
+
+		if (this->task_itr_->use_count() <= static_cast<LONG>(use_cnt)) {
+			auto task = (*this->task_itr_);
+
+			task->Init();
+			task->task_shared_p_.reset();
+
+			this->task_cont_by_index_[task->task_index_].remove(task);
+
+			if (!task->task_name_.empty()) {
+				this->task_cont_by_name_.erase(task->task_name_);
+			}
+
+			this->task_itr_ = this->task_cont_.erase(this->task_itr_);
+		} else {
+			++this->task_itr_;
+		}
+
+		if (++loop_cnt >= 10U) {
+			break;
+		}
+	}
+
+	loop_cnt = 0U;
+
+	while (this->event_itr_ != this->event_cont_.end()) {
+		use_cnt = 3U;
+
+		if (!(*this->event_itr_)->event_name_.empty()) {
+			++use_cnt;
+		}
+
+		if (this->event_itr_->use_count() <= static_cast<LONG>(use_cnt)) {
+			auto event = (*this->event_itr_);
+
+			event->Init();
+			event->event_shared_p_.reset();
+
+			this->event_cont_by_index_[event->event_index_].remove(event);
+
+			if (!event->event_name_.empty()) {
+				this->event_cont_by_name_.erase(event->event_name_);
+			}
+
+			this->event_itr_ = this->event_cont_.erase(this->event_itr_);
+		} else {
+			++this->event_itr_;
+		}
+
+		if (++loop_cnt >= 10U) {
 			break;
 		}
 	}
@@ -213,6 +291,8 @@ void tml::test::Manager::Update(void)
 			this->deferred_create_res_cont_.erase(res_itr);
 		}
 	}
+
+	this->RunTask();
 
 	return;
 }
@@ -299,5 +379,208 @@ void tml::test::Manager::SetResourceName(tml::test::ManagerResource *res, const 
 		this->res_cont_by_name_.emplace(res->res_name_, res->res_shared_p_);
 	}
 
+	return;
+}
+
+
+/**
+ * @brief CreateTaskContainerŠÖ”
+ * @param task_cnt_cont (task_count_container)
+ * @return result (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::test::Manager::CreateTaskContainer(const std::vector<UINT> &task_cnt_cont)
+{
+	this->DeleteTaskContainer();
+
+	this->task_cont_by_index_.resize(task_cnt_cont.size());
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteTaskContainerŠÖ”
+ */
+void tml::test::Manager::DeleteTaskContainer(void)
+{
+	for (auto &task : this->task_cont_) {
+		task->Init();
+		task->task_shared_p_.reset();
+	}
+
+	this->task_cont_.clear();
+	this->task_itr_ = this->task_cont_.end();
+	this->task_cont_by_index_.clear();
+	this->task_cont_by_name_.clear();
+
+	return;
+}
+
+
+/**
+ * @brief GetTaskInitPartŠÖ”
+ * @param task (task)
+ */
+void tml::test::Manager::GetTaskInitPart(tml::shared_ptr<tml::test::ManagerTask> &task)
+{
+	task->task_shared_p_.reset();
+
+	return;
+}
+
+
+/**
+ * @brief SetTaskNameŠÖ”
+ * @param task (task)
+ * @param task_name (task_name)
+ */
+void tml::test::Manager::SetTaskName(tml::test::ManagerTask *task, const WCHAR *task_name)
+{
+	if ((task == nullptr)
+	|| (task_name == nullptr)) {
+		return;
+	}
+
+	if (task_name[0] != 0) {
+		auto task_itr = this->task_cont_by_name_.find(task_name);
+
+		if (task_itr != this->task_cont_by_name_.end()) {
+			return;
+		}
+	}
+
+	if (!task->task_name_.empty()) {
+		this->task_cont_by_name_.erase(task->task_name_);
+	}
+
+	task->task_name_ = task_name;
+
+	if (!task->task_name_.empty()) {
+		this->task_cont_by_name_.emplace(task->task_name_, task->task_shared_p_);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetTaskRunFlagŠÖ”
+ * @param task (task)
+ * @param run_flg (run_flag)
+ */
+void tml::test::Manager::SetTaskRunFlag(tml::test::ManagerTask *task, const bool run_flg)
+{
+	return;
+}
+
+
+/**
+ * @brief RunTaskŠÖ”
+ */
+void tml::test::Manager::RunTask(void)
+{
+	return;
+}
+
+
+/**
+ * @brief CreateEventContainerŠÖ”
+ * @param event_cnt_cont (event_count_container)
+ * @return result (result)<br>
+ * 0–¢–=¸”s
+ */
+INT tml::test::Manager::CreateEventContainer(const std::vector<UINT> &event_cnt_cont)
+{
+	this->DeleteEventContainer();
+
+	this->event_cont_by_index_.resize(event_cnt_cont.size());
+
+	return (0);
+}
+
+
+/**
+ * @brief DeleteEventContainerŠÖ”
+ */
+void tml::test::Manager::DeleteEventContainer(void)
+{
+	for (auto &event : this->event_cont_) {
+		event->Init();
+		event->event_shared_p_.reset();
+	}
+
+	this->event_cont_.clear();
+	this->event_itr_ = this->event_cont_.end();
+	this->event_cont_by_index_.clear();
+	this->event_cont_by_name_.clear();
+
+	return;
+}
+
+
+/**
+ * @brief GetEventInitPartŠÖ”
+ * @param event (event)
+ */
+void tml::test::Manager::GetEventInitPart(tml::shared_ptr<tml::test::ManagerEvent> &event)
+{
+	event->event_shared_p_.reset();
+
+	return;
+}
+
+
+/**
+ * @brief SetEventNameŠÖ”
+ * @param event (event)
+ * @param event_name (event_name)
+ */
+void tml::test::Manager::SetEventName(tml::test::ManagerEvent *event, const WCHAR *event_name)
+{
+	if ((event == nullptr)
+	|| (event_name == nullptr)) {
+		return;
+	}
+
+	if (event_name[0] != 0) {
+		auto event_itr = this->event_cont_by_name_.find(event_name);
+
+		if (event_itr != this->event_cont_by_name_.end()) {
+			return;
+		}
+	}
+
+	if (!event->event_name_.empty()) {
+		this->event_cont_by_name_.erase(event->event_name_);
+	}
+
+	event->event_name_ = event_name;
+
+	if (!event->event_name_.empty()) {
+		this->event_cont_by_name_.emplace(event->event_name_, event->event_shared_p_);
+	}
+
+	return;
+}
+
+
+/**
+ * @brief SetEventRunFlagŠÖ”
+ * @param event (event)
+ * @param run_flg (run_flag)
+ */
+void tml::test::Manager::SetEventRunFlag(tml::test::ManagerEvent *event, const bool run_flg)
+{
+	return;
+}
+
+
+/**
+ * @brief RunEventŠÖ”
+ * @param event_index (event_index)
+ */
+void tml::test::Manager::RunEvent(const UINT event_index)
+{
 	return;
 }
