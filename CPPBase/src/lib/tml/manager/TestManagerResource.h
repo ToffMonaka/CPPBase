@@ -90,12 +90,10 @@ private:
 	UINT res_index_;
 	tml::shared_ptr<tml::test::ManagerResource> res_shared_p_;
 	std::wstring res_name_;
-
-protected:
+	bool deferred_create_flg_;
+	bool deferred_created_flg_;
 	tml::unique_ptr<tml::test::ManagerResourceDesc> deferred_create_desc_unique_p_;
 	const tml::test::ManagerResourceDesc *deferred_create_desc_;
-	bool deferred_created_flg_;
-	bool deferred_creating_flg_;
 
 private:
 	void Release(void);
@@ -110,11 +108,12 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::test::ManagerResourceDesc &);
+
 	virtual void InitDeferred(void);
 	INT CreateDeferred(void);
-	const tml::test::ManagerResourceDesc *GetDeferredCreateDesc(void) const;
+	bool IsDeferredCreate(void) const;
 	bool IsDeferredCreated(void) const;
-	bool IsDeferredCreating(void) const;
+	const tml::test::ManagerResourceDesc *GetDeferredCreateDesc(void) const;
 
 	tml::test::Manager *GetManager(void);
 	UINT GetResourceIndex(void) const;
@@ -146,12 +145,13 @@ inline void tml::test::ManagerResource::ReleaseDeferred(void)
 
 
 /**
- * @brief GetDeferredCreateDescŠÖ”
- * @return deferred_create_desc (deferred_create_desc)
+ * @brief IsDeferredCreateŠÖ”
+ * @return result_flg (result_flag)<br>
+ * false=”ñì¬’†,true=ì¬’†
  */
-inline const tml::test::ManagerResourceDesc *tml::test::ManagerResource::GetDeferredCreateDesc(void) const
+inline bool tml::test::ManagerResource::IsDeferredCreate(void) const
 {
-	return (this->deferred_create_desc_);
+	return (this->deferred_create_flg_);
 }
 
 
@@ -167,13 +167,12 @@ inline bool tml::test::ManagerResource::IsDeferredCreated(void) const
 
 
 /**
- * @brief IsDeferredCreatingŠÖ”
- * @return result_flg (result_flag)<br>
- * false=”ñì¬’†,true=ì¬’†
+ * @brief GetDeferredCreateDescŠÖ”
+ * @return deferred_create_desc (deferred_create_desc)
  */
-inline bool tml::test::ManagerResource::IsDeferredCreating(void) const
+inline const tml::test::ManagerResourceDesc *tml::test::ManagerResource::GetDeferredCreateDesc(void) const
 {
-	return (this->deferred_creating_flg_);
+	return (this->deferred_create_desc_);
 }
 
 

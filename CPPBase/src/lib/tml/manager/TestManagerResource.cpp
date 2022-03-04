@@ -120,9 +120,9 @@ void tml::test::ManagerResourceDesc::SetManager(tml::test::Manager *mgr)
 tml::test::ManagerResource::ManagerResource() :
 	mgr_(nullptr),
 	res_index_(0U),
-	deferred_create_desc_(nullptr),
+	deferred_create_flg_(false),
 	deferred_created_flg_(false),
-	deferred_creating_flg_(true)
+	deferred_create_desc_(nullptr)
 {
 	return;
 }
@@ -146,11 +146,6 @@ void tml::test::ManagerResource::Init(void)
 {
 	this->Release();
 
-	this->deferred_create_desc_unique_p_.reset();
-	this->deferred_create_desc_ = nullptr;
-	this->deferred_created_flg_ = false;
-	this->deferred_creating_flg_ = true;
-	
 	return;
 }
 
@@ -192,29 +187,27 @@ void tml::test::ManagerResource::InitDeferred(void)
  */
 INT tml::test::ManagerResource::CreateDeferred(void)
 {
-	if (this->deferred_created_flg_) {
-		return (1);
+	if (!this->deferred_create_flg_) {
+		return (-1);
 	}
 
-	if (!this->deferred_creating_flg_) {
-		return (-1);
+	if (this->deferred_created_flg_) {
+		return (1);
 	}
 
 	if (this->OnCreateDeferred() < 0) {
 		this->InitDeferred();
 
+		this->deferred_created_flg_ = false;
 		this->deferred_create_desc_unique_p_.reset();
 		this->deferred_create_desc_ = nullptr;
-		this->deferred_created_flg_ = false;
-		this->deferred_creating_flg_ = false;
 
 		return (-1);
 	}
 
+	this->deferred_created_flg_ = true;
 	this->deferred_create_desc_unique_p_.reset();
 	this->deferred_create_desc_ = nullptr;
-	this->deferred_created_flg_ = true;
-	this->deferred_creating_flg_ = false;
 
 	return (0);
 }

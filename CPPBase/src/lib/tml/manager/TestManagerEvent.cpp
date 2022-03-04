@@ -12,7 +12,8 @@
  * @brief コンストラクタ
  */
 tml::test::ManagerEventDesc::ManagerEventDesc() :
-	mgr_(nullptr)
+	mgr_(nullptr),
+	run_flag(true)
 {
 	return;
 }
@@ -38,6 +39,7 @@ void tml::test::ManagerEventDesc::Init(void)
 
 	this->mgr_ = nullptr;
 	this->event_name.clear();
+	this->run_flag = true;
 
 	return;
 }
@@ -117,7 +119,8 @@ void tml::test::ManagerEventDesc::SetManager(tml::test::Manager *mgr)
  */
 tml::test::ManagerEvent::ManagerEvent() :
 	mgr_(nullptr),
-	event_index_(0U)
+	event_index_(0U),
+	run_flg_(true)
 {
 	return;
 }
@@ -161,4 +164,19 @@ INT tml::test::ManagerEvent::Create(const tml::test::ManagerEventDesc &desc)
 	this->mgr_ = desc.GetManager();
 
 	return (0);
+}
+
+
+/**
+ * @brief Run関数
+ */
+void tml::test::ManagerEvent::Run(void)
+{
+	if (!this->run_flg_) {
+		return;
+	}
+
+	this->OnRun();
+
+	return;
 }

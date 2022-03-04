@@ -22,9 +22,9 @@ public:
 	HWND window_handle;
 	HDC window_device_context_handle;
 	tml::test::ManagerFactory *factory;
-	std::vector<UINT> resource_count_container;
-	std::vector<UINT> task_count_container;
-	std::vector<UINT> event_count_container;
+	UINT resource_count;
+	UINT task_count;
+	UINT event_count;
 
 private:
 	void Release(void);
@@ -78,10 +78,14 @@ private:
 	std::list<tml::shared_ptr<tml::test::ManagerTask>>::iterator task_itr_;
 	std::vector<std::list<tml::shared_ptr<tml::test::ManagerTask>>> task_cont_by_index_;
 	std::unordered_map<std::wstring, tml::shared_ptr<tml::test::ManagerTask>> task_cont_by_name_;
+	std::list<tml::shared_ptr<tml::test::ManagerTask>> run_task_cont_;
+	std::list<tml::shared_ptr<tml::test::ManagerTask>> add_run_task_cont_;
 	std::list<tml::shared_ptr<tml::test::ManagerEvent>> event_cont_;
 	std::list<tml::shared_ptr<tml::test::ManagerEvent>>::iterator event_itr_;
 	std::vector<std::list<tml::shared_ptr<tml::test::ManagerEvent>>> event_cont_by_index_;
 	std::unordered_map<std::wstring, tml::shared_ptr<tml::test::ManagerEvent>> event_cont_by_name_;
+	std::vector<std::list<tml::shared_ptr<tml::test::ManagerEvent>>> run_event_cont_;
+	std::vector<std::list<tml::shared_ptr<tml::test::ManagerEvent>>> add_run_event_cont_;
 
 public:
 	tml::test::ManagerFactory *factory;
@@ -89,16 +93,16 @@ public:
 private:
 	void Release(void);
 
-	void GetResourceInitPart(tml::shared_ptr<tml::test::ManagerResource> &);
-	void GetTaskInitPart(tml::shared_ptr<tml::test::ManagerTask> &);
-	void GetEventInitPart(tml::shared_ptr<tml::test::ManagerEvent> &);
+	void InitResourcePart(tml::shared_ptr<tml::test::ManagerResource> &);
+	void InitTaskPart(tml::shared_ptr<tml::test::ManagerTask> &);
+	void InitEventPart(tml::shared_ptr<tml::test::ManagerEvent> &);
 
 protected:
-	INT CreateResourceContainer(const std::vector<UINT> &);
+	INT CreateResourceContainer(const UINT);
 	void DeleteResourceContainer(void);
-	INT CreateTaskContainer(const std::vector<UINT> &);
+	INT CreateTaskContainer(const UINT);
 	void DeleteTaskContainer(void);
-	INT CreateEventContainer(const std::vector<UINT> &);
+	INT CreateEventContainer(const UINT);
 	void DeleteEventContainer(void);
 
 public:
@@ -220,15 +224,21 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetResource(tml::shared_ptr<T2> 
 	res->res_shared_p_ = res;
 	res->res_name_ = desc.resource_name;
 
-	if (reinterpret_cast<T *>(res.get())->Create(desc) < 0) {
-		this->GetResourceInitPart(res);
+	dst_res = std::dynamic_pointer_cast<T2>(res);
 
+	if ((dst_res == nullptr)
+	|| (reinterpret_cast<T *>(res.get())->Create(desc) < 0)) {
+		this->InitResourcePart(res);
+
+		dst_res.reset();
 		tml::SetResult(dst_result, -1);
 
 		return (dst_res);
 	}
 
-	if (desc.deferred_create_flag) {
+	res->deferred_create_flg_ = desc.deferred_create_flag_;
+
+	if (res->deferred_create_flg_) {
 		tml::unique_ptr<tml::test::ManagerResourceDesc> deferred_create_desc = tml::make_unique<D>(1U);
 
 		(*reinterpret_cast<D *>(deferred_create_desc.get())) = desc;
@@ -242,8 +252,8 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetResource(tml::shared_ptr<T2> 
 		res->deferred_create_desc_ = &desc;
 
 		if ((res->CreateDeferred() < 0)
-		|| (res->IsDeferredCreating())) {
-			this->GetResourceInitPart(res);
+		|| (!res->IsDeferredCreated())) {
+			this->InitResourcePart(res);
 
 			tml::SetResult(dst_result, -1);
 
@@ -258,12 +268,6 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetResource(tml::shared_ptr<T2> 
 	}
 
 	this->res_cont_.push_back(res);
-
-	dst_res = std::dynamic_pointer_cast<T2>(res);
-
-	if (dst_res == nullptr) {
-		tml::SetResult(dst_result, -1);
-	}
 
 	return (dst_res);
 }
@@ -382,12 +386,22 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetTask(tml::shared_ptr<T2> &dst
 	task->task_shared_p_ = task;
 	task->task_name_ = desc.task_name;
 
-	if (reinterpret_cast<T *>(task.get())->Create(desc) < 0) {
-		this->GetTaskInitPart(task);
+	dst_task = std::dynamic_pointer_cast<T2>(task);
 
+	if ((dst_task == nullptr)
+	|| (reinterpret_cast<T *>(task.get())->Create(desc) < 0)) {
+		this->InitTaskPart(task);
+
+		dst_task.reset();
 		tml::SetResult(dst_result, -1);
 
 		return (dst_task);
+	}
+
+	task->run_flg_ = desc.run_flag;
+
+	if (task->run_flg_) {
+		this->add_run_task_cont_.push_back(task);
 	}
 
 	this->task_cont_by_index_[task->task_index_].push_back(task);
@@ -397,12 +411,6 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetTask(tml::shared_ptr<T2> &dst
 	}
 
 	this->task_cont_.push_back(task);
-
-	dst_task = std::dynamic_pointer_cast<T2>(task);
-
-	if (dst_task == nullptr) {
-		tml::SetResult(dst_result, -1);
-	}
 
 	return (dst_task);
 }
@@ -521,12 +529,22 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetEvent(tml::shared_ptr<T2> &ds
 	event->event_shared_p_ = event;
 	event->event_name_ = desc.event_name;
 
-	if (reinterpret_cast<T *>(event.get())->Create(desc) < 0) {
-		this->GetEventInitPart(event);
+	dst_event = std::dynamic_pointer_cast<T2>(event);
 
+	if ((dst_event == nullptr)
+	|| (reinterpret_cast<T *>(event.get())->Create(desc) < 0)) {
+		this->InitEventPart(event);
+
+		dst_event.reset();
 		tml::SetResult(dst_result, -1);
 
 		return (dst_event);
+	}
+
+	event->run_flg_ = desc.run_flag;
+
+	if (event->run_flg_) {
+		this->add_run_event_cont_[event->event_index_].push_back(event);
 	}
 
 	this->event_cont_by_index_[event->event_index_].push_back(event);
@@ -536,12 +554,6 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetEvent(tml::shared_ptr<T2> &ds
 	}
 
 	this->event_cont_.push_back(event);
-
-	dst_event = std::dynamic_pointer_cast<T2>(event);
-
-	if (dst_event == nullptr) {
-		tml::SetResult(dst_result, -1);
-	}
 
 	return (dst_event);
 }

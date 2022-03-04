@@ -25,9 +25,10 @@ class ManagerTaskDesc
 {
 private:
 	tml::test::Manager *mgr_;
-	std::wstring task_name;
 
 public:
+	std::wstring task_name;
+	bool run_flag;
 
 private:
 	void Release(void);
@@ -89,9 +90,13 @@ private:
 	UINT task_index_;
 	tml::shared_ptr<tml::test::ManagerTask> task_shared_p_;
 	std::wstring task_name_;
+	bool run_flg_;
 
 private:
 	void Release(void);
+
+protected:
+	virtual void OnRun(void) = 0;
 
 public:
 	ManagerTask();
@@ -100,10 +105,13 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::test::ManagerTaskDesc &);
 
+	void Run(void);
+
 	tml::test::Manager *GetManager(void);
 	UINT GetTaskIndex(void) const;
 	const tml::shared_ptr<tml::test::ManagerTask> &GetTaskSharedPointer(void) const;
 	const std::wstring &GetTaskName(void) const;
+	bool GetRunFlag(void) const;
 };
 }
 }
@@ -155,4 +163,14 @@ inline const tml::shared_ptr<tml::test::ManagerTask> &tml::test::ManagerTask::Ge
 inline const std::wstring &tml::test::ManagerTask::GetTaskName(void) const
 {
 	return (this->task_name_);
+}
+
+
+/**
+ * @brief GetRunFlagŠÖ”
+ * @return run_flg (run_flag)
+ */
+inline bool tml::test::ManagerTask::GetRunFlag(void) const
+{
+	return (this->run_flg_);
 }

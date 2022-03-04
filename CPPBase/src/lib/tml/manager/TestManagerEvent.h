@@ -25,9 +25,10 @@ class ManagerEventDesc
 {
 private:
 	tml::test::Manager *mgr_;
-	std::wstring event_name;
 
 public:
+	std::wstring event_name;
+	bool run_flag;
 
 private:
 	void Release(void);
@@ -89,9 +90,13 @@ private:
 	UINT event_index_;
 	tml::shared_ptr<tml::test::ManagerEvent> event_shared_p_;
 	std::wstring event_name_;
+	bool run_flg_;
 
 private:
 	void Release(void);
+
+protected:
+	virtual void OnRun(void) = 0;
 
 public:
 	ManagerEvent();
@@ -100,10 +105,13 @@ public:
 	virtual void Init(void);
 	INT Create(const tml::test::ManagerEventDesc &);
 
+	void Run(void);
+
 	tml::test::Manager *GetManager(void);
 	UINT GetEventIndex(void) const;
 	const tml::shared_ptr<tml::test::ManagerEvent> &GetEventSharedPointer(void) const;
 	const std::wstring &GetEventName(void) const;
+	bool GetRunFlag(void) const;
 };
 }
 }
@@ -155,4 +163,14 @@ inline const tml::shared_ptr<tml::test::ManagerEvent> &tml::test::ManagerEvent::
 inline const std::wstring &tml::test::ManagerEvent::GetEventName(void) const
 {
 	return (this->event_name_);
+}
+
+
+/**
+ * @brief GetRunFlagŠÖ”
+ * @return run_flg (run_flag)
+ */
+inline bool tml::test::ManagerEvent::GetRunFlag(void) const
+{
+	return (this->run_flg_);
 }

@@ -12,7 +12,8 @@
  * @brief コンストラクタ
  */
 tml::test::ManagerTaskDesc::ManagerTaskDesc() :
-	mgr_(nullptr)
+	mgr_(nullptr),
+	run_flag(true)
 {
 	return;
 }
@@ -38,6 +39,7 @@ void tml::test::ManagerTaskDesc::Init(void)
 
 	this->mgr_ = nullptr;
 	this->task_name.clear();
+	this->run_flag = true;
 
 	return;
 }
@@ -117,7 +119,8 @@ void tml::test::ManagerTaskDesc::SetManager(tml::test::Manager *mgr)
  */
 tml::test::ManagerTask::ManagerTask() :
 	mgr_(nullptr),
-	task_index_(0U)
+	task_index_(0U),
+	run_flg_(true)
 {
 	return;
 }
@@ -161,4 +164,19 @@ INT tml::test::ManagerTask::Create(const tml::test::ManagerTaskDesc &desc)
 	this->mgr_ = desc.GetManager();
 
 	return (0);
+}
+
+
+/**
+ * @brief Run関数
+ */
+void tml::test::ManagerTask::Run(void)
+{
+	if (!this->run_flg_) {
+		return;
+	}
+
+	this->OnRun();
+
+	return;
 }
