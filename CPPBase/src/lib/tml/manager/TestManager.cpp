@@ -487,8 +487,6 @@ void tml::test::Manager::SetTaskRunFlag(tml::test::ManagerTask *task, const bool
 
 	if (run_flg) {
 		this->add_run_task_cont_.push_back(task->task_shared_p_);
-	} else {
-		this->add_run_task_cont_.remove(task->task_shared_p_);
 	}
 
 	return;
@@ -501,7 +499,11 @@ void tml::test::Manager::SetTaskRunFlag(tml::test::ManagerTask *task, const bool
 void tml::test::Manager::RunTask(void)
 {
 	for (auto &task : this->add_run_task_cont_) {
-		this->run_task_cont_.push_back(std::move(task));
+		if (!task->run_added_flg_) {
+			task->run_added_flg_ = true;
+
+			this->run_task_cont_.push_back(std::move(task));
+		}
 	}
 
 	this->add_run_task_cont_.clear();
@@ -509,9 +511,11 @@ void tml::test::Manager::RunTask(void)
 	for (auto task_itr = this->run_task_cont_.begin(); task_itr != this->run_task_cont_.end();) {
 		(*task_itr)->Run();
 
-		if ((*task_itr)->GetRunFlag()) {
+		if ((*task_itr)->run_flg_) {
 			++task_itr;
 		} else {
+			(*task_itr)->run_added_flg_ = false;
+
 			task_itr = this->run_task_cont_.erase(task_itr);
 		}
 	}
@@ -622,8 +626,6 @@ void tml::test::Manager::SetEventRunFlag(tml::test::ManagerEvent *event, const b
 
 	if (run_flg) {
 		this->add_run_event_cont_[event->event_index_].push_back(event->event_shared_p_);
-	} else {
-		this->add_run_event_cont_[event->event_index_].remove(event->event_shared_p_);
 	}
 
 	return;
@@ -641,7 +643,11 @@ void tml::test::Manager::RunEvent(const UINT event_index)
 	}
 
 	for (auto &event : this->add_run_event_cont_[event_index]) {
-		this->run_event_cont_[event_index].push_back(std::move(event));
+		if (!event->run_added_flg_) {
+			event->run_added_flg_ = true;
+
+			this->run_event_cont_[event_index].push_back(std::move(event));
+		}
 	}
 
 	this->add_run_event_cont_[event_index].clear();
@@ -649,9 +655,11 @@ void tml::test::Manager::RunEvent(const UINT event_index)
 	for (auto event_itr = this->run_event_cont_[event_index].begin(); event_itr != this->run_event_cont_[event_index].end();) {
 		(*event_itr)->Run();
 
-		if ((*event_itr)->GetRunFlag()) {
+		if ((*event_itr)->run_flg_) {
 			++event_itr;
 		} else {
+			(*event_itr)->run_added_flg_ = false;
+
 			event_itr = this->run_event_cont_[event_index].erase(event_itr);
 		}
 	}

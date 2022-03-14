@@ -40,6 +40,7 @@ void tml::test::ManagerEventDesc::Init(void)
 	this->mgr_ = nullptr;
 	this->event_name.clear();
 	this->run_flag = true;
+	this->function = nullptr;
 
 	return;
 }
@@ -120,7 +121,8 @@ void tml::test::ManagerEventDesc::SetManager(tml::test::Manager *mgr)
 tml::test::ManagerEvent::ManagerEvent() :
 	mgr_(nullptr),
 	event_index_(0U),
-	run_flg_(true)
+	run_flg_(false),
+	run_added_flg_(false)
 {
 	return;
 }
@@ -162,6 +164,7 @@ INT tml::test::ManagerEvent::Create(const tml::test::ManagerEventDesc &desc)
 	}
 
 	this->mgr_ = desc.GetManager();
+	this->func_ = desc.function;
 
 	return (0);
 }
@@ -177,6 +180,12 @@ void tml::test::ManagerEvent::Run(void)
 	}
 
 	this->OnRun();
+
+	auto func = this->func_;
+
+	if (func != nullptr) {
+		func();
+	}
 
 	return;
 }

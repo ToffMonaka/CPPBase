@@ -126,21 +126,21 @@ inline tml::shared_ptr<T> &tml::test::ManagerFactory::GetResource(tml::shared_pt
 
 	auto res_func_itr = this->res_func_cont_.find(class_name);
 
-	if (res_func_itr == this->res_func_cont_.end()) {
-		tml::SetResult(dst_result, -1);
+	if (res_func_itr != this->res_func_cont_.end()) {
+		auto res_func = res_func_itr->second;
 
-		return (dst_res);
+		if (res_func != nullptr) {
+			auto res = res_func(conf_file_read_desc, dst_result);
+
+			dst_res = std::dynamic_pointer_cast<T>(res);
+
+			if (dst_res != nullptr) {
+				return (dst_res);
+			}
+		}
 	}
 
-	auto res = res_func_itr->second(conf_file_read_desc, dst_result);
-
-	dst_res = std::dynamic_pointer_cast<T>(res);
-
-	if (dst_res == nullptr) {
-		tml::SetResult(dst_result, -1);
-
-		return (dst_res);
-	}
+	tml::SetResult(dst_result, -1);
 
 	return (dst_res);
 }
@@ -169,21 +169,21 @@ inline tml::shared_ptr<T> &tml::test::ManagerFactory::GetTask(tml::shared_ptr<T>
 
 	auto task_func_itr = this->task_func_cont_.find(class_name);
 
-	if (task_func_itr == this->task_func_cont_.end()) {
-		tml::SetResult(dst_result, -1);
+	if (task_func_itr != this->task_func_cont_.end()) {
+		auto task_func = task_func_itr->second;
 
-		return (dst_task);
+		if (task_func != nullptr) {
+			auto task = task_func(conf_file_read_desc, dst_result);
+
+			dst_task = std::dynamic_pointer_cast<T>(task);
+
+			if (dst_task != nullptr) {
+				return (dst_task);
+			}
+		}
 	}
 
-	auto task = task_func_itr->second(conf_file_read_desc, dst_result);
-
-	dst_task = std::dynamic_pointer_cast<T>(task);
-
-	if (dst_task == nullptr) {
-		tml::SetResult(dst_result, -1);
-
-		return (dst_task);
-	}
+	tml::SetResult(dst_result, -1);
 
 	return (dst_task);
 }
@@ -212,21 +212,21 @@ inline tml::shared_ptr<T> &tml::test::ManagerFactory::GetEvent(tml::shared_ptr<T
 
 	auto event_func_itr = this->event_func_cont_.find(class_name);
 
-	if (event_func_itr == this->event_func_cont_.end()) {
-		tml::SetResult(dst_result, -1);
+	if (event_func_itr != this->event_func_cont_.end()) {
+		auto event_func = event_func_itr->second;
 
-		return (dst_event);
+		if (event_func != nullptr) {
+			auto event = event_func(conf_file_read_desc, dst_result);
+
+			dst_event = std::dynamic_pointer_cast<T>(event);
+
+			if (dst_event != nullptr) {
+				return (dst_event);
+			}
+		}
 	}
 
-	auto event = event_func_itr->second(conf_file_read_desc, dst_result);
-
-	dst_event = std::dynamic_pointer_cast<T>(event);
-
-	if (dst_event == nullptr) {
-		tml::SetResult(dst_result, -1);
-
-		return (dst_event);
-	}
+	tml::SetResult(dst_result, -1);
 
 	return (dst_event);
 }

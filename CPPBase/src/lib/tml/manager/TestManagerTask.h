@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include <functional>
 #include "../file/INIFile.h"
 
 
@@ -29,6 +30,7 @@ private:
 public:
 	std::wstring task_name;
 	bool run_flag;
+	std::function<void(void)> function;
 
 private:
 	void Release(void);
@@ -91,6 +93,8 @@ private:
 	tml::shared_ptr<tml::test::ManagerTask> task_shared_p_;
 	std::wstring task_name_;
 	bool run_flg_;
+	bool run_added_flg_;
+	std::function<void(void)> func_;
 
 private:
 	void Release(void);
