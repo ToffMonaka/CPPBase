@@ -103,26 +103,15 @@ INT tml::test::ManagerResourceDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
- * @param mgr (manager)
- */
-void tml::test::ManagerResourceDesc::SetManager(tml::test::Manager *mgr)
-{
-	this->mgr_ = mgr;
-
-	return;
-}
-
-
-/**
  * @brief コンストラクタ
  */
 tml::test::ManagerResource::ManagerResource() :
 	mgr_(nullptr),
+	desc_(nullptr),
 	res_index_(0U),
 	deferred_create_flg_(false),
 	deferred_created_flg_(false),
-	deferred_create_desc_(nullptr)
+	deferred_create_added_flg_(false)
 {
 	return;
 }
@@ -152,31 +141,50 @@ void tml::test::ManagerResource::Init(void)
 
 /**
  * @brief Create関数
- * @param desc (desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::test::ManagerResource::Create(const tml::test::ManagerResourceDesc &desc)
+INT tml::test::ManagerResource::Create(void)
 {
-	if ((desc.GetManager() == nullptr)
-	|| (this->res_index_ == 0U)) {
+	this->Init();
+
+	if ((this->mgr_ == nullptr)
+	|| (this->desc_ == nullptr)) {
+		this->Init();
+
 		return (-1);
 	}
 
-	this->mgr_ = desc.GetManager();
+	if (this->OnCreate() < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	if (!this->desc_->deferred_create_flag) {
+		if (this->OnCreateDeferred() < 0) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->desc_unique_p_.reset();
+		this->desc_ = nullptr;
+		this->deferred_created_flg_ = true;
+	}
 
 	return (0);
 }
 
 
 /**
- * @brief InitDeferred関数
+ * @brief OnCreate関数
+ * @return result (result)<br>
+ * 0未満=失敗
  */
-void tml::test::ManagerResource::InitDeferred(void)
+INT tml::test::ManagerResource::OnCreate(void)
 {
-	this->ReleaseDeferred();
-
-	return;
+	return (0);
 }
 
 
@@ -196,18 +204,14 @@ INT tml::test::ManagerResource::CreateDeferred(void)
 	}
 
 	if (this->OnCreateDeferred() < 0) {
-		this->InitDeferred();
-
-		this->deferred_created_flg_ = false;
-		this->deferred_create_desc_unique_p_.reset();
-		this->deferred_create_desc_ = nullptr;
+		this->Init();
 
 		return (-1);
 	}
 
+	this->desc_unique_p_.reset();
+	this->desc_ = nullptr;
 	this->deferred_created_flg_ = true;
-	this->deferred_create_desc_unique_p_.reset();
-	this->deferred_create_desc_ = nullptr;
 
 	return (0);
 }

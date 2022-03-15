@@ -104,18 +104,6 @@ INT tml::test::ManagerEventDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
- * @param mgr (manager)
- */
-void tml::test::ManagerEventDesc::SetManager(tml::test::Manager *mgr)
-{
-	this->mgr_ = mgr;
-
-	return;
-}
-
-
-/**
  * @brief コンストラクタ
  */
 tml::test::ManagerEvent::ManagerEvent() :

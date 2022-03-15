@@ -286,13 +286,28 @@ void tml::test::Manager::Update(void)
 		}
 	}
 
-	if (!this->deferred_create_res_cont_.empty()) {
-		auto res_itr = this->deferred_create_res_cont_.begin();
+	for (auto &res : this->add_deferred_create_res_cont_) {
+		if (!res->deferred_create_added_flg_) {
+			res->deferred_create_added_flg_ = true;
 
-		if (((*res_itr)->CreateDeferred() < 0)
-		|| ((*res_itr)->IsDeferredCreated())) {
-			this->deferred_create_res_cont_.erase(res_itr);
+			this->deferred_create_res_cont_.push_back(std::move(res));
 		}
+	}
+
+	this->add_deferred_create_res_cont_.clear();
+
+	for (auto res_itr = this->deferred_create_res_cont_.begin(); res_itr != this->deferred_create_res_cont_.end();) {
+		if (((*res_itr)->CreateDeferred() < 0)
+		|| (!(*res_itr)->deferred_create_flg_)
+		|| (*res_itr)->deferred_created_flg_) {
+			(*res_itr)->deferred_create_added_flg_ = false;
+
+			res_itr = this->deferred_create_res_cont_.erase(res_itr);
+		} else {
+			++res_itr;
+		}
+
+		break;
 	}
 
 	this->RunTask();
@@ -333,6 +348,7 @@ void tml::test::Manager::DeleteResourceContainer(void)
 	this->res_cont_by_index_.clear();
 	this->res_cont_by_name_.clear();
 	this->deferred_create_res_cont_.clear();
+	this->add_deferred_create_res_cont_.clear();
 
 	return;
 }
@@ -344,9 +360,6 @@ void tml::test::Manager::DeleteResourceContainer(void)
  */
 void tml::test::Manager::InitResourcePart(tml::shared_ptr<tml::test::ManagerResource> &res)
 {
-	res->deferred_create_desc_unique_p_.reset();
-	res->deferred_create_desc_ = nullptr;
-
 	res->res_shared_p_.reset();
 
 	return;
@@ -511,12 +524,12 @@ void tml::test::Manager::RunTask(void)
 	for (auto task_itr = this->run_task_cont_.begin(); task_itr != this->run_task_cont_.end();) {
 		(*task_itr)->Run();
 
-		if ((*task_itr)->run_flg_) {
-			++task_itr;
-		} else {
+		if (!(*task_itr)->run_flg_) {
 			(*task_itr)->run_added_flg_ = false;
 
 			task_itr = this->run_task_cont_.erase(task_itr);
+		} else {
+			++task_itr;
 		}
 	}
 
@@ -655,12 +668,12 @@ void tml::test::Manager::RunEvent(const UINT event_index)
 	for (auto event_itr = this->run_event_cont_[event_index].begin(); event_itr != this->run_event_cont_[event_index].end();) {
 		(*event_itr)->Run();
 
-		if ((*event_itr)->run_flg_) {
-			++event_itr;
-		} else {
+		if (!(*event_itr)->run_flg_) {
 			(*event_itr)->run_added_flg_ = false;
 
 			event_itr = this->run_event_cont_[event_index].erase(event_itr);
+		} else {
+			++event_itr;
 		}
 	}
 

@@ -74,6 +74,7 @@ private:
 	std::vector<std::list<tml::shared_ptr<tml::test::ManagerResource>>> res_cont_by_index_;
 	std::unordered_map<std::wstring, tml::shared_ptr<tml::test::ManagerResource>> res_cont_by_name_;
 	std::list<tml::shared_ptr<tml::test::ManagerResource>> deferred_create_res_cont_;
+	std::list<tml::shared_ptr<tml::test::ManagerResource>> add_deferred_create_res_cont_;
 	std::list<tml::shared_ptr<tml::test::ManagerTask>> task_cont_;
 	std::list<tml::shared_ptr<tml::test::ManagerTask>>::iterator task_itr_;
 	std::vector<std::list<tml::shared_ptr<tml::test::ManagerTask>>> task_cont_by_index_;
@@ -218,16 +219,17 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetResource(tml::shared_ptr<T2> 
 	}
 
 	tml::shared_ptr<tml::test::ManagerResource> res = tml::make_shared<T>(1U);
-	UINT res_index = T::RESOURCE_INDEX;
 
-	res->res_index_ = res_index;
+	reinterpret_cast<T *>(res.get())->SetManager(desc.GetManager());
+	reinterpret_cast<T *>(res.get())->SetDesc(&desc);
+	res->res_index_ = T::RESOURCE_INDEX;
 	res->res_shared_p_ = res;
 	res->res_name_ = desc.resource_name;
 
 	dst_res = std::dynamic_pointer_cast<T2>(res);
 
 	if ((dst_res == nullptr)
-	|| (reinterpret_cast<T *>(res.get())->Create(desc) < 0)) {
+	|| (reinterpret_cast<T *>(res.get())->Create() < 0)) {
 		this->InitResourcePart(res);
 
 		dst_res.reset();
@@ -239,26 +241,13 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetResource(tml::shared_ptr<T2> 
 	res->deferred_create_flg_ = desc.deferred_create_flag_;
 
 	if (res->deferred_create_flg_) {
-		tml::unique_ptr<tml::test::ManagerResourceDesc> deferred_create_desc = tml::make_unique<D>(1U);
+		res->desc_unique_p_ = tml::make_unique<D>(1U);
 
-		(*reinterpret_cast<D *>(deferred_create_desc.get())) = desc;
+		(*reinterpret_cast<D *>(res->desc_unique_p_.get())) = desc;
 
-		res->deferred_create_desc_unique_p_ = std::move(deferred_create_desc);
-		res->deferred_create_desc_ = res->deferred_create_desc_unique_p_.get();
+		reinterpret_cast<T *>(res.get())->SetDesc(reinterpret_cast<D *>(res->desc_unique_p_.get()));
 
-		this->deferred_create_res_cont_.push_back(res);
-	} else {
-		res->deferred_create_desc_unique_p_.reset();
-		res->deferred_create_desc_ = &desc;
-
-		if ((res->CreateDeferred() < 0)
-		|| (!res->IsDeferredCreated())) {
-			this->InitResourcePart(res);
-
-			tml::SetResult(dst_result, -1);
-
-			return (dst_res);
-		}
+		this->add_deferred_create_res_cont_.push_back(res);
 	}
 
 	this->res_cont_by_index_[res->res_index_].push_back(res);
@@ -380,9 +369,9 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetTask(tml::shared_ptr<T2> &dst
 	}
 
 	tml::shared_ptr<tml::test::ManagerTask> task = tml::make_shared<T>(1U);
-	UINT task_index = T::TASK_INDEX;
 
-	task->task_index_ = task_index;
+	reinterpret_cast<T *>(task.get())->SetManager(desc.GetManager());
+	task->task_index_ = T::TASK_INDEX;
 	task->task_shared_p_ = task;
 	task->task_name_ = desc.task_name;
 
@@ -523,9 +512,9 @@ inline tml::shared_ptr<T2> &tml::test::Manager::GetEvent(tml::shared_ptr<T2> &ds
 	}
 
 	tml::shared_ptr<tml::test::ManagerEvent> event = tml::make_shared<T>(1U);
-	UINT event_index = T::EVENT_INDEX;
 
-	event->event_index_ = event_index;
+	reinterpret_cast<T *>(event.get())->SetManager(desc.GetManager());
+	event->event_index_ = T::EVENT_INDEX;
 	event->event_shared_p_ = event;
 	event->event_name_ = desc.event_name;
 

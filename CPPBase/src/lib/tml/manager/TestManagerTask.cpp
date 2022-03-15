@@ -104,18 +104,6 @@ INT tml::test::ManagerTaskDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
- * @param mgr (manager)
- */
-void tml::test::ManagerTaskDesc::SetManager(tml::test::Manager *mgr)
-{
-	this->mgr_ = mgr;
-
-	return;
-}
-
-
-/**
  * @brief コンストラクタ
  */
 tml::test::ManagerTask::ManagerTask() :

@@ -72,6 +72,18 @@ inline tml::test::Manager *tml::test::ManagerTaskDesc::GetManager(void) const
 }
 
 
+/**
+ * @brief SetManagerŠÖ”
+ * @param mgr (manager)
+ */
+inline void tml::test::ManagerTaskDesc::SetManager(tml::test::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	return;
+}
+
+
 namespace tml {
 namespace test {
 /**
@@ -101,6 +113,8 @@ private:
 
 protected:
 	virtual void OnRun(void) = 0;
+
+	void SetManager(tml::test::Manager *);
 
 public:
 	ManagerTask();
@@ -137,6 +151,18 @@ inline void tml::test::ManagerTask::Release(void)
 inline tml::test::Manager *tml::test::ManagerTask::GetManager(void)
 {
 	return (this->mgr_);
+}
+
+
+/**
+ * @brief SetManagerŠÖ”
+ * @param mgr (manager)
+ */
+inline void tml::test::ManagerTask::SetManager(tml::test::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	return;
 }
 
 
