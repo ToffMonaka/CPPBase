@@ -80,6 +80,7 @@ INT cpp_base::scene::Field2DBulletNodeDesc::ReadValue(const tml::INIFile &conf_f
  * @brief コンストラクタ
  */
 cpp_base::scene::Field2DBulletNode::Field2DBulletNode() :
+	desc_(nullptr),
 	field_node_(nullptr),
 	update_time_(0.0)
 {
@@ -126,18 +127,13 @@ void cpp_base::scene::Field2DBulletNode::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::Field2DBulletNode::Create(const cpp_base::scene::Field2DBulletNodeDesc &desc)
+INT cpp_base::scene::Field2DBulletNode::OnCreate(void)
 {
-	this->Init();
-
-	if (cpp_base::scene::Node::Create(desc) < 0) {
-		this->Init();
-
+	if (cpp_base::scene::Node::OnCreate() < 0) {
 		return (-1);
 	}
 
@@ -152,10 +148,23 @@ INT cpp_base::scene::Field2DBulletNode::Create(const cpp_base::scene::Field2DBul
 		model_desc.draw_priority = 4;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT cpp_base::scene::Field2DBulletNode::OnCreateDeferred(void)
+{
+	if (cpp_base::scene::Node::OnCreateDeferred() < 0) {
+		return (-1);
 	}
 
 	return (0);
@@ -204,6 +213,20 @@ void cpp_base::scene::Field2DBulletNode::OnUpdate(void)
 	}
 
 	this->transform_2d.Move(this->transform_2d.GetYAxisVector(), 5.0f);
+
+	return;
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void cpp_base::scene::Field2DBulletNode::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const cpp_base::scene::Field2DBulletNodeDesc *>(desc);
+
+	cpp_base::scene::Node::OnSetDesc(this->desc_);
 
 	return;
 }

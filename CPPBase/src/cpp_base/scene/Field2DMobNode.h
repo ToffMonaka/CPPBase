@@ -56,6 +56,7 @@ public: cpp_base::scene::Field2DMobNode &operator =(const cpp_base::scene::Field
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::Field2DMobNodeDesc *desc_;
 	cpp_base::scene::Field2DNode *field_node_;
 
 public:
@@ -66,16 +67,32 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Field2DMobNode();
 	virtual ~Field2DMobNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::Field2DMobNodeDesc &);
+
+	const cpp_base::scene::Field2DMobNodeDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::Field2DMobNodeDesc *cpp_base::scene::Field2DMobNode::GetDesc(void) const
+{
+	return (this->desc_);
 }

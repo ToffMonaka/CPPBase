@@ -72,7 +72,8 @@ INT tml::sound::SESoundDesc::ReadValue(const tml::INIFile &conf_file)
 /**
  * @brief コンストラクタ
  */
-tml::sound::SESound::SESound()
+tml::sound::SESound::SESound() :
+	desc_(nullptr)
 {
 	return;
 }
@@ -112,20 +113,44 @@ void tml::sound::SESound::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::sound::SESound::Create(const tml::sound::SESoundDesc &desc)
+INT tml::sound::SESound::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::sound::Sound::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::sound::Sound::OnCreate() < 0) {
 		return (-1);
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::sound::SESound::OnCreateDeferred(void)
+{
+	if (tml::sound::Sound::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::sound::SESound::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::sound::SESoundDesc *>(desc);
+
+	tml::sound::Sound::OnSetDesc(this->desc_);
+
+	return;
 }

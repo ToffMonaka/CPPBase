@@ -58,10 +58,10 @@ public: tml::graphic::Sampler &operator =(const tml::graphic::Sampler &) = delet
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER);
 
 private:
+	const tml::graphic::SamplerDesc *desc_;
 	tml::graphic::Sampler *current_;
 	ID3D11SamplerState *samp_;
 	CD3D11_SAMPLER_DESC samp_desc_;
@@ -69,18 +69,34 @@ private:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Sampler();
 	virtual ~Sampler();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::SamplerDesc &);
 
+	const tml::graphic::SamplerDesc *GetDesc(void) const;
 	ID3D11SamplerState *GetSampler(void);
 	const CD3D11_SAMPLER_DESC &GetSamplerDesc(void) const;
 	ID3D11SamplerState *GetSR(void);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::SamplerDesc *tml::graphic::Sampler::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

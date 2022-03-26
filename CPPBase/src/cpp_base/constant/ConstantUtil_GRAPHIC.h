@@ -21,6 +21,11 @@ namespace GRAPHIC {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::GRAPHIC::RESOURCE_TYPE::COUNT);
+	enum class TASK_TYPE : UINT {
+		USER = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TASK_TYPE::USER),
+		COUNT
+	};
+	const UINT TASK_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::GRAPHIC::TASK_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		USER = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::EVENT_TYPE::USER),
 		COUNT

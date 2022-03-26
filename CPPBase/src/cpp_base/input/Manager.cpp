@@ -12,8 +12,9 @@
  */
 cpp_base::input::ManagerDesc::ManagerDesc()
 {
-	this->InitResourceCount();
-	this->InitEventCount();
+	this->resource_count = cpp_base::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT;
+	this->task_count = cpp_base::ConstantUtil::INPUT::TASK_TYPE_COUNT;
+	this->event_count = cpp_base::ConstantUtil::INPUT::EVENT_TYPE_COUNT;
 
 	return;
 }
@@ -39,34 +40,9 @@ void cpp_base::input::ManagerDesc::Init(void)
 
 	tml::input::ManagerDesc::Init();
 
-	this->InitResourceCount();
-	this->InitEventCount();
-
-	return;
-}
-
-
-/**
- * @brief InitResourceCountŠÖ”
- */
-void cpp_base::input::ManagerDesc::InitResourceCount(void)
-{
-	tml::input::ManagerDesc::InitResourceCount();
-
-	this->resource_count_container.resize(cpp_base::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT);
-
-	return;
-}
-
-
-/**
- * @brief InitEventCountŠÖ”
- */
-void cpp_base::input::ManagerDesc::InitEventCount(void)
-{
-	tml::input::ManagerDesc::InitEventCount();
-
-	this->event_count_container.resize(cpp_base::ConstantUtil::INPUT::EVENT_TYPE_COUNT);
+	this->resource_count = cpp_base::ConstantUtil::INPUT::RESOURCE_TYPE_COUNT;
+	this->task_count = cpp_base::ConstantUtil::INPUT::TASK_TYPE_COUNT;
+	this->event_count = cpp_base::ConstantUtil::INPUT::EVENT_TYPE_COUNT;
 
 	return;
 }

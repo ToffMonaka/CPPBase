@@ -12,8 +12,9 @@
  */
 cpp_base::sound::ManagerDesc::ManagerDesc()
 {
-	this->InitResourceCount();
-	this->InitEventCount();
+	this->resource_count = cpp_base::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT;
+	this->task_count = cpp_base::ConstantUtil::SOUND::TASK_TYPE_COUNT;
+	this->event_count = cpp_base::ConstantUtil::SOUND::EVENT_TYPE_COUNT;
 
 	return;
 }
@@ -39,34 +40,9 @@ void cpp_base::sound::ManagerDesc::Init(void)
 
 	tml::sound::ManagerDesc::Init();
 
-	this->InitResourceCount();
-	this->InitEventCount();
-
-	return;
-}
-
-
-/**
- * @brief InitResourceCountŠÖ”
- */
-void cpp_base::sound::ManagerDesc::InitResourceCount(void)
-{
-	tml::sound::ManagerDesc::InitResourceCount();
-
-	this->resource_count_container.resize(cpp_base::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT);
-
-	return;
-}
-
-
-/**
- * @brief InitEventCountŠÖ”
- */
-void cpp_base::sound::ManagerDesc::InitEventCount(void)
-{
-	tml::sound::ManagerDesc::InitEventCount();
-
-	this->event_count_container.resize(cpp_base::ConstantUtil::SOUND::EVENT_TYPE_COUNT);
+	this->resource_count = cpp_base::ConstantUtil::SOUND::RESOURCE_TYPE_COUNT;
+	this->task_count = cpp_base::ConstantUtil::SOUND::TASK_TYPE_COUNT;
+	this->event_count = cpp_base::ConstantUtil::SOUND::EVENT_TYPE_COUNT;
 
 	return;
 }

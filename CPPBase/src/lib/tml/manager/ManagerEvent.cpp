@@ -11,8 +11,40 @@
 /**
  * @brief コンストラクタ
  */
+tml::ManagerEventData::ManagerEventData()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::ManagerEventData::~ManagerEventData()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::ManagerEventData::Init(void)
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::ManagerEventDesc::ManagerEventDesc() :
-	mgr_(nullptr)
+	mgr_(nullptr),
+	run_flag(true)
 {
 	return;
 }
@@ -37,6 +69,9 @@ void tml::ManagerEventDesc::Init(void)
 	this->Release();
 
 	this->mgr_ = nullptr;
+	this->event_name.clear();
+	this->run_flag = true;
+	this->function = nullptr;
 
 	return;
 }
@@ -80,27 +115,30 @@ INT tml::ManagerEventDesc::Read(const tml::INIFileReadDesc &conf_file_read_desc)
  */
 INT tml::ManagerEventDesc::ReadValue(const tml::INIFile &conf_file)
 {
-	/*
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
-	{// Event Section Read
+	{// Resource Section Read
 		val_name_cont = conf_file.data.GetValueNameContainer(L"EVENT");
 
 		if (val_name_cont != nullptr) {
+			val = conf_file.data.GetValue((*val_name_cont), L"NAME");
+
+			if (val != nullptr) {
+				this->event_name = (*val);
+			}
 		}
 	}
-	*/
 
 	return (0);
 }
 
 
 /**
- * @brief SetManager関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
  */
-void tml::ManagerEventDesc::SetManager(tml::Manager *mgr)
+void tml::ManagerEventDesc::OnSetManager(tml::Manager *mgr)
 {
 	this->mgr_ = mgr;
 
@@ -113,8 +151,9 @@ void tml::ManagerEventDesc::SetManager(tml::Manager *mgr)
  */
 tml::ManagerEvent::ManagerEvent() :
 	mgr_(nullptr),
-	event_main_index_(0U),
-	event_sub_index_(0U)
+	event_type_(0U),
+	run_flg_(false),
+	run_added_flg_(false)
 {
 	return;
 }
@@ -150,27 +189,32 @@ void tml::ManagerEvent::Init(void)
  */
 INT tml::ManagerEvent::Create(const tml::ManagerEventDesc &desc)
 {
-	if ((desc.GetManager() == nullptr)
-	|| (this->event_main_index_ == 0U)
-	|| (this->event_sub_index_ == 0U)) {
+	if (this->mgr_ == nullptr) {
 		return (-1);
 	}
 
-	this->mgr_ = desc.GetManager();
+	this->func_ = desc.function;
 
 	return (0);
 }
 
 
 /**
- * @brief SetEventMainIndex関数
- * @param mgr (manager)
- * @param event_main_index (event_main_index)
+ * @brief Run関数
+ * @param dat (data)
  */
-void tml::ManagerEvent::SetEventMainIndex(tml::Manager *mgr, const UINT event_main_index)
+void tml::ManagerEvent::Run(const tml::ManagerEventData *dat)
 {
-	if (mgr->CheckFriendEvent(this)) {
-		this->event_main_index_ = event_main_index;
+	if (!this->run_flg_) {
+		return;
+	}
+
+	this->OnRun(dat);
+
+	auto func = this->func_;
+
+	if (func != nullptr) {
+		func(dat);
 	}
 
 	return;
@@ -178,15 +222,24 @@ void tml::ManagerEvent::SetEventMainIndex(tml::Manager *mgr, const UINT event_ma
 
 
 /**
- * @brief SetEventSubIndex関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
- * @param event_sub_index (event_sub_index)
  */
-void tml::ManagerEvent::SetEventSubIndex(tml::Manager *mgr, const UINT event_sub_index)
+void tml::ManagerEvent::OnSetManager(tml::Manager *mgr)
 {
-	if (mgr->CheckFriendEvent(this)) {
-		this->event_sub_index_ = event_sub_index;
-	}
+	this->mgr_ = mgr;
+
+	return;
+}
+
+
+/**
+ * @brief SetRunFlag関数
+ * @param run_flg (run_flag)
+ */
+void tml::ManagerEvent::SetRunFlag(const bool run_flg)
+{
+	this->mgr_->SetEventRunFlag(this, run_flg);
 
 	return;
 }

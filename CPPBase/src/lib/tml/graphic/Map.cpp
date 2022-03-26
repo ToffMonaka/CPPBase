@@ -143,6 +143,7 @@ INT tml::graphic::MapDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Map::Map() :
+	desc_(nullptr),
 	tile_cnt_(0U),
 	block_cnt_(0U),
 	tileset_tile_size_(0U),
@@ -159,6 +160,15 @@ tml::graphic::Map::~Map()
 {
 	this->Release();
 
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::graphic::Map::Release(void)
+{
 	return;
 }
 
@@ -184,70 +194,53 @@ void tml::graphic::Map::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
+INT tml::graphic::Map::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	auto map_file_read_desc_dat = desc.map_file_read_desc.GetDataByParent();
+	auto map_file_read_desc_dat = this->desc_->map_file_read_desc.GetDataByParent();
 
 	tml::XMLFile map_file;
 
 	map_file.read_desc.parent_data = map_file_read_desc_dat;
 
 	if (map_file.Read() < 0) {
-		this->Init();
-
 		return (-1);
 	}
 
 	auto &map_file_root_node = map_file.data.GetRootNode();
 
 	if (map_file_root_node->GetChildNodeContainer().empty()) {
-		this->Init();
-
 		return (-1);
 	}
 
 	auto &map_file_map_node = map_file_root_node->GetChildNode(L"map");
 
 	if (map_file_map_node == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
 	auto &map_file_tileset_node = map_file_root_node->GetChildNode(L"tileset");
 
 	if (map_file_tileset_node == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
 	auto &map_file_img_node = map_file_root_node->GetChildNode(L"image");
 
 	if (map_file_img_node == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
 	auto &map_file_dat_node = map_file_root_node->GetChildNode(L"data");
 
 	if (map_file_dat_node == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -258,8 +251,6 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->tile_cnt_.x, val->c_str());
 	} else {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -268,8 +259,6 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->tile_cnt_.y, val->c_str());
 	} else {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -311,8 +300,6 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->tileset_tile_size_.x, val->c_str());
 	} else {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -321,8 +308,6 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->tileset_tile_size_.y, val->c_str());
 	} else {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -331,8 +316,6 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 	if (val != nullptr) {
 		tml::StringUtil::GetValue(this->tileset_tile_cnt_.x, val->c_str());
 	} else {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -343,8 +326,6 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 
 		this->tileset_tile_cnt_.y /= this->tileset_tile_cnt_.x;
 	} else {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -353,13 +334,13 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 	val = map_file_img_node->GetValue(L"source");
 
 	if (val != nullptr) {
-		img_file_path = desc.map_directory_path;
+		img_file_path = this->desc_->map_directory_path;
 		img_file_path += L"/";
 		img_file_path += (*val);
 	}
 
 	// Texture Create
-	if (desc.texture_flag) {
+	if (this->desc_->texture_flag) {
 		tml::graphic::TextureDesc tex_desc;
 
 		tex_desc.SetManager(this->GetManager());
@@ -367,11 +348,38 @@ INT tml::graphic::Map::Create(const tml::graphic::MapDesc &desc)
 		tex_desc.image_file_read_desc_container[0].data.file_path = img_file_path;
 
 		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->tex_, tex_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Map::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Map::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::MapDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }

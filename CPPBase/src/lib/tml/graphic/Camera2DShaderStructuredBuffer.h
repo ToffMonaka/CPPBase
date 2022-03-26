@@ -76,15 +76,24 @@ public:
 	} ELEMENT;
 
 private:
+	const tml::graphic::Camera2DShaderStructuredBufferDesc *desc_;
+
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Camera2DShaderStructuredBuffer();
 	virtual ~Camera2DShaderStructuredBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::Camera2DShaderStructuredBufferDesc &);
 
+	const tml::graphic::Camera2DShaderStructuredBufferDesc *GetDesc(void) const;
 	tml::graphic::Camera2DShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	tml::graphic::Camera2DShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::Camera2DShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
@@ -100,6 +109,16 @@ public:
 inline void tml::graphic::Camera2DShaderStructuredBuffer::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::Camera2DShaderStructuredBufferDesc *tml::graphic::Camera2DShaderStructuredBuffer::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

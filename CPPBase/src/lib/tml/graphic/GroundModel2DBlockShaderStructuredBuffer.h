@@ -84,15 +84,24 @@ public:
 	} ELEMENT;
 
 private:
+	const tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc *desc_;
+
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	GroundModel2DBlockShaderStructuredBuffer();
 	virtual ~GroundModel2DBlockShaderStructuredBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc &);
 
+	const tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc *GetDesc(void) const;
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
@@ -108,6 +117,16 @@ public:
 inline void tml::graphic::GroundModel2DBlockShaderStructuredBuffer::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::GroundModel2DBlockShaderStructuredBufferDesc *tml::graphic::GroundModel2DBlockShaderStructuredBuffer::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

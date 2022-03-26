@@ -28,6 +28,8 @@ private:
 protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
+	virtual void OnSetManager(tml::Manager *);
+
 public:
 	ManagerEventDesc();
 	virtual ~ManagerEventDesc();
@@ -35,7 +37,6 @@ public:
 	virtual void Init(void);
 
 	tml::graphic::Manager *GetManager(void) const;
-	void SetManager(tml::graphic::Manager *);
 };
 }
 }
@@ -75,10 +76,12 @@ protected: virtual void InterfaceDummy(void) = 0;
 
 private:
 	tml::graphic::Manager *mgr_;
-	tml::ConstantUtil::GRAPHIC::EVENT_TYPE event_type_;
 
 private:
 	void Release(void);
+
+protected:
+	virtual void OnSetManager(tml::Manager *);
 
 public:
 	ManagerEvent();
@@ -88,7 +91,6 @@ public:
 	INT Create(const tml::graphic::ManagerEventDesc &);
 
 	tml::graphic::Manager *GetManager(void);
-	tml::ConstantUtil::GRAPHIC::EVENT_TYPE GetEventType(void) const;
 };
 }
 }
@@ -110,14 +112,4 @@ inline void tml::graphic::ManagerEvent::Release(void)
 inline tml::graphic::Manager *tml::graphic::ManagerEvent::GetManager(void)
 {
 	return (this->mgr_);
-}
-
-
-/**
- * @brief GetEventTypeŠÖ”
- * @return event_type (event_type)
- */
-inline tml::ConstantUtil::GRAPHIC::EVENT_TYPE tml::graphic::ManagerEvent::GetEventType(void) const
-{
-	return (this->event_type_);
 }

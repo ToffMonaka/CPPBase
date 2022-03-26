@@ -205,6 +205,7 @@ INT tml::graphic::Model2DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Model2D::Model2D() :
+	desc_(nullptr),
 	color(1.0f),
 	size(0.0f),
 	draw_data(nullptr)
@@ -252,20 +253,50 @@ void tml::graphic::Model2D::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Model2D::Create(const tml::graphic::Model2DDesc &desc)
+INT tml::graphic::Model2D::OnCreate(void)
 {
-	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2D) < 0) {
+	if (tml::graphic::Model::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->transform = desc.transform;
-	this->color = desc.color;
-	this->size = desc.size;
+	this->SetDimensionType(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2D);
+
+	this->transform = this->desc_->transform;
+	this->color = this->desc_->color;
+	this->size = this->desc_->size;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Model2D::OnCreateDeferred(void)
+{
+	if (tml::graphic::Model::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Model2D::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::Model2DDesc *>(desc);
+
+	tml::graphic::Model::OnSetDesc(this->desc_);
+
+	return;
 }

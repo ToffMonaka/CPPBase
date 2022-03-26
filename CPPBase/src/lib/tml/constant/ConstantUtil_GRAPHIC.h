@@ -40,125 +40,13 @@ namespace GRAPHIC {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::COUNT);
-	enum class RASTERIZER_STATE_TYPE : UINT {
+	enum class TASK_TYPE : UINT {
 		NONE = 0U,
 		BASE,
 		USER,
 		COUNT
 	};
-	const UINT RASTERIZER_STATE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_TYPE::COUNT);
-	enum class BLEND_STATE_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT BLEND_STATE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::BLEND_STATE_TYPE::COUNT);
-	enum class DEPTH_STATE_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT DEPTH_STATE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_TYPE::COUNT);
-	enum class SHADER_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT SHADER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_TYPE::COUNT);
-	enum class SHADER_CONSTANT_BUFFER_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT SHADER_CONSTANT_BUFFER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_TYPE::COUNT);
-	enum class SHADER_STRUCTURED_BUFFER_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT SHADER_STRUCTURED_BUFFER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_TYPE::COUNT);
-	enum class MESH_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT MESH_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MESH_TYPE::COUNT);
-	enum class TEXTURE_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT TEXTURE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::COUNT);
-	enum class SAMPLER_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT SAMPLER_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE::COUNT);
-	enum class FONT_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT FONT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FONT_TYPE::COUNT);
-	enum class ATLAS_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT ATLAS_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::ATLAS_TYPE::COUNT);
-	enum class MAP_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT MAP_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MAP_TYPE::COUNT);
-	enum class CANVAS_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT CANVAS_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CANVAS_TYPE::COUNT);
-	enum class CAMERA_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT CAMERA_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::COUNT);
-	enum class LIGHT_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT LIGHT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::COUNT);
-	enum class FOG_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT FOG_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::COUNT);
-	enum class MODEL_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT MODEL_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::COUNT);
+	const UINT TASK_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TASK_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
 		BASE,

@@ -41,8 +41,9 @@ private:
 	void Release(void);
 
 protected:
-	void InitResourceCount(void);
-	void InitEventCount(void);
+	virtual void OnSetInputManager(tml::input::Manager *);
+	virtual void OnSetGraphicManager(tml::graphic::Manager *);
+	virtual void OnSetSoundManager(tml::sound::Manager *);
 
 public:
 	ManagerDesc();
@@ -51,11 +52,8 @@ public:
 	virtual void Init(void);
 
 	cpp_base::input::Manager *GetInputManager(void) const;
-	void SetInputManager(cpp_base::input::Manager *);
 	cpp_base::graphic::Manager *GetGraphicManager(void) const;
-	void SetGraphicManager(cpp_base::graphic::Manager *);
 	cpp_base::sound::Manager *GetSoundManager(void) const;
-	void SetSoundManager(cpp_base::sound::Manager *);
 };
 }
 }
@@ -121,6 +119,11 @@ public:
 
 private:
 	void Release(void);
+
+protected:
+	virtual void OnSetInputManager(tml::input::Manager *);
+	virtual void OnSetGraphicManager(tml::graphic::Manager *);
+	virtual void OnSetSoundManager(tml::sound::Manager *);
 
 public:
 	Manager();

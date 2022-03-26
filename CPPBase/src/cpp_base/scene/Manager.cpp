@@ -31,8 +31,9 @@ cpp_base::scene::ManagerDesc::ManagerDesc() :
 	graphic_mgr_(nullptr),
 	sound_mgr_(nullptr)
 {
-	this->InitResourceCount();
-	this->InitEventCount();
+	this->resource_count = cpp_base::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT;
+	this->task_count = cpp_base::ConstantUtil::SCENE::TASK_TYPE_COUNT;
+	this->event_count = cpp_base::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
 	return;
 }
@@ -62,76 +63,51 @@ void cpp_base::scene::ManagerDesc::Init(void)
 
 	tml::scene::ManagerDesc::Init();
 
-	this->InitResourceCount();
-	this->InitEventCount();
+	this->resource_count = cpp_base::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT;
+	this->task_count = cpp_base::ConstantUtil::SCENE::TASK_TYPE_COUNT;
+	this->event_count = cpp_base::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
 	return;
 }
 
 
 /**
- * @brief InitResourceCountŠÖ”
- */
-void cpp_base::scene::ManagerDesc::InitResourceCount(void)
-{
-	tml::scene::ManagerDesc::InitResourceCount();
-
-	this->resource_count_container.resize(cpp_base::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
-
-	return;
-}
-
-
-/**
- * @brief InitEventCountŠÖ”
- */
-void cpp_base::scene::ManagerDesc::InitEventCount(void)
-{
-	tml::scene::ManagerDesc::InitEventCount();
-
-	this->event_count_container.resize(cpp_base::ConstantUtil::SCENE::EVENT_TYPE_COUNT);
-
-	return;
-}
-
-
-/**
- * @brief SetInputManagerŠÖ”
+ * @brief OnSetInputManagerŠÖ”
  * @param input_mgr (input_manager)
  */
-void cpp_base::scene::ManagerDesc::SetInputManager(cpp_base::input::Manager *input_mgr)
+void cpp_base::scene::ManagerDesc::OnSetInputManager(tml::input::Manager *input_mgr)
 {
-	this->input_mgr_ = input_mgr;
+	this->input_mgr_ = dynamic_cast<cpp_base::input::Manager *>(input_mgr);
 
-	tml::scene::ManagerDesc::SetInputManager(input_mgr);
+	tml::scene::ManagerDesc::OnSetInputManager(this->input_mgr_);
 
 	return;
 }
 
 
 /**
- * @brief SetGraphicManagerŠÖ”
+ * @brief OnSetGraphicManagerŠÖ”
  * @param graphic_mgr (graphic_manager)
  */
-void cpp_base::scene::ManagerDesc::SetGraphicManager(cpp_base::graphic::Manager *graphic_mgr)
+void cpp_base::scene::ManagerDesc::OnSetGraphicManager(tml::graphic::Manager *graphic_mgr)
 {
-	this->graphic_mgr_ = graphic_mgr;
+	this->graphic_mgr_ = dynamic_cast<cpp_base::graphic::Manager *>(graphic_mgr);
 
-	tml::scene::ManagerDesc::SetGraphicManager(graphic_mgr);
+	tml::scene::ManagerDesc::OnSetGraphicManager(this->graphic_mgr_);
 
 	return;
 }
 
 
 /**
- * @brief SetSoundManagerŠÖ”
+ * @brief OnSetSoundManagerŠÖ”
  * @param sound_mgr (sound_manager)
  */
-void cpp_base::scene::ManagerDesc::SetSoundManager(cpp_base::sound::Manager *sound_mgr)
+void cpp_base::scene::ManagerDesc::OnSetSoundManager(tml::sound::Manager *sound_mgr)
 {
-	this->sound_mgr_ = sound_mgr;
+	this->sound_mgr_ = dynamic_cast<cpp_base::sound::Manager *>(sound_mgr);
 
-	tml::scene::ManagerDesc::SetSoundManager(sound_mgr);
+	tml::scene::ManagerDesc::OnSetSoundManager(this->sound_mgr_);
 
 	return;
 }
@@ -420,4 +396,46 @@ INT cpp_base::scene::Manager::Create(const cpp_base::scene::ManagerDesc &desc)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnSetInputManagerŠÖ”
+ * @param input_mgr (input_manager)
+ */
+void cpp_base::scene::Manager::OnSetInputManager(tml::input::Manager *input_mgr)
+{
+	this->input_mgr_ = dynamic_cast<cpp_base::input::Manager *>(input_mgr);
+
+	tml::scene::Manager::OnSetInputManager(this->input_mgr_);
+
+	return;
+}
+
+
+/**
+ * @brief OnSetGraphicManagerŠÖ”
+ * @param graphic_mgr (graphic_manager)
+ */
+void cpp_base::scene::Manager::OnSetGraphicManager(tml::graphic::Manager *graphic_mgr)
+{
+	this->graphic_mgr_ = dynamic_cast<cpp_base::graphic::Manager *>(graphic_mgr);
+
+	tml::scene::Manager::OnSetGraphicManager(this->graphic_mgr_);
+
+	return;
+}
+
+
+/**
+ * @brief OnSetSoundManagerŠÖ”
+ * @param sound_mgr (sound_manager)
+ */
+void cpp_base::scene::Manager::OnSetSoundManager(tml::sound::Manager *sound_mgr)
+{
+	this->sound_mgr_ = dynamic_cast<cpp_base::sound::Manager *>(sound_mgr);
+
+	tml::scene::Manager::OnSetSoundManager(this->sound_mgr_);
+
+	return;
 }

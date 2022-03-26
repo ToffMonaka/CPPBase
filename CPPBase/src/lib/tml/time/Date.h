@@ -29,12 +29,11 @@ public:
 	static tml::TIME_SECONDS GetNowTime(void);
 
 private:
+	void Release(void);
+
 	CHAR *GetStringSetStringPart(CHAR *, const size_t) const;
 	WCHAR *GetStringSetStringPart(WCHAR *, const size_t) const;
 	void SetStringSetTimePart(void);
-
-private:
-	void Release(void);
 
 public:
 	Date();

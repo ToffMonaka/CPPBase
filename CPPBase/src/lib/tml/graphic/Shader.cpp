@@ -278,6 +278,7 @@ INT tml::graphic::ShaderDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Shader::Shader() :
+	desc_(nullptr),
 	vs_(nullptr),
 	vs_input_layout_(nullptr),
 	hs_(nullptr),
@@ -366,38 +367,29 @@ void tml::graphic::Shader::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
+INT tml::graphic::Shader::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	auto shader_file_read_desc_dat = desc.shader_file_read_desc.GetDataByParent();
+	auto shader_file_read_desc_dat = this->desc_->shader_file_read_desc.GetDataByParent();
 
 	tml::BinaryFile shader_file;
 
 	shader_file.read_desc.parent_data = shader_file_read_desc_dat;
 
 	if (shader_file.Read() < 0) {
-		this->Init();
-
 		return (-1);
 	}
 
 	auto &shader_file_buf = shader_file.data.buffer;
 
 	if (shader_file_buf.GetLength() <= 0U) {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -405,14 +397,14 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	std::vector<std::string> macro_name_ary;
 	std::vector<std::string> macro_val_ary;
 
-	if (!desc.macro_container.empty()) {
-		macro_ary.resize(desc.macro_container.size() + 1U);
-		macro_name_ary.resize(desc.macro_container.size());
-		macro_val_ary.resize(desc.macro_container.size());
+	if (!this->desc_->macro_container.empty()) {
+		macro_ary.resize(this->desc_->macro_container.size() + 1U);
+		macro_name_ary.resize(this->desc_->macro_container.size());
+		macro_val_ary.resize(this->desc_->macro_container.size());
 
 		UINT macro_i = 0U;
 
-		for (auto &macro : desc.macro_container) {
+		for (auto &macro : this->desc_->macro_container) {
 			tml::StringUtil::GetString(macro_name_ary[macro_i], macro.first.c_str());
 			tml::StringUtil::GetString(macro_val_ary[macro_i], macro.second.c_str());
 
@@ -426,27 +418,21 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 		macro_ary[macro_i].Definition = nullptr;
 	}
 
-	if (!desc.vertex_shader_function_name.empty()) {
-		auto blob = this->GetBlob(shader_file_buf, desc.shader_directory_path.c_str(), desc.vertex_shader_function_name.c_str(), desc.vertex_shader_model_name.c_str(), macro_ary.data());
+	if (!this->desc_->vertex_shader_function_name.empty()) {
+		auto blob = this->GetBlob(shader_file_buf, this->desc_->shader_directory_path.c_str(), this->desc_->vertex_shader_function_name.c_str(), this->desc_->vertex_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->vs_))) {
 			this->ReleaseBlob(&blob);
 
-			this->Init();
-
 			return (-1);
 		}
 
-		if (FAILED(this->GetManager()->GetDevice()->CreateInputLayout(desc.vertex_shader_input_element_desc_array, desc.vertex_shader_input_element_desc_count, blob->GetBufferPointer(), blob->GetBufferSize(), &this->vs_input_layout_))) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateInputLayout(this->desc_->vertex_shader_input_element_desc_array, this->desc_->vertex_shader_input_element_desc_count, blob->GetBufferPointer(), blob->GetBufferSize(), &this->vs_input_layout_))) {
 			this->ReleaseBlob(&blob);
-
-			this->Init();
 
 			return (-1);
 		}
@@ -454,99 +440,79 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.hull_shader_function_name.empty()) {
-		auto blob = this->GetBlob(shader_file_buf, desc.shader_directory_path.c_str(), desc.hull_shader_function_name.c_str(), desc.hull_shader_model_name.c_str(), macro_ary.data());
+	if (!this->desc_->hull_shader_function_name.empty()) {
+		auto blob = this->GetBlob(shader_file_buf, this->desc_->shader_directory_path.c_str(), this->desc_->hull_shader_function_name.c_str(), this->desc_->hull_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateHullShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->hs_))) {
 			this->ReleaseBlob(&blob);
 
-			this->Init();
-
 			return (-1);
 		}
 
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.domain_shader_function_name.empty()) {
-		auto blob = this->GetBlob(shader_file_buf, desc.shader_directory_path.c_str(), desc.domain_shader_function_name.c_str(), desc.domain_shader_model_name.c_str(), macro_ary.data());
+	if (!this->desc_->domain_shader_function_name.empty()) {
+		auto blob = this->GetBlob(shader_file_buf, this->desc_->shader_directory_path.c_str(), this->desc_->domain_shader_function_name.c_str(), this->desc_->domain_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateDomainShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->ds_))) {
 			this->ReleaseBlob(&blob);
 
-			this->Init();
-
 			return (-1);
 		}
 
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.geometry_shader_function_name.empty()) {
-		auto blob = this->GetBlob(shader_file_buf, desc.shader_directory_path.c_str(), desc.geometry_shader_function_name.c_str(), desc.geometry_shader_model_name.c_str(), macro_ary.data());
+	if (!this->desc_->geometry_shader_function_name.empty()) {
+		auto blob = this->GetBlob(shader_file_buf, this->desc_->shader_directory_path.c_str(), this->desc_->geometry_shader_function_name.c_str(), this->desc_->geometry_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateGeometryShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->gs_))) {
 			this->ReleaseBlob(&blob);
 
-			this->Init();
-
 			return (-1);
 		}
 
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.pixel_shader_function_name.empty()) {
-		auto blob = this->GetBlob(shader_file_buf, desc.shader_directory_path.c_str(), desc.pixel_shader_function_name.c_str(), desc.pixel_shader_model_name.c_str(), macro_ary.data());
+	if (!this->desc_->pixel_shader_function_name.empty()) {
+		auto blob = this->GetBlob(shader_file_buf, this->desc_->shader_directory_path.c_str(), this->desc_->pixel_shader_function_name.c_str(), this->desc_->pixel_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
 		if (FAILED(this->GetManager()->GetDevice()->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->ps_))) {
 			this->ReleaseBlob(&blob);
 
-			this->Init();
-
 			return (-1);
 		}
 
 		this->ReleaseBlob(&blob);
 	}
 
-	if (!desc.compute_shader_function_name.empty()) {
-		auto blob = this->GetBlob(shader_file_buf, desc.shader_directory_path.c_str(), desc.compute_shader_function_name.c_str(), desc.compute_shader_model_name.c_str(), macro_ary.data());
+	if (!this->desc_->compute_shader_function_name.empty()) {
+		auto blob = this->GetBlob(shader_file_buf, this->desc_->shader_directory_path.c_str(), this->desc_->compute_shader_function_name.c_str(), this->desc_->compute_shader_model_name.c_str(), macro_ary.data());
 
 		if (blob == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateComputeShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &this->cs_))) {
 			this->ReleaseBlob(&blob);
-
-			this->Init();
 
 			return (-1);
 		}
@@ -555,6 +521,35 @@ INT tml::graphic::Shader::Create(const tml::graphic::ShaderDesc &desc)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Shader::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Shader::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::ShaderDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

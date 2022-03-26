@@ -56,6 +56,7 @@ public: cpp_base::scene::Field2DPlayerNode &operator =(const cpp_base::scene::Fi
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::Field2DPlayerNodeDesc *desc_;
 	cpp_base::scene::Field2DNode *field_node_;
 	tml::TIME_REAL attack_cool_time_;
 
@@ -67,19 +68,35 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Field2DPlayerNode();
 	virtual ~Field2DPlayerNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::Field2DPlayerNodeDesc &);
 
 	void Move(const tml::XMFLOAT2EX &);
 	void Attack(const tml::XMFLOAT2EX &);
+
+	const cpp_base::scene::Field2DPlayerNodeDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::Field2DPlayerNodeDesc *cpp_base::scene::Field2DPlayerNode::GetDesc(void) const
+{
+	return (this->desc_);
 }

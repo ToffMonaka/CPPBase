@@ -47,7 +47,8 @@ void tml::graphic::GroundModel2DLayerShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::GroundModel2DLayerShaderStructuredBuffer::GroundModel2DLayerShaderStructuredBuffer()
+tml::graphic::GroundModel2DLayerShaderStructuredBuffer::GroundModel2DLayerShaderStructuredBuffer() :
+	desc_(nullptr)
 {
 	return;
 }
@@ -78,22 +79,46 @@ void tml::graphic::GroundModel2DLayerShaderStructuredBuffer::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::GroundModel2DLayerShaderStructuredBuffer::Create(const tml::graphic::GroundModel2DLayerShaderStructuredBufferDesc &desc)
+INT tml::graphic::GroundModel2DLayerShaderStructuredBuffer::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ShaderStructuredBuffer::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ShaderStructuredBuffer::OnCreate() < 0) {
 		return (-1);
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::GroundModel2DLayerShaderStructuredBuffer::OnCreateDeferred(void)
+{
+	if (tml::graphic::ShaderStructuredBuffer::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::GroundModel2DLayerShaderStructuredBuffer::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::GroundModel2DLayerShaderStructuredBufferDesc *>(desc);
+
+	tml::graphic::ShaderStructuredBuffer::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

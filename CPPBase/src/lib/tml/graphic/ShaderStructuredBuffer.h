@@ -62,10 +62,10 @@ public: tml::graphic::ShaderStructuredBuffer &operator =(const tml::graphic::Sha
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER);
 
 private:
+	const tml::graphic::ShaderStructuredBufferDesc *desc_;
 	ID3D11Buffer *buf_;
 	CD3D11_BUFFER_DESC buf_desc_;
 	UINT element_size_;
@@ -80,6 +80,10 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 	template <typename T>
 	T *GetElementArray(void);
 	template <typename T>
@@ -92,8 +96,8 @@ public:
 	virtual ~ShaderStructuredBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::ShaderStructuredBufferDesc &);
 
+	const tml::graphic::ShaderStructuredBufferDesc *GetDesc(void) const;
 	ID3D11Buffer *GetBuffer(void);
 	const CD3D11_BUFFER_DESC &GetBufferDesc(void) const;
 	UINT GetElementSize(void) const;
@@ -108,6 +112,16 @@ public:
 	ID3D11UnorderedAccessView *GetUASR(void);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::ShaderStructuredBufferDesc *tml::graphic::ShaderStructuredBuffer::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

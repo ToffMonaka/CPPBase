@@ -160,10 +160,10 @@ public: tml::graphic::Texture &operator =(const tml::graphic::Texture &) = delet
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE);
 
 private:
+	const tml::graphic::TextureDesc *desc_;
 	tml::graphic::Texture *current_;
 	ID3D11Texture2D *tex_;
 	CD3D11_TEXTURE2D_DESC tex_desc_;
@@ -183,13 +183,19 @@ private:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Texture();
 	virtual ~Texture();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::TextureDesc &);
 
+	const tml::graphic::TextureDesc *GetDesc(void) const;
 	ID3D11Texture2D *GetTexture(void);
 	const CD3D11_TEXTURE2D_DESC &GetTextureDesc(void) const;
 	const tml::graphic::TextureRect &GetRect(void) const;
@@ -221,6 +227,16 @@ public:
 	const tml::graphic::AtlasRect &GetAtlasRect(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::TextureDesc *tml::graphic::Texture::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

@@ -71,11 +71,10 @@ public: tml::graphic::Light &operator =(const tml::graphic::Light &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::LIGHT_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT);
 
 private:
-	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE type_;
+	const tml::graphic::LightDesc *desc_;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type_;
 	INT draw_priority_;
 	UINT draw_set_canvas_cnt_;
@@ -97,14 +96,20 @@ private:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	void SetDimensionType(const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
+
 public:
 	Light();
 	virtual ~Light();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::LightDesc &, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
 
-	tml::ConstantUtil::GRAPHIC::LIGHT_TYPE GetType(void) const;
+	const tml::graphic::LightDesc *GetDesc(void) const;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE GetDimensionType(void) const;
 	INT GetDrawPriority(void) const;
 	void SetDrawPriority(const INT);
@@ -148,12 +153,12 @@ inline void tml::graphic::Light::Release(void)
 
 
 /**
- * @brief GetTypeŠÖ”
- * @return type (type)
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
  */
-inline tml::ConstantUtil::GRAPHIC::LIGHT_TYPE tml::graphic::Light::GetType(void) const
+inline const tml::graphic::LightDesc *tml::graphic::Light::GetDesc(void) const
 {
-	return (this->type_);
+	return (this->desc_);
 }
 
 
@@ -164,6 +169,18 @@ inline tml::ConstantUtil::GRAPHIC::LIGHT_TYPE tml::graphic::Light::GetType(void)
 inline tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE tml::graphic::Light::GetDimensionType(void) const
 {
 	return (this->dimension_type_);
+}
+
+
+/**
+ * @brief SetDimensionTypeŠÖ”
+ * @param dimension_type (dimension_type)
+ */
+inline void tml::graphic::Light::SetDimensionType(const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
+{
+	this->dimension_type_ = dimension_type;
+
+	return;
 }
 
 

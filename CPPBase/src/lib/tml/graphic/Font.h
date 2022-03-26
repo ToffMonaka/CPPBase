@@ -137,10 +137,10 @@ public: tml::graphic::Font &operator =(const tml::graphic::Font &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FONT_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT);
 
 private:
+	const tml::graphic::FontDesc *desc_;
 	HDC dc_handle_;
 	HFONT font_handle_;
 	LOGFONT font_desc_;
@@ -150,13 +150,19 @@ private:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Font();
 	virtual ~Font();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::FontDesc &);
 
+	const tml::graphic::FontDesc *GetDesc(void) const;
 	HDC GetDeviceContextHandle(void) const;
 	HFONT GetFontHandle(void) const;
 	const LOGFONT &GetFontDesc(void) const;
@@ -164,6 +170,16 @@ public:
 	const tml::graphic::FontBitmap *GetBitmap(const WCHAR);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::FontDesc *tml::graphic::Font::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

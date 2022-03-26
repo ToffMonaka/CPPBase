@@ -56,6 +56,7 @@ public: cpp_base::scene::Field2DBulletNode &operator =(const cpp_base::scene::Fi
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::Field2DBulletNodeDesc *desc_;
 	cpp_base::scene::Field2DNode *field_node_;
 	tml::TIME_REAL update_time_;
 
@@ -66,16 +67,32 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Field2DBulletNode();
 	virtual ~Field2DBulletNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::Field2DBulletNodeDesc &);
+
+	const cpp_base::scene::Field2DBulletNodeDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::Field2DBulletNodeDesc *cpp_base::scene::Field2DBulletNode::GetDesc(void) const
+{
+	return (this->desc_);
 }

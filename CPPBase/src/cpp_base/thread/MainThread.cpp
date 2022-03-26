@@ -160,10 +160,10 @@ INT cpp_base::MainThread::OnStart(void)
 		mgr_desc.window_handle = this->GetWindowHandle();
 		mgr_desc.window_device_context_handle = this->GetWindowDeviceContextHandle();
 		mgr_desc.factory = &this->mgr_factory_;
-		mgr_desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, cpp_base::Global::system_config_file.data.sound_bgm_volume);
-		mgr_desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM, cpp_base::Global::system_config_file.data.sound_bgm_mute_flag);
-		mgr_desc.SetVolume(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, cpp_base::Global::system_config_file.data.sound_se_volume);
-		mgr_desc.SetMuteFlag(tml::ConstantUtil::SOUND::SOUND_TYPE::SE, cpp_base::Global::system_config_file.data.sound_se_mute_flag);
+		mgr_desc.bgm_sound_volume = cpp_base::Global::system_config_file.data.sound_bgm_volume;
+		mgr_desc.bgm_sound_mute_flag = cpp_base::Global::system_config_file.data.sound_bgm_mute_flag;
+		mgr_desc.se_sound_volume = cpp_base::Global::system_config_file.data.sound_se_volume;
+		mgr_desc.se_sound_mute_flag = cpp_base::Global::system_config_file.data.sound_se_mute_flag;
 
 		if (this->sound_mgr_.Create(mgr_desc) < 0) {
 			return (-1);
@@ -331,12 +331,12 @@ LRESULT CALLBACK cpp_base::MainThread::WindowProcedure(HWND wnd_handle, UINT msg
 
 		switch (ri.header.dwType) {
 		case RIM_TYPEMOUSE: {
-			th->GetInputManager().AddMouseDeviceRawInput(ri.data.mouse, th->GetInputManager().GetMouseDevicePosition());
+			th->GetInputManager().SetMouseDeviceRawInput(ri.data.mouse);
 
 			break;
 		}
 		case RIM_TYPEKEYBOARD: {
-			th->GetInputManager().AddKeyboardDeviceRawInput(ri.data.keyboard);
+			th->GetInputManager().SetKeyboardDeviceRawInput(ri.data.keyboard);
 
 			break;
 		}

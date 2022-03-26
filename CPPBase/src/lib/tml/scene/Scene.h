@@ -86,8 +86,7 @@ public: tml::scene::Scene &operator =(const tml::scene::Scene &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE);
 
 public:
 	static const tml::shared_ptr<tml::graphic::Canvas> empty_canvas;
@@ -96,10 +95,10 @@ public:
 	static const tml::shared_ptr<tml::graphic::Model> empty_model;
 
 private:
+	const tml::scene::SceneDesc *desc_;
 	tml::input::Manager *input_mgr_;
 	tml::graphic::Manager *graphic_mgr_;
 	tml::sound::Manager *sound_mgr_;
-	tml::ConstantUtil::SCENE::SCENE_TYPE type_;
 	bool run_flg_;
 	bool start_flg_;
 	bool started_flg_;
@@ -130,25 +129,29 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Scene();
 	virtual ~Scene();
 
 	virtual void Init(void);
-	INT Create(const tml::scene::SceneDesc &);
 
 	INT Start(void);
 	void End(void);
 	void Update(void);
 
+	const tml::scene::SceneDesc *GetDesc(void) const;
 	tml::input::Manager *GetInputManager(void);
 	tml::graphic::Manager *GetGraphicManager(void);
 	tml::sound::Manager *GetSoundManager(void);
-	tml::ConstantUtil::SCENE::SCENE_TYPE GetType(void) const;
 	bool GetRunFlag(void) const;
 	void SetRunFlag(const bool);
 	bool GetStartFlag(void) const;
@@ -181,6 +184,16 @@ public:
 
 
 /**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::scene::SceneDesc *tml::scene::Scene::GetDesc(void) const
+{
+	return (this->desc_);
+}
+
+
+/**
  * @brief GetInputManagerŠÖ”
  * @return input_mgr (input_manager)
  */
@@ -207,16 +220,6 @@ inline tml::graphic::Manager *tml::scene::Scene::GetGraphicManager(void)
 inline tml::sound::Manager *tml::scene::Scene::GetSoundManager(void)
 {
 	return (this->sound_mgr_);
-}
-
-
-/**
- * @brief GetTypeŠÖ”
- * @return type (type)
- */
-inline tml::ConstantUtil::SCENE::SCENE_TYPE tml::scene::Scene::GetType(void) const
-{
-	return (this->type_);
 }
 
 

@@ -32,6 +32,11 @@ namespace SCENE {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::SCENE::RESOURCE_TYPE::COUNT);
+	enum class TASK_TYPE : UINT {
+		USER = static_cast<UINT>(tml::ConstantUtil::SCENE::TASK_TYPE::USER),
+		COUNT
+	};
+	const UINT TASK_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::SCENE::TASK_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		USER = static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::USER),
 		COUNT

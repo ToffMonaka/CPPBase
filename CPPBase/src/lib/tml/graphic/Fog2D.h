@@ -66,6 +66,7 @@ public: tml::graphic::Fog2D &operator =(const tml::graphic::Fog2D &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const tml::graphic::Fog2DDesc *desc_;
 	tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE effect_type_;
 
 public:
@@ -76,13 +77,19 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Fog2D();
 	virtual ~Fog2D();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::Fog2DDesc &);
 
+	const tml::graphic::Fog2DDesc *GetDesc(void) const;
 	tml::ConstantUtil::GRAPHIC::FOG_2D_EFFECT_TYPE GetEffectType(void) const;
 
 	virtual void DrawStageInit(void);
@@ -97,6 +104,16 @@ public:
 inline void tml::graphic::Fog2D::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::Fog2DDesc *tml::graphic::Fog2D::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

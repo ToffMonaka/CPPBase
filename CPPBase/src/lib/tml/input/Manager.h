@@ -23,10 +23,6 @@ public:
 private:
 	void Release(void);
 
-protected:
-	void InitResourceCount(void);
-	void InitEventCount(void);
-
 public:
 	ManagerDesc();
 	virtual ~ManagerDesc();
@@ -85,12 +81,12 @@ public:
 	bool GetMouseDeviceCodeState(const tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE, const bool);
 	void SetMouseDeviceCodeState(const tml::ConstantUtil::INPUT::MOUSE_DEVICE_CODE, const bool);
 	void ClearMouseDeviceCodeState(void);
-	INT AddMouseDeviceRawInput(const RAWMOUSE &, const tml::XMINT2EX &);
+	void SetMouseDeviceRawInput(const RAWMOUSE &);
 	bool GetKeyboardDeviceCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE) const;
 	bool GetKeyboardDeviceCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE, const bool);
 	void SetKeyboardDeviceCodeState(const tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE, const bool);
 	void ClearKeyboardDeviceCodeState(void);
-	INT AddKeyboardDeviceRawInput(const RAWKEYBOARD &);
+	void SetKeyboardDeviceRawInput(const RAWKEYBOARD &);
 };
 }
 }

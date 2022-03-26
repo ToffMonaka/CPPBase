@@ -100,10 +100,10 @@ INT tml::scene::SceneDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::scene::Scene::Scene() :
+	desc_(nullptr),
 	input_mgr_(nullptr),
 	graphic_mgr_(nullptr),
 	sound_mgr_(nullptr),
-	type_(tml::ConstantUtil::SCENE::SCENE_TYPE::NONE),
 	run_flg_(false),
 	start_flg_(false),
 	started_flg_(false),
@@ -152,7 +152,6 @@ void tml::scene::Scene::Init(void)
 	this->input_mgr_ = nullptr;
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
-	this->type_ = tml::ConstantUtil::SCENE::SCENE_TYPE::NONE;
 	this->run_flg_ = false;
 	this->start_flg_ = false;
 	this->started_flg_ = false;
@@ -183,33 +182,42 @@ void tml::scene::Scene::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::scene::Scene::Create(const tml::scene::SceneDesc &desc)
+INT tml::scene::Scene::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::scene::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::scene::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->input_mgr_ = desc.GetManager()->GetInputManager();
-	this->graphic_mgr_ = desc.GetManager()->GetGraphicManager();
-	this->sound_mgr_ = desc.GetManager()->GetSoundManager();
-	this->type_ = static_cast<tml::ConstantUtil::SCENE::SCENE_TYPE>(this->GetResourceSubIndex());
+	this->input_mgr_ = this->desc_->GetManager()->GetInputManager();
+	this->graphic_mgr_ = this->desc_->GetManager()->GetGraphicManager();
+	this->sound_mgr_ = this->desc_->GetManager()->GetSoundManager();
 	this->start_flg_ = true;
 
-	this->name = desc.name;
-	this->transform_2d = desc.transform_2d;
-	this->transform_3d = desc.transform_3d;
-	this->color = desc.color;
+	this->name = this->desc_->name;
+	this->transform_2d = this->desc_->transform_2d;
+	this->transform_3d = this->desc_->transform_3d;
+	this->color = this->desc_->color;
 
 	this->SetRootNode();
+
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::scene::Scene::OnCreateDeferred(void)
+{
+	if (tml::scene::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
 
 	return (0);
 }
@@ -379,6 +387,20 @@ void tml::scene::Scene::Update(void)
  */
 void tml::scene::Scene::OnUpdate(void)
 {
+	return;
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::scene::Scene::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::scene::SceneDesc *>(desc);
+
+	tml::scene::ManagerResource::OnSetDesc(this->desc_);
+
 	return;
 }
 

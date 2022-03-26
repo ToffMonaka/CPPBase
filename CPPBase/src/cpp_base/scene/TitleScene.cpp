@@ -89,6 +89,7 @@ INT cpp_base::scene::TitleSceneDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief ÉRÉìÉXÉgÉâÉNÉ^
  */
 cpp_base::scene::TitleScene::TitleScene() :
+	desc_(nullptr),
 	progress_type_(0U)
 {
 	return;
@@ -145,18 +146,13 @@ void cpp_base::scene::TitleScene::Init(void)
 
 
 /**
- * @brief Createä÷êî
- * @param desc (desc)
+ * @brief OnCreateä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &desc)
+INT cpp_base::scene::TitleScene::OnCreate(void)
 {
-	this->Init();
-
-	if (cpp_base::scene::Scene::Create(desc) < 0) {
-		this->Init();
-
+	if (cpp_base::scene::Scene::OnCreate() < 0) {
 		return (-1);
 	}
 
@@ -168,8 +164,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		camera_desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, camera_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -181,8 +175,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		canvas_desc.draw_priority = 1;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -202,8 +194,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		camera_desc.far_clip = 1000.0f;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, camera_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -215,8 +205,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		canvas_desc.draw_priority = 0;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas3D>(this->canvas_3d, canvas_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -236,8 +224,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		model_desc.size_auto_flag = false;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -255,8 +241,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			tex_desc.image_file_read_desc_container[0].data.file_path = cpp_base::ConstantUtil::FILE_PATH::TITLE_BACKGROUND_IMAGE;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -266,8 +250,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 	{// BGMSound Create
 		if (this->GetSoundManager()->GetResource<tml::sound::BGMSound>(this->bgm_sound, this->GetSoundManager()->common2.title_bgm_sound) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -283,8 +265,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		model_desc.diffuse_texture_desc->atlas_rect = (*this->GetGraphicManager()->common2.common_atlas->GetRect(L"title_logo_img.png"));
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->logo_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -299,8 +279,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		font_desc.SetFontDesc(start_font_size, L"ÇlÇr ÉSÉVÉbÉN");
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->start_font, font_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -313,8 +291,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->start_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -332,8 +308,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			tex_desc.cpu_buffer_flag = true;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -353,8 +327,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 
 	{// StartSESound Create
 		if (this->GetSoundManager()->GetResource<tml::sound::SESound>(this->start_se_sound, this->GetSoundManager()->common2.start_se_sound) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -369,8 +341,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		font_desc.SetFontDesc(footer_font_size, L"ÇlÇr ÉSÉVÉbÉN");
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->footer_font, font_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -383,8 +353,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(8U), tml::MathUtil::GetColor1(8U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->footer_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -402,8 +370,6 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 			tex_desc.cpu_buffer_flag = true;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -429,6 +395,21 @@ INT cpp_base::scene::TitleScene::Create(const cpp_base::scene::TitleSceneDesc &d
 		tex->DrawCPUBufferString(company_name.c_str(), tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(4, -4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_LEFT, this->footer_font.get());
 		tex->DrawCPUBufferString(version_name.c_str(), tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(-4, -4), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::BOTTOM_RIGHT, this->footer_font.get());
 		tex->UploadCPUBuffer();
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferredä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::scene::TitleScene::OnCreateDeferred(void)
+{
+	if (cpp_base::scene::Scene::OnCreateDeferred() < 0) {
+		return (-1);
 	}
 
 	return (0);
@@ -483,6 +464,7 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 {
 	switch (this->progress_type_) {
 	case 1U: {
+		/*
 		for (UINT event_i = 0U; event_i < this->GetInputManager()->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
 			auto event = reinterpret_cast<tml::input::DeviceEvent *>(this->GetInputManager()->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
 
@@ -526,6 +508,7 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 			}
 			}
 		}
+		*/
 
 		break;
 	}
@@ -541,6 +524,20 @@ void cpp_base::scene::TitleScene::OnUpdate(void)
 		this->start_model->transform.scale = tml::XMFLOAT2EX(1.0f, 1.0f);
 		this->start_model->color = tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f);
 	}
+
+	return;
+}
+
+
+/**
+ * @brief OnSetDescä÷êî
+ * @param desc (desc)
+ */
+void cpp_base::scene::TitleScene::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const cpp_base::scene::TitleSceneDesc *>(desc);
+
+	cpp_base::scene::Scene::OnSetDesc(this->desc_);
 
 	return;
 }

@@ -88,7 +88,7 @@ INT tml::sound::SoundDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::sound::Sound::Sound() :
-	type_(tml::ConstantUtil::SOUND::SOUND_TYPE::NONE),
+	desc_(nullptr),
 	buf_(0U),
 	src_(0U),
 	ogg_file_buf_(0L),
@@ -115,54 +115,6 @@ tml::sound::Sound::~Sound()
  */
 void tml::sound::Sound::Release(void)
 {
-	this->ReleaseDeferred();
-
-	return;
-}
-
-
-/**
- * @brief Init関数
- */
-void tml::sound::Sound::Init(void)
-{
-	this->Release();
-
-	this->ogg_file_buf_ = nullptr;
-	this->ogg_file_buf_size_ = 0L;
-	this->ogg_file_buf_index_ = 0L;
-
-	this->type_ = tml::ConstantUtil::SOUND::SOUND_TYPE::NONE;
-
-	tml::sound::ManagerResource::Init();
-
-	return;
-}
-
-
-/**
- * @brief Create関数
- * @param desc (desc)
- * @return result (result)<br>
- * 0未満=失敗
- */
-INT tml::sound::Sound::Create(const tml::sound::SoundDesc &desc)
-{
-	if (tml::sound::ManagerResource::Create(desc) < 0) {
-		return (-1);
-	}
-
-	this->type_ = static_cast<tml::ConstantUtil::SOUND::SOUND_TYPE>(this->GetResourceSubIndex());
-
-	return (0);
-}
-
-
-/**
- * @brief ReleaseDeferred関数
- */
-void tml::sound::Sound::ReleaseDeferred(void)
-{
 	if (this->src_ != 0U) {
 		alDeleteSources(1, &this->src_);
 
@@ -180,19 +132,34 @@ void tml::sound::Sound::ReleaseDeferred(void)
 
 
 /**
- * @brief InitDeferred関数
+ * @brief Init関数
  */
-void tml::sound::Sound::InitDeferred(void)
+void tml::sound::Sound::Init(void)
 {
-	this->ReleaseDeferred();
+	this->Release();
 
 	this->ogg_file_buf_ = nullptr;
 	this->ogg_file_buf_size_ = 0L;
 	this->ogg_file_buf_index_ = 0L;
 
-	tml::sound::ManagerResource::InitDeferred();
+	tml::sound::ManagerResource::Init();
 
 	return;
+}
+
+
+/**
+ * @brief OnCreate関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::sound::Sound::OnCreate(void)
+{
+	if (tml::sound::ManagerResource::OnCreate() < 0) {
+		return (-1);
+	}
+
+	return (0);
 }
 
 
@@ -207,13 +174,7 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 		return (-1);
 	}
 
-	auto desc = dynamic_cast<const tml::sound::SoundDesc *>(this->deferred_create_desc_);
-
-	if (desc == nullptr) {
-		return (-1);
-	}
-
-	auto sound_file_read_desc_dat = desc->sound_file_read_desc.GetDataByParent();
+	auto sound_file_read_desc_dat = this->desc_->sound_file_read_desc.GetDataByParent();
 
 	tml::BinaryFile sound_file;
 
@@ -617,6 +578,20 @@ INT tml::sound::Sound::OnCreateDeferred(void)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::sound::Sound::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::sound::SoundDesc *>(desc);
+
+	tml::sound::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

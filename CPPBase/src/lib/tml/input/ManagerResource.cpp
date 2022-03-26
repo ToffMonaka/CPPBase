@@ -73,14 +73,14 @@ INT tml::input::ManagerResourceDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
  */
-void tml::input::ManagerResourceDesc::SetManager(tml::input::Manager *mgr)
+void tml::input::ManagerResourceDesc::OnSetManager(tml::Manager *mgr)
 {
-	this->mgr_ = mgr;
+	this->mgr_ = dynamic_cast<tml::input::Manager *>(mgr);
 
-	tml::ManagerResourceDesc::SetManager(mgr);
+	tml::ManagerResourceDesc::OnSetManager(this->mgr_);
 
 	return;
 }
@@ -90,9 +90,8 @@ void tml::input::ManagerResourceDesc::SetManager(tml::input::Manager *mgr)
  * @brief コンストラクタ
  */
 tml::input::ManagerResource::ManagerResource() :
-	mgr_(nullptr),
-	res_type_(tml::ConstantUtil::INPUT::RESOURCE_TYPE::NONE)
-	
+	desc_(nullptr),
+	mgr_(nullptr)
 {
 	return;
 }
@@ -116,9 +115,6 @@ void tml::input::ManagerResource::Init(void)
 {
 	this->Release();
 
-	this->mgr_ = nullptr;
-	this->res_type_ = tml::ConstantUtil::INPUT::RESOURCE_TYPE::NONE;
-
 	tml::ManagerResource::Init();
 
 	return;
@@ -126,23 +122,58 @@ void tml::input::ManagerResource::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::input::ManagerResource::Create(const tml::input::ManagerResourceDesc &desc)
+INT tml::input::ManagerResource::OnCreate(void)
 {
-	if (desc.GetManager() == nullptr) {
+	if (tml::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
-
-	if (tml::ManagerResource::Create(desc) < 0) {
-		return (-1);
-	}
-
-	this->mgr_ = desc.GetManager();
-	this->res_type_ = static_cast<tml::ConstantUtil::INPUT::RESOURCE_TYPE>(this->GetResourceMainIndex());
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::input::ManagerResource::OnCreateDeferred(void)
+{
+	if (tml::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::input::ManagerResource::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::input::ManagerResourceDesc *>(desc);
+
+	tml::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
+}
+
+
+/**
+ * @brief OnSetManager関数
+ * @param mgr (manager)
+ */
+void tml::input::ManagerResource::OnSetManager(tml::Manager *mgr)
+{
+	this->mgr_ = dynamic_cast<tml::input::Manager *>(mgr);
+
+	tml::ManagerResource::OnSetManager(this->mgr_);
+
+	return;
 }

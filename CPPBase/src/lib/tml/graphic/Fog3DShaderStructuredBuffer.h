@@ -77,15 +77,24 @@ public:
 	} ELEMENT;
 
 private:
+	const tml::graphic::Fog3DShaderStructuredBufferDesc *desc_;
+
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Fog3DShaderStructuredBuffer();
 	virtual ~Fog3DShaderStructuredBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::Fog3DShaderStructuredBufferDesc &);
 
+	const tml::graphic::Fog3DShaderStructuredBufferDesc *GetDesc(void) const;
 	tml::graphic::Fog3DShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	tml::graphic::Fog3DShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::Fog3DShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
@@ -101,6 +110,16 @@ public:
 inline void tml::graphic::Fog3DShaderStructuredBuffer::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::Fog3DShaderStructuredBufferDesc *tml::graphic::Fog3DShaderStructuredBuffer::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

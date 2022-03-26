@@ -66,6 +66,7 @@ public: tml::graphic::Light3D &operator =(const tml::graphic::Light3D &) = delet
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const tml::graphic::Light3DDesc *desc_;
 	tml::ConstantUtil::GRAPHIC::LIGHT_3D_EFFECT_TYPE effect_type_;
 
 public:
@@ -76,13 +77,19 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Light3D();
 	virtual ~Light3D();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::Light3DDesc &);
 
+	const tml::graphic::Light3DDesc *GetDesc(void) const;
 	tml::ConstantUtil::GRAPHIC::LIGHT_3D_EFFECT_TYPE GetEffectType(void) const;
 
 	virtual void DrawStageInit(void);
@@ -97,6 +104,16 @@ public:
 inline void tml::graphic::Light3D::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::Light3DDesc *tml::graphic::Light3D::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

@@ -58,25 +58,41 @@ public: tml::graphic::DepthState &operator =(const tml::graphic::DepthState &) =
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::DEPTH_STATE_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE);
 
 private:
+	const tml::graphic::DepthStateDesc *desc_;
 	ID3D11DepthStencilState *ds_;
 
 private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	DepthState();
 	virtual ~DepthState();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::DepthStateDesc &);
 
+	const tml::graphic::DepthStateDesc *GetDesc(void) const;
 	ID3D11DepthStencilState *GetDepthState(void);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::DepthStateDesc *tml::graphic::DepthState::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

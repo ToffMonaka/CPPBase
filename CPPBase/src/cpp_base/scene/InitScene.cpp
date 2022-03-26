@@ -87,6 +87,7 @@ INT cpp_base::scene::InitSceneDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief ÉRÉìÉXÉgÉâÉNÉ^
  */
 cpp_base::scene::InitScene::InitScene() :
+	desc_(nullptr),
 	progress_type_(0U),
 	wait_update_time(0.0)
 {
@@ -145,18 +146,13 @@ void cpp_base::scene::InitScene::Init(void)
 
 
 /**
- * @brief Createä÷êî
- * @param desc (desc)
+ * @brief OnCreateä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &desc)
+INT cpp_base::scene::InitScene::OnCreate(void)
 {
-	this->Init();
-
-	if (cpp_base::scene::Scene::Create(desc) < 0) {
-		this->Init();
-
+	if (cpp_base::scene::Scene::OnCreate() < 0) {
 		return (-1);
 	}
 
@@ -172,8 +168,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		camera_desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, camera_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -185,8 +179,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		canvas_desc.draw_priority = 1;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -206,8 +198,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		camera_desc.far_clip = 1000.0f;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, camera_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -219,8 +209,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		canvas_desc.draw_priority = 0;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas3D>(this->canvas_3d, canvas_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -241,8 +229,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		model_desc.size_auto_flag = false;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -255,8 +241,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 			tml::shared_ptr<tml::graphic::Texture> tex;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, this->GetGraphicManager()->common2.background_texture) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -274,8 +258,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		font_desc.SetFontDesc(wait_font_size, L"ÇlÇr ÉSÉVÉbÉN");
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->wait_font, font_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -288,8 +270,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->wait_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -307,8 +287,6 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 			tex_desc.cpu_buffer_flag = true;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -324,6 +302,21 @@ INT cpp_base::scene::InitScene::Create(const cpp_base::scene::InitSceneDesc &des
 		tex->ClearCPUBuffer();
 		tex->DrawCPUBufferString(L"ÇøÇÂÇ¡Ç∆ë“Ç¡ÇƒÇÀÅB", tml::ConstantUtil::GRAPHIC::STRING_ALIGNMENT_TYPE::LEFT, tml::XMINT2EX(0, 0), tml::ConstantUtil::GRAPHIC::POSITION_FIT_TYPE::CENTER, this->wait_font.get());
 		tex->UploadCPUBuffer();
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferredä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::scene::InitScene::OnCreateDeferred(void)
+{
+	if (cpp_base::scene::Scene::OnCreateDeferred() < 0) {
+		return (-1);
 	}
 
 	return (0);
@@ -379,9 +372,9 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 		if (this->deferred_create_res_itr_ != this->deferred_create_res_cont_.end()) {
 			auto &res = (*this->deferred_create_res_itr_);
 
-			if (res->IsDeferredCreated()) {
+			if (res->GetDeferredCreatedFlag()) {
 				++this->deferred_create_res_itr_;
-			} else if (!res->IsDeferredCreating()) {
+			} else if (!res->GetDeferredCreateFlag()) {
 				if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
 					tml::Log(L"Error: Resource Deferred Create\n");
 				}
@@ -437,6 +430,20 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 		break;
 	}
 	}
+
+	return;
+}
+
+
+/**
+ * @brief OnSetDescä÷êî
+ * @param desc (desc)
+ */
+void cpp_base::scene::InitScene::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const cpp_base::scene::InitSceneDesc *>(desc);
+
+	cpp_base::scene::Scene::OnSetDesc(this->desc_);
 
 	return;
 }

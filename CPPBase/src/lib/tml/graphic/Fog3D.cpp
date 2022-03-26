@@ -81,6 +81,7 @@ INT tml::graphic::Fog3DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Fog3D::Fog3D() :
+	desc_(nullptr),
 	effect_type_(tml::ConstantUtil::GRAPHIC::FOG_3D_EFFECT_TYPE::NONE),
 	color(1.0f),
 	draw_data(nullptr)
@@ -120,27 +121,53 @@ void tml::graphic::Fog3D::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Fog3D::Create(const tml::graphic::Fog3DDesc &desc)
+INT tml::graphic::Fog3D::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::Fog::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D) < 0) {
-		this->Init();
-
+	if (tml::graphic::Fog::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->effect_type_ = desc.effect_type;
+	this->SetDimensionType(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D);
 
-	this->transform = desc.transform;
-	this->color = desc.color;
+	this->effect_type_ = this->desc_->effect_type;
+
+	this->transform = this->desc_->transform;
+	this->color = this->desc_->color;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Fog3D::OnCreateDeferred(void)
+{
+	if (tml::graphic::Fog::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Fog3D::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::Fog3DDesc *>(desc);
+
+	tml::graphic::Fog::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

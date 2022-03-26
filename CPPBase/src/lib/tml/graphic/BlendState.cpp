@@ -227,6 +227,7 @@ void tml::graphic::BlendStateDesc::SetBlendStateDesc(const tml::ConstantUtil::GR
  * @brief コンストラクタ
  */
 tml::graphic::BlendState::BlendState() :
+	desc_(nullptr),
 	bs_(nullptr)
 {
 	this->factor_ary_.fill(D3D11_BLEND_ZERO);
@@ -277,28 +278,50 @@ void tml::graphic::BlendState::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::BlendState::Create(const tml::graphic::BlendStateDesc &desc)
+INT tml::graphic::BlendState::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	if (FAILED(this->GetManager()->GetDevice()->CreateBlendState(&desc.blend_state_desc, &this->bs_))) {
-		this->Init();
-
+	if (FAILED(this->GetManager()->GetDevice()->CreateBlendState(&this->desc_->blend_state_desc, &this->bs_))) {
 		return (-1);
 	}
 
-	this->factor_ary_ = desc.factor_array;
+	this->factor_ary_ = this->desc_->factor_array;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::BlendState::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::BlendState::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::BlendStateDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }

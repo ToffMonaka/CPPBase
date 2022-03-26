@@ -70,10 +70,10 @@ public: tml::graphic::Mesh &operator =(const tml::graphic::Mesh &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MESH_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH);
 
 private:
+	const tml::graphic::MeshDesc *desc_;
 	ID3D11Buffer *vb_;
 	CD3D11_BUFFER_DESC vb_desc_;
 	UINT vb_element_size_;
@@ -92,13 +92,19 @@ private:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Mesh();
 	virtual ~Mesh();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::MeshDesc &);
 
+	const tml::graphic::MeshDesc *GetDesc(void) const;
 	ID3D11Buffer *GetVertexBuffer(void);
 	const CD3D11_BUFFER_DESC &GetVertexBufferDesc(void) const;
 	UINT GetVertexBufferElementSize(void) const;
@@ -131,6 +137,16 @@ public:
 	D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::MeshDesc *tml::graphic::Mesh::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

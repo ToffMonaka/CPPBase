@@ -12,6 +12,37 @@
 namespace tml {
 namespace input {
 /**
+ * @brief DeviceEventDataクラス
+ */
+class DeviceEventData : public tml::input::ManagerEventData
+{
+public:
+
+private:
+	void Release(void);
+
+public:
+	DeviceEventData();
+	virtual ~DeviceEventData();
+
+	virtual void Init(void);
+};
+}
+}
+
+
+/**
+ * @brief Release関数
+ */
+inline void tml::input::DeviceEventData::Release(void)
+{
+	return;
+}
+
+
+namespace tml {
+namespace input {
+/**
  * @brief DeviceEventDescクラス
  */
 class DeviceEventDesc : public tml::input::ManagerEventDesc
@@ -56,11 +87,7 @@ public: DeviceEvent(const tml::input::DeviceEvent &) = delete;
 public: tml::input::DeviceEvent &operator =(const tml::input::DeviceEvent &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
-public:
-	static const UINT EVENT_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::DEVICE);
-
 private:
-	tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE type_;
 
 private:
 	void Release(void);
@@ -71,8 +98,6 @@ public:
 
 	virtual void Init(void);
 	INT Create(const tml::input::DeviceEventDesc &);
-
-	tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE GetType(void) const;
 };
 }
 }
@@ -84,14 +109,4 @@ public:
 inline void tml::input::DeviceEvent::Release(void)
 {
 	return;
-}
-
-
-/**
- * @brief GetType関数
- * @return type (type)
- */
-inline tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE tml::input::DeviceEvent::GetType(void) const
-{
-	return (this->type_);
 }

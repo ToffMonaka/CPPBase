@@ -11,21 +11,18 @@
 
 
 namespace tml {
-namespace test {
 class Manager;
-}
 }
 
 
 namespace tml {
-namespace test {
 /**
  * @brief ManagerTaskDescクラス
  */
 class ManagerTaskDesc
 {
 private:
-	tml::test::Manager *mgr_;
+	tml::Manager *mgr_;
 
 public:
 	std::wstring task_name;
@@ -38,6 +35,8 @@ private:
 protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
+	virtual void OnSetManager(tml::Manager *);
+
 public:
 	ManagerTaskDesc();
 	virtual ~ManagerTaskDesc();
@@ -46,17 +45,16 @@ public:
 
 	INT Read(const tml::INIFileReadDesc &);
 
-	tml::test::Manager *GetManager(void) const;
-	void SetManager(tml::test::Manager *);
+	tml::Manager *GetManager(void) const;
+	void SetManager(tml::Manager *);
 };
-}
 }
 
 
 /**
  * @brief Release関数
  */
-inline void tml::test::ManagerTaskDesc::Release(void)
+inline void tml::ManagerTaskDesc::Release(void)
 {
 	return;
 }
@@ -66,7 +64,7 @@ inline void tml::test::ManagerTaskDesc::Release(void)
  * @brief GetManager関数
  * @return mgr (manager)
  */
-inline tml::test::Manager *tml::test::ManagerTaskDesc::GetManager(void) const
+inline tml::Manager *tml::ManagerTaskDesc::GetManager(void) const
 {
 	return (this->mgr_);
 }
@@ -76,16 +74,15 @@ inline tml::test::Manager *tml::test::ManagerTaskDesc::GetManager(void) const
  * @brief SetManager関数
  * @param mgr (manager)
  */
-inline void tml::test::ManagerTaskDesc::SetManager(tml::test::Manager *mgr)
+inline void tml::ManagerTaskDesc::SetManager(tml::Manager *mgr)
 {
-	this->mgr_ = mgr;
+	this->OnSetManager(mgr);
 
 	return;
 }
 
 
 namespace tml {
-namespace test {
 /**
  * @brief ManagerTaskクラス
  *
@@ -93,16 +90,16 @@ namespace test {
  */
 class ManagerTask
 {
-friend class tml::test::Manager;
+friend class tml::Manager;
 
-public: ManagerTask(const tml::test::ManagerTask &) = delete;
-public: tml::test::ManagerTask &operator =(const tml::test::ManagerTask &) = delete;
+public: ManagerTask(const tml::ManagerTask &) = delete;
+public: tml::ManagerTask &operator =(const tml::ManagerTask &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
-	tml::test::Manager *mgr_;
-	UINT task_index_;
-	tml::shared_ptr<tml::test::ManagerTask> task_shared_p_;
+	tml::Manager *mgr_;
+	UINT task_type_;
+	tml::shared_ptr<tml::ManagerTask> task_shared_p_;
 	std::wstring task_name_;
 	bool run_flg_;
 	bool run_added_flg_;
@@ -114,31 +111,32 @@ private:
 protected:
 	virtual void OnRun(void) = 0;
 
-	void SetManager(tml::test::Manager *);
+	virtual void OnSetManager(tml::Manager *);
 
 public:
 	ManagerTask();
 	virtual ~ManagerTask();
 
 	virtual void Init(void);
-	INT Create(const tml::test::ManagerTaskDesc &);
+	INT Create(const tml::ManagerTaskDesc &);
 
 	void Run(void);
 
-	tml::test::Manager *GetManager(void);
-	UINT GetTaskIndex(void) const;
-	const tml::shared_ptr<tml::test::ManagerTask> &GetTaskSharedPointer(void) const;
+	tml::Manager *GetManager(void);
+	void SetManager(tml::Manager *);
+	UINT GetTaskType(void) const;
+	const tml::shared_ptr<tml::ManagerTask> &GetTaskSharedPointer(void) const;
 	const std::wstring &GetTaskName(void) const;
 	bool GetRunFlag(void) const;
+	void SetRunFlag(const bool);
 };
-}
 }
 
 
 /**
  * @brief Release関数
  */
-inline void tml::test::ManagerTask::Release(void)
+inline void tml::ManagerTask::Release(void)
 {
 	return;
 }
@@ -148,7 +146,7 @@ inline void tml::test::ManagerTask::Release(void)
  * @brief GetManager関数
  * @return mgr (manager)
  */
-inline tml::test::Manager *tml::test::ManagerTask::GetManager(void)
+inline tml::Manager *tml::ManagerTask::GetManager(void)
 {
 	return (this->mgr_);
 }
@@ -158,21 +156,21 @@ inline tml::test::Manager *tml::test::ManagerTask::GetManager(void)
  * @brief SetManager関数
  * @param mgr (manager)
  */
-inline void tml::test::ManagerTask::SetManager(tml::test::Manager *mgr)
+inline void tml::ManagerTask::SetManager(tml::Manager *mgr)
 {
-	this->mgr_ = mgr;
+	this->OnSetManager(mgr);
 
 	return;
 }
 
 
 /**
- * @brief GetTaskIndex関数
- * @return task_index (task_index)
+ * @brief GetTaskType関数
+ * @return task_type (task_type)
  */
-inline UINT tml::test::ManagerTask::GetTaskIndex(void) const
+inline UINT tml::ManagerTask::GetTaskType(void) const
 {
-	return (this->task_index_);
+	return (this->task_type_);
 }
 
 
@@ -180,7 +178,7 @@ inline UINT tml::test::ManagerTask::GetTaskIndex(void) const
  * @brief GetTaskSharedPointer関数
  * @return task_shared_p (task_shared_pointer)
  */
-inline const tml::shared_ptr<tml::test::ManagerTask> &tml::test::ManagerTask::GetTaskSharedPointer(void) const
+inline const tml::shared_ptr<tml::ManagerTask> &tml::ManagerTask::GetTaskSharedPointer(void) const
 {
 	return (this->task_shared_p_);
 }
@@ -190,7 +188,7 @@ inline const tml::shared_ptr<tml::test::ManagerTask> &tml::test::ManagerTask::Ge
  * @brief GetTaskName関数
  * @return task_name (task_name)
  */
-inline const std::wstring &tml::test::ManagerTask::GetTaskName(void) const
+inline const std::wstring &tml::ManagerTask::GetTaskName(void) const
 {
 	return (this->task_name_);
 }
@@ -200,7 +198,7 @@ inline const std::wstring &tml::test::ManagerTask::GetTaskName(void) const
  * @brief GetRunFlag関数
  * @return run_flg (run_flag)
  */
-inline bool tml::test::ManagerTask::GetRunFlag(void) const
+inline bool tml::ManagerTask::GetRunFlag(void) const
 {
 	return (this->run_flg_);
 }

@@ -19,20 +19,19 @@ namespace SOUND {
 	enum class RESOURCE_TYPE : UINT {
 		NONE = 0U,
 		BASE,
-		SOUND,
+		BGM_SOUND,
+		SE_SOUND,
 		USER,
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::COUNT);
-	enum class SOUND_TYPE : UINT {
+	enum class TASK_TYPE : UINT {
 		NONE = 0U,
 		BASE,
-		BGM,
-		SE,
 		USER,
 		COUNT
 	};
-	const UINT SOUND_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::SOUND_TYPE::COUNT);
+	const UINT TASK_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SOUND::TASK_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
 		BASE,

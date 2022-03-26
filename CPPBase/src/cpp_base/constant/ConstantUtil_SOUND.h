@@ -21,6 +21,11 @@ namespace SOUND {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::SOUND::RESOURCE_TYPE::COUNT);
+	enum class TASK_TYPE : UINT {
+		USER = static_cast<UINT>(tml::ConstantUtil::SOUND::TASK_TYPE::USER),
+		COUNT
+	};
+	const UINT TASK_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::SOUND::TASK_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		USER = static_cast<UINT>(tml::ConstantUtil::SOUND::EVENT_TYPE::USER),
 		COUNT

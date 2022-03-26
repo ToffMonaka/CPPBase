@@ -44,8 +44,9 @@ private:
 	void Release(void);
 
 protected:
-	void InitResourceCount(void);
-	void InitEventCount(void);
+	virtual void OnSetInputManager(tml::input::Manager *);
+	virtual void OnSetGraphicManager(tml::graphic::Manager *);
+	virtual void OnSetSoundManager(tml::sound::Manager *);
 
 public:
 	ManagerDesc();
@@ -84,6 +85,18 @@ inline tml::input::Manager *tml::scene::ManagerDesc::GetInputManager(void) const
 
 
 /**
+ * @brief SetInputManagerŠÖ”
+ * @param input_mgr (input_manager)
+ */
+inline void tml::scene::ManagerDesc::SetInputManager(tml::input::Manager *input_mgr)
+{
+	this->OnSetInputManager(input_mgr);
+
+	return;
+}
+
+
+/**
  * @brief GetGraphicManagerŠÖ”
  * @return graphic_mgr (graphic_manager)
  */
@@ -94,12 +107,36 @@ inline tml::graphic::Manager *tml::scene::ManagerDesc::GetGraphicManager(void) c
 
 
 /**
+ * @brief SetGraphicManagerŠÖ”
+ * @param graphic_mgr (graphic_manager)
+ */
+inline void tml::scene::ManagerDesc::SetGraphicManager(tml::graphic::Manager *graphic_mgr)
+{
+	this->OnSetGraphicManager(graphic_mgr);
+
+	return;
+}
+
+
+/**
  * @brief GetSoundManagerŠÖ”
  * @return sound_mgr (sound_manager)
  */
 inline tml::sound::Manager *tml::scene::ManagerDesc::GetSoundManager(void) const
 {
 	return (this->sound_mgr_);
+}
+
+
+/**
+ * @brief SetSoundManagerŠÖ”
+ * @param sound_mgr (sound_manager)
+ */
+inline void tml::scene::ManagerDesc::SetSoundManager(tml::sound::Manager *sound_mgr)
+{
+	this->OnSetSoundManager(sound_mgr);
+
+	return;
 }
 
 
@@ -138,6 +175,11 @@ private:
 	void GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Scene> &, const tml::shared_ptr<tml::XMLFileNode> &);
 	void GetNodeRecursivePart(const tml::shared_ptr<tml::scene::Node> &, const tml::shared_ptr<tml::XMLFileNode> &);
 
+protected:
+	virtual void OnSetInputManager(tml::input::Manager *);
+	virtual void OnSetGraphicManager(tml::graphic::Manager *);
+	virtual void OnSetSoundManager(tml::sound::Manager *);
+
 public:
 	Manager();
 	virtual ~Manager();
@@ -148,8 +190,11 @@ public:
 	void Update(void);
 
 	tml::input::Manager *GetInputManager(void);
+	void SetInputManager(tml::input::Manager *);
 	tml::graphic::Manager *GetGraphicManager(void);
+	void SetGraphicManager(tml::graphic::Manager *);
 	tml::sound::Manager *GetSoundManager(void);
+	void SetSoundManager(tml::sound::Manager *);
 	const tml::FrameRate &GetFrameRate(void) const;
 	UINT GetFrameRateLimit(void) const;
 	const tml::TIME_REAL &GetElapsedTime(void) const;
@@ -158,8 +203,8 @@ public:
 
 	tml::shared_ptr<tml::scene::Scene> &GetScene(tml::shared_ptr<tml::scene::Scene> &, const tml::XMLFileReadDesc &, INT *dst_result = nullptr);
 	const tml::shared_ptr<tml::scene::Scene> &GetScene(void);
-	INT StartScene(const tml::shared_ptr<tml::scene::Scene> &);
-	void EndScene(void);
+	INT StartScene(const tml::shared_ptr<tml::scene::Scene> &, const bool deferred_flg = true);
+	void EndScene(const bool deferred_flg = true);
 	tml::shared_ptr<tml::scene::Node> &GetNode(tml::shared_ptr<tml::scene::Node> &, const tml::XMLFileReadDesc &, INT *dst_result = nullptr);
 };
 }
@@ -177,6 +222,18 @@ inline tml::input::Manager *tml::scene::Manager::GetInputManager(void)
 
 
 /**
+ * @brief SetInputManagerŠÖ”
+ * @param input_mgr (input_manager)
+ */
+inline void tml::scene::Manager::SetInputManager(tml::input::Manager *input_mgr)
+{
+	this->OnSetInputManager(input_mgr);
+
+	return;
+}
+
+
+/**
  * @brief GetGraphicManagerŠÖ”
  * @return graphic_mgr (graphic_manager)
  */
@@ -187,12 +244,36 @@ inline tml::graphic::Manager *tml::scene::Manager::GetGraphicManager(void)
 
 
 /**
+ * @brief SetGraphicManagerŠÖ”
+ * @param graphic_mgr (graphic_manager)
+ */
+inline void tml::scene::Manager::SetGraphicManager(tml::graphic::Manager *graphic_mgr)
+{
+	this->OnSetGraphicManager(graphic_mgr);
+
+	return;
+}
+
+
+/**
  * @brief GetSoundManagerŠÖ”
  * @return sound_mgr (sound_manager)
  */
 inline tml::sound::Manager *tml::scene::Manager::GetSoundManager(void)
 {
 	return (this->sound_mgr_);
+}
+
+
+/**
+ * @brief SetSoundManagerŠÖ”
+ * @param sound_mgr (sound_manager)
+ */
+inline void tml::scene::Manager::SetSoundManager(tml::sound::Manager *sound_mgr)
+{
+	this->OnSetSoundManager(sound_mgr);
+
+	return;
 }
 
 

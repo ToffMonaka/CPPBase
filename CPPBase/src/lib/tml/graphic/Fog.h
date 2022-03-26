@@ -65,11 +65,10 @@ public: tml::graphic::Fog &operator =(const tml::graphic::Fog &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::FOG_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG);
 
 private:
-	tml::ConstantUtil::GRAPHIC::FOG_TYPE type_;
+	const tml::graphic::FogDesc *desc_;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type_;
 	INT draw_priority_;
 	UINT draw_set_canvas_cnt_;
@@ -85,14 +84,20 @@ private:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	void SetDimensionType(const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
+
 public:
 	Fog();
 	virtual ~Fog();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::FogDesc &, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
 
-	tml::ConstantUtil::GRAPHIC::FOG_TYPE GetType(void) const;
+	const tml::graphic::FogDesc *GetDesc(void) const;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE GetDimensionType(void) const;
 	INT GetDrawPriority(void) const;
 	void SetDrawPriority(const INT);
@@ -126,12 +131,12 @@ inline void tml::graphic::Fog::Release(void)
 
 
 /**
- * @brief GetTypeŠÖ”
- * @return type (type)
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
  */
-inline tml::ConstantUtil::GRAPHIC::FOG_TYPE tml::graphic::Fog::GetType(void) const
+inline const tml::graphic::FogDesc *tml::graphic::Fog::GetDesc(void) const
 {
-	return (this->type_);
+	return (this->desc_);
 }
 
 
@@ -142,6 +147,18 @@ inline tml::ConstantUtil::GRAPHIC::FOG_TYPE tml::graphic::Fog::GetType(void) con
 inline tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE tml::graphic::Fog::GetDimensionType(void) const
 {
 	return (this->dimension_type_);
+}
+
+
+/**
+ * @brief SetDimensionTypeŠÖ”
+ * @param dimension_type (dimension_type)
+ */
+inline void tml::graphic::Fog::SetDimensionType(const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
+{
+	this->dimension_type_ = dimension_type;
+
+	return;
 }
 
 

@@ -41,6 +41,8 @@ private:
 protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
+	virtual void OnSetManager(tml::Manager *);
+
 public:
 	NodeDesc();
 	virtual ~NodeDesc();
@@ -48,7 +50,6 @@ public:
 	virtual void Init(void);
 
 	cpp_base::scene::Manager *GetManager(void) const;
-	void SetManager(cpp_base::scene::Manager *);
 };
 }
 }
@@ -85,6 +86,7 @@ public: cpp_base::scene::Node &operator =(const cpp_base::scene::Node &) = delet
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::NodeDesc *desc_;
 	cpp_base::scene::Manager *mgr_;
 	cpp_base::input::Manager *input_mgr_;
 	cpp_base::graphic::Manager *graphic_mgr_;
@@ -94,23 +96,39 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	virtual void OnSetManager(tml::Manager *);
 
 public:
 	Node();
 	virtual ~Node();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::NodeDesc &);
 
+	const cpp_base::scene::NodeDesc *GetDesc(void) const;
 	cpp_base::scene::Manager *GetManager(void);
 	cpp_base::input::Manager *GetInputManager(void);
 	cpp_base::graphic::Manager *GetGraphicManager(void);
 	cpp_base::sound::Manager *GetSoundManager(void);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::NodeDesc *cpp_base::scene::Node::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

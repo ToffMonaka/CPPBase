@@ -103,10 +103,10 @@ INT tml::ManagerResourceDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
  */
-void tml::ManagerResourceDesc::SetManager(tml::Manager *mgr)
+void tml::ManagerResourceDesc::OnSetManager(tml::Manager *mgr)
 {
 	this->mgr_ = mgr;
 
@@ -118,12 +118,12 @@ void tml::ManagerResourceDesc::SetManager(tml::Manager *mgr)
  * @brief コンストラクタ
  */
 tml::ManagerResource::ManagerResource() :
+	desc_(nullptr),
 	mgr_(nullptr),
-	res_main_index_(0U),
-	res_sub_index_(0U),
-	deferred_create_desc_(nullptr),
+	res_type_(0U),
+	deferred_create_flg_(false),
 	deferred_created_flg_(false),
-	deferred_creating_flg_(true)
+	deferred_create_added_flg_(false)
 {
 	return;
 }
@@ -147,43 +147,56 @@ void tml::ManagerResource::Init(void)
 {
 	this->Release();
 
-	this->deferred_create_desc_unique_p_.reset();
-	this->deferred_create_desc_ = nullptr;
-	this->deferred_created_flg_ = false;
-	this->deferred_creating_flg_ = true;
-	
 	return;
 }
 
 
 /**
  * @brief Create関数
- * @param desc (desc)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::ManagerResource::Create(const tml::ManagerResourceDesc &desc)
+INT tml::ManagerResource::Create(void)
 {
-	if ((desc.GetManager() == nullptr)
-	|| (this->res_main_index_ == 0U)
-	|| (this->res_sub_index_ == 0U)) {
+	this->Init();
+
+	if ((this->desc_ == nullptr)
+	|| (this->mgr_ == nullptr)) {
+		this->Init();
+
 		return (-1);
 	}
 
-	this->mgr_ = desc.GetManager();
+	if (this->OnCreate() < 0) {
+		this->Init();
+
+		return (-1);
+	}
+
+	if (!this->desc_->deferred_create_flag) {
+		if (this->OnCreateDeferred() < 0) {
+			this->Init();
+
+			return (-1);
+		}
+
+		this->desc_unique_p_.reset();
+		this->SetDesc(nullptr);
+		this->deferred_created_flg_ = true;
+	}
 
 	return (0);
 }
 
 
 /**
- * @brief InitDeferred関数
+ * @brief OnCreate関数
+ * @return result (result)<br>
+ * 0未満=失敗
  */
-void tml::ManagerResource::InitDeferred(void)
+INT tml::ManagerResource::OnCreate(void)
 {
-	this->ReleaseDeferred();
-
-	return;
+	return (0);
 }
 
 
@@ -194,29 +207,23 @@ void tml::ManagerResource::InitDeferred(void)
  */
 INT tml::ManagerResource::CreateDeferred(void)
 {
+	if (!this->deferred_create_flg_) {
+		return (-1);
+	}
+
 	if (this->deferred_created_flg_) {
 		return (1);
 	}
 
-	if (!this->deferred_creating_flg_) {
-		return (-1);
-	}
-
 	if (this->OnCreateDeferred() < 0) {
-		this->InitDeferred();
-
-		this->SetDeferredCreateDesc(nullptr);
-
-		this->deferred_created_flg_ = false;
-		this->deferred_creating_flg_ = false;
+		this->Init();
 
 		return (-1);
 	}
 
-	this->SetDeferredCreateDesc(nullptr);
-
+	this->desc_unique_p_.reset();
+	this->SetDesc(nullptr);
 	this->deferred_created_flg_ = true;
-	this->deferred_creating_flg_ = false;
 
 	return (0);
 }
@@ -234,60 +241,24 @@ INT tml::ManagerResource::OnCreateDeferred(void)
 
 
 /**
- * @brief SetResourceMainIndex関数
- * @param mgr (manager)
- * @param res_main_index (resource_main_index)
+ * @brief OnSetDesc関数
+ * @param desc (desc)
  */
-void tml::ManagerResource::SetResourceMainIndex(tml::Manager *mgr, const UINT res_main_index)
+void tml::ManagerResource::OnSetDesc(const tml::ManagerResourceDesc *desc)
 {
-	if (mgr->CheckFriendResource(this)) {
-		this->res_main_index_ = res_main_index;
-	}
+	this->desc_ = desc;
 
 	return;
 }
 
 
 /**
- * @brief SetResourceSubIndex関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
- * @param res_sub_index (resource_sub_index)
  */
-void tml::ManagerResource::SetResourceSubIndex(tml::Manager *mgr, const UINT res_sub_index)
+void tml::ManagerResource::OnSetManager(tml::Manager *mgr)
 {
-	if (mgr->CheckFriendResource(this)) {
-		this->res_sub_index_ = res_sub_index;
-	}
-
-	return;
-}
-
-
-/**
- * @brief SetResourceSharedPointer関数
- * @param mgr (manager)
- * @param res_shared_p (resource_shared_pointer)
- */
-void tml::ManagerResource::SetResourceSharedPointer(tml::Manager *mgr, const tml::shared_ptr<tml::ManagerResource> &res_shared_p)
-{
-	if (mgr->CheckFriendResource(this)) {
-		this->res_shared_p_ = res_shared_p;
-	}
-
-	return;
-}
-
-
-/**
- * @brief SetResourceName関数
- * @param mgr (manager)
- * @param res_name (resource_name)
- */
-void tml::ManagerResource::SetResourceName(tml::Manager *mgr, const WCHAR *res_name)
-{
-	if (mgr->CheckFriendResource(this)) {
-		this->res_name_ = res_name;
-	}
+	this->mgr_ = mgr;
 
 	return;
 }

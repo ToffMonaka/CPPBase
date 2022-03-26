@@ -66,6 +66,7 @@ void tml::ManagerFactory::Init(void)
 	this->Release();
 
 	this->res_func_cont_.clear();
+	this->task_func_cont_.clear();
 	this->event_func_cont_.clear();
 	this->value_container.clear();
 
@@ -119,6 +120,43 @@ void tml::ManagerFactory::RemoveResourceFunction(const WCHAR *class_name)
 	}
 
 	this->res_func_cont_.erase(class_name);
+
+	return;
+}
+
+
+/**
+ * @brief AddTaskFunctionä÷êî
+ * @param class_name (class_name)
+ * @param task_func (task_function)
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT tml::ManagerFactory::AddTaskFunction(const WCHAR *class_name, std::function<tml::shared_ptr<tml::ManagerTask>(const tml::INIFileReadDesc &, INT *)> task_func)
+{
+	if ((class_name == nullptr)
+	|| (class_name[0] == 0)) {
+		return (-1);
+	}
+
+	this->task_func_cont_[class_name] = task_func;
+
+	return (0);
+}
+
+
+/**
+ * @brief RemoveTaskFunctionä÷êî
+ * @param class_name (class_name)
+ */
+void tml::ManagerFactory::RemoveTaskFunction(const WCHAR *class_name)
+{
+	if ((class_name == nullptr)
+	|| (class_name[0] == 0)) {
+		return;
+	}
+
+	this->task_func_cont_.erase(class_name);
 
 	return;
 }

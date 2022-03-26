@@ -56,6 +56,7 @@ public: cpp_base::scene::Test2DStageNode &operator =(const cpp_base::scene::Test
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::Test2DStageNodeDesc *desc_;
 	tml::shared_ptr<tml::scene::Node> field_layout_node_;
 
 public:
@@ -64,22 +65,37 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Test2DStageNode();
 	virtual ~Test2DStageNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::Test2DStageNodeDesc &);
 
+	const cpp_base::scene::Test2DStageNodeDesc *GetDesc(void) const;
 	const tml::shared_ptr<tml::scene::Node> &GetFieldNode(void);
 	INT AddFieldNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
 	void RemoveFieldNode(const bool deferred_flg = true);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::Test2DStageNodeDesc *cpp_base::scene::Test2DStageNode::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

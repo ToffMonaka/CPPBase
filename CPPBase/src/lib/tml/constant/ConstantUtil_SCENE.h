@@ -26,21 +26,7 @@ namespace SCENE {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::COUNT);
-	enum class SCENE_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT SCENE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_TYPE::COUNT);
-	enum class NODE_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT NODE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_TYPE::COUNT);
-	enum class EVENT_TYPE : UINT {
+	enum class TASK_TYPE : UINT {
 		NONE = 0U,
 		BASE,
 		SCENE,
@@ -48,27 +34,20 @@ namespace SCENE {
 		USER,
 		COUNT
 	};
+	const UINT TASK_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::TASK_TYPE::COUNT);
+	enum class EVENT_TYPE : UINT {
+		NONE = 0U,
+		BASE,
+		USER,
+		COUNT
+	};
 	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::COUNT);
-	enum class SCENE_EVENT_TYPE : UINT {
+	enum class SCENE_TASK_RUN_TYPE : UINT {
 		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
+		START_SCENE,
+		END_SCENE
 	};
-	const UINT SCENE_EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::SCENE_EVENT_TYPE::COUNT);
-	enum class NODE_EVENT_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		USER,
-		COUNT
-	};
-	const UINT NODE_EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_EVENT_TYPE::COUNT);
-	enum class SCENE_EVENT_DATA_TYPE : UINT {
-		NONE = 0U,
-		START,
-		END
-	};
-	enum class NODE_EVENT_DATA_TYPE : UINT {
+	enum class NODE_TASK_RUN_TYPE : UINT {
 		NONE = 0U,
 		ADD_CHILD_NODE,
 		REMOVE_CHILD_NODE
@@ -85,9 +64,9 @@ class Scene;
 class SceneDesc;
 class Node;
 class NodeDesc;
-class SceneEvent;
-class SceneEventDesc;
-class NodeEvent;
-class NodeEventDesc;
+class SceneTask;
+class SceneTaskDesc;
+class NodeTask;
+class NodeTaskDesc;
 }
 }

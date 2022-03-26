@@ -11,6 +11,39 @@
 /**
  * @brief コンストラクタ
  */
+tml::input::DeviceEventData::DeviceEventData()
+{
+	return;
+}
+
+
+/**
+ * @brief デストラクタ
+ */
+tml::input::DeviceEventData::~DeviceEventData()
+{
+	this->Release();
+
+	return;
+}
+
+
+/**
+ * @brief Init関数
+ */
+void tml::input::DeviceEventData::Init(void)
+{
+	this->Release();
+
+	tml::input::ManagerEventData::Init();
+
+	return;
+}
+
+
+/**
+ * @brief コンストラクタ
+ */
 tml::input::DeviceEventDesc::DeviceEventDesc()
 {
 	return;
@@ -72,8 +105,7 @@ INT tml::input::DeviceEventDesc::ReadValue(const tml::INIFile &conf_file)
 /**
  * @brief コンストラクタ
  */
-tml::input::DeviceEvent::DeviceEvent() :
-	type_(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::NONE)
+tml::input::DeviceEvent::DeviceEvent()
 {
 	return;
 }
@@ -97,8 +129,6 @@ void tml::input::DeviceEvent::Init(void)
 {
 	this->Release();
 
-	this->type_ = tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::NONE;
-
 	tml::input::ManagerEvent::Init();
 
 	return;
@@ -116,8 +146,6 @@ INT tml::input::DeviceEvent::Create(const tml::input::DeviceEventDesc &desc)
 	if (tml::input::ManagerEvent::Create(desc) < 0) {
 		return (-1);
 	}
-
-	this->type_ = static_cast<tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE>(this->GetEventSubIndex());
 
 	return (0);
 }

@@ -348,8 +348,7 @@ public: tml::graphic::Model &operator =(const tml::graphic::Model &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL);
 
 public:
 	static const tml::shared_ptr<tml::graphic::RasterizerState> empty_rasterizer_state;
@@ -361,7 +360,7 @@ public:
 	static const tml::shared_ptr<tml::graphic::Sampler> empty_sampler;
 
 private:
-	tml::ConstantUtil::GRAPHIC::MODEL_TYPE type_;
+	const tml::graphic::ModelDesc *desc_;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type_;
 	std::vector<tml::shared_ptr<tml::graphic::RasterizerState>> rs_cont_;
 	std::vector<tml::shared_ptr<tml::graphic::BlendState>> bs_cont_;
@@ -379,6 +378,11 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	void SetDimensionType(const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
 	tml::graphic::ModelStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::ModelStage> &);
 
@@ -387,9 +391,8 @@ public:
 	virtual ~Model();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::ModelDesc &, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
 
-	tml::ConstantUtil::GRAPHIC::MODEL_TYPE GetType(void) const;
+	const tml::graphic::ModelDesc *GetDesc(void) const;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE GetDimensionType(void) const;
 	UINT GetRasterizerStateCount(void) const;
 	const tml::shared_ptr<tml::graphic::RasterizerState> &GetRasterizerState(const UINT);
@@ -438,12 +441,12 @@ public:
 
 
 /**
- * @brief GetTypeŠÖ”
- * @return type (type)
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
  */
-inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void) const
+inline const tml::graphic::ModelDesc *tml::graphic::Model::GetDesc(void) const
 {
-	return (this->type_);
+	return (this->desc_);
 }
 
 
@@ -454,6 +457,18 @@ inline tml::ConstantUtil::GRAPHIC::MODEL_TYPE tml::graphic::Model::GetType(void)
 inline tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE tml::graphic::Model::GetDimensionType(void) const
 {
 	return (this->dimension_type_);
+}
+
+
+/**
+ * @brief SetDimensionTypeŠÖ”
+ * @param dimension_type (dimension_type)
+ */
+inline void tml::graphic::Model::SetDimensionType(const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
+{
+	this->dimension_type_ = dimension_type;
+
+	return;
 }
 
 

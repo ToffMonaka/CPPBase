@@ -10,8 +10,8 @@
 #include "../sound/Manager.h"
 #include "Scene.h"
 #include "Node.h"
-#include "SceneEvent.h"
-#include "NodeEvent.h"
+#include "SceneTask.h"
+#include "NodeTask.h"
 
 
 /**
@@ -23,8 +23,9 @@ tml::scene::ManagerDesc::ManagerDesc() :
 	sound_mgr_(nullptr),
 	frame_rate_limit(60U)
 {
-	this->InitResourceCount();
-	this->InitEventCount();
+	this->resource_count = tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT;
+	this->task_count = tml::ConstantUtil::SCENE::TASK_TYPE_COUNT;
+	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
 	return;
 }
@@ -55,48 +56,19 @@ void tml::scene::ManagerDesc::Init(void)
 
 	tml::ManagerDesc::Init();
 
-	this->InitResourceCount();
-	this->InitEventCount();
+	this->resource_count = tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT;
+	this->task_count = tml::ConstantUtil::SCENE::TASK_TYPE_COUNT;
+	this->event_count = tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT;
 
 	return;
 }
 
 
 /**
- * @brief InitResourceCountŠÖ”
- */
-void tml::scene::ManagerDesc::InitResourceCount(void)
-{
-	tml::ManagerDesc::InitResourceCount();
-
-	this->resource_count_container.resize(tml::ConstantUtil::SCENE::RESOURCE_TYPE_COUNT);
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_TYPE_COUNT;
-
-	return;
-}
-
-
-/**
- * @brief InitEventCountŠÖ”
- */
-void tml::scene::ManagerDesc::InitEventCount(void)
-{
-	tml::ManagerDesc::InitEventCount();
-
-	this->event_count_container.resize(tml::ConstantUtil::SCENE::EVENT_TYPE_COUNT);
-	this->event_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::SCENE)] = tml::ConstantUtil::SCENE::SCENE_EVENT_TYPE_COUNT;
-	this->event_count_container[static_cast<UINT>(tml::ConstantUtil::SCENE::EVENT_TYPE::NODE)] = tml::ConstantUtil::SCENE::NODE_EVENT_TYPE_COUNT;
-
-	return;
-}
-
-
-/**
- * @brief SetInputManagerŠÖ”
+ * @brief OnSetInputManagerŠÖ”
  * @param input_mgr (input_manager)
  */
-void tml::scene::ManagerDesc::SetInputManager(tml::input::Manager *input_mgr)
+void tml::scene::ManagerDesc::OnSetInputManager(tml::input::Manager *input_mgr)
 {
 	this->input_mgr_ = input_mgr;
 
@@ -105,10 +77,10 @@ void tml::scene::ManagerDesc::SetInputManager(tml::input::Manager *input_mgr)
 
 
 /**
- * @brief SetGraphicManagerŠÖ”
+ * @brief OnSetGraphicManagerŠÖ”
  * @param graphic_mgr (graphic_manager)
  */
-void tml::scene::ManagerDesc::SetGraphicManager(tml::graphic::Manager *graphic_mgr)
+void tml::scene::ManagerDesc::OnSetGraphicManager(tml::graphic::Manager *graphic_mgr)
 {
 	this->graphic_mgr_ = graphic_mgr;
 
@@ -117,10 +89,10 @@ void tml::scene::ManagerDesc::SetGraphicManager(tml::graphic::Manager *graphic_m
 
 
 /**
- * @brief SetSoundManagerŠÖ”
+ * @brief OnSetSoundManagerŠÖ”
  * @param sound_mgr (sound_manager)
  */
-void tml::scene::ManagerDesc::SetSoundManager(tml::sound::Manager *sound_mgr)
+void tml::scene::ManagerDesc::OnSetSoundManager(tml::sound::Manager *sound_mgr)
 {
 	this->sound_mgr_ = sound_mgr;
 
@@ -170,6 +142,7 @@ void tml::scene::Manager::Release(void)
 	this->common.Init();
 
 	this->DeleteResourceContainer();
+	this->DeleteTaskContainer();
 	this->DeleteEventContainer();
 
 	return;
@@ -283,77 +256,6 @@ void tml::scene::Manager::Update(void)
 {
 	tml::Manager::Update();
 
-	for (UINT event_i = 0U; event_i < this->GetEventCount(tml::scene::SceneEvent::EVENT_MAIN_INDEX); ++event_i) {
-		auto event = reinterpret_cast<tml::scene::SceneEvent *>(this->GetEventFast(tml::scene::SceneEvent::EVENT_MAIN_INDEX, event_i));
-		auto &event_dat = event->data;
-
-		switch (event_dat.type) {
-		case tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::START: {
-			if (this->scene_ == event_dat.scene) {
-				break;
-			}
-
-			if (this->scene_ != nullptr) {
-				this->scene_->End();
-				this->scene_->SetRunFlag(false);
-			}
-
-			event_dat.scene->End();
-			event_dat.scene->SetRunFlag(true);
-
-			this->scene_ = event_dat.scene;
-
-			break;
-		}
-		case tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::END: {
-			if (this->scene_ == nullptr) {
-				return;
-			}
-
-			this->scene_->End();
-			this->scene_->SetRunFlag(false);
-
-			this->scene_.reset();
-
-			return;
-		}
-		}
-
-		event_dat.Init();
-	}
-
-	for (UINT event_i = 0U; event_i < this->GetEventCount(tml::scene::NodeEvent::EVENT_MAIN_INDEX); ++event_i) {
-		auto event = reinterpret_cast<tml::scene::NodeEvent *>(this->GetEventFast(tml::scene::NodeEvent::EVENT_MAIN_INDEX, event_i));
-		auto &event_dat = event->data;
-
-		switch (event_dat.type) {
-		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::ADD_CHILD_NODE: {
-			if (event_dat.node != nullptr) {
-				if (event_dat.child_node != nullptr) {
-					event_dat.node->AddChildNode(event_dat.child_node, false);
-				}
-			}
-
-			break;
-		}
-		case tml::ConstantUtil::SCENE::NODE_EVENT_DATA_TYPE::REMOVE_CHILD_NODE: {
-			if (event_dat.node != nullptr) {
-				if (event_dat.child_node != nullptr) {
-					event_dat.node->RemoveChildNode(event_dat.child_node, false);
-				} else {
-					event_dat.node->RemoveChildNode(false);
-				}
-			} else {
-				event_dat.child_node->RemoveChildNodeFromParentNode(false);
-			}
-
-			break;
-		}
-		}
-
-		event_dat.Init();
-	}
-
 	if (this->scene_ != nullptr) {
 		if (!this->scene_->IsStarted()) {
 			if (this->scene_->GetStartFlag()) {
@@ -403,6 +305,42 @@ void tml::scene::Manager::Update(void)
 			return;
 		}
 	}
+
+	return;
+}
+
+
+/**
+ * @brief OnSetInputManagerŠÖ”
+ * @param input_mgr (input_manager)
+ */
+void tml::scene::Manager::OnSetInputManager(tml::input::Manager *input_mgr)
+{
+	this->input_mgr_ = input_mgr;
+
+	return;
+}
+
+
+/**
+ * @brief OnSetGraphicManagerŠÖ”
+ * @param graphic_mgr (graphic_manager)
+ */
+void tml::scene::Manager::OnSetGraphicManager(tml::graphic::Manager *graphic_mgr)
+{
+	this->graphic_mgr_ = graphic_mgr;
+
+	return;
+}
+
+
+/**
+ * @brief OnSetSoundManagerŠÖ”
+ * @param sound_mgr (sound_manager)
+ */
+void tml::scene::Manager::OnSetSoundManager(tml::sound::Manager *sound_mgr)
+{
+	this->sound_mgr_ = sound_mgr;
 
 	return;
 }
@@ -516,23 +454,41 @@ tml::shared_ptr<tml::scene::Scene> &tml::scene::Manager::GetSceneGetPart(tml::sh
 /**
  * @brief StartSceneŠÖ”
  * @param scene (scene)
+ * @param deferred_flg (deferred_flag)
  * @return result (result)<br>
  * 0–¢–=¸”s
  */
-INT tml::scene::Manager::StartScene(const tml::shared_ptr<tml::scene::Scene> &scene)
+INT tml::scene::Manager::StartScene(const tml::shared_ptr<tml::scene::Scene> &scene, const bool deferred_flg)
 {
 	if (scene == nullptr) {
 		return (-1);
 	}
 
-	tml::scene::SceneEventDesc event_desc;
+	if (deferred_flg) {
+		tml::shared_ptr<tml::scene::SceneTask> task;
+		tml::scene::SceneTaskDesc task_desc;
 
-	event_desc.SetManager(this);
-	event_desc.data.type = tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::START;
-	event_desc.data.scene = scene;
+		task_desc.SetManager(this);
+		task_desc.run_type = tml::ConstantUtil::SCENE::SCENE_TASK_RUN_TYPE::START_SCENE;
+		task_desc.scene = scene;
 
-	if (this->AddEvent<tml::scene::SceneEvent>(event_desc) < 0) {
-		return (-1);
+		if (this->GetTask<tml::scene::SceneTask>(task, task_desc) == nullptr) {
+			return (-1);
+		}
+	} else {
+		if (this->scene_ == scene) {
+			return (-1);
+		}
+
+		if (this->scene_ != nullptr) {
+			this->scene_->End();
+			this->scene_->SetRunFlag(false);
+		}
+
+		scene->End();
+		scene->SetRunFlag(true);
+
+		this->scene_ = scene;
 	}
 
 	return (0);
@@ -541,16 +497,29 @@ INT tml::scene::Manager::StartScene(const tml::shared_ptr<tml::scene::Scene> &sc
 
 /**
  * @brief EndSceneŠÖ”
+ * @param deferred_flg (deferred_flag)
  */
-void tml::scene::Manager::EndScene(void)
+void tml::scene::Manager::EndScene(const bool deferred_flg)
 {
-	tml::scene::SceneEventDesc event_desc;
+	if (deferred_flg) {
+		tml::shared_ptr<tml::scene::SceneTask> task;
+		tml::scene::SceneTaskDesc task_desc;
 
-	event_desc.SetManager(this);
-	event_desc.data.type = tml::ConstantUtil::SCENE::SCENE_EVENT_DATA_TYPE::END;
+		task_desc.SetManager(this);
+		task_desc.run_type = tml::ConstantUtil::SCENE::SCENE_TASK_RUN_TYPE::END_SCENE;
 
-	if (this->AddEvent<tml::scene::SceneEvent>(event_desc) < 0) {
-		return;
+		if (this->GetTask<tml::scene::SceneTask>(task, task_desc) == nullptr) {
+			return;
+		}
+	} else {
+		if (this->scene_ == nullptr) {
+			return;
+		}
+
+		this->scene_->End();
+		this->scene_->SetRunFlag(false);
+
+		this->scene_.reset();
 	}
 
 	return;

@@ -73,14 +73,14 @@ INT tml::graphic::ManagerEventDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
  */
-void tml::graphic::ManagerEventDesc::SetManager(tml::graphic::Manager *mgr)
+void tml::graphic::ManagerEventDesc::OnSetManager(tml::Manager *mgr)
 {
-	this->mgr_ = mgr;
+	this->mgr_ = dynamic_cast<tml::graphic::Manager *>(mgr);
 
-	tml::ManagerEventDesc::SetManager(mgr);
+	tml::ManagerEventDesc::OnSetManager(this->mgr_);
 
 	return;
 }
@@ -90,8 +90,7 @@ void tml::graphic::ManagerEventDesc::SetManager(tml::graphic::Manager *mgr)
  * @brief コンストラクタ
  */
 tml::graphic::ManagerEvent::ManagerEvent() :
-	mgr_(nullptr),
-	event_type_(tml::ConstantUtil::GRAPHIC::EVENT_TYPE::NONE)
+	mgr_(nullptr)
 {
 	return;
 }
@@ -115,9 +114,6 @@ void tml::graphic::ManagerEvent::Init(void)
 {
 	this->Release();
 
-	this->mgr_ = nullptr;
-	this->event_type_ = tml::ConstantUtil::GRAPHIC::EVENT_TYPE::NONE;
-
 	tml::ManagerEvent::Init();
 
 	return;
@@ -132,16 +128,23 @@ void tml::graphic::ManagerEvent::Init(void)
  */
 INT tml::graphic::ManagerEvent::Create(const tml::graphic::ManagerEventDesc &desc)
 {
-	if (desc.GetManager() == nullptr) {
-		return (-1);
-	}
-
 	if (tml::ManagerEvent::Create(desc) < 0) {
 		return (-1);
 	}
 
-	this->mgr_ = desc.GetManager();
-	this->event_type_ = static_cast<tml::ConstantUtil::GRAPHIC::EVENT_TYPE>(this->GetEventMainIndex());
-
 	return (0);
+}
+
+
+/**
+ * @brief OnSetManager関数
+ * @param mgr (manager)
+ */
+void tml::graphic::ManagerEvent::OnSetManager(tml::Manager *mgr)
+{
+	this->mgr_ = dynamic_cast<tml::graphic::Manager *>(mgr);
+
+	tml::ManagerEvent::OnSetManager(this->mgr_);
+
+	return;
 }

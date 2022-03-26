@@ -21,6 +21,11 @@ namespace INPUT {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::INPUT::RESOURCE_TYPE::COUNT);
+	enum class TASK_TYPE : UINT {
+		USER = static_cast<UINT>(tml::ConstantUtil::INPUT::TASK_TYPE::USER),
+		COUNT
+	};
+	const UINT TASK_TYPE_COUNT = static_cast<UINT>(cpp_base::ConstantUtil::INPUT::TASK_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		USER = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::USER),
 		COUNT

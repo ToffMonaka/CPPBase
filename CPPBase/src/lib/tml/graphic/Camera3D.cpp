@@ -85,6 +85,7 @@ INT tml::graphic::Camera3DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Camera3D::Camera3D() :
+	desc_(nullptr),
 	proj_type_(tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE::NONE),
 	fov_size_(0.0f),
 	fov_angle_(0.0f),
@@ -128,30 +129,56 @@ void tml::graphic::Camera3D::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Camera3D::Create(const tml::graphic::Camera3DDesc &desc)
+INT tml::graphic::Camera3D::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::Camera::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D) < 0) {
-		this->Init();
-
+	if (tml::graphic::Camera::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->proj_type_ = desc.projection_type;
-	this->fov_size_ = desc.fov_size;
-	this->fov_angle_ = desc.fov_angle;
-	this->near_clip_ = desc.near_clip;
-	this->far_clip_ = desc.far_clip;
+	this->SetDimensionType(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D);
 
-	this->transform = desc.transform;
+	this->proj_type_ = this->desc_->projection_type;
+	this->fov_size_ = this->desc_->fov_size;
+	this->fov_angle_ = this->desc_->fov_angle;
+	this->near_clip_ = this->desc_->near_clip;
+	this->far_clip_ = this->desc_->far_clip;
+
+	this->transform = this->desc_->transform;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Camera3D::OnCreateDeferred(void)
+{
+	if (tml::graphic::Camera::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Camera3D::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::Camera3DDesc *>(desc);
+
+	tml::graphic::Camera::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

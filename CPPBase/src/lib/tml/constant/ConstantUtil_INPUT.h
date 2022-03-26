@@ -22,23 +22,22 @@ namespace INPUT {
 		COUNT
 	};
 	const UINT RESOURCE_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::RESOURCE_TYPE::COUNT);
+	enum class TASK_TYPE : UINT {
+		NONE = 0U,
+		BASE,
+		USER,
+		COUNT
+	};
+	const UINT TASK_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::TASK_TYPE::COUNT);
 	enum class EVENT_TYPE : UINT {
 		NONE = 0U,
 		BASE,
-		DEVICE,
+		MOUSE_DEVICE,
+		KEYBOARD_DEVICE,
 		USER,
 		COUNT
 	};
 	const UINT EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::COUNT);
-	enum class DEVICE_EVENT_TYPE : UINT {
-		NONE = 0U,
-		BASE,
-		MOUSE,
-		KEYBOARD,
-		USER,
-		COUNT
-	};
-	const UINT DEVICE_EVENT_TYPE_COUNT = static_cast<UINT>(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::COUNT);
 	enum class MOUSE_DEVICE_EVENT_DATA_TYPE : UINT {
 		NONE = 0U,
 		LEFT_BUTTON_DOWN = RI_MOUSE_LEFT_BUTTON_DOWN,

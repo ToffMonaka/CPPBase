@@ -88,15 +88,24 @@ public:
 	} ELEMENT;
 
 private:
+	const tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc *desc_;
+
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	FigureModel2DLayerShaderStructuredBuffer();
 	virtual ~FigureModel2DLayerShaderStructuredBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc &);
 
+	const tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc *GetDesc(void) const;
 	tml::graphic::FigureModel2DLayerShaderStructuredBuffer::ELEMENT *GetElementArray(void);
 	tml::graphic::FigureModel2DLayerShaderStructuredBuffer::ELEMENT *GetElement(const UINT);
 	tml::graphic::FigureModel2DLayerShaderStructuredBuffer::ELEMENT *GetElementFast(const UINT);
@@ -112,6 +121,16 @@ public:
 inline void tml::graphic::FigureModel2DLayerShaderStructuredBuffer::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::FigureModel2DLayerShaderStructuredBufferDesc *tml::graphic::FigureModel2DLayerShaderStructuredBuffer::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

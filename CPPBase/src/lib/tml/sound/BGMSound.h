@@ -55,19 +55,37 @@ public: tml::sound::BGMSound &operator =(const tml::sound::BGMSound &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SOUND::SOUND_TYPE::BGM);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::BGM_SOUND);
 
 private:
+	const tml::sound::BGMSoundDesc *desc_;
 
 private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	BGMSound();
 	virtual ~BGMSound();
 
 	virtual void Init(void);
-	INT Create(const tml::sound::BGMSoundDesc &);
+
+	const tml::sound::BGMSoundDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::sound::BGMSoundDesc *tml::sound::BGMSound::GetDesc(void) const
+{
+	return (this->desc_);
 }

@@ -33,6 +33,8 @@ private:
 protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
+	virtual void OnSetManager(tml::Manager *);
+
 public:
 	ManagerResourceDesc();
 	virtual ~ManagerResourceDesc();
@@ -66,6 +68,18 @@ inline tml::Manager *tml::ManagerResourceDesc::GetManager(void) const
 }
 
 
+/**
+ * @brief SetManagerä÷êî
+ * @param mgr (manager)
+ */
+inline void tml::ManagerResourceDesc::SetManager(tml::Manager *mgr)
+{
+	this->OnSetManager(mgr);
+
+	return;
+}
+
+
 namespace tml {
 /**
  * @brief ManagerResourceÉNÉâÉX
@@ -74,53 +88,50 @@ namespace tml {
  */
 class ManagerResource
 {
+friend class tml::Manager;
+
 public: ManagerResource(const tml::ManagerResource &) = delete;
 public: tml::ManagerResource &operator =(const tml::ManagerResource &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	tml::unique_ptr<tml::ManagerResourceDesc> desc_unique_p_;
+	const tml::ManagerResourceDesc *desc_;
 	tml::Manager *mgr_;
-	UINT res_main_index_;
-	UINT res_sub_index_;
+	UINT res_type_;
 	tml::shared_ptr<tml::ManagerResource> res_shared_p_;
 	std::wstring res_name_;
-
-protected:
-	tml::unique_ptr<tml::ManagerResourceDesc> deferred_create_desc_unique_p_;
-	const tml::ManagerResourceDesc *deferred_create_desc_;
+	bool deferred_create_flg_;
 	bool deferred_created_flg_;
-	bool deferred_creating_flg_;
+	bool deferred_create_added_flg_;
 
 private:
 	void Release(void);
-	void ReleaseDeferred(void);
 
 protected:
+	virtual INT OnCreate(void);
 	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	virtual void OnSetManager(tml::Manager *);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
-	INT Create(const tml::ManagerResourceDesc &);
-	virtual void InitDeferred(void);
+	INT Create(void);
 	INT CreateDeferred(void);
-	const tml::ManagerResourceDesc *GetDeferredCreateDesc(void) const;
-	void SetDeferredCreateDesc(tml::unique_ptr<tml::ManagerResourceDesc> &);
-	void SetDeferredCreateDesc(const tml::ManagerResourceDesc *);
-	bool IsDeferredCreated(void) const;
-	bool IsDeferredCreating(void) const;
 
+	const tml::ManagerResourceDesc *GetDesc(void) const;
+	void SetDesc(const tml::ManagerResourceDesc *);
 	tml::Manager *GetManager(void);
-	UINT GetResourceMainIndex(void) const;
-	void SetResourceMainIndex(tml::Manager *, const UINT);
-	UINT GetResourceSubIndex(void) const;
-	void SetResourceSubIndex(tml::Manager *, const UINT);
+	void SetManager(tml::Manager *);
+	UINT GetResourceType(void) const;
 	const tml::shared_ptr<tml::ManagerResource> &GetResourceSharedPointer(void) const;
-	void SetResourceSharedPointer(tml::Manager *, const tml::shared_ptr<tml::ManagerResource> &);
 	const std::wstring &GetResourceName(void) const;
-	void SetResourceName(tml::Manager *, const WCHAR *);
+	bool GetDeferredCreateFlag(void) const;
+	bool GetDeferredCreatedFlag(void) const;
 };
 }
 
@@ -130,76 +141,29 @@ public:
  */
 inline void tml::ManagerResource::Release(void)
 {
-	this->ReleaseDeferred();
-
 	return;
 }
 
 
 /**
- * @brief ReleaseDeferredä÷êî
+ * @brief GetDescä÷êî
+ * @return desc (desc)
  */
-inline void tml::ManagerResource::ReleaseDeferred(void)
+inline const tml::ManagerResourceDesc *tml::ManagerResource::GetDesc(void) const
 {
-	return;
+	return (this->desc_);
 }
 
 
 /**
- * @brief GetDeferredCreateDescä÷êî
- * @return deferred_create_desc (deferred_create_desc)
+ * @brief SetDescä÷êî
+ * @param desc (desc)
  */
-inline const tml::ManagerResourceDesc *tml::ManagerResource::GetDeferredCreateDesc(void) const
+inline void tml::ManagerResource::SetDesc(const tml::ManagerResourceDesc *desc)
 {
-	return (this->deferred_create_desc_);
-}
-
-
-/**
- * @brief SetDeferredCreateDescä÷êî
- * @return deferred_create_desc (deferred_create_desc)
- */
-inline void tml::ManagerResource::SetDeferredCreateDesc(tml::unique_ptr<tml::ManagerResourceDesc> &deferred_create_desc)
-{
-	this->deferred_create_desc_unique_p_ = std::move(deferred_create_desc);
-	this->deferred_create_desc_ = this->deferred_create_desc_unique_p_.get();
+	this->OnSetDesc(desc);
 
 	return;
-}
-
-
-/**
- * @brief SetDeferredCreateDescä÷êî
- * @return deferred_create_desc (deferred_create_desc)
- */
-inline void tml::ManagerResource::SetDeferredCreateDesc(const tml::ManagerResourceDesc *deferred_create_desc)
-{
-	this->deferred_create_desc_unique_p_.reset();
-	this->deferred_create_desc_ = deferred_create_desc;
-
-	return;
-}
-
-
-/**
- * @brief IsDeferredCreatedä÷êî
- * @return result_flg (result_flag)<br>
- * false=îÒçÏê¨çœÇ›,true=çÏê¨çœÇ›
- */
-inline bool tml::ManagerResource::IsDeferredCreated(void) const
-{
-	return (this->deferred_created_flg_);
-}
-
-
-/**
- * @brief IsDeferredCreatingä÷êî
- * @return result_flg (result_flag)<br>
- * false=îÒçÏê¨íÜ,true=çÏê¨íÜ
- */
-inline bool tml::ManagerResource::IsDeferredCreating(void) const
-{
-	return (this->deferred_creating_flg_);
 }
 
 
@@ -214,22 +178,24 @@ inline tml::Manager *tml::ManagerResource::GetManager(void)
 
 
 /**
- * @brief GetResourceMainIndexä÷êî
- * @return res_main_index (resource_main_index)
+ * @brief SetManagerä÷êî
+ * @param mgr (manager)
  */
-inline UINT tml::ManagerResource::GetResourceMainIndex(void) const
+inline void tml::ManagerResource::SetManager(tml::Manager *mgr)
 {
-	return (this->res_main_index_);
+	this->OnSetManager(mgr);
+
+	return;
 }
 
 
 /**
- * @brief GetResourceSubIndexä÷êî
- * @return res_sub_index (resource_sub_index)
+ * @brief GetResourceTypeä÷êî
+ * @return res_type (resource_type)
  */
-inline UINT tml::ManagerResource::GetResourceSubIndex(void) const
+inline UINT tml::ManagerResource::GetResourceType(void) const
 {
-	return (this->res_sub_index_);
+	return (this->res_type_);
 }
 
 
@@ -250,4 +216,24 @@ inline const tml::shared_ptr<tml::ManagerResource> &tml::ManagerResource::GetRes
 inline const std::wstring &tml::ManagerResource::GetResourceName(void) const
 {
 	return (this->res_name_);
+}
+
+
+/**
+ * @brief GetDeferredCreateFlagä÷êî
+ * @return deferred_create_flg (deferred_create_flag)
+ */
+inline bool tml::ManagerResource::GetDeferredCreateFlag(void) const
+{
+	return (this->deferred_create_flg_);
+}
+
+
+/**
+ * @brief GetDeferredCreatedFlagä÷êî
+ * @return deferred_created_flg (deferred_created_flag)
+ */
+inline bool tml::ManagerResource::GetDeferredCreatedFlag(void) const
+{
+	return (this->deferred_created_flg_);
 }

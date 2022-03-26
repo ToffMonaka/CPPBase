@@ -72,7 +72,8 @@ INT tml::sound::BGMSoundDesc::ReadValue(const tml::INIFile &conf_file)
 /**
  * @brief コンストラクタ
  */
-tml::sound::BGMSound::BGMSound()
+tml::sound::BGMSound::BGMSound() :
+	desc_(nullptr)
 {
 	return;
 }
@@ -112,20 +113,44 @@ void tml::sound::BGMSound::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::sound::BGMSound::Create(const tml::sound::BGMSoundDesc &desc)
+INT tml::sound::BGMSound::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::sound::Sound::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::sound::Sound::OnCreate() < 0) {
 		return (-1);
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::sound::BGMSound::OnCreateDeferred(void)
+{
+	if (tml::sound::Sound::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::sound::BGMSound::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::sound::BGMSoundDesc *>(desc);
+
+	tml::sound::Sound::OnSetDesc(this->desc_);
+
+	return;
 }

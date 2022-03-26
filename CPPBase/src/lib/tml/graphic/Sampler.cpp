@@ -158,6 +158,7 @@ void tml::graphic::SamplerDesc::SetSamplerDesc(const tml::ConstantUtil::GRAPHIC:
  * @brief コンストラクタ
  */
 tml::graphic::Sampler::Sampler() :
+	desc_(nullptr),
 	samp_(nullptr),
 	samp_desc_(CD3D11_DEFAULT())
 {
@@ -212,24 +213,17 @@ void tml::graphic::Sampler::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Sampler::Create(const tml::graphic::SamplerDesc &desc)
+INT tml::graphic::Sampler::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	if (FAILED(this->GetManager()->GetDevice()->CreateSamplerState(&desc.sampler_desc, &this->samp_))) {
-		this->Init();
-
+	if (FAILED(this->GetManager()->GetDevice()->CreateSamplerState(&this->desc_->sampler_desc, &this->samp_))) {
 		return (-1);
 	}
 
@@ -238,4 +232,33 @@ INT tml::graphic::Sampler::Create(const tml::graphic::SamplerDesc &desc)
 	this->current_ = this;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Sampler::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Sampler::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::SamplerDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }

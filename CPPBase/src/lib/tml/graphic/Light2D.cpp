@@ -81,6 +81,7 @@ INT tml::graphic::Light2DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Light2D::Light2D() :
+	desc_(nullptr),
 	effect_type_(tml::ConstantUtil::GRAPHIC::LIGHT_2D_EFFECT_TYPE::NONE),
 	color(1.0f),
 	draw_data(nullptr)
@@ -120,27 +121,53 @@ void tml::graphic::Light2D::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Light2D::Create(const tml::graphic::Light2DDesc &desc)
+INT tml::graphic::Light2D::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::Light::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2D) < 0) {
-		this->Init();
-
+	if (tml::graphic::Light::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->effect_type_ = desc.effect_type;
+	this->SetDimensionType(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_2D);
 
-	this->transform = desc.transform;
-	this->color = desc.color;
+	this->effect_type_ = this->desc_->effect_type;
+
+	this->transform = this->desc_->transform;
+	this->color = this->desc_->color;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Light2D::OnCreateDeferred(void)
+{
+	if (tml::graphic::Light::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Light2D::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::Light2DDesc *>(desc);
+
+	tml::graphic::Light::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

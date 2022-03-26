@@ -189,6 +189,7 @@ void tml::graphic::FontDesc::SetFontDesc(const tml::XMUINT2EX &size, const WCHAR
  * @brief コンストラクタ
  */
 tml::graphic::Font::Font() :
+	desc_(nullptr),
 	dc_handle_(nullptr),
 	font_handle_(nullptr),
 	font_desc_{},
@@ -248,44 +249,64 @@ void tml::graphic::Font::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Font::Create(const tml::graphic::FontDesc &desc)
+INT tml::graphic::Font::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
 	this->dc_handle_ = CreateCompatibleDC(this->GetManager()->GetWindowDeviceContextHandle());
 
 	if (this->dc_handle_ == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
-	this->font_handle_ = CreateFontIndirect(&desc.font_desc);
+	this->font_handle_ = CreateFontIndirect(&this->desc_->font_desc);
 
 	if (this->font_handle_ == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
-	this->font_desc_ = desc.font_desc;
+	this->font_desc_ = this->desc_->font_desc;
 
 	SelectObject(this->dc_handle_, this->font_handle_);
 
 	GetTextMetrics(this->dc_handle_, &this->tm_);
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Font::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Font::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::FontDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

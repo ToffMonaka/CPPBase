@@ -139,23 +139,29 @@ public: tml::graphic::Atlas &operator =(const tml::graphic::Atlas &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::ATLAS);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::ATLAS_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::ATLAS);
 
 private:
+	const tml::graphic::AtlasDesc *desc_;
 	std::map<std::wstring, tml::graphic::AtlasRect> rect_cont_;
 	tml::shared_ptr<tml::graphic::Texture> tex_;
 
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Atlas();
 	virtual ~Atlas();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::AtlasDesc &);
 
+	const tml::graphic::AtlasDesc *GetDesc(void) const;
 	const tml::graphic::AtlasRect *GetRect(const WCHAR *) const;
 	const tml::shared_ptr<tml::graphic::Texture> &GetTexture(void);
 };
@@ -164,11 +170,12 @@ public:
 
 
 /**
- * @brief ReleaseŠÖ”
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
  */
-inline void tml::graphic::Atlas::Release(void)
+inline const tml::graphic::AtlasDesc *tml::graphic::Atlas::GetDesc(void) const
 {
-	return;
+	return (this->desc_);
 }
 
 

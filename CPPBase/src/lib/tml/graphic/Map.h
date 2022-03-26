@@ -160,10 +160,10 @@ public: tml::graphic::Map &operator =(const tml::graphic::Map &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MAP);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::MAP_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MAP);
 
 private:
+	const tml::graphic::MapDesc *desc_;
 	tml::XMUINT2EX tile_cnt_;
 	tml::XMUINT2EX block_cnt_;
 	std::vector<tml::graphic::MapBlock> block_cont_;
@@ -174,13 +174,19 @@ private:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Map();
 	virtual ~Map();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::MapDesc &);
 
+	const tml::graphic::MapDesc *GetDesc(void) const;
 	const tml::XMUINT2EX &GetTileCount(void) const;
 	const UINT *GetTileType(const UINT, const UINT) const;
 	const UINT *GetTileTypeFast(const UINT, const UINT) const;
@@ -199,11 +205,12 @@ public:
 
 
 /**
- * @brief ReleaseŠÖ”
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
  */
-inline void tml::graphic::Map::Release(void)
+inline const tml::graphic::MapDesc *tml::graphic::Map::GetDesc(void) const
 {
-	return;
+	return (this->desc_);
 }
 
 

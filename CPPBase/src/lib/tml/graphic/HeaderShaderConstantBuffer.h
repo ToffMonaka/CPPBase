@@ -76,15 +76,24 @@ public:
 	} ELEMENT;
 
 private:
+	const tml::graphic::HeaderShaderConstantBufferDesc *desc_;
+
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	HeaderShaderConstantBuffer();
 	virtual ~HeaderShaderConstantBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::HeaderShaderConstantBufferDesc &);
 
+	const tml::graphic::HeaderShaderConstantBufferDesc *GetDesc(void) const;
 	tml::graphic::HeaderShaderConstantBuffer::ELEMENT *GetElement(void);
 	void SetElement(const UINT, const UINT, const UINT, const UINT);
 };
@@ -98,6 +107,16 @@ public:
 inline void tml::graphic::HeaderShaderConstantBuffer::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::HeaderShaderConstantBufferDesc *tml::graphic::HeaderShaderConstantBuffer::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

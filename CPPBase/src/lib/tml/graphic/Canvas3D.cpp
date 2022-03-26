@@ -84,6 +84,7 @@ INT tml::graphic::Canvas3DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Canvas3D::Canvas3D() :
+	desc_(nullptr),
 	rt_tex_clear_flg_(false),
 	dt_tex_clear_flg_(false),
 	vp_(0.0f, 0.0f, 1.0f, 1.0f),
@@ -156,22 +157,48 @@ void tml::graphic::Canvas3D::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Canvas3D::Create(const tml::graphic::Canvas3DDesc &desc)
+INT tml::graphic::Canvas3D::OnCreate(void)
 {
-	this->Init();
+	if (tml::graphic::Canvas::OnCreate() < 0) {
+		return (-1);
+	}
 
-	if (tml::graphic::Canvas::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D) < 0) {
-		this->Init();
+	this->SetDimensionType(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D);
 
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Canvas3D::OnCreateDeferred(void)
+{
+	if (tml::graphic::Canvas::OnCreateDeferred() < 0) {
 		return (-1);
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Canvas3D::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::Canvas3DDesc *>(desc);
+
+	tml::graphic::Canvas::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

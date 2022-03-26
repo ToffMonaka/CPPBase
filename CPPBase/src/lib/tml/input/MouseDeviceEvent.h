@@ -15,7 +15,7 @@ namespace input {
 /**
  * @brief MouseDeviceEventDataƒNƒ‰ƒX
  */
-class MouseDeviceEventData
+class MouseDeviceEventData : public tml::input::DeviceEventData
 {
 public:
 	tml::ConstantUtil::INPUT::MOUSE_DEVICE_EVENT_DATA_TYPE type_flag;
@@ -55,7 +55,6 @@ namespace input {
 class MouseDeviceEventDesc : public tml::input::DeviceEventDesc
 {
 public:
-	tml::input::MouseDeviceEventData data;
 
 private:
 	void Release(void);
@@ -94,15 +93,15 @@ public: tml::input::MouseDeviceEvent &operator =(const tml::input::MouseDeviceEv
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT EVENT_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::MOUSE);
+	static const UINT EVENT_TYPE = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::MOUSE_DEVICE);
 
 private:
-
-public:
-	tml::input::MouseDeviceEventData data;
 
 private:
 	void Release(void);
+
+protected:
+	virtual void OnRun(const tml::ManagerEventData *);
 
 public:
 	MouseDeviceEvent();

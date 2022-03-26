@@ -58,25 +58,41 @@ public: tml::graphic::RasterizerState &operator =(const tml::graphic::Rasterizer
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE);
 
 private:
+	const tml::graphic::RasterizerStateDesc *desc_;
 	ID3D11RasterizerState *rs_;
 
 private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	RasterizerState();
 	virtual ~RasterizerState();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::RasterizerStateDesc &);
 
+	const tml::graphic::RasterizerStateDesc *GetDesc(void) const;
 	ID3D11RasterizerState *GetRasterizerState(void);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::RasterizerStateDesc *tml::graphic::RasterizerState::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

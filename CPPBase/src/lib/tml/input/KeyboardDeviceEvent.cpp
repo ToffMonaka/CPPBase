@@ -40,6 +40,8 @@ void tml::input::KeyboardDeviceEventData::Init(void)
 	this->type_flag = tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE::NONE;
 	this->code = tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_CODE::NONE;
 
+	tml::input::DeviceEventData::Init();
+
 	return;
 }
 
@@ -83,8 +85,6 @@ tml::input::KeyboardDeviceEventDesc::~KeyboardDeviceEventDesc()
 void tml::input::KeyboardDeviceEventDesc::Init(void)
 {
 	this->Release();
-
-	this->data.Init();
 
 	tml::input::DeviceEventDesc::Init();
 
@@ -147,8 +147,6 @@ void tml::input::KeyboardDeviceEvent::Init(void)
 {
 	this->Release();
 
-	this->data.Init();
-
 	tml::input::DeviceEvent::Init();
 
 	return;
@@ -171,7 +169,15 @@ INT tml::input::KeyboardDeviceEvent::Create(const tml::input::KeyboardDeviceEven
 		return (-1);
 	}
 
-	this->data = desc.data;
-
 	return (0);
+}
+
+
+/**
+ * @brief OnRunŠÖ”
+ * @param dat (data)
+ */
+void tml::input::KeyboardDeviceEvent::OnRun(const tml::ManagerEventData *dat)
+{
+	return;
 }

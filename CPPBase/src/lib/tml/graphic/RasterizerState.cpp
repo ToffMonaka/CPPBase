@@ -114,6 +114,7 @@ void tml::graphic::RasterizerStateDesc::SetRasterizerStateDesc(const tml::Consta
  * @brief コンストラクタ
  */
 tml::graphic::RasterizerState::RasterizerState() :
+	desc_(nullptr),
 	rs_(nullptr)
 {
 	return;
@@ -160,26 +161,48 @@ void tml::graphic::RasterizerState::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::RasterizerState::Create(const tml::graphic::RasterizerStateDesc &desc)
+INT tml::graphic::RasterizerState::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	if (FAILED(this->GetManager()->GetDevice()->CreateRasterizerState(&desc.rasterizer_state_desc, &this->rs_))) {
-		this->Init();
-
+	if (FAILED(this->GetManager()->GetDevice()->CreateRasterizerState(&this->desc_->rasterizer_state_desc, &this->rs_))) {
 		return (-1);
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::RasterizerState::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::RasterizerState::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::RasterizerStateDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }

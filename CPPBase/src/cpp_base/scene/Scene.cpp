@@ -76,14 +76,14 @@ INT cpp_base::scene::SceneDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
  */
-void cpp_base::scene::SceneDesc::SetManager(cpp_base::scene::Manager *mgr)
+void cpp_base::scene::SceneDesc::OnSetManager(tml::Manager *mgr)
 {
-	this->mgr_ = mgr;
+	this->mgr_ = dynamic_cast<cpp_base::scene::Manager *>(mgr);
 
-	tml::scene::SceneDesc::SetManager(mgr);
+	tml::scene::SceneDesc::OnSetManager(this->mgr_);
 
 	return;
 }
@@ -93,6 +93,7 @@ void cpp_base::scene::SceneDesc::SetManager(cpp_base::scene::Manager *mgr)
  * @brief コンストラクタ
  */
 cpp_base::scene::Scene::Scene() :
+	desc_(nullptr),
 	mgr_(nullptr),
 	input_mgr_(nullptr),
 	graphic_mgr_(nullptr),
@@ -129,7 +130,6 @@ void cpp_base::scene::Scene::Init(void)
 {
 	this->Release();
 
-	this->mgr_ = nullptr;
 	this->input_mgr_ = nullptr;
 	this->graphic_mgr_ = nullptr;
 	this->sound_mgr_ = nullptr;
@@ -141,31 +141,34 @@ void cpp_base::scene::Scene::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::Scene::Create(const cpp_base::scene::SceneDesc &desc)
+INT cpp_base::scene::Scene::OnCreate(void)
 {
-	if (desc.GetManager() == nullptr) {
-		this->Init();
-
+	if (tml::scene::Scene::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->Init();
+	this->input_mgr_ = this->desc_->GetManager()->GetInputManager();
+	this->graphic_mgr_ = this->desc_->GetManager()->GetGraphicManager();
+	this->sound_mgr_ = this->desc_->GetManager()->GetSoundManager();
 
-	if (tml::scene::Scene::Create(desc) < 0) {
-		this->Init();
+	return (0);
+}
 
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT cpp_base::scene::Scene::OnCreateDeferred(void)
+{
+	if (tml::scene::Scene::OnCreateDeferred() < 0) {
 		return (-1);
 	}
-
-	this->mgr_ = desc.GetManager();
-	this->input_mgr_ = desc.GetManager()->GetInputManager();
-	this->graphic_mgr_ = desc.GetManager()->GetGraphicManager();
-	this->sound_mgr_ = desc.GetManager()->GetSoundManager();
 
 	return (0);
 }
@@ -196,5 +199,33 @@ void cpp_base::scene::Scene::OnEnd(void)
  */
 void cpp_base::scene::Scene::OnUpdate(void)
 {
+	return;
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void cpp_base::scene::Scene::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const cpp_base::scene::SceneDesc *>(desc);
+
+	tml::scene::Scene::OnSetDesc(this->desc_);
+
+	return;
+}
+
+
+/**
+ * @brief OnSetManager関数
+ * @param mgr (manager)
+ */
+void cpp_base::scene::Scene::OnSetManager(tml::Manager *mgr)
+{
+	this->mgr_ = dynamic_cast<cpp_base::scene::Manager *>(mgr);
+
+	tml::scene::Scene::OnSetManager(this->mgr_);
+
 	return;
 }

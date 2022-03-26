@@ -61,6 +61,7 @@ public: tml::graphic::Camera3D &operator =(const tml::graphic::Camera3D &) = del
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const tml::graphic::Camera3DDesc *desc_;
 	tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE proj_type_;
 	tml::XMFLOAT2EX fov_size_;
 	FLOAT fov_angle_;
@@ -73,13 +74,19 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Camera3D();
 	virtual ~Camera3D();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::Camera3DDesc &);
 
+	const tml::graphic::Camera3DDesc *GetDesc(void) const;
 	tml::ConstantUtil::GRAPHIC::CAMERA_3D_PROJECTION_TYPE GetProjectionType(void) const;
 	const tml::XMFLOAT2EX &GetFOVSize(void) const;
 	void SetFOVSize(const tml::XMFLOAT2EX &);
@@ -102,6 +109,16 @@ public:
 inline void tml::graphic::Camera3D::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::Camera3DDesc *tml::graphic::Camera3D::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

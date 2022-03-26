@@ -59,23 +59,29 @@ public: tml::graphic::BlendState &operator =(const tml::graphic::BlendState &) =
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::BLEND_STATE_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE);
 
 private:
+	const tml::graphic::BlendStateDesc *desc_;
 	ID3D11BlendState *bs_;
 	std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> factor_ary_;
 
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	BlendState();
 	virtual ~BlendState();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::BlendStateDesc &);
 
+	const tml::graphic::BlendStateDesc *GetDesc(void) const;
 	ID3D11BlendState *GetBlendState(void);
 	const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &GetFactorArray(void) const;
 	void SetFactorArray(const std::array<FLOAT, tml::ConstantUtil::GRAPHIC::BLEND_STATE_FACTOR_COUNT> &);
@@ -83,6 +89,16 @@ public:
 	void SetFactor(const UINT, FLOAT);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::BlendStateDesc *tml::graphic::BlendState::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

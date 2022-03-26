@@ -73,14 +73,14 @@ INT tml::sound::ManagerResourceDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
  */
-void tml::sound::ManagerResourceDesc::SetManager(tml::sound::Manager *mgr)
+void tml::sound::ManagerResourceDesc::OnSetManager(tml::Manager *mgr)
 {
-	this->mgr_ = mgr;
+	this->mgr_ = dynamic_cast<tml::sound::Manager *>(mgr);
 
-	tml::ManagerResourceDesc::SetManager(mgr);
+	tml::ManagerResourceDesc::OnSetManager(this->mgr_);
 
 	return;
 }
@@ -90,9 +90,8 @@ void tml::sound::ManagerResourceDesc::SetManager(tml::sound::Manager *mgr)
  * @brief コンストラクタ
  */
 tml::sound::ManagerResource::ManagerResource() :
-	mgr_(nullptr),
-	res_type_(tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE)
-	
+	desc_(nullptr),
+	mgr_(nullptr)
 {
 	return;
 }
@@ -116,9 +115,6 @@ void tml::sound::ManagerResource::Init(void)
 {
 	this->Release();
 
-	this->mgr_ = nullptr;
-	this->res_type_ = tml::ConstantUtil::SOUND::RESOURCE_TYPE::NONE;
-
 	tml::ManagerResource::Init();
 
 	return;
@@ -126,38 +122,17 @@ void tml::sound::ManagerResource::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::sound::ManagerResource::Create(const tml::sound::ManagerResourceDesc &desc)
+INT tml::sound::ManagerResource::OnCreate(void)
 {
-	if (desc.GetManager() == nullptr) {
+	if (tml::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
-
-	if (tml::ManagerResource::Create(desc) < 0) {
-		return (-1);
-	}
-
-	this->mgr_ = desc.GetManager();
-	this->res_type_ = static_cast<tml::ConstantUtil::SOUND::RESOURCE_TYPE>(this->GetResourceMainIndex());
 
 	return (0);
-}
-
-
-/**
- * @brief InitDeferred関数
- */
-void tml::sound::ManagerResource::InitDeferred(void)
-{
-	this->ReleaseDeferred();
-
-	tml::ManagerResource::InitDeferred();
-
-	return;
 }
 
 
@@ -173,4 +148,32 @@ INT tml::sound::ManagerResource::OnCreateDeferred(void)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::sound::ManagerResource::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::sound::ManagerResourceDesc *>(desc);
+
+	tml::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
+}
+
+
+/**
+ * @brief OnSetManager関数
+ * @param mgr (manager)
+ */
+void tml::sound::ManagerResource::OnSetManager(tml::Manager *mgr)
+{
+	this->mgr_ = dynamic_cast<tml::sound::Manager *>(mgr);
+
+	tml::ManagerResource::OnSetManager(this->mgr_);
+
+	return;
 }

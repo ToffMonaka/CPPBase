@@ -111,10 +111,10 @@ public: tml::graphic::Shader &operator =(const tml::graphic::Shader &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::SHADER_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER);
 
 private:
+	const tml::graphic::ShaderDesc *desc_;
 	ID3D11VertexShader *vs_;
 	ID3D11InputLayout *vs_input_layout_;
 	ID3D11HullShader *hs_;
@@ -129,13 +129,19 @@ private:
 	ID3DBlob *GetBlob(const tml::DynamicBuffer &, const WCHAR *, const WCHAR *, const WCHAR *, const D3D10_SHADER_MACRO *);
 	void ReleaseBlob(ID3DBlob **);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Shader();
 	virtual ~Shader();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::ShaderDesc &);
 
+	const tml::graphic::ShaderDesc *GetDesc(void) const;
 	ID3D11VertexShader *GetVertexShader(void);
 	ID3D11InputLayout *GetVertexShaderInputLayout(void);
 	ID3D11HullShader *GetHullShader(void);
@@ -145,6 +151,16 @@ public:
 	ID3D11ComputeShader *GetComputeShader(void);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::ShaderDesc *tml::graphic::Shader::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

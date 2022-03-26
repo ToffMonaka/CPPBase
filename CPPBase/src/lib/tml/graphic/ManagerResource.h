@@ -28,6 +28,8 @@ private:
 protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
+	virtual void OnSetManager(tml::Manager *);
+
 public:
 	ManagerResourceDesc();
 	virtual ~ManagerResourceDesc();
@@ -35,7 +37,6 @@ public:
 	virtual void Init(void);
 
 	tml::graphic::Manager *GetManager(void) const;
-	void SetManager(tml::graphic::Manager *);
 };
 }
 }
@@ -74,21 +75,27 @@ public: tml::graphic::ManagerResource &operator =(const tml::graphic::ManagerRes
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	const tml::graphic::ManagerResourceDesc *desc_;
 	tml::graphic::Manager *mgr_;
-	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE res_type_;
 
 private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	virtual void OnSetManager(tml::Manager *);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::ManagerResourceDesc &);
 
+	const tml::graphic::ManagerResourceDesc *GetDesc(void) const;
 	tml::graphic::Manager *GetManager(void);
-	tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
 }
@@ -104,20 +111,20 @@ inline void tml::graphic::ManagerResource::Release(void)
 
 
 /**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::ManagerResourceDesc *tml::graphic::ManagerResource::GetDesc(void) const
+{
+	return (this->desc_);
+}
+
+
+/**
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
 inline tml::graphic::Manager *tml::graphic::ManagerResource::GetManager(void)
 {
 	return (this->mgr_);
-}
-
-
-/**
- * @brief GetResourceTypeŠÖ”
- * @return res_type (resource_type)
- */
-inline tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE tml::graphic::ManagerResource::GetResourceType(void) const
-{
-	return (this->res_type_);
 }

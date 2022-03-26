@@ -58,25 +58,30 @@ public: tml::graphic::Camera &operator =(const tml::graphic::Camera &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::CAMERA_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA);
 
 private:
-	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE type_;
+	const tml::graphic::CameraDesc *desc_;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type_;
 	bool draw_set_flg_;
 
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	void SetDimensionType(const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
+
 public:
 	Camera();
 	virtual ~Camera();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::CameraDesc &, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE);
 
-	tml::ConstantUtil::GRAPHIC::CAMERA_TYPE GetType(void) const;
+	const tml::graphic::CameraDesc *GetDesc(void) const;
 	tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE GetDimensionType(void) const;
 	virtual DirectX::XMMATRIX &GetViewMatrix(DirectX::XMMATRIX &) = 0;
 	virtual DirectX::XMMATRIX &GetProjectionMatrix(DirectX::XMMATRIX &) = 0;
@@ -97,12 +102,12 @@ inline void tml::graphic::Camera::Release(void)
 
 
 /**
- * @brief GetTypeŠÖ”
- * @return type (type)
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
  */
-inline tml::ConstantUtil::GRAPHIC::CAMERA_TYPE tml::graphic::Camera::GetType(void) const
+inline const tml::graphic::CameraDesc *tml::graphic::Camera::GetDesc(void) const
 {
-	return (this->type_);
+	return (this->desc_);
 }
 
 
@@ -113,6 +118,18 @@ inline tml::ConstantUtil::GRAPHIC::CAMERA_TYPE tml::graphic::Camera::GetType(voi
 inline tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE tml::graphic::Camera::GetDimensionType(void) const
 {
 	return (this->dimension_type_);
+}
+
+
+/**
+ * @brief SetDimensionTypeŠÖ”
+ * @param dimension_type (dimension_type)
+ */
+inline void tml::graphic::Camera::SetDimensionType(const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
+{
+	this->dimension_type_ = dimension_type;
+
+	return;
 }
 
 

@@ -73,14 +73,14 @@ INT tml::graphic::ManagerResourceDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
- * @brief SetManager関数
+ * @brief OnSetManager関数
  * @param mgr (manager)
  */
-void tml::graphic::ManagerResourceDesc::SetManager(tml::graphic::Manager *mgr)
+void tml::graphic::ManagerResourceDesc::OnSetManager(tml::Manager *mgr)
 {
-	this->mgr_ = mgr;
+	this->mgr_ = dynamic_cast<tml::graphic::Manager *>(mgr);
 
-	tml::ManagerResourceDesc::SetManager(mgr);
+	tml::ManagerResourceDesc::OnSetManager(this->mgr_);
 
 	return;
 }
@@ -90,9 +90,8 @@ void tml::graphic::ManagerResourceDesc::SetManager(tml::graphic::Manager *mgr)
  * @brief コンストラクタ
  */
 tml::graphic::ManagerResource::ManagerResource() :
-	mgr_(nullptr),
-	res_type_(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::NONE)
-	
+	desc_(nullptr),
+	mgr_(nullptr)
 {
 	return;
 }
@@ -116,9 +115,6 @@ void tml::graphic::ManagerResource::Init(void)
 {
 	this->Release();
 
-	this->mgr_ = nullptr;
-	this->res_type_ = tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::NONE;
-
 	tml::ManagerResource::Init();
 
 	return;
@@ -126,23 +122,58 @@ void tml::graphic::ManagerResource::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::ManagerResource::Create(const tml::graphic::ManagerResourceDesc &desc)
+INT tml::graphic::ManagerResource::OnCreate(void)
 {
-	if (desc.GetManager() == nullptr) {
+	if (tml::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
-
-	if (tml::ManagerResource::Create(desc) < 0) {
-		return (-1);
-	}
-
-	this->mgr_ = desc.GetManager();
-	this->res_type_ = static_cast<tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE>(this->GetResourceMainIndex());
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ManagerResource::OnCreateDeferred(void)
+{
+	if (tml::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::ManagerResource::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::ManagerResourceDesc *>(desc);
+
+	tml::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
+}
+
+
+/**
+ * @brief OnSetManager関数
+ * @param mgr (manager)
+ */
+void tml::graphic::ManagerResource::OnSetManager(tml::Manager *mgr)
+{
+	this->mgr_ = dynamic_cast<tml::graphic::Manager *>(mgr);
+
+	tml::ManagerResource::OnSetManager(this->mgr_);
+
+	return;
 }

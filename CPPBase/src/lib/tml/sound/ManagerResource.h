@@ -28,6 +28,8 @@ private:
 protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
+	virtual void OnSetManager(tml::Manager *);
+
 public:
 	ManagerResourceDesc();
 	virtual ~ManagerResourceDesc();
@@ -35,7 +37,6 @@ public:
 	virtual void Init(void);
 
 	tml::sound::Manager *GetManager(void) const;
-	void SetManager(tml::sound::Manager *);
 };
 }
 }
@@ -74,26 +75,27 @@ public: tml::sound::ManagerResource &operator =(const tml::sound::ManagerResourc
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	const tml::sound::ManagerResourceDesc *desc_;
 	tml::sound::Manager *mgr_;
-	tml::ConstantUtil::SOUND::RESOURCE_TYPE res_type_;
 
 private:
 	void Release(void);
-	void ReleaseDeferred(void);
 
 protected:
+	virtual INT OnCreate(void);
 	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	virtual void OnSetManager(tml::Manager *);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
-	INT Create(const tml::sound::ManagerResourceDesc &);
-	virtual void InitDeferred(void);
 
+	const tml::sound::ManagerResourceDesc *GetDesc(void) const;
 	tml::sound::Manager *GetManager(void);
-	tml::ConstantUtil::SOUND::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
 }
@@ -104,18 +106,17 @@ public:
  */
 inline void tml::sound::ManagerResource::Release(void)
 {
-	this->ReleaseDeferred();
-
 	return;
 }
 
 
 /**
- * @brief ReleaseDeferredŠÖ”
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
  */
-inline void tml::sound::ManagerResource::ReleaseDeferred(void)
+inline const tml::sound::ManagerResourceDesc *tml::sound::ManagerResource::GetDesc(void) const
 {
-	return;
+	return (this->desc_);
 }
 
 
@@ -126,14 +127,4 @@ inline void tml::sound::ManagerResource::ReleaseDeferred(void)
 inline tml::sound::Manager *tml::sound::ManagerResource::GetManager(void)
 {
 	return (this->mgr_);
-}
-
-
-/**
- * @brief GetResourceTypeŠÖ”
- * @return res_type (resource_type)
- */
-inline tml::ConstantUtil::SOUND::RESOURCE_TYPE tml::sound::ManagerResource::GetResourceType(void) const
-{
-	return (this->res_type_);
 }

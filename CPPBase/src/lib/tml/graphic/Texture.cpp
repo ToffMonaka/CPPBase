@@ -186,6 +186,7 @@ void tml::graphic::TextureDesc::SetTextureDesc(const tml::ConstantUtil::GRAPHIC:
  * @brief コンストラクタ
  */
 tml::graphic::Texture::Texture() :
+	desc_(nullptr),
 	tex_(nullptr),
 	tex_desc_(DXGI_FORMAT_UNKNOWN, 0U, 0U, 0U, 0U, 0U),
 	rt_(nullptr),
@@ -274,66 +275,51 @@ void tml::graphic::Texture::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
+INT tml::graphic::Texture::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	if (desc.atlas_texture != nullptr) {
-		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->atlas_tex_, desc.atlas_texture) == nullptr) {
-			this->Init();
-
+	if (this->desc_->atlas_texture != nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->atlas_tex_, this->desc_->atlas_texture) == nullptr) {
 			return (-1);
 		}
 
 		if (this->atlas_tex_->GetTexture() == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
-		this->atlas_rect_ = desc.atlas_rect;
-	} else if (desc.atlas_texture_desc != nullptr) {
-		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->atlas_tex_, (*desc.atlas_texture_desc)) == nullptr) {
-			this->Init();
-
+		this->atlas_rect_ = this->desc_->atlas_rect;
+	} else if (this->desc_->atlas_texture_desc != nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->atlas_tex_, (*this->desc_->atlas_texture_desc)) == nullptr) {
 			return (-1);
 		}
 
-		if (desc.atlas_texture->GetTexture() == nullptr) {
-			this->Init();
-
+		if (this->desc_->atlas_texture->GetTexture() == nullptr) {
 			return (-1);
 		}
 
-		this->atlas_rect_ = desc.atlas_rect;
-	} else if (desc.swap_chain != nullptr) {
-		if (FAILED(desc.swap_chain->GetBuffer(0U, IID_PPV_ARGS(&this->tex_)))) {
-			this->Init();
-
+		this->atlas_rect_ = this->desc_->atlas_rect;
+	} else if (this->desc_->swap_chain != nullptr) {
+		if (FAILED(this->desc_->swap_chain->GetBuffer(0U, IID_PPV_ARGS(&this->tex_)))) {
 			return (-1);
 		}
 
 		this->tex_->GetDesc(&this->tex_desc_);
-	} else if (desc.image_file_read_desc_container.size() > 1U) {
-		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
+	} else if (this->desc_->image_file_read_desc_container.size() > 1U) {
+		CD3D11_TEXTURE2D_DESC tmp_tex_desc = this->desc_->texture_desc;
 		bool tmp_tex_desc_fixed_flg = false;
 		std::list<D3D11_SUBRESOURCE_DATA> srd_cont;
 		std::list<tml::DynamicBuffer> srd_buf_cont;
 		ID3D11Texture2D *tex = nullptr;
 		CD3D11_TEXTURE2D_DESC tex_desc;
 
-		for (auto &img_file_read_desc : desc.image_file_read_desc_container) {
+		for (auto &img_file_read_desc : this->desc_->image_file_read_desc_container) {
 			auto img_file_read_desc_dat = img_file_read_desc.GetDataByParent();
 
 			if (!img_file_read_desc_dat->IsEmpty()) {
@@ -342,16 +328,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				img_file.read_desc.parent_data = img_file_read_desc_dat;
 
 				if (img_file.Read() < 0) {
-					this->Init();
-
 					return (-1);
 				}
 
 				auto &img_file_buf = img_file.data.buffer;
 
 				if (img_file_buf.GetLength() <= 0U) {
-					this->Init();
-
 					return (-1);
 				}
 
@@ -367,14 +349,10 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				img_load_info.Format = (tmp_tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : tmp_tex_desc.Format;
 
 				if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(img_file_buf.Get()), img_file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&tex), nullptr))) {
-					this->Init();
-
 					return (-1);
 				}
 			} else {
 				if ((tmp_tex_desc.Width * tmp_tex_desc.Height) <= 0U) {
-					this->Init();
-
 					return (-1);
 				}
 
@@ -386,8 +364,6 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				tex_desc.MiscFlags = 0U;
 
 				if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tex_desc, nullptr, &tex))) {
-					this->Init();
-
 					return (-1);
 				}
 			}
@@ -402,8 +378,6 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 					tex->Release();
 
 					tex = nullptr;
-
-					this->Init();
 
 					return (-1);
 				}
@@ -427,8 +401,6 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 
 				tex = nullptr;
 
-				this->Init();
-
 				return (-1);
 			}
 
@@ -450,16 +422,14 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		std::vector<D3D11_SUBRESOURCE_DATA> tmp_srd_cont(srd_cont.begin(), srd_cont.end());
 
 		if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tmp_tex_desc, tmp_srd_cont.data(), &this->tex_))) {
-			this->Init();
-
 			return (-1);
 		}
 
 		this->tex_->GetDesc(&this->tex_desc_);
-	} else if (desc.image_file_read_desc_container.size() == 1U) {
-		CD3D11_TEXTURE2D_DESC tmp_tex_desc = desc.texture_desc;
+	} else if (this->desc_->image_file_read_desc_container.size() == 1U) {
+		CD3D11_TEXTURE2D_DESC tmp_tex_desc = this->desc_->texture_desc;
 
-		auto img_file_read_desc_dat = desc.image_file_read_desc_container[0].GetDataByParent();
+		auto img_file_read_desc_dat = this->desc_->image_file_read_desc_container[0].GetDataByParent();
 
 		if (!img_file_read_desc_dat->IsEmpty()) {
 			tml::BinaryFile img_file;
@@ -467,16 +437,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			img_file.read_desc.parent_data = img_file_read_desc_dat;
 
 			if (img_file.Read() < 0) {
-				this->Init();
-
 				return (-1);
 			}
 
 			auto &img_file_buf = img_file.data.buffer;
 
 			if (img_file_buf.GetLength() <= 0U) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -492,46 +458,38 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			img_load_info.Format = (tmp_tex_desc.Format == DXGI_FORMAT_UNKNOWN) ? DXGI_FORMAT_FROM_FILE : tmp_tex_desc.Format;
 
 			if (FAILED(D3DX11CreateTextureFromMemory(this->GetManager()->GetDevice(), reinterpret_cast<LPCVOID>(img_file_buf.Get()), img_file_buf.GetLength(), &img_load_info, nullptr, reinterpret_cast<ID3D11Resource **>(&this->tex_), nullptr))) {
-				this->Init();
-
 				return (-1);
 			}
 		} else {
 			if ((tmp_tex_desc.Width * tmp_tex_desc.Height) <= 0U) {
-				this->Init();
-
 				return (-1);
 			}
 
 			if (FAILED(this->GetManager()->GetDevice()->CreateTexture2D(&tmp_tex_desc, nullptr, &this->tex_))) {
-				this->Init();
-
 				return (-1);
 			}
 		}
 
 		this->tex_->GetDesc(&this->tex_desc_);
 	} else {
-		this->Init();
-
 		return (-1);
 	}
 
 	if (this->atlas_tex_ != nullptr) {
-		if (desc.rect_auto_flag) {
+		if (this->desc_->rect_auto_flag) {
 			this->rect_.SetPosition(this->atlas_rect_.GetPosition());
 			this->rect_.SetSize(this->atlas_rect_.GetSize());
 		} else {
-			this->rect_ = desc.rect;
+			this->rect_ = this->desc_->rect;
 		}
 
 		this->current_ = this->atlas_tex_.get();
 	} else {
-		if (desc.rect_auto_flag) {
+		if (this->desc_->rect_auto_flag) {
 			this->rect_.SetPosition(tml::XMUINT2EX(0U, 0U));
 			this->rect_.SetSize(tml::XMUINT2EX(this->tex_desc_.Width, this->tex_desc_.Height));
 		} else {
-			this->rect_ = desc.rect;
+			this->rect_ = this->desc_->rect;
 		}
 
 		this->mm_size_cont_.resize(this->tex_desc_.MipLevels);
@@ -544,14 +502,12 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 			mm_size.y = (mm_size.y > 1U) ? (mm_size.y >> 1) : 1U;
 		}
 
-		if (desc.cpu_buffer_flag) {
+		if (this->desc_->cpu_buffer_flag) {
 			INT result = 0;
 
 			this->GetManager()->GetCPUBuffer(this->cpu_buf_cont_, this->msr_cont_, this->tex_, &result);
 
 			if (result < 0) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -569,10 +525,8 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 		}
 
 		if (this->tex_desc_.BindFlags & D3D11_BIND_RENDER_TARGET) {
-			if (desc.render_target_desc_null_flag) {
+			if (this->desc_->render_target_desc_null_flag) {
 				if (FAILED(this->GetManager()->GetDevice()->CreateRenderTargetView(this->tex_, nullptr, &this->rt_))) {
-					this->Init();
-
 					return (-1);
 				}
 			} else {
@@ -592,7 +546,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 					}
 				}
 
-				DXGI_FORMAT format = desc.render_target_format;
+				DXGI_FORMAT format = this->desc_->render_target_format;
 
 				if (format == DXGI_FORMAT_UNKNOWN) {
 					format = this->tex_desc_.Format;
@@ -601,18 +555,14 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				CD3D11_RENDER_TARGET_VIEW_DESC rt_desc = CD3D11_RENDER_TARGET_VIEW_DESC(this->tex_, dimension, format);
 
 				if (FAILED(this->GetManager()->GetDevice()->CreateRenderTargetView(this->tex_, &rt_desc, &this->rt_))) {
-					this->Init();
-
 					return (-1);
 				}
 			}
 		}
 
 		if (this->tex_desc_.BindFlags & D3D11_BIND_DEPTH_STENCIL) {
-			if (desc.depth_target_desc_null_flag) {
+			if (this->desc_->depth_target_desc_null_flag) {
 				if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilView(this->tex_, nullptr, &this->dt_))) {
-					this->Init();
-
 					return (-1);
 				}
 			} else {
@@ -632,7 +582,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 					}
 				}
 
-				DXGI_FORMAT format = desc.depth_target_format;
+				DXGI_FORMAT format = this->desc_->depth_target_format;
 
 				if (format == DXGI_FORMAT_UNKNOWN) {
 					format = this->tex_desc_.Format;
@@ -641,18 +591,14 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				CD3D11_DEPTH_STENCIL_VIEW_DESC dt_desc = CD3D11_DEPTH_STENCIL_VIEW_DESC(this->tex_, dimension, format);
 
 				if (FAILED(this->GetManager()->GetDevice()->CreateDepthStencilView(this->tex_, &dt_desc, &this->dt_))) {
-					this->Init();
-
 					return (-1);
 				}
 			}
 		}
 
 		if (this->tex_desc_.BindFlags & D3D11_BIND_SHADER_RESOURCE) {
-			if (desc.sr_desc_null_flag) {
+			if (this->desc_->sr_desc_null_flag) {
 				if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->tex_, nullptr, &this->sr_))) {
-					this->Init();
-
 					return (-1);
 				}
 			} else {
@@ -672,7 +618,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 					}
 				}
 
-				DXGI_FORMAT format = desc.sr_format;
+				DXGI_FORMAT format = this->desc_->sr_format;
 
 				if (format == DXGI_FORMAT_UNKNOWN) {
 					format = this->tex_desc_.Format;
@@ -681,26 +627,20 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				CD3D11_SHADER_RESOURCE_VIEW_DESC sr_desc = CD3D11_SHADER_RESOURCE_VIEW_DESC(this->tex_, dimension, format);
 
 				if (FAILED(this->GetManager()->GetDevice()->CreateShaderResourceView(this->tex_, &sr_desc, &this->sr_))) {
-					this->Init();
-
 					return (-1);
 				}
 			}
 		}
 
 		if (this->tex_desc_.BindFlags & D3D11_BIND_UNORDERED_ACCESS) {
-			if (desc.uasr_desc_null_flag) {
+			if (this->desc_->uasr_desc_null_flag) {
 				if (FAILED(this->GetManager()->GetDevice()->CreateUnorderedAccessView(this->tex_, nullptr, &this->uasr_))) {
-					this->Init();
-
 					return (-1);
 				}
 			} else {
 				D3D11_UAV_DIMENSION dimension = D3D11_UAV_DIMENSION_TEXTURE2D;
 
 				if (this->tex_desc_.SampleDesc.Count > 1U) {
-					this->Init();
-
 					return (-1);
 				} else {
 					if (this->tex_desc_.ArraySize > 1U) {
@@ -710,7 +650,7 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 					}
 				}
 
-				DXGI_FORMAT format = desc.uasr_format;
+				DXGI_FORMAT format = this->desc_->uasr_format;
 
 				if (format == DXGI_FORMAT_UNKNOWN) {
 					format = this->tex_desc_.Format;
@@ -719,8 +659,6 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 				CD3D11_UNORDERED_ACCESS_VIEW_DESC uasr_desc = CD3D11_UNORDERED_ACCESS_VIEW_DESC(this->tex_, dimension, format);
 
 				if (FAILED(this->GetManager()->GetDevice()->CreateUnorderedAccessView(this->tex_, &uasr_desc, &this->uasr_))) {
-					this->Init();
-
 					return (-1);
 				}
 			}
@@ -730,6 +668,35 @@ INT tml::graphic::Texture::Create(const tml::graphic::TextureDesc &desc)
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Texture::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Texture::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::TextureDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

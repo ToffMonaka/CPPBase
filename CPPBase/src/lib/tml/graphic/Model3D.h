@@ -127,6 +127,9 @@ public: Model3D(const tml::graphic::Model3D &) = delete;
 public: tml::graphic::Model3D &operator =(const tml::graphic::Model3D &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+private:
+	const tml::graphic::Model3DDesc *desc_;
+
 public:
 	tml::Transform3D transform;
 	tml::XMFLOAT4EX color;
@@ -136,12 +139,29 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Model3D();
 	virtual ~Model3D();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::Model3DDesc &);
+
+	const tml::graphic::Model3DDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::Model3DDesc *tml::graphic::Model3D::GetDesc(void) const
+{
+	return (this->desc_);
 }

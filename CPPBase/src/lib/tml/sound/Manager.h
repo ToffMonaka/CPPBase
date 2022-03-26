@@ -18,26 +18,19 @@ namespace sound {
 class ManagerDesc : public tml::ManagerDesc
 {
 public:
-	std::array<FLOAT, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> volume_array;
-	std::array<bool, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> mute_flag_array;
+	FLOAT bgm_sound_volume;
+	bool bgm_sound_mute_flag;
+	FLOAT se_sound_volume;
+	bool se_sound_mute_flag;
 
 private:
 	void Release(void);
-
-protected:
-	void InitResourceCount(void);
-	void InitEventCount(void);
 
 public:
 	ManagerDesc();
 	virtual ~ManagerDesc();
 
 	virtual void Init(void);
-
-	FLOAT GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
-	void SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE, const FLOAT);
-	bool GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
-	void SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE, const bool);
 };
 }
 }
@@ -48,54 +41,6 @@ public:
  */
 inline void tml::sound::ManagerDesc::Release(void)
 {
-	return;
-}
-
-
-/**
- * @brief GetVolumeŠÖ”
- * @param type (type)
- * @return volume (volume)
- */
-inline FLOAT tml::sound::ManagerDesc::GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
-{
-	return (this->volume_array[static_cast<UINT>(type)]);
-}
-
-
-/**
- * @brief SetVolumeŠÖ”
- * @param type (type)
- * @param volume (volume)
- */
-inline void tml::sound::ManagerDesc::SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const FLOAT volume)
-{
-	this->volume_array[static_cast<UINT>(type)] = volume;
-
-	return;
-}
-
-
-/**
- * @brief GetMuteFlagŠÖ”
- * @param type (type)
- * @return mute_flg (mute_flag)
- */
-inline bool tml::sound::ManagerDesc::GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
-{
-	return (this->mute_flag_array[static_cast<UINT>(type)]);
-}
-
-
-/**
- * @brief SetMuteFlagŠÖ”
- * @param type (type)
- * @param mute_flg (mute_flag)
- */
-inline void tml::sound::ManagerDesc::SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type, const bool mute_flg)
-{
-	this->mute_flag_array[static_cast<UINT>(type)] = mute_flg;
-
 	return;
 }
 
@@ -114,14 +59,17 @@ protected: virtual void InterfaceDummy(void) {return;};
 private:
 	ALCdevice *device_;
 	ALCcontext *device_context_;
-	std::array<FLOAT, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> volume_ary_;
-	std::array<bool, tml::ConstantUtil::SOUND::SOUND_TYPE_COUNT> mute_flg_ary_;
+	std::vector<FLOAT> sound_volume_cont_;
+	std::vector<bool> sound_mute_flg_cont_;
 
 public:
 	tml::sound::ManagerCommon common;
 
 private:
 	void Release(void);
+
+	void SetSoundVolumePart(const UINT);
+	void SetSoundMuteFlagPart(const UINT);
 
 public:
 	Manager();
@@ -134,10 +82,14 @@ public:
 
 	ALCdevice *GetDevice(void);
 	ALCcontext *GetDeviceContext(void);
-	FLOAT GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
-	void SetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE, const FLOAT);
-	bool GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE) const;
-	void SetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE, const bool);
+	FLOAT GetBGMSoundVolume(void) const;
+	void SetBGMSoundVolume(const FLOAT);
+	bool GetBGMSoundMuteFlag(void) const;
+	void SetBGMSoundMuteFlag(const bool);
+	FLOAT GetSESoundVolume(void) const;
+	void SetSESoundVolume(const FLOAT);
+	bool GetSESoundMuteFlag(void) const;
+	void SetSESoundMuteFlag(const bool);
 
 	void PlaySound(tml::sound::Sound *, const bool);
 	void StopSound(tml::sound::Sound *);
@@ -168,22 +120,96 @@ inline ALCcontext *tml::sound::Manager::GetDeviceContext(void)
 
 
 /**
- * @brief GetVolumeŠÖ”
- * @param type (type)
- * @return volume (volume)
+ * @brief GetBGMSoundVolumeŠÖ”
+ * @return bgm_sound_volume (bgm_sound_volume)
  */
-inline FLOAT tml::sound::Manager::GetVolume(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
+inline FLOAT tml::sound::Manager::GetBGMSoundVolume(void) const
 {
-	return (this->volume_ary_[static_cast<UINT>(type)]);
+	return (this->sound_volume_cont_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::BGM_SOUND)]);
 }
 
 
 /**
- * @brief GetMuteFlagŠÖ”
- * @param type (type)
- * @return mute_flg (mute_flag)
+ * @brief SetBGMSoundVolumeŠÖ”
+ * @param bgm_sound_volume (bgm_sound_volume)
  */
-inline bool tml::sound::Manager::GetMuteFlag(const tml::ConstantUtil::SOUND::SOUND_TYPE type) const
+inline void tml::sound::Manager::SetBGMSoundVolume(const FLOAT bgm_sound_volume)
 {
-	return (this->mute_flg_ary_[static_cast<UINT>(type)]);
+	this->sound_volume_cont_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::BGM_SOUND)] = bgm_sound_volume;
+
+	this->SetSoundVolumePart(static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::BGM_SOUND));
+
+	return;
+}
+
+
+/**
+ * @brief GetBGMSoundMuteFlagŠÖ”
+ * @return bgm_sound_mute_flg (bgm_sound_mute_flag)
+ */
+inline bool tml::sound::Manager::GetBGMSoundMuteFlag(void) const
+{
+	return (this->sound_mute_flg_cont_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::BGM_SOUND)]);
+}
+
+
+/**
+ * @brief SetBGMSoundMuteFlagŠÖ”
+ * @param bgm_sound_mute_flg (bgm_sound_mute_flag)
+ */
+inline void tml::sound::Manager::SetBGMSoundMuteFlag(const bool bgm_sound_mute_flg)
+{
+	this->sound_mute_flg_cont_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::BGM_SOUND)] = bgm_sound_mute_flg;
+
+	this->SetSoundMuteFlagPart(static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::BGM_SOUND));
+
+	return;
+}
+
+
+/**
+ * @brief GetSESoundVolumeŠÖ”
+ * @return se_sound_volume (se_sound_volume)
+ */
+inline FLOAT tml::sound::Manager::GetSESoundVolume(void) const
+{
+	return (this->sound_volume_cont_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SE_SOUND)]);
+}
+
+
+/**
+ * @brief SetSESoundVolumeŠÖ”
+ * @param se_sound_volume (se_sound_volume)
+ */
+inline void tml::sound::Manager::SetSESoundVolume(const FLOAT se_sound_volume)
+{
+	this->sound_volume_cont_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SE_SOUND)] = se_sound_volume;
+
+	this->SetSoundVolumePart(static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SE_SOUND));
+
+	return;
+}
+
+
+/**
+ * @brief GetSESoundMuteFlagŠÖ”
+ * @return se_sound_mute_flg (se_sound_mute_flag)
+ */
+inline bool tml::sound::Manager::GetSESoundMuteFlag(void) const
+{
+	return (this->sound_mute_flg_cont_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SE_SOUND)]);
+}
+
+
+/**
+ * @brief SetSESoundMuteFlagŠÖ”
+ * @param se_sound_mute_flg (se_sound_mute_flag)
+ */
+inline void tml::sound::Manager::SetSESoundMuteFlag(const bool se_sound_mute_flg)
+{
+	this->sound_mute_flg_cont_[static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SE_SOUND)] = se_sound_mute_flg;
+
+	this->SetSoundMuteFlagPart(static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SE_SOUND));
+
+	return;
 }

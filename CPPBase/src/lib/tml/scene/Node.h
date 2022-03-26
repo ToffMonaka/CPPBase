@@ -86,8 +86,7 @@ public: tml::scene::Node &operator =(const tml::scene::Node &) = delete;
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE);
-	static const UINT RESOURCE_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::SCENE::NODE_TYPE::BASE);
+	static const UINT RESOURCE_TYPE = static_cast<UINT>(tml::ConstantUtil::SCENE::RESOURCE_TYPE::NODE);
 
 public:
 	static const tml::shared_ptr<tml::scene::Node> empty_child_node;
@@ -97,10 +96,10 @@ public:
 	static const tml::shared_ptr<tml::graphic::Model> empty_model;
 
 private:
+	const tml::scene::NodeDesc *desc_;
 	tml::input::Manager *input_mgr_;
 	tml::graphic::Manager *graphic_mgr_;
 	tml::sound::Manager *sound_mgr_;
-	tml::ConstantUtil::SCENE::NODE_TYPE type_;
 	bool run_flg_;
 	bool start_flg_;
 	bool started_flg_;
@@ -134,25 +133,29 @@ private:
 	const tml::shared_ptr<tml::scene::Node> &GetChildNodeRecursivePart(const std::list<tml::shared_ptr<tml::scene::Node>> &, const WCHAR *);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Node();
 	virtual ~Node();
 
 	virtual void Init(void);
-	INT Create(const tml::scene::NodeDesc &);
 
 	INT Start(void);
 	void End(void);
 	void Update(void);
 
+	const tml::scene::NodeDesc *GetDesc(void) const;
 	tml::input::Manager *GetInputManager(void);
 	tml::graphic::Manager *GetGraphicManager(void);
 	tml::sound::Manager *GetSoundManager(void);
-	tml::ConstantUtil::SCENE::NODE_TYPE GetType(void) const;
 	bool GetRunFlag(void) const;
 	void SetRunFlag(const bool);
 	bool GetStartFlag(void) const;
@@ -193,6 +196,16 @@ public:
 
 
 /**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::scene::NodeDesc *tml::scene::Node::GetDesc(void) const
+{
+	return (this->desc_);
+}
+
+
+/**
  * @brief GetInputManagerŠÖ”
  * @return input_mgr (input_manager)
  */
@@ -219,16 +232,6 @@ inline tml::graphic::Manager *tml::scene::Node::GetGraphicManager(void)
 inline tml::sound::Manager *tml::scene::Node::GetSoundManager(void)
 {
 	return (this->sound_mgr_);
-}
-
-
-/**
- * @brief GetTypeŠÖ”
- * @return type (type)
- */
-inline tml::ConstantUtil::SCENE::NODE_TYPE tml::scene::Node::GetType(void) const
-{
-	return (this->type_);
 }
 
 

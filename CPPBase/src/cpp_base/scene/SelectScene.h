@@ -57,6 +57,7 @@ public: cpp_base::scene::SelectScene &operator =(const cpp_base::scene::SelectSc
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::SelectSceneDesc *desc_;
 	UINT progress_type_;
 
 public:
@@ -75,16 +76,32 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	SelectScene();
 	virtual ~SelectScene();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::SelectSceneDesc &);
+
+	const cpp_base::scene::SelectSceneDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::SelectSceneDesc *cpp_base::scene::SelectScene::GetDesc(void) const
+{
+	return (this->desc_);
 }

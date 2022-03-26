@@ -127,6 +127,9 @@ public: Model2D(const tml::graphic::Model2D &) = delete;
 public: tml::graphic::Model2D &operator =(const tml::graphic::Model2D &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
+private:
+	const tml::graphic::Model2DDesc *desc_;
+
 public:
 	tml::Transform2D transform;
 	tml::XMFLOAT4EX color;
@@ -136,12 +139,29 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Model2D();
 	virtual ~Model2D();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::Model2DDesc &);
+
+	const tml::graphic::Model2DDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::Model2DDesc *tml::graphic::Model2D::GetDesc(void) const
+{
+	return (this->desc_);
 }

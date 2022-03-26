@@ -81,6 +81,7 @@ INT cpp_base::scene::Field2DMobNodeDesc::ReadValue(const tml::INIFile &conf_file
  * @brief コンストラクタ
  */
 cpp_base::scene::Field2DMobNode::Field2DMobNode() :
+	desc_(nullptr),
 	field_node_(nullptr)
 {
 	return;
@@ -126,18 +127,13 @@ void cpp_base::scene::Field2DMobNode::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNodeDesc &desc)
+INT cpp_base::scene::Field2DMobNode::OnCreate(void)
 {
-	this->Init();
-
-	if (cpp_base::scene::Node::Create(desc) < 0) {
-		this->Init();
-
+	if (cpp_base::scene::Node::OnCreate() < 0) {
 		return (-1);
 	}
 
@@ -152,8 +148,6 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 		model_desc.draw_priority = 2;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -174,10 +168,23 @@ INT cpp_base::scene::Field2DMobNode::Create(const cpp_base::scene::Field2DMobNod
 		model_desc.draw_priority = 1;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->shadow_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT cpp_base::scene::Field2DMobNode::OnCreateDeferred(void)
+{
+	if (cpp_base::scene::Node::OnCreateDeferred() < 0) {
+		return (-1);
 	}
 
 	return (0);
@@ -218,5 +225,19 @@ void cpp_base::scene::Field2DMobNode::OnEnd(void)
  */
 void cpp_base::scene::Field2DMobNode::OnUpdate(void)
 {
+	return;
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void cpp_base::scene::Field2DMobNode::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const cpp_base::scene::Field2DMobNodeDesc *>(desc);
+
+	cpp_base::scene::Node::OnSetDesc(this->desc_);
+
 	return;
 }

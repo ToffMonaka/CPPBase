@@ -103,6 +103,7 @@ void tml::graphic::ShaderConstantBufferDesc::SetBufferDesc(const tml::ConstantUt
  * @brief コンストラクタ
  */
 tml::graphic::ShaderConstantBuffer::ShaderConstantBuffer() :
+	desc_(nullptr),
 	buf_(nullptr),
 	buf_desc_(0U, 0U),
 	element_size_(0U),
@@ -157,28 +158,27 @@ void tml::graphic::ShaderConstantBuffer::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstantBufferDesc &desc)
+INT tml::graphic::ShaderConstantBuffer::OnCreate(void)
 {
-	if ((desc.element_size <= 0U)
-	|| ((desc.element_size % 16U) > 0)) {
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
+	if ((this->desc_->element_size <= 0U)
+	|| ((this->desc_->element_size % 16U) > 0)) {
 		return (-1);
 	}
 
-	if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&desc.buffer_desc, nullptr, &this->buf_))) {
+	if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&this->desc_->buffer_desc, nullptr, &this->buf_))) {
 		return (-1);
 	}
 
 	this->buf_->GetDesc(&this->buf_desc_);
-	this->element_size_ = desc.element_size;
+	this->element_size_ = this->desc_->element_size;
 
 	INT result = 0;
 
@@ -189,6 +189,35 @@ INT tml::graphic::ShaderConstantBuffer::Create(const tml::graphic::ShaderConstan
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::ShaderConstantBuffer::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::ShaderConstantBuffer::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::ShaderConstantBufferDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

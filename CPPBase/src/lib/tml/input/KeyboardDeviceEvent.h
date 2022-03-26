@@ -6,6 +6,7 @@
 
 
 #include "../constant/ConstantUtil.h"
+#include "../math/XNAMathVector.h"
 #include "DeviceEvent.h"
 
 
@@ -14,7 +15,7 @@ namespace input {
 /**
  * @brief KeyboardDeviceEventDataƒNƒ‰ƒX
  */
-class KeyboardDeviceEventData
+class KeyboardDeviceEventData : public tml::input::DeviceEventData
 {
 public:
 	tml::ConstantUtil::INPUT::KEYBOARD_DEVICE_EVENT_DATA_TYPE type_flag;
@@ -52,7 +53,6 @@ namespace input {
 class KeyboardDeviceEventDesc : public tml::input::DeviceEventDesc
 {
 public:
-	tml::input::KeyboardDeviceEventData data;
 
 private:
 	void Release(void);
@@ -91,15 +91,15 @@ public: tml::input::KeyboardDeviceEvent &operator =(const tml::input::KeyboardDe
 protected: virtual void InterfaceDummy(void) {return;};
 
 public:
-	static const UINT EVENT_SUB_INDEX = static_cast<UINT>(tml::ConstantUtil::INPUT::DEVICE_EVENT_TYPE::KEYBOARD);
+	static const UINT EVENT_TYPE = static_cast<UINT>(tml::ConstantUtil::INPUT::EVENT_TYPE::KEYBOARD_DEVICE);
 
 private:
-
-public:
-	tml::input::KeyboardDeviceEventData data;
 
 private:
 	void Release(void);
+
+protected:
+	virtual void OnRun(const tml::ManagerEventData *);
 
 public:
 	KeyboardDeviceEvent();

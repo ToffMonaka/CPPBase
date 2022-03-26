@@ -45,7 +45,8 @@ void tml::graphic::Light3DShaderStructuredBufferDesc::Init(void)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Light3DShaderStructuredBuffer::Light3DShaderStructuredBuffer()
+tml::graphic::Light3DShaderStructuredBuffer::Light3DShaderStructuredBuffer() :
+	desc_(nullptr)
 {
 	return;
 }
@@ -76,22 +77,46 @@ void tml::graphic::Light3DShaderStructuredBuffer::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Light3DShaderStructuredBuffer::Create(const tml::graphic::Light3DShaderStructuredBufferDesc &desc)
+INT tml::graphic::Light3DShaderStructuredBuffer::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ShaderStructuredBuffer::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ShaderStructuredBuffer::OnCreate() < 0) {
 		return (-1);
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Light3DShaderStructuredBuffer::OnCreateDeferred(void)
+{
+	if (tml::graphic::ShaderStructuredBuffer::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Light3DShaderStructuredBuffer::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::Light3DShaderStructuredBufferDesc *>(desc);
+
+	tml::graphic::ShaderStructuredBuffer::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

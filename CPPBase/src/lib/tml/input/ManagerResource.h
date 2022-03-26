@@ -28,6 +28,8 @@ private:
 protected:
 	virtual INT ReadValue(const tml::INIFile &);
 
+	virtual void OnSetManager(tml::Manager *);
+
 public:
 	ManagerResourceDesc();
 	virtual ~ManagerResourceDesc();
@@ -35,7 +37,6 @@ public:
 	virtual void Init(void);
 
 	tml::input::Manager *GetManager(void) const;
-	void SetManager(tml::input::Manager *);
 };
 }
 }
@@ -74,21 +75,27 @@ public: tml::input::ManagerResource &operator =(const tml::input::ManagerResourc
 protected: virtual void InterfaceDummy(void) = 0;
 
 private:
+	const tml::input::ManagerResourceDesc *desc_;
 	tml::input::Manager *mgr_;
-	tml::ConstantUtil::INPUT::RESOURCE_TYPE res_type_;
 
 private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+	virtual void OnSetManager(tml::Manager *);
 
 public:
 	ManagerResource();
 	virtual ~ManagerResource();
 
 	virtual void Init(void);
-	INT Create(const tml::input::ManagerResourceDesc &);
 
+	const tml::input::ManagerResourceDesc *GetDesc(void) const;
 	tml::input::Manager *GetManager(void);
-	tml::ConstantUtil::INPUT::RESOURCE_TYPE GetResourceType(void) const;
 };
 }
 }
@@ -104,20 +111,20 @@ inline void tml::input::ManagerResource::Release(void)
 
 
 /**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::input::ManagerResourceDesc *tml::input::ManagerResource::GetDesc(void) const
+{
+	return (this->desc_);
+}
+
+
+/**
  * @brief GetManagerŠÖ”
  * @return mgr (manager)
  */
 inline tml::input::Manager *tml::input::ManagerResource::GetManager(void)
 {
 	return (this->mgr_);
-}
-
-
-/**
- * @brief GetResourceTypeŠÖ”
- * @return res_type (resource_type)
- */
-inline tml::ConstantUtil::INPUT::RESOURCE_TYPE tml::input::ManagerResource::GetResourceType(void) const
-{
-	return (this->res_type_);
 }

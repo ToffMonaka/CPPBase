@@ -76,7 +76,8 @@ INT cpp_base::scene::Test2DStageNodeDesc::ReadValue(const tml::INIFile &conf_fil
 /**
  * @brief コンストラクタ
  */
-cpp_base::scene::Test2DStageNode::Test2DStageNode()
+cpp_base::scene::Test2DStageNode::Test2DStageNode() :
+	desc_(nullptr)
 {
 	return;
 }
@@ -118,18 +119,28 @@ void cpp_base::scene::Test2DStageNode::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::Test2DStageNode::Create(const cpp_base::scene::Test2DStageNodeDesc &desc)
+INT cpp_base::scene::Test2DStageNode::OnCreate(void)
 {
-	this->Init();
+	if (cpp_base::scene::Node::OnCreate() < 0) {
+		return (-1);
+	}
 
-	if (cpp_base::scene::Node::Create(desc) < 0) {
-		this->Init();
+	return (0);
+}
 
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT cpp_base::scene::Test2DStageNode::OnCreateDeferred(void)
+{
+	if (cpp_base::scene::Node::OnCreateDeferred() < 0) {
 		return (-1);
 	}
 
@@ -180,6 +191,20 @@ void cpp_base::scene::Test2DStageNode::OnEnd(void)
  */
 void cpp_base::scene::Test2DStageNode::OnUpdate(void)
 {
+	return;
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void cpp_base::scene::Test2DStageNode::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const cpp_base::scene::Test2DStageNodeDesc *>(desc);
+
+	cpp_base::scene::Node::OnSetDesc(this->desc_);
+
 	return;
 }
 

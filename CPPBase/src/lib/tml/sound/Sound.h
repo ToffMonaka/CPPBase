@@ -59,11 +59,8 @@ public: Sound(const tml::sound::Sound &) = delete;
 public: tml::sound::Sound &operator =(const tml::sound::Sound &) = delete;
 protected: virtual void InterfaceDummy(void) = 0;
 
-public:
-	static const UINT RESOURCE_MAIN_INDEX = static_cast<UINT>(tml::ConstantUtil::SOUND::RESOURCE_TYPE::SOUND);
-
 private:
-	tml::ConstantUtil::SOUND::SOUND_TYPE type_;
+	const tml::sound::SoundDesc *desc_;
 	ALuint buf_;
 	ALuint src_;
 	BYTE *ogg_file_buf_;
@@ -78,20 +75,20 @@ private:
 
 private:
 	void Release(void);
-	void ReleaseDeferred(void);
 
 protected:
+	virtual INT OnCreate(void);
 	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Sound();
 	virtual ~Sound();
 
 	virtual void Init(void);
-	INT Create(const tml::sound::SoundDesc &);
-	virtual void InitDeferred(void);
 
-	tml::ConstantUtil::SOUND::SOUND_TYPE GetType(void) const;
+	const tml::sound::SoundDesc *GetDesc(void) const;
 	ALuint GetBuffer(void) const;
 	ALuint GetSource(void) const;
 };
@@ -100,12 +97,12 @@ public:
 
 
 /**
- * @brief GetTypeŠÖ”
- * @return type (type)
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
  */
-inline tml::ConstantUtil::SOUND::SOUND_TYPE tml::sound::Sound::GetType(void) const
+inline const tml::sound::SoundDesc *tml::sound::Sound::GetDesc(void) const
 {
-	return (this->type_);
+	return (this->desc_);
 }
 
 

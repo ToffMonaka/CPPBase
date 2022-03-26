@@ -76,15 +76,24 @@ public:
 	} ELEMENT;
 
 private:
+	const tml::graphic::ConfigShaderConstantBufferDesc *desc_;
+
+private:
 	void Release(void);
+
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	ConfigShaderConstantBuffer();
 	virtual ~ConfigShaderConstantBuffer();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::ConfigShaderConstantBufferDesc &);
 
+	const tml::graphic::ConfigShaderConstantBufferDesc *GetDesc(void) const;
 	tml::graphic::ConfigShaderConstantBuffer::ELEMENT *GetElement(void);
 };
 }
@@ -97,6 +106,16 @@ public:
 inline void tml::graphic::ConfigShaderConstantBuffer::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::ConfigShaderConstantBufferDesc *tml::graphic::ConfigShaderConstantBuffer::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

@@ -223,6 +223,7 @@ public: tml::graphic::Canvas2D &operator =(const tml::graphic::Canvas2D &) = del
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const tml::graphic::Canvas2DDesc *desc_;
 	tml::shared_ptr<tml::graphic::Camera2D> camera_;
 	tml::shared_ptr<tml::graphic::Texture> rt_tex_;
 	bool rt_tex_clear_flg_;
@@ -251,13 +252,19 @@ public:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	Canvas2D();
 	virtual ~Canvas2D();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::Canvas2DDesc &);
 
+	const tml::graphic::Canvas2DDesc *GetDesc(void) const;
 	const tml::shared_ptr<tml::graphic::Camera2D> &GetCamera(void);
 	void SetCamera(const tml::shared_ptr<tml::graphic::Camera2D> &);
 	const tml::shared_ptr<tml::graphic::Texture> &GetRenderTargetTexture(void);
@@ -291,6 +298,16 @@ public:
 inline void tml::graphic::Canvas2D::Release(void)
 {
 	return;
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::Canvas2DDesc *tml::graphic::Canvas2D::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

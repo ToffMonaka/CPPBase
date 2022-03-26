@@ -190,6 +190,7 @@ public:
 	static const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_ARRAY[tml::graphic::GroundModel2D::INPUT_ELEMENT_DESC_COUNT];
 
 private:
+	const tml::graphic::GroundModel2DDesc *desc_;
 	tml::shared_ptr<tml::graphic::Map> map_;
 	tml::shared_ptr<tml::graphic::GroundModel2DShaderStructuredBuffer> ssb_;
 	tml::shared_ptr<tml::graphic::GroundModel2DLayerShaderStructuredBuffer> layer_ssb_;
@@ -198,13 +199,19 @@ private:
 private:
 	void Release(void);
 
+protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
+
 public:
 	GroundModel2D();
 	virtual ~GroundModel2D();
 
 	virtual void Init(void);
-	INT Create(const tml::graphic::GroundModel2DDesc &);
 
+	const tml::graphic::GroundModel2DDesc *GetDesc(void) const;
 	tml::graphic::GroundModel2DStage *GetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE);
 	void SetStage(const tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE, tml::unique_ptr<tml::graphic::GroundModel2DStage> &);
 	const tml::XMUINT2EX &GetTileCount(void) const;
@@ -219,6 +226,16 @@ public:
 	virtual void DrawStageForward2D(void);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const tml::graphic::GroundModel2DDesc *tml::graphic::GroundModel2D::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

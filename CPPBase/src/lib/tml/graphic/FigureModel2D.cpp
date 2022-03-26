@@ -216,7 +216,8 @@ INT tml::graphic::FigureModel2DDesc::ReadValue(const tml::INIFile &conf_file)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::FigureModel2D::FigureModel2D()
+tml::graphic::FigureModel2D::FigureModel2D() :
+	desc_(nullptr)
 {
 	return;
 }
@@ -259,18 +260,13 @@ void tml::graphic::FigureModel2D::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &desc)
+INT tml::graphic::FigureModel2D::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::Model2D::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::Model2D::OnCreate() < 0) {
 		return (-1);
 	}
 
@@ -280,8 +276,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		auto stage = tml::make_unique<tml::graphic::FigureModel2DStage>(1U);
 
 		if (stage->Create(this->GetManager()) < 0) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -294,8 +288,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			tml::shared_ptr<tml::graphic::RasterizerState> rs;
 
 			if (this->GetManager()->GetResource<tml::graphic::RasterizerState>(rs, this->GetManager()->common.back_culling_rasterizer_state) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -306,8 +298,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			tml::shared_ptr<tml::graphic::BlendState> bs;
 
 			if (this->GetManager()->GetResource<tml::graphic::BlendState>(bs, this->GetManager()->common.alignment_blend_state_array[1]) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -318,8 +308,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			tml::shared_ptr<tml::graphic::DepthState> ds;
 
 			if (this->GetManager()->GetResource<tml::graphic::DepthState>(ds, this->GetManager()->common.reference_depth_state) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -330,8 +318,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
 			if (this->GetManager()->GetResource<tml::graphic::Shader>(shader, this->GetManager()->common.figure_model_2d_shader) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -342,8 +328,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			auto layer = tml::make_unique<tml::graphic::FigureModel2DLayer>(1U);
 
 			if (layer->Create(this->GetManager()) < 0) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -355,8 +339,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 				tml::shared_ptr<tml::graphic::Mesh> mesh;
 
 				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, this->GetManager()->common.figure_model_2d_mesh) == nullptr) {
-					this->Init();
-
 					return (-1);
 				}
 
@@ -364,24 +346,20 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 			}
 
 			// DiffuseTexture Create
-			if (desc.diffuse_texture != nullptr) {
+			if (this->desc_->diffuse_texture != nullptr) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
 
-				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc.diffuse_texture) == nullptr) {
-					this->Init();
-
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, this->desc_->diffuse_texture) == nullptr) {
 					return (-1);
 				}
 
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
 				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
-			} else if (desc.diffuse_texture_desc != nullptr) {
+			} else if (this->desc_->diffuse_texture_desc != nullptr) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
 
-				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, (*desc.diffuse_texture_desc)) == nullptr) {
-					this->Init();
-
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, (*this->desc_->diffuse_texture_desc)) == nullptr) {
 					return (-1);
 				}
 
@@ -396,8 +374,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 				tml::shared_ptr<tml::graphic::Sampler> samp;
 
 				if (this->GetManager()->GetResource<tml::graphic::Sampler>(samp, this->GetManager()->common.cc_sampler) == nullptr) {
-					this->Init();
-
 					return (-1);
 				}
 
@@ -410,10 +386,10 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		this->SetStage(tml::ConstantUtil::GRAPHIC::DRAW_STAGE_TYPE::FORWARD_2D, stage);
 	}
 
-	if (desc.size_auto_flag) {
+	if (this->desc_->size_auto_flag) {
 		this->size = size;
 	} else {
-		this->size = desc.size;
+		this->size = this->desc_->size;
 	}
 
 	{// ShaderStructuredBuffer Create
@@ -423,8 +399,6 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FigureModel2DShaderStructuredBuffer::ELEMENT), 1U);
 
 		if (this->GetManager()->GetResource<tml::graphic::FigureModel2DShaderStructuredBuffer>(this->ssb_, ssb_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -436,13 +410,40 @@ INT tml::graphic::FigureModel2D::Create(const tml::graphic::FigureModel2DDesc &d
 		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::FigureModel2DLayerShaderStructuredBuffer::ELEMENT), 1U);
 
 		if (this->GetManager()->GetResource<tml::graphic::FigureModel2DLayerShaderStructuredBuffer>(this->layer_ssb_, ssb_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::FigureModel2D::OnCreateDeferred(void)
+{
+	if (tml::graphic::Model2D::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::FigureModel2D::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::FigureModel2DDesc *>(desc);
+
+	tml::graphic::Model2D::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

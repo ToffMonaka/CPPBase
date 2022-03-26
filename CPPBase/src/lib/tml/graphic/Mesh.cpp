@@ -150,6 +150,7 @@ void tml::graphic::MeshDesc::SetIndexBufferDesc(const UINT element_size, const U
  * @brief コンストラクタ
  */
 tml::graphic::Mesh::Mesh() :
+	desc_(nullptr),
 	vb_(nullptr),
 	vb_desc_(0U, D3D11_BIND_VERTEX_BUFFER),
 	vb_element_size_(0U),
@@ -226,73 +227,89 @@ void tml::graphic::Mesh::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Mesh::Create(const tml::graphic::MeshDesc &desc)
+INT tml::graphic::Mesh::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	if ((desc.vertex_buffer_element_size * desc.vertex_buffer_element_count) > 0U) {
-		if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&desc.vertex_buffer_desc, &desc.vertex_buffer_subresource_data, &this->vb_))) {
-			this->Init();
-
+	if ((this->desc_->vertex_buffer_element_size * this->desc_->vertex_buffer_element_count) > 0U) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&this->desc_->vertex_buffer_desc, &this->desc_->vertex_buffer_subresource_data, &this->vb_))) {
 			return (-1);
 		}
 
 		this->vb_->GetDesc(&this->vb_desc_);
-		this->vb_element_size_ = desc.vertex_buffer_element_size;
-		this->vb_element_cnt_ = desc.vertex_buffer_element_count;
+		this->vb_element_size_ = this->desc_->vertex_buffer_element_size;
+		this->vb_element_cnt_ = this->desc_->vertex_buffer_element_count;
 
-		if (desc.vertex_buffer_cpu_buffer_flag) {
+		if (this->desc_->vertex_buffer_cpu_buffer_flag) {
 			INT result = 0;
 
 			this->GetManager()->GetCPUBuffer(this->vb_cpu_buf_, this->vb_msr_, this->vb_, &result);
 
 			if (result < 0) {
-				this->Init();
-
 				return (-1);
 			}
 		}
 	}
 
-	if ((desc.index_buffer_element_size * desc.index_buffer_element_count) > 0U) {
-		if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&desc.index_buffer_desc, &desc.index_buffer_subresource_data, &this->ib_))) {
-			this->Init();
-
+	if ((this->desc_->index_buffer_element_size * this->desc_->index_buffer_element_count) > 0U) {
+		if (FAILED(this->GetManager()->GetDevice()->CreateBuffer(&this->desc_->index_buffer_desc, &this->desc_->index_buffer_subresource_data, &this->ib_))) {
 			return (-1);
 		}
 
 		this->ib_->GetDesc(&this->ib_desc_);
-		this->ib_element_size_ = desc.index_buffer_element_size;
-		this->ib_element_cnt_ = desc.index_buffer_element_count;
-		this->ib_format_ = desc.index_buffer_format;
+		this->ib_element_size_ = this->desc_->index_buffer_element_size;
+		this->ib_element_cnt_ = this->desc_->index_buffer_element_count;
+		this->ib_format_ = this->desc_->index_buffer_format;
 
-		if (desc.index_buffer_cpu_buffer_flag) {
+		if (this->desc_->index_buffer_cpu_buffer_flag) {
 			INT result = 0;
 
 			this->GetManager()->GetCPUBuffer(this->ib_cpu_buf_, this->ib_msr_, this->ib_, &result);
 
 			if (result < 0) {
-				this->Init();
-
 				return (-1);
 			}
 		}
 	}
 
-	this->pt_ = desc.primitive_topology;
+	this->pt_ = this->desc_->primitive_topology;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Mesh::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Mesh::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::MeshDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

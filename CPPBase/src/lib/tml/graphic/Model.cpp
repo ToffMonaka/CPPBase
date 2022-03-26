@@ -252,7 +252,7 @@ INT tml::graphic::ModelDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Model::Model() :
-	type_(tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE),
+	desc_(nullptr),
 	dimension_type_(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE),
 	draw_priority_(0),
 	draw_set_canvas_cnt_(0U)
@@ -294,7 +294,6 @@ void tml::graphic::Model::Init(void)
 {
 	this->Release();
 
-	this->type_ = tml::ConstantUtil::GRAPHIC::MODEL_TYPE::NONE;
 	this->dimension_type_ = tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE;
 	this->rs_cont_.clear();
 	this->bs_cont_.clear();
@@ -316,23 +315,48 @@ void tml::graphic::Model::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
- * @param dimension_type (dimension_type)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Model::Create(const tml::graphic::ModelDesc &desc, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
+INT tml::graphic::Model::OnCreate(void)
 {
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::MODEL_TYPE>(this->GetResourceSubIndex());
-	this->dimension_type_ = dimension_type;
-	this->draw_priority_ = desc.draw_priority;
+	this->draw_priority_ = this->desc_->draw_priority;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Model::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Model::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::ModelDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

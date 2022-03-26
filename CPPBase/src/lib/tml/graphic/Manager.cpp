@@ -57,8 +57,9 @@ tml::graphic::ManagerDesc::ManagerDesc() :
 	frame_rate_limit(60U),
 	vsync_flag(true)
 {
-	this->InitResourceCount();
-	this->InitEventCount();
+	this->resource_count = tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT;
+	this->task_count = tml::ConstantUtil::GRAPHIC::TASK_TYPE_COUNT;
+	this->event_count = tml::ConstantUtil::GRAPHIC::EVENT_TYPE_COUNT;
 
 	return;
 }
@@ -88,51 +89,9 @@ void tml::graphic::ManagerDesc::Init(void)
 
 	tml::ManagerDesc::Init();
 
-	this->InitResourceCount();
-	this->InitEventCount();
-
-	return;
-}
-
-
-/**
- * @brief InitResourceCountŠÖ”
- */
-void tml::graphic::ManagerDesc::InitResourceCount(void)
-{
-	tml::ManagerDesc::InitResourceCount();
-
-	this->resource_count_container.resize(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT);
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::RASTERIZER_STATE)] = tml::ConstantUtil::GRAPHIC::RASTERIZER_STATE_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::BLEND_STATE)] = tml::ConstantUtil::GRAPHIC::BLEND_STATE_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::DEPTH_STATE)] = tml::ConstantUtil::GRAPHIC::DEPTH_STATE_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER)] = tml::ConstantUtil::GRAPHIC::SHADER_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_CONSTANT_BUFFER)] = tml::ConstantUtil::GRAPHIC::SHADER_CONSTANT_BUFFER_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SHADER_STRUCTURED_BUFFER)] = tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MESH)] = tml::ConstantUtil::GRAPHIC::MESH_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::TEXTURE)] = tml::ConstantUtil::GRAPHIC::TEXTURE_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::SAMPLER)] = tml::ConstantUtil::GRAPHIC::SAMPLER_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FONT)] = tml::ConstantUtil::GRAPHIC::FONT_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::ATLAS)] = tml::ConstantUtil::GRAPHIC::ATLAS_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MAP)] = tml::ConstantUtil::GRAPHIC::MAP_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CANVAS)] = tml::ConstantUtil::GRAPHIC::CANVAS_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::CAMERA)] = tml::ConstantUtil::GRAPHIC::CAMERA_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::LIGHT)] = tml::ConstantUtil::GRAPHIC::LIGHT_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::FOG)] = tml::ConstantUtil::GRAPHIC::FOG_TYPE_COUNT;
-	this->resource_count_container[static_cast<UINT>(tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE::MODEL)] = tml::ConstantUtil::GRAPHIC::MODEL_TYPE_COUNT;
-
-	return;
-}
-
-
-/**
- * @brief InitEventCountŠÖ”
- */
-void tml::graphic::ManagerDesc::InitEventCount(void)
-{
-	tml::ManagerDesc::InitEventCount();
-
-	this->event_count_container.resize(tml::ConstantUtil::GRAPHIC::EVENT_TYPE_COUNT);
+	this->resource_count = tml::ConstantUtil::GRAPHIC::RESOURCE_TYPE_COUNT;
+	this->task_count = tml::ConstantUtil::GRAPHIC::TASK_TYPE_COUNT;
+	this->event_count = tml::ConstantUtil::GRAPHIC::EVENT_TYPE_COUNT;
 
 	return;
 }
@@ -248,6 +207,7 @@ void tml::graphic::Manager::Release(void)
 	this->common.Init();
 
 	this->DeleteResourceContainer();
+	this->DeleteTaskContainer();
 	this->DeleteEventContainer();
 
 	if (this->swap_chain_ != nullptr) {

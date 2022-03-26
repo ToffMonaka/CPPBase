@@ -153,7 +153,8 @@ INT tml::graphic::AtlasDesc::ReadValue(const tml::INIFile &conf_file)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::Atlas::Atlas()
+tml::graphic::Atlas::Atlas() :
+	desc_(nullptr)
 {
 	return;
 }
@@ -166,6 +167,15 @@ tml::graphic::Atlas::~Atlas()
 {
 	this->Release();
 
+	return;
+}
+
+
+/**
+ * @brief Release関数
+ */
+void tml::graphic::Atlas::Release(void)
+{
 	return;
 }
 
@@ -187,46 +197,35 @@ void tml::graphic::Atlas::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
+INT tml::graphic::Atlas::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	auto atlas_file_read_desc_dat = desc.atlas_file_read_desc.GetDataByParent();
+	auto atlas_file_read_desc_dat = this->desc_->atlas_file_read_desc.GetDataByParent();
 
 	tml::XMLFile atlas_file;
 
 	atlas_file.read_desc.parent_data = atlas_file_read_desc_dat;
 
 	if (atlas_file.Read() < 0) {
-		this->Init();
-
 		return (-1);
 	}
 
 	auto &atlas_file_root_node = atlas_file.data.GetRootNode();
 
 	if (atlas_file_root_node->GetChildNodeContainer().empty()) {
-		this->Init();
-
 		return (-1);
 	}
 
 	auto &atlas_file_root_dict_node = atlas_file_root_node->GetChildNode(L"dict");
 
 	if (atlas_file_root_dict_node == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -262,14 +261,10 @@ INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
 	}
 
 	if (atlas_file_frames_dict_node == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
 	if (atlas_file_metadata_dict_node == nullptr) {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -349,7 +344,7 @@ INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
 
 			if (node_itr != node_end_itr) {
 				if ((*node_itr)->name == L"string") {
-					img_file_path = desc.atlas_directory_path;
+					img_file_path = this->desc_->atlas_directory_path;
 					img_file_path += L"/";
 					img_file_path += (*node_itr)->string;
 				}
@@ -360,7 +355,7 @@ INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
 	}
 
 	// Texture Create
-	if (desc.texture_flag) {
+	if (this->desc_->texture_flag) {
 		tml::graphic::TextureDesc tex_desc;
 
 		tex_desc.SetManager(this->GetManager());
@@ -368,11 +363,38 @@ INT tml::graphic::Atlas::Create(const tml::graphic::AtlasDesc &desc)
 		tex_desc.image_file_read_desc_container[0].data.file_path = img_file_path;
 
 		if (this->GetManager()->GetResource<tml::graphic::Texture>(this->tex_, tex_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Atlas::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Atlas::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::AtlasDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }

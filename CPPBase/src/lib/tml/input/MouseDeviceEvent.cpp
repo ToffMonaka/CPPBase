@@ -44,6 +44,8 @@ void tml::input::MouseDeviceEventData::Init(void)
 	this->move_value = 0;
 	this->wheel_value = 0.0f;
 
+	tml::input::DeviceEventData::Init();
+
 	return;
 }
 
@@ -104,8 +106,6 @@ tml::input::MouseDeviceEventDesc::~MouseDeviceEventDesc()
 void tml::input::MouseDeviceEventDesc::Init(void)
 {
 	this->Release();
-
-	this->data.Init();
 
 	tml::input::DeviceEventDesc::Init();
 
@@ -168,8 +168,6 @@ void tml::input::MouseDeviceEvent::Init(void)
 {
 	this->Release();
 
-	this->data.Init();
-
 	tml::input::DeviceEvent::Init();
 
 	return;
@@ -192,7 +190,15 @@ INT tml::input::MouseDeviceEvent::Create(const tml::input::MouseDeviceEventDesc 
 		return (-1);
 	}
 
-	this->data = desc.data;
-
 	return (0);
+}
+
+
+/**
+ * @brief OnRunŠÖ”
+ * @param dat (data)
+ */
+void tml::input::MouseDeviceEvent::OnRun(const tml::ManagerEventData *dat)
+{
+	return;
 }

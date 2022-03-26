@@ -56,6 +56,7 @@ public: cpp_base::scene::Field2DGroundNode &operator =(const cpp_base::scene::Fi
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::Field2DGroundNodeDesc *desc_;
 	cpp_base::scene::Field2DNode *field_node_;
 
 public:
@@ -65,16 +66,32 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Field2DGroundNode();
 	virtual ~Field2DGroundNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::Field2DGroundNodeDesc &);
+
+	const cpp_base::scene::Field2DGroundNodeDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::Field2DGroundNodeDesc *cpp_base::scene::Field2DGroundNode::GetDesc(void) const
+{
+	return (this->desc_);
 }

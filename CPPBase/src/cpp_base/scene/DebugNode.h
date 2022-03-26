@@ -56,6 +56,7 @@ public: cpp_base::scene::DebugNode &operator =(const cpp_base::scene::DebugNode 
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::DebugNodeDesc *desc_;
 	tml::TIME_REAL update_time_;
 	tml::TIME_REAL cpu_elapsed_time_;
 	UINT cpu_elapsed_cnt_;
@@ -70,16 +71,32 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	DebugNode();
 	virtual ~DebugNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::DebugNodeDesc &);
+
+	const cpp_base::scene::DebugNodeDesc *GetDesc(void) const;
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::DebugNodeDesc *cpp_base::scene::DebugNode::GetDesc(void) const
+{
+	return (this->desc_);
 }

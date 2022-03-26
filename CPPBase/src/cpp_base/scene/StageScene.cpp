@@ -83,6 +83,7 @@ INT cpp_base::scene::StageSceneDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 cpp_base::scene::StageScene::StageScene() :
+	desc_(nullptr),
 	progress_type_(0U)
 {
 	return;
@@ -133,18 +134,13 @@ void cpp_base::scene::StageScene::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &desc)
+INT cpp_base::scene::StageScene::OnCreate(void)
 {
-	this->Init();
-
-	if (cpp_base::scene::Scene::Create(desc) < 0) {
-		this->Init();
-
+	if (cpp_base::scene::Scene::OnCreate() < 0) {
 		return (-1);
 	}
 
@@ -156,8 +152,6 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		camera_desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, camera_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -169,8 +163,6 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		canvas_desc.draw_priority = 1;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -190,8 +182,6 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		camera_desc.far_clip = 1000.0f;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, camera_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -203,8 +193,6 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		canvas_desc.draw_priority = 0;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas3D>(this->canvas_3d, canvas_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -213,6 +201,21 @@ INT cpp_base::scene::StageScene::Create(const cpp_base::scene::StageSceneDesc &d
 		this->canvas_3d->SetRenderTargetTextureClearFlag(true);
 		this->canvas_3d->SetDepthTargetTexture(this->GetGraphicManager()->common.main_depth_target_texture);
 		this->canvas_3d->SetDepthTargetTextureClearFlag(true);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT cpp_base::scene::StageScene::OnCreateDeferred(void)
+{
+	if (cpp_base::scene::Scene::OnCreateDeferred() < 0) {
+		return (-1);
 	}
 
 	return (0);
@@ -278,6 +281,20 @@ void cpp_base::scene::StageScene::OnUpdate(void)
 		break;
 	}
 	}
+
+	return;
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void cpp_base::scene::StageScene::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const cpp_base::scene::StageSceneDesc *>(desc);
+
+	cpp_base::scene::Scene::OnSetDesc(this->desc_);
 
 	return;
 }

@@ -205,6 +205,7 @@ INT tml::graphic::Model3DDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Model3D::Model3D() :
+	desc_(nullptr),
 	color(1.0f),
 	size(0.0f),
 	draw_data(nullptr)
@@ -252,20 +253,50 @@ void tml::graphic::Model3D::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Model3D::Create(const tml::graphic::Model3DDesc &desc)
+INT tml::graphic::Model3D::OnCreate(void)
 {
-	if (tml::graphic::Model::Create(desc, tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D) < 0) {
+	if (tml::graphic::Model::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->transform = desc.transform;
-	this->color = desc.color;
-	this->size = desc.size;
+	this->SetDimensionType(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::_3D);
+
+	this->transform = this->desc_->transform;
+	this->color = this->desc_->color;
+	this->size = this->desc_->size;
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Model3D::OnCreateDeferred(void)
+{
+	if (tml::graphic::Model::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Model3D::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::Model3DDesc *>(desc);
+
+	tml::graphic::Model::OnSetDesc(this->desc_);
+
+	return;
 }

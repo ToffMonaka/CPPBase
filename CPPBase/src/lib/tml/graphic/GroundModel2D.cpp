@@ -221,7 +221,8 @@ INT tml::graphic::GroundModel2DDesc::ReadValue(const tml::INIFile &conf_file)
 /**
  * @brief コンストラクタ
  */
-tml::graphic::GroundModel2D::GroundModel2D()
+tml::graphic::GroundModel2D::GroundModel2D() :
+	desc_(nullptr)
 {
 	return;
 }
@@ -266,37 +267,26 @@ void tml::graphic::GroundModel2D::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &desc)
+INT tml::graphic::GroundModel2D::OnCreate(void)
 {
-	this->Init();
-
-	if (tml::graphic::Model2D::Create(desc) < 0) {
-		this->Init();
-
+	if (tml::graphic::Model2D::OnCreate() < 0) {
 		return (-1);
 	}
 
 	// Map Create
-	if (desc.map != nullptr) {
-		if (this->GetManager()->GetResource<tml::graphic::Map>(this->map_, desc.map) == nullptr) {
-			this->Init();
-
+	if (this->desc_->map != nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Map>(this->map_, this->desc_->map) == nullptr) {
 			return (-1);
 		}
-	} else if (desc.map_desc != nullptr) {
-		if (this->GetManager()->GetResource<tml::graphic::Map>(this->map_, (*desc.map_desc)) == nullptr) {
-			this->Init();
-
+	} else if (this->desc_->map_desc != nullptr) {
+		if (this->GetManager()->GetResource<tml::graphic::Map>(this->map_, (*this->desc_->map_desc)) == nullptr) {
 			return (-1);
 		}
 	} else {
-		this->Init();
-
 		return (-1);
 	}
 
@@ -306,8 +296,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		auto stage = tml::make_unique<tml::graphic::GroundModel2DStage>(1U);
 
 		if (stage->Create(this->GetManager()) < 0) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -320,8 +308,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			tml::shared_ptr<tml::graphic::RasterizerState> rs;
 
 			if (this->GetManager()->GetResource<tml::graphic::RasterizerState>(rs, this->GetManager()->common.back_culling_rasterizer_state) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -332,8 +318,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			tml::shared_ptr<tml::graphic::BlendState> bs;
 
 			if (this->GetManager()->GetResource<tml::graphic::BlendState>(bs, this->GetManager()->common.alignment_blend_state_array[1]) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -344,8 +328,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			tml::shared_ptr<tml::graphic::DepthState> ds;
 
 			if (this->GetManager()->GetResource<tml::graphic::DepthState>(ds, this->GetManager()->common.reference_depth_state) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -356,8 +338,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			tml::shared_ptr<tml::graphic::Shader> shader;
 
 			if (this->GetManager()->GetResource<tml::graphic::Shader>(shader, this->GetManager()->common.ground_model_2d_shader) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -368,8 +348,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			auto layer = tml::make_unique<tml::graphic::GroundModel2DLayer>(1U);
 
 			if (layer->Create(this->GetManager()) < 0) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -430,8 +408,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 				mesh_desc.primitive_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 				if (this->GetManager()->GetResource<tml::graphic::Mesh>(mesh, mesh_desc) == nullptr) {
-					this->Init();
-
 					return (-1);
 				}
 
@@ -439,24 +415,20 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 			}
 
 			// DiffuseTexture Create
-			if (desc.diffuse_texture != nullptr) {
+			if (this->desc_->diffuse_texture != nullptr) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
 
-				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, desc.diffuse_texture) == nullptr) {
-					this->Init();
-
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, this->desc_->diffuse_texture) == nullptr) {
 					return (-1);
 				}
 
 				this->SetTexture(layer->GetDiffuseTextureIndex(), tex);
 
 				size = tml::XMFLOAT2EX(static_cast<FLOAT>(tex->GetRect().GetSize().x), static_cast<FLOAT>(tex->GetRect().GetSize().y));
-			} else if (desc.diffuse_texture_desc != nullptr) {
+			} else if (this->desc_->diffuse_texture_desc != nullptr) {
 				tml::shared_ptr<tml::graphic::Texture> tex;
 
-				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, (*desc.diffuse_texture_desc)) == nullptr) {
-					this->Init();
-
+				if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, (*this->desc_->diffuse_texture_desc)) == nullptr) {
 					return (-1);
 				}
 
@@ -468,8 +440,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 					tml::shared_ptr<tml::graphic::Texture> tex;
 
 					if (this->GetManager()->GetResource<tml::graphic::Texture>(tex, this->map_->GetTexture()) == nullptr) {
-						this->Init();
-
 						return (-1);
 					}
 
@@ -485,8 +455,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 				tml::shared_ptr<tml::graphic::Sampler> samp;
 
 				if (this->GetManager()->GetResource<tml::graphic::Sampler>(samp, this->GetManager()->common.cc_sampler) == nullptr) {
-					this->Init();
-
 					return (-1);
 				}
 
@@ -501,10 +469,10 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 
 	size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->map_->GetTilesetTileSize().x * this->map_->GetTileCount().x), static_cast<FLOAT>(this->map_->GetTilesetTileSize().y * this->map_->GetTileCount().y));
 
-	if (desc.size_auto_flag) {
+	if (this->desc_->size_auto_flag) {
 		this->size = size;
 	} else {
-		this->size = desc.size;
+		this->size = this->desc_->size;
 	}
 
 	{// ShaderStructuredBuffer Create
@@ -514,8 +482,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DShaderStructuredBuffer::ELEMENT), 1U);
 
 		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DShaderStructuredBuffer>(this->ssb_, ssb_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -527,8 +493,6 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DLayerShaderStructuredBuffer::ELEMENT), 1U);
 
 		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DLayerShaderStructuredBuffer>(this->layer_ssb_, ssb_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -540,13 +504,40 @@ INT tml::graphic::GroundModel2D::Create(const tml::graphic::GroundModel2DDesc &d
 		ssb_desc.SetBufferDesc(tml::ConstantUtil::GRAPHIC::SHADER_STRUCTURED_BUFFER_DESC_BIND_FLAG::SR, sizeof(tml::graphic::GroundModel2DBlockShaderStructuredBuffer::ELEMENT), this->map_->GetBlockCount().x * this->map_->GetBlockCount().y);
 
 		if (this->GetManager()->GetResource<tml::graphic::GroundModel2DBlockShaderStructuredBuffer>(this->block_ssb_, ssb_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::GroundModel2D::OnCreateDeferred(void)
+{
+	if (tml::graphic::Model2D::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::GroundModel2D::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::GroundModel2DDesc *>(desc);
+
+	tml::graphic::Model2D::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

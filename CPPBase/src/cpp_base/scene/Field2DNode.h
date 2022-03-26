@@ -56,6 +56,7 @@ public: cpp_base::scene::Field2DNode &operator =(const cpp_base::scene::Field2DN
 protected: virtual void InterfaceDummy(void) {return;};
 
 private:
+	const cpp_base::scene::Field2DNodeDesc *desc_;
 	tml::shared_ptr<tml::scene::Node> ground_layout_node_;
 	tml::shared_ptr<tml::scene::Node> pl_layout_node_;
 	tml::shared_ptr<tml::scene::Node> mob_layout_node_;
@@ -67,16 +68,22 @@ private:
 	void Release(void);
 
 protected:
+	virtual INT OnCreate(void);
+	virtual INT OnCreateDeferred(void);
+
 	virtual INT OnStart(void);
 	virtual void OnEnd(void);
 	virtual void OnUpdate(void);
+
+	virtual void OnSetDesc(const tml::ManagerResourceDesc *);
 
 public:
 	Field2DNode();
 	virtual ~Field2DNode();
 
 	virtual void Init(void);
-	INT Create(const cpp_base::scene::Field2DNodeDesc &);
+
+	const cpp_base::scene::Field2DNodeDesc *GetDesc(void) const;
 	const tml::shared_ptr<tml::scene::Node> &GetGroundNode(void);
 	INT AddGroundNode(const tml::shared_ptr<tml::scene::Node> &, const bool deferred_flg = true);
 	void RemoveGroundNode(const bool deferred_flg = true);
@@ -93,6 +100,16 @@ public:
 	void RemoveBulletNode(const bool deferred_flg = true);
 };
 }
+}
+
+
+/**
+ * @brief GetDescŠÖ”
+ * @return desc (desc)
+ */
+inline const cpp_base::scene::Field2DNodeDesc *cpp_base::scene::Field2DNode::GetDesc(void) const
+{
+	return (this->desc_);
 }
 
 

@@ -86,7 +86,7 @@ INT tml::graphic::FogDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief コンストラクタ
  */
 tml::graphic::Fog::Fog() :
-	type_(tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE),
+	desc_(nullptr),
 	dimension_type_(tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE),
 	draw_priority_(0),
 	draw_set_canvas_cnt_(0U)
@@ -120,7 +120,6 @@ void tml::graphic::Fog::Init(void)
 {
 	this->Release();
 
-	this->type_ = tml::ConstantUtil::GRAPHIC::FOG_TYPE::NONE;
 	this->dimension_type_ = tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE::NONE;
 	this->draw_priority_ = 0;
 	this->draw_set_canvas_cnt_ = 0U;
@@ -140,28 +139,54 @@ void tml::graphic::Fog::Init(void)
 
 
 /**
- * @brief Create関数
- * @param desc (desc)
- * @param dimension_type (dimension_type)
+ * @brief OnCreate関数
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::graphic::Fog::Create(const tml::graphic::FogDesc &desc, const tml::ConstantUtil::GRAPHIC::DIMENSION_TYPE dimension_type)
+INT tml::graphic::Fog::OnCreate(void)
 {
-	if (tml::graphic::ManagerResource::Create(desc) < 0) {
+	if (tml::graphic::ManagerResource::OnCreate() < 0) {
 		return (-1);
 	}
 
-	this->type_ = static_cast<tml::ConstantUtil::GRAPHIC::FOG_TYPE>(this->GetResourceSubIndex());
-	this->dimension_type_ = dimension_type;
-	this->draw_priority_ = desc.draw_priority;
+	this->draw_priority_ = this->desc_->draw_priority;
+
 	/*
-	this->mul_val_ = desc.mul_value;
-	this->SetNearRange(desc.near_range);
-	this->SetFarRange(desc.far_range);
+	this->mul_val_ = this->desc_->mul_value;
+	this->SetNearRange(this->desc_->near_range);
+	this->SetFarRange(this->desc_->far_range);
 	*/
 
 	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferred関数
+ * @return result (result)<br>
+ * 0未満=失敗
+ */
+INT tml::graphic::Fog::OnCreateDeferred(void)
+{
+	if (tml::graphic::ManagerResource::OnCreateDeferred() < 0) {
+		return (-1);
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnSetDesc関数
+ * @param desc (desc)
+ */
+void tml::graphic::Fog::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const tml::graphic::FogDesc *>(desc);
+
+	tml::graphic::ManagerResource::OnSetDesc(this->desc_);
+
+	return;
 }
 
 

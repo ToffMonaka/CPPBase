@@ -89,6 +89,7 @@ INT cpp_base::scene::SelectSceneDesc::ReadValue(const tml::INIFile &conf_file)
  * @brief ÉRÉìÉXÉgÉâÉNÉ^
  */
 cpp_base::scene::SelectScene::SelectScene() :
+	desc_(nullptr),
 	progress_type_(0U)
 {
 	return;
@@ -142,18 +143,13 @@ void cpp_base::scene::SelectScene::Init(void)
 
 
 /**
- * @brief Createä÷êî
- * @param desc (desc)
+ * @brief OnCreateä÷êî
  * @return result (result)<br>
  * 0ñ¢ñû=é∏îs
  */
-INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc &desc)
+INT cpp_base::scene::SelectScene::OnCreate(void)
 {
-	this->Init();
-
-	if (cpp_base::scene::Scene::Create(desc) < 0) {
-		this->Init();
-
+	if (cpp_base::scene::Scene::OnCreate() < 0) {
 		return (-1);
 	}
 
@@ -165,8 +161,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		camera_desc.fov_size = tml::XMFLOAT2EX(static_cast<FLOAT>(this->GetGraphicManager()->GetSize().x), static_cast<FLOAT>(this->GetGraphicManager()->GetSize().y));
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera2D>(this->camera_2d, camera_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -178,8 +172,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		canvas_desc.draw_priority = 1;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas2D>(this->canvas_2d, canvas_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -199,8 +191,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		camera_desc.far_clip = 1000.0f;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Camera3D>(this->camera_3d, camera_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -212,8 +202,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		canvas_desc.draw_priority = 0;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Canvas3D>(this->canvas_3d, canvas_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -234,8 +222,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		model_desc.size_auto_flag = false;
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->bg_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -248,8 +234,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 			tml::shared_ptr<tml::graphic::Texture> tex;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, this->GetGraphicManager()->common2.background_texture) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -259,8 +243,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 
 	{// BGMSound Create
 		if (this->GetSoundManager()->GetResource<tml::sound::BGMSound>(this->bgm_sound, this->GetSoundManager()->common2.select_bgm_sound) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -275,8 +257,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		font_desc.SetFontDesc(stage_font_size, L"ÇlÇr ÉSÉVÉbÉN");
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::Font>(this->stage_font, font_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 	}
@@ -289,8 +269,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 		model_desc.color = tml::XMFLOAT4EX(tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), tml::MathUtil::GetColor1(252U), 1.0f);
 
 		if (this->GetGraphicManager()->GetResource<tml::graphic::FigureModel2D>(this->stage_model, model_desc) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
 
@@ -308,8 +286,6 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 			tex_desc.cpu_buffer_flag = true;
 
 			if (this->GetGraphicManager()->GetResource<tml::graphic::Texture>(tex, tex_desc) == nullptr) {
-				this->Init();
-
 				return (-1);
 			}
 
@@ -329,10 +305,23 @@ INT cpp_base::scene::SelectScene::Create(const cpp_base::scene::SelectSceneDesc 
 
 	{// StageSESound Create
 		if (this->GetSoundManager()->GetResource<tml::sound::SESound>(this->stage_se_sound, this->GetSoundManager()->common2.start_se_sound) == nullptr) {
-			this->Init();
-
 			return (-1);
 		}
+	}
+
+	return (0);
+}
+
+
+/**
+ * @brief OnCreateDeferredä÷êî
+ * @return result (result)<br>
+ * 0ñ¢ñû=é∏îs
+ */
+INT cpp_base::scene::SelectScene::OnCreateDeferred(void)
+{
+	if (cpp_base::scene::Scene::OnCreateDeferred() < 0) {
+		return (-1);
 	}
 
 	return (0);
@@ -385,6 +374,7 @@ void cpp_base::scene::SelectScene::OnUpdate(void)
 {
 	switch (this->progress_type_) {
 	case 1U: {
+		/*
 		for (UINT event_i = 0U; event_i < this->GetInputManager()->GetEventCount(tml::input::DeviceEvent::EVENT_MAIN_INDEX); ++event_i) {
 			auto event = reinterpret_cast<tml::input::DeviceEvent *>(this->GetInputManager()->GetEventFast(tml::input::DeviceEvent::EVENT_MAIN_INDEX, event_i));
 
@@ -428,6 +418,7 @@ void cpp_base::scene::SelectScene::OnUpdate(void)
 			}
 			}
 		}
+		*/
 
 		break;
 	}
@@ -443,6 +434,20 @@ void cpp_base::scene::SelectScene::OnUpdate(void)
 		this->stage_model->transform.scale = tml::XMFLOAT2EX(1.0f, 1.0f);
 		this->stage_model->color = tml::XMFLOAT4EX(1.0f, 1.0f, 1.0f, 1.0f);
 	}
+
+	return;
+}
+
+
+/**
+ * @brief OnSetDescä÷êî
+ * @param desc (desc)
+ */
+void cpp_base::scene::SelectScene::OnSetDesc(const tml::ManagerResourceDesc *desc)
+{
+	this->desc_ = dynamic_cast<const cpp_base::scene::SelectSceneDesc *>(desc);
+
+	cpp_base::scene::Scene::OnSetDesc(this->desc_);
 
 	return;
 }

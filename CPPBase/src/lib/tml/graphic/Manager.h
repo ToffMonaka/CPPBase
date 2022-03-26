@@ -27,10 +27,6 @@ public:
 private:
 	void Release(void);
 
-protected:
-	void InitResourceCount(void);
-	void InitEventCount(void);
-
 public:
 	ManagerDesc();
 	virtual ~ManagerDesc();

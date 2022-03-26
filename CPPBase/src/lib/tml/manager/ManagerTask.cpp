@@ -1,17 +1,17 @@
 /**
  * @file
- * @brief ManagerEventコードファイル
+ * @brief ManagerTaskコードファイル
  */
 
 
-#include "TestManagerEvent.h"
-#include "TestManager.h"
+#include "ManagerTask.h"
+#include "Manager.h"
 
 
 /**
  * @brief コンストラクタ
  */
-tml::test::ManagerEventDesc::ManagerEventDesc() :
+tml::ManagerTaskDesc::ManagerTaskDesc() :
 	mgr_(nullptr),
 	run_flag(true)
 {
@@ -22,7 +22,7 @@ tml::test::ManagerEventDesc::ManagerEventDesc() :
 /**
  * @brief デストラクタ
  */
-tml::test::ManagerEventDesc::~ManagerEventDesc()
+tml::ManagerTaskDesc::~ManagerTaskDesc()
 {
 	this->Release();
 
@@ -33,12 +33,12 @@ tml::test::ManagerEventDesc::~ManagerEventDesc()
 /**
  * @brief Init関数
  */
-void tml::test::ManagerEventDesc::Init(void)
+void tml::ManagerTaskDesc::Init(void)
 {
 	this->Release();
 
 	this->mgr_ = nullptr;
-	this->event_name.clear();
+	this->task_name.clear();
 	this->run_flag = true;
 	this->function = nullptr;
 
@@ -52,7 +52,7 @@ void tml::test::ManagerEventDesc::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::test::ManagerEventDesc::Read(const tml::INIFileReadDesc &conf_file_read_desc)
+INT tml::ManagerTaskDesc::Read(const tml::INIFileReadDesc &conf_file_read_desc)
 {
 	auto conf_file_read_desc_dat = conf_file_read_desc.GetDataByParent();
 
@@ -82,19 +82,19 @@ INT tml::test::ManagerEventDesc::Read(const tml::INIFileReadDesc &conf_file_read
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::test::ManagerEventDesc::ReadValue(const tml::INIFile &conf_file)
+INT tml::ManagerTaskDesc::ReadValue(const tml::INIFile &conf_file)
 {
 	const std::map<std::wstring, std::wstring> *val_name_cont = nullptr;
 	const std::wstring *val = nullptr;
 
 	{// Resource Section Read
-		val_name_cont = conf_file.data.GetValueNameContainer(L"EVENT");
+		val_name_cont = conf_file.data.GetValueNameContainer(L"TASK");
 
 		if (val_name_cont != nullptr) {
 			val = conf_file.data.GetValue((*val_name_cont), L"NAME");
 
 			if (val != nullptr) {
-				this->event_name = (*val);
+				this->task_name = (*val);
 			}
 		}
 	}
@@ -104,11 +104,23 @@ INT tml::test::ManagerEventDesc::ReadValue(const tml::INIFile &conf_file)
 
 
 /**
+ * @brief OnSetManager関数
+ * @param mgr (manager)
+ */
+void tml::ManagerTaskDesc::OnSetManager(tml::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	return;
+}
+
+
+/**
  * @brief コンストラクタ
  */
-tml::test::ManagerEvent::ManagerEvent() :
+tml::ManagerTask::ManagerTask() :
 	mgr_(nullptr),
-	event_index_(0U),
+	task_type_(0U),
 	run_flg_(false),
 	run_added_flg_(false)
 {
@@ -119,7 +131,7 @@ tml::test::ManagerEvent::ManagerEvent() :
 /**
  * @brief デストラクタ
  */
-tml::test::ManagerEvent::~ManagerEvent()
+tml::ManagerTask::~ManagerTask()
 {
 	this->Release();
 
@@ -130,7 +142,7 @@ tml::test::ManagerEvent::~ManagerEvent()
 /**
  * @brief Init関数
  */
-void tml::test::ManagerEvent::Init(void)
+void tml::ManagerTask::Init(void)
 {
 	this->Release();
 
@@ -144,14 +156,12 @@ void tml::test::ManagerEvent::Init(void)
  * @return result (result)<br>
  * 0未満=失敗
  */
-INT tml::test::ManagerEvent::Create(const tml::test::ManagerEventDesc &desc)
+INT tml::ManagerTask::Create(const tml::ManagerTaskDesc &desc)
 {
-	if ((desc.GetManager() == nullptr)
-	|| (this->event_index_ == 0U)) {
+	if (this->mgr_ == nullptr) {
 		return (-1);
 	}
 
-	this->mgr_ = desc.GetManager();
 	this->func_ = desc.function;
 
 	return (0);
@@ -161,7 +171,7 @@ INT tml::test::ManagerEvent::Create(const tml::test::ManagerEventDesc &desc)
 /**
  * @brief Run関数
  */
-void tml::test::ManagerEvent::Run(void)
+void tml::ManagerTask::Run(void)
 {
 	if (!this->run_flg_) {
 		return;
@@ -174,6 +184,30 @@ void tml::test::ManagerEvent::Run(void)
 	if (func != nullptr) {
 		func();
 	}
+
+	return;
+}
+
+
+/**
+ * @brief OnSetManager関数
+ * @param mgr (manager)
+ */
+void tml::ManagerTask::OnSetManager(tml::Manager *mgr)
+{
+	this->mgr_ = mgr;
+
+	return;
+}
+
+
+/**
+ * @brief SetRunFlag関数
+ * @param run_flg (run_flag)
+ */
+void tml::ManagerTask::SetRunFlag(const bool run_flg)
+{
+	this->mgr_->SetTaskRunFlag(this, run_flg);
 
 	return;
 }
