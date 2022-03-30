@@ -150,14 +150,14 @@ INT tml::Manager::Create(const tml::ManagerDesc &desc)
  */
 void tml::Manager::Update(void)
 {
-	if (this->res_itr_ == this->res_cont_.end()) {
-		this->res_itr_ = this->res_cont_.begin();
-	}
-
 	UINT loop_cnt = 0U;
 	UINT use_cnt = 0U;
 
 	loop_cnt = 0U;
+
+	if (this->res_itr_ == this->res_cont_.end()) {
+		this->res_itr_ = this->res_cont_.begin();
+	}
 
 	while (this->res_itr_ != this->res_cont_.end()) {
 		use_cnt = 3U;
@@ -191,6 +191,10 @@ void tml::Manager::Update(void)
 
 	loop_cnt = 0U;
 
+	if (this->task_itr_ == this->task_cont_.end()) {
+		this->task_itr_ = this->task_cont_.begin();
+	}
+
 	while (this->task_itr_ != this->task_cont_.end()) {
 		use_cnt = 3U;
 
@@ -222,6 +226,10 @@ void tml::Manager::Update(void)
 	}
 
 	loop_cnt = 0U;
+
+	if (this->event_itr_ == this->event_cont_.end()) {
+		this->event_itr_ = this->event_cont_.begin();
+	}
 
 	while (this->event_itr_ != this->event_cont_.end()) {
 		use_cnt = 3U;
@@ -266,9 +274,9 @@ void tml::Manager::Update(void)
 	}
 
 	for (auto res_itr = this->deferred_create_res_cont_.begin(); res_itr != this->deferred_create_res_cont_.end();) {
-		if (((*res_itr)->CreateDeferred() < 0)
-		|| (!(*res_itr)->deferred_create_flg_)
-		|| (*res_itr)->deferred_created_flg_) {
+		(*res_itr)->CreateDeferred();
+
+		if (!(*res_itr)->deferred_create_flg_) {
 			(*res_itr)->deferred_create_added_flg_ = false;
 
 			res_itr = this->deferred_create_res_cont_.erase(res_itr);

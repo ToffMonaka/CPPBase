@@ -108,6 +108,8 @@ private:
 private:
 	void Release(void);
 
+	void InitDeferredCreate(const bool);
+
 protected:
 	virtual INT OnCreate(void);
 	virtual INT OnCreateDeferred(void);

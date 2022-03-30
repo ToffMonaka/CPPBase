@@ -580,7 +580,19 @@ void tml::scene::Node::RemoveChildNodeFromParentNode(const bool deferred_flg)
 			return;
 		}
 
-		tml::shared_ptr<tml::scene::Node> child_node = std::reinterpret_pointer_cast<tml::scene::Node>(this->GetResourceSharedPointer());
+		tml::shared_ptr<tml::scene::Node> child_node;
+
+		for (auto &tmp_child_node : this->parent_node_->child_node_cont_) {
+			if (tmp_child_node.get() == this) {
+				child_node = tmp_child_node;
+
+				break;
+			}
+		}
+
+		if (child_node == nullptr) {
+			return;
+		}
 
 		this->parent_node_->RemoveChildNode(child_node, false);
 	}

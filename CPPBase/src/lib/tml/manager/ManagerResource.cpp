@@ -163,26 +163,29 @@ INT tml::ManagerResource::Create(void)
 	if ((this->desc_ == nullptr)
 	|| (this->mgr_ == nullptr)) {
 		this->Init();
+		this->InitDeferredCreate(false);
 
 		return (-1);
 	}
 
 	if (this->OnCreate() < 0) {
 		this->Init();
+		this->InitDeferredCreate(false);
 
 		return (-1);
 	}
 
 	if (!this->desc_->deferred_create_flag) {
-		if (this->OnCreateDeferred() < 0) {
-			this->Init();
+		if (!this->deferred_created_flg_) {
+			if (this->OnCreateDeferred() < 0) {
+				this->Init();
+				this->InitDeferredCreate(false);
 
-			return (-1);
+				return (-1);
+			}
+
+			this->InitDeferredCreate(true);
 		}
-
-		this->desc_unique_p_.reset();
-		this->SetDesc(nullptr);
-		this->deferred_created_flg_ = true;
 	}
 
 	return (0);
@@ -203,7 +206,7 @@ INT tml::ManagerResource::OnCreate(void)
 /**
  * @brief CreateDeferredŠÖ”
  * @return result (result)<br>
- * 0–¢–=¸”s,1=ì¬Ï‚İ
+ * 0–¢–=¸”s
  */
 INT tml::ManagerResource::CreateDeferred(void)
 {
@@ -211,19 +214,16 @@ INT tml::ManagerResource::CreateDeferred(void)
 		return (-1);
 	}
 
-	if (this->deferred_created_flg_) {
-		return (1);
+	if (!this->deferred_created_flg_) {
+		if (this->OnCreateDeferred() < 0) {
+			this->Init();
+			this->InitDeferredCreate(false);
+
+			return (-1);
+		}
+
+		this->InitDeferredCreate(true);
 	}
-
-	if (this->OnCreateDeferred() < 0) {
-		this->Init();
-
-		return (-1);
-	}
-
-	this->desc_unique_p_.reset();
-	this->SetDesc(nullptr);
-	this->deferred_created_flg_ = true;
 
 	return (0);
 }
@@ -259,6 +259,21 @@ void tml::ManagerResource::OnSetDesc(const tml::ManagerResourceDesc *desc)
 void tml::ManagerResource::OnSetManager(tml::Manager *mgr)
 {
 	this->mgr_ = mgr;
+
+	return;
+}
+
+
+/**
+ * @brief InitDeferredCreateŠÖ”
+ * @param deferred_created_flg (deferred_created_flag)
+ */
+void tml::ManagerResource::InitDeferredCreate(const bool deferred_created_flg)
+{
+	this->desc_unique_p_.reset();
+	this->SetDesc(nullptr);
+	this->deferred_create_flg_ = false;
+	this->deferred_created_flg_ = deferred_created_flg;
 
 	return;
 }

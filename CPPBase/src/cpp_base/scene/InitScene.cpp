@@ -372,16 +372,18 @@ void cpp_base::scene::InitScene::OnUpdate(void)
 		if (this->deferred_create_res_itr_ != this->deferred_create_res_cont_.end()) {
 			auto &res = (*this->deferred_create_res_itr_);
 
-			if (res->GetDeferredCreatedFlag()) {
-				++this->deferred_create_res_itr_;
-			} else if (!res->GetDeferredCreateFlag()) {
-				if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
-					tml::Log(L"Error: Resource Deferred Create\n");
+			if (!res->GetDeferredCreateFlag()) {
+				if (res->GetDeferredCreatedFlag()) {
+					++this->deferred_create_res_itr_;
+				} else {
+					if (cpp_base::ConstantUtil::APPLICATION::DEBUG_FLAG) {
+						tml::Log(L"Error: Resource Deferred Create\n");
+					}
+
+					this->GetManager()->EndScene();
+
+					return;
 				}
-
-				this->GetManager()->EndScene();
-
-				return;
 			}
 		}
 
